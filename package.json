@@ -1,0 +1,15 @@
+{
+  "name": "react-pdf",
+  "version": "0.0.1",
+  "description": "A react component using pdf.js to display pdf documents inline",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "pdf",
+    "react"
+  ],
+  "author": "Niklas Närhinen <niklas@narhinen.net>",
+  "license": "MIT"
+}
