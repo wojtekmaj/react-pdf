@@ -4,12 +4,21 @@
   "description": "A react component using pdf.js to display pdf documents inline",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "example": "browserify -t reactify example/index.js > example/bundle.js"
   },
   "keywords": [
     "pdf",
     "react"
   ],
   "author": "Niklas Närhinen <niklas@narhinen.net>",
-  "license": "MIT"
+  "license": "MIT",
+  "peerDependencies": {
+    "react": "^0.11.2"
+  },
+  "devDependencies": {
+    "browserify": "^5.12.1",
+    "react": "^0.11.2",
+    "reactify": "^0.14.0"
+  }
 }
