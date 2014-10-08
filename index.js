@@ -28,6 +28,9 @@ var Pdf = React.createClass({
       pdfPage: null
     });
   },
+  getDefaultProps: function() {
+    return {page: 1};
+  },
   render: function() {
     var self = this;
     this.state.pdfPage && setTimeout(function() {
