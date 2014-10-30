@@ -1,6 +1,6 @@
 {
   "name": "react-pdf",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "A react component using pdf.js to display pdf documents inline",
   "main": "index.js",
   "scripts": {
@@ -23,5 +23,9 @@
   },
   "browserify": {
     "transform": ["reactify"]
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nnarhinen/react-pdf.git"
   }
 }
