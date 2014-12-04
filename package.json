@@ -13,9 +13,6 @@
   ],
   "author": "Niklas Närhinen <niklas@narhinen.net>",
   "license": "MIT",
-  "peerDependencies": {
-    "react": "^0.11.2"
-  },
   "devDependencies": {
     "browserify": "^5.12.1",
     "react": "^0.11.2",
