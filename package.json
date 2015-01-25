@@ -1,6 +1,6 @@
 {
   "name": "react-pdf",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "A react component using pdf.js to display pdf documents inline",
   "main": "index.js",
   "scripts": {
@@ -13,8 +13,7 @@
   ],
   "author": "Niklas Närhinen <niklas@narhinen.net>",
   "license": "MIT",
-  "devDependencies": {
-  },
+  "devDependencies": {},
   "browserify": {
     "transform": [
       "reactify"
