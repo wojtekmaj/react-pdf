@@ -14,9 +14,6 @@
   "author": "Niklas Närhinen <niklas@narhinen.net>",
   "license": "MIT",
   "devDependencies": {
-    "browserify": "^5.12.1",
-    "react": "^0.11.2",
-    "reactify": "^0.14.0"
   },
   "browserify": {
     "transform": [

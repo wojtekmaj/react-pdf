@@ -33,10 +33,10 @@ var Pdf = React.createClass({
   },
   render: function() {
     var self = this;
-    this.state.pdfPage && setTimeout(function() {
+    if (this.state.pdfPage) setTimeout(function() {
       var canvas = self.getDOMNode(),
           context = canvas.getContext('2d'),
-          scale = 1.0,
+          scale = self.props.scale || 1.0,
           viewport = self.state.pdfPage.getViewport(scale);
       canvas.height = viewport.height;
       canvas.width = viewport.width;
