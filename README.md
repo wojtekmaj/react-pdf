@@ -18,7 +18,28 @@ var PDF = require('react-pdf');
 
 var MyApp = React.createClass({
   render: function() {
+    
     return <PDF file="somefile.pdf" page="2" />
+  },
+  _onPdfCompleted: function(page, pages){
+    this.setState({page: page, pages: pages});
+  }
+});
+```
+or
+```js
+var PDF = require('react-pdf');
+
+var MyApp = React.createClass({
+  render: function() {
+    
+    return <PDF content="YSBzaW1wbGUgcGRm..." page="1" scale="1.0" onDocumentComplete={this._onDocumentComplete} onPageComplete={this._onPageComplete} loading={(<span>Your own loading message ...</span>)} />
+  },
+  _onDocumentCompleted: function(pages){
+    this.setState({pages: pages});
+  },
+  _onPageCompleted: function(page){
+    this.setState({currentPage: page});
   }
 });
 ```
@@ -42,3 +63,5 @@ Author
 ------
 
 Niklas Närhinen <niklas@narhinen.net>
+
+Bart Van Houtte <bart.van.houtte@ading.be> Added Base64 Content , update PDFJS, document and page completion notification callbacks and custom loading message
