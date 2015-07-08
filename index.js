@@ -1,54 +1,81 @@
 /**
  * @jsx React.DOM
  */
-
 var React = require('react');
 
-
 var Pdf = React.createClass({
+  displayName: 'React-PDF',
+  propTypes: {
+    file: React.PropTypes.string,
+    content: React.PropTypes.string,
+    page: React.PropTypes.number,
+    scale: React.PropTypes.number,
+    onDocumentComplete: React.PropTypes.func,
+    onPageComplete: React.PropTypes.func
+  },
   getInitialState: function() {
-    return {};
+    return { };
+  },
+  getDefaultProps: function() {
+    return {page: 1, scale: 1.0};
   },
   componentDidMount: function() {
     var self = this;
-    PDFJS.getDocument(this.props.file).then(function(pdf) {
-      pdf.getPage(self.props.page).then(function(page) {
-        self.setState({pdfPage: page, pdf: pdf});
-      });
-    });
+    if(!!this.props.file){
+      PDFJS.getDocument(this.props.file).then(this._onDocumentComplete);
+    }
+    else if(!!this.props.content){
+      var bytes = window.atob(this.props.content);
+      var byteLength = bytes.length;
+      var byteArray = new Uint8Array(new ArrayBuffer(byteLength));
+      for(index = 0; index < byteLength; index++) {
+        byteArray[index] = bytes.charCodeAt(index);
+      }
+      PDFJS.getDocument(byteArray).then(this._onDocumentComplete);   
+    }
+    else {
+      console.error('React_Pdf works with a file(URL) or (base64)content. At least one needs to be provided!')
+    }
   },
   componentWillReceiveProps: function(newProps) {
-    var self = this;
-    if (newProps.page) {
-      self.state.pdf.getPage(newProps.page).then(function(page) {
-        self.setState({pdfPage: page, pageId: newProps.page});
-      });
+    if (!!this.state.pdf && !!newProps.page && newProps.page !== this.props.page) {
+      this.setState({page: null});
+      this.state.pdf.getPage(newProps.page).then(this._onPageComplete);
     }
-    this.setState({
-      pdfPage: null
-    });
-  },
-  getDefaultProps: function() {
-    return {page: 1};
   },
   render: function() {
     var self = this;
-    if (this.state.pdfPage) setTimeout(function() {
-      var canvas = self.getDOMNode(),
+    if (!!this.state.page){
+      setTimeout(function() {
+        var canvas = self.refs.pdfCanvas.getDOMNode(),
           context = canvas.getContext('2d'),
-          scale = self.props.scale || 1.0,
-          viewport = self.state.pdfPage.getViewport(scale);
-      canvas.height = viewport.height;
-      canvas.width = viewport.width;
-      var renderContext = {
-        canvasContext: context,
-        viewport: viewport
-      };
-      self.state.pdfPage.render(renderContext);
-    });
-    return this.state.pdfPage ? <canvas></canvas> : <div>Loading pdf..</div>;
+          scale = self.props.scale,
+          viewport = self.state.page.getViewport(scale);
+        canvas.height = viewport.height;
+        canvas.width = viewport.width;
+        var renderContext = {
+          canvasContext: context,
+          viewport: viewport
+        };
+        self.state.page.render(renderContext);
+      });
+      return (<canvas ref="pdfCanvas"></canvas>);
+    }
+    return (this.props.loading || <div>Loading pdf..</div>);
+  },
+  _onDocumentComplete: function(pdf){
+    this.setState({ pdf: pdf })
+    if(!!this.props.onDocumentComplete && typeof this.props.onDocumentComplete === 'function'){
+      this.props.onDocumentComplete(pdf.numPages);
+    }
+    pdf.getPage(this.props.page).then(this._onPageComplete);
+  },
+  _onPageComplete: function(page){
+    this.setState({ page: page });
+    if(!!this.props.onPageComplete && typeof this.props.onPageComplete === 'function'){
+      this.props.onPageComplete(page.pageIndex + 1);
+    }
   }
 });
-
 
 module.exports = Pdf;
