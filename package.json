@@ -1,6 +1,6 @@
 {
   "name": "react-pdf",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "A react component using pdf.js to display pdf documents inline",
   "main": "index.js",
   "scripts": {

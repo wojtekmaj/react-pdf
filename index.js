@@ -47,17 +47,19 @@ var Pdf = React.createClass({
     var self = this;
     if (!!this.state.page){
       setTimeout(function() {
-        var canvas = self.refs.pdfCanvas.getDOMNode(),
-          context = canvas.getContext('2d'),
-          scale = self.props.scale,
-          viewport = self.state.page.getViewport(scale);
-        canvas.height = viewport.height;
-        canvas.width = viewport.width;
-        var renderContext = {
-          canvasContext: context,
-          viewport: viewport
-        };
-        self.state.page.render(renderContext);
+        if(self.isMounted()){
+          var canvas = self.refs.pdfCanvas.getDOMNode(),
+            context = canvas.getContext('2d'),
+            scale = self.props.scale,
+            viewport = self.state.page.getViewport(scale);
+          canvas.height = viewport.height;
+          canvas.width = viewport.width;
+          var renderContext = {
+            canvasContext: context,
+            viewport: viewport
+          };
+          self.state.page.render(renderContext);
+        }
       });
       return (<canvas ref="pdfCanvas"></canvas>);
     }
