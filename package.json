@@ -1,6 +1,6 @@
 {
   "name": "react-pdf",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "A react component using pdf.js to display pdf documents inline",
   "main": "index.js",
   "scripts": {
@@ -12,10 +12,12 @@
     "react"
   ],
   "author": "Niklas Närhinen <niklas@narhinen.net>",
-  "contributors": [{
-    "name": "Bart Van Houtte",
-    "email": "bart.van.houtte@ading.be"
-  }],
+  "contributors": [
+    {
+      "name": "Bart Van Houtte",
+      "email": "bart.van.houtte@ading.be"
+    }
+  ],
   "license": "MIT",
   "devDependencies": {},
   "browserify": {
