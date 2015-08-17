@@ -61,9 +61,9 @@ var Pdf = React.createClass({
           self.state.page.render(renderContext);
         }
       });
-      return (<canvas ref="pdfCanvas"></canvas>);
+      return (React.createElement("canvas", {ref: "pdfCanvas"}));
     }
-    return (this.props.loading || <div>Loading pdf..</div>);
+    return (this.props.loading || React.createElement("div", null, "Loading pdf...."));
   },
   _onDocumentComplete: function(pdf){
     this.setState({ pdf: pdf })
