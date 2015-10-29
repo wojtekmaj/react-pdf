@@ -19,7 +19,13 @@
     }
   ],
   "license": "MIT",
-  "devDependencies": {},
+  "devDependencies": {
+    "browserify": "^11.0.1",
+    "reactify": "^1.1.1"
+  },
+  "peerDependencies": {
+    "react": "^0.13.3"
+  },
   "browserify": {
     "transform": [
       "reactify"
