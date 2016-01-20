@@ -2,6 +2,7 @@
  * @jsx React.DOM
  */
 var React = require('react');
+var ReactDOM = require('react-dom');
 
 var Pdf = React.createClass({
   displayName: 'React-PDF',
@@ -62,7 +63,7 @@ var Pdf = React.createClass({
     if (!!this.state.page){
       setTimeout(function() {
         if(self.isMounted()){
-          var canvas = self.refs.pdfCanvas.getDOMNode(),
+          var canvas = ReactDOM.findDOMNode(self.refs.pdfCanvas),
             context = canvas.getContext('2d'),
             scale = self.props.scale,
             viewport = self.state.page.getViewport(scale);

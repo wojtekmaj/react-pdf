@@ -24,7 +24,8 @@
     "reactify": "^1.1.1"
   },
   "peerDependencies": {
-    "react": "^0.13.3 || ^0.14"
+    "react": "^0.13.3 || ^0.14",
+    "react-dom": "^0.13.3 || ^0.14"
   },
   "browserify": {
     "transform": [
