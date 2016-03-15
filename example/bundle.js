@@ -21,8 +21,7 @@ var App = React.createClass({displayName: "App",
   },
   nextPage: function(ev) {
     ev.preventDefault();
-    if(this.state.pages < this.state.pages)
-      this.setState({currentPage: this.state.pages < this.state.pages ? this.state.currentPage + 1 : this.state.pages });
+    this.setState({ currentPage: this.state.currentPage < this.state.pages ? this.state.currentPage + 1 : this.state.pages });
   },
   onFileChange: function(ev) {
     this.setState({
