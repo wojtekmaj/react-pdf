@@ -76,7 +76,7 @@ var Pdf = React.createClass({
       });
       return (React.createElement('canvas', { ref: 'pdfCanvas' }));
     }
-    return (this.props.loading || React.createElement("div", null, "Loading pdf...."));
+    return (this.props.loading || React.createElement('div', null, 'Loading PDF…'));
   },
   _onDocumentComplete: function (pdf) {
     if (!this.isMounted()) return;
