@@ -16,6 +16,10 @@
     {
       "name": "Bart Van Houtte",
       "email": "bart.van.houtte@ading.be"
+    },
+    {
+      "name": "Wojciech Maj",
+      "email": "kontakt@wojtekmaj.pl"
     }
   ],
   "license": "MIT",
@@ -24,8 +28,8 @@
     "reactify": "^1.1.1"
   },
   "peerDependencies": {
-    "react": "^0.13.3 || ^0.14",
-    "react-dom": "^0.13.3 || ^0.14"
+    "react": ">0.13.3",
+    "react-dom": ">0.13.3"
   },
   "browserify": {
     "transform": [
@@ -34,6 +38,6 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/nnarhinen/react-pdf.git"
+    "url": "https://github.com/wojtekmaj/react-pdf.git"
   }
 }
