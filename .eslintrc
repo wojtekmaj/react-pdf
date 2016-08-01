@@ -1,3 +1,14 @@
 {
-    "extends": "airbnb"
+    "extends": "airbnb",
+    "env": {
+        "es6": true
+    },
+    "globals": {
+        "PDFJS": true
+    },
+    "parserOptions": {
+        "ecmaFeatures": {
+            "experimentalObjectRestSpread": true
+        }
+    }
 }
