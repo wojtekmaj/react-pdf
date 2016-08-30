@@ -23,6 +23,9 @@
     }
   ],
   "license": "MIT",
+  "dependencies": {
+    "pdfjs-dist": "^1.5.404"
+  },
   "devDependencies": {
     "browserify": "^11.0.1",
     "reactify": "^1.1.1",

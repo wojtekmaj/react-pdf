@@ -4,6 +4,10 @@
 var React = require('react');
 var ReactDOM = require('react-dom');
 
+require('pdfjs-dist/web/compatibility');
+require('pdfjs-dist/build/pdf');
+PDFJS.workerSrc = require('pdfjs-dist/build/pdf.worker.js');
+
 var Pdf = React.createClass({
   displayName: 'React-PDF',
   propTypes: {
