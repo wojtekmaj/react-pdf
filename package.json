@@ -24,6 +24,8 @@
   ],
   "license": "MIT",
   "dependencies": {
+    "react": ">0.13.3",
+    "react-dom": ">0.13.3",
     "pdfjs-dist": "^1.5.404"
   },
   "devDependencies": {
@@ -34,10 +36,6 @@
     "eslint-plugin-import": "^1.8.1",
     "eslint-plugin-jsx-a11y": "^1.2.3",
     "eslint-plugin-react": "^5.1.1"
-  },
-  "peerDependencies": {
-    "react": ">0.13.3",
-    "react-dom": ">0.13.3"
   },
   "browserify": {
     "transform": [
