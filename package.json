@@ -27,7 +27,7 @@
   "license": "MIT",
   "dependencies": {
     "react": ">=0.14.0 || >=15.0.0",
-    "pdfjs-dist": "^1.5.404"
+    "pdfjs-dist": "^1.5.406"
   },
   "devDependencies": {
     "babel": "^6.5.2",
