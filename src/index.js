@@ -1,5 +1,4 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 
 require('pdfjs-dist/web/compatibility');
 require('pdfjs-dist/build/pdf');
