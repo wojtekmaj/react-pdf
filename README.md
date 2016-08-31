@@ -9,38 +9,58 @@ A component for showing a pdf page using [pdf.js](http://mozilla.github.io/pdf.j
 Usage
 -----
 
-Install with `npm install react-pdf`
+Install with `npm install --save react-pdf`
 
 Use in your app:
 
 ```js
-var PDF = require('react-pdf');
+import PDF from 'react-pdf';
 
-var MyApp = React.createClass({
-  render: function() {
-
-    return <PDF file="somefile.pdf" page="2" />
-  },
-  _onPdfCompleted: function(page, pages){
-    this.setState({page: page, pages: pages});
-  }
-});
+class MyApp extends React.Component {
+    onDocumentComplete(pages) {
+        this.setState({ pages });
+    },
+    onPageComplete(page) {
+        this.setState({ page });
+    }
+    render() {
+        return (
+            <div>
+                <PDF
+                    file="somefile.pdf"
+                    page="2"
+                    onDocumentComplete={this.onDocumentComplete}
+                    onPageComplete={this.onPageComplete}
+                />
+                <p>Page {this.state.page} of {this.state.pages}</p>
+            </div>
+        );
+    },
+}
 ```
 or
 ```js
 var PDF = require('react-pdf');
 
 var MyApp = React.createClass({
-  render: function() {
-
-    return <PDF content="YSBzaW1wbGUgcGRm..." page="1" scale="1.0" onDocumentComplete={this._onDocumentComplete} onPageComplete={this._onPageComplete} loading="Your own loading message" />
-  },
-  _onDocumentCompleted: function(pages){
-    this.setState({pages: pages});
-  },
-  _onPageCompleted: function(page){
-    this.setState({currentPage: page});
-  }
+    _onDocumentComplete: function(pages){
+        this.setState({pages: pages});
+    },
+    _onPageComplete: function(page){
+        this.setState({currentPage: page});
+    },
+    render: function() {
+        return (
+            <PDF
+                content="YSBzaW1wbGUgcGRm..."
+                page="1"
+                scale="1.0"
+                onDocumentComplete={this._onDocumentComplete}
+                onPageComplete={this._onPageComplete}
+                loading="Your own loading message"
+            />
+        );
+    }
 });
 ```
 
