@@ -33,7 +33,7 @@ var PDF = require('react-pdf');
 var MyApp = React.createClass({
   render: function() {
 
-    return <PDF content="YSBzaW1wbGUgcGRm..." page="1" scale="1.0" onDocumentComplete={this._onDocumentComplete} onPageComplete={this._onPageComplete} loading={(<span>Your own loading message ...</span>)} />
+    return <PDF content="YSBzaW1wbGUgcGRm..." page="1" scale="1.0" onDocumentComplete={this._onDocumentComplete} onPageComplete={this._onPageComplete} loading="Your own loading message" />
   },
   _onDocumentCompleted: function(pages){
     this.setState({pages: pages});
