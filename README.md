@@ -18,7 +18,7 @@ var PDF = require('react-pdf');
 
 var MyApp = React.createClass({
   render: function() {
-    
+
     return <PDF file="somefile.pdf" page="2" />
   },
   _onPdfCompleted: function(page, pages){
@@ -32,7 +32,7 @@ var PDF = require('react-pdf');
 
 var MyApp = React.createClass({
   render: function() {
-    
+
     return <PDF content="YSBzaW1wbGUgcGRm..." page="1" scale="1.0" onDocumentComplete={this._onDocumentComplete} onPageComplete={this._onPageComplete} loading={(<span>Your own loading message ...</span>)} />
   },
   _onDocumentCompleted: function(pages){
@@ -46,13 +46,6 @@ var MyApp = React.createClass({
 
 Check the example-directory of this repository for a full working example
 
-Pitfalls
---------
-
-Unfortunately pdf.js isn't too friendly for commonjs environments so react-pdf
-assumes a global `PDFJS` variable, see the example directory of this repository
-for an example.
-
 
 License
 -------
@@ -64,4 +57,6 @@ Author
 
 Niklas Närhinen <niklas@narhinen.net>
 
-Bart Van Houtte <bart.van.houtte@ading.be> Added Base64 Content , update PDFJS, document and page completion notification callbacks and custom loading message
+Bart Van Houtte <bart.van.houtte@ading.be> Added Base64 Content, update PDF.js, document and page completion notification callbacks and custom loading message
+
+Wojciech Maj <kontakt@wojtekmaj.pl> Rewritten React-PDF to ES6 module, upgraded module to support React 15.x, included PDF.js as a native npm module to avoid necessity of constant manual updating, removed necessity of adding global PDFJS variable
