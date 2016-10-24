@@ -11,7 +11,10 @@ PDFJS.workerSrc = require('pdfjs-dist/build/pdf.worker.js');
 var Pdf = React.createClass({
   displayName: 'React-PDF',
   propTypes: {
-    file: React.PropTypes.string,
+    file: React.PropTypes.oneOfType([
+      React.PropTypes.file,
+      React.PropTypes.string
+    ]),
     content: React.PropTypes.string,
     page: React.PropTypes.number,
     scale: React.PropTypes.number,
@@ -53,9 +56,9 @@ var Pdf = React.createClass({
   },
   componentWillReceiveProps: function (newProps) {
     if ((newProps.file && newProps.file !== this.props.file) || (newProps.content && newProps.content !== this.props.content)) {
+      this.setState({ page: null });
       this._loadPDFDocument(newProps);
-    }
-    if (!!this.state.pdf && !!newProps.page && newProps.page !== this.props.page) {
+    } else if (!!this.state.pdf && !!newProps.page && newProps.page !== this.props.page) {
       this.setState({ page: null });
       this.state.pdf.getPage(newProps.page).then(this._onPageComplete);
     }
