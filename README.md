@@ -13,7 +13,7 @@ Demo page is included in sample directory.
 
 [Online demo](http://projekty.wojtekmaj.pl/react-pdf/) is also available!
 
-Usage
+Quick start
 -----
 
 Install with `npm install --save react-pdf`
@@ -49,6 +49,12 @@ class MyApp extends React.Component {
 ```
 
 Check the sample drectory of this repository for a full working example.
+
+Detailed usage instructions
+-------
+
+TBD
+
 
 License
 -------
