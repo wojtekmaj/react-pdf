@@ -55,7 +55,6 @@ class Example extends Component {
                             file={file}
                             onDocumentLoad={this.onDocumentLoad}
                             onPageLoad={this.onPageLoad}
-                            loading={<div>Loading PDF…</div>}
                             pageIndex={pageIndex}
                         />
                     </div>

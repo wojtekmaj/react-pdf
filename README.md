@@ -37,7 +37,7 @@ class MyApp extends React.Component {
             <div>
                 <ReactPDF
                     file="somefile.pdf"
-                    page={2}
+                    pageIndex={2}
                     onDocumentLoad={this.onDocumentLoad}
                     onPageLoad={this.onPageLoad}
                 />
