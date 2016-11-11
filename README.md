@@ -1,13 +1,7 @@
 react-pdf
 =========
 
-## Maintainer needed
-
-I'm not using this library in any of my active projects at the moment. I'm reviewing and accepting pull requests constantly but I would be happy to grant push rights to someone actively using this library.
-
-Open an issue or contact me directly at niklas@narhinen.net if interested.
-
-What
+What is react-PDF
 ----
 
 A component for showing a pdf page using [pdf.js](http://mozilla.github.io/pdf.js).
