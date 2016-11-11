@@ -6,8 +6,9 @@
   "es6": "src/index.js",
   "scripts": {
     "build": "babel src -d es5",
+    "build-sample": "webpack",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "prepublish": "npm run build"
+    "prepublish": "npm run build && npm run build-sample"
   },
   "keywords": [
     "pdf",
@@ -26,21 +27,31 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "react": ">=0.14.0 || >=15.0.0",
-    "pdfjs-dist": "^1.5.406"
+    "pdfjs-dist": "^1.5.406",
+    "react": ">=15.0",
+    "react-dom": ">=15.0",
+    "webpack": "1.13.3"
   },
   "devDependencies": {
     "babel": "^6.5.2",
-    "babel-cli": "^6.14.0",
+    "babel-cli": "^6.18.0",
+    "babel-core": "^6.18.2",
+    "babel-loader": "^6.2.7",
     "babel-plugin-transform-class-properties": "^6.18.0",
     "babel-preset-es2015": "^6.14.0",
     "babel-preset-react": "^6.11.1",
     "babel-preset-stage-0": "^6.16.0",
+    "css-loader": "^0.25.0",
     "eslint": "^3.9.1",
     "eslint-config-airbnb": "^13.0.0",
     "eslint-plugin-import": "^2.2.0",
     "eslint-plugin-jsx-a11y": "^2.2.3",
-    "eslint-plugin-react": "^6.6.0"
+    "eslint-plugin-react": "^6.6.0",
+    "file-loader": "latest",
+    "less": "^2.7.1",
+    "less-loader": "latest",
+    "style-loader": "latest",
+    "url-loader": "latest"
   },
   "repository": {
     "type": "git",
