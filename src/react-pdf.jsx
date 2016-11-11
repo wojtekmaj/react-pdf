@@ -32,22 +32,6 @@ export default class ReactPDF extends Component {
         return nextState.page !== this.state.page;
     }
 
-    loadPage(pageIndex) {
-        if (!this.pdf) {
-            throw new Error('Unexpected call to getPage() before the document has been loaded.');
-        }
-
-        let pageNumber = pageIndex + 1;
-
-        if (!pageIndex || pageNumber < 1) {
-            pageNumber = 1;
-        } else if (pageNumber >= this.pdf.numPages) {
-            pageNumber = this.pdf.numPages;
-        }
-
-        this.pdf.getPage(pageNumber).then(this.onPageLoad);
-    }
-
     onDocumentLoad = (pdf) => {
         this.pdf = pdf;
 
@@ -87,7 +71,7 @@ export default class ReactPDF extends Component {
             this.props.onPageRender();
         }
     }
- 
+
     handleProps(props = this.props) {
         const self = this;
 
@@ -119,6 +103,22 @@ export default class ReactPDF extends Component {
         }
     }
 
+    loadPage(pageIndex) {
+        if (!this.pdf) {
+            throw new Error('Unexpected call to getPage() before the document has been loaded.');
+        }
+
+        let pageNumber = pageIndex + 1;
+
+        if (!pageIndex || pageNumber < 1) {
+            pageNumber = 1;
+        } else if (pageNumber >= this.pdf.numPages) {
+            pageNumber = this.pdf.numPages;
+        }
+
+        this.pdf.getPage(pageNumber).then(this.onPageLoad);
+    }
+
     loadPDFDocument(byteArray) {
         PDFJS.getDocument(byteArray).then(this.onDocumentLoad);
     }
@@ -135,8 +135,10 @@ export default class ReactPDF extends Component {
 
         return (
             <canvas
-                ref={canvas => {
-                    if (!canvas) return;
+                ref={(ref) => {
+                    if (!ref) return;
+
+                    const canvas = ref;
 
                     const context = canvas.getContext('2d');
                     const viewport = page.getViewport(scale);
@@ -163,11 +165,12 @@ ReactPDF.defaultProps = {
 };
 
 ReactPDF.propTypes = {
-    file: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
     content: PropTypes.string,
-    pageIndex: PropTypes.number,
-    scale: PropTypes.number,
+    file: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
     loading: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
     onDocumentLoad: PropTypes.func,
     onPageLoad: PropTypes.func,
+    onPageRender: PropTypes.func,
+    pageIndex: PropTypes.number,
+    scale: PropTypes.number,
 };

@@ -29,7 +29,7 @@ class Example extends Component {
     }
 
     changePage(by) {
-        let newPageIndex = this.state.pageIndex + by;
+        const newPageIndex = this.state.pageIndex + by;
 
         this.setState({
             pageIndex: newPageIndex,
@@ -37,7 +37,7 @@ class Example extends Component {
     }
 
     render() {
-        let { file, pageIndex, pageNumber, total } = this.state;
+        const { file, pageIndex, pageNumber, total } = this.state;
 
         return (
             <div className="Example">
@@ -45,7 +45,8 @@ class Example extends Component {
                 <div className="Example__container">
                     <div className="Example__container__load">
                         <label htmlFor="file">Load from file:</label>&nbsp;
-                        <input type="file"
+                        <input
+                            type="file"
                             onChange={this.onFileChange}
                         />
                     </div>
