@@ -11,15 +11,14 @@ export default class ReactPDF extends Component {
     }
 
     componentDidMount() {
-        this.handleProps();
+        this.handleFileLoad();
     }
 
     componentWillReceiveProps(newProps) {
         if (
-            (newProps.file && newProps.file !== this.props.file) ||
-            (newProps.content && newProps.content !== this.props.content)
+            newProps.file && newProps.file !== this.props.file
         ) {
-            this.handleProps(newProps);
+            this.handleFileLoad(newProps);
         }
 
         if (
@@ -84,35 +83,48 @@ export default class ReactPDF extends Component {
         }
     }
 
-    handleProps(props = this.props) {
-        const self = this;
+    handleFileLoad(props = this.props) {
+        const { file } = props;
 
-        if (props.file) {
-            if (typeof props.file === 'string') {
-                this.loadPDFDocument(props.file);
-                return;
-            }
+        if (!file) return;
 
+        this.setState({
+            pdf: null,
+            page: null,
+        })
+
+        // File is a file
+        if (file instanceof File) {
             const reader = new FileReader();
 
             reader.onloadend = () => {
-                self.loadPDFDocument(new Uint8Array(reader.result));
-            };
-
-            reader.readAsArrayBuffer(props.file);
-        } else if (props.content) {
-            const bytes = window.atob(props.content);
-            const byteLength = bytes.length;
-            const byteArray = new Uint8Array(new ArrayBuffer(byteLength));
-
-            for (let index = 0; index < byteLength; index += 1) {
-                byteArray[index] = bytes.charCodeAt(index);
+                this.loadDocument(new Uint8Array(reader.result));
             }
 
-            this.loadPDFDocument(byteArray);
-        } else {
-            console.error('React-PDF works with a file(URL) or (base64)content. At least one needs to be provided!'); // eslint-disable-line max-len, no-console
+            reader.readAsArrayBuffer(file);
+            return;
         }
+
+        // File is a string
+        if (
+            typeof file === 'string'
+        ) {
+            if (
+                window.location.protocol === 'file:'
+            ) {
+                console.warn(`Loading PDF as base64 strings/URLs might not work on protocols other than HTTP/HTTPS.`);
+            }
+            this.loadDocument(file);
+            return;
+        }
+
+        throw new Error(`File is neither a File nor a string with base64/URL.`);
+    }
+
+    loadDocument(source) {
+        PDFJS.getDocument(source)
+            .then(this.onDocumentLoad)
+            .catch(this.onDocumentError);
     }
 
     loadPage(pageIndex) {
@@ -131,12 +143,6 @@ export default class ReactPDF extends Component {
         this.state.pdf.getPage(pageNumber)
             .then(this.onPageLoad)
             .catch(this.onPageError);
-    }
-
-    loadPDFDocument(byteArray) {
-        PDFJS.getDocument(byteArray)
-            .then(this.onDocumentLoad)
-            .catch(this.onDocumentError);
     }
 
     renderError() {
