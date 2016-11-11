@@ -173,11 +173,6 @@
 	                            file: file,
 	                            onDocumentLoad: this.onDocumentLoad,
 	                            onPageLoad: this.onPageLoad,
-	                            loading: _react2.default.createElement(
-	                                'div',
-	                                null,
-	                                'Loading PDF\u2026'
-	                            ),
 	                            pageIndex: pageIndex
 	                        })
 	                    ),
@@ -21648,6 +21643,10 @@
 	
 	            _this.loadPage(_this.props.pageIndex);
 	        }, _this.onDocumentError = function () {
+	            if (_this.props.onDocumentError && typeof _this.props.onDocumentError === 'function') {
+	                _this.props.onDocumentError();
+	            }
+	
 	            _this.setState({ pdf: false });
 	        }, _this.onPageLoad = function (page) {
 	            if (_this.props.onPageLoad && typeof _this.props.onPageLoad === 'function') {
@@ -21659,6 +21658,10 @@
 	
 	            _this.setState({ page: page });
 	        }, _this.onPageError = function () {
+	            if (_this.props.onPageError && typeof _this.props.onPageError === 'function') {
+	                _this.props.onPageError();
+	            }
+	
 	            _this.setState({ page: false });
 	        }, _this.onPageRender = function () {
 	            if (_this.props.onPageRender && typeof _this.props.onPageLoad === 'function') {
@@ -21833,7 +21836,9 @@
 	    error: _react.PropTypes.oneOfType([_react.PropTypes.string, _react.PropTypes.node]),
 	    file: _react.PropTypes.oneOfType([_react.PropTypes.string, _react.PropTypes.object]),
 	    loading: _react.PropTypes.oneOfType([_react.PropTypes.string, _react.PropTypes.node]),
+	    onDocumentError: _react.PropTypes.func,
 	    onDocumentLoad: _react.PropTypes.func,
+	    onPageError: _react.PropTypes.func,
 	    onPageLoad: _react.PropTypes.func,
 	    onPageRender: _react.PropTypes.func,
 	    pageIndex: _react.PropTypes.number,
