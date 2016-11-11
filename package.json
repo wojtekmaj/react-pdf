@@ -5,10 +5,12 @@
   "main": "es5/react-pdf.js",
   "es6": "src/react-pdf.jsx",
   "scripts": {
-    "build": "babel src -d es5",
+    "build": "npm run build-source && npm run build-sample",
     "build-sample": "webpack",
+    "build-source": "babel src -d es5",
+    "prepublish": "npm run build && npm run build-sample",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "prepublish": "npm run build && npm run build-sample"
+    "watch": "webpack --watch"
   },
   "keywords": [
     "pdf",
