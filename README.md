@@ -14,58 +14,32 @@ Install with `npm install --save react-pdf`
 Use in your app:
 
 ```js
-import PDF from 'react-pdf';
+import ReactPDF from 'react-pdf';
 
 class MyApp extends React.Component {
-    onDocumentComplete(pages) {
-        this.setState({ pages });
+    onDocumentLoad({ total }) {
+        this.setState({ total });
     },
-    onPageComplete(page) {
-        this.setState({ page });
+    onPageLoad({ pageIndex, pageNumber }) {
+        this.setState({{ pageIndex, pageNumber });
     }
     render() {
         return (
             <div>
-                <PDF
+                <ReactPDF
                     file="somefile.pdf"
-                    page="2"
-                    onDocumentComplete={this.onDocumentComplete}
-                    onPageComplete={this.onPageComplete}
+                    page={2}
+                    onDocumentLoad={this.onDocumentLoad}
+                    onPageLoad={this.onPageLoad}
                 />
-                <p>Page {this.state.page} of {this.state.pages}</p>
+                <p>Page {this.state.pageNumber} of {this.state.total}</p>
             </div>
         );
     },
 }
 ```
-or
-```js
-var PDF = require('react-pdf');
 
-var MyApp = React.createClass({
-    _onDocumentComplete: function(pages){
-        this.setState({pages: pages});
-    },
-    _onPageComplete: function(page){
-        this.setState({currentPage: page});
-    },
-    render: function() {
-        return (
-            <PDF
-                content="YSBzaW1wbGUgcGRm..."
-                page="1"
-                scale="1.0"
-                onDocumentComplete={this._onDocumentComplete}
-                onPageComplete={this._onPageComplete}
-                loading="Your own loading message"
-            />
-        );
-    }
-});
-```
-
-Check the example-directory of this repository for a full working example
-
+Check the sample drectory of this repository for a full working example.
 
 License
 -------
@@ -75,8 +49,6 @@ The MIT License
 Author
 ------
 
-Niklas Närhinen <niklas@narhinen.net>
+Wojciech Maj <kontakt@wojtekmaj.pl>
 
-Bart Van Houtte <bart.van.houtte@ading.be> Added Base64 Content, update PDF.js, document and page completion notification callbacks and custom loading message
-
-Wojciech Maj <kontakt@wojtekmaj.pl> Rewritten React-PDF to ES6 module, upgraded module to support React 15.x, included PDF.js as a native npm module to avoid necessity of constant manual updating, removed necessity of adding global PDFJS variable
+Based on an awesome work of Niklas Närhinen <niklas@narhinen.net>
