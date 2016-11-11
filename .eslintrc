@@ -1,14 +1,21 @@
 {
     "extends": "airbnb",
     "env": {
+        "browser": true,
         "es6": true
     },
     "globals": {
         "PDFJS": true
     },
+    "parser": "babel-eslint",
     "parserOptions": {
         "ecmaFeatures": {
             "experimentalObjectRestSpread": true
         }
+    },
+    "rules": {
+        "indent": ["error", 4, { "SwitchCase": 1 }],
+        "react/jsx-indent": ["error", 4],
+        "react/jsx-indent-props": ["error", 4]
     }
 }
