@@ -54,6 +54,13 @@ export default class ReactPDF extends Component {
     }
 
     onDocumentError = () => {
+        if (
+            this.props.onDocumentError &&
+            typeof this.props.onDocumentError === 'function'
+        ) {
+            this.props.onDocumentError();
+        }
+
         this.setState({ pdf: false });
     }
 
@@ -72,6 +79,13 @@ export default class ReactPDF extends Component {
     }
 
     onPageError = () => {
+        if (
+            this.props.onPageError &&
+            typeof this.props.onPageError === 'function'
+        ) {
+            this.props.onPageError();
+        }
+
         this.setState({ page: false });
     }
 
@@ -200,7 +214,9 @@ ReactPDF.propTypes = {
     error: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
     file: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
     loading: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
+    onDocumentError: PropTypes.func,
     onDocumentLoad: PropTypes.func,
+    onPageError: PropTypes.func,
     onPageLoad: PropTypes.func,
     onPageRender: PropTypes.func,
     pageIndex: PropTypes.number,
