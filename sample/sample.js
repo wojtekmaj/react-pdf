@@ -165,7 +165,8 @@
 	                            'Load from file:'
 	                        ),
 	                        '\xA0',
-	                        _react2.default.createElement('input', { type: 'file',
+	                        _react2.default.createElement('input', {
+	                            type: 'file',
 	                            onChange: this.onFileChange
 	                        })
 	                    ),
@@ -21637,9 +21638,10 @@
 	            args[_key] = arguments[_key];
 	        }
 	
-	        return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = ReactPDF.__proto__ || Object.getPrototypeOf(ReactPDF)).call.apply(_ref, [this].concat(args))), _this), _this.state = {}, _this.onDocumentLoad = function (pdf) {
-	            _this.pdf = pdf;
-	
+	        return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = ReactPDF.__proto__ || Object.getPrototypeOf(ReactPDF)).call.apply(_ref, [this].concat(args))), _this), _this.state = {
+	            pdf: null,
+	            page: null
+	        }, _this.onDocumentLoad = function (pdf) {
 	            if (_this.props.onDocumentLoad && typeof _this.props.onDocumentLoad === 'function') {
 	                _this.props.onDocumentLoad({
 	                    total: pdf.numPages
@@ -21649,6 +21651,8 @@
 	            _this.setState({ pdf: pdf });
 	
 	            _this.loadPage(_this.props.pageIndex);
+	        }, _this.onDocumentError = function () {
+	            _this.setState({ pdf: false });
 	        }, _this.onPageLoad = function (page) {
 	            if (_this.props.onPageLoad && typeof _this.props.onPageLoad === 'function') {
 	                _this.props.onPageLoad({
@@ -21658,6 +21662,8 @@
 	            }
 	
 	            _this.setState({ page: page });
+	        }, _this.onPageError = function () {
+	            _this.setState({ page: false });
 	        }, _this.onPageRender = function () {
 	            if (_this.props.onPageRender && typeof _this.props.onPageLoad === 'function') {
 	                _this.props.onPageRender();
@@ -21684,24 +21690,7 @@
 	    }, {
 	        key: 'shouldComponentUpdate',
 	        value: function shouldComponentUpdate(nextProps, nextState) {
-	            return nextState.page !== this.state.page;
-	        }
-	    }, {
-	        key: 'loadPage',
-	        value: function loadPage(pageIndex) {
-	            if (!this.pdf) {
-	                throw new Error('Unexpected call to getPage() before the document has been loaded.');
-	            }
-	
-	            var pageNumber = pageIndex + 1;
-	
-	            if (!pageIndex || pageNumber < 1) {
-	                pageNumber = 1;
-	            } else if (pageNumber >= this.pdf.numPages) {
-	                pageNumber = this.pdf.numPages;
-	            }
-	
-	            this.pdf.getPage(pageNumber).then(this.onPageLoad);
+	            return nextState.pdf !== this.state.pdf || nextState.page !== this.state.page;
 	        }
 	    }, {
 	        key: 'handleProps',
@@ -21746,9 +21735,44 @@
 	            }
 	        }
 	    }, {
+	        key: 'loadPage',
+	        value: function loadPage(pageIndex) {
+	            if (!this.state.pdf) {
+	                throw new Error('Unexpected call to getPage() before the document has been loaded.');
+	            }
+	
+	            var pageNumber = pageIndex + 1;
+	
+	            if (!pageIndex || pageNumber < 1) {
+	                pageNumber = 1;
+	            } else if (pageNumber >= this.state.pdf.numPages) {
+	                pageNumber = this.state.pdf.numPages;
+	            }
+	
+	            this.state.pdf.getPage(pageNumber).then(this.onPageLoad).catch(this.onPageError);
+	        }
+	    }, {
 	        key: 'loadPDFDocument',
 	        value: function loadPDFDocument(byteArray) {
-	            PDFJS.getDocument(byteArray).then(this.onDocumentLoad);
+	            PDFJS.getDocument(byteArray).then(this.onDocumentLoad).catch(this.onDocumentError);
+	        }
+	    }, {
+	        key: 'renderError',
+	        value: function renderError() {
+	            return _react2.default.createElement(
+	                'div',
+	                null,
+	                this.props.error
+	            );
+	        }
+	    }, {
+	        key: 'renderLoader',
+	        value: function renderLoader() {
+	            return _react2.default.createElement(
+	                'div',
+	                null,
+	                this.props.loading
+	            );
 	        }
 	    }, {
 	        key: 'render',
@@ -21756,20 +21780,24 @@
 	            var _this3 = this;
 	
 	            var scale = this.props.scale;
-	            var page = this.state.page;
+	            var _state = this.state,
+	                pdf = _state.pdf,
+	                page = _state.page;
 	
 	
-	            if (!page) {
-	                return _react2.default.createElement(
-	                    'div',
-	                    null,
-	                    this.props.loading
-	                );
+	            if (pdf === false || page === false) {
+	                return this.renderError();
+	            }
+	
+	            if (pdf === null || page === null) {
+	                return this.renderLoader();
 	            }
 	
 	            return _react2.default.createElement('canvas', {
-	                ref: function ref(canvas) {
-	                    if (!canvas) return;
+	                ref: function ref(_ref2) {
+	                    if (!_ref2) return;
+	
+	                    var canvas = _ref2;
 	
 	                    var context = canvas.getContext('2d');
 	                    var viewport = page.getViewport(scale);
@@ -21797,17 +21825,20 @@
 	ReactPDF.defaultProps = {
 	    pageIndex: 0,
 	    scale: 1.0,
+	    error: 'Failed to load PDF file.',
 	    loading: 'Loading PDF…'
 	};
 	
 	ReactPDF.propTypes = {
-	    file: _react.PropTypes.oneOfType([_react.PropTypes.string, _react.PropTypes.object]),
 	    content: _react.PropTypes.string,
-	    pageIndex: _react.PropTypes.number,
-	    scale: _react.PropTypes.number,
+	    error: _react.PropTypes.oneOfType([_react.PropTypes.string, _react.PropTypes.node]),
+	    file: _react.PropTypes.oneOfType([_react.PropTypes.string, _react.PropTypes.object]),
 	    loading: _react.PropTypes.oneOfType([_react.PropTypes.string, _react.PropTypes.node]),
 	    onDocumentLoad: _react.PropTypes.func,
-	    onPageLoad: _react.PropTypes.func
+	    onPageLoad: _react.PropTypes.func,
+	    onPageRender: _react.PropTypes.func,
+	    pageIndex: _react.PropTypes.number,
+	    scale: _react.PropTypes.number
 	};
 
 /***/ },

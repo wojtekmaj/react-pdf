@@ -5,7 +5,10 @@ require('pdfjs-dist/build/pdf');
 PDFJS.workerSrc = require('pdfjs-dist/build/pdf.worker.js');
 
 export default class ReactPDF extends Component {
-    state = {}
+    state = {
+        pdf: null,
+        page: null,
+    }
 
     componentDidMount() {
         this.handleProps();
@@ -29,12 +32,13 @@ export default class ReactPDF extends Component {
     }
 
     shouldComponentUpdate(nextProps, nextState) {
-        return nextState.page !== this.state.page;
+        return (
+            nextState.pdf !== this.state.pdf ||
+            nextState.page !== this.state.page
+        );
     }
 
     onDocumentLoad = (pdf) => {
-        this.pdf = pdf;
-
         if (
             this.props.onDocumentLoad &&
             typeof this.props.onDocumentLoad === 'function'
@@ -49,6 +53,10 @@ export default class ReactPDF extends Component {
         this.loadPage(this.props.pageIndex);
     }
 
+    onDocumentError = () => {
+        this.setState({ pdf: false });
+    }
+
     onPageLoad = (page) => {
         if (
             this.props.onPageLoad &&
@@ -61,6 +69,10 @@ export default class ReactPDF extends Component {
         }
 
         this.setState({ page });
+    }
+
+    onPageError = () => {
+        this.setState({ page: false });
     }
 
     onPageRender = () => {
@@ -104,7 +116,7 @@ export default class ReactPDF extends Component {
     }
 
     loadPage(pageIndex) {
-        if (!this.pdf) {
+        if (!this.state.pdf) {
             throw new Error('Unexpected call to getPage() before the document has been loaded.');
         }
 
@@ -112,25 +124,43 @@ export default class ReactPDF extends Component {
 
         if (!pageIndex || pageNumber < 1) {
             pageNumber = 1;
-        } else if (pageNumber >= this.pdf.numPages) {
-            pageNumber = this.pdf.numPages;
+        } else if (pageNumber >= this.state.pdf.numPages) {
+            pageNumber = this.state.pdf.numPages;
         }
 
-        this.pdf.getPage(pageNumber).then(this.onPageLoad);
+        this.state.pdf.getPage(pageNumber)
+            .then(this.onPageLoad)
+            .catch(this.onPageError);
     }
 
     loadPDFDocument(byteArray) {
-        PDFJS.getDocument(byteArray).then(this.onDocumentLoad);
+        PDFJS.getDocument(byteArray)
+            .then(this.onDocumentLoad)
+            .catch(this.onDocumentError);
+    }
+
+    renderError() {
+        return (
+            <div>{this.props.error}</div>
+        );
+    }
+
+    renderLoader() {
+        return (
+            <div>{this.props.loading}</div>
+        );
     }
 
     render() {
         const { scale } = this.props;
-        const { page } = this.state;
+        const { pdf, page } = this.state;
 
-        if (!page) {
-            return (
-                <div>{this.props.loading}</div>
-            );
+        if (pdf === false || page === false) {
+            return this.renderError();
+        }
+
+        if (pdf === null || page === null) {
+            return this.renderLoader();
         }
 
         return (
@@ -161,11 +191,13 @@ export default class ReactPDF extends Component {
 ReactPDF.defaultProps = {
     pageIndex: 0,
     scale: 1.0,
+    error: 'Failed to load PDF file.',
     loading: 'Loading PDF…',
 };
 
 ReactPDF.propTypes = {
     content: PropTypes.string,
+    error: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
     file: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
     loading: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
     onDocumentLoad: PropTypes.func,
