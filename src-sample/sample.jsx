@@ -4,11 +4,9 @@ import ReactPDF from '../src/react-pdf';
 
 import './sample.less';
 
-import SamplePDF from './sample.pdf';
-
 class Example extends Component {
     state = {
-        file: SamplePDF,
+        file: './sample.pdf',
         pageIndex: null,
         pageNumber: null,
         total: null,
