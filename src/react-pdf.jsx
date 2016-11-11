@@ -105,19 +105,7 @@ export default class ReactPDF extends Component {
         this.setState({
             pdf: null,
             page: null,
-        })
-
-        // File is a file
-        if (file instanceof File) {
-            const reader = new FileReader();
-
-            reader.onloadend = () => {
-                this.loadDocument(new Uint8Array(reader.result));
-            }
-
-            reader.readAsArrayBuffer(file);
-            return;
-        }
+        });
 
         // File is a string
         if (
@@ -126,17 +114,37 @@ export default class ReactPDF extends Component {
             if (
                 window.location.protocol === 'file:'
             ) {
-                console.warn(`Loading PDF as base64 strings/URLs might not work on protocols other than HTTP/HTTPS.`);
+                console.warn('Loading PDF as base64 strings/URLs might not work on protocols other than HTTP/HTTPS. On Google Chrome, you can use --allow-file-access-from-files flag for debugging purposes.');
             }
             this.loadDocument(file);
             return;
         }
 
-        throw new Error(`File is neither a File nor a string with base64/URL.`);
+        // File is a file
+        if (file instanceof File) {
+            const reader = new FileReader();
+
+            reader.onloadend = () => {
+                this.loadDocument(new Uint8Array(reader.result));
+            };
+
+            reader.readAsArrayBuffer(file);
+            return;
+        }
+
+        // File is a Uint8Array object or parameter object
+        if (
+            typeof file === 'object'
+        ) {
+            this.loadDocument(file);
+            return;
+        }
+
+        throw new Error('Unrecognized input type.');
     }
 
-    loadDocument(source) {
-        PDFJS.getDocument(source)
+    loadDocument(...args) {
+        PDFJS.getDocument(...args)
             .then(this.onDocumentLoad)
             .catch(this.onDocumentError);
     }
@@ -216,10 +224,24 @@ ReactPDF.defaultProps = {
 };
 
 ReactPDF.propTypes = {
-    content: PropTypes.string,
-    error: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
-    file: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
-    loading: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
+    error: PropTypes.oneOfType([
+        PropTypes.string,
+        PropTypes.node,
+    ]),
+    file: PropTypes.oneOfType([
+        PropTypes.string,
+        PropTypes.instanceOf(File),
+        PropTypes.shape({
+            url: PropTypes.string,
+            data: PropTypes.object,
+            range: PropTypes.object,
+            httpHeaders: PropTypes.object,
+        }),
+    ]),
+    loading: PropTypes.oneOfType([
+        PropTypes.string,
+        PropTypes.node,
+    ]),
     onDocumentError: PropTypes.func,
     onDocumentLoad: PropTypes.func,
     onPageError: PropTypes.func,
