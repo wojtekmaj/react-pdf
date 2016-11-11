@@ -2,8 +2,8 @@
   "name": "react-pdf",
   "version": "1.0.0",
   "description": "A react component using pdf.js to display pdf documents inline",
-  "main": "es5/index.js",
-  "es6": "src/index.js",
+  "main": "es5/react-pdf.js",
+  "es6": "src/react-pdf.jsx",
   "scripts": {
     "build": "babel src -d es5",
     "build-sample": "webpack",
