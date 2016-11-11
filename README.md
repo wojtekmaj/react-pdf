@@ -1,10 +1,17 @@
 react-pdf
 =========
 
-What is react-PDF
+What is react-PDF?
 ----
 
-A component for showing a pdf page using [pdf.js](http://mozilla.github.io/pdf.js).
+A component for displaying PDF files using [pdf.js](http://mozilla.github.io/pdf.js).
+
+Demo
+-----
+
+Demo page is included in sample directory.
+
+[Online demo](http://projekty.wojtekmaj.pl/react-pdf/) is also available!
 
 Usage
 -----
