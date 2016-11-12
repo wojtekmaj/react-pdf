@@ -14,29 +14,29 @@ export default class ReactPDF extends Component {
         this.handleFileLoad();
     }
 
-    componentWillReceiveProps(newProps) {
-        if (this.isParameterObject(newProps.file)) {
+    componentWillReceiveProps(nextProps) {
+        if (this.isParameterObject(nextProps.file)) {
             // File is a parameter object
             if (
-                newProps.file.url !== this.props.file.url ||
-                newProps.file.data !== this.props.file.data ||
-                newProps.file.range !== this.props.file.range
+                nextProps.file.data !== this.props.file.data ||
+                nextProps.file.range !== this.props.file.range ||
+                nextProps.file.url !== this.props.file.url
             ) {
-                this.handleFileLoad(newProps);
+                this.handleFileLoad(nextProps);
                 return;
             }
-        } else if (newProps.file && newProps.file !== this.props.file) {
+        } else if (nextProps.file && nextProps.file !== this.props.file) {
             // File is a normal object or not an object at all
-            this.handleFileLoad(newProps);
+            this.handleFileLoad(nextProps);
             return;
         }
 
         if (
             this.state.pdf &&
-            typeof newProps.pageIndex !== 'undefined' &&
-            newProps.pageIndex !== this.props.pageIndex
+            typeof nextProps.pageIndex !== 'undefined' &&
+            nextProps.pageIndex !== this.props.pageIndex
         ) {
-            this.loadPage(newProps.pageIndex);
+            this.loadPage(nextProps.pageIndex);
         }
     }
 
