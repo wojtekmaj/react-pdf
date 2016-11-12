@@ -145,7 +145,7 @@ export default class ReactPDF extends Component {
             return;
         }
 
-        // File is a file
+        // File is a File
         if (file instanceof File) {
             const reader = new FileReader();
 
@@ -157,15 +157,27 @@ export default class ReactPDF extends Component {
             return;
         }
 
-        // File is a Uint8Array object or parameter object
-        if (
-            typeof file === 'object'
-        ) {
-            if (this.isParameterObject(file)) {
-                // File is a parameter object
-                // Prevent from modifying props
-                file = Object.assign({}, file);
+        // File is a Blob
+        if (file instanceof Blob) {
+            file = URL.createObjectURL(file);
+
+            this.loadDocument(file);
+            return;
+        }
+
+        // File is an ArrayBuffer
+        if (file instanceof ArrayBuffer) {
+            this.loadDocument(file);
+            return;
+        }
+
+        // File is a parameter object
+        if (this.isParameterObject(file)) {
             }
+
+            // File is a parameter object
+            // Prevent from modifying props
+            file = Object.assign({}, file);
 
             this.loadDocument(file);
             return;
@@ -273,6 +285,7 @@ ReactPDF.propTypes = {
     file: PropTypes.oneOfType([
         PropTypes.string,
         PropTypes.instanceOf(File),
+        PropTypes.instanceOf(Blob),
         PropTypes.shape({
             url: PropTypes.string,
             data: PropTypes.object,
