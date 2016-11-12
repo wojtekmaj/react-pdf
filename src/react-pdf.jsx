@@ -190,6 +190,12 @@ export default class ReactPDF extends Component {
             .catch(this.onPageError);
     }
 
+    renderNoData() {
+        return (
+            <div>{this.props.noData}</div>
+        );
+    }
+
     renderError() {
         return (
             <div>{this.props.error}</div>
@@ -203,8 +209,12 @@ export default class ReactPDF extends Component {
     }
 
     render() {
-        const { scale } = this.props;
+        const { scale, file } = this.props;
         const { pdf, page } = this.state;
+
+        if (!file) {
+            return this.renderNoData();
+        }
 
         if (pdf === false || page === false) {
             return this.renderError();
@@ -244,6 +254,7 @@ ReactPDF.defaultProps = {
     scale: 1.0,
     error: 'Failed to load PDF file.',
     loading: 'Loading PDF…',
+    noData: 'No PDF file specified.',
 };
 
 ReactPDF.propTypes = {
