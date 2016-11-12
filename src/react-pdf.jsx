@@ -119,7 +119,13 @@ export default class ReactPDF extends Component {
     handleFileLoad(props = this.props) {
         let { file } = props;
 
-        if (!file) return;
+        if (
+            !file ||
+            (
+                this.isParameterObject(file) &&
+                !file.data && !file.range && !file.url
+            )
+        ) return;
 
         this.setState({
             pdf: null,
