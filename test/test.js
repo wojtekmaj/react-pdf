@@ -77,6 +77,10 @@
 	
 	__webpack_require__(179);
 	
+	var _test = __webpack_require__(183);
+	
+	var _test2 = _interopRequireDefault(_test);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -85,29 +89,64 @@
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	var Example = function (_Component) {
-	    _inherits(Example, _Component);
+	var Test = function (_Component) {
+	    _inherits(Test, _Component);
 	
-	    function Example() {
+	    function Test() {
 	        var _ref;
 	
 	        var _temp, _this, _ret;
 	
-	        _classCallCheck(this, Example);
+	        _classCallCheck(this, Test);
 	
 	        for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
 	            args[_key] = arguments[_key];
 	        }
 	
-	        return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = Example.__proto__ || Object.getPrototypeOf(Example)).call.apply(_ref, [this].concat(args))), _this), _this.state = {
-	            file: './sample.pdf',
+	        return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = Test.__proto__ || Object.getPrototypeOf(Test)).call.apply(_ref, [this].concat(args))), _this), _this.state = {
+	            file: null,
 	            pageIndex: null,
 	            pageNumber: null,
+	            passObj: false,
 	            total: null
 	        }, _this.onFileChange = function (event) {
 	            _this.setState({
 	                file: event.target.files[0]
 	            });
+	        }, _this.onFileUintChange = function (event) {
+	            var reader = new FileReader();
+	
+	            reader.onloadend = function () {
+	                _this.setState({
+	                    file: reader.result
+	                });
+	            };
+	
+	            reader.readAsArrayBuffer(event.target.files[0]);
+	        }, _this.onURLChange = function (event) {
+	            event.preventDefault();
+	
+	            _this.setState({
+	                file: event.target.querySelector('input').value
+	            });
+	        }, _this.onRequestChange = function (event) {
+	            event.preventDefault();
+	
+	            var url = event.target.querySelector('input').value;
+	
+	            fetch(url).then(function (response) {
+	                return response.blob();
+	            }).then(function (blob) {
+	                _this.setState({
+	                    file: blob
+	                });
+	            });
+	        }, _this.onUseImported = function () {
+	            _this.setState({
+	                file: _test2.default
+	            });
+	        }, _this.onPassObjChange = function (event) {
+	            _this.setState({ passObj: event.target.checked });
 	        }, _this.onDocumentLoad = function (_ref2) {
 	            var total = _ref2.total;
 	
@@ -120,7 +159,7 @@
 	        }, _temp), _possibleConstructorReturn(_this, _ret);
 	    }
 	
-	    _createClass(Example, [{
+	    _createClass(Test, [{
 	        key: 'changePage',
 	        value: function changePage(by) {
 	            var newPageIndex = this.state.pageIndex + by;
@@ -135,7 +174,6 @@
 	            var _this2 = this;
 	
 	            var _state = this.state,
-	                file = _state.file,
 	                pageIndex = _state.pageIndex,
 	                pageNumber = _state.pageNumber,
 	                total = _state.total;
@@ -147,7 +185,7 @@
 	                _react2.default.createElement(
 	                    'h1',
 	                    null,
-	                    'react-pdf sample page'
+	                    'react-pdf test page'
 	                ),
 	                _react2.default.createElement(
 	                    'div',
@@ -164,59 +202,143 @@
 	                        _react2.default.createElement('input', {
 	                            type: 'file',
 	                            onChange: this.onFileChange
-	                        })
+	                        }),
+	                        _react2.default.createElement('br', null),
+	                        _react2.default.createElement('br', null),
+	                        _react2.default.createElement(
+	                            'label',
+	                            { htmlFor: 'file' },
+	                            'Load from file to Uint8Array:'
+	                        ),
+	                        '\xA0',
+	                        _react2.default.createElement('input', {
+	                            type: 'file',
+	                            onChange: this.onFileUintChange
+	                        }),
+	                        _react2.default.createElement('br', null),
+	                        _react2.default.createElement('br', null),
+	                        _react2.default.createElement(
+	                            'form',
+	                            { onSubmit: this.onURLChange },
+	                            _react2.default.createElement(
+	                                'label',
+	                                { htmlFor: 'url' },
+	                                'Load from URL:'
+	                            ),
+	                            '\xA0',
+	                            _react2.default.createElement('input', {
+	                                type: 'text'
+	                            }),
+	                            _react2.default.createElement(
+	                                'button',
+	                                { type: 'submit' },
+	                                'Apply'
+	                            )
+	                        ),
+	                        _react2.default.createElement('br', null),
+	                        _react2.default.createElement(
+	                            'form',
+	                            { onSubmit: this.onRequestChange },
+	                            _react2.default.createElement(
+	                                'label',
+	                                { htmlFor: 'url' },
+	                                'Fetch and pass:'
+	                            ),
+	                            '\xA0',
+	                            _react2.default.createElement('input', {
+	                                type: 'text'
+	                            }),
+	                            _react2.default.createElement(
+	                                'button',
+	                                { type: 'submit' },
+	                                'Apply'
+	                            )
+	                        ),
+	                        _react2.default.createElement('br', null),
+	                        _react2.default.createElement(
+	                            'button',
+	                            { onClick: this.onUseImported },
+	                            'Use imported file'
+	                        ),
+	                        _react2.default.createElement('br', null),
+	                        _react2.default.createElement('br', null),
+	                        _react2.default.createElement('input', { id: 'passobj', type: 'checkbox', onChange: this.onPassObjChange }),
+	                        _react2.default.createElement(
+	                            'label',
+	                            { htmlFor: 'passobj' },
+	                            'Pass as an object (URLs and imports only)'
+	                        )
 	                    ),
 	                    _react2.default.createElement(
 	                        'div',
 	                        { className: 'Example__container__preview' },
-	                        _react2.default.createElement(_reactPdf2.default, {
-	                            file: file,
-	                            onDocumentLoad: this.onDocumentLoad,
-	                            onPageLoad: this.onPageLoad,
-	                            pageIndex: pageIndex
-	                        })
-	                    ),
-	                    _react2.default.createElement(
-	                        'div',
-	                        { className: 'Example__container__controls' },
 	                        _react2.default.createElement(
-	                            'button',
-	                            {
-	                                disabled: pageNumber <= 1,
-	                                onClick: function onClick() {
-	                                    return _this2.changePage(-1);
-	                                }
-	                            },
-	                            'Previous'
+	                            'div',
+	                            { className: 'Example__container__preview__out' },
+	                            _react2.default.createElement(_reactPdf2.default, {
+	                                file: this.transformedFile,
+	                                onDocumentLoad: this.onDocumentLoad,
+	                                onPageLoad: this.onPageLoad,
+	                                pageIndex: pageIndex
+	                            })
 	                        ),
 	                        _react2.default.createElement(
-	                            'span',
-	                            null,
-	                            'Page ',
-	                            pageNumber || '--',
-	                            ' of ',
-	                            total || '--'
-	                        ),
-	                        _react2.default.createElement(
-	                            'button',
-	                            {
-	                                disabled: pageNumber >= total,
-	                                onClick: function onClick() {
-	                                    return _this2.changePage(1);
-	                                }
-	                            },
-	                            'Next'
+	                            'div',
+	                            { className: 'Example__container__preview__controls' },
+	                            _react2.default.createElement(
+	                                'button',
+	                                {
+	                                    disabled: pageNumber <= 1,
+	                                    onClick: function onClick() {
+	                                        return _this2.changePage(-1);
+	                                    }
+	                                },
+	                                'Previous'
+	                            ),
+	                            _react2.default.createElement(
+	                                'span',
+	                                null,
+	                                'Page ',
+	                                pageNumber || '--',
+	                                ' of ',
+	                                total || '--'
+	                            ),
+	                            _react2.default.createElement(
+	                                'button',
+	                                {
+	                                    disabled: pageNumber >= total,
+	                                    onClick: function onClick() {
+	                                        return _this2.changePage(1);
+	                                    }
+	                                },
+	                                'Next'
+	                            )
 	                        )
 	                    )
 	                )
 	            );
 	        }
+	    }, {
+	        key: 'transformedFile',
+	        get: function get() {
+	            if (!this.state.passObj) {
+	                return this.state.file;
+	            }
+	
+	            var result = {};
+	            if (typeof this.state.file === 'string') {
+	                result.url = this.state.file;
+	            } else {
+	                return this.state.file;
+	            }
+	            return result;
+	        }
 	    }]);
 	
-	    return Example;
+	    return Test;
 	}(_react.Component);
 	
-	_reactDom2.default.render(_react2.default.createElement(Example, null), document.getElementById('react-container'));
+	_reactDom2.default.render(_react2.default.createElement(Test, null), document.getElementById('react-container'));
 
 /***/ },
 /* 3 */
@@ -87051,8 +87173,8 @@
 	if(false) {
 		// When the styles change, update the <style> tags
 		if(!content.locals) {
-			module.hot.accept("!!./../node_modules/css-loader/index.js!./../node_modules/less-loader/index.js!./sample.less", function() {
-				var newContent = require("!!./../node_modules/css-loader/index.js!./../node_modules/less-loader/index.js!./sample.less");
+			module.hot.accept("!!./../node_modules/css-loader/index.js!./../node_modules/less-loader/index.js!./test.less", function() {
+				var newContent = require("!!./../node_modules/css-loader/index.js!./../node_modules/less-loader/index.js!./test.less");
 				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 				update(newContent);
 			});
@@ -87070,7 +87192,7 @@
 	
 	
 	// module
-	exports.push([module.id, ".Example {\n  font-family: Segoe UI, Tahoma, sans-serif;\n}\n.Example input,\n.Example button {\n  font: inherit;\n}\n.Example__container {\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n}\n.Example__container__preview {\n  width: 300px;\n  border: 1px solid darkgray;\n  margin: 1em 0;\n}\n.Example__container__preview canvas {\n  width: 100%;\n  height: auto;\n}\n.Example__container__controls {\n  width: 300px;\n  display: flex;\n}\n.Example__container__controls span {\n  flex-grow: 1;\n  margin: 0 1em;\n  text-align: center;\n}\n.Example__container__controls button {\n  width: 80px;\n}\n", ""]);
+	exports.push([module.id, ".Example {\n  font-family: Segoe UI, Tahoma, sans-serif;\n}\n.Example input,\n.Example button {\n  font: inherit;\n}\n.Example__container {\n  display: flex;\n  flex-direction: row;\n  align-items: flex-start;\n}\n.Example__container__load {\n  width: 420px;\n}\n.Example__container__preview {\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n  width: 420px;\n}\n.Example__container__preview__out {\n  border: 1px solid darkgray;\n  margin: 1em 0;\n}\n.Example__container__preview__out canvas {\n  width: 100%;\n  height: auto;\n}\n.Example__container__preview__controls {\n  width: 420px;\n  display: flex;\n}\n.Example__container__preview__controls span {\n  flex-grow: 1;\n  margin: 0 1em;\n  text-align: center;\n}\n.Example__container__preview__controls button {\n  width: 80px;\n}\n", ""]);
 	
 	// exports
 
@@ -87391,4 +87513,4 @@
 
 /***/ }
 /******/ ]);
-//# sourceMappingURL=sample.js.map
+//# sourceMappingURL=test.js.map

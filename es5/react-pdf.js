@@ -77,7 +77,7 @@ var ReactPDF = function (_Component) {
                 _this.props.onPageRender();
             }
         }, _this.isParameterObject = function (object) {
-            return (typeof object === 'undefined' ? 'undefined' : _typeof(object)) === 'object' && (object.url || object.data || object.range);
+            return object && (typeof object === 'undefined' ? 'undefined' : _typeof(object)) === 'object' && (object.hasOwnProperty('data') || object.hasOwnProperty('range') || object.hasOwnProperty('url'));
         }, _temp), _possibleConstructorReturn(_this, _ret);
     }
 
@@ -88,21 +88,21 @@ var ReactPDF = function (_Component) {
         }
     }, {
         key: 'componentWillReceiveProps',
-        value: function componentWillReceiveProps(newProps) {
-            if (this.isParameterObject(newProps.file)) {
+        value: function componentWillReceiveProps(nextProps) {
+            if (this.isParameterObject(nextProps.file)) {
                 // File is a parameter object
-                if (newProps.file.url !== this.props.file.url || newProps.file.data !== this.props.file.data || newProps.file.range !== this.props.file.range) {
-                    this.handleFileLoad(newProps);
+                if (nextProps.file && !this.props.file || nextProps.file.data !== this.props.file.data || nextProps.file.range !== this.props.file.range || nextProps.file.url !== this.props.file.url) {
+                    this.handleFileLoad(nextProps);
                     return;
                 }
-            } else if (newProps.file && newProps.file !== this.props.file) {
+            } else if (nextProps.file && nextProps.file !== this.props.file) {
                 // File is a normal object or not an object at all
-                this.handleFileLoad(newProps);
+                this.handleFileLoad(nextProps);
                 return;
             }
 
-            if (this.state.pdf && typeof newProps.pageIndex !== 'undefined' && newProps.pageIndex !== this.props.pageIndex) {
-                this.loadPage(newProps.pageIndex);
+            if (this.state.pdf && typeof nextProps.pageIndex !== 'undefined' && nextProps.pageIndex !== this.props.pageIndex) {
+                this.loadPage(nextProps.pageIndex);
             }
         }
     }, {
@@ -119,7 +119,7 @@ var ReactPDF = function (_Component) {
             var file = props.file;
 
 
-            if (!file) return;
+            if (!file || this.isParameterObject(file) && !file.data && !file.range && !file.url) return;
 
             this.setState({
                 pdf: null,
@@ -129,13 +129,14 @@ var ReactPDF = function (_Component) {
             // File is a string
             if (typeof file === 'string') {
                 if (window.location.protocol === 'file:') {
-                    console.warn('Loading PDF as base64 strings/URLs might not work on protocols other than HTTP/HTTPS. On Google Chrome, you can use --allow-file-access-from-files flag for debugging purposes.');
+                    this.displayCORSWarning();
                 }
+
                 this.loadDocument(file);
                 return;
             }
 
-            // File is a file
+            // File is a File
             if (file instanceof File) {
                 var _ret2 = function () {
                     var reader = new FileReader();
@@ -153,13 +154,29 @@ var ReactPDF = function (_Component) {
                 if ((typeof _ret2 === 'undefined' ? 'undefined' : _typeof(_ret2)) === "object") return _ret2.v;
             }
 
-            // File is a Uint8Array object or parameter object
-            if ((typeof file === 'undefined' ? 'undefined' : _typeof(file)) === 'object') {
-                if (this.isParameterObject(file)) {
-                    // File is a parameter object
-                    // Prevent from modifying props
-                    file = Object.assign({}, file);
+            // File is a Blob
+            if (file instanceof Blob) {
+                file = URL.createObjectURL(file);
+
+                this.loadDocument(file);
+                return;
+            }
+
+            // File is an ArrayBuffer
+            if (file instanceof ArrayBuffer) {
+                this.loadDocument(file);
+                return;
+            }
+
+            // File is a parameter object
+            if (this.isParameterObject(file)) {
+                if (file.url && window.location.protocol === 'file:') {
+                    this.displayCORSWarning();
                 }
+
+                // File is a parameter object
+                // Prevent from modifying props
+                file = Object.assign({}, file);
 
                 this.loadDocument(file);
                 return;
@@ -192,6 +209,20 @@ var ReactPDF = function (_Component) {
             this.state.pdf.getPage(pageNumber).then(this.onPageLoad).catch(this.onPageError);
         }
     }, {
+        key: 'displayCORSWarning',
+        value: function displayCORSWarning() {
+            console.warn('Loading PDF as base64 strings/URLs might not work on protocols other than HTTP/HTTPS. On Google Chrome, you can use --allow-file-access-from-files flag for debugging purposes.');
+        }
+    }, {
+        key: 'renderNoData',
+        value: function renderNoData() {
+            return _react2.default.createElement(
+                'div',
+                null,
+                this.props.noData
+            );
+        }
+    }, {
         key: 'renderError',
         value: function renderError() {
             return _react2.default.createElement(
@@ -214,11 +245,17 @@ var ReactPDF = function (_Component) {
         value: function render() {
             var _this3 = this;
 
-            var scale = this.props.scale;
+            var _props = this.props,
+                scale = _props.scale,
+                file = _props.file;
             var _state = this.state,
                 pdf = _state.pdf,
                 page = _state.page;
 
+
+            if (!file) {
+                return this.renderNoData();
+            }
 
             if (pdf === false || page === false) {
                 return this.renderError();
@@ -261,18 +298,20 @@ ReactPDF.defaultProps = {
     pageIndex: 0,
     scale: 1.0,
     error: 'Failed to load PDF file.',
-    loading: 'Loading PDF…'
+    loading: 'Loading PDF…',
+    noData: 'No PDF file specified.'
 };
 
 ReactPDF.propTypes = {
     error: _react.PropTypes.oneOfType([_react.PropTypes.string, _react.PropTypes.node]),
-    file: _react.PropTypes.oneOfType([_react.PropTypes.string, _react.PropTypes.instanceOf(File), _react.PropTypes.shape({
-        url: _react.PropTypes.string,
+    file: _react.PropTypes.oneOfType([_react.PropTypes.string, _react.PropTypes.instanceOf(File), _react.PropTypes.instanceOf(Blob), _react.PropTypes.shape({
         data: _react.PropTypes.object,
+        httpHeaders: _react.PropTypes.object,
         range: _react.PropTypes.object,
-        httpHeaders: _react.PropTypes.object
+        url: _react.PropTypes.string
     })]),
     loading: _react.PropTypes.oneOfType([_react.PropTypes.string, _react.PropTypes.node]),
+    noData: _react.PropTypes.oneOfType([_react.PropTypes.string, _react.PropTypes.node]),
     onDocumentError: _react.PropTypes.func,
     onDocumentLoad: _react.PropTypes.func,
     onPageError: _react.PropTypes.func,
