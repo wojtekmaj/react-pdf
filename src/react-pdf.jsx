@@ -108,10 +108,12 @@ export default class ReactPDF extends Component {
     }
 
     isParameterObject = object =>
-        typeof object === 'object' && (
-            object.url ||
-            object.data ||
-            object.range
+        object &&
+        typeof object === 'object' &&
+        (
+            object.hasOwnProperty('data') ||
+            object.hasOwnProperty('range') ||
+            object.hasOwnProperty('url')
         )
 
     handleFileLoad(props = this.props) {
