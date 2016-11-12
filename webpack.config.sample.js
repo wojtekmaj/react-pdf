@@ -2,7 +2,6 @@ var webpack = require('webpack');
 
 module.exports = {
     context: __dirname,
-    devtool: 'source-map',
     entry: ['./src-sample/index.html', './src-sample/sample.jsx', './src-sample/sample.pdf'],
     output: {
         path: './sample',
@@ -33,5 +32,13 @@ module.exports = {
             },
         ],
     },
+    plugins: [
+        new webpack.DefinePlugin({
+            'process.env':{
+                'NODE_ENV': JSON.stringify("production"),
+            }
+        }),
+        new webpack.optimize.UglifyJsPlugin(),
+    ]
 };
 
