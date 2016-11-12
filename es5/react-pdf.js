@@ -76,6 +76,8 @@ var ReactPDF = function (_Component) {
             if (_this.props.onPageRender && typeof _this.props.onPageLoad === 'function') {
                 _this.props.onPageRender();
             }
+        }, _this.isParameterObject = function (object) {
+            return (typeof object === 'undefined' ? 'undefined' : _typeof(object)) === 'object' && (object.url || object.data || object.range);
         }, _temp), _possibleConstructorReturn(_this, _ret);
     }
 
@@ -87,8 +89,16 @@ var ReactPDF = function (_Component) {
     }, {
         key: 'componentWillReceiveProps',
         value: function componentWillReceiveProps(newProps) {
-            if (newProps.file && newProps.file !== this.props.file) {
+            if (this.isParameterObject(newProps.file)) {
+                // File is a parameter object
+                if (newProps.file.url !== this.props.file.url || newProps.file.data !== this.props.file.data || newProps.file.range !== this.props.file.range) {
+                    this.handleFileLoad(newProps);
+                    return;
+                }
+            } else if (newProps.file && newProps.file !== this.props.file) {
+                // File is a normal object or not an object at all
                 this.handleFileLoad(newProps);
+                return;
             }
 
             if (this.state.pdf && typeof newProps.pageIndex !== 'undefined' && newProps.pageIndex !== this.props.pageIndex) {
@@ -116,6 +126,15 @@ var ReactPDF = function (_Component) {
                 page: null
             });
 
+            // File is a string
+            if (typeof file === 'string') {
+                if (window.location.protocol === 'file:') {
+                    console.warn('Loading PDF as base64 strings/URLs might not work on protocols other than HTTP/HTTPS. On Google Chrome, you can use --allow-file-access-from-files flag for debugging purposes.');
+                }
+                this.loadDocument(file);
+                return;
+            }
+
             // File is a file
             if (file instanceof File) {
                 var _ret2 = function () {
@@ -134,21 +153,26 @@ var ReactPDF = function (_Component) {
                 if ((typeof _ret2 === 'undefined' ? 'undefined' : _typeof(_ret2)) === "object") return _ret2.v;
             }
 
-            // File is a string
-            if (typeof file === 'string') {
-                if (window.location.protocol === 'file:') {
-                    console.warn('Loading PDF as base64 strings/URLs might not work on protocols other than HTTP/HTTPS.');
+            // File is a Uint8Array object or parameter object
+            if ((typeof file === 'undefined' ? 'undefined' : _typeof(file)) === 'object') {
+                if (this.isParameterObject(file)) {
+                    // File is a parameter object
+                    // Prevent from modifying props
+                    file = Object.assign({}, file);
                 }
+
                 this.loadDocument(file);
                 return;
             }
 
-            throw new Error('File is neither a File nor a string with base64/URL.');
+            throw new Error('Unrecognized input type.');
         }
     }, {
         key: 'loadDocument',
-        value: function loadDocument(source) {
-            PDFJS.getDocument(source).then(this.onDocumentLoad).catch(this.onDocumentError);
+        value: function loadDocument() {
+            var _PDFJS;
+
+            (_PDFJS = PDFJS).getDocument.apply(_PDFJS, arguments).then(this.onDocumentLoad).catch(this.onDocumentError);
         }
     }, {
         key: 'loadPage',
@@ -241,9 +265,13 @@ ReactPDF.defaultProps = {
 };
 
 ReactPDF.propTypes = {
-    content: _react.PropTypes.string,
     error: _react.PropTypes.oneOfType([_react.PropTypes.string, _react.PropTypes.node]),
-    file: _react.PropTypes.oneOfType([_react.PropTypes.string, _react.PropTypes.object]),
+    file: _react.PropTypes.oneOfType([_react.PropTypes.string, _react.PropTypes.instanceOf(File), _react.PropTypes.shape({
+        url: _react.PropTypes.string,
+        data: _react.PropTypes.object,
+        range: _react.PropTypes.object,
+        httpHeaders: _react.PropTypes.object
+    })]),
     loading: _react.PropTypes.oneOfType([_react.PropTypes.string, _react.PropTypes.node]),
     onDocumentError: _react.PropTypes.func,
     onDocumentLoad: _react.PropTypes.func,
