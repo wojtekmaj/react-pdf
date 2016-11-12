@@ -18,6 +18,7 @@ export default class ReactPDF extends Component {
         if (this.isParameterObject(nextProps.file)) {
             // File is a parameter object
             if (
+                (nextProps.file && !this.props.file) ||
                 nextProps.file.data !== this.props.file.data ||
                 nextProps.file.range !== this.props.file.range ||
                 nextProps.file.url !== this.props.file.url
