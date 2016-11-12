@@ -102,7 +102,7 @@ export default class ReactPDF extends Component {
     onPageRender = () => {
         if (
             this.props.onPageRender &&
-            typeof this.props.onPageLoad === 'function'
+            typeof this.props.onPageRender === 'function'
         ) {
             this.props.onPageRender();
         }
