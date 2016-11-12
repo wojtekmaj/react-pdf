@@ -6,12 +6,31 @@ import './test.less';
 
 import samplePDF from './test.pdf';
 
+let componentRenderCount = 0;
+
+class WrappedReactPDF extends ReactPDF {
+    componentDidMount() {
+        super.componentDidMount();
+    }
+
+    componentWillReceiveProps(nextProps) {
+        super.componentWillReceiveProps(nextProps);
+    }
+
+    componentWillUpdate() {
+        componentRenderCount++;
+    }
+}
+
+WrappedReactPDF.propTypes = ReactPDF.propTypes;
+
 class Test extends Component {
     state = {
         file: null,
         pageIndex: null,
         pageNumber: null,
         passObj: false,
+        pageRenderCount: 0,
         total: null,
     }
 
@@ -71,6 +90,10 @@ class Test extends Component {
         this.setState({ pageIndex, pageNumber });
     }
 
+    onPageRender = () => {
+        this.setState({ pageRenderCount: (this.state.pageRenderCount + 1) });
+    }
+
     get transformedFile() {
         if (!this.state.passObj) {
             return this.state.file;
@@ -94,7 +117,7 @@ class Test extends Component {
     }
 
     render() {
-        const { pageIndex, pageNumber, total } = this.state;
+        const { pageIndex, pageNumber, pageRenderCount, total } = this.state;
 
         return (
             <div className="Example">
@@ -136,10 +159,11 @@ class Test extends Component {
                     </div>
                     <div className="Example__container__preview">
                         <div className="Example__container__preview__out">
-                            <ReactPDF
+                            <WrappedReactPDF
                                 file={this.transformedFile}
                                 onDocumentLoad={this.onDocumentLoad}
                                 onPageLoad={this.onPageLoad}
+                                onPageRender={this.onPageRender}
                                 pageIndex={pageIndex}
                             />
                         </div>
@@ -157,6 +181,10 @@ class Test extends Component {
                             >
                                 Next
                             </button>
+                        </div>
+                        <div className="Example__container__preview__info">
+                            Page render count: {pageRenderCount}<br />
+                            Component render count: {componentRenderCount}
                         </div>
                     </div>
                 </div>
