@@ -63,6 +63,8 @@
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
+	var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
+	
 	var _react = __webpack_require__(3);
 	
 	var _react2 = _interopRequireDefault(_react);
@@ -89,13 +91,46 @@
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
+	var componentRenderCount = 0;
+	
+	var WrappedReactPDF = function (_ReactPDF) {
+	    _inherits(WrappedReactPDF, _ReactPDF);
+	
+	    function WrappedReactPDF() {
+	        _classCallCheck(this, WrappedReactPDF);
+	
+	        return _possibleConstructorReturn(this, (WrappedReactPDF.__proto__ || Object.getPrototypeOf(WrappedReactPDF)).apply(this, arguments));
+	    }
+	
+	    _createClass(WrappedReactPDF, [{
+	        key: 'componentDidMount',
+	        value: function componentDidMount() {
+	            _get(WrappedReactPDF.prototype.__proto__ || Object.getPrototypeOf(WrappedReactPDF.prototype), 'componentDidMount', this).call(this);
+	        }
+	    }, {
+	        key: 'componentWillReceiveProps',
+	        value: function componentWillReceiveProps(nextProps) {
+	            _get(WrappedReactPDF.prototype.__proto__ || Object.getPrototypeOf(WrappedReactPDF.prototype), 'componentWillReceiveProps', this).call(this, nextProps);
+	        }
+	    }, {
+	        key: 'componentWillUpdate',
+	        value: function componentWillUpdate() {
+	            componentRenderCount++;
+	        }
+	    }]);
+	
+	    return WrappedReactPDF;
+	}(_reactPdf2.default);
+	
+	WrappedReactPDF.propTypes = _reactPdf2.default.propTypes;
+	
 	var Test = function (_Component) {
 	    _inherits(Test, _Component);
 	
 	    function Test() {
 	        var _ref;
 	
-	        var _temp, _this, _ret;
+	        var _temp, _this2, _ret;
 	
 	        _classCallCheck(this, Test);
 	
@@ -103,33 +138,34 @@
 	            args[_key] = arguments[_key];
 	        }
 	
-	        return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = Test.__proto__ || Object.getPrototypeOf(Test)).call.apply(_ref, [this].concat(args))), _this), _this.state = {
+	        return _ret = (_temp = (_this2 = _possibleConstructorReturn(this, (_ref = Test.__proto__ || Object.getPrototypeOf(Test)).call.apply(_ref, [this].concat(args))), _this2), _this2.state = {
 	            file: null,
 	            pageIndex: null,
 	            pageNumber: null,
 	            passObj: false,
+	            pageRenderCount: 0,
 	            total: null
-	        }, _this.onFileChange = function (event) {
-	            _this.setState({
+	        }, _this2.onFileChange = function (event) {
+	            _this2.setState({
 	                file: event.target.files[0]
 	            });
-	        }, _this.onFileUintChange = function (event) {
+	        }, _this2.onFileUintChange = function (event) {
 	            var reader = new FileReader();
 	
 	            reader.onloadend = function () {
-	                _this.setState({
+	                _this2.setState({
 	                    file: reader.result
 	                });
 	            };
 	
 	            reader.readAsArrayBuffer(event.target.files[0]);
-	        }, _this.onURLChange = function (event) {
+	        }, _this2.onURLChange = function (event) {
 	            event.preventDefault();
 	
-	            _this.setState({
+	            _this2.setState({
 	                file: event.target.querySelector('input').value
 	            });
-	        }, _this.onRequestChange = function (event) {
+	        }, _this2.onRequestChange = function (event) {
 	            event.preventDefault();
 	
 	            var url = event.target.querySelector('input').value;
@@ -137,26 +173,28 @@
 	            fetch(url).then(function (response) {
 	                return response.blob();
 	            }).then(function (blob) {
-	                _this.setState({
+	                _this2.setState({
 	                    file: blob
 	                });
 	            });
-	        }, _this.onUseImported = function () {
-	            _this.setState({
+	        }, _this2.onUseImported = function () {
+	            _this2.setState({
 	                file: _test2.default
 	            });
-	        }, _this.onPassObjChange = function (event) {
-	            _this.setState({ passObj: event.target.checked });
-	        }, _this.onDocumentLoad = function (_ref2) {
+	        }, _this2.onPassObjChange = function (event) {
+	            _this2.setState({ passObj: event.target.checked });
+	        }, _this2.onDocumentLoad = function (_ref2) {
 	            var total = _ref2.total;
 	
-	            _this.setState({ total: total });
-	        }, _this.onPageLoad = function (_ref3) {
+	            _this2.setState({ total: total });
+	        }, _this2.onPageLoad = function (_ref3) {
 	            var pageIndex = _ref3.pageIndex,
 	                pageNumber = _ref3.pageNumber;
 	
-	            _this.setState({ pageIndex: pageIndex, pageNumber: pageNumber });
-	        }, _temp), _possibleConstructorReturn(_this, _ret);
+	            _this2.setState({ pageIndex: pageIndex, pageNumber: pageNumber });
+	        }, _this2.onPageRender = function () {
+	            _this2.setState({ pageRenderCount: _this2.state.pageRenderCount + 1 });
+	        }, _temp), _possibleConstructorReturn(_this2, _ret);
 	    }
 	
 	    _createClass(Test, [{
@@ -171,11 +209,12 @@
 	    }, {
 	        key: 'render',
 	        value: function render() {
-	            var _this2 = this;
+	            var _this3 = this;
 	
 	            var _state = this.state,
 	                pageIndex = _state.pageIndex,
 	                pageNumber = _state.pageNumber,
+	                pageRenderCount = _state.pageRenderCount,
 	                total = _state.total;
 	
 	
@@ -275,10 +314,11 @@
 	                        _react2.default.createElement(
 	                            'div',
 	                            { className: 'Example__container__preview__out' },
-	                            _react2.default.createElement(_reactPdf2.default, {
+	                            _react2.default.createElement(WrappedReactPDF, {
 	                                file: this.transformedFile,
 	                                onDocumentLoad: this.onDocumentLoad,
 	                                onPageLoad: this.onPageLoad,
+	                                onPageRender: this.onPageRender,
 	                                pageIndex: pageIndex
 	                            })
 	                        ),
@@ -290,7 +330,7 @@
 	                                {
 	                                    disabled: pageNumber <= 1,
 	                                    onClick: function onClick() {
-	                                        return _this2.changePage(-1);
+	                                        return _this3.changePage(-1);
 	                                    }
 	                                },
 	                                'Previous'
@@ -308,11 +348,20 @@
 	                                {
 	                                    disabled: pageNumber >= total,
 	                                    onClick: function onClick() {
-	                                        return _this2.changePage(1);
+	                                        return _this3.changePage(1);
 	                                    }
 	                                },
 	                                'Next'
 	                            )
+	                        ),
+	                        _react2.default.createElement(
+	                            'div',
+	                            { className: 'Example__container__preview__info' },
+	                            'Page render count: ',
+	                            pageRenderCount,
+	                            _react2.default.createElement('br', null),
+	                            'Component render count: ',
+	                            componentRenderCount
 	                        )
 	                    )
 	                )
@@ -21786,7 +21835,7 @@
 	
 	            _this.setState({ page: false });
 	        }, _this.onPageRender = function () {
-	            if (_this.props.onPageRender && typeof _this.props.onPageLoad === 'function') {
+	            if (_this.props.onPageRender && typeof _this.props.onPageRender === 'function') {
 	                _this.props.onPageRender();
 	            }
 	        }, _this.isParameterObject = function (object) {

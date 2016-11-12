@@ -21664,7 +21664,7 @@
 	
 	            _this.setState({ page: false });
 	        }, _this.onPageRender = function () {
-	            if (_this.props.onPageRender && typeof _this.props.onPageLoad === 'function') {
+	            if (_this.props.onPageRender && typeof _this.props.onPageRender === 'function') {
 	                _this.props.onPageRender();
 	            }
 	        }, _this.isParameterObject = function (object) {
