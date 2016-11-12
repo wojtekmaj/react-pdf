@@ -15,10 +15,20 @@ export default class ReactPDF extends Component {
     }
 
     componentWillReceiveProps(newProps) {
-        if (
-            newProps.file && newProps.file !== this.props.file
-        ) {
+        if (this.isParameterObject(newProps.file)) {
+            // File is a parameter object
+            if (
+                newProps.file.url !== this.props.file.url ||
+                newProps.file.data !== this.props.file.data ||
+                newProps.file.range !== this.props.file.range
+            ) {
+                this.handleFileLoad(newProps);
+                return;
+            }
+        } else if (newProps.file && newProps.file !== this.props.file) {
+            // File is a normal object or not an object at all
             this.handleFileLoad(newProps);
+            return;
         }
 
         if (
@@ -97,8 +107,15 @@ export default class ReactPDF extends Component {
         }
     }
 
+    isParameterObject = object =>
+        typeof object === 'object' && (
+            object.url ||
+            object.data ||
+            object.range
+        )
+
     handleFileLoad(props = this.props) {
-        const { file } = props;
+        let { file } = props;
 
         if (!file) return;
 
@@ -136,6 +153,12 @@ export default class ReactPDF extends Component {
         if (
             typeof file === 'object'
         ) {
+            if (this.isParameterObject(file)) {
+                // File is a parameter object
+                // Prevent from modifying props
+                file = Object.assign({}, file);
+            }
+
             this.loadDocument(file);
             return;
         }

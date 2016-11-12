@@ -76,6 +76,8 @@ var ReactPDF = function (_Component) {
             if (_this.props.onPageRender && typeof _this.props.onPageLoad === 'function') {
                 _this.props.onPageRender();
             }
+        }, _this.isParameterObject = function (object) {
+            return (typeof object === 'undefined' ? 'undefined' : _typeof(object)) === 'object' && (object.url || object.data || object.range);
         }, _temp), _possibleConstructorReturn(_this, _ret);
     }
 
@@ -87,8 +89,16 @@ var ReactPDF = function (_Component) {
     }, {
         key: 'componentWillReceiveProps',
         value: function componentWillReceiveProps(newProps) {
-            if (newProps.file && newProps.file !== this.props.file) {
+            if (this.isParameterObject(newProps.file)) {
+                // File is a parameter object
+                if (newProps.file.url !== this.props.file.url || newProps.file.data !== this.props.file.data || newProps.file.range !== this.props.file.range) {
+                    this.handleFileLoad(newProps);
+                    return;
+                }
+            } else if (newProps.file && newProps.file !== this.props.file) {
+                // File is a normal object or not an object at all
                 this.handleFileLoad(newProps);
+                return;
             }
 
             if (this.state.pdf && typeof newProps.pageIndex !== 'undefined' && newProps.pageIndex !== this.props.pageIndex) {
@@ -145,6 +155,12 @@ var ReactPDF = function (_Component) {
 
             // File is a Uint8Array object or parameter object
             if ((typeof file === 'undefined' ? 'undefined' : _typeof(file)) === 'object') {
+                if (this.isParameterObject(file)) {
+                    // File is a parameter object
+                    // Prevent from modifying props
+                    file = Object.assign({}, file);
+                }
+
                 this.loadDocument(file);
                 return;
             }
