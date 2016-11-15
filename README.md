@@ -1,4 +1,4 @@
-# React-PDF [![Code Climate](https://codeclimate.com/github/wojtekmaj/react-pdf/badges/gpa.svg)](https://codeclimate.com/github/wojtekmaj/react-pdf)
+# React-PDF [![Build Status](https://travis-ci.org/wojtekmaj/react-pdf.svg?branch=master)](https://travis-ci.org/wojtekmaj/react-pdf) [![Code Climate](https://codeclimate.com/github/wojtekmaj/react-pdf/badges/gpa.svg)](https://codeclimate.com/github/wojtekmaj/react-pdf)
 Easily display PDF files in your React application.
 
 ## tl;dr
