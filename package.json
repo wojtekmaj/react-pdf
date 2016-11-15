@@ -9,6 +9,7 @@
     "build-sample": "webpack --config webpack.config.sample.js",
     "build-source": "babel src -d es5",
     "build-test": "webpack --config webpack.config.test.js",
+    "eslint": "eslint .",
     "prepublish": "npm run build",
     "test": "npm run build-test && echo \"Open ./test/index.html\" && exit 1",
     "watch": "webpack --watch"
