@@ -1,5 +1,3 @@
-var webpack = require('webpack');
-
 module.exports = {
     context: __dirname,
     devtool: 'source-map',
@@ -34,4 +32,3 @@ module.exports = {
         ],
     },
 };
-
