@@ -16,3 +16,4 @@ ratings:
 exclude_paths:
 - es5/
 - test/
+- sample/
