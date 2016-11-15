@@ -1,4 +1,4 @@
-# React-PDF
+# React-PDF [![Code Climate](https://codeclimate.com/github/wojtekmaj/react-pdf/badges/gpa.svg)](https://codeclimate.com/github/wojtekmaj/react-pdf)
 Easily display PDF files in your React application.
 
 ## tl;dr
