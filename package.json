@@ -11,7 +11,7 @@
     "build-test": "webpack --config webpack.config.test.js",
     "eslint": "eslint .",
     "prepublish": "npm run build",
-    "test": "npm run build-test && echo \"Open ./test/index.html\" && exit 1",
+    "test": "npm run build-test && echo Open ./test/index.html",
     "watch": "webpack --watch"
   },
   "keywords": [
