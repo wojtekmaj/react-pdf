@@ -2,6 +2,9 @@
 engines:
   duplication:
     enabled: true
+    exclude_paths:
+    - "webpack.config.sample.js"
+    - "webpack.config.test.js"
     config:
       languages:
       - javascript
