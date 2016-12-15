@@ -24,6 +24,8 @@ require('pdfjs-dist/web/compatibility');
 require('pdfjs-dist/build/pdf');
 PDFJS.workerSrc = require('pdfjs-dist/build/pdf.worker.js');
 
+PDFJS.disableWorker = true;
+
 var ReactPDF = function (_Component) {
     _inherits(ReactPDF, _Component);
 
