@@ -97,6 +97,11 @@ export default class ReactPDF extends Component {
         }
     }
 
+    displayCORSWarning = () => {
+        // eslint-disable-next-line no-console
+        console.warn('Loading PDF as base64 strings/URLs might not work on protocols other than HTTP/HTTPS. On Google Chrome, you can use --allow-file-access-from-files flag for debugging purposes.');
+    }
+
     isParameterObject = object =>
         object &&
         typeof object === 'object' &&
@@ -204,10 +209,6 @@ export default class ReactPDF extends Component {
         this.state.pdf.getPage(pageNumber)
             .then(this.onPageLoad)
             .catch(this.onPageError);
-    }
-
-    displayCORSWarning() {
-        console.warn('Loading PDF as base64 strings/URLs might not work on protocols other than HTTP/HTTPS. On Google Chrome, you can use --allow-file-access-from-files flag for debugging purposes.');
     }
 
     renderNoData() {
