@@ -46,7 +46,9 @@ export default class ReactPDF extends Component {
     shouldComponentUpdate(nextProps, nextState) {
         return (
             nextState.pdf !== this.state.pdf ||
-            nextState.page !== this.state.page
+            nextState.page !== this.state.page ||
+            nextProps.width !== this.props.width ||
+            nextProps.scale !== this.props.scale
         );
     }
 
@@ -97,6 +99,21 @@ export default class ReactPDF extends Component {
         this.callIfDefined(this.props.onPageRender);
     }
 
+    get pageScale() {
+        const { scale, width } = this.props;
+        const { page } = this.state;
+
+        // Be default, we'll render page at 100% * scale width.
+        let pageScale = 1;
+
+        // If width is defined, calculate the scale of the page so it could be of desired width.
+        if (width) {
+            pageScale = width / page.getViewport(scale).width;
+        }
+
+        return scale * pageScale;
+    }
+
     callIfDefined = (fn, args) => {
         if (fn && typeof fn === 'function') {
             fn(args);
@@ -111,11 +128,7 @@ export default class ReactPDF extends Component {
     isParameterObject = object =>
         object &&
         typeof object === 'object' &&
-        (
-            object.hasOwnProperty('data') ||
-            object.hasOwnProperty('range') ||
-            object.hasOwnProperty('url')
-        )
+        ['file', 'range', 'url'].some(key => Object.keys(object).includes(key))
 
     isDataURI = str => /^data:/.test(str)
 
@@ -225,7 +238,9 @@ export default class ReactPDF extends Component {
     }
 
     loadPage(pageIndex) {
-        if (!this.state.pdf) {
+        const { pdf } = this.state;
+
+        if (!pdf) {
             throw new Error('Unexpected call to getPage() before the document has been loaded.');
         }
 
@@ -233,11 +248,11 @@ export default class ReactPDF extends Component {
 
         if (!pageIndex || pageNumber < 1) {
             pageNumber = 1;
-        } else if (pageNumber >= this.state.pdf.numPages) {
-            pageNumber = this.state.pdf.numPages;
+        } else if (pageNumber >= pdf.numPages) {
+            pageNumber = pdf.numPages;
         }
 
-        this.state.pdf.getPage(pageNumber)
+        pdf.getPage(pageNumber)
             .then(this.onPageLoad)
             .catch(this.onPageError);
     }
@@ -261,7 +276,7 @@ export default class ReactPDF extends Component {
     }
 
     render() {
-        const { scale, file } = this.props;
+        const { file } = this.props;
         const { pdf, page } = this.state;
 
         if (!file) {
@@ -283,18 +298,25 @@ export default class ReactPDF extends Component {
 
                     const canvas = ref;
 
-                    const context = canvas.getContext('2d');
-                    const viewport = page.getViewport(scale);
+                    const pixelRatio = window.devicePixelRatio || 1;
+                    const viewport = page.getViewport(this.pageScale * pixelRatio);
 
                     canvas.height = viewport.height;
                     canvas.width = viewport.width;
 
+                    canvas.style.height = `${viewport.height / pixelRatio}px`;
+                    canvas.style.width = `${viewport.width / pixelRatio}px`;
+
+                    const canvasContext = canvas.getContext('2d');
+
                     const renderContext = {
-                        canvasContext: context,
+                        canvasContext,
                         viewport,
                     };
 
-                    page.render(renderContext).then(this.onPageRender);
+                    page
+                        .render(renderContext)
+                        .then(this.onPageRender);
                 }}
             />
         );
@@ -340,4 +362,5 @@ ReactPDF.propTypes = {
     onPageRender: PropTypes.func,
     pageIndex: PropTypes.number,
     scale: PropTypes.number,
+    width: PropTypes.number,
 };

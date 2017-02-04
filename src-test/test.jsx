@@ -31,6 +31,7 @@ class Test extends Component {
         pageNumber: null,
         passObj: false,
         pageRenderCount: 0,
+        pageWidth: 300,
         total: null,
     }
 
@@ -55,8 +56,14 @@ class Test extends Component {
     onURLChange = (event) => {
         event.preventDefault();
 
+        const url = event.target.querySelector('input').value;
+
+        if (!url) {
+            return;
+        }
+
         this.setState({
-            file: event.target.querySelector('input').value,
+            file: url,
         });
     }
 
@@ -64,6 +71,10 @@ class Test extends Component {
         event.preventDefault();
 
         const url = event.target.querySelector('input').value;
+
+        if (!url) {
+            return;
+        }
 
         fetch(url).then(response => response.blob()).then((blob) => {
             this.setState({
@@ -80,6 +91,18 @@ class Test extends Component {
 
     onPassObjChange = (event) => {
         this.setState({ passObj: event.target.checked });
+    }
+
+    onPageWidthChange = (event) => {
+        const width = event.target.value;
+
+        if (!width) {
+            return;
+        }
+
+        this.setState({
+            pageWidth: parseInt(width, 10),
+        });
     }
 
     onDocumentLoad = ({ total }) => {
@@ -120,7 +143,7 @@ class Test extends Component {
     }
 
     render() {
-        const { pageIndex, pageNumber, pageRenderCount, total } = this.state;
+        const { pageIndex, pageNumber, pageRenderCount, pageWidth, total } = this.state;
 
         return (
             <div className="Example">
@@ -141,17 +164,13 @@ class Test extends Component {
                         <br /><br />
                         <form onSubmit={this.onURLChange}>
                             <label htmlFor="url">Load from URL:</label>&nbsp;
-                            <input
-                                type="text"
-                            />
+                            <input type="text" />
                             <button type="submit">Apply</button>
                         </form>
                         <br />
                         <form onSubmit={this.onRequestChange}>
                             <label htmlFor="url">Fetch and pass:</label>&nbsp;
-                            <input
-                                type="text"
-                            />
+                            <input type="text" />
                             <button type="submit">Apply</button>
                         </form>
                         <br />
@@ -159,6 +178,17 @@ class Test extends Component {
                         <br /><br />
                         <input id="passobj" type="checkbox" onChange={this.onPassObjChange} />
                         <label htmlFor="passobj">Pass as an object (URLs and imports only)</label>
+                        <br />
+                        <br />
+                        <form onSubmit={this.onPageWidthChange}>
+                            <label htmlFor="pageWidth">Page width:</label>&nbsp;
+                            <input
+                                type="number"
+                                value={pageWidth}
+                                onChange={this.onPageWidthChange}
+                            />
+                        </form>
+                        <br />
                     </div>
                     <div className="Example__container__preview">
                         <div className="Example__container__preview__out">
@@ -168,6 +198,7 @@ class Test extends Component {
                                 onPageLoad={this.onPageLoad}
                                 onPageRender={this.onPageRender}
                                 pageIndex={pageIndex}
+                                width={pageWidth}
                             />
                         </div>
                         <div className="Example__container__preview__controls">

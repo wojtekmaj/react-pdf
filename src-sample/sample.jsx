@@ -52,6 +52,7 @@ class Example extends Component {
                             onDocumentLoad={this.onDocumentLoad}
                             onPageLoad={this.onPageLoad}
                             pageIndex={pageIndex}
+                            width={300}
                         />
                     </div>
                     <div className="Example__container__controls">
