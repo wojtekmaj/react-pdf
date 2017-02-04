@@ -97,6 +97,57 @@ export default class ReactPDF extends Component {
         this.callIfDefined(this.props.onPageRender);
     }
 
+    getPageScale(page, pixelRatio = 1) {
+        const { scale, width } = this.props;
+
+        // Be default, we'll render page at 100% * scale width.
+        let pageScale = 1;
+
+        // If width is defined, calculate the scale of the page so it could be of desired width.
+        if (width) {
+            const pageDimensions = this.getPageDimensions(page);
+            pageScale = width / pageDimensions.width;
+        }
+
+        return scale * pageScale * pixelRatio;
+    }
+
+    getPageRenderScale(page) {
+        return this.getPageScale(
+            page,
+            window.devicePixelRatio,
+        );
+    }
+
+    getPageDisplayScale(page) {
+        return this.getPageScale(
+            page,
+        );
+    }
+
+    getPageDimensions(page, scale = 1) {
+        const viewport = page.getViewport(scale);
+
+        return {
+            width: viewport.width,
+            height: viewport.height,
+        };
+    }
+
+    getPageRenderDimensions(page) {
+        return this.getPageDimensions(
+            page,
+            this.getPageRenderScale(page),
+        );
+    }
+
+    getPageDisplayDimensions(page) {
+        return this.getPageDimensions(
+            page,
+            this.getPageDisplayScale(page),
+        );
+    }
+
     callIfDefined = (fn, args) => {
         if (fn && typeof fn === 'function') {
             fn(args);
@@ -261,7 +312,7 @@ export default class ReactPDF extends Component {
     }
 
     render() {
-        const { scale, file } = this.props;
+        const { file } = this.props;
         const { pdf, page } = this.state;
 
         if (!file) {
@@ -283,18 +334,29 @@ export default class ReactPDF extends Component {
 
                     const canvas = ref;
 
-                    const context = canvas.getContext('2d');
+                    const scale = this.getPageRenderScale(page);
                     const viewport = page.getViewport(scale);
 
-                    canvas.height = viewport.height;
-                    canvas.width = viewport.width;
+                    const renderDimensions = this.getPageRenderDimensions(page);
+                    canvas.height = renderDimensions.height;
+                    canvas.width = renderDimensions.width;
+
+                    const canvasContext = canvas.getContext('2d');
 
                     const renderContext = {
-                        canvasContext: context,
+                        canvasContext,
                         viewport,
                     };
 
-                    page.render(renderContext).then(this.onPageRender);
+                    page
+                        .render(renderContext)
+                        .then(() => {
+                            const displayDimensions = this.getPageDisplayDimensions(page);
+                            canvas.style.height = `${displayDimensions.height}px`;
+                            canvas.style.width = `${displayDimensions.width}px`;
+
+                            this.onPageRender();
+                        });
                 }}
             />
         );
@@ -340,4 +402,5 @@ ReactPDF.propTypes = {
     onPageRender: PropTypes.func,
     pageIndex: PropTypes.number,
     scale: PropTypes.number,
+    width: PropTypes.number,
 };
