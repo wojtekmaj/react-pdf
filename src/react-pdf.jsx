@@ -117,6 +117,26 @@ export default class ReactPDF extends Component {
             object.hasOwnProperty('url')
         )
 
+    isDataURI = str => /^data:/.test(str)
+
+    dataURItoBlob = (dataURI) => {
+        let byteString;
+        if (dataURI.split(',')[0].indexOf('base64') >= 0) {
+            byteString = atob(dataURI.split(',')[1]);
+        } else {
+            byteString = unescape(dataURI.split(',')[1]);
+        }
+
+        const mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
+
+        const ia = new Uint8Array(byteString.length);
+        for (let i = 0; i < byteString.length; i += 1) {
+            ia[i] = byteString.charCodeAt(i);
+        }
+
+        return new Blob([ia], { type: mimeString });
+    }
+
     handleFileLoad(props = this.props) {
         let { file } = props;
 
@@ -126,7 +146,9 @@ export default class ReactPDF extends Component {
                 this.isParameterObject(file) &&
                 !file.data && !file.range && !file.url
             )
-        ) return;
+        ) {
+            return null;
+        }
 
         this.setState({
             pdf: null,
@@ -134,17 +156,27 @@ export default class ReactPDF extends Component {
         });
 
         // File is a string
-        if (
-            typeof file === 'string'
-        ) {
-            if (
-                window.location.protocol === 'file:'
-            ) {
-                this.displayCORSWarning();
+        if (typeof file === 'string') {
+            // File is not data URI
+            if (!this.isDataURI(file)) {
+                if (window.location.protocol === 'file:') {
+                    this.displayCORSWarning();
+                }
+
+                return this.loadDocument(file);
             }
 
-            this.loadDocument(file);
-            return;
+            // File is data URI
+            file = this.dataURItoBlob(file);
+
+            // Fall through to "File is a blob"
+        }
+
+        // File is a Blob
+        if (file instanceof Blob) {
+            file = URL.createObjectURL(file);
+
+            return this.loadDocument(file);
         }
 
         // File is a File
@@ -155,22 +187,12 @@ export default class ReactPDF extends Component {
                 this.loadDocument(new Uint8Array(reader.result));
             };
 
-            reader.readAsArrayBuffer(file);
-            return;
-        }
-
-        // File is a Blob
-        if (file instanceof Blob) {
-            file = URL.createObjectURL(file);
-
-            this.loadDocument(file);
-            return;
+            return reader.readAsArrayBuffer(file);
         }
 
         // File is an ArrayBuffer
         if (file instanceof ArrayBuffer) {
-            this.loadDocument(file);
-            return;
+            return this.loadDocument(file);
         }
 
         // File is a parameter object
@@ -182,12 +204,15 @@ export default class ReactPDF extends Component {
                 this.displayCORSWarning();
             }
 
-            // File is a parameter object
             // Prevent from modifying props
             file = Object.assign({}, file);
 
-            this.loadDocument(file);
-            return;
+            // File is data URI
+            if (file.url && this.isDataURI(file.url)) {
+                file = URL.createObjectURL(this.dataURItoBlob(file.url));
+            }
+
+            return this.loadDocument(file);
         }
 
         throw new Error('Unrecognized input type.');
