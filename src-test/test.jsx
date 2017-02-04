@@ -169,7 +169,7 @@ class Test extends Component {
                         <form onSubmit={this.onPageWidthChange}>
                             <label htmlFor="pageWidth">Page width:</label>&nbsp;
                             <input
-                                type="number" 
+                                type="number"
                                 value={pageWidth}
                                 onChange={this.onPageWidthChange}
                             />
