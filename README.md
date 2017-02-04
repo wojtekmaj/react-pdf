@@ -71,10 +71,10 @@ Check the sample directory of this repository for a full working example.
 |pageIndex|Defines which page from PDF file should be displayed. Defaults to 0.|`pageIndex={2}`|
 |scale|Defines the scale in which PDF file should be rendered. Defaults to 1.0.|`scale={0.5}`|
 |onDocumentLoad|Function called when the document is successfully loaded to the memory.|`onDocumentLoad={({ total }) => alert('Loaded a file with ' + total + ' pages!')}`|
-|onDocumentError|Function called in case of an error while loading a document.||
+|onDocumentError|Function called in case of an error while loading a document.|`onDocumentError={({ message }) => alert('Error while loading document! ' + message)}`|
 |onPageLoad|Function called when the page is successfully loaded to the memory.|`onPageLoad={({ pageIndex, pageNumber }) => alert('Now displaying a page number ' + pageNumber + '!')}`|
 |onPageRender|Function called when the page is successfully rendered on the screen.|`onPageLoad={() => alert('Rendered the page!')}`|
-|onPageError|Function called in case of an error while rendering a page.||
+|onPageError|Function called in case of an error while rendering a page.|`onPageError={({ message }) => alert('Error while loading page! ' + message)}`|
 
 ## License
 
