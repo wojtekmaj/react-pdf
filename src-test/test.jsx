@@ -18,7 +18,7 @@ class WrappedReactPDF extends ReactPDF {
     }
 
     componentWillUpdate() {
-        componentRenderCount++;
+        componentRenderCount += 1;
     }
 }
 
