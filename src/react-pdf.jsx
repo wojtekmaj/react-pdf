@@ -51,14 +51,12 @@ export default class ReactPDF extends Component {
     }
 
     onDocumentLoad = (pdf) => {
-        if (
-            this.props.onDocumentLoad &&
-            typeof this.props.onDocumentLoad === 'function'
-        ) {
-            this.props.onDocumentLoad({
+        this.callIfDefined(
+            this.props.onDocumentLoad,
+            {
                 total: pdf.numPages,
-            });
-        }
+            },
+        );
 
         this.setState({ pdf });
 
@@ -66,48 +64,42 @@ export default class ReactPDF extends Component {
     }
 
     onDocumentError = () => {
-        if (
-            this.props.onDocumentError &&
-            typeof this.props.onDocumentError === 'function'
-        ) {
-            this.props.onDocumentError();
-        }
+        this.callIfDefined(this.props.onDocumentError);
 
         this.setState({ pdf: false });
     }
 
     onPageLoad = (page) => {
-        if (
-            this.props.onPageLoad &&
-            typeof this.props.onPageLoad === 'function'
-        ) {
-            this.props.onPageLoad({
+        this.callIfDefined(
+            this.props.onPageLoad,
+            {
                 pageIndex: page.pageIndex,
                 pageNumber: page.pageNumber,
-            });
-        }
+            },
+        );
 
         this.setState({ page });
     }
 
     onPageError = () => {
-        if (
-            this.props.onPageError &&
-            typeof this.props.onPageError === 'function'
-        ) {
-            this.props.onPageError();
-        }
+        this.callIfDefined(this.props.onPageError);
 
         this.setState({ page: false });
     }
 
     onPageRender = () => {
-        if (
-            this.props.onPageRender &&
-            typeof this.props.onPageRender === 'function'
-        ) {
-            this.props.onPageRender();
+        this.callIfDefined(this.props.onPageRender);
+    }
+
+    callIfDefined = (fn, args) => {
+        if (fn && typeof fn === 'function') {
+            fn(args);
         }
+    }
+
+    displayCORSWarning = () => {
+        // eslint-disable-next-line no-console
+        console.warn('Loading PDF as base64 strings/URLs might not work on protocols other than HTTP/HTTPS. On Google Chrome, you can use --allow-file-access-from-files flag for debugging purposes.');
     }
 
     isParameterObject = object =>
@@ -217,10 +209,6 @@ export default class ReactPDF extends Component {
         this.state.pdf.getPage(pageNumber)
             .then(this.onPageLoad)
             .catch(this.onPageError);
-    }
-
-    displayCORSWarning() {
-        console.warn('Loading PDF as base64 strings/URLs might not work on protocols other than HTTP/HTTPS. On Google Chrome, you can use --allow-file-access-from-files flag for debugging purposes.');
     }
 
     renderNoData() {

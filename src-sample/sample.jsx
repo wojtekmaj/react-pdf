@@ -27,11 +27,9 @@ class Example extends Component {
     }
 
     changePage(by) {
-        const newPageIndex = this.state.pageIndex + by;
-
-        this.setState({
-            pageIndex: newPageIndex,
-        });
+        this.setState(prevState => ({
+            pageIndex: prevState.pageIndex + by,
+        }));
     }
 
     render() {
