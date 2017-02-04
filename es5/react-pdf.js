@@ -40,47 +40,7 @@ var ReactPDF = function (_Component) {
             args[_key] = arguments[_key];
         }
 
-        return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = ReactPDF.__proto__ || Object.getPrototypeOf(ReactPDF)).call.apply(_ref, [this].concat(args))), _this), _this.state = {
-            pdf: null,
-            page: null
-        }, _this.onDocumentLoad = function (pdf) {
-            if (_this.props.onDocumentLoad && typeof _this.props.onDocumentLoad === 'function') {
-                _this.props.onDocumentLoad({
-                    total: pdf.numPages
-                });
-            }
-
-            _this.setState({ pdf: pdf });
-
-            _this.loadPage(_this.props.pageIndex);
-        }, _this.onDocumentError = function () {
-            if (_this.props.onDocumentError && typeof _this.props.onDocumentError === 'function') {
-                _this.props.onDocumentError();
-            }
-
-            _this.setState({ pdf: false });
-        }, _this.onPageLoad = function (page) {
-            if (_this.props.onPageLoad && typeof _this.props.onPageLoad === 'function') {
-                _this.props.onPageLoad({
-                    pageIndex: page.pageIndex,
-                    pageNumber: page.pageNumber
-                });
-            }
-
-            _this.setState({ page: page });
-        }, _this.onPageError = function () {
-            if (_this.props.onPageError && typeof _this.props.onPageError === 'function') {
-                _this.props.onPageError();
-            }
-
-            _this.setState({ page: false });
-        }, _this.onPageRender = function () {
-            if (_this.props.onPageRender && typeof _this.props.onPageRender === 'function') {
-                _this.props.onPageRender();
-            }
-        }, _this.isParameterObject = function (object) {
-            return object && (typeof object === 'undefined' ? 'undefined' : _typeof(object)) === 'object' && (object.hasOwnProperty('data') || object.hasOwnProperty('range') || object.hasOwnProperty('url'));
-        }, _temp), _possibleConstructorReturn(_this, _ret);
+        return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = ReactPDF.__proto__ || Object.getPrototypeOf(ReactPDF)).call.apply(_ref, [this].concat(args))), _this), _initialiseProps.call(_this), _temp), _possibleConstructorReturn(_this, _ret);
     }
 
     _createClass(ReactPDF, [{
@@ -121,7 +81,9 @@ var ReactPDF = function (_Component) {
             var file = props.file;
 
 
-            if (!file || this.isParameterObject(file) && !file.data && !file.range && !file.url) return;
+            if (!file || this.isParameterObject(file) && !file.data && !file.range && !file.url) {
+                return null;
+            }
 
             this.setState({
                 pdf: null,
@@ -130,12 +92,26 @@ var ReactPDF = function (_Component) {
 
             // File is a string
             if (typeof file === 'string') {
-                if (window.location.protocol === 'file:') {
-                    this.displayCORSWarning();
+                // File is not data URI
+                if (!this.isDataURI(file)) {
+                    if (window.location.protocol === 'file:') {
+                        this.displayCORSWarning();
+                    }
+
+                    return this.loadDocument(file);
                 }
 
-                this.loadDocument(file);
-                return;
+                // File is data URI
+                file = this.dataURItoBlob(file);
+
+                // Fall through to "File is a blob"
+            }
+
+            // File is a Blob
+            if (file instanceof Blob) {
+                file = URL.createObjectURL(file);
+
+                return this.loadDocument(file);
             }
 
             // File is a File
@@ -147,27 +123,17 @@ var ReactPDF = function (_Component) {
                         _this2.loadDocument(new Uint8Array(reader.result));
                     };
 
-                    reader.readAsArrayBuffer(file);
                     return {
-                        v: void 0
+                        v: reader.readAsArrayBuffer(file)
                     };
                 }();
 
                 if ((typeof _ret2 === 'undefined' ? 'undefined' : _typeof(_ret2)) === "object") return _ret2.v;
             }
 
-            // File is a Blob
-            if (file instanceof Blob) {
-                file = URL.createObjectURL(file);
-
-                this.loadDocument(file);
-                return;
-            }
-
             // File is an ArrayBuffer
             if (file instanceof ArrayBuffer) {
-                this.loadDocument(file);
-                return;
+                return this.loadDocument(file);
             }
 
             // File is a parameter object
@@ -176,12 +142,15 @@ var ReactPDF = function (_Component) {
                     this.displayCORSWarning();
                 }
 
-                // File is a parameter object
                 // Prevent from modifying props
                 file = Object.assign({}, file);
 
-                this.loadDocument(file);
-                return;
+                // File is data URI
+                if (file.url && this.isDataURI(file.url)) {
+                    file = URL.createObjectURL(this.dataURItoBlob(file.url));
+                }
+
+                return this.loadDocument(file);
             }
 
             throw new Error('Unrecognized input type.');
@@ -209,11 +178,6 @@ var ReactPDF = function (_Component) {
             }
 
             this.state.pdf.getPage(pageNumber).then(this.onPageLoad).catch(this.onPageError);
-        }
-    }, {
-        key: 'displayCORSWarning',
-        value: function displayCORSWarning() {
-            console.warn('Loading PDF as base64 strings/URLs might not work on protocols other than HTTP/HTTPS. On Google Chrome, you can use --allow-file-access-from-files flag for debugging purposes.');
         }
     }, {
         key: 'renderNoData',
@@ -292,6 +256,88 @@ var ReactPDF = function (_Component) {
 
     return ReactPDF;
 }(_react.Component);
+
+var _initialiseProps = function _initialiseProps() {
+    var _this4 = this;
+
+    this.state = {
+        pdf: null,
+        page: null
+    };
+
+    this.onDocumentLoad = function (pdf) {
+        _this4.callIfDefined(_this4.props.onDocumentLoad, {
+            total: pdf.numPages
+        });
+
+        _this4.setState({ pdf: pdf });
+
+        _this4.loadPage(_this4.props.pageIndex);
+    };
+
+    this.onDocumentError = function (error) {
+        _this4.callIfDefined(_this4.props.onDocumentError, error);
+
+        _this4.setState({ pdf: false });
+    };
+
+    this.onPageLoad = function (page) {
+        _this4.callIfDefined(_this4.props.onPageLoad, {
+            pageIndex: page.pageIndex,
+            pageNumber: page.pageNumber
+        });
+
+        _this4.setState({ page: page });
+    };
+
+    this.onPageError = function (error) {
+        _this4.callIfDefined(_this4.props.onPageError, error);
+
+        _this4.setState({ page: false });
+    };
+
+    this.onPageRender = function () {
+        _this4.callIfDefined(_this4.props.onPageRender);
+    };
+
+    this.callIfDefined = function (fn, args) {
+        if (fn && typeof fn === 'function') {
+            fn(args);
+        }
+    };
+
+    this.displayCORSWarning = function () {
+        // eslint-disable-next-line no-console
+        console.warn('Loading PDF as base64 strings/URLs might not work on protocols other than HTTP/HTTPS. On Google Chrome, you can use --allow-file-access-from-files flag for debugging purposes.');
+    };
+
+    this.isParameterObject = function (object) {
+        return object && (typeof object === 'undefined' ? 'undefined' : _typeof(object)) === 'object' && (object.hasOwnProperty('data') || object.hasOwnProperty('range') || object.hasOwnProperty('url'));
+    };
+
+    this.isDataURI = function (str) {
+        return (/^data:/.test(str)
+        );
+    };
+
+    this.dataURItoBlob = function (dataURI) {
+        var byteString = void 0;
+        if (dataURI.split(',')[0].indexOf('base64') >= 0) {
+            byteString = atob(dataURI.split(',')[1]);
+        } else {
+            byteString = unescape(dataURI.split(',')[1]);
+        }
+
+        var mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
+
+        var ia = new Uint8Array(byteString.length);
+        for (var i = 0; i < byteString.length; i += 1) {
+            ia[i] = byteString.charCodeAt(i);
+        }
+
+        return new Blob([ia], { type: mimeString });
+    };
+};
 
 exports.default = ReactPDF;
 
