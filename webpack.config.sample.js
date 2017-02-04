@@ -9,26 +9,30 @@ module.exports = {
         chunkFilename: 'sample.js',
     },
     resolve: {
-        extensions: ['', '.js', '.jsx'],
+        extensions: ['.js', '.jsx'],
     },
     module: {
-        loaders: [
+        rules: [
             {
                 test: /\.html$/,
-                loader: 'file?name=[name].[ext]',
+                use: 'file-loader?name=[name].[ext]',
             },
             {
                 test: /\.pdf$/,
-                loader: 'url',
+                use: 'url-loader',
             },
             {
                 test: /\.less$/,
-                loader: 'style!css!less',
+                use: [
+                    'style-loader',
+                    'css-loader',
+                    'less-loader',
+                ],
             },
             {
                 test: /\.(js|jsx)$/,
                 exclude: /node_modules/,
-                loader: 'babel',
+                use: 'babel-loader',
             },
         ],
     },
