@@ -70,7 +70,7 @@ var ReactPDF = function (_Component) {
     }, {
         key: 'shouldComponentUpdate',
         value: function shouldComponentUpdate(nextProps, nextState) {
-            return nextState.pdf !== this.state.pdf || nextState.page !== this.state.page;
+            return nextState.pdf !== this.state.pdf || nextState.page !== this.state.page || nextProps.width !== this.props.width || nextProps.scale !== this.props.scale;
         }
     }, {
         key: 'handleFileLoad',
@@ -165,7 +165,10 @@ var ReactPDF = function (_Component) {
     }, {
         key: 'loadPage',
         value: function loadPage(pageIndex) {
-            if (!this.state.pdf) {
+            var pdf = this.state.pdf;
+
+
+            if (!pdf) {
                 throw new Error('Unexpected call to getPage() before the document has been loaded.');
             }
 
@@ -173,11 +176,11 @@ var ReactPDF = function (_Component) {
 
             if (!pageIndex || pageNumber < 1) {
                 pageNumber = 1;
-            } else if (pageNumber >= this.state.pdf.numPages) {
-                pageNumber = this.state.pdf.numPages;
+            } else if (pageNumber >= pdf.numPages) {
+                pageNumber = pdf.numPages;
             }
 
-            this.state.pdf.getPage(pageNumber).then(this.onPageLoad).catch(this.onPageError);
+            pdf.getPage(pageNumber).then(this.onPageLoad).catch(this.onPageError);
         }
     }, {
         key: 'renderNoData',
@@ -211,9 +214,7 @@ var ReactPDF = function (_Component) {
         value: function render() {
             var _this3 = this;
 
-            var _props = this.props,
-                scale = _props.scale,
-                file = _props.file;
+            var file = this.props.file;
             var _state = this.state,
                 pdf = _state.pdf,
                 page = _state.page;
@@ -237,20 +238,44 @@ var ReactPDF = function (_Component) {
 
                     var canvas = _ref2;
 
-                    var context = canvas.getContext('2d');
-                    var viewport = page.getViewport(scale);
+                    var pixelRatio = window.devicePixelRatio || 1;
+                    var viewport = page.getViewport(_this3.pageScale * pixelRatio);
 
                     canvas.height = viewport.height;
                     canvas.width = viewport.width;
 
+                    canvas.style.height = viewport.height / pixelRatio + 'px';
+                    canvas.style.width = viewport.width / pixelRatio + 'px';
+
+                    var canvasContext = canvas.getContext('2d');
+
                     var renderContext = {
-                        canvasContext: context,
+                        canvasContext: canvasContext,
                         viewport: viewport
                     };
 
                     page.render(renderContext).then(_this3.onPageRender);
                 }
             });
+        }
+    }, {
+        key: 'pageScale',
+        get: function get() {
+            var _props = this.props,
+                scale = _props.scale,
+                width = _props.width;
+            var page = this.state.page;
+
+            // Be default, we'll render page at 100% * scale width.
+
+            var pageScale = 1;
+
+            // If width is defined, calculate the scale of the page so it could be of desired width.
+            if (width) {
+                pageScale = width / page.getViewport(scale).width;
+            }
+
+            return scale * pageScale;
         }
     }]);
 
@@ -312,7 +337,9 @@ var _initialiseProps = function _initialiseProps() {
     };
 
     this.isParameterObject = function (object) {
-        return object && (typeof object === 'undefined' ? 'undefined' : _typeof(object)) === 'object' && (object.hasOwnProperty('data') || object.hasOwnProperty('range') || object.hasOwnProperty('url'));
+        return object && (typeof object === 'undefined' ? 'undefined' : _typeof(object)) === 'object' && ['file', 'range', 'url'].some(function (key) {
+            return Object.keys(object).includes(key);
+        });
     };
 
     this.isDataURI = function (str) {
@@ -366,5 +393,6 @@ ReactPDF.propTypes = {
     onPageLoad: _react.PropTypes.func,
     onPageRender: _react.PropTypes.func,
     pageIndex: _react.PropTypes.number,
-    scale: _react.PropTypes.number
+    scale: _react.PropTypes.number,
+    width: _react.PropTypes.number
 };

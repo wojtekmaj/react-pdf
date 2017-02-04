@@ -60064,6 +60064,7 @@ var Test = function (_Component) {
             pageNumber: null,
             passObj: false,
             pageRenderCount: 0,
+            pageWidth: 300,
             total: null
         }, _this2.onFileChange = function (event) {
             _this2.setState({
@@ -60082,13 +60083,23 @@ var Test = function (_Component) {
         }, _this2.onURLChange = function (event) {
             event.preventDefault();
 
+            var url = event.target.querySelector('input').value;
+
+            if (!url) {
+                return;
+            }
+
             _this2.setState({
-                file: event.target.querySelector('input').value
+                file: url
             });
         }, _this2.onRequestChange = function (event) {
             event.preventDefault();
 
             var url = event.target.querySelector('input').value;
+
+            if (!url) {
+                return;
+            }
 
             fetch(url).then(function (response) {
                 return response.blob();
@@ -60103,6 +60114,16 @@ var Test = function (_Component) {
             });
         }, _this2.onPassObjChange = function (event) {
             _this2.setState({ passObj: event.target.checked });
+        }, _this2.onPageWidthChange = function (event) {
+            var width = event.target.value;
+
+            if (!width) {
+                return;
+            }
+
+            _this2.setState({
+                pageWidth: parseInt(width, 10)
+            });
         }, _this2.onDocumentLoad = function (_ref2) {
             var total = _ref2.total;
 
@@ -60140,6 +60161,7 @@ var Test = function (_Component) {
                 pageIndex = _state.pageIndex,
                 pageNumber = _state.pageNumber,
                 pageRenderCount = _state.pageRenderCount,
+                pageWidth = _state.pageWidth,
                 total = _state.total;
 
 
@@ -60190,9 +60212,7 @@ var Test = function (_Component) {
                                 'Load from URL:'
                             ),
                             '\xA0',
-                            _react2.default.createElement('input', {
-                                type: 'text'
-                            }),
+                            _react2.default.createElement('input', { type: 'text' }),
                             _react2.default.createElement(
                                 'button',
                                 { type: 'submit' },
@@ -60209,9 +60229,7 @@ var Test = function (_Component) {
                                 'Fetch and pass:'
                             ),
                             '\xA0',
-                            _react2.default.createElement('input', {
-                                type: 'text'
-                            }),
+                            _react2.default.createElement('input', { type: 'text' }),
                             _react2.default.createElement(
                                 'button',
                                 { type: 'submit' },
@@ -60231,7 +60249,25 @@ var Test = function (_Component) {
                             'label',
                             { htmlFor: 'passobj' },
                             'Pass as an object (URLs and imports only)'
-                        )
+                        ),
+                        _react2.default.createElement('br', null),
+                        _react2.default.createElement('br', null),
+                        _react2.default.createElement(
+                            'form',
+                            { onSubmit: this.onPageWidthChange },
+                            _react2.default.createElement(
+                                'label',
+                                { htmlFor: 'pageWidth' },
+                                'Page width:'
+                            ),
+                            '\xA0',
+                            _react2.default.createElement('input', {
+                                type: 'number',
+                                value: pageWidth,
+                                onChange: this.onPageWidthChange
+                            })
+                        ),
+                        _react2.default.createElement('br', null)
                     ),
                     _react2.default.createElement(
                         'div',
@@ -60244,7 +60280,8 @@ var Test = function (_Component) {
                                 onDocumentLoad: this.onDocumentLoad,
                                 onPageLoad: this.onPageLoad,
                                 onPageRender: this.onPageRender,
-                                pageIndex: pageIndex
+                                pageIndex: pageIndex,
+                                width: pageWidth
                             })
                         ),
                         _react2.default.createElement(
@@ -60397,7 +60434,7 @@ var ReactPDF = function (_Component) {
     }, {
         key: 'shouldComponentUpdate',
         value: function shouldComponentUpdate(nextProps, nextState) {
-            return nextState.pdf !== this.state.pdf || nextState.page !== this.state.page;
+            return nextState.pdf !== this.state.pdf || nextState.page !== this.state.page || nextProps.width !== this.props.width || nextProps.scale !== this.props.scale;
         }
     }, {
         key: 'handleFileLoad',
@@ -60492,7 +60529,10 @@ var ReactPDF = function (_Component) {
     }, {
         key: 'loadPage',
         value: function loadPage(pageIndex) {
-            if (!this.state.pdf) {
+            var pdf = this.state.pdf;
+
+
+            if (!pdf) {
                 throw new Error('Unexpected call to getPage() before the document has been loaded.');
             }
 
@@ -60500,11 +60540,11 @@ var ReactPDF = function (_Component) {
 
             if (!pageIndex || pageNumber < 1) {
                 pageNumber = 1;
-            } else if (pageNumber >= this.state.pdf.numPages) {
-                pageNumber = this.state.pdf.numPages;
+            } else if (pageNumber >= pdf.numPages) {
+                pageNumber = pdf.numPages;
             }
 
-            this.state.pdf.getPage(pageNumber).then(this.onPageLoad).catch(this.onPageError);
+            pdf.getPage(pageNumber).then(this.onPageLoad).catch(this.onPageError);
         }
     }, {
         key: 'renderNoData',
@@ -60538,9 +60578,7 @@ var ReactPDF = function (_Component) {
         value: function render() {
             var _this3 = this;
 
-            var _props = this.props,
-                scale = _props.scale,
-                file = _props.file;
+            var file = this.props.file;
             var _state = this.state,
                 pdf = _state.pdf,
                 page = _state.page;
@@ -60564,20 +60602,44 @@ var ReactPDF = function (_Component) {
 
                     var canvas = _ref2;
 
-                    var context = canvas.getContext('2d');
-                    var viewport = page.getViewport(scale);
+                    var pixelRatio = window.devicePixelRatio || 1;
+                    var viewport = page.getViewport(_this3.pageScale * pixelRatio);
 
                     canvas.height = viewport.height;
                     canvas.width = viewport.width;
 
+                    canvas.style.height = viewport.height / pixelRatio + 'px';
+                    canvas.style.width = viewport.width / pixelRatio + 'px';
+
+                    var canvasContext = canvas.getContext('2d');
+
                     var renderContext = {
-                        canvasContext: context,
+                        canvasContext: canvasContext,
                         viewport: viewport
                     };
 
                     page.render(renderContext).then(_this3.onPageRender);
                 }
             });
+        }
+    }, {
+        key: 'pageScale',
+        get: function get() {
+            var _props = this.props,
+                scale = _props.scale,
+                width = _props.width;
+            var page = this.state.page;
+
+            // Be default, we'll render page at 100% * scale width.
+
+            var pageScale = 1;
+
+            // If width is defined, calculate the scale of the page so it could be of desired width.
+            if (width) {
+                pageScale = width / page.getViewport(scale).width;
+            }
+
+            return scale * pageScale;
         }
     }]);
 
@@ -60639,7 +60701,9 @@ var _initialiseProps = function _initialiseProps() {
     };
 
     this.isParameterObject = function (object) {
-        return object && (typeof object === 'undefined' ? 'undefined' : _typeof(object)) === 'object' && (object.hasOwnProperty('data') || object.hasOwnProperty('range') || object.hasOwnProperty('url'));
+        return object && (typeof object === 'undefined' ? 'undefined' : _typeof(object)) === 'object' && ['file', 'range', 'url'].some(function (key) {
+            return Object.keys(object).includes(key);
+        });
     };
 
     this.isDataURI = function (str) {
@@ -60693,7 +60757,8 @@ ReactPDF.propTypes = {
     onPageLoad: _react.PropTypes.func,
     onPageRender: _react.PropTypes.func,
     pageIndex: _react.PropTypes.number,
-    scale: _react.PropTypes.number
+    scale: _react.PropTypes.number,
+    width: _react.PropTypes.number
 };
 
 /***/ }),
@@ -60705,7 +60770,7 @@ exports = module.exports = __webpack_require__(87)();
 
 
 // module
-exports.push([module.i, ".Example {\n  font-family: Segoe UI, Tahoma, sans-serif;\n}\n.Example input,\n.Example button {\n  font: inherit;\n}\n.Example__container {\n  display: flex;\n  flex-direction: row;\n  align-items: flex-start;\n}\n.Example__container__load {\n  width: 420px;\n}\n.Example__container__preview {\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n  width: 420px;\n}\n.Example__container__preview__out {\n  border: 1px solid darkgray;\n  margin: 1em 0;\n}\n.Example__container__preview__out canvas {\n  width: 100%;\n  height: auto;\n}\n.Example__container__preview__controls {\n  width: 420px;\n  display: flex;\n}\n.Example__container__preview__controls span {\n  flex-grow: 1;\n  margin: 0 1em;\n  text-align: center;\n}\n.Example__container__preview__controls button {\n  width: 80px;\n}\n", ""]);
+exports.push([module.i, ".Example {\n  font-family: Segoe UI, Tahoma, sans-serif;\n}\n.Example input,\n.Example button {\n  font: inherit;\n}\n.Example__container {\n  display: flex;\n  flex-direction: row;\n  align-items: flex-start;\n}\n.Example__container__load {\n  width: 420px;\n}\n.Example__container__preview {\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n  width: 420px;\n}\n.Example__container__preview__out {\n  border: 1px solid darkgray;\n  margin: 1em 0;\n}\n.Example__container__preview__controls {\n  width: 420px;\n  display: flex;\n}\n.Example__container__preview__controls span {\n  flex-grow: 1;\n  margin: 0 1em;\n  text-align: center;\n}\n.Example__container__preview__controls button {\n  width: 80px;\n}\n", ""]);
 
 // exports
 
