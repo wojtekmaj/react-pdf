@@ -86,6 +86,11 @@ class Test extends Component {
         this.setState({ total });
     }
 
+    onDocumentError = ({ message }) => {
+        // eslint-disable-next-line no-console
+        console.error(message);
+    }
+
     onPageLoad = ({ pageIndex, pageNumber }) => {
         this.setState({ pageIndex, pageNumber });
     }

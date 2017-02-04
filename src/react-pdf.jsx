@@ -63,8 +63,11 @@ export default class ReactPDF extends Component {
         this.loadPage(this.props.pageIndex);
     }
 
-    onDocumentError = () => {
-        this.callIfDefined(this.props.onDocumentError);
+    onDocumentError = (error) => {
+        this.callIfDefined(
+            this.props.onDocumentError,
+            error,
+        );
 
         this.setState({ pdf: false });
     }
@@ -81,8 +84,11 @@ export default class ReactPDF extends Component {
         this.setState({ page });
     }
 
-    onPageError = () => {
-        this.callIfDefined(this.props.onPageError);
+    onPageError = (error) => {
+        this.callIfDefined(
+            this.props.onPageError,
+            error,
+        );
 
         this.setState({ page: false });
     }
