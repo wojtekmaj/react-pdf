@@ -99,55 +99,19 @@ export default class ReactPDF extends Component {
         this.callIfDefined(this.props.onPageRender);
     }
 
-    getPageScale(page, pixelRatio = 1) {
+    get pageScale() {
         const { scale, width } = this.props;
+        const { page } = this.state;
 
         // Be default, we'll render page at 100% * scale width.
         let pageScale = 1;
 
         // If width is defined, calculate the scale of the page so it could be of desired width.
         if (width) {
-            const pageDimensions = this.getPageDimensions(page);
-            pageScale = width / pageDimensions.width;
+            pageScale = width / page.getViewport(scale).width;
         }
 
-        return scale * pageScale * pixelRatio;
-    }
-
-    getPageRenderScale(page) {
-        return this.getPageScale(
-            page,
-            window.devicePixelRatio,
-        );
-    }
-
-    getPageDisplayScale(page) {
-        return this.getPageScale(
-            page,
-        );
-    }
-
-    getPageDimensions(page, scale = 1) {
-        const viewport = page.getViewport(scale);
-
-        return {
-            width: viewport.width,
-            height: viewport.height,
-        };
-    }
-
-    getPageRenderDimensions(page) {
-        return this.getPageDimensions(
-            page,
-            this.getPageRenderScale(page),
-        );
-    }
-
-    getPageDisplayDimensions(page) {
-        return this.getPageDimensions(
-            page,
-            this.getPageDisplayScale(page),
-        );
+        return scale * pageScale;
     }
 
     callIfDefined = (fn, args) => {
@@ -162,13 +126,8 @@ export default class ReactPDF extends Component {
     }
 
     isParameterObject = object =>
-        object &&
         typeof object === 'object' &&
-        (
-            object.hasOwnProperty('data') ||
-            object.hasOwnProperty('range') ||
-            object.hasOwnProperty('url')
-        )
+        ['file', 'range', 'url'].some(key => Object.keys(object).includes(key))
 
     isDataURI = str => /^data:/.test(str)
 
@@ -278,7 +237,9 @@ export default class ReactPDF extends Component {
     }
 
     loadPage(pageIndex) {
-        if (!this.state.pdf) {
+        const { pdf } = this.state;
+
+        if (!pdf) {
             throw new Error('Unexpected call to getPage() before the document has been loaded.');
         }
 
@@ -286,11 +247,11 @@ export default class ReactPDF extends Component {
 
         if (!pageIndex || pageNumber < 1) {
             pageNumber = 1;
-        } else if (pageNumber >= this.state.pdf.numPages) {
-            pageNumber = this.state.pdf.numPages;
+        } else if (pageNumber >= pdf.numPages) {
+            pageNumber = pdf.numPages;
         }
 
-        this.state.pdf.getPage(pageNumber)
+        pdf.getPage(pageNumber)
             .then(this.onPageLoad)
             .catch(this.onPageError);
     }
@@ -336,12 +297,14 @@ export default class ReactPDF extends Component {
 
                     const canvas = ref;
 
-                    const scale = this.getPageRenderScale(page);
-                    const viewport = page.getViewport(scale);
+                    const pixelRatio = window.devicePixelRatio || 1;
+                    const viewport = page.getViewport(this.pageScale * pixelRatio);
 
-                    const renderDimensions = this.getPageRenderDimensions(page);
-                    canvas.height = renderDimensions.height;
-                    canvas.width = renderDimensions.width;
+                    canvas.height = viewport.height;
+                    canvas.width = viewport.width;
+
+                    canvas.style.height = `${viewport.height / pixelRatio}px`;
+                    canvas.style.width = `${viewport.width / pixelRatio}px`;
 
                     const canvasContext = canvas.getContext('2d');
 
@@ -352,13 +315,7 @@ export default class ReactPDF extends Component {
 
                     page
                         .render(renderContext)
-                        .then(() => {
-                            const displayDimensions = this.getPageDisplayDimensions(page);
-                            canvas.style.height = `${displayDimensions.height}px`;
-                            canvas.style.width = `${displayDimensions.width}px`;
-
-                            this.onPageRender();
-                        });
+                        .then(this.onPageRender);
                 }}
             />
         );
