@@ -17,6 +17,7 @@
         "indent": [2, 4, { "SwitchCase": 1 }],
         "no-prototype-builtins": 0,
         "react/jsx-indent": [2, 4],
-        "react/jsx-indent-props": [2, 4]
+        "react/jsx-indent-props": [2, 4],
+        "react/require-default-props": 0
     }
 }
