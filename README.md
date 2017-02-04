@@ -2,7 +2,7 @@
 Easily display PDF files in your React application.
 
 ## tl;dr
-* Install by executing `npm install --save react-pdf`.
+* ~~Install by executing `npm install --save react-pdf`.~~ Coming soon! See [temporary instructions](https://github.com/wojtekmaj/react-pdf/issues/6).
 * Import by addding `import ReactPDF from 'react-pdf'`
 * Use by adding `<ReactPDF file="..." />`. `file` can be an URL, base64 content, Uint8Array, and more.
 
@@ -22,7 +22,7 @@ Your project needs to use React 15.0.0 or later.
 
 ### Installation
 
-Add React-PDF to your project by executing `npm install --save react-pdf`.
+~~Add React-PDF to your project by executing `npm install --save react-pdf`.~~ Coming soon! See [temporary instructions](https://github.com/wojtekmaj/react-pdf/issues/6).
 
 ### Usage
 
@@ -70,6 +70,7 @@ Check the sample directory of this repository for a full working example.
 |noData|Defines what the component should display in case of no data. Defaults to "No PDF file specified.".|<ul><li>String:<br />`error="Please select a file."`</li><li>React element:<Br />`error={<div>Please select a file.</div>}`</li><li>Function:<Br />`error={this.renderNoData()}`</li></ul>|
 |pageIndex|Defines which page from PDF file should be displayed. Defaults to 0.|`pageIndex={2}`|
 |scale|Defines the scale in which PDF file should be rendered. Defaults to 1.0.|`scale={0.5}`|
+|width|Defines the width of the page. If not defined, canvas will be rendered at the width defined in PDF. If you define `width` and `scale` at the same time, the width will be multiplied by a given factor.|`width={300}`|
 |onDocumentLoad|Function called when the document is successfully loaded to the memory.|`onDocumentLoad={({ total }) => alert('Loaded a file with ' + total + ' pages!')}`|
 |onDocumentError|Function called in case of an error while loading a document.|`onDocumentError={({ message }) => alert('Error while loading document! ' + message)}`|
 |onPageLoad|Function called when the page is successfully loaded to the memory.|`onPageLoad={({ pageIndex, pageNumber }) => alert('Now displaying a page number ' + pageNumber + '!')}`|
