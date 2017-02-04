@@ -56,8 +56,14 @@ class Test extends Component {
     onURLChange = (event) => {
         event.preventDefault();
 
+        const url = event.target.querySelector('input').value;
+
+        if (!url) {
+            return;
+        }
+
         this.setState({
-            file: event.target.querySelector('input').value,
+            file: url,
         });
     }
 
@@ -65,6 +71,10 @@ class Test extends Component {
         event.preventDefault();
 
         const url = event.target.querySelector('input').value;
+
+        if (!url) {
+            return;
+        }
 
         fetch(url).then(response => response.blob()).then((blob) => {
             this.setState({
@@ -85,6 +95,10 @@ class Test extends Component {
 
     onPageWidthChange = (event) => {
         const width = event.target.value;
+
+        if (!width) {
+            return;
+        }
 
         this.setState({
             pageWidth: parseInt(width, 10),
