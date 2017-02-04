@@ -126,6 +126,7 @@ export default class ReactPDF extends Component {
     }
 
     isParameterObject = object =>
+        object &&
         typeof object === 'object' &&
         ['file', 'range', 'url'].some(key => Object.keys(object).includes(key))
 
