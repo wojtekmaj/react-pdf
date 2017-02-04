@@ -46,7 +46,9 @@ export default class ReactPDF extends Component {
     shouldComponentUpdate(nextProps, nextState) {
         return (
             nextState.pdf !== this.state.pdf ||
-            nextState.page !== this.state.page
+            nextState.page !== this.state.page ||
+            nextProps.width !== this.props.width ||
+            nextProps.scale !== this.props.scale
         );
     }
 
