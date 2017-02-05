@@ -6909,8 +6909,8 @@ module.exports = getActiveElement;
  }
 }(this, function (exports) {
  'use strict';
- var pdfjsVersion = '1.7.235';
- var pdfjsBuild = '3f320f0';
+ var pdfjsVersion = '1.7.246';
+ var pdfjsBuild = 'cae8d97c';
  var pdfjsFilePath = typeof document !== 'undefined' && document.currentScript ? document.currentScript.src : null;
  var pdfjsLibs = {};
  (function pdfjsWrapper() {
@@ -13787,7 +13787,6 @@ module.exports = getActiveElement;
       var encoding = Object.create(null);
       var bytes = this.bytes;
       var predefined = false;
-      var hasSupplement = false;
       var format, i, ii;
       var raw = null;
       function readSupplement() {
@@ -13837,7 +13836,6 @@ module.exports = getActiveElement;
        if (format & 0x80) {
         bytes[dataStart] &= 0x7f;
         readSupplement();
-        hasSupplement = true;
        }
        raw = bytes.subarray(dataStart, dataEnd);
       }
@@ -15151,8 +15149,7 @@ module.exports = getActiveElement;
       subStream.end = start + length || this.end;
       subStream.dict = dict;
       return subStream;
-     },
-     isStream: true
+     }
     };
     return ChunkedStream;
    }();
@@ -20555,14 +20552,12 @@ module.exports = getActiveElement;
       var deltaHeight = decodeInteger(contextCache, 'IADH', decoder);
       currentHeight += deltaHeight;
       var currentWidth = 0;
-      var totalWidth = 0;
       while (true) {
        var deltaWidth = decodeInteger(contextCache, 'IADW', decoder);
        if (deltaWidth === null) {
         break;
        }
        currentWidth += deltaWidth;
-       totalWidth += currentWidth;
        var bitmap;
        if (refinement) {
         var numberOfInstances = decodeInteger(contextCache, 'IAAI', decoder);
@@ -20972,7 +20967,7 @@ module.exports = getActiveElement;
        delete pageInfo.height;
       }
       var pageSegmentFlags = data[position + 16];
-      var pageStripingInformation = readUint16(data, position + 17);
+      readUint16(data, position + 17);
       pageInfo.lossless = !!(pageSegmentFlags & 1);
       pageInfo.refinement = !!(pageSegmentFlags & 2);
       pageInfo.defaultPixelValue = pageSegmentFlags >> 2 & 1;
@@ -21015,7 +21010,7 @@ module.exports = getActiveElement;
       header.numberOfPages = readUint32(data, position);
       position += 4;
      }
-     var segments = readSegments(header, data, position, end);
+     readSegments(header, data, position, end);
      error('Not implemented');
     }
     function parseJbig2Chunks(chunks) {
@@ -21852,7 +21847,7 @@ module.exports = getActiveElement;
         resetInterval = readUint16();
         break;
        case 0xFFDA:
-        var scanLength = readUint16();
+        readUint16();
         var selectorsCount = data[offset++];
         var components = [], component;
         for (i = 0; i < selectorsCount; i++) {
@@ -30272,7 +30267,6 @@ module.exports = getActiveElement;
    var isArray = sharedUtil.isArray;
    var createObjectURL = sharedUtil.createObjectURL;
    var shadow = sharedUtil.shadow;
-   var warn = sharedUtil.warn;
    var isSpace = sharedUtil.isSpace;
    var Dict = corePrimitives.Dict;
    var isDict = corePrimitives.isDict;
@@ -30354,8 +30348,7 @@ module.exports = getActiveElement;
      },
      makeSubStream: function Stream_makeSubStream(start, length, dict) {
       return new Stream(this.bytes.buffer, start, length, dict);
-     },
-     isStream: true
+     }
     };
     return Stream;
    }();
@@ -38932,264 +38925,6 @@ module.exports = getActiveElement;
     return AES128Cipher;
    }();
    var AES256Cipher = function AES256CipherClosure() {
-    var rcon = new Uint8Array([
-     0x8d,
-     0x01,
-     0x02,
-     0x04,
-     0x08,
-     0x10,
-     0x20,
-     0x40,
-     0x80,
-     0x1b,
-     0x36,
-     0x6c,
-     0xd8,
-     0xab,
-     0x4d,
-     0x9a,
-     0x2f,
-     0x5e,
-     0xbc,
-     0x63,
-     0xc6,
-     0x97,
-     0x35,
-     0x6a,
-     0xd4,
-     0xb3,
-     0x7d,
-     0xfa,
-     0xef,
-     0xc5,
-     0x91,
-     0x39,
-     0x72,
-     0xe4,
-     0xd3,
-     0xbd,
-     0x61,
-     0xc2,
-     0x9f,
-     0x25,
-     0x4a,
-     0x94,
-     0x33,
-     0x66,
-     0xcc,
-     0x83,
-     0x1d,
-     0x3a,
-     0x74,
-     0xe8,
-     0xcb,
-     0x8d,
-     0x01,
-     0x02,
-     0x04,
-     0x08,
-     0x10,
-     0x20,
-     0x40,
-     0x80,
-     0x1b,
-     0x36,
-     0x6c,
-     0xd8,
-     0xab,
-     0x4d,
-     0x9a,
-     0x2f,
-     0x5e,
-     0xbc,
-     0x63,
-     0xc6,
-     0x97,
-     0x35,
-     0x6a,
-     0xd4,
-     0xb3,
-     0x7d,
-     0xfa,
-     0xef,
-     0xc5,
-     0x91,
-     0x39,
-     0x72,
-     0xe4,
-     0xd3,
-     0xbd,
-     0x61,
-     0xc2,
-     0x9f,
-     0x25,
-     0x4a,
-     0x94,
-     0x33,
-     0x66,
-     0xcc,
-     0x83,
-     0x1d,
-     0x3a,
-     0x74,
-     0xe8,
-     0xcb,
-     0x8d,
-     0x01,
-     0x02,
-     0x04,
-     0x08,
-     0x10,
-     0x20,
-     0x40,
-     0x80,
-     0x1b,
-     0x36,
-     0x6c,
-     0xd8,
-     0xab,
-     0x4d,
-     0x9a,
-     0x2f,
-     0x5e,
-     0xbc,
-     0x63,
-     0xc6,
-     0x97,
-     0x35,
-     0x6a,
-     0xd4,
-     0xb3,
-     0x7d,
-     0xfa,
-     0xef,
-     0xc5,
-     0x91,
-     0x39,
-     0x72,
-     0xe4,
-     0xd3,
-     0xbd,
-     0x61,
-     0xc2,
-     0x9f,
-     0x25,
-     0x4a,
-     0x94,
-     0x33,
-     0x66,
-     0xcc,
-     0x83,
-     0x1d,
-     0x3a,
-     0x74,
-     0xe8,
-     0xcb,
-     0x8d,
-     0x01,
-     0x02,
-     0x04,
-     0x08,
-     0x10,
-     0x20,
-     0x40,
-     0x80,
-     0x1b,
-     0x36,
-     0x6c,
-     0xd8,
-     0xab,
-     0x4d,
-     0x9a,
-     0x2f,
-     0x5e,
-     0xbc,
-     0x63,
-     0xc6,
-     0x97,
-     0x35,
-     0x6a,
-     0xd4,
-     0xb3,
-     0x7d,
-     0xfa,
-     0xef,
-     0xc5,
-     0x91,
-     0x39,
-     0x72,
-     0xe4,
-     0xd3,
-     0xbd,
-     0x61,
-     0xc2,
-     0x9f,
-     0x25,
-     0x4a,
-     0x94,
-     0x33,
-     0x66,
-     0xcc,
-     0x83,
-     0x1d,
-     0x3a,
-     0x74,
-     0xe8,
-     0xcb,
-     0x8d,
-     0x01,
-     0x02,
-     0x04,
-     0x08,
-     0x10,
-     0x20,
-     0x40,
-     0x80,
-     0x1b,
-     0x36,
-     0x6c,
-     0xd8,
-     0xab,
-     0x4d,
-     0x9a,
-     0x2f,
-     0x5e,
-     0xbc,
-     0x63,
-     0xc6,
-     0x97,
-     0x35,
-     0x6a,
-     0xd4,
-     0xb3,
-     0x7d,
-     0xfa,
-     0xef,
-     0xc5,
-     0x91,
-     0x39,
-     0x72,
-     0xe4,
-     0xd3,
-     0xbd,
-     0x61,
-     0xc2,
-     0x9f,
-     0x25,
-     0x4a,
-     0x94,
-     0x33,
-     0x66,
-     0xcc,
-     0x83,
-     0x1d,
-     0x3a,
-     0x74,
-     0xe8,
-     0xcb,
-     0x8d
-    ]);
     var s = new Uint8Array([
      0x63,
      0x7c,
@@ -40748,9 +40483,9 @@ module.exports = getActiveElement;
     function parseCmap(data, start, end) {
      var offset = getUshort(data, start + 2) === 1 ? getLong(data, start + 8) : getLong(data, start + 16);
      var format = getUshort(data, start + offset);
-     var length, ranges, p, i;
+     var ranges, p, i;
      if (format === 4) {
-      length = getUshort(data, start + offset + 2);
+      getUshort(data, start + offset + 2);
       var segCount = getUshort(data, start + offset + 6) >> 1;
       p = start + offset + 14;
       ranges = [];
@@ -40777,7 +40512,7 @@ module.exports = getActiveElement;
       }
       return ranges;
      } else if (format === 12) {
-      length = getLong(data, start + offset + 4);
+      getLong(data, start + offset + 4);
       var groups = getLong(data, start + offset + 12);
       p = start + offset + 16;
       ranges = [];
@@ -43874,7 +43609,7 @@ module.exports = getActiveElement;
           error = true;
           break;
          }
-         var wy = this.stack.pop();
+         this.stack.pop();
          wx = this.stack.pop();
          var sby = this.stack.pop();
          sbx = this.stack.pop();
@@ -44126,7 +43861,7 @@ module.exports = getActiveElement;
         }
         break;
        case 'Subrs':
-        var num = this.readInt();
+        this.readInt();
         this.getToken();
         while ((token = this.getToken()) === 'dup') {
          var index = this.readInt();
@@ -46779,9 +46514,6 @@ module.exports = getActiveElement;
      this.sizes = [];
      this.missingFile = false;
      this.glyphCache = Object.create(null);
-     var names = name.split('+');
-     names = names.length > 1 ? names[1] : names[0];
-     names = names.split(/[-,_]/g)[0];
      this.isSerifFont = !!(properties.flags & FontFlags.Serif);
      this.isSymbolicFont = !!(properties.flags & FontFlags.Symbolic);
      this.isMonospace = !!(properties.flags & FontFlags.FixedPitch);
@@ -47369,7 +47101,7 @@ module.exports = getActiveElement;
        var segment;
        var start = (font.start ? font.start : 0) + cmap.offset;
        font.pos = start;
-       var version = font.getUint16();
+       font.getUint16();
        var numTables = font.getUint16();
        var potentialTable;
        var canBreak = false;
@@ -47415,8 +47147,8 @@ module.exports = getActiveElement;
         };
        }
        var format = font.getUint16();
-       var length = font.getUint16();
-       var language = font.getUint16();
+       font.getUint16();
+       font.getUint16();
        var hasShortCmap = false;
        var mappings = [];
        var j, glyphId;
@@ -52904,22 +52636,11 @@ module.exports = getActiveElement;
        var width = 0;
        var height = 0;
        var glyphs = font.charsToGlyphs(chars);
-       var defaultVMetrics = font.defaultVMetrics;
        for (var i = 0; i < glyphs.length; i++) {
         var glyph = glyphs[i];
-        var vMetricX = null;
-        var vMetricY = null;
         var glyphWidth = null;
-        if (font.vertical) {
-         if (glyph.vmetric) {
-          glyphWidth = glyph.vmetric[0];
-          vMetricX = glyph.vmetric[1];
-          vMetricY = glyph.vmetric[2];
-         } else {
-          glyphWidth = glyph.width;
-          vMetricX = glyph.width * 0.5;
-          vMetricY = defaultVMetrics[2];
-         }
+        if (font.vertical && glyph.vmetric) {
+         glyphWidth = glyph.vmetric[0];
         } else {
          glyphWidth = glyph.width;
         }
@@ -54832,7 +54553,6 @@ module.exports = getActiveElement;
    var AnnotationType = sharedUtil.AnnotationType;
    var OPS = sharedUtil.OPS;
    var Util = sharedUtil.Util;
-   var isString = sharedUtil.isString;
    var isArray = sharedUtil.isArray;
    var isInt = sharedUtil.isInt;
    var stringToBytes = sharedUtil.stringToBytes;
@@ -56185,7 +55905,6 @@ module.exports = getActiveElement;
    var MissingPDFException = sharedUtil.MissingPDFException;
    var UnexpectedResponseException = sharedUtil.UnexpectedResponseException;
    var PasswordException = sharedUtil.PasswordException;
-   var PasswordResponses = sharedUtil.PasswordResponses;
    var UnknownErrorException = sharedUtil.UnknownErrorException;
    var XRefParseException = sharedUtil.XRefParseException;
    var arrayByteLength = sharedUtil.arrayByteLength;
@@ -56451,7 +56170,7 @@ module.exports = getActiveElement;
       var xhr = new XMLHttpRequest();
       var responseExists = 'response' in xhr;
       try {
-       var dummy = xhr.responseType;
+       xhr.responseType;
       } catch (e) {
        responseExists = false;
       }
@@ -59976,40 +59695,36 @@ module.exports = g;
 
 /***/ }),
 /* 83 */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-
-
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(81);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_react__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_react_dom__ = __webpack_require__(104);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_react_dom___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_react_dom__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__src_react_pdf__ = __webpack_require__(85);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__test_less__ = __webpack_require__(188);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__test_less___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__test_less__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__test_pdf__ = __webpack_require__(52);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__test_pdf___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4__test_pdf__);
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
-
-var _react = __webpack_require__(81);
-
-var _react2 = _interopRequireDefault(_react);
-
-var _reactDom = __webpack_require__(104);
-
-var _reactDom2 = _interopRequireDefault(_reactDom);
-
-var _reactPdf = __webpack_require__(85);
-
-var _reactPdf2 = _interopRequireDefault(_reactPdf);
-
-__webpack_require__(188);
-
-var _test = __webpack_require__(52);
-
-var _test2 = _interopRequireDefault(_test);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+
+
+
+
+
+
+
 
 var componentRenderCount = 0;
 
@@ -60040,9 +59755,9 @@ var WrappedReactPDF = function (_ReactPDF) {
     }]);
 
     return WrappedReactPDF;
-}(_reactPdf2.default);
+}(__WEBPACK_IMPORTED_MODULE_2__src_react_pdf__["a" /* default */]);
 
-WrappedReactPDF.propTypes = _reactPdf2.default.propTypes;
+WrappedReactPDF.propTypes = __WEBPACK_IMPORTED_MODULE_2__src_react_pdf__["a" /* default */].propTypes;
 
 var Test = function (_Component) {
     _inherits(Test, _Component);
@@ -60110,7 +59825,7 @@ var Test = function (_Component) {
             });
         }, _this2.onUseImported = function () {
             _this2.setState({
-                file: _test2.default
+                file: __WEBPACK_IMPORTED_MODULE_4__test_pdf___default.a
             });
         }, _this2.onPassObjChange = function (event) {
             _this2.setState({ passObj: event.target.checked });
@@ -60165,117 +59880,117 @@ var Test = function (_Component) {
                 total = _state.total;
 
 
-            return _react2.default.createElement(
+            return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                 'div',
                 { className: 'Example' },
-                _react2.default.createElement(
+                __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                     'h1',
                     null,
                     'react-pdf test page'
                 ),
-                _react2.default.createElement(
+                __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                     'div',
                     { className: 'Example__container' },
-                    _react2.default.createElement(
+                    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                         'div',
                         { className: 'Example__container__load' },
-                        _react2.default.createElement(
+                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                             'label',
                             { htmlFor: 'file' },
                             'Load from file:'
                         ),
                         '\xA0',
-                        _react2.default.createElement('input', {
+                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('input', {
                             type: 'file',
                             onChange: this.onFileChange
                         }),
-                        _react2.default.createElement('br', null),
-                        _react2.default.createElement('br', null),
-                        _react2.default.createElement(
+                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('br', null),
+                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('br', null),
+                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                             'label',
                             { htmlFor: 'file' },
                             'Load from file to Uint8Array:'
                         ),
                         '\xA0',
-                        _react2.default.createElement('input', {
+                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('input', {
                             type: 'file',
                             onChange: this.onFileUintChange
                         }),
-                        _react2.default.createElement('br', null),
-                        _react2.default.createElement('br', null),
-                        _react2.default.createElement(
+                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('br', null),
+                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('br', null),
+                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                             'form',
                             { onSubmit: this.onURLChange },
-                            _react2.default.createElement(
+                            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                                 'label',
                                 { htmlFor: 'url' },
                                 'Load from URL:'
                             ),
                             '\xA0',
-                            _react2.default.createElement('input', { type: 'text' }),
-                            _react2.default.createElement(
+                            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('input', { type: 'text' }),
+                            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                                 'button',
                                 { type: 'submit' },
                                 'Apply'
                             )
                         ),
-                        _react2.default.createElement('br', null),
-                        _react2.default.createElement(
+                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('br', null),
+                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                             'form',
                             { onSubmit: this.onRequestChange },
-                            _react2.default.createElement(
+                            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                                 'label',
                                 { htmlFor: 'url' },
                                 'Fetch and pass:'
                             ),
                             '\xA0',
-                            _react2.default.createElement('input', { type: 'text' }),
-                            _react2.default.createElement(
+                            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('input', { type: 'text' }),
+                            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                                 'button',
                                 { type: 'submit' },
                                 'Apply'
                             )
                         ),
-                        _react2.default.createElement('br', null),
-                        _react2.default.createElement(
+                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('br', null),
+                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                             'button',
                             { onClick: this.onUseImported },
                             'Use imported file'
                         ),
-                        _react2.default.createElement('br', null),
-                        _react2.default.createElement('br', null),
-                        _react2.default.createElement('input', { id: 'passobj', type: 'checkbox', onChange: this.onPassObjChange }),
-                        _react2.default.createElement(
+                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('br', null),
+                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('br', null),
+                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('input', { id: 'passobj', type: 'checkbox', onChange: this.onPassObjChange }),
+                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                             'label',
                             { htmlFor: 'passobj' },
                             'Pass as an object (URLs and imports only)'
                         ),
-                        _react2.default.createElement('br', null),
-                        _react2.default.createElement('br', null),
-                        _react2.default.createElement(
+                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('br', null),
+                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('br', null),
+                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                             'form',
                             { onSubmit: this.onPageWidthChange },
-                            _react2.default.createElement(
+                            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                                 'label',
                                 { htmlFor: 'pageWidth' },
                                 'Page width:'
                             ),
                             '\xA0',
-                            _react2.default.createElement('input', {
+                            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('input', {
                                 type: 'number',
                                 value: pageWidth,
                                 onChange: this.onPageWidthChange
                             })
                         ),
-                        _react2.default.createElement('br', null)
+                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('br', null)
                     ),
-                    _react2.default.createElement(
+                    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                         'div',
                         { className: 'Example__container__preview' },
-                        _react2.default.createElement(
+                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                             'div',
                             { className: 'Example__container__preview__out' },
-                            _react2.default.createElement(WrappedReactPDF, {
+                            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(WrappedReactPDF, {
                                 file: this.transformedFile,
                                 onDocumentLoad: this.onDocumentLoad,
                                 onPageLoad: this.onPageLoad,
@@ -60284,10 +59999,10 @@ var Test = function (_Component) {
                                 width: pageWidth
                             })
                         ),
-                        _react2.default.createElement(
+                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                             'div',
                             { className: 'Example__container__preview__controls' },
-                            _react2.default.createElement(
+                            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                                 'button',
                                 {
                                     disabled: pageNumber <= 1,
@@ -60297,7 +60012,7 @@ var Test = function (_Component) {
                                 },
                                 'Previous'
                             ),
-                            _react2.default.createElement(
+                            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                                 'span',
                                 null,
                                 'Page ',
@@ -60305,7 +60020,7 @@ var Test = function (_Component) {
                                 ' of ',
                                 total || '--'
                             ),
-                            _react2.default.createElement(
+                            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                                 'button',
                                 {
                                     disabled: pageNumber >= total,
@@ -60316,12 +60031,12 @@ var Test = function (_Component) {
                                 'Next'
                             )
                         ),
-                        _react2.default.createElement(
+                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                             'div',
                             { className: 'Example__container__preview__info' },
                             'Page render count: ',
                             pageRenderCount,
-                            _react2.default.createElement('br', null),
+                            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('br', null),
                             'Component render count: ',
                             componentRenderCount
                         )
@@ -60347,9 +60062,9 @@ var Test = function (_Component) {
     }]);
 
     return Test;
-}(_react.Component);
+}(__WEBPACK_IMPORTED_MODULE_0_react__["Component"]);
 
-_reactDom2.default.render(_react2.default.createElement(Test, null), document.getElementById('react-container'));
+__WEBPACK_IMPORTED_MODULE_1_react_dom___default.a.render(__WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(Test, null), document.getElementById('react-container'));
 
 /***/ }),
 /* 84 */
@@ -60359,30 +60074,22 @@ module.exports = __webpack_require__.p + "index.html";
 
 /***/ }),
 /* 85 */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(81);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_react__);
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _react = __webpack_require__(81);
-
-var _react2 = _interopRequireDefault(_react);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+
 
 __webpack_require__(103);
 __webpack_require__(102);
@@ -60549,7 +60256,7 @@ var ReactPDF = function (_Component) {
     }, {
         key: 'renderNoData',
         value: function renderNoData() {
-            return _react2.default.createElement(
+            return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                 'div',
                 null,
                 this.props.noData
@@ -60558,7 +60265,7 @@ var ReactPDF = function (_Component) {
     }, {
         key: 'renderError',
         value: function renderError() {
-            return _react2.default.createElement(
+            return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                 'div',
                 null,
                 this.props.error
@@ -60567,7 +60274,7 @@ var ReactPDF = function (_Component) {
     }, {
         key: 'renderLoader',
         value: function renderLoader() {
-            return _react2.default.createElement(
+            return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                 'div',
                 null,
                 this.props.loading
@@ -60596,7 +60303,7 @@ var ReactPDF = function (_Component) {
                 return this.renderLoader();
             }
 
-            return _react2.default.createElement('canvas', {
+            return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('canvas', {
                 ref: function ref(_ref2) {
                     if (!_ref2) return;
 
@@ -60644,7 +60351,7 @@ var ReactPDF = function (_Component) {
     }]);
 
     return ReactPDF;
-}(_react.Component);
+}(__WEBPACK_IMPORTED_MODULE_0_react__["Component"]);
 
 var _initialiseProps = function _initialiseProps() {
     var _this4 = this;
@@ -60730,7 +60437,7 @@ var _initialiseProps = function _initialiseProps() {
     };
 };
 
-exports.default = ReactPDF;
+/* harmony default export */ __webpack_exports__["a"] = ReactPDF;
 
 
 ReactPDF.defaultProps = {
@@ -60742,23 +60449,23 @@ ReactPDF.defaultProps = {
 };
 
 ReactPDF.propTypes = {
-    error: _react.PropTypes.oneOfType([_react.PropTypes.string, _react.PropTypes.node]),
-    file: _react.PropTypes.oneOfType([_react.PropTypes.string, _react.PropTypes.instanceOf(File), _react.PropTypes.instanceOf(Blob), _react.PropTypes.shape({
-        data: _react.PropTypes.object,
-        httpHeaders: _react.PropTypes.object,
-        range: _react.PropTypes.object,
-        url: _react.PropTypes.string
+    error: __WEBPACK_IMPORTED_MODULE_0_react__["PropTypes"].oneOfType([__WEBPACK_IMPORTED_MODULE_0_react__["PropTypes"].string, __WEBPACK_IMPORTED_MODULE_0_react__["PropTypes"].node]),
+    file: __WEBPACK_IMPORTED_MODULE_0_react__["PropTypes"].oneOfType([__WEBPACK_IMPORTED_MODULE_0_react__["PropTypes"].string, __WEBPACK_IMPORTED_MODULE_0_react__["PropTypes"].instanceOf(File), __WEBPACK_IMPORTED_MODULE_0_react__["PropTypes"].instanceOf(Blob), __WEBPACK_IMPORTED_MODULE_0_react__["PropTypes"].shape({
+        data: __WEBPACK_IMPORTED_MODULE_0_react__["PropTypes"].object,
+        httpHeaders: __WEBPACK_IMPORTED_MODULE_0_react__["PropTypes"].object,
+        range: __WEBPACK_IMPORTED_MODULE_0_react__["PropTypes"].object,
+        url: __WEBPACK_IMPORTED_MODULE_0_react__["PropTypes"].string
     })]),
-    loading: _react.PropTypes.oneOfType([_react.PropTypes.string, _react.PropTypes.node]),
-    noData: _react.PropTypes.oneOfType([_react.PropTypes.string, _react.PropTypes.node]),
-    onDocumentError: _react.PropTypes.func,
-    onDocumentLoad: _react.PropTypes.func,
-    onPageError: _react.PropTypes.func,
-    onPageLoad: _react.PropTypes.func,
-    onPageRender: _react.PropTypes.func,
-    pageIndex: _react.PropTypes.number,
-    scale: _react.PropTypes.number,
-    width: _react.PropTypes.number
+    loading: __WEBPACK_IMPORTED_MODULE_0_react__["PropTypes"].oneOfType([__WEBPACK_IMPORTED_MODULE_0_react__["PropTypes"].string, __WEBPACK_IMPORTED_MODULE_0_react__["PropTypes"].node]),
+    noData: __WEBPACK_IMPORTED_MODULE_0_react__["PropTypes"].oneOfType([__WEBPACK_IMPORTED_MODULE_0_react__["PropTypes"].string, __WEBPACK_IMPORTED_MODULE_0_react__["PropTypes"].node]),
+    onDocumentError: __WEBPACK_IMPORTED_MODULE_0_react__["PropTypes"].func,
+    onDocumentLoad: __WEBPACK_IMPORTED_MODULE_0_react__["PropTypes"].func,
+    onPageError: __WEBPACK_IMPORTED_MODULE_0_react__["PropTypes"].func,
+    onPageLoad: __WEBPACK_IMPORTED_MODULE_0_react__["PropTypes"].func,
+    onPageRender: __WEBPACK_IMPORTED_MODULE_0_react__["PropTypes"].func,
+    pageIndex: __WEBPACK_IMPORTED_MODULE_0_react__["PropTypes"].number,
+    scale: __WEBPACK_IMPORTED_MODULE_0_react__["PropTypes"].number,
+    width: __WEBPACK_IMPORTED_MODULE_0_react__["PropTypes"].number
 };
 
 /***/ }),
@@ -61600,8 +61307,8 @@ module.exports = performanceNow;
  }
 }(this, function (exports) {
  'use strict';
- var pdfjsVersion = '1.7.235';
- var pdfjsBuild = '3f320f0';
+ var pdfjsVersion = '1.7.246';
+ var pdfjsBuild = 'cae8d97c';
  var pdfjsFilePath = typeof document !== 'undefined' && document.currentScript ? document.currentScript.src : null;
  var pdfjsLibs = {};
  (function pdfjsWrapper() {
@@ -65357,6 +65064,7 @@ module.exports = performanceNow;
   }(this, function (exports, sharedUtil, displayDOMUtils) {
    var AnnotationBorderStyleType = sharedUtil.AnnotationBorderStyleType;
    var AnnotationType = sharedUtil.AnnotationType;
+   var stringToPDFString = sharedUtil.stringToPDFString;
    var Util = sharedUtil.Util;
    var addLinkAttributes = displayDOMUtils.addLinkAttributes;
    var LinkTarget = displayDOMUtils.LinkTarget;
@@ -65899,8 +65607,14 @@ module.exports = performanceNow;
    var FileAttachmentAnnotationElement = function FileAttachmentAnnotationElementClosure() {
     function FileAttachmentAnnotationElement(parameters) {
      AnnotationElement.call(this, parameters, true);
-     this.filename = getFilenameFromUrl(parameters.data.file.filename);
-     this.content = parameters.data.file.content;
+     var file = this.data.file;
+     this.filename = getFilenameFromUrl(file.filename);
+     this.content = file.content;
+     this.linkService.onFileAttachmentAnnotation({
+      id: stringToPDFString(file.filename),
+      filename: file.filename,
+      content: file.content
+     });
     }
     Util.inherit(FileAttachmentAnnotationElement, AnnotationElement, {
      render: function FileAttachmentAnnotationElement_render() {
@@ -65934,7 +65648,7 @@ module.exports = performanceNow;
        if (!data) {
         continue;
        }
-       var properties = {
+       var element = annotationElementFactory.create({
         data: data,
         layer: parameters.div,
         page: parameters.page,
@@ -65943,8 +65657,7 @@ module.exports = performanceNow;
         downloadManager: parameters.downloadManager,
         imageResourcesPath: parameters.imageResourcesPath || getDefaultSetting('imageResourcesPath'),
         renderInteractiveForms: parameters.renderInteractiveForms || false
-       };
-       var element = annotationElementFactory.create(properties);
+       });
        if (element.isRenderable) {
         parameters.div.appendChild(element.render());
        }
@@ -69134,7 +68847,6 @@ module.exports = performanceNow;
    var MessageHandler = sharedUtil.MessageHandler;
    var MissingPDFException = sharedUtil.MissingPDFException;
    var PageViewport = sharedUtil.PageViewport;
-   var PasswordResponses = sharedUtil.PasswordResponses;
    var PasswordException = sharedUtil.PasswordException;
    var StatTimer = sharedUtil.StatTimer;
    var UnexpectedResponseException = sharedUtil.UnexpectedResponseException;
@@ -70599,6 +70311,7 @@ module.exports = performanceNow;
  exports.renderTextLayer = pdfjsLibs.pdfjsDisplayTextLayer.renderTextLayer;
  exports.AnnotationLayer = pdfjsLibs.pdfjsDisplayAnnotationLayer.AnnotationLayer;
  exports.CustomStyle = pdfjsLibs.pdfjsDisplayDOMUtils.CustomStyle;
+ exports.createPromiseCapability = pdfjsLibs.pdfjsSharedUtil.createPromiseCapability;
  exports.PasswordResponses = pdfjsLibs.pdfjsSharedUtil.PasswordResponses;
  exports.InvalidPDFException = pdfjsLibs.pdfjsSharedUtil.InvalidPDFException;
  exports.MissingPDFException = pdfjsLibs.pdfjsSharedUtil.MissingPDFException;
@@ -71042,13 +70755,19 @@ if (typeof PDFJS === 'undefined') {
   } else if (!('bind' in console.log)) {
     // native functions in IE9 might not have bind
     console.log = (function(fn) {
-      return function(msg) { return fn(msg); };
+      return function(msg) {
+        return fn(msg);
+      };
     })(console.log);
     console.error = (function(fn) {
-      return function(msg) { return fn(msg); };
+      return function(msg) {
+        return fn(msg);
+      };
     })(console.error);
     console.warn = (function(fn) {
-      return function(msg) { return fn(msg); };
+      return function(msg) {
+        return fn(msg);
+      };
     })(console.warn);
   }
 })();
@@ -71229,7 +70948,9 @@ if (typeof PDFJS === 'undefined') {
     var inputProto = el.constructor.prototype;
     var typeProperty = Object.getOwnPropertyDescriptor(inputProto, 'type');
     Object.defineProperty(inputProto, 'type', {
-      get: function () { return typeProperty.get.call(this); },
+      get: function () {
+        return typeProperty.get.call(this);
+      },
       set: function (value) {
         typeProperty.set.call(this, value === 'number' ? 'text' : value);
       },
@@ -71253,7 +70974,9 @@ if (typeof PDFJS === 'undefined') {
       var value = readyStateProto.get.call(this);
       return value === 'interactive' ? 'loading' : value;
     },
-    set: function (value) { readyStateProto.set.call(this, value); },
+    set: function (value) {
+      readyStateProto.set.call(this, value);
+    },
     enumerable: true,
     configurable: true
   });
