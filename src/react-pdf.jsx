@@ -52,6 +52,9 @@ export default class ReactPDF extends Component {
         );
     }
 
+    /**
+     * Called when a document is loaded successfully.
+     */
     onDocumentLoad = (pdf) => {
         this.callIfDefined(
             this.props.onDocumentLoad,
@@ -65,6 +68,9 @@ export default class ReactPDF extends Component {
         this.loadPage(this.props.pageIndex);
     }
 
+    /**
+     * Called when a document fails to load.
+     */
     onDocumentError = (error) => {
         this.callIfDefined(
             this.props.onDocumentError,
@@ -74,6 +80,9 @@ export default class ReactPDF extends Component {
         this.setState({ pdf: false });
     }
 
+    /**
+     * Called when a page is loaded successfully.
+     */
     onPageLoad = (page) => {
         this.callIfDefined(
             this.props.onPageLoad,
@@ -86,12 +95,18 @@ export default class ReactPDF extends Component {
         this.setState({ page });
     }
 
+    /**
+     * Called when a page is rendered successfully.
+     */
     onPageRender = () => {
         this.renderer = null;
 
         this.callIfDefined(this.props.onPageRender);
     }
 
+    /**
+     * Called when a page fails to load or render.
+     */
     onPageError = (error) => {
         this.callIfDefined(
             this.props.onPageError,
@@ -166,8 +181,8 @@ export default class ReactPDF extends Component {
         }
 
         this.setState({
-            pdf: null,
             page: null,
+            pdf: null,
         });
 
         // File is a string
