@@ -2,7 +2,11 @@ const webpack = require('webpack');
 
 module.exports = {
     context: __dirname,
-    entry: ['./src-sample/index.html', './src-sample/sample.jsx', './src-sample/sample.pdf'],
+    entry: [
+        './src-sample/index.html',
+        './src-sample/sample.jsx',
+        './src-sample/sample.pdf',
+    ],
     output: {
         path: './sample',
         filename: 'sample.js',
