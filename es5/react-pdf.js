@@ -62,6 +62,31 @@ var ReactPDF = function (_Component) {
         value: function shouldComponentUpdate(nextProps, nextState) {
             return nextState.pdf !== this.state.pdf || nextState.page !== this.state.page || nextProps.width !== this.props.width || nextProps.scale !== this.props.scale;
         }
+
+        /**
+         * Called when a document is loaded successfully.
+         */
+
+
+        /**
+         * Called when a document fails to load.
+         */
+
+
+        /**
+         * Called when a page is loaded successfully.
+         */
+
+
+        /**
+         * Called when a page is rendered successfully.
+         */
+
+
+        /**
+         * Called when a page fails to load or render.
+         */
+
     }, {
         key: 'handleFileLoad',
         value: function handleFileLoad() {
@@ -76,8 +101,8 @@ var ReactPDF = function (_Component) {
             }
 
             this.setState({
-                pdf: null,
-                page: null
+                page: null,
+                pdf: null
             });
 
             // File is a string
@@ -244,7 +269,23 @@ var ReactPDF = function (_Component) {
                         viewport: viewport
                     };
 
-                    page.render(renderContext).then(_this3.onPageRender);
+                    // If another render is in progress, let's cancel it
+                    /* eslint-disable no-underscore-dangle */
+                    if (_this3.renderer && _this3.renderer._internalRenderTask.running) {
+                        _this3.renderer._internalRenderTask.cancel();
+                    }
+                    /* eslint-enable no-underscore-dangle */
+
+                    _this3.renderer = page.render(renderContext);
+
+                    _this3.renderer.then(_this3.onPageRender).catch(function (dismiss) {
+                        if (dismiss === 'cancelled') {
+                            // Everything's alright
+                            return;
+                        }
+
+                        _this3.onPageError(dismiss);
+                    });
                 }
             });
         }
@@ -305,14 +346,16 @@ var _initialiseProps = function _initialiseProps() {
         _this4.setState({ page: page });
     };
 
+    this.onPageRender = function () {
+        _this4.renderer = null;
+
+        _this4.callIfDefined(_this4.props.onPageRender);
+    };
+
     this.onPageError = function (error) {
         _this4.callIfDefined(_this4.props.onPageError, error);
 
         _this4.setState({ page: false });
-    };
-
-    this.onPageRender = function () {
-        _this4.callIfDefined(_this4.props.onPageRender);
     };
 
     this.callIfDefined = function (fn, args) {
