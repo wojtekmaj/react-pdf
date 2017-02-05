@@ -86,6 +86,12 @@ export default class ReactPDF extends Component {
         this.setState({ page });
     }
 
+    onPageRender = () => {
+        this.renderer = null;
+
+        this.callIfDefined(this.props.onPageRender);
+    }
+
     onPageError = (error) => {
         this.callIfDefined(
             this.props.onPageError,
@@ -93,10 +99,6 @@ export default class ReactPDF extends Component {
         );
 
         this.setState({ page: false });
-    }
-
-    onPageRender = () => {
-        this.callIfDefined(this.props.onPageRender);
     }
 
     get pageScale() {
@@ -314,9 +316,25 @@ export default class ReactPDF extends Component {
                         viewport,
                     };
 
-                    page
-                        .render(renderContext)
-                        .then(this.onPageRender);
+                    // If another render is in progress, let's cancel it
+                    /* eslint-disable no-underscore-dangle */
+                    if (this.renderer && this.renderer._internalRenderTask.running) {
+                        this.renderer._internalRenderTask.cancel();
+                    }
+                    /* eslint-enable no-underscore-dangle */
+
+                    this.renderer = page.render(renderContext);
+
+                    this.renderer
+                        .then(this.onPageRender)
+                        .catch((dismiss) => {
+                            if (dismiss === 'cancelled') {
+                                // Everything's alright
+                                return;
+                            }
+
+                            this.onPageError(dismiss);
+                        });
                 }}
             />
         );
