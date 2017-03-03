@@ -1,0 +1,21 @@
+engines:
+  duplication:
+    enabled: true
+    exclude_paths:
+    - "webpack.config.sample.js"
+    - "webpack.config.test.js"
+    config:
+      languages:
+      - javascript
+  eslint:
+    enabled: true
+  fixme:
+    enabled: true
+ratings:
+  paths:
+  - "**.js"
+  - "**.jsx"
+exclude_paths:
+- es5/
+- test/
+- sample/

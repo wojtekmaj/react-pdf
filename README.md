@@ -1,73 +1,89 @@
-react-pdf
-=========
+# React-PDF [![Build Status](https://travis-ci.org/wojtekmaj/react-pdf.svg?branch=master)](https://travis-ci.org/wojtekmaj/react-pdf) [![Code Climate](https://codeclimate.com/github/wojtekmaj/react-pdf/badges/gpa.svg)](https://codeclimate.com/github/wojtekmaj/react-pdf)
+Easily display PDF files in your React application.
 
-## Maintainer needed
+## tl;dr
+* Install by executing `npm install --save react-pdf`.
+* Import by addding `import ReactPDF from 'react-pdf'`.
+* Use by adding `<ReactPDF file="..." />`. `file` can be an URL, base64 content, Uint8Array, and more.
 
-I'm not using this library in any of my active projects at the moment. I'm reviewing and accepting pull requests constantly but I would be happy to grant push rights to someone actively using this library.
+## Demo
+Demo page is included in sample directory.
 
-Open an issue or contact me directly at niklas@narhinen.net if interested.
+[Online demo](http://projekty.wojtekmaj.pl/react-pdf/) is also available!
 
-What
-----
+## Getting started
+### Prerequisites
 
-A component for showing a pdf page using [pdf.js](http://mozilla.github.io/pdf.js).
+You'll need to have Node >= 4 on your machine.
 
-Usage
------
+We strongly recommend to use Node >= 6 and npm >= 3 for faster installation speed and better disk usage.
 
-Install with `npm install react-pdf`
+Your project needs to use React 15.0.0 or later.
 
-Use in your app:
+### Installation
+
+~~Add React-PDF to your project by executing `npm install --save react-pdf`.~~ Coming soon! See [temporary instructions](https://github.com/wojtekmaj/react-pdf/issues/6).
+
+### Usage
+
+Here's an example of basic usage:
 
 ```js
-var PDF = require('react-pdf');
+import ReactPDF from 'react-pdf';
 
-var MyApp = React.createClass({
-  render: function() {
-    
-    return <PDF file="somefile.pdf" page="2" />
-  },
-  _onPdfCompleted: function(page, pages){
-    this.setState({page: page, pages: pages});
-  }
-});
-```
-or
-```js
-var PDF = require('react-pdf');
+class MyApp extends React.Component {
+    onDocumentLoad({ total }) {
+        this.setState({ total });
+    },
 
-var MyApp = React.createClass({
-  render: function() {
+    onPageLoad({ pageIndex, pageNumber }) {
+        this.setState({{ pageIndex, pageNumber });
+    }
     
-    return <PDF content="YSBzaW1wbGUgcGRm..." page="1" scale="1.0" onDocumentComplete={this._onDocumentComplete} onPageComplete={this._onPageComplete} loading={(<span>Your own loading message ...</span>)} />
-  },
-  _onDocumentCompleted: function(pages){
-    this.setState({pages: pages});
-  },
-  _onPageCompleted: function(page){
-    this.setState({currentPage: page});
-  }
-});
+    render() {
+        return (
+            <div>
+                <ReactPDF
+                    file="somefile.pdf"
+                    pageIndex={2}
+                    onDocumentLoad={this.onDocumentLoad}
+                    onPageLoad={this.onPageLoad}
+                />
+                <p>Page {this.state.pageNumber} of {this.state.total}</p>
+            </div>
+        );
+    },
+}
 ```
 
-Check the example-directory of this repository for a full working example
+Check the sample directory of this repository for a full working example.
 
-Pitfalls
---------
+## User guide
 
-Unfortunately pdf.js isn't too friendly for commonjs environments so react-pdf
-assumes a global `PDFJS` variable, see the example directory of this repository
-for an example.
+### Props
 
+|Prop name|Description|Example of usage|
+|----|----|----|
+|file|Defines what PDF should be displayed.<br />Its value can be an URL, a file (imported using `import ... from ...` or from file input form element), or an object with parameters (`url` - URL; `data` - data, preferably Uint8Array; `range` - PDFDataRangeTransport; `httpHeaders` - custom request headers, e.g. for authorization).|<ul><li>URL:<br />`file="http://example.com/sample.pdf"`</li><li>File:<br />`import sample from '../static/sample.pdf'` and then<br />`file={sample}`</li><li>Parameter object:<br />`file={{ url: 'http://example.com/sample.pdf', httpHeaders: { 'X-CustomHeader': '40359820958024350238508234' }}}`</ul>|
+|loading|Defines what the component should display while loading. Defaults to "Loading PDF…".|<ul><li>String:<br />`loading="Please wait!"`</li><li>React element:<Br />`loading={<div>Please wait!</div>}`</li><li>Function:<Br />`loading={this.renderLoader()}`</li></ul>|
+|error|Defines what the component should display in case of an error. Defaults to "Failed to load PDF file.".|<ul><li>String:<br />`error="An error occurred!"`</li><li>React element:<Br />`error={<div>An error occurred!</div>}`</li><li>Function:<Br />`error={this.renderError()}`</li></ul>|
+|noData|Defines what the component should display in case of no data. Defaults to "No PDF file specified.".|<ul><li>String:<br />`error="Please select a file."`</li><li>React element:<Br />`error={<div>Please select a file.</div>}`</li><li>Function:<Br />`error={this.renderNoData()}`</li></ul>|
+|pageIndex|Defines which page from PDF file should be displayed. Defaults to 0.|`pageIndex={2}`|
+|scale|Defines the scale in which PDF file should be rendered. Defaults to 1.0.|`scale={0.5}`|
+|width|Defines the width of the page. If not defined, canvas will be rendered at the width defined in PDF. If you define `width` and `scale` at the same time, the width will be multiplied by a given factor.|`width={300}`|
+|onDocumentLoad|Function called when the document is successfully loaded to the memory.|`onDocumentLoad={({ total }) => alert('Loaded a file with ' + total + ' pages!')}`|
+|onDocumentError|Function called in case of an error while loading a document.|`onDocumentError={({ message }) => alert('Error while loading document! ' + message)}`|
+|onPageLoad|Function called when the page is successfully loaded to the memory.|`onPageLoad={({ pageIndex, pageNumber, width, height, originalWidth, originalHeight, scale }) => alert('Now displaying a page number ' + pageNumber + '!')}`|
+|onPageRender|Function called when the page is successfully rendered on the screen.|`onPageLoad={() => alert('Rendered the page!')}`|
+|onPageError|Function called in case of an error while rendering a page.|`onPageError={({ message }) => alert('Error while loading page! ' + message)}`|
 
-License
--------
+## License
 
 The MIT License
 
-Author
-------
+## Author
+Wojciech Maj<br />
+<kontakt@wojtekmaj.pl><br />
+[wojtekmaj.pl](http://wojtekmaj.pl)
 
-Niklas Närhinen <niklas@narhinen.net>
-
-Bart Van Houtte <bart.van.houtte@ading.be> Added Base64 Content , update PDFJS, document and page completion notification callbacks and custom loading message
+This project wouldn't be possible without awesome work of Niklas Närhinen <niklas@narhinen.net> who created its initial version and without Mozilla, author of [pdf.js](http://mozilla.github.io/pdf.js). Thank you!
