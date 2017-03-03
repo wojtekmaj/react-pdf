@@ -1,15 +1,15 @@
 {
-    "presets": [
-        [
-            "es2015", 
-            { 
-                "modules": false 
-            }
-        ],
-        "stage-2",
-        "react"
+  "presets": [
+    [
+      "es2015", 
+      { 
+        "modules": false 
+      }
     ],
-    "plugins": [
-        "babel-plugin-transform-class-properties"
-    ]
+    "stage-2",
+    "react"
+  ],
+  "plugins": [
+    "babel-plugin-transform-class-properties"
+  ]
 }
