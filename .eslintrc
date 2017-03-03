@@ -1,20 +1,16 @@
 {
-    "extends": "airbnb",
-    "env": {
-        "browser": true,
-        "es6": true
-    },
-    "globals": {
-        "PDFJS": true
-    },
-    "parser": "babel-eslint",
-    "parserOptions": {
-        "ecmaFeatures": {
-            "experimentalObjectRestSpread": true
-        }
-    },
-    "rules": {
-        "no-prototype-builtins": 0,
-        "react/require-default-props": 0
+  "extends": "airbnb",
+  "env": {
+    "browser": true,
+    "es6": true
+  },
+  "globals": {
+    "PDFJS": true
+  },
+  "parser": "babel-eslint",
+  "parserOptions": {
+    "ecmaFeatures": {
+      "experimentalObjectRestSpread": true
     }
+  },
 }
