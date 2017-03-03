@@ -2,8 +2,8 @@
 Easily display PDF files in your React application.
 
 ## tl;dr
-* ~~Install by executing `npm install --save react-pdf`.~~ Coming soon! See [temporary instructions](https://github.com/wojtekmaj/react-pdf/issues/6).
-* Import by addding `import ReactPDF from 'react-pdf'`
+* Install by executing `npm install --save react-pdf`.
+* Import by addding `import ReactPDF from 'react-pdf'`.
 * Use by adding `<ReactPDF file="..." />`. `file` can be an URL, base64 content, Uint8Array, and more.
 
 ## Demo
@@ -73,7 +73,7 @@ Check the sample directory of this repository for a full working example.
 |width|Defines the width of the page. If not defined, canvas will be rendered at the width defined in PDF. If you define `width` and `scale` at the same time, the width will be multiplied by a given factor.|`width={300}`|
 |onDocumentLoad|Function called when the document is successfully loaded to the memory.|`onDocumentLoad={({ total }) => alert('Loaded a file with ' + total + ' pages!')}`|
 |onDocumentError|Function called in case of an error while loading a document.|`onDocumentError={({ message }) => alert('Error while loading document! ' + message)}`|
-|onPageLoad|Function called when the page is successfully loaded to the memory.|`onPageLoad={({ pageIndex, pageNumber }) => alert('Now displaying a page number ' + pageNumber + '!')}`|
+|onPageLoad|Function called when the page is successfully loaded to the memory.|`onPageLoad={({ pageIndex, pageNumber, width, height, originalWidth, originalHeight, scale }) => alert('Now displaying a page number ' + pageNumber + '!')}`|
 |onPageRender|Function called when the page is successfully rendered on the screen.|`onPageLoad={() => alert('Rendered the page!')}`|
 |onPageError|Function called in case of an error while rendering a page.|`onPageError={({ message }) => alert('Error while loading page! ' + message)}`|
 
