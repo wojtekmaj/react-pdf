@@ -88,6 +88,25 @@ var ReactPDF = function (_Component) {
          */
 
     }, {
+        key: 'getPageScale',
+        value: function getPageScale() {
+            var page = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : this.state.page;
+            var _props = this.props,
+                scale = _props.scale,
+                width = _props.width;
+
+            // Be default, we'll render page at 100% * scale width.
+
+            var pageScale = 1;
+
+            // If width is defined, calculate the scale of the page so it could be of desired width.
+            if (width) {
+                pageScale = width / page.getViewport(scale).width;
+            }
+
+            return scale * pageScale;
+        }
+    }, {
         key: 'handleFileLoad',
         value: function handleFileLoad() {
             var _this2 = this;
@@ -254,7 +273,7 @@ var ReactPDF = function (_Component) {
                     var canvas = _ref2;
 
                     var pixelRatio = window.devicePixelRatio || 1;
-                    var viewport = page.getViewport(_this3.pageScale * pixelRatio);
+                    var viewport = page.getViewport(_this3.getPageScale() * pixelRatio);
 
                     canvas.height = viewport.height;
                     canvas.width = viewport.width;
@@ -289,25 +308,6 @@ var ReactPDF = function (_Component) {
                 }
             });
         }
-    }, {
-        key: 'pageScale',
-        get: function get() {
-            var _props = this.props,
-                scale = _props.scale,
-                width = _props.width;
-            var page = this.state.page;
-
-            // Be default, we'll render page at 100% * scale width.
-
-            var pageScale = 1;
-
-            // If width is defined, calculate the scale of the page so it could be of desired width.
-            if (width) {
-                pageScale = width / page.getViewport(scale).width;
-            }
-
-            return scale * pageScale;
-        }
     }]);
 
     return ReactPDF;
@@ -338,9 +338,24 @@ var _initialiseProps = function _initialiseProps() {
     };
 
     this.onPageLoad = function (page) {
+        var scale = _this4.getPageScale(page);
+
         _this4.callIfDefined(_this4.props.onPageLoad, {
             pageIndex: page.pageIndex,
-            pageNumber: page.pageNumber
+            pageNumber: page.pageNumber,
+            get width() {
+                return page.view[2] * scale;
+            },
+            get height() {
+                return page.view[3] * scale;
+            },
+            scale: scale,
+            get originalWidth() {
+                return page.view[2];
+            },
+            get originalHeight() {
+                return page.view[3];
+            }
         });
 
         _this4.setState({ page: page });
