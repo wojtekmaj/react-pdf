@@ -22,7 +22,7 @@ Your project needs to use React 15.0.0 or later.
 
 ### Installation
 
-~~Add React-PDF to your project by executing `npm install --save react-pdf`.~~ Coming soon! See [temporary instructions](https://github.com/wojtekmaj/react-pdf/issues/6).
+Add React-PDF to your project by executing `npm install --save react-pdf`.
 
 ### Usage
 
