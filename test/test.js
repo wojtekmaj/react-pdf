@@ -44892,7 +44892,7 @@ var Page = function PageClosure() {
    getArray = getArray || false;
    while (dict) {
     var value = getArray ? dict.getArray(key) : dict.get(key);
-    if (value) {
+    if (value !== undefined) {
      if (!valueArray) {
       valueArray = [];
      }
@@ -57950,8 +57950,8 @@ if (typeof PDFJS === 'undefined' || !PDFJS.compatibilityChecked) {
 
 "use strict";
 
-var pdfjsVersion = '1.7.337';
-var pdfjsBuild = '9163a6fb';
+var pdfjsVersion = '1.7.339';
+var pdfjsBuild = '24e5b6ee';
 var pdfjsCoreWorker = __w_pdfjs_require__(8);
 {
  __w_pdfjs_require__(19);
@@ -60557,339 +60557,339 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 var componentRenderCount = 0;
 
 var WrappedReactPDF = function (_ReactPDF) {
-    _inherits(WrappedReactPDF, _ReactPDF);
+  _inherits(WrappedReactPDF, _ReactPDF);
 
-    function WrappedReactPDF() {
-        _classCallCheck(this, WrappedReactPDF);
+  function WrappedReactPDF() {
+    _classCallCheck(this, WrappedReactPDF);
 
-        return _possibleConstructorReturn(this, (WrappedReactPDF.__proto__ || Object.getPrototypeOf(WrappedReactPDF)).apply(this, arguments));
+    return _possibleConstructorReturn(this, (WrappedReactPDF.__proto__ || Object.getPrototypeOf(WrappedReactPDF)).apply(this, arguments));
+  }
+
+  _createClass(WrappedReactPDF, [{
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+      _get(WrappedReactPDF.prototype.__proto__ || Object.getPrototypeOf(WrappedReactPDF.prototype), 'componentDidMount', this).call(this);
     }
+  }, {
+    key: 'componentWillReceiveProps',
+    value: function componentWillReceiveProps(nextProps) {
+      _get(WrappedReactPDF.prototype.__proto__ || Object.getPrototypeOf(WrappedReactPDF.prototype), 'componentWillReceiveProps', this).call(this, nextProps);
+    }
+  }, {
+    key: 'componentWillUpdate',
+    value: function componentWillUpdate() {
+      componentRenderCount += 1;
+    }
+  }]);
 
-    _createClass(WrappedReactPDF, [{
-        key: 'componentDidMount',
-        value: function componentDidMount() {
-            _get(WrappedReactPDF.prototype.__proto__ || Object.getPrototypeOf(WrappedReactPDF.prototype), 'componentDidMount', this).call(this);
-        }
-    }, {
-        key: 'componentWillReceiveProps',
-        value: function componentWillReceiveProps(nextProps) {
-            _get(WrappedReactPDF.prototype.__proto__ || Object.getPrototypeOf(WrappedReactPDF.prototype), 'componentWillReceiveProps', this).call(this, nextProps);
-        }
-    }, {
-        key: 'componentWillUpdate',
-        value: function componentWillUpdate() {
-            componentRenderCount += 1;
-        }
-    }]);
-
-    return WrappedReactPDF;
+  return WrappedReactPDF;
 }(__WEBPACK_IMPORTED_MODULE_2__src_react_pdf__["a" /* default */]);
 
 WrappedReactPDF.propTypes = __WEBPACK_IMPORTED_MODULE_2__src_react_pdf__["a" /* default */].propTypes;
 
 var Test = function (_Component) {
-    _inherits(Test, _Component);
+  _inherits(Test, _Component);
 
-    function Test() {
-        var _ref;
+  function Test() {
+    var _ref;
 
-        var _temp, _this2, _ret;
+    var _temp, _this2, _ret;
 
-        _classCallCheck(this, Test);
+    _classCallCheck(this, Test);
 
-        for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-            args[_key] = arguments[_key];
-        }
-
-        return _ret = (_temp = (_this2 = _possibleConstructorReturn(this, (_ref = Test.__proto__ || Object.getPrototypeOf(Test)).call.apply(_ref, [this].concat(args))), _this2), _this2.state = {
-            file: null,
-            pageIndex: null,
-            pageNumber: null,
-            passObj: false,
-            pageRenderCount: 0,
-            pageWidth: 300,
-            total: null
-        }, _this2.onFileChange = function (event) {
-            _this2.setState({
-                file: event.target.files[0]
-            });
-        }, _this2.onFileUintChange = function (event) {
-            var reader = new FileReader();
-
-            reader.onloadend = function () {
-                _this2.setState({
-                    file: reader.result
-                });
-            };
-
-            reader.readAsArrayBuffer(event.target.files[0]);
-        }, _this2.onURLChange = function (event) {
-            event.preventDefault();
-
-            var url = event.target.querySelector('input').value;
-
-            if (!url) {
-                return;
-            }
-
-            _this2.setState({
-                file: url
-            });
-        }, _this2.onRequestChange = function (event) {
-            event.preventDefault();
-
-            var url = event.target.querySelector('input').value;
-
-            if (!url) {
-                return;
-            }
-
-            fetch(url).then(function (response) {
-                return response.blob();
-            }).then(function (blob) {
-                _this2.setState({
-                    file: blob
-                });
-            });
-        }, _this2.onUseImported = function () {
-            _this2.setState({
-                file: __WEBPACK_IMPORTED_MODULE_4__test_pdf___default.a
-            });
-        }, _this2.onPassObjChange = function (event) {
-            _this2.setState({ passObj: event.target.checked });
-        }, _this2.onPageWidthChange = function (event) {
-            var width = event.target.value;
-
-            if (!width) {
-                return;
-            }
-
-            _this2.setState({
-                pageWidth: parseInt(width, 10)
-            });
-        }, _this2.onDocumentLoad = function (_ref2) {
-            var total = _ref2.total;
-
-            _this2.setState({ total: total });
-        }, _this2.onDocumentError = function (_ref3) {
-            var message = _ref3.message;
-
-            // eslint-disable-next-line no-console
-            console.error(message);
-        }, _this2.onPageLoad = function (_ref4) {
-            var pageIndex = _ref4.pageIndex,
-                pageNumber = _ref4.pageNumber;
-
-            _this2.setState({ pageIndex: pageIndex, pageNumber: pageNumber });
-        }, _this2.onPageRender = function () {
-            _this2.setState({ pageRenderCount: _this2.state.pageRenderCount + 1 });
-        }, _temp), _possibleConstructorReturn(_this2, _ret);
+    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
     }
 
-    _createClass(Test, [{
-        key: 'changePage',
-        value: function changePage(by) {
-            this.setState(function (prevState) {
-                return {
-                    pageIndex: prevState.pageIndex + by
-                };
-            });
-        }
-    }, {
-        key: 'render',
-        value: function render() {
-            var _this3 = this;
+    return _ret = (_temp = (_this2 = _possibleConstructorReturn(this, (_ref = Test.__proto__ || Object.getPrototypeOf(Test)).call.apply(_ref, [this].concat(args))), _this2), _this2.state = {
+      file: null,
+      pageIndex: null,
+      pageNumber: null,
+      passObj: false,
+      pageRenderCount: 0,
+      pageWidth: 300,
+      total: null
+    }, _this2.onFileChange = function (event) {
+      _this2.setState({
+        file: event.target.files[0]
+      });
+    }, _this2.onFileUintChange = function (event) {
+      var reader = new FileReader();
 
-            var _state = this.state,
-                pageIndex = _state.pageIndex,
-                pageNumber = _state.pageNumber,
-                pageRenderCount = _state.pageRenderCount,
-                pageWidth = _state.pageWidth,
-                total = _state.total;
+      reader.onloadend = function () {
+        _this2.setState({
+          file: reader.result
+        });
+      };
+
+      reader.readAsArrayBuffer(event.target.files[0]);
+    }, _this2.onURLChange = function (event) {
+      event.preventDefault();
+
+      var url = event.target.querySelector('input').value;
+
+      if (!url) {
+        return;
+      }
+
+      _this2.setState({
+        file: url
+      });
+    }, _this2.onRequestChange = function (event) {
+      event.preventDefault();
+
+      var url = event.target.querySelector('input').value;
+
+      if (!url) {
+        return;
+      }
+
+      fetch(url).then(function (response) {
+        return response.blob();
+      }).then(function (blob) {
+        _this2.setState({
+          file: blob
+        });
+      });
+    }, _this2.onUseImported = function () {
+      _this2.setState({
+        file: __WEBPACK_IMPORTED_MODULE_4__test_pdf___default.a
+      });
+    }, _this2.onPassObjChange = function (event) {
+      _this2.setState({ passObj: event.target.checked });
+    }, _this2.onPageWidthChange = function (event) {
+      var width = event.target.value;
+
+      if (!width) {
+        return;
+      }
+
+      _this2.setState({
+        pageWidth: parseInt(width, 10)
+      });
+    }, _this2.onDocumentLoad = function (_ref2) {
+      var total = _ref2.total;
+
+      _this2.setState({ total: total });
+    }, _this2.onDocumentError = function (_ref3) {
+      var message = _ref3.message;
+
+      // eslint-disable-next-line no-console
+      console.error(message);
+    }, _this2.onPageLoad = function (_ref4) {
+      var pageIndex = _ref4.pageIndex,
+          pageNumber = _ref4.pageNumber;
+
+      _this2.setState({ pageIndex: pageIndex, pageNumber: pageNumber });
+    }, _this2.onPageRender = function () {
+      _this2.setState({ pageRenderCount: _this2.state.pageRenderCount + 1 });
+    }, _temp), _possibleConstructorReturn(_this2, _ret);
+  }
+
+  _createClass(Test, [{
+    key: 'changePage',
+    value: function changePage(by) {
+      this.setState(function (prevState) {
+        return {
+          pageIndex: prevState.pageIndex + by
+        };
+      });
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      var _this3 = this;
+
+      var _state = this.state,
+          pageIndex = _state.pageIndex,
+          pageNumber = _state.pageNumber,
+          pageRenderCount = _state.pageRenderCount,
+          pageWidth = _state.pageWidth,
+          total = _state.total;
 
 
-            return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                'div',
-                { className: 'Example' },
-                __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                    'h1',
-                    null,
-                    'react-pdf test page'
-                ),
-                __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                    'div',
-                    { className: 'Example__container' },
-                    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                        'div',
-                        { className: 'Example__container__load' },
-                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                            'label',
-                            { htmlFor: 'file' },
-                            'Load from file:'
-                        ),
-                        '\xA0',
-                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('input', {
-                            type: 'file',
-                            onChange: this.onFileChange
-                        }),
-                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('br', null),
-                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('br', null),
-                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                            'label',
-                            { htmlFor: 'file' },
-                            'Load from file to Uint8Array:'
-                        ),
-                        '\xA0',
-                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('input', {
-                            type: 'file',
-                            onChange: this.onFileUintChange
-                        }),
-                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('br', null),
-                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('br', null),
-                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                            'form',
-                            { onSubmit: this.onURLChange },
-                            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                                'label',
-                                { htmlFor: 'url' },
-                                'Load from URL:'
-                            ),
-                            '\xA0',
-                            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('input', { type: 'text' }),
-                            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                                'button',
-                                { type: 'submit' },
-                                'Apply'
-                            )
-                        ),
-                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('br', null),
-                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                            'form',
-                            { onSubmit: this.onRequestChange },
-                            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                                'label',
-                                { htmlFor: 'url' },
-                                'Fetch and pass:'
-                            ),
-                            '\xA0',
-                            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('input', { type: 'text' }),
-                            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                                'button',
-                                { type: 'submit' },
-                                'Apply'
-                            )
-                        ),
-                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('br', null),
-                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                            'button',
-                            { onClick: this.onUseImported },
-                            'Use imported file'
-                        ),
-                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('br', null),
-                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('br', null),
-                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('input', { id: 'passobj', type: 'checkbox', onChange: this.onPassObjChange }),
-                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                            'label',
-                            { htmlFor: 'passobj' },
-                            'Pass as an object (URLs and imports only)'
-                        ),
-                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('br', null),
-                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('br', null),
-                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                            'form',
-                            { onSubmit: this.onPageWidthChange },
-                            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                                'label',
-                                { htmlFor: 'pageWidth' },
-                                'Page width:'
-                            ),
-                            '\xA0',
-                            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('input', {
-                                type: 'number',
-                                value: pageWidth,
-                                onChange: this.onPageWidthChange
-                            })
-                        ),
-                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('br', null)
-                    ),
-                    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                        'div',
-                        { className: 'Example__container__preview' },
-                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                            'div',
-                            { className: 'Example__container__preview__out' },
-                            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(WrappedReactPDF, {
-                                file: this.transformedFile,
-                                onDocumentLoad: this.onDocumentLoad,
-                                onPageLoad: this.onPageLoad,
-                                onPageRender: this.onPageRender,
-                                pageIndex: pageIndex,
-                                width: pageWidth
-                            })
-                        ),
-                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                            'div',
-                            { className: 'Example__container__preview__controls' },
-                            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                                'button',
-                                {
-                                    disabled: pageNumber <= 1,
-                                    onClick: function onClick() {
-                                        return _this3.changePage(-1);
-                                    }
-                                },
-                                'Previous'
-                            ),
-                            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                                'span',
-                                null,
-                                'Page ',
-                                pageNumber || '--',
-                                ' of ',
-                                total || '--'
-                            ),
-                            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                                'button',
-                                {
-                                    disabled: pageNumber >= total,
-                                    onClick: function onClick() {
-                                        return _this3.changePage(1);
-                                    }
-                                },
-                                'Next'
-                            )
-                        ),
-                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                            'div',
-                            { className: 'Example__container__preview__info' },
-                            'Page render count: ',
-                            pageRenderCount,
-                            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('br', null),
-                            'Component render count: ',
-                            componentRenderCount
-                        )
-                    )
-                )
-            );
-        }
-    }, {
-        key: 'transformedFile',
-        get: function get() {
-            if (!this.state.passObj) {
-                return this.state.file;
-            }
+      return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+        'div',
+        { className: 'Example' },
+        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+          'h1',
+          null,
+          'react-pdf test page'
+        ),
+        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+          'div',
+          { className: 'Example__container' },
+          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+            'div',
+            { className: 'Example__container__load' },
+            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+              'label',
+              { htmlFor: 'file' },
+              'Load from file:'
+            ),
+            '\xA0',
+            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('input', {
+              type: 'file',
+              onChange: this.onFileChange
+            }),
+            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('br', null),
+            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('br', null),
+            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+              'label',
+              { htmlFor: 'file' },
+              'Load from file to Uint8Array:'
+            ),
+            '\xA0',
+            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('input', {
+              type: 'file',
+              onChange: this.onFileUintChange
+            }),
+            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('br', null),
+            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('br', null),
+            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+              'form',
+              { onSubmit: this.onURLChange },
+              __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                'label',
+                { htmlFor: 'url' },
+                'Load from URL:'
+              ),
+              '\xA0',
+              __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('input', { type: 'text' }),
+              __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                'button',
+                { type: 'submit' },
+                'Apply'
+              )
+            ),
+            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('br', null),
+            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+              'form',
+              { onSubmit: this.onRequestChange },
+              __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                'label',
+                { htmlFor: 'url' },
+                'Fetch and pass:'
+              ),
+              '\xA0',
+              __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('input', { type: 'text' }),
+              __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                'button',
+                { type: 'submit' },
+                'Apply'
+              )
+            ),
+            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('br', null),
+            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+              'button',
+              { onClick: this.onUseImported },
+              'Use imported file'
+            ),
+            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('br', null),
+            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('br', null),
+            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('input', { id: 'passobj', type: 'checkbox', onChange: this.onPassObjChange }),
+            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+              'label',
+              { htmlFor: 'passobj' },
+              'Pass as an object (URLs and imports only)'
+            ),
+            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('br', null),
+            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('br', null),
+            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+              'form',
+              { onSubmit: this.onPageWidthChange },
+              __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                'label',
+                { htmlFor: 'pageWidth' },
+                'Page width:'
+              ),
+              '\xA0',
+              __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('input', {
+                type: 'number',
+                value: pageWidth,
+                onChange: this.onPageWidthChange
+              })
+            ),
+            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('br', null)
+          ),
+          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+            'div',
+            { className: 'Example__container__preview' },
+            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+              'div',
+              { className: 'Example__container__preview__out' },
+              __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(WrappedReactPDF, {
+                file: this.transformedFile,
+                onDocumentLoad: this.onDocumentLoad,
+                onPageLoad: this.onPageLoad,
+                onPageRender: this.onPageRender,
+                pageIndex: pageIndex,
+                width: pageWidth
+              })
+            ),
+            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+              'div',
+              { className: 'Example__container__preview__controls' },
+              __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                'button',
+                {
+                  disabled: pageNumber <= 1,
+                  onClick: function onClick() {
+                    return _this3.changePage(-1);
+                  }
+                },
+                'Previous'
+              ),
+              __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                'span',
+                null,
+                'Page ',
+                pageNumber || '--',
+                ' of ',
+                total || '--'
+              ),
+              __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                'button',
+                {
+                  disabled: pageNumber >= total,
+                  onClick: function onClick() {
+                    return _this3.changePage(1);
+                  }
+                },
+                'Next'
+              )
+            ),
+            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+              'div',
+              { className: 'Example__container__preview__info' },
+              'Page render count: ',
+              pageRenderCount,
+              __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('br', null),
+              'Component render count: ',
+              componentRenderCount
+            )
+          )
+        )
+      );
+    }
+  }, {
+    key: 'transformedFile',
+    get: function get() {
+      if (!this.state.passObj) {
+        return this.state.file;
+      }
 
-            var result = {};
-            if (typeof this.state.file === 'string') {
-                result.url = this.state.file;
-            } else {
-                return this.state.file;
-            }
-            return result;
-        }
-    }]);
+      var result = {};
+      if (typeof this.state.file === 'string') {
+        result.url = this.state.file;
+      } else {
+        return this.state.file;
+      }
+      return result;
+    }
+  }]);
 
-    return Test;
+  return Test;
 }(__WEBPACK_IMPORTED_MODULE_0_react__["Component"]);
 
 __WEBPACK_IMPORTED_MODULE_1_react_dom___default.a.render(__WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(Test, null), document.getElementById('react-container'));
@@ -60926,432 +60926,432 @@ PDFJS.workerSrc = __webpack_require__(56);
 PDFJS.disableWorker = true;
 
 var ReactPDF = function (_Component) {
-    _inherits(ReactPDF, _Component);
+  _inherits(ReactPDF, _Component);
 
-    function ReactPDF() {
-        var _ref;
+  function ReactPDF() {
+    var _ref;
 
-        var _temp, _this, _ret;
+    var _temp, _this, _ret;
 
-        _classCallCheck(this, ReactPDF);
+    _classCallCheck(this, ReactPDF);
 
-        for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-            args[_key] = arguments[_key];
-        }
-
-        return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = ReactPDF.__proto__ || Object.getPrototypeOf(ReactPDF)).call.apply(_ref, [this].concat(args))), _this), _initialiseProps.call(_this), _temp), _possibleConstructorReturn(_this, _ret);
+    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
     }
 
-    _createClass(ReactPDF, [{
-        key: 'componentDidMount',
-        value: function componentDidMount() {
-            this.handleFileLoad();
+    return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = ReactPDF.__proto__ || Object.getPrototypeOf(ReactPDF)).call.apply(_ref, [this].concat(args))), _this), _initialiseProps.call(_this), _temp), _possibleConstructorReturn(_this, _ret);
+  }
+
+  _createClass(ReactPDF, [{
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+      this.handleFileLoad();
+    }
+  }, {
+    key: 'componentWillReceiveProps',
+    value: function componentWillReceiveProps(nextProps) {
+      if (this.isParameterObject(nextProps.file)) {
+        // File is a parameter object
+        if (nextProps.file && !this.props.file || nextProps.file.data !== this.props.file.data || nextProps.file.range !== this.props.file.range || nextProps.file.url !== this.props.file.url) {
+          this.handleFileLoad(nextProps);
+          return;
         }
-    }, {
-        key: 'componentWillReceiveProps',
-        value: function componentWillReceiveProps(nextProps) {
-            if (this.isParameterObject(nextProps.file)) {
-                // File is a parameter object
-                if (nextProps.file && !this.props.file || nextProps.file.data !== this.props.file.data || nextProps.file.range !== this.props.file.range || nextProps.file.url !== this.props.file.url) {
-                    this.handleFileLoad(nextProps);
-                    return;
-                }
-            } else if (nextProps.file && nextProps.file !== this.props.file) {
-                // File is a normal object or not an object at all
-                this.handleFileLoad(nextProps);
-                return;
-            }
+      } else if (nextProps.file && nextProps.file !== this.props.file) {
+        // File is a normal object or not an object at all
+        this.handleFileLoad(nextProps);
+        return;
+      }
 
-            if (this.state.pdf && typeof nextProps.pageIndex !== 'undefined' && nextProps.pageIndex !== this.props.pageIndex) {
-                this.loadPage(nextProps.pageIndex);
-            }
+      if (this.state.pdf && typeof nextProps.pageIndex !== 'undefined' && nextProps.pageIndex !== this.props.pageIndex) {
+        this.loadPage(nextProps.pageIndex);
+      }
+    }
+  }, {
+    key: 'shouldComponentUpdate',
+    value: function shouldComponentUpdate(nextProps, nextState) {
+      return nextState.pdf !== this.state.pdf || nextState.page !== this.state.page || nextProps.width !== this.props.width || nextProps.scale !== this.props.scale;
+    }
+
+    /**
+     * Called when a document is loaded successfully.
+     */
+
+
+    /**
+     * Called when a document fails to load.
+     */
+
+
+    /**
+     * Called when a page is loaded successfully.
+     */
+
+
+    /**
+     * Called when a page is rendered successfully.
+     */
+
+
+    /**
+     * Called when a page fails to load or render.
+     */
+
+  }, {
+    key: 'getPageScale',
+    value: function getPageScale() {
+      var page = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : this.state.page;
+      var _props = this.props,
+          scale = _props.scale,
+          width = _props.width;
+
+      // Be default, we'll render page at 100% * scale width.
+
+      var pageScale = 1;
+
+      // If width is defined, calculate the scale of the page so it could be of desired width.
+      if (width) {
+        pageScale = width / page.getViewport(scale).width;
+      }
+
+      return scale * pageScale;
+    }
+  }, {
+    key: 'handleFileLoad',
+    value: function handleFileLoad() {
+      var _this2 = this;
+
+      var props = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : this.props;
+      var file = props.file;
+
+
+      if (!file || this.isParameterObject(file) && !file.data && !file.range && !file.url) {
+        return null;
+      }
+
+      this.setState({
+        page: null,
+        pdf: null
+      });
+
+      // File is a string
+      if (typeof file === 'string') {
+        // File is not data URI
+        if (!this.isDataURI(file)) {
+          if (window.location.protocol === 'file:') {
+            this.displayCORSWarning();
+          }
+
+          return this.loadDocument(file);
         }
-    }, {
-        key: 'shouldComponentUpdate',
-        value: function shouldComponentUpdate(nextProps, nextState) {
-            return nextState.pdf !== this.state.pdf || nextState.page !== this.state.page || nextProps.width !== this.props.width || nextProps.scale !== this.props.scale;
+
+        // File is data URI
+        file = this.dataURItoBlob(file);
+
+        // Fall through to "File is a blob"
+      }
+
+      // File is a Blob
+      if (file instanceof Blob) {
+        file = URL.createObjectURL(file);
+
+        return this.loadDocument(file);
+      }
+
+      // File is a File
+      if (file instanceof File) {
+        var _ret2 = function () {
+          var reader = new FileReader();
+
+          reader.onloadend = function () {
+            _this2.loadDocument(new Uint8Array(reader.result));
+          };
+
+          return {
+            v: reader.readAsArrayBuffer(file)
+          };
+        }();
+
+        if ((typeof _ret2 === 'undefined' ? 'undefined' : _typeof(_ret2)) === "object") return _ret2.v;
+      }
+
+      // File is an ArrayBuffer
+      if (file instanceof ArrayBuffer) {
+        return this.loadDocument(file);
+      }
+
+      // File is a parameter object
+      if (this.isParameterObject(file)) {
+        if (file.url && window.location.protocol === 'file:') {
+          this.displayCORSWarning();
         }
 
-        /**
-         * Called when a document is loaded successfully.
-         */
+        // Prevent from modifying props
+        file = Object.assign({}, file);
 
-
-        /**
-         * Called when a document fails to load.
-         */
-
-
-        /**
-         * Called when a page is loaded successfully.
-         */
-
-
-        /**
-         * Called when a page is rendered successfully.
-         */
-
-
-        /**
-         * Called when a page fails to load or render.
-         */
-
-    }, {
-        key: 'getPageScale',
-        value: function getPageScale() {
-            var page = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : this.state.page;
-            var _props = this.props,
-                scale = _props.scale,
-                width = _props.width;
-
-            // Be default, we'll render page at 100% * scale width.
-
-            var pageScale = 1;
-
-            // If width is defined, calculate the scale of the page so it could be of desired width.
-            if (width) {
-                pageScale = width / page.getViewport(scale).width;
-            }
-
-            return scale * pageScale;
+        // File is data URI
+        if (file.url && this.isDataURI(file.url)) {
+          file = URL.createObjectURL(this.dataURItoBlob(file.url));
         }
-    }, {
-        key: 'handleFileLoad',
-        value: function handleFileLoad() {
-            var _this2 = this;
 
-            var props = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : this.props;
-            var file = props.file;
+        return this.loadDocument(file);
+      }
+
+      throw new Error('Unrecognized input type.');
+    }
+  }, {
+    key: 'loadDocument',
+    value: function loadDocument() {
+      var _PDFJS;
+
+      (_PDFJS = PDFJS).getDocument.apply(_PDFJS, arguments).then(this.onDocumentLoad).catch(this.onDocumentError);
+    }
+  }, {
+    key: 'loadPage',
+    value: function loadPage(pageIndex) {
+      var pdf = this.state.pdf;
 
 
-            if (!file || this.isParameterObject(file) && !file.data && !file.range && !file.url) {
-                return null;
+      if (!pdf) {
+        throw new Error('Unexpected call to getPage() before the document has been loaded.');
+      }
+
+      var pageNumber = pageIndex + 1;
+
+      if (!pageIndex || pageNumber < 1) {
+        pageNumber = 1;
+      } else if (pageNumber >= pdf.numPages) {
+        pageNumber = pdf.numPages;
+      }
+
+      pdf.getPage(pageNumber).then(this.onPageLoad).catch(this.onPageError);
+    }
+  }, {
+    key: 'renderNoData',
+    value: function renderNoData() {
+      return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+        'div',
+        null,
+        this.props.noData
+      );
+    }
+  }, {
+    key: 'renderError',
+    value: function renderError() {
+      return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+        'div',
+        null,
+        this.props.error
+      );
+    }
+  }, {
+    key: 'renderLoader',
+    value: function renderLoader() {
+      return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+        'div',
+        null,
+        this.props.loading
+      );
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      var _this3 = this;
+
+      var file = this.props.file;
+      var _state = this.state,
+          pdf = _state.pdf,
+          page = _state.page;
+
+
+      if (!file) {
+        return this.renderNoData();
+      }
+
+      if (pdf === false || page === false) {
+        return this.renderError();
+      }
+
+      if (pdf === null || page === null) {
+        return this.renderLoader();
+      }
+
+      return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('canvas', {
+        ref: function ref(_ref2) {
+          if (!_ref2) return;
+
+          var canvas = _ref2;
+
+          var pixelRatio = window.devicePixelRatio || 1;
+          var viewport = page.getViewport(_this3.getPageScale() * pixelRatio);
+
+          canvas.height = viewport.height;
+          canvas.width = viewport.width;
+
+          canvas.style.height = viewport.height / pixelRatio + 'px';
+          canvas.style.width = viewport.width / pixelRatio + 'px';
+
+          var canvasContext = canvas.getContext('2d');
+
+          var renderContext = {
+            canvasContext: canvasContext,
+            viewport: viewport
+          };
+
+          // If another render is in progress, let's cancel it
+          /* eslint-disable no-underscore-dangle */
+          if (_this3.renderer && _this3.renderer._internalRenderTask.running) {
+            _this3.renderer._internalRenderTask.cancel();
+          }
+          /* eslint-enable no-underscore-dangle */
+
+          _this3.renderer = page.render(renderContext);
+
+          _this3.renderer.then(_this3.onPageRender).catch(function (dismiss) {
+            if (dismiss === 'cancelled') {
+              // Everything's alright
+              return;
             }
 
-            this.setState({
-                page: null,
-                pdf: null
-            });
-
-            // File is a string
-            if (typeof file === 'string') {
-                // File is not data URI
-                if (!this.isDataURI(file)) {
-                    if (window.location.protocol === 'file:') {
-                        this.displayCORSWarning();
-                    }
-
-                    return this.loadDocument(file);
-                }
-
-                // File is data URI
-                file = this.dataURItoBlob(file);
-
-                // Fall through to "File is a blob"
-            }
-
-            // File is a Blob
-            if (file instanceof Blob) {
-                file = URL.createObjectURL(file);
-
-                return this.loadDocument(file);
-            }
-
-            // File is a File
-            if (file instanceof File) {
-                var _ret2 = function () {
-                    var reader = new FileReader();
-
-                    reader.onloadend = function () {
-                        _this2.loadDocument(new Uint8Array(reader.result));
-                    };
-
-                    return {
-                        v: reader.readAsArrayBuffer(file)
-                    };
-                }();
-
-                if ((typeof _ret2 === 'undefined' ? 'undefined' : _typeof(_ret2)) === "object") return _ret2.v;
-            }
-
-            // File is an ArrayBuffer
-            if (file instanceof ArrayBuffer) {
-                return this.loadDocument(file);
-            }
-
-            // File is a parameter object
-            if (this.isParameterObject(file)) {
-                if (file.url && window.location.protocol === 'file:') {
-                    this.displayCORSWarning();
-                }
-
-                // Prevent from modifying props
-                file = Object.assign({}, file);
-
-                // File is data URI
-                if (file.url && this.isDataURI(file.url)) {
-                    file = URL.createObjectURL(this.dataURItoBlob(file.url));
-                }
-
-                return this.loadDocument(file);
-            }
-
-            throw new Error('Unrecognized input type.');
+            _this3.onPageError(dismiss);
+          });
         }
-    }, {
-        key: 'loadDocument',
-        value: function loadDocument() {
-            var _PDFJS;
+      });
+    }
+  }]);
 
-            (_PDFJS = PDFJS).getDocument.apply(_PDFJS, arguments).then(this.onDocumentLoad).catch(this.onDocumentError);
-        }
-    }, {
-        key: 'loadPage',
-        value: function loadPage(pageIndex) {
-            var pdf = this.state.pdf;
-
-
-            if (!pdf) {
-                throw new Error('Unexpected call to getPage() before the document has been loaded.');
-            }
-
-            var pageNumber = pageIndex + 1;
-
-            if (!pageIndex || pageNumber < 1) {
-                pageNumber = 1;
-            } else if (pageNumber >= pdf.numPages) {
-                pageNumber = pdf.numPages;
-            }
-
-            pdf.getPage(pageNumber).then(this.onPageLoad).catch(this.onPageError);
-        }
-    }, {
-        key: 'renderNoData',
-        value: function renderNoData() {
-            return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                'div',
-                null,
-                this.props.noData
-            );
-        }
-    }, {
-        key: 'renderError',
-        value: function renderError() {
-            return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                'div',
-                null,
-                this.props.error
-            );
-        }
-    }, {
-        key: 'renderLoader',
-        value: function renderLoader() {
-            return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                'div',
-                null,
-                this.props.loading
-            );
-        }
-    }, {
-        key: 'render',
-        value: function render() {
-            var _this3 = this;
-
-            var file = this.props.file;
-            var _state = this.state,
-                pdf = _state.pdf,
-                page = _state.page;
-
-
-            if (!file) {
-                return this.renderNoData();
-            }
-
-            if (pdf === false || page === false) {
-                return this.renderError();
-            }
-
-            if (pdf === null || page === null) {
-                return this.renderLoader();
-            }
-
-            return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('canvas', {
-                ref: function ref(_ref2) {
-                    if (!_ref2) return;
-
-                    var canvas = _ref2;
-
-                    var pixelRatio = window.devicePixelRatio || 1;
-                    var viewport = page.getViewport(_this3.getPageScale() * pixelRatio);
-
-                    canvas.height = viewport.height;
-                    canvas.width = viewport.width;
-
-                    canvas.style.height = viewport.height / pixelRatio + 'px';
-                    canvas.style.width = viewport.width / pixelRatio + 'px';
-
-                    var canvasContext = canvas.getContext('2d');
-
-                    var renderContext = {
-                        canvasContext: canvasContext,
-                        viewport: viewport
-                    };
-
-                    // If another render is in progress, let's cancel it
-                    /* eslint-disable no-underscore-dangle */
-                    if (_this3.renderer && _this3.renderer._internalRenderTask.running) {
-                        _this3.renderer._internalRenderTask.cancel();
-                    }
-                    /* eslint-enable no-underscore-dangle */
-
-                    _this3.renderer = page.render(renderContext);
-
-                    _this3.renderer.then(_this3.onPageRender).catch(function (dismiss) {
-                        if (dismiss === 'cancelled') {
-                            // Everything's alright
-                            return;
-                        }
-
-                        _this3.onPageError(dismiss);
-                    });
-                }
-            });
-        }
-    }]);
-
-    return ReactPDF;
+  return ReactPDF;
 }(__WEBPACK_IMPORTED_MODULE_0_react__["Component"]);
 
 var _initialiseProps = function _initialiseProps() {
-    var _this4 = this;
+  var _this4 = this;
 
-    this.state = {
-        pdf: null,
-        page: null
-    };
+  this.state = {
+    pdf: null,
+    page: null
+  };
 
-    this.onDocumentLoad = function (pdf) {
-        _this4.callIfDefined(_this4.props.onDocumentLoad, {
-            total: pdf.numPages
-        });
+  this.onDocumentLoad = function (pdf) {
+    _this4.callIfDefined(_this4.props.onDocumentLoad, {
+      total: pdf.numPages
+    });
 
-        _this4.setState({ pdf: pdf });
+    _this4.setState({ pdf: pdf });
 
-        _this4.loadPage(_this4.props.pageIndex);
-    };
+    _this4.loadPage(_this4.props.pageIndex);
+  };
 
-    this.onDocumentError = function (error) {
-        _this4.callIfDefined(_this4.props.onDocumentError, error);
+  this.onDocumentError = function (error) {
+    _this4.callIfDefined(_this4.props.onDocumentError, error);
 
-        _this4.setState({ pdf: false });
-    };
+    _this4.setState({ pdf: false });
+  };
 
-    this.onPageLoad = function (page) {
-        var scale = _this4.getPageScale(page);
+  this.onPageLoad = function (page) {
+    var scale = _this4.getPageScale(page);
 
-        _this4.callIfDefined(_this4.props.onPageLoad, {
-            pageIndex: page.pageIndex,
-            pageNumber: page.pageNumber,
-            get width() {
-                return page.view[2] * scale;
-            },
-            get height() {
-                return page.view[3] * scale;
-            },
-            scale: scale,
-            get originalWidth() {
-                return page.view[2];
-            },
-            get originalHeight() {
-                return page.view[3];
-            }
-        });
+    _this4.callIfDefined(_this4.props.onPageLoad, {
+      pageIndex: page.pageIndex,
+      pageNumber: page.pageNumber,
+      get width() {
+        return page.view[2] * scale;
+      },
+      get height() {
+        return page.view[3] * scale;
+      },
+      scale: scale,
+      get originalWidth() {
+        return page.view[2];
+      },
+      get originalHeight() {
+        return page.view[3];
+      }
+    });
 
-        _this4.setState({ page: page });
-    };
+    _this4.setState({ page: page });
+  };
 
-    this.onPageRender = function () {
-        _this4.renderer = null;
+  this.onPageRender = function () {
+    _this4.renderer = null;
 
-        _this4.callIfDefined(_this4.props.onPageRender);
-    };
+    _this4.callIfDefined(_this4.props.onPageRender);
+  };
 
-    this.onPageError = function (error) {
-        _this4.callIfDefined(_this4.props.onPageError, error);
+  this.onPageError = function (error) {
+    _this4.callIfDefined(_this4.props.onPageError, error);
 
-        _this4.setState({ page: false });
-    };
+    _this4.setState({ page: false });
+  };
 
-    this.callIfDefined = function (fn, args) {
-        if (fn && typeof fn === 'function') {
-            fn(args);
-        }
-    };
+  this.callIfDefined = function (fn, args) {
+    if (fn && typeof fn === 'function') {
+      fn(args);
+    }
+  };
 
-    this.displayCORSWarning = function () {
-        // eslint-disable-next-line no-console
-        console.warn('Loading PDF as base64 strings/URLs might not work on protocols other than HTTP/HTTPS. On Google Chrome, you can use --allow-file-access-from-files flag for debugging purposes.');
-    };
+  this.displayCORSWarning = function () {
+    // eslint-disable-next-line no-console
+    console.warn('Loading PDF as base64 strings/URLs might not work on protocols other than HTTP/HTTPS. On Google Chrome, you can use --allow-file-access-from-files flag for debugging purposes.');
+  };
 
-    this.isParameterObject = function (object) {
-        return object && (typeof object === 'undefined' ? 'undefined' : _typeof(object)) === 'object' && ['file', 'range', 'url'].some(function (key) {
-            return Object.keys(object).includes(key);
-        });
-    };
+  this.isParameterObject = function (object) {
+    return object && (typeof object === 'undefined' ? 'undefined' : _typeof(object)) === 'object' && ['file', 'range', 'url'].some(function (key) {
+      return Object.keys(object).includes(key);
+    });
+  };
 
-    this.isDataURI = function (str) {
-        return (/^data:/.test(str)
-        );
-    };
+  this.isDataURI = function (str) {
+    return (/^data:/.test(str)
+    );
+  };
 
-    this.dataURItoBlob = function (dataURI) {
-        var byteString = void 0;
-        if (dataURI.split(',')[0].indexOf('base64') >= 0) {
-            byteString = atob(dataURI.split(',')[1]);
-        } else {
-            byteString = unescape(dataURI.split(',')[1]);
-        }
+  this.dataURItoBlob = function (dataURI) {
+    var byteString = void 0;
+    if (dataURI.split(',')[0].indexOf('base64') >= 0) {
+      byteString = atob(dataURI.split(',')[1]);
+    } else {
+      byteString = unescape(dataURI.split(',')[1]);
+    }
 
-        var mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
+    var mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
 
-        var ia = new Uint8Array(byteString.length);
-        for (var i = 0; i < byteString.length; i += 1) {
-            ia[i] = byteString.charCodeAt(i);
-        }
+    var ia = new Uint8Array(byteString.length);
+    for (var i = 0; i < byteString.length; i += 1) {
+      ia[i] = byteString.charCodeAt(i);
+    }
 
-        return new Blob([ia], { type: mimeString });
-    };
+    return new Blob([ia], { type: mimeString });
+  };
 };
 
 /* harmony default export */ __webpack_exports__["a"] = ReactPDF;
 
 
 ReactPDF.defaultProps = {
-    pageIndex: 0,
-    scale: 1.0,
-    error: 'Failed to load PDF file.',
-    loading: 'Loading PDF…',
-    noData: 'No PDF file specified.'
+  pageIndex: 0,
+  scale: 1.0,
+  error: 'Failed to load PDF file.',
+  loading: 'Loading PDF…',
+  noData: 'No PDF file specified.'
 };
 
 ReactPDF.propTypes = {
-    error: __WEBPACK_IMPORTED_MODULE_0_react__["PropTypes"].oneOfType([__WEBPACK_IMPORTED_MODULE_0_react__["PropTypes"].string, __WEBPACK_IMPORTED_MODULE_0_react__["PropTypes"].node]),
-    file: __WEBPACK_IMPORTED_MODULE_0_react__["PropTypes"].oneOfType([__WEBPACK_IMPORTED_MODULE_0_react__["PropTypes"].string, __WEBPACK_IMPORTED_MODULE_0_react__["PropTypes"].instanceOf(File), __WEBPACK_IMPORTED_MODULE_0_react__["PropTypes"].instanceOf(Blob), __WEBPACK_IMPORTED_MODULE_0_react__["PropTypes"].shape({
-        data: __WEBPACK_IMPORTED_MODULE_0_react__["PropTypes"].object,
-        httpHeaders: __WEBPACK_IMPORTED_MODULE_0_react__["PropTypes"].object,
-        range: __WEBPACK_IMPORTED_MODULE_0_react__["PropTypes"].object,
-        url: __WEBPACK_IMPORTED_MODULE_0_react__["PropTypes"].string
-    })]),
-    loading: __WEBPACK_IMPORTED_MODULE_0_react__["PropTypes"].oneOfType([__WEBPACK_IMPORTED_MODULE_0_react__["PropTypes"].string, __WEBPACK_IMPORTED_MODULE_0_react__["PropTypes"].node]),
-    noData: __WEBPACK_IMPORTED_MODULE_0_react__["PropTypes"].oneOfType([__WEBPACK_IMPORTED_MODULE_0_react__["PropTypes"].string, __WEBPACK_IMPORTED_MODULE_0_react__["PropTypes"].node]),
-    onDocumentError: __WEBPACK_IMPORTED_MODULE_0_react__["PropTypes"].func,
-    onDocumentLoad: __WEBPACK_IMPORTED_MODULE_0_react__["PropTypes"].func,
-    onPageError: __WEBPACK_IMPORTED_MODULE_0_react__["PropTypes"].func,
-    onPageLoad: __WEBPACK_IMPORTED_MODULE_0_react__["PropTypes"].func,
-    onPageRender: __WEBPACK_IMPORTED_MODULE_0_react__["PropTypes"].func,
-    pageIndex: __WEBPACK_IMPORTED_MODULE_0_react__["PropTypes"].number,
-    scale: __WEBPACK_IMPORTED_MODULE_0_react__["PropTypes"].number,
-    width: __WEBPACK_IMPORTED_MODULE_0_react__["PropTypes"].number
+  error: __WEBPACK_IMPORTED_MODULE_0_react__["PropTypes"].oneOfType([__WEBPACK_IMPORTED_MODULE_0_react__["PropTypes"].string, __WEBPACK_IMPORTED_MODULE_0_react__["PropTypes"].node]),
+  file: __WEBPACK_IMPORTED_MODULE_0_react__["PropTypes"].oneOfType([__WEBPACK_IMPORTED_MODULE_0_react__["PropTypes"].string, __WEBPACK_IMPORTED_MODULE_0_react__["PropTypes"].instanceOf(File), __WEBPACK_IMPORTED_MODULE_0_react__["PropTypes"].instanceOf(Blob), __WEBPACK_IMPORTED_MODULE_0_react__["PropTypes"].shape({
+    data: __WEBPACK_IMPORTED_MODULE_0_react__["PropTypes"].object,
+    httpHeaders: __WEBPACK_IMPORTED_MODULE_0_react__["PropTypes"].object,
+    range: __WEBPACK_IMPORTED_MODULE_0_react__["PropTypes"].object,
+    url: __WEBPACK_IMPORTED_MODULE_0_react__["PropTypes"].string
+  })]),
+  loading: __WEBPACK_IMPORTED_MODULE_0_react__["PropTypes"].oneOfType([__WEBPACK_IMPORTED_MODULE_0_react__["PropTypes"].string, __WEBPACK_IMPORTED_MODULE_0_react__["PropTypes"].node]),
+  noData: __WEBPACK_IMPORTED_MODULE_0_react__["PropTypes"].oneOfType([__WEBPACK_IMPORTED_MODULE_0_react__["PropTypes"].string, __WEBPACK_IMPORTED_MODULE_0_react__["PropTypes"].node]),
+  onDocumentError: __WEBPACK_IMPORTED_MODULE_0_react__["PropTypes"].func,
+  onDocumentLoad: __WEBPACK_IMPORTED_MODULE_0_react__["PropTypes"].func,
+  onPageError: __WEBPACK_IMPORTED_MODULE_0_react__["PropTypes"].func,
+  onPageLoad: __WEBPACK_IMPORTED_MODULE_0_react__["PropTypes"].func,
+  onPageRender: __WEBPACK_IMPORTED_MODULE_0_react__["PropTypes"].func,
+  pageIndex: __WEBPACK_IMPORTED_MODULE_0_react__["PropTypes"].number,
+  scale: __WEBPACK_IMPORTED_MODULE_0_react__["PropTypes"].number,
+  width: __WEBPACK_IMPORTED_MODULE_0_react__["PropTypes"].number
 };
 
 /***/ }),
@@ -65902,8 +65902,8 @@ var _UnsupportedManager = function UnsupportedManagerClosure() {
   }
  };
 }();
-exports.version = '1.7.337';
-exports.build = '9163a6fb';
+exports.version = '1.7.339';
+exports.build = '24e5b6ee';
 exports.getDocument = getDocument;
 exports.PDFDataRangeTransport = PDFDataRangeTransport;
 exports.PDFWorker = PDFWorker;
@@ -67935,8 +67935,8 @@ if (!globalScope.PDFJS) {
  globalScope.PDFJS = {};
 }
 var PDFJS = globalScope.PDFJS;
-PDFJS.version = '1.7.337';
-PDFJS.build = '9163a6fb';
+PDFJS.version = '1.7.339';
+PDFJS.build = '24e5b6ee';
 PDFJS.pdfBug = false;
 if (PDFJS.verbosity !== undefined) {
  sharedUtil.setVerbosityLevel(PDFJS.verbosity);
@@ -72022,8 +72022,8 @@ if (typeof PDFJS === 'undefined' || !PDFJS.compatibilityChecked) {
 
 "use strict";
 
-var pdfjsVersion = '1.7.337';
-var pdfjsBuild = '9163a6fb';
+var pdfjsVersion = '1.7.339';
+var pdfjsBuild = '24e5b6ee';
 var pdfjsSharedUtil = __w_pdfjs_require__(0);
 var pdfjsDisplayGlobal = __w_pdfjs_require__(9);
 var pdfjsDisplayAPI = __w_pdfjs_require__(3);
