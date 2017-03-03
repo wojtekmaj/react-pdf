@@ -84,11 +84,18 @@ export default class ReactPDF extends Component {
      * Called when a page is loaded successfully.
      */
     onPageLoad = (page) => {
+        const scale = this.getPageScale(page);
+
         this.callIfDefined(
             this.props.onPageLoad,
             {
                 pageIndex: page.pageIndex,
                 pageNumber: page.pageNumber,
+                get width() { return page.view[2] * scale; },
+                get height() { return page.view[3] * scale; },
+                scale,
+                get originalWidth() { return page.view[2]; },
+                get originalHeight() { return page.view[3]; },
             },
         );
 
@@ -116,9 +123,8 @@ export default class ReactPDF extends Component {
         this.setState({ page: false });
     }
 
-    get pageScale() {
+    getPageScale(page = this.state.page) {
         const { scale, width } = this.props;
-        const { page } = this.state;
 
         // Be default, we'll render page at 100% * scale width.
         let pageScale = 1;
@@ -316,7 +322,7 @@ export default class ReactPDF extends Component {
                     const canvas = ref;
 
                     const pixelRatio = window.devicePixelRatio || 1;
-                    const viewport = page.getViewport(this.pageScale * pixelRatio);
+                    const viewport = page.getViewport(this.getPageScale() * pixelRatio);
 
                     canvas.height = viewport.height;
                     canvas.width = viewport.width;
