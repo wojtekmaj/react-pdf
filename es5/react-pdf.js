@@ -1,14 +1,24 @@
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = require('react');
+
+var _react2 = _interopRequireDefault(_react);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-import React, { Component, PropTypes } from 'react';
 
 require('pdfjs-dist/web/compatibility');
 require('pdfjs-dist/build/pdf');
@@ -219,7 +229,7 @@ var ReactPDF = function (_Component) {
   }, {
     key: 'renderNoData',
     value: function renderNoData() {
-      return React.createElement(
+      return _react2.default.createElement(
         'div',
         null,
         this.props.noData
@@ -228,7 +238,7 @@ var ReactPDF = function (_Component) {
   }, {
     key: 'renderError',
     value: function renderError() {
-      return React.createElement(
+      return _react2.default.createElement(
         'div',
         null,
         this.props.error
@@ -237,7 +247,7 @@ var ReactPDF = function (_Component) {
   }, {
     key: 'renderLoader',
     value: function renderLoader() {
-      return React.createElement(
+      return _react2.default.createElement(
         'div',
         null,
         this.props.loading
@@ -266,7 +276,7 @@ var ReactPDF = function (_Component) {
         return this.renderLoader();
       }
 
-      return React.createElement('canvas', {
+      return _react2.default.createElement('canvas', {
         ref: function ref(_ref2) {
           if (!_ref2) return;
 
@@ -311,7 +321,7 @@ var ReactPDF = function (_Component) {
   }]);
 
   return ReactPDF;
-}(Component);
+}(_react.Component);
 
 var _initialiseProps = function _initialiseProps() {
   var _this4 = this;
@@ -414,7 +424,7 @@ var _initialiseProps = function _initialiseProps() {
   };
 };
 
-export default ReactPDF;
+exports.default = ReactPDF;
 
 
 ReactPDF.defaultProps = {
@@ -426,21 +436,21 @@ ReactPDF.defaultProps = {
 };
 
 ReactPDF.propTypes = {
-  error: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
-  file: PropTypes.oneOfType([PropTypes.string, PropTypes.instanceOf(File), PropTypes.instanceOf(Blob), PropTypes.shape({
-    data: PropTypes.object,
-    httpHeaders: PropTypes.object,
-    range: PropTypes.object,
-    url: PropTypes.string
+  error: _react.PropTypes.oneOfType([_react.PropTypes.string, _react.PropTypes.node]),
+  file: _react.PropTypes.oneOfType([_react.PropTypes.string, _react.PropTypes.instanceOf(File), _react.PropTypes.instanceOf(Blob), _react.PropTypes.shape({
+    data: _react.PropTypes.object,
+    httpHeaders: _react.PropTypes.object,
+    range: _react.PropTypes.object,
+    url: _react.PropTypes.string
   })]),
-  loading: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
-  noData: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
-  onDocumentError: PropTypes.func,
-  onDocumentLoad: PropTypes.func,
-  onPageError: PropTypes.func,
-  onPageLoad: PropTypes.func,
-  onPageRender: PropTypes.func,
-  pageIndex: PropTypes.number,
-  scale: PropTypes.number,
-  width: PropTypes.number
+  loading: _react.PropTypes.oneOfType([_react.PropTypes.string, _react.PropTypes.node]),
+  noData: _react.PropTypes.oneOfType([_react.PropTypes.string, _react.PropTypes.node]),
+  onDocumentError: _react.PropTypes.func,
+  onDocumentLoad: _react.PropTypes.func,
+  onPageError: _react.PropTypes.func,
+  onPageLoad: _react.PropTypes.func,
+  onPageRender: _react.PropTypes.func,
+  pageIndex: _react.PropTypes.number,
+  scale: _react.PropTypes.number,
+  width: _react.PropTypes.number
 };
