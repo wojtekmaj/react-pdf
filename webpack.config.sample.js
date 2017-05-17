@@ -1,4 +1,5 @@
 const webpack = require('webpack');
+const path = require('path');
 
 module.exports = {
   context: __dirname,
@@ -8,7 +9,7 @@ module.exports = {
     './src-sample/sample.pdf',
   ],
   output: {
-    path: './sample',
+    path: path.join(__dirname, './sample'),
     filename: 'sample.js',
     chunkFilename: 'sample.js',
   },
