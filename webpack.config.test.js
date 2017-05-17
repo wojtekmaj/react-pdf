@@ -1,3 +1,5 @@
+const path = require('path');
+
 module.exports = {
   context: __dirname,
   devtool: 'source-map',
@@ -7,7 +9,7 @@ module.exports = {
     './src-test/test.pdf',
   ],
   output: {
-    path: './test',
+    path: path.join(__dirname, './test'),
     filename: 'test.js',
     chunkFilename: 'test.js',
   },
