@@ -37,7 +37,7 @@ class MyApp extends React.Component {
     },
 
     onPageLoad({ pageIndex, pageNumber }) {
-        this.setState({{ pageIndex, pageNumber });
+        this.setState({ pageIndex, pageNumber });
     }
     
     render() {
