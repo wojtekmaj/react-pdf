@@ -384,6 +384,7 @@ ReactPDF.propTypes = {
       httpHeaders: PropTypes.object,
       range: PropTypes.object,
       url: PropTypes.string,
+      withCredentials: PropTypes.bool
     }),
   ]),
   loading: PropTypes.oneOfType([

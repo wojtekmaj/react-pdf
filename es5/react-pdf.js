@@ -441,7 +441,8 @@ ReactPDF.propTypes = {
     data: _react.PropTypes.object,
     httpHeaders: _react.PropTypes.object,
     range: _react.PropTypes.object,
-    url: _react.PropTypes.string
+    url: _react.PropTypes.string,
+    withCredentials:  _react.PropTypes.bool
   })]),
   loading: _react.PropTypes.oneOfType([_react.PropTypes.string, _react.PropTypes.node]),
   noData: _react.PropTypes.oneOfType([_react.PropTypes.string, _react.PropTypes.node]),
