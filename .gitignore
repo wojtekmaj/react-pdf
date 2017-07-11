@@ -1,3 +1,4 @@
+.vscode
 node_modules
 npm-debug.log
-.vscode/settings.json
+package-lock.json
