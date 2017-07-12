@@ -1,27 +1,22 @@
+const webpack = require('webpack');
 const path = require('path');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = {
   context: __dirname,
   devtool: 'source-map',
-  entry: [
-    './src-test/index.html',
-    './src-test/test.jsx',
-    './src-test/test.pdf',
-  ],
+  entry: {
+    test: './src-test/test.jsx',
+  },
   output: {
-    path: path.join(__dirname, './test'),
-    filename: 'test.js',
-    chunkFilename: 'test.js',
+    path: path.join(__dirname, 'test'),
+    filename: '[name].js',
   },
   resolve: {
     extensions: ['.js', '.jsx'],
   },
   module: {
     rules: [
-      {
-        test: /\.html$/,
-        use: 'file-loader?name=[name].[ext]',
-      },
       {
         test: /\.pdf$/,
         use: 'url-loader',
@@ -41,4 +36,12 @@ module.exports = {
       },
     ],
   },
+  plugins: [
+    new webpack.IgnorePlugin(/pdf.worker.js/),
+    new CopyWebpackPlugin([
+      { from: './src-test/index.html' },
+      { from: './src-test/test.pdf' },
+      { from: 'node_modules/pdfjs-dist/build/pdf.worker.js' },
+    ]),
+  ],
 };

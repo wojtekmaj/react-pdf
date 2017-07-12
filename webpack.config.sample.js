@@ -1,16 +1,15 @@
 const webpack = require('webpack');
 const path = require('path');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = {
   context: __dirname,
-  entry: [
-    './src-sample/index.html',
-    './src-sample/sample.jsx',
-    './src-sample/sample.pdf',
-  ],
+  entry: {
+    sample: './src-sample/sample.jsx',
+  },
   output: {
-    path: path.join(__dirname, './sample'),
-    filename: 'sample.js',
+    path: path.join(__dirname, 'sample'),
+    filename: '[name].js',
     chunkFilename: 'sample.js',
   },
   resolve: {
@@ -48,5 +47,11 @@ module.exports = {
       },
     }),
     new webpack.optimize.UglifyJsPlugin(),
+    new webpack.IgnorePlugin(/pdf.worker.js/),
+    new CopyWebpackPlugin([
+      { from: './src-sample/index.html' },
+      { from: './src-sample/sample.pdf' },
+      { from: 'node_modules/pdfjs-dist/build/pdf.worker.js' },
+    ]),
   ],
 };

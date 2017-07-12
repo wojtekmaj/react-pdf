@@ -1,11 +1,10 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import pdfjsLib from 'pdfjs-dist';
 
 require('pdfjs-dist/web/compatibility');
-require('pdfjs-dist/build/pdf');
-PDFJS.workerSrc = require('pdfjs-dist/build/pdf.worker.js');
 
-PDFJS.disableWorker = true;
+pdfjsLib.PDFJS.workerSrc = 'pdf.worker.js';
 
 export default class ReactPDF extends Component {
   state = {
@@ -364,11 +363,11 @@ export default class ReactPDF extends Component {
 }
 
 ReactPDF.defaultProps = {
-  pageIndex: 0,
-  scale: 1.0,
   error: 'Failed to load PDF file.',
   loading: 'Loading PDF…',
   noData: 'No PDF file specified.',
+  pageIndex: 0,
+  scale: 1.0,
 };
 
 ReactPDF.propTypes = {
