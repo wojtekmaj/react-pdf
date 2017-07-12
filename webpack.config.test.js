@@ -41,7 +41,10 @@ module.exports = {
     new CopyWebpackPlugin([
       { from: './src-test/index.html' },
       { from: './src-test/test.pdf' },
-      { from: 'node_modules/pdfjs-dist/build/pdf.worker.js' },
+      {
+        from: 'node_modules/pdfjs-dist/build/pdf.worker.min.js',
+        to: 'pdf.worker.js',
+      },
     ]),
   ],
 };
