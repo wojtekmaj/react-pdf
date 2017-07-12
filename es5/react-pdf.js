@@ -12,6 +12,14 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
+var _propTypes = require('prop-types');
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
+var _pdfjsDist = require('pdfjs-dist');
+
+var _pdfjsDist2 = _interopRequireDefault(_pdfjsDist);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -21,10 +29,10 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 require('pdfjs-dist/web/compatibility');
-require('pdfjs-dist/build/pdf');
-PDFJS.workerSrc = require('pdfjs-dist/build/pdf.worker.js');
-
-PDFJS.disableWorker = true;
+/**
+ * Passing string won't work as a separate module is required anyway
+ */
+_pdfjsDist2.default.PDFJS.workerSrc = 'pdf.worker.js';
 
 var ReactPDF = function (_Component) {
   _inherits(ReactPDF, _Component);
@@ -428,29 +436,29 @@ exports.default = ReactPDF;
 
 
 ReactPDF.defaultProps = {
-  pageIndex: 0,
-  scale: 1.0,
   error: 'Failed to load PDF file.',
   loading: 'Loading PDF…',
-  noData: 'No PDF file specified.'
+  noData: 'No PDF file specified.',
+  pageIndex: 0,
+  scale: 1.0
 };
 
 ReactPDF.propTypes = {
-  error: _react.PropTypes.oneOfType([_react.PropTypes.string, _react.PropTypes.node]),
-  file: _react.PropTypes.oneOfType([_react.PropTypes.string, _react.PropTypes.instanceOf(File), _react.PropTypes.instanceOf(Blob), _react.PropTypes.shape({
-    data: _react.PropTypes.object,
-    httpHeaders: _react.PropTypes.object,
-    range: _react.PropTypes.object,
-    url: _react.PropTypes.string
+  error: _propTypes2.default.oneOfType([_propTypes2.default.string, _propTypes2.default.node]),
+  file: _propTypes2.default.oneOfType([_propTypes2.default.string, _propTypes2.default.instanceOf(File), _propTypes2.default.instanceOf(Blob), _propTypes2.default.shape({
+    data: _propTypes2.default.object,
+    httpHeaders: _propTypes2.default.object,
+    range: _propTypes2.default.object,
+    url: _propTypes2.default.string
   })]),
-  loading: _react.PropTypes.oneOfType([_react.PropTypes.string, _react.PropTypes.node]),
-  noData: _react.PropTypes.oneOfType([_react.PropTypes.string, _react.PropTypes.node]),
-  onDocumentError: _react.PropTypes.func,
-  onDocumentLoad: _react.PropTypes.func,
-  onPageError: _react.PropTypes.func,
-  onPageLoad: _react.PropTypes.func,
-  onPageRender: _react.PropTypes.func,
-  pageIndex: _react.PropTypes.number,
-  scale: _react.PropTypes.number,
-  width: _react.PropTypes.number
+  loading: _propTypes2.default.oneOfType([_propTypes2.default.string, _propTypes2.default.node]),
+  noData: _propTypes2.default.oneOfType([_propTypes2.default.string, _propTypes2.default.node]),
+  onDocumentError: _propTypes2.default.func,
+  onDocumentLoad: _propTypes2.default.func,
+  onPageError: _propTypes2.default.func,
+  onPageLoad: _propTypes2.default.func,
+  onPageRender: _propTypes2.default.func,
+  pageIndex: _propTypes2.default.number,
+  scale: _propTypes2.default.number,
+  width: _propTypes2.default.number
 };
