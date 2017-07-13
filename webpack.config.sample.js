@@ -5,7 +5,7 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 module.exports = {
   context: __dirname,
   entry: {
-    sample: './src-sample/sample.jsx',
+    sample: './src-sample/sample',
   },
   output: {
     path: path.join(__dirname, 'sample'),
@@ -47,14 +47,9 @@ module.exports = {
       },
     }),
     new webpack.optimize.UglifyJsPlugin(),
-    new webpack.IgnorePlugin(/pdf.worker.js/),
     new CopyWebpackPlugin([
       { from: './src-sample/index.html' },
       { from: './src-sample/sample.pdf' },
-      {
-        from: 'node_modules/pdfjs-dist/build/pdf.worker.min.js',
-        to: 'pdf.worker.js',
-      },
     ]),
   ],
 };
