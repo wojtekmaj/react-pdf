@@ -16,6 +16,6 @@ ratings:
   - "**.js"
   - "**.jsx"
 exclude_paths:
-- es5/
+- build/
 - test/
 - sample/
