@@ -4,27 +4,16 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = {
   context: __dirname,
-  entry: {
-    sample: './src-sample/sample',
-  },
+  entry: './src-sample/sample',
   output: {
     path: path.join(__dirname, 'sample'),
-    filename: '[name].js',
-    chunkFilename: 'sample.js',
+    filename: '[name].bundle.js',
   },
   resolve: {
     extensions: ['.js', '.jsx'],
   },
   module: {
     rules: [
-      {
-        test: /\.html$/,
-        use: 'file-loader?name=[name].[ext]',
-      },
-      {
-        test: /\.pdf$/,
-        use: 'url-loader',
-      },
       {
         test: /\.less$/,
         use: [

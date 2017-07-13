@@ -4,12 +4,10 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 module.exports = {
   context: __dirname,
   devtool: 'source-map',
-  entry: {
-    test: './src-test/test',
-  },
+  entry: './src-test/test',
   output: {
     path: path.join(__dirname, 'test'),
-    filename: '[name].js',
+    filename: '[name].bundle.js',
   },
   resolve: {
     extensions: ['.js', '.jsx'],

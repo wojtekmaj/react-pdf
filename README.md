@@ -18,7 +18,7 @@ You'll need to have Node >= 4 on your machine.
 
 We strongly recommend to use Node >= 6 and npm >= 3 for faster installation speed and better disk usage.
 
-Your project needs to use React 15.0.0 or later.
+Your project needs to use React 15.5.0 or later.
 
 ### Installation
 
@@ -76,6 +76,22 @@ Check the sample directory of this repository for a full working example.
 |onPageLoad|Function called when the page is successfully loaded to the memory.|`onPageLoad={({ pageIndex, pageNumber, width, height, originalWidth, originalHeight, scale }) => alert('Now displaying a page number ' + pageNumber + '!')}`|
 |onPageRender|Function called when the page is successfully rendered on the screen.|`onPageLoad={() => alert('Rendered the page!')}`|
 |onPageError|Function called in case of an error while rendering a page.|`onPageError={({ message }) => alert('Error while loading page! ' + message)}`|
+
+#### Usage without worker
+
+If you want to use React-PDF without PDF.js worker, instead of importing React-PDF like so:
+
+```js
+import ReactPDF from 'react-pdf';
+```
+
+use the following syntax:
+
+```js
+import ReactPDF from 'react-pdf/build/react-pdf.entry.noworker';
+```
+
+Please note that while by doing so your bundle size will be reduced, it may negatively affect React-PDF performance, so it is not recommended unless bundle size is your absolute priority.
 
 ## License
 

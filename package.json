@@ -2,15 +2,15 @@
   "name": "react-pdf",
   "version": "1.7.0",
   "description": "Easily display PDF files in your React application.",
-  "main": "build/react-pdf.js",
-  "es6": "src/react-pdf.jsx",
+  "main": "build/react-pdf.entry.js",
+  "es6": "src/react-pdf.entry.js",
   "scripts": {
     "build": "npm run build-source && npm run build-sample-only && npm run build-test-only",
-    "build-source": "webpack --progress --json > stats.source.json",
+    "build-source": "babel src -d build",
     "build-sample": "npm run build-source && npm run build-sample-only",
-    "build-sample-only": "webpack --progress --config webpack.config.sample.js --json > stats.sample.json",
+    "build-sample-only": "webpack --config webpack.config.sample.js",
     "build-test": "npm run build-source && npm run build-test-only",
-    "build-test-only": "webpack --progress --config webpack.config.test.js --json > stats.test.json",
+    "build-test-only": "webpack --config webpack.config.test.js",
     "eslint": "eslint .",
     "prepublishOnly": "npm run build",
     "test": "npm run eslint"
@@ -63,7 +63,6 @@
     "file-loader": "latest",
     "less": "^2.7.2",
     "less-loader": "latest",
-    "raw-loader": "^0.5.1",
     "style-loader": "latest",
     "url-loader": "latest",
     "webpack": "^3.2.0"
