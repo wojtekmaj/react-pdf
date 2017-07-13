@@ -2,13 +2,15 @@
   "name": "react-pdf",
   "version": "1.7.0",
   "description": "Easily display PDF files in your React application.",
-  "main": "es5/react-pdf.js",
+  "main": "build/react-pdf.js",
   "es6": "src/react-pdf.jsx",
   "scripts": {
-    "build": "npm run build-sample && npm run build-source && npm run build-test",
-    "build-sample": "webpack --config webpack.config.sample.js",
-    "build-source": "babel src -d es5",
-    "build-test": "webpack --config webpack.config.test.js",
+    "build": "npm run build-source && npm run build-sample-only && npm run build-test-only",
+    "build-source": "webpack --progress --json > stats.source.json",
+    "build-sample": "npm run build-source && npm run build-sample-only",
+    "build-sample-only": "webpack --progress --config webpack.config.sample.js --json > stats.sample.json",
+    "build-test": "npm run build-source && npm run build-test-only",
+    "build-test-only": "webpack --progress --config webpack.config.test.js --json > stats.test.json",
     "eslint": "eslint .",
     "prepublishOnly": "npm run build",
     "test": "npm run eslint"
@@ -34,11 +36,10 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "is-utf8": "^0.2.1",
-    "pdfjs-dist": "^1.8.527",
-    "prop-types": "^15.5.10",
-    "react": "^15.6.1",
-    "react-dom": "^15.6.1"
+    "pdfjs-dist": "^1.8.529",
+    "prop-types": ">=15.5",
+    "react": ">=15.5",
+    "react-dom": ">=15.5"
   },
   "devDependencies": {
     "babel": "^6.23.0",
@@ -62,6 +63,7 @@
     "file-loader": "latest",
     "less": "^2.7.2",
     "less-loader": "latest",
+    "raw-loader": "^0.5.1",
     "style-loader": "latest",
     "url-loader": "latest",
     "webpack": "^3.2.0"
