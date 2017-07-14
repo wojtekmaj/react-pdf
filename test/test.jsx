@@ -33,6 +33,7 @@ class Test extends Component {
     pageRenderCount: 0,
     pageWidth: 300,
     total: null,
+    rotate: 0,
   }
 
   onFileChange = (event) => {
@@ -143,7 +144,7 @@ class Test extends Component {
   }
 
   render() {
-    const { pageIndex, pageNumber, pageRenderCount, pageWidth, total } = this.state;
+    const { pageIndex, pageNumber, pageRenderCount, pageWidth, rotate, total } = this.state;
 
     return (
       <div className="Example">
@@ -189,6 +190,20 @@ class Test extends Component {
               />
             </form>
             <br />
+            <button
+              onClick={() =>
+                this.setState(prevState => ({ rotate: (prevState.rotate - 90) % 360 }))
+              }
+            >
+              Rotate left
+            </button>&nbsp;
+            <button
+              onClick={() =>
+                this.setState(prevState => ({ rotate: (prevState.rotate + 90) % 360 }))
+              }
+            >
+              Rotate right
+            </button>
           </div>
           <div className="Example__container__preview">
             <div className="Example__container__preview__out">
@@ -198,6 +213,7 @@ class Test extends Component {
                 onPageLoad={this.onPageLoad}
                 onPageRender={this.onPageRender}
                 pageIndex={pageIndex}
+                rotate={rotate}
                 width={pageWidth}
               />
             </div>
