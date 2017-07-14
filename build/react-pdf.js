@@ -421,6 +421,7 @@ ReactPDF.defaultProps = {
   loading: 'Loading PDF…',
   noData: 'No PDF file specified.',
   pageIndex: 0,
+  rotate: 0,
   scale: 1.0
 };
 
