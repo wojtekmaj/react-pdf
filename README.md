@@ -24,7 +24,7 @@ Your project needs to use React 15.5 or later. If you use older version of React
 
 |React version|Newest supported React-PDF|
 |----|----|
-|>15.5|1.7.0|
+|>15.5|latest|
 |>15.0|1.6.1|
 |>0.14|0.0.10|
 |>0.13|0.0.10|
