@@ -1,6 +1,6 @@
 {
   "name": "react-pdf-sample-page",
-  "version": "1.8.1",
+  "version": "1.8.2",
   "description": "A sample page for React-PDF.",
   "scripts": {
     "build": "webpack"
