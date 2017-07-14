@@ -42,6 +42,7 @@ export default class ReactPDF extends Component {
     return (
       nextState.pdf !== this.state.pdf ||
       nextState.page !== this.state.page ||
+      nextProps.rotate % 360 !== this.props.rotate % 360 ||
       nextProps.width !== this.props.width ||
       nextProps.scale !== this.props.scale
     );
@@ -119,14 +120,14 @@ export default class ReactPDF extends Component {
   }
 
   getPageScale(page = this.state.page) {
-    const { scale, width } = this.props;
+    const { rotate, scale, width } = this.props;
 
     // Be default, we'll render page at 100% * scale width.
     let pageScale = 1;
 
     // If width is defined, calculate the scale of the page so it could be of desired width.
     if (width) {
-      pageScale = width / page.getViewport(scale).width;
+      pageScale = width / page.getViewport(scale, rotate).width;
     }
 
     return scale * pageScale;
@@ -309,6 +310,8 @@ export default class ReactPDF extends Component {
       return this.renderLoader();
     }
 
+    const { rotate } = this.props;
+
     return (
       <canvas
         ref={(ref) => {
@@ -317,7 +320,7 @@ export default class ReactPDF extends Component {
           const canvas = ref;
 
           const pixelRatio = window.devicePixelRatio || 1;
-          const viewport = page.getViewport(this.getPageScale() * pixelRatio);
+          const viewport = page.getViewport(this.getPageScale() * pixelRatio, rotate);
 
           canvas.height = viewport.height;
           canvas.width = viewport.width;
@@ -396,6 +399,7 @@ ReactPDF.propTypes = {
   onPageLoad: PropTypes.func,
   onPageRender: PropTypes.func,
   pageIndex: PropTypes.number,
+  rotate: PropTypes.number,
   scale: PropTypes.number,
   width: PropTypes.number,
 };
