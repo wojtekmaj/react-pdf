@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { render } from 'react-dom';
-import ReactPDF from 'react-pdf';
+import ReactPDF from 'react-pdf/build/entry.webpack';
 
 import './sample.less';
 
