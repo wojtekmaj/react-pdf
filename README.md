@@ -81,6 +81,7 @@ Check the sample directory of this repository for a full working example.
 |error|Defines what the component should display in case of an error. Defaults to "Failed to load PDF file.".|<ul><li>String:<br />`error="An error occurred!"`</li><li>React element:<Br />`error={<div>An error occurred!</div>}`</li><li>Function:<Br />`error={this.renderError()}`</li></ul>|
 |noData|Defines what the component should display in case of no data. Defaults to "No PDF file specified.".|<ul><li>String:<br />`noData="Please select a file."`</li><li>React element:<Br />`noData={<div>Please select a file.</div>}`</li><li>Function:<Br />`noData={this.renderNoData()}`</li></ul>|
 |pageIndex|Defines which page from PDF file should be displayed. Defaults to 0.|`pageIndex={2}`|
+|rotate|Defines the rotation of the document in degrees. 90 = rotated to the right, 180 = upside down, 270 = rotated to the left. Defaults to 0.|`rotate={90}`|
 |scale|Defines the scale in which PDF file should be rendered. Defaults to 1.0.|`scale={0.5}`|
 |width|Defines the width of the page. If not defined, canvas will be rendered at the width defined in PDF. If you define `width` and `scale` at the same time, the width will be multiplied by a given factor.|`width={300}`|
 |onDocumentLoad|Function called when the document is successfully loaded to the memory.|`onDocumentLoad={({ total }) => alert('Loaded a file with ' + total + ' pages!')}`|
