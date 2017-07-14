@@ -55,7 +55,7 @@ var ReactPDF = function (_Component) {
   }, {
     key: 'shouldComponentUpdate',
     value: function shouldComponentUpdate(nextProps, nextState) {
-      return nextState.pdf !== this.state.pdf || nextState.page !== this.state.page || nextProps.width !== this.props.width || nextProps.scale !== this.props.scale;
+      return nextState.pdf !== this.state.pdf || nextState.page !== this.state.page || nextProps.rotate % 360 !== this.props.rotate % 360 || nextProps.width !== this.props.width || nextProps.scale !== this.props.scale;
     }
 
     /**
@@ -87,6 +87,7 @@ var ReactPDF = function (_Component) {
     value: function getPageScale() {
       var page = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : this.state.page;
       var _props = this.props,
+          rotate = _props.rotate,
           scale = _props.scale,
           width = _props.width;
 
@@ -96,7 +97,7 @@ var ReactPDF = function (_Component) {
 
       // If width is defined, calculate the scale of the page so it could be of desired width.
       if (width) {
-        pageScale = width / page.getViewport(scale).width;
+        pageScale = width / page.getViewport(scale, rotate).width;
       }
 
       return scale * pageScale;
@@ -255,6 +256,9 @@ var ReactPDF = function (_Component) {
         return this.renderLoader();
       }
 
+      var rotate = this.props.rotate;
+
+
       return React.createElement('canvas', {
         ref: function ref(_ref2) {
           if (!_ref2) return;
@@ -262,7 +266,7 @@ var ReactPDF = function (_Component) {
           var canvas = _ref2;
 
           var pixelRatio = window.devicePixelRatio || 1;
-          var viewport = page.getViewport(_this3.getPageScale() * pixelRatio);
+          var viewport = page.getViewport(_this3.getPageScale() * pixelRatio, rotate);
 
           canvas.height = viewport.height;
           canvas.width = viewport.width;
@@ -431,6 +435,7 @@ ReactPDF.propTypes = {
   onPageLoad: PropTypes.func,
   onPageRender: PropTypes.func,
   pageIndex: PropTypes.number,
+  rotate: PropTypes.number,
   scale: PropTypes.number,
   width: PropTypes.number
 };
