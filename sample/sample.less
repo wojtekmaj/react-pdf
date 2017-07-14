@@ -1,0 +1,36 @@
+.Example {
+  font-family: Segoe UI, Tahoma, sans-serif;
+
+  input, button {
+    font: inherit;
+  }
+
+  &__container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    &__load {
+    }
+
+    &__preview {
+      border: 1px solid darkgray;
+      margin: 1em 0;
+    }
+
+    &__controls {
+      width: 300px;
+      display: flex;
+
+      span {
+        flex-grow: 1;
+        margin: 0 1em;
+        text-align: center;
+      }
+
+      button {
+        width: 80px;
+      }
+    }
+  }
+}

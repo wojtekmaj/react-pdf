@@ -2,8 +2,9 @@ engines:
   duplication:
     enabled: true
     exclude_paths:
-    - "webpack.config.sample.js"
-    - "webpack.config.test.js"
+    - "webpack.config.js"
+    - "test/webpack.config.js"
+    - "sample/webpack.config.js"
     config:
       languages:
       - javascript
@@ -16,6 +17,6 @@ ratings:
   - "**.js"
   - "**.jsx"
 exclude_paths:
-- es5/
-- test/
-- sample/
+- build/
+- test/build/
+- sample/build/
