@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-export default class ReactPDF extends Component {
+class ReactPDF extends Component {
   state = {
     pdf: null,
     page: null,
@@ -403,3 +403,5 @@ ReactPDF.propTypes = {
   scale: PropTypes.number,
   width: PropTypes.number,
 };
+
+module.exports = ReactPDF;

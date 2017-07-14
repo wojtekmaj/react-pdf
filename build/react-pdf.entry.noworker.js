@@ -1,3 +1,5 @@
+'use strict';
+
 var ReactPDF = require('./react-pdf');
 
 var pdfjs = require('pdfjs-dist');

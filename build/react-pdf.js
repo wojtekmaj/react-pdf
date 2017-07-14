@@ -1,15 +1,24 @@
+'use strict';
+
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = require('react');
+
+var _react2 = _interopRequireDefault(_react);
+
+var _propTypes = require('prop-types');
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 
 var ReactPDF = function (_Component) {
   _inherits(ReactPDF, _Component);
@@ -209,7 +218,7 @@ var ReactPDF = function (_Component) {
   }, {
     key: 'renderNoData',
     value: function renderNoData() {
-      return React.createElement(
+      return _react2.default.createElement(
         'div',
         null,
         this.props.noData
@@ -218,7 +227,7 @@ var ReactPDF = function (_Component) {
   }, {
     key: 'renderError',
     value: function renderError() {
-      return React.createElement(
+      return _react2.default.createElement(
         'div',
         null,
         this.props.error
@@ -227,7 +236,7 @@ var ReactPDF = function (_Component) {
   }, {
     key: 'renderLoader',
     value: function renderLoader() {
-      return React.createElement(
+      return _react2.default.createElement(
         'div',
         null,
         this.props.loading
@@ -259,7 +268,7 @@ var ReactPDF = function (_Component) {
       var rotate = this.props.rotate;
 
 
-      return React.createElement('canvas', {
+      return _react2.default.createElement('canvas', {
         ref: function ref(_ref2) {
           if (!_ref2) return;
 
@@ -304,7 +313,7 @@ var ReactPDF = function (_Component) {
   }]);
 
   return ReactPDF;
-}(Component);
+}(_react.Component);
 
 var _initialiseProps = function _initialiseProps() {
   var _this4 = this;
@@ -407,9 +416,6 @@ var _initialiseProps = function _initialiseProps() {
   };
 };
 
-export default ReactPDF;
-
-
 ReactPDF.defaultProps = {
   error: 'Failed to load PDF file.',
   loading: 'Loading PDF…',
@@ -419,23 +425,25 @@ ReactPDF.defaultProps = {
 };
 
 ReactPDF.propTypes = {
-  error: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
-  file: PropTypes.oneOfType([PropTypes.string, PropTypes.instanceOf(File), PropTypes.instanceOf(Blob), PropTypes.shape({
-    data: PropTypes.object,
-    httpHeaders: PropTypes.object,
-    range: PropTypes.object,
-    url: PropTypes.string,
-    withCredentials: PropTypes.bool
+  error: _propTypes2.default.oneOfType([_propTypes2.default.string, _propTypes2.default.node]),
+  file: _propTypes2.default.oneOfType([_propTypes2.default.string, _propTypes2.default.instanceOf(File), _propTypes2.default.instanceOf(Blob), _propTypes2.default.shape({
+    data: _propTypes2.default.object,
+    httpHeaders: _propTypes2.default.object,
+    range: _propTypes2.default.object,
+    url: _propTypes2.default.string,
+    withCredentials: _propTypes2.default.bool
   })]),
-  loading: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
-  noData: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
-  onDocumentError: PropTypes.func,
-  onDocumentLoad: PropTypes.func,
-  onPageError: PropTypes.func,
-  onPageLoad: PropTypes.func,
-  onPageRender: PropTypes.func,
-  pageIndex: PropTypes.number,
-  rotate: PropTypes.number,
-  scale: PropTypes.number,
-  width: PropTypes.number
+  loading: _propTypes2.default.oneOfType([_propTypes2.default.string, _propTypes2.default.node]),
+  noData: _propTypes2.default.oneOfType([_propTypes2.default.string, _propTypes2.default.node]),
+  onDocumentError: _propTypes2.default.func,
+  onDocumentLoad: _propTypes2.default.func,
+  onPageError: _propTypes2.default.func,
+  onPageLoad: _propTypes2.default.func,
+  onPageRender: _propTypes2.default.func,
+  pageIndex: _propTypes2.default.number,
+  rotate: _propTypes2.default.number,
+  scale: _propTypes2.default.number,
+  width: _propTypes2.default.number
 };
+
+module.exports = ReactPDF;
