@@ -30,7 +30,6 @@ Your project needs to use React 15.5 or later. If you use older version of React
 |>0.13|0.0.10|
 |>0.11|0.0.4|
 
-
 ### Installation
 
 Add React-PDF to your project by executing `npm install --save react-pdf`.
@@ -70,6 +69,18 @@ class MyApp extends React.Component {
 
 Check the sample directory of this repository for a full working example.
 
+### Enable PDF.js worker
+
+It is crucial for performance to use PDF.js worker whenever possible. This ensures that your PDF file will be rendered in a separate thread without affecting page performance. While normal import should work just fine, it is recommended that you import an entry file specifically designed for your build environment.
+
+#### Webpack
+
+Instead of directly importing/requiring `'react-pdf'`, use the following syntax:
+
+```js
+import ReactPDF from 'react-pdf/build/entry.webpack';
+```
+
 ## User guide
 
 ### Props
@@ -89,22 +100,6 @@ Check the sample directory of this repository for a full working example.
 |onPageLoad|Function called when the page is successfully loaded to the memory.|`onPageLoad={({ pageIndex, pageNumber, width, height, originalWidth, originalHeight, scale }) => alert('Now displaying a page number ' + pageNumber + '!')}`|
 |onPageRender|Function called when the page is successfully rendered on the screen.|`onPageLoad={() => alert('Rendered the page!')}`|
 |onPageError|Function called in case of an error while rendering a page.|`onPageError={({ message }) => alert('Error while loading page! ' + message)}`|
-
-### Usage without worker
-
-If you want to use React-PDF without PDF.js worker, instead of importing React-PDF like so:
-
-```js
-import ReactPDF from 'react-pdf';
-```
-
-use the following syntax:
-
-```js
-import ReactPDF from 'react-pdf/build/react-pdf.entry.noworker';
-```
-
-Please note that while by doing so your bundle size will be reduced, it may negatively affect React-PDF performance, so it is not recommended unless bundle size is your absolute priority.
 
 ## License
 
