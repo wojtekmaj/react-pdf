@@ -4,9 +4,9 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = {
   context: __dirname,
-  entry: './src-sample/sample',
+  entry: './sample',
   output: {
-    path: path.join(__dirname, 'sample'),
+    path: path.join(__dirname, 'build'),
     filename: '[name].bundle.js',
   },
   resolve: {
@@ -23,7 +23,7 @@ module.exports = {
         ],
       },
       {
-        test: /\.(js|jsx)$/,
+        test: /\.jsx?$/,
         exclude: /node_modules/,
         use: 'babel-loader',
       },
@@ -37,8 +37,8 @@ module.exports = {
     }),
     new webpack.optimize.UglifyJsPlugin(),
     new CopyWebpackPlugin([
-      { from: './src-sample/index.html' },
-      { from: './src-sample/sample.pdf' },
+      { from: './index.html' },
+      { from: './sample.pdf' },
     ]),
   ],
 };

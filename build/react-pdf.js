@@ -145,19 +145,13 @@ var ReactPDF = function (_Component) {
 
       // File is a File
       if (file instanceof File) {
-        var _ret2 = function () {
-          var reader = new FileReader();
+        var reader = new FileReader();
 
-          reader.onloadend = function () {
-            _this2.loadDocument(new Uint8Array(reader.result));
-          };
+        reader.onloadend = function () {
+          _this2.loadDocument(new Uint8Array(reader.result));
+        };
 
-          return {
-            v: reader.readAsArrayBuffer(file)
-          };
-        }();
-
-        if ((typeof _ret2 === 'undefined' ? 'undefined' : _typeof(_ret2)) === "object") return _ret2.v;
+        return reader.readAsArrayBuffer(file);
       }
 
       // File is an ArrayBuffer

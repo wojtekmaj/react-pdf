@@ -4,9 +4,9 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 module.exports = {
   context: __dirname,
   devtool: 'source-map',
-  entry: './src-test/test',
+  entry: './test',
   output: {
-    path: path.join(__dirname, 'test'),
+    path: path.join(__dirname, 'build'),
     filename: '[name].bundle.js',
   },
   resolve: {
@@ -27,7 +27,7 @@ module.exports = {
         ],
       },
       {
-        test: /\.(js|jsx)$/,
+        test: /\.jsx?$/,
         exclude: /node_modules/,
         use: 'babel-loader',
       },
@@ -35,8 +35,8 @@ module.exports = {
   },
   plugins: [
     new CopyWebpackPlugin([
-      { from: './src-test/index.html' },
-      { from: './src-test/test.pdf' },
+      { from: './index.html' },
+      { from: './test.pdf' },
     ]),
   ],
 };

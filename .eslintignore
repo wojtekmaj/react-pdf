@@ -1,4 +1,4 @@
 # Ignore compiled files
 build/*
-sample/*
-test/*
+sample/build/*
+test/build/*
