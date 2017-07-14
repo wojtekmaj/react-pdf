@@ -18,7 +18,18 @@ You'll need to have Node >= 4 on your machine.
 
 We strongly recommend to use Node >= 6 and npm >= 3 for faster installation speed and better disk usage.
 
-Your project needs to use React 15.5.0 or later.
+#### Compatibility
+
+Your project needs to use React 15.5 or later. If you use older version of React, please refer to the table below to find suitable React-PDF version.
+
+|React version|Newest supported React-PDF|
+|----|----|
+|>15.5|1.7.0|
+|>15.0|1.6.1|
+|>0.14|0.0.10|
+|>0.13|0.0.10|
+|>0.11|0.0.4|
+
 
 ### Installation
 
@@ -78,7 +89,7 @@ Check the sample directory of this repository for a full working example.
 |onPageRender|Function called when the page is successfully rendered on the screen.|`onPageLoad={() => alert('Rendered the page!')}`|
 |onPageError|Function called in case of an error while rendering a page.|`onPageError={({ message }) => alert('Error while loading page! ' + message)}`|
 
-#### Usage without worker
+### Usage without worker
 
 If you want to use React-PDF without PDF.js worker, instead of importing React-PDF like so:
 
