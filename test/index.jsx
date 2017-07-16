@@ -4,7 +4,6 @@ import { AppContainer } from 'react-hot-loader';
 import Test from './Test';
 
 const render = (Component) => {
-  console.log('Rendering...');
   ReactDOM.render(
     <AppContainer>
       <Component />
