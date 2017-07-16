@@ -224,7 +224,7 @@ export default class Test extends Component {
                 <input
                   type="number"
                   name="pageWidth"
-                  initValue={pageWidth}
+                  defaultValue={pageWidth}
                 />&nbsp;
                 <button
                   style={{ display: 'none' }}
