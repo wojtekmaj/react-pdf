@@ -200,7 +200,10 @@ Page.propTypes = {
   // @TODO: Check if > 0, < pdf.numPages
   pageIndex: PropTypes.number,
   pageNumber: PropTypes.number,
-  pdf: PropTypes.object,
+  pdf: PropTypes.shape({
+    getPage: PropTypes.func.isRequired,
+    numPages: PropTypes.number.isRequired,
+  }),
   rotate: PropTypes.number,
   scale: PropTypes.number,
   width: PropTypes.number,

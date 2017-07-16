@@ -100,7 +100,10 @@ export default class PageCanvas extends Component {
 PageCanvas.propTypes = {
   onRenderError: PropTypes.func,
   onRenderSuccess: PropTypes.func,
-  page: PropTypes.object,
+  page: PropTypes.shape({
+    getViewport: PropTypes.func.isRequired,
+    render: PropTypes.func.isRequired,
+  }).isRequired,
   rotate: PropTypes.number,
   scale: PropTypes.number,
 };

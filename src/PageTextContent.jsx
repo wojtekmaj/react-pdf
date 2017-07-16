@@ -144,7 +144,10 @@ export default class PageTextContent extends Component {
 PageTextContent.propTypes = {
   onGetTextError: PropTypes.func,
   onGetTextSuccess: PropTypes.func,
-  page: PropTypes.object,
+  page: PropTypes.shape({
+    getTextContent: PropTypes.func.isRequired,
+    getViewport: PropTypes.func.isRequired,
+  }).isRequired,
   rotate: PropTypes.number,
   scale: PropTypes.number,
 };
