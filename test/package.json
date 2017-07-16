@@ -5,7 +5,7 @@
   "scripts": {
     "preinstall": "cd ../ && npm install webpack@^2.7.0 --no-save",
     "build": "webpack",
-    "start": "webpack-dev-server"
+    "start": "webpack-dev-server --config webpack.config.hot.js"
   },
   "author": {
     "name": "Wojciech Maj",
