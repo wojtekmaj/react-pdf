@@ -17,11 +17,10 @@ export default class Page extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.pdf !== this.props.pdf) {
-      this.setState({ page: null });
-    }
-
-    if (this.getPageIndex(nextProps) !== this.getPageIndex()) {
+    if (
+      nextProps.pdf !== this.props.pdf ||
+      this.getPageNumber(nextProps) !== this.getPageNumber()
+    ) {
       this.loadPage(nextProps);
     }
   }
@@ -37,7 +36,7 @@ export default class Page extends Component {
   }
 
   /**
-   * Called when a document is read successfully
+   * Called when a page is read successfully
    */
   onLoadSuccess = (page) => {
     this.setState({ page });
@@ -59,7 +58,7 @@ export default class Page extends Component {
   }
 
   /**
-   * Called when a document failed to read successfully
+   * Called when a page failed to read successfully
    */
   onLoadError = (error) => {
     callIfDefined(
@@ -160,6 +159,10 @@ export default class Page extends Component {
 
     if (!pdf) {
       throw new Error('Attempted to load a page, but no document was specified.');
+    }
+
+    if (this.state.page !== null) {
+      this.setState({ page: null });
     }
 
     pdf.getPage(pageNumber)
