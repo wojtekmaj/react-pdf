@@ -12,5 +12,9 @@
     "ecmaFeatures": {
       "experimentalObjectRestSpread": true
     }
+  },
+  "rules": {
+    "react/require-default-props": 0,
+    "react/sort-comp": 0
   }
 }
