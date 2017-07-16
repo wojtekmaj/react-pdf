@@ -87,6 +87,10 @@ export default class PageCanvas extends Component {
     return (
       <canvas
         className="ReactPDF__Page__canvas"
+        style={{
+          display: 'block',
+          userSelect: 'none',
+        }}
         ref={(ref) => {
           if (!ref) return;
 
