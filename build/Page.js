@@ -16,6 +16,14 @@ var _propTypes = require('prop-types');
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
+var _PageCanvas = require('./PageCanvas');
+
+var _PageCanvas2 = _interopRequireDefault(_PageCanvas);
+
+var _PageTextContent = require('./PageTextContent');
+
+var _PageTextContent2 = _interopRequireDefault(_PageTextContent);
+
 var _util = require('./shared/util');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -69,58 +77,6 @@ var Page = function (_Component) {
       (0, _util.callIfDefined)(_this.props.onLoadError, error);
 
       _this.setState({ page: false });
-    }, _this.onRenderSuccess = function () {
-      _this.renderer = null;
-
-      (0, _util.callIfDefined)(_this.props.onRenderSuccess);
-    }, _this.onRenderError = function (error) {
-      (0, _util.callIfDefined)(_this.props.onRenderError, error);
-
-      _this.setState({ page: false });
-    }, _this.drawPageOnCanvas = function (canvas) {
-      if (!canvas) {
-        return;
-      }
-
-      var page = _this.state.page;
-      var _this3 = _this,
-          rotate = _this3.rotate,
-          scale = _this3.scale;
-
-
-      var pixelRatio = (0, _util.getPixelRatio)();
-      var viewport = page.getViewport(scale * pixelRatio, rotate);
-
-      canvas.width = viewport.width;
-      canvas.height = viewport.height;
-
-      canvas.style.height = Math.floor(viewport.height / pixelRatio) + 'px';
-      canvas.style.width = Math.floor(viewport.width / pixelRatio) + 'px';
-
-      var canvasContext = canvas.getContext('2d');
-
-      var renderContext = {
-        canvasContext: canvasContext,
-        viewport: viewport
-      };
-
-      // If another render is in progress, let's cancel it
-      /* eslint-disable no-underscore-dangle */
-      if (_this.renderer && _this.renderer._internalRenderTask.running) {
-        _this.renderer._internalRenderTask.cancel();
-      }
-      /* eslint-enable no-underscore-dangle */
-
-      _this.renderer = page.render(renderContext);
-
-      _this.renderer.then(_this.onRenderSuccess).catch(function (dismiss) {
-        if (dismiss === 'cancelled') {
-          // Everything's alright
-          return;
-        }
-
-        _this.onRenderError(dismiss);
-      });
     }, _temp), _possibleConstructorReturn(_this, _ret);
   }
 
@@ -136,30 +92,14 @@ var Page = function (_Component) {
         this.loadPage(nextProps);
       }
     }
-  }, {
-    key: 'shouldComponentUpdate',
-    value: function shouldComponentUpdate(nextProps, nextState) {
-      return nextState.pdf !== this.state.pdf || nextState.page !== this.state.page || !Object.is(nextProps.rotate % 360, this.props.rotate % 360) || // Supports comparing NaN
-      nextProps.width !== this.props.width || nextProps.scale !== this.props.scale;
-    }
 
     /**
-     * Called when a page is read successfully
+     * Called when a page is loaded successfully
      */
 
 
     /**
-     * Called when a page failed to read successfully
-     */
-
-
-    /**
-     * Called when a page is rendered successfully.
-     */
-
-
-    /**
-     * Called when a page fails to load or render.
+     * Called when a page failed to load
      */
 
   }, {
@@ -215,8 +155,6 @@ var Page = function (_Component) {
   }, {
     key: 'render',
     value: function render() {
-      var _this4 = this;
-
       var pdf = this.props.pdf;
       var page = this.state.page;
       var pageIndex = this.pageIndex;
@@ -230,15 +168,32 @@ var Page = function (_Component) {
         return null;
       }
 
+      var _props = this.props,
+          onGetTextError = _props.onGetTextError,
+          onGetTextSuccess = _props.onGetTextSuccess,
+          onRenderError = _props.onRenderError,
+          onRenderSuccess = _props.onRenderSuccess;
+
+
       return _react2.default.createElement(
         'div',
-        { className: 'ReactPDF__Page' },
-        _react2.default.createElement('canvas', {
-          ref: function ref(_ref2) {
-            if (!_ref2) return;
-
-            _this4.drawPageOnCanvas(_ref2);
-          }
+        {
+          className: 'ReactPDF__Page',
+          style: { position: 'relative' }
+        },
+        _react2.default.createElement(_PageCanvas2.default, {
+          onRenderError: onRenderError,
+          onRenderSuccess: onRenderSuccess,
+          page: page,
+          rotate: this.rotate,
+          scale: this.scale
+        }),
+        _react2.default.createElement(_PageTextContent2.default, {
+          onGetTextError: onGetTextError,
+          onGetTextSuccess: onGetTextSuccess,
+          page: page,
+          rotate: this.rotate,
+          scale: this.scale
         })
       );
     }
@@ -271,9 +226,9 @@ var Page = function (_Component) {
   }, {
     key: 'scale',
     get: function get() {
-      var _props = this.props,
-          scale = _props.scale,
-          width = _props.width;
+      var _props2 = this.props,
+          scale = _props2.scale,
+          width = _props2.width;
       var page = this.state.page;
       var rotate = this.rotate;
 
@@ -283,7 +238,8 @@ var Page = function (_Component) {
 
       // If width is defined, calculate the scale of the page so it could be of desired width.
       if (width) {
-        pageScale = width / page.getViewport(scale, rotate).width;
+        var viewport = page.getViewport(scale, rotate);
+        pageScale = width / viewport.width;
       }
 
       return scale * pageScale;
@@ -301,11 +257,13 @@ Page.defaultProps = {
 };
 
 Page.propTypes = {
-  // @TODO: Check if > 0, < pdf.numPages
+  onGetTextError: _propTypes2.default.func,
+  onGetTextSuccess: _propTypes2.default.func,
   onLoadError: _propTypes2.default.func,
   onLoadSuccess: _propTypes2.default.func,
   onRenderError: _propTypes2.default.func,
   onRenderSuccess: _propTypes2.default.func,
+  // @TODO: Check if > 0, < pdf.numPages
   pageIndex: _propTypes2.default.number,
   pageNumber: _propTypes2.default.number,
   pdf: _propTypes2.default.object,
