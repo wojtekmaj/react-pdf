@@ -103,7 +103,7 @@ Loads a document passed using `file` prop.
 |file|Defines what PDF should be displayed.<br />Its value can be an URL, a file (imported using `import ... from ...` or from file input form element), or an object with parameters (`url` - URL; `data` - data, preferably Uint8Array; `range` - PDFDataRangeTransport; `httpHeaders` - custom request headers, e.g. for authorization), `withCredentials` - a boolean to indicate whether or not to include cookies in the request (defaults to `false`).|<ul><li>URL:<br />`"http://example.com/sample.pdf"`</li><li>File:<br />`import sample from '../static/sample.pdf'` and then<br />`sample`</li><li>Parameter object:<br />`{ url: 'http://example.com/sample.pdf', httpHeaders: { 'X-CustomHeader': '40359820958024350238508234' }, withCredentials: true }`</ul>|
 |loading|Defines what the component should display while loading. Defaults to "Loading PDF…".|<ul><li>String:<br />`"Please wait!"`</li><li>React element:<Br />`<div>Please wait!</div>`</li><li>Function:<Br />`this.renderLoader()`</li></ul>|
 |noData|Defines what the component should display in case of no data. Defaults to "No PDF file specified.".|<ul><li>String:<br />`"Please select a file."`</li><li>React element:<Br />`<div>Please select a file.</div>`</li><li>Function:<Br />`this.renderNoData()`</li></ul>|
-|onLoadError|Function called in case of an error while loading a document.|`(error) =>alert('Error while loading document! ' + error.message)`|
+|onLoadError|Function called in case of an error while loading a document.|`(error) => alert('Error while loading document! ' + error.message)`|
 |onLoadSuccess|Function called when the document is successfully loaded.|`(pdf) => alert('Loaded a file with ' + pdf.numPages + ' pages!')`|
 |onSourceError|Function called in case of an error while retrieving document source from `file` prop.|`(error) => alert('Error while retreiving document source! ' + error.message)`|
 |onSourceSuccess|Function called when document source is successfully retreived from `file` prop.|`() => alert('Document source retreived!')`|
@@ -117,9 +117,9 @@ Displays a page. Must be placed inside `<Document />` or have `pdf` prop passed,
 
 |Prop name|Description|Example values|
 |----|----|----|
-|onLoadError|Function called in case of an error while loading the page.|`(error) =>alert('Error while loading page! ' + error.message)`|
+|onLoadError|Function called in case of an error while loading the page.|`(error) => alert('Error while loading page! ' + error.message)`|
 |onLoadSuccess|Function called when the page is successfully loaded.|`(page) => alert('Now displaying a page number ' + page.pageNumber + '!')`|
-|onRenderError|Function called in case of an error while rendering the page.|`(error) =>alert('Error while loading page! ' + error.message)`|
+|onRenderError|Function called in case of an error while rendering the page.|`(error) => alert('Error while loading page! ' + error.message)`|
 |onRenderSuccess|Function called when the page is successfully rendered on the screen.|`() => alert('Rendered the page!')`|
 |pageIndex|Defines which page from PDF file should be displayed. Defaults to 0.|`0`|
 |pageNumber|Defines which page from PDF file should be displayed. If provided, `pageIndex` prop will be ignored. Defaults to 1.|`1`|
@@ -136,9 +136,9 @@ Displays an outline (table of contents). Must be placed inside `<Document />` or
 |Prop name|Description|Example values|
 |----|----|----|
 |onItemClick|Function called when an item has been clicked.|`({ pageNumber }) => alert('Clicked an item from page ' + pageNumber + '!')`|
-|onLoadError|Function called in case of an error while retreiving the outline.|`(error) =>alert('Error while retreiving the outline! ' + error.message)`|
+|onLoadError|Function called in case of an error while retreiving the outline.|`(error) => alert('Error while retreiving the outline! ' + error.message)`|
 |onLoadSuccess|Function called when the outline is successfully retreived.|`() => alert('The outline has been successfully retreived.')`|
-|onParseError|Function called in case of an error while parsing the outline.|`(error) =>alert('Error while parsing the outline! ' + error.message)`|
+|onParseError|Function called in case of an error while parsing the outline.|`(error) => alert('Error while parsing the outline! ' + error.message)`|
 |onParseSuccess|Function called when the outline is successfully parsed.|`({ outline }) => alert('There are ' + outline.length + ' top level items in the table of contents.')`|
 
 ## License
