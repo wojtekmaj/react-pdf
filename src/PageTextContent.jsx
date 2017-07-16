@@ -43,10 +43,10 @@ export default class PageTextContent extends Component {
     this.setState({ textItems: false });
   }
 
-  get viewport() {
-    const { page, rotate, scale } = this.props;
+  get unrotatedViewport() {
+    const { page, scale } = this.props;
 
-    return page.getViewport(scale, rotate);
+    return page.getViewport(scale);
   }
 
   getTextContent(props = this.props) {
@@ -78,7 +78,7 @@ export default class PageTextContent extends Component {
   renderTextItem = (textItem, itemIndex) => {
     const [, , , , left, bottom] = textItem.transform;
     const { scale } = this.props;
-    const { viewport } = this;
+    const { unrotatedViewport: viewport } = this;
     const top = (viewport.height / scale) - bottom - textItem.height;
 
     return (
@@ -119,16 +119,20 @@ export default class PageTextContent extends Component {
   }
 
   render() {
+    const { rotate } = this.props;
+    const { unrotatedViewport: viewport } = this;
+
     return (
       <div
         className="ReactPDF__Page__textContent"
         style={{
           position: 'absolute',
-          top: 0,
-          right: 0,
-          bottom: 0,
-          left: 0,
+          top: '50%',
+          left: '50%',
+          width: `${viewport.width}px`,
+          height: `${viewport.height}px`,
           color: 'transparent',
+          transform: `translate(-50%, -50%) rotate(${rotate}deg)`,
         }}
       >
         {this.renderTextItems()}
