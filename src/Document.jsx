@@ -199,19 +199,19 @@ export default class Document extends Component {
 
   renderNoData() {
     return (
-      <div>{this.props.noData}</div>
+      <div className="ReactPDF__NoData">{this.props.noData}</div>
     );
   }
 
   renderError() {
     return (
-      <div>{this.props.error}</div>
+      <div className="ReactPDF__Error">{this.props.error}</div>
     );
   }
 
   renderLoader() {
     return (
-      <div>{this.props.loading}</div>
+      <div className="ReactPDF__Loader">{this.props.loading}</div>
     );
   }
 
