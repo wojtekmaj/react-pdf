@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 import PageCanvas from './PageCanvas';
+import PageTextContent from './PageTextContent';
 
 import {
   callIfDefined,
@@ -173,6 +174,13 @@ export default class Page extends Component {
           rotate={this.rotate}
           scale={this.scale}
         />
+        <PageTextContent
+          onGetTextError={onGetTextError}
+          onGetTextSuccess={onGetTextSuccess}
+          page={page}
+          rotate={this.rotate}
+          scale={this.scale}
+        />
       </div>
     );
   }
@@ -183,6 +191,8 @@ Page.defaultProps = {
 };
 
 Page.propTypes = {
+  onGetTextError: PropTypes.func,
+  onGetTextSuccess: PropTypes.func,
   onLoadError: PropTypes.func,
   onLoadSuccess: PropTypes.func,
   onRenderError: PropTypes.func,
