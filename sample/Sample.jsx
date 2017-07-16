@@ -32,7 +32,9 @@ class Example extends Component {
 
     return (
       <div className="Example">
-        <h1>react-pdf sample page</h1>
+        <header>
+          <h1>react-pdf sample page</h1>
+        </header>
         <div className="Example__container">
           <div className="Example__container__load">
             <label htmlFor="file">Load from file:</label>&nbsp;
@@ -41,31 +43,24 @@ class Example extends Component {
               onChange={this.onFileChange}
             />
           </div>
-          <div className="Example__container__preview">
+          <div className="Example__container__document">
             <Document
               file={file}
               onLoadSuccess={this.onDocumentLoadSuccess}
             >
-              <Page
-                pageNumber={pageNumber}
-                width={300}
-              />
+              {
+                Array.from(
+                  new Array(numPages),
+                  (el, index) => (
+                    <Page
+                      key={`page_${index + 1}`}
+                      pageNumber={index + 1}
+                      onRenderSuccess={this.onPageRenderSuccess}
+                    />
+                  ),
+                )
+              }
             </Document>
-          </div>
-          <div className="Example__container__controls">
-            <button
-              disabled={pageNumber <= 1}
-              onClick={() => this.changePage(-1)}
-            >
-              Previous
-            </button>
-            <span>Page {pageNumber || '--'} of {numPages || '--'}</span>
-            <button
-              disabled={pageNumber >= numPages}
-              onClick={() => this.changePage(1)}
-            >
-              Next
-            </button>
           </div>
         </div>
       </div>

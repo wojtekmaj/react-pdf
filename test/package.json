@@ -14,6 +14,7 @@
   "license": "MIT",
   "dependencies": {
     "babel-polyfill": "^6.23.0",
+    "prop-types": "next",
     "react": "next",
     "react-dom": "next",
     "react-pdf": "../"
