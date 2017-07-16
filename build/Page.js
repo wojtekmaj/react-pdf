@@ -94,8 +94,8 @@ var Page = function (_Component) {
       canvas.width = viewport.width;
       canvas.height = viewport.height;
 
-      canvas.style.height = viewport.height / pixelRatio + 'px';
-      canvas.style.width = viewport.width / pixelRatio + 'px';
+      canvas.style.height = Math.floor(viewport.height / pixelRatio) + 'px';
+      canvas.style.width = Math.floor(viewport.width / pixelRatio) + 'px';
 
       var canvasContext = canvas.getContext('2d');
 
