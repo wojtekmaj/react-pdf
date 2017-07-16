@@ -104,6 +104,10 @@ var PageCanvas = function (_Component) {
 
       return _react2.default.createElement('canvas', {
         className: 'ReactPDF__Page__canvas',
+        style: {
+          display: 'block',
+          userSelect: 'none'
+        },
         ref: function ref(_ref2) {
           if (!_ref2) return;
 
@@ -146,7 +150,10 @@ exports.default = PageCanvas;
 PageCanvas.propTypes = {
   onRenderError: _propTypes2.default.func,
   onRenderSuccess: _propTypes2.default.func,
-  page: _propTypes2.default.object,
+  page: _propTypes2.default.shape({
+    getViewport: _propTypes2.default.func.isRequired,
+    render: _propTypes2.default.func.isRequired
+  }).isRequired,
   rotate: _propTypes2.default.number,
   scale: _propTypes2.default.number
 };

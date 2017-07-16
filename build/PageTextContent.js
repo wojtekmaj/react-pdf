@@ -62,7 +62,7 @@ var PageTextContent = function (_Component) {
 
       var scale = _this.props.scale;
       var _this2 = _this,
-          viewport = _this2.viewport;
+          viewport = _this2.unrotatedViewport;
 
       var top = viewport.height / scale - bottom - textItem.height;
 
@@ -149,32 +149,36 @@ var PageTextContent = function (_Component) {
   }, {
     key: 'render',
     value: function render() {
+      var rotate = this.props.rotate;
+      var viewport = this.unrotatedViewport;
+
+
       return _react2.default.createElement(
         'div',
         {
           className: 'ReactPDF__Page__textContent',
           style: {
             position: 'absolute',
-            top: 0,
-            right: 0,
-            bottom: 0,
-            left: 0,
-            color: 'transparent'
+            top: '50%',
+            left: '50%',
+            width: viewport.width + 'px',
+            height: viewport.height + 'px',
+            color: 'transparent',
+            transform: 'translate(-50%, -50%) rotate(' + rotate + 'deg)'
           }
         },
         this.renderTextItems()
       );
     }
   }, {
-    key: 'viewport',
+    key: 'unrotatedViewport',
     get: function get() {
       var _props = this.props,
           page = _props.page,
-          rotate = _props.rotate,
           scale = _props.scale;
 
 
-      return page.getViewport(scale, rotate);
+      return page.getViewport(scale);
     }
   }]);
 
@@ -187,7 +191,10 @@ exports.default = PageTextContent;
 PageTextContent.propTypes = {
   onGetTextError: _propTypes2.default.func,
   onGetTextSuccess: _propTypes2.default.func,
-  page: _propTypes2.default.object,
+  page: _propTypes2.default.shape({
+    getTextContent: _propTypes2.default.func.isRequired,
+    getViewport: _propTypes2.default.func.isRequired
+  }).isRequired,
   rotate: _propTypes2.default.number,
   scale: _propTypes2.default.number
 };

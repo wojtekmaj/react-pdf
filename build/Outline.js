@@ -406,5 +406,8 @@ Outline.propTypes = {
   onLoadSuccess: _propTypes2.default.func,
   onParseError: _propTypes2.default.func,
   onParseSuccess: _propTypes2.default.func,
-  pdf: _propTypes2.default.object
+  pdf: _propTypes2.default.shape({
+    getDestination: _propTypes2.default.func.isRequired,
+    getOutline: _propTypes2.default.func.isRequired
+  })
 };
