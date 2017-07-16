@@ -143,11 +143,23 @@ Displays an outline (table of contents). Must be placed inside `<Document />` or
 
 ## License
 
-The MIT License
+The MIT License.
 
 ## Author
-Wojciech Maj<br />
-<kontakt@wojtekmaj.pl><br />
-[wojtekmaj.pl](http://wojtekmaj.pl)
+
+<table>
+  <tr>
+    <td>
+      <img src="https://github.com/wojtekmaj.png?s=100" width="100">
+    </td>
+    <td>
+      Wojciech Maj<br />
+      <a href="mailto:kontakt@wojtekmaj.pl">kontakt@wojtekmaj.pl</a><br />
+      <a href="http://wojtekmaj.pl">http://wojtekmaj.pl</a>
+    </td>
+  </tr>
+</table>
+
+## Thank you
 
 This project wouldn't be possible without awesome work of Niklas Närhinen <niklas@narhinen.net> who created its initial version and without Mozilla, author of [pdf.js](http://mozilla.github.io/pdf.js). Thank you!
