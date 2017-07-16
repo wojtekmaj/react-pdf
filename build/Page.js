@@ -132,7 +132,7 @@ var Page = function (_Component) {
   }, {
     key: 'componentWillReceiveProps',
     value: function componentWillReceiveProps(nextProps) {
-      if (nextProps.pdf !== this.props.pdf || this.getPageIndex(nextProps) !== this.getPageIndex()) {
+      if (nextProps.pdf !== this.props.pdf || this.getPageNumber(nextProps) !== this.getPageNumber()) {
         this.loadPage(nextProps);
       }
     }

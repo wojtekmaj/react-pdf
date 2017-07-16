@@ -70,9 +70,7 @@ var Outline = function (_Component) {
     return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref2 = Outline.__proto__ || Object.getPrototypeOf(Outline)).call.apply(_ref2, [this].concat(args))), _this), _this.state = {
       outline: null
     }, _this.onLoadSuccess = function (outline) {
-      (0, _util.callIfDefined)(_this.props.onLoadSuccess, {
-        outline: outline
-      });
+      (0, _util.callIfDefined)(_this.props.onLoadSuccess);
 
       _this.parseOutline(outline).then(_this.onParseSuccess).catch(_this.onParseError);
     }, _this.onLoadError = function (error) {
