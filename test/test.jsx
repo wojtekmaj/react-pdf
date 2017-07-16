@@ -1,14 +1,13 @@
 import React, { Component } from 'react';
-import { render } from 'react-dom';
-import ReactPDF from 'react-pdf/build/entry.webpack';
+import { Document, Page } from 'react-pdf/src/entry.webpack';
 
-import './test.less';
+import './Test.less';
 
 import samplePDF from './test.pdf';
 
 let componentRenderCount = 0;
 
-class WrappedReactPDF extends ReactPDF {
+class WrappedDocument extends Document {
   componentDidMount() {
     super.componentDidMount();
   }
@@ -22,18 +21,20 @@ class WrappedReactPDF extends ReactPDF {
   }
 }
 
-WrappedReactPDF.propTypes = ReactPDF.propTypes;
+WrappedDocument.propTypes = Document.propTypes;
 
-class Test extends Component {
+WrappedDocument.displayName = 'Wrapped(Document)';
+
+export default class Test extends Component {
   state = {
+    displayAll: false,
     file: null,
-    pageIndex: null,
-    pageNumber: null,
-    passObj: false,
+    numPages: null,
+    pageNumber: 1,
     pageRenderCount: 0,
-    pageWidth: 300,
-    total: null,
-    rotate: 0,
+    pageWidth: null,
+    passObj: false,
+    rotate: null,
   }
 
   onFileChange = (event) => {
@@ -84,18 +85,21 @@ class Test extends Component {
     });
   }
 
-  onUseImported = () => {
-    this.setState({
-      file: samplePDF,
-    });
-  }
+  onUseImported = () =>
+    this.setState({ file: samplePDF })
 
-  onPassObjChange = (event) => {
-    this.setState({ passObj: event.target.checked });
-  }
+  onPassObjChange = event =>
+    this.setState({ passObj: event.target.checked })
+
+  onDisplayAllChange = event =>
+    this.setState({ displayAll: event.target.checked })
 
   onPageWidthChange = (event) => {
-    const width = event.target.value;
+    event.preventDefault();
+
+    const form = event.target;
+
+    const width = form.pageWidth.value;
 
     if (!width) {
       return;
@@ -106,22 +110,26 @@ class Test extends Component {
     });
   }
 
-  onDocumentLoad = ({ total }) => {
-    this.setState({ total });
-  }
+  onDocumentLoadSuccess = ({ numPages }) =>
+    this.setState({ numPages })
 
-  onDocumentError = ({ message }) => {
+  onDocumentLoadError = ({ errorMessage }) => {
     // eslint-disable-next-line no-console
-    console.error(message);
+    console.error(errorMessage);
   }
 
-  onPageLoad = ({ pageIndex, pageNumber }) => {
-    this.setState({ pageIndex, pageNumber });
-  }
+  onPageRenderSuccess = () =>
+    this.setState(prevState => ({ pageRenderCount: prevState.pageRenderCount + 1 }))
 
-  onPageRender = () => {
-    this.setState({ pageRenderCount: (this.state.pageRenderCount + 1) });
-  }
+  unloadFile = () => this.setState({ file: null })
+
+  rotateLeft = () => this.setState(prevState => ({ rotate: (prevState.rotate - 90) % 360 }))
+
+  rotateRight = () => this.setState(prevState => ({ rotate: (prevState.rotate + 90) % 360 }))
+
+  resetRotation = () => this.setState({ rotate: null })
+
+  resetWidth = () => this.setState({ pageWidth: null })
 
   get transformedFile() {
     if (!this.state.passObj) {
@@ -139,99 +147,164 @@ class Test extends Component {
 
   changePage(by) {
     this.setState(prevState => ({
-      pageIndex: prevState.pageIndex + by,
+      pageNumber: prevState.pageNumber + by,
     }));
   }
 
   render() {
-    const { pageIndex, pageNumber, pageRenderCount, pageWidth, rotate, total } = this.state;
+    const {
+      displayAll,
+      numPages,
+      pageNumber,
+      pageRenderCount,
+      pageWidth,
+      rotate,
+    } = this.state;
 
     return (
       <div className="Example">
         <h1>react-pdf test page</h1>
         <div className="Example__container">
-          <div className="Example__container__load">
-            <label htmlFor="file">Load from file:</label>&nbsp;
-            <input
-              type="file"
-              onChange={this.onFileChange}
-            />
-            <br /><br />
-            <label htmlFor="file">Load from file to Uint8Array:</label>&nbsp;
-            <input
-              type="file"
-              onChange={this.onFileUintChange}
-            />
-            <br /><br />
-            <form onSubmit={this.onURLChange}>
-              <label htmlFor="url">Load from URL:</label>&nbsp;
-              <input type="text" />
-              <button type="submit">Apply</button>
-            </form>
-            <br />
-            <form onSubmit={this.onRequestChange}>
-              <label htmlFor="url">Fetch and pass:</label>&nbsp;
-              <input type="text" />
-              <button type="submit">Apply</button>
-            </form>
-            <br />
-            <button onClick={this.onUseImported}>Use imported file</button>
-            <br /><br />
-            <input id="passobj" type="checkbox" onChange={this.onPassObjChange} />
-            <label htmlFor="passobj">Pass as an object (URLs and imports only)</label>
-            <br />
-            <br />
-            <form onSubmit={this.onPageWidthChange}>
-              <label htmlFor="pageWidth">Page width:</label>&nbsp;
+          <div className="Example__container__options">
+            <fieldset id="load">
+              <legend htmlFor="load">Load file</legend>
+
+              <label htmlFor="file">Load from file:</label>&nbsp;
               <input
-                type="number"
-                value={pageWidth}
-                onChange={this.onPageWidthChange}
+                type="file"
+                onChange={this.onFileChange}
               />
-            </form>
-            <br />
-            <button
-              onClick={() =>
-                this.setState(prevState => ({ rotate: (prevState.rotate - 90) % 360 }))
-              }
-            >
-              Rotate left
-            </button>&nbsp;
-            <button
-              onClick={() =>
-                this.setState(prevState => ({ rotate: (prevState.rotate + 90) % 360 }))
-              }
-            >
-              Rotate right
-            </button>
+              <br />
+              <br />
+
+              <label htmlFor="file">Load from file to Uint8Array:</label>&nbsp;
+              <input
+                type="file"
+                onChange={this.onFileUintChange}
+              />
+              <br />
+              <br />
+
+              <form onSubmit={this.onURLChange}>
+                <label htmlFor="url">Load from URL:</label>&nbsp;
+                <input type="text" />
+                <button type="submit">Apply</button>
+              </form>
+              <br />
+
+              <form onSubmit={this.onRequestChange}>
+                <label htmlFor="url">Fetch and pass:</label>&nbsp;
+                <input type="text" />
+                <button type="submit">Apply</button>
+              </form>
+              <br />
+
+              <button onClick={this.onUseImported}>Use imported file</button>
+              <br />
+              <br />
+
+              <input id="passobj" type="checkbox" onChange={this.onPassObjChange} />
+              <label htmlFor="passobj">Pass as an object (URLs and imports only)</label>
+              <br />
+              <br />
+
+              <button
+                disabled={this.transformedFile === null}
+                onClick={this.unloadFile}
+              >
+                Unload file
+              </button>
+            </fieldset>
+
+            <fieldset id="viewoptions">
+              <legend htmlFor="viewoptions">View options</legend>
+
+              <form onSubmit={this.onPageWidthChange}>
+                <label htmlFor="pageWidth">Page width:</label>&nbsp;
+                <input
+                  type="number"
+                  name="pageWidth"
+                  initValue={pageWidth}
+                />&nbsp;
+                <button
+                  style={{ display: 'none' }}
+                  type="submit"
+                >
+                  Set width
+                </button>
+                <button
+                  disabled={pageWidth === null}
+                  onClick={this.resetWidth}
+                  type="button"
+                >
+                  Reset width
+                </button>
+              </form>
+              <br />
+
+              <button onClick={this.rotateLeft}>Rotate left</button>&nbsp;
+              <button onClick={this.rotateRight}>Rotate right</button>&nbsp;
+              <button
+                disabled={rotate === null}
+                onClick={this.resetRotation}
+              >
+                Reset rotation
+              </button>
+              <br />
+              <br />
+
+              <input id="displayAll" type="checkbox" onChange={this.onDisplayAllChange} />
+              <label htmlFor="displayAll">View all pages</label>
+            </fieldset>
           </div>
           <div className="Example__container__preview">
             <div className="Example__container__preview__out">
-              <WrappedReactPDF
+              <WrappedDocument
                 file={this.transformedFile}
-                onDocumentLoad={this.onDocumentLoad}
-                onPageLoad={this.onPageLoad}
-                onPageRender={this.onPageRender}
-                pageIndex={pageIndex}
+                onLoadSuccess={this.onDocumentLoadSuccess}
+                onLoadError={this.onDocumentLoadError}
                 rotate={rotate}
-                width={pageWidth}
-              />
-            </div>
-            <div className="Example__container__preview__controls">
-              <button
-                disabled={pageNumber <= 1}
-                onClick={() => this.changePage(-1)}
               >
-                Previous
-              </button>
-              <span>Page {pageNumber || '--'} of {total || '--'}</span>
-              <button
-                disabled={pageNumber >= total}
-                onClick={() => this.changePage(1)}
-              >
-                Next
-              </button>
+                {
+                  displayAll ?
+                    Array.from(
+                      new Array(numPages),
+                      (el, index) => (
+                        <Page
+                          key={`page_${index + 1}`}
+                          pageNumber={index + 1}
+                          width={pageWidth}
+                          onRenderSuccess={this.onPageRenderSuccess}
+                        />
+                      ),
+                    ) :
+                    <Page
+                      key={`page_${pageNumber}`}
+                      pageNumber={pageNumber}
+                      width={pageWidth}
+                      onRenderSuccess={this.onPageRenderSuccess}
+                    />
+                }
+              </WrappedDocument>
             </div>
+            {
+              displayAll ||
+                <div className="Example__container__preview__controls">
+                  <button
+                    disabled={pageNumber <= 1}
+                    onClick={() => this.changePage(-1)}
+                  >
+                    Previous
+                  </button>
+                  <span>Page {pageNumber || '--'} of {numPages || '--'}</span>
+                  <button
+                    disabled={pageNumber >= numPages}
+                    onClick={() => this.changePage(1)}
+                  >
+                    Next
+                  </button>
+                </div>
+            }
             <div className="Example__container__preview__info">
               Page render count: {pageRenderCount}<br />
               Component render count: {componentRenderCount}
@@ -242,5 +315,3 @@ class Test extends Component {
     );
   }
 }
-
-render(<Test />, document.getElementById('react-container'));

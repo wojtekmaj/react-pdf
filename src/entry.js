@@ -1,6 +1,11 @@
-const ReactPDF = require('./react-pdf');
+import Document from './Document';
+import Page from './Page';
 
+require('babel-polyfill');
 require('pdfjs-dist');
 require('pdfjs-dist/web/compatibility');
 
-module.exports = ReactPDF;
+export {
+  Document,
+  Page,
+};

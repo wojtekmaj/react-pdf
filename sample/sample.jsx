@@ -1,15 +1,14 @@
 import React, { Component } from 'react';
 import { render } from 'react-dom';
-import ReactPDF from 'react-pdf/build/entry.webpack';
+import { Document, Page } from 'react-pdf/build/entry.webpack';
 
-import './sample.less';
+import './Sample.less';
 
 class Example extends Component {
   state = {
     file: './sample.pdf',
-    pageIndex: null,
-    pageNumber: null,
-    total: null,
+    pageNumber: 1,
+    numPages: null,
   }
 
   onFileChange = (event) => {
@@ -18,22 +17,18 @@ class Example extends Component {
     });
   }
 
-  onDocumentLoad = ({ total }) => {
-    this.setState({ total });
-  }
-
-  onPageLoad = ({ pageIndex, pageNumber }) => {
-    this.setState({ pageIndex, pageNumber });
+  onDocumentLoadSuccess = ({ numPages }) => {
+    this.setState({ numPages });
   }
 
   changePage(by) {
     this.setState(prevState => ({
-      pageIndex: prevState.pageIndex + by,
+      pageNumber: prevState.pageNumber + by,
     }));
   }
 
   render() {
-    const { file, pageIndex, pageNumber, total } = this.state;
+    const { file, pageNumber, numPages } = this.state;
 
     return (
       <div className="Example">
@@ -47,13 +42,15 @@ class Example extends Component {
             />
           </div>
           <div className="Example__container__preview">
-            <ReactPDF
+            <Document
               file={file}
-              onDocumentLoad={this.onDocumentLoad}
-              onPageLoad={this.onPageLoad}
-              pageIndex={pageIndex}
-              width={300}
-            />
+              onLoadSuccess={this.onDocumentLoadSuccess}
+            >
+              <Page
+                pageNumber={pageNumber}
+                width={300}
+              />
+            </Document>
           </div>
           <div className="Example__container__controls">
             <button
@@ -62,9 +59,9 @@ class Example extends Component {
             >
               Previous
             </button>
-            <span>Page {pageNumber || '--'} of {total || '--'}</span>
+            <span>Page {pageNumber || '--'} of {numPages || '--'}</span>
             <button
-              disabled={pageNumber >= total}
+              disabled={pageNumber >= numPages}
               onClick={() => this.changePage(1)}
             >
               Next

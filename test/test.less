@@ -10,24 +10,45 @@
     flex-direction: row;
     align-items: flex-start;
 
-    &__load {
+    &__options {
       width: 420px;
+      margin-right: 8px;
+
+      fieldset {
+        border: 1px solid black;
+      }
     }
 
     &__preview {
       display: flex;
       flex-direction: column;
+      flex-grow: 1;
       align-items: center;
       min-width: 420px;
+      margin-top: 10px;
 
       &__out {
-        border: 1px solid darkgray;
-        margin: 1em 0;
+        border: 1px solid black;
+        max-width: 100%;
+        max-height: 60vh;
+        overflow: auto;
+
+        .ReactPDF {
+          &__Document {
+
+          }
+
+          &__Page {
+            border: 1px solid darkgray;
+            margin: 1em;
+          }
+        }
       }
 
       &__controls {
         width: 420px;
         display: flex;
+        margin-top: 1em;
 
         span {
           flex-grow: 1;
@@ -38,6 +59,10 @@
         button {
           width: 80px;
         }
+      }
+
+      &__info {
+        margin-top: 1em;
       }
     }
   }

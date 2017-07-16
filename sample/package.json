@@ -1,6 +1,6 @@
 {
   "name": "react-pdf-sample-page",
-  "version": "1.8.2",
+  "version": "2.0.0-alpha",
   "description": "A sample page for React-PDF.",
   "scripts": {
     "build": "webpack"
@@ -36,6 +36,6 @@
     "less-loader": "latest",
     "style-loader": "latest",
     "url-loader": "latest",
-    "webpack": "^2.7.0"
+    "webpack": "^3.3.0"
   }
 }
