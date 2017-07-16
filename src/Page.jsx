@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
+import PageCanvas from './PageCanvas';
+
 import {
   callIfDefined,
   isProvided,
-  getPixelRatio,
 } from './shared/util';
 
 export default class Page extends Component {
@@ -25,18 +26,8 @@ export default class Page extends Component {
     }
   }
 
-  shouldComponentUpdate(nextProps, nextState) {
-    return (
-      nextState.pdf !== this.state.pdf ||
-      nextState.page !== this.state.page ||
-      !Object.is(nextProps.rotate % 360, this.props.rotate % 360) || // Supports comparing NaN
-      nextProps.width !== this.props.width ||
-      nextProps.scale !== this.props.scale
-    );
-  }
-
   /**
-   * Called when a page is read successfully
+   * Called when a page is loaded successfully
    */
   onLoadSuccess = (page) => {
     this.setState({ page });
@@ -58,32 +49,11 @@ export default class Page extends Component {
   }
 
   /**
-   * Called when a page failed to read successfully
+   * Called when a page failed to load
    */
   onLoadError = (error) => {
     callIfDefined(
       this.props.onLoadError,
-      error,
-    );
-
-    this.setState({ page: false });
-  }
-
-  /**
-   * Called when a page is rendered successfully.
-   */
-  onRenderSuccess = () => {
-    this.renderer = null;
-
-    callIfDefined(this.props.onRenderSuccess);
-  }
-
-  /**
-   * Called when a page fails to load or render.
-   */
-  onRenderError = (error) => {
-    callIfDefined(
-      this.props.onRenderError,
       error,
     );
 
@@ -147,7 +117,8 @@ export default class Page extends Component {
 
     // If width is defined, calculate the scale of the page so it could be of desired width.
     if (width) {
-      pageScale = width / page.getViewport(scale, rotate).width;
+      const viewport = page.getViewport(scale, rotate);
+      pageScale = width / viewport.width;
     }
 
     return scale * pageScale;
@@ -170,51 +141,6 @@ export default class Page extends Component {
       .catch(this.onLoadError);
   }
 
-  drawPageOnCanvas = (canvas) => {
-    if (!canvas) {
-      return;
-    }
-
-    const { page } = this.state;
-    const { rotate, scale } = this;
-
-    const pixelRatio = getPixelRatio();
-    const viewport = page.getViewport(scale * pixelRatio, rotate);
-
-    canvas.width = viewport.width;
-    canvas.height = viewport.height;
-
-    canvas.style.height = `${Math.floor(viewport.height / pixelRatio)}px`;
-    canvas.style.width = `${Math.floor(viewport.width / pixelRatio)}px`;
-
-    const canvasContext = canvas.getContext('2d');
-
-    const renderContext = {
-      canvasContext,
-      viewport,
-    };
-
-    // If another render is in progress, let's cancel it
-    /* eslint-disable no-underscore-dangle */
-    if (this.renderer && this.renderer._internalRenderTask.running) {
-      this.renderer._internalRenderTask.cancel();
-    }
-    /* eslint-enable no-underscore-dangle */
-
-    this.renderer = page.render(renderContext);
-
-    this.renderer
-      .then(this.onRenderSuccess)
-      .catch((dismiss) => {
-        if (dismiss === 'cancelled') {
-          // Everything's alright
-          return;
-        }
-
-        this.onRenderError(dismiss);
-      });
-  }
-
   render() {
     const { pdf } = this.props;
     const { page } = this.state;
@@ -228,14 +154,24 @@ export default class Page extends Component {
       return null;
     }
 
-    return (
-      <div className="ReactPDF__Page">
-        <canvas
-          ref={(ref) => {
-            if (!ref) return;
+    const {
+      onGetTextError,
+      onGetTextSuccess,
+      onRenderError,
+      onRenderSuccess,
+     } = this.props;
 
-            this.drawPageOnCanvas(ref);
-          }}
+    return (
+      <div
+        className="ReactPDF__Page"
+        style={{ position: 'relative' }}
+      >
+        <PageCanvas
+          onRenderError={onRenderError}
+          onRenderSuccess={onRenderSuccess}
+          page={page}
+          rotate={this.rotate}
+          scale={this.scale}
         />
       </div>
     );
@@ -247,11 +183,11 @@ Page.defaultProps = {
 };
 
 Page.propTypes = {
-  // @TODO: Check if > 0, < pdf.numPages
   onLoadError: PropTypes.func,
   onLoadSuccess: PropTypes.func,
   onRenderError: PropTypes.func,
   onRenderSuccess: PropTypes.func,
+  // @TODO: Check if > 0, < pdf.numPages
   pageIndex: PropTypes.number,
   pageNumber: PropTypes.number,
   pdf: PropTypes.object,

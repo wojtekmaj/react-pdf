@@ -37,9 +37,7 @@ export default class Document extends Component {
    * Called when a document source is resolved correctly
    */
   onSourceSuccess = (source) => {
-    callIfDefined(
-      this.props.onSourceSuccess,
-    );
+    callIfDefined(this.props.onSourceSuccess);
 
     if (!PDFJS) {
       throw new Error('Could not load the document. PDF.js is not loaded.');
