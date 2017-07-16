@@ -22,7 +22,6 @@ if ((0, _util.isLocalFileSystem)()) {
   console.warn('You are running React-PDF from your local file system. PDF.js Worker may fail to load due to browser\'s security policies. If you\'re on Google Chrome, you can use --allow-file-access-from-files flag for debugging purposes.');
 }
 
-require('babel-polyfill');
 require('pdfjs-dist/webpack');
 require('pdfjs-dist/web/compatibility');
 
