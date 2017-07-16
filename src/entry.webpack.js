@@ -1,4 +1,5 @@
 import Document from './Document';
+import Outline from './Outline';
 import Page from './Page';
 
 import { isLocalFileSystem } from './shared/util';
@@ -13,5 +14,6 @@ require('pdfjs-dist/web/compatibility');
 
 export {
   Document,
+  Outline,
   Page,
 };
