@@ -3,6 +3,7 @@
   "version": "2.0.0-alpha",
   "description": "A sample page for React-PDF.",
   "scripts": {
+    "preinstall": "cd ../ && npm install webpack@^2.7.0 --no-save",
     "build": "webpack"
   },
   "author": {
@@ -36,6 +37,6 @@
     "less-loader": "latest",
     "style-loader": "latest",
     "url-loader": "latest",
-    "webpack": "^3.3.0"
+    "webpack": "^2.7.0"
   }
 }

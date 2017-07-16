@@ -3,6 +3,7 @@
   "version": "2.0.0-alpha",
   "description": "A test page for React-PDF.",
   "scripts": {
+    "preinstall": "cd ../ && npm install webpack@^2.7.0 --no-save",
     "build": "webpack",
     "start": "webpack-dev-server"
   },
@@ -39,7 +40,7 @@
     "react-hot-loader": "^3.0.0-beta.7",
     "style-loader": "latest",
     "url-loader": "latest",
-    "webpack": "^3.3.0",
+    "webpack": "^2.7.0",
     "webpack-dev-server": "^2.5.1"
   }
 }
