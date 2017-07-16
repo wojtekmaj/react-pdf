@@ -3,11 +3,15 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.Page = exports.Document = undefined;
+exports.Page = exports.Outline = exports.Document = undefined;
 
 var _Document = require('./Document');
 
 var _Document2 = _interopRequireDefault(_Document);
+
+var _Outline = require('./Outline');
+
+var _Outline2 = _interopRequireDefault(_Outline);
 
 var _Page = require('./Page');
 
@@ -26,4 +30,5 @@ require('pdfjs-dist/webpack');
 require('pdfjs-dist/web/compatibility');
 
 exports.Document = _Document2.default;
+exports.Outline = _Outline2.default;
 exports.Page = _Page2.default;

@@ -217,7 +217,7 @@ var Document = function (_Component) {
     value: function renderNoData() {
       return _react2.default.createElement(
         'div',
-        null,
+        { className: 'ReactPDF__NoData' },
         this.props.noData
       );
     }
@@ -226,7 +226,7 @@ var Document = function (_Component) {
     value: function renderError() {
       return _react2.default.createElement(
         'div',
-        null,
+        { className: 'ReactPDF__Error' },
         this.props.error
       );
     }
@@ -235,7 +235,7 @@ var Document = function (_Component) {
     value: function renderLoader() {
       return _react2.default.createElement(
         'div',
-        null,
+        { className: 'ReactPDF__Loader' },
         this.props.loading
       );
     }
