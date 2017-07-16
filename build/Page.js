@@ -132,11 +132,7 @@ var Page = function (_Component) {
   }, {
     key: 'componentWillReceiveProps',
     value: function componentWillReceiveProps(nextProps) {
-      if (nextProps.pdf !== this.props.pdf) {
-        this.setState({ page: null });
-      }
-
-      if (this.getPageIndex(nextProps) !== this.getPageIndex()) {
+      if (nextProps.pdf !== this.props.pdf || this.getPageIndex(nextProps) !== this.getPageIndex()) {
         this.loadPage(nextProps);
       }
     }
@@ -148,12 +144,12 @@ var Page = function (_Component) {
     }
 
     /**
-     * Called when a document is read successfully
+     * Called when a page is read successfully
      */
 
 
     /**
-     * Called when a document failed to read successfully
+     * Called when a page failed to read successfully
      */
 
 
@@ -208,6 +204,10 @@ var Page = function (_Component) {
 
       if (!pdf) {
         throw new Error('Attempted to load a page, but no document was specified.');
+      }
+
+      if (this.state.page !== null) {
+        this.setState({ page: null });
       }
 
       pdf.getPage(pageNumber).then(this.onLoadSuccess).catch(this.onLoadError);
