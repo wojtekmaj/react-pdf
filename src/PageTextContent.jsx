@@ -76,23 +76,25 @@ export default class PageTextContent extends Component {
     return font.data;
   }
 
-  async alignTextItem(element, width, fontName) {
+  async alignTextItem(element, textItem) {
     if (!element) {
       return;
     }
 
     const { scale } = this.props;
-    const targetWidth = width * scale;
+    const targetWidth = textItem.width * scale;
+
+    const fontData = await this.getFontData(textItem.fontName);
 
     let actualWidth = element.getBoundingClientRect().width;
+    const widthDisproportion = Math.abs((targetWidth / actualWidth) - 1);
 
-    const fontData = await this.getFontData(fontName);
-    const fontDisproportion = Math.abs((targetWidth / actualWidth) - 1);
+    const repairsNeeded = widthDisproportion > BROKEN_FONT_ALARM_THRESHOLD;
 
-    // Font has severe rendering disproportions, possibly the font is broken completely
-    if (fontDisproportion > BROKEN_FONT_ALARM_THRESHOLD) {
+    if (repairsNeeded) {
       const fallbackFontName = fontData ? fontData.fallbackName : 'sans-serif';
       element.style.fontFamily = fallbackFontName;
+
       actualWidth = element.getBoundingClientRect().width;
     }
 
@@ -125,7 +127,7 @@ export default class PageTextContent extends Component {
             return;
           }
 
-          this.alignTextItem(ref, textItem.width, fontName);
+          this.alignTextItem(ref, textItem);
         }}
       >
         {textItem.str}
