@@ -131,20 +131,26 @@ var Outline = function (_Component) {
                 pdf = this.props.pdf;
                 mappedItem = {
                   title: item.title,
-                  destinationId: item.dest,
+                  destination: item.dest,
                   getDestination: function getDestination() {
                     var _this2 = this;
 
                     return _asyncToGenerator(regeneratorRuntime.mark(function _callee() {
-                      var destinationId;
                       return regeneratorRuntime.wrap(function _callee$(_context) {
                         while (1) {
                           switch (_context.prev = _context.next) {
                             case 0:
-                              destinationId = _this2.destinationId;
-                              return _context.abrupt('return', pdf.getDestination(destinationId));
+                              if (!(typeof _this2.destination === 'string')) {
+                                _context.next = 2;
+                                break;
+                              }
+
+                              return _context.abrupt('return', pdf.getDestination(_this2.destination));
 
                             case 2:
+                              return _context.abrupt('return', _this2.destination);
+
+                            case 3:
                             case 'end':
                               return _context.stop();
                           }
@@ -156,14 +162,14 @@ var Outline = function (_Component) {
                     var _this3 = this;
 
                     return _asyncToGenerator(regeneratorRuntime.mark(function _callee2() {
-                      var _ref4, _ref5, ref;
+                      var destination, _destination, ref;
 
                       return regeneratorRuntime.wrap(function _callee2$(_context2) {
                         while (1) {
                           switch (_context2.prev = _context2.next) {
                             case 0:
                               if ((0, _util.isDefined)(_this3.pageIndex)) {
-                                _context2.next = 7;
+                                _context2.next = 5;
                                 break;
                               }
 
@@ -171,16 +177,18 @@ var Outline = function (_Component) {
                               return _this3.getDestination();
 
                             case 3:
-                              _ref4 = _context2.sent;
-                              _ref5 = _slicedToArray(_ref4, 1);
-                              ref = _ref5[0];
+                              destination = _context2.sent;
 
-                              _this3.pageIndex = pdf.getPageIndex(new Ref(ref));
+                              if (destination) {
+                                _destination = _slicedToArray(destination, 1), ref = _destination[0];
 
-                            case 7:
+                                _this3.pageIndex = pdf.getPageIndex(new Ref(ref));
+                              }
+
+                            case 5:
                               return _context2.abrupt('return', _this3.pageIndex);
 
-                            case 8:
+                            case 6:
                             case 'end':
                               return _context2.stop();
                           }
@@ -254,7 +262,7 @@ var Outline = function (_Component) {
   }, {
     key: 'parseOutline',
     value: function () {
-      var _ref6 = _asyncToGenerator(regeneratorRuntime.mark(function _callee5(outline) {
+      var _ref4 = _asyncToGenerator(regeneratorRuntime.mark(function _callee5(outline) {
         var _this6 = this;
 
         return regeneratorRuntime.wrap(function _callee5$(_context5) {
@@ -282,7 +290,7 @@ var Outline = function (_Component) {
       }));
 
       function parseOutline(_x2) {
-        return _ref6.apply(this, arguments);
+        return _ref4.apply(this, arguments);
       }
 
       return parseOutline;
@@ -290,7 +298,7 @@ var Outline = function (_Component) {
   }, {
     key: 'onItemClick',
     value: function () {
-      var _ref7 = _asyncToGenerator(regeneratorRuntime.mark(function _callee6(item) {
+      var _ref5 = _asyncToGenerator(regeneratorRuntime.mark(function _callee6(item) {
         var pageIndex, pageNumber;
         return regeneratorRuntime.wrap(function _callee6$(_context6) {
           while (1) {
@@ -322,7 +330,7 @@ var Outline = function (_Component) {
       }));
 
       function onItemClick(_x3) {
-        return _ref7.apply(this, arguments);
+        return _ref5.apply(this, arguments);
       }
 
       return onItemClick;
@@ -354,10 +362,12 @@ var Outline = function (_Component) {
       return _react2.default.createElement(
         'ul',
         null,
-        outline.map(function (item) {
+        outline.map(function (item, itemIndex) {
           return _react2.default.createElement(
             'li',
-            { key: item.destinationId },
+            {
+              key: typeof item.destination === 'string' ? item.destination : itemIndex
+            },
             _react2.default.createElement(
               'a',
               {

@@ -20,14 +20,14 @@ var _util = require('./shared/util');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-// Render disproportion above which font will be scaled
-var BROKEN_FONT_WARNING_THRESHOLD = 0.025;
 // Render disproportion above which font will be considered broken and fallback will be used
 var BROKEN_FONT_ALARM_THRESHOLD = 0.1;
 
@@ -69,7 +69,7 @@ var PageTextContent = function (_Component) {
       var scale = _this.props.scale;
       // Distance from top of the page to the baseline
 
-      var fontFamily = textItem.fontName + ', sans-serif';
+      var fontName = textItem.fontName;
       var fontSize = fontSizePx * scale + 'px';
 
       return _react2.default.createElement(
@@ -77,10 +77,10 @@ var PageTextContent = function (_Component) {
         {
           key: itemIndex,
           style: {
-            position: 'absolute',
-            fontSize: fontSize,
-            fontFamily: fontFamily,
             height: '1em',
+            fontFamily: fontName,
+            fontSize: fontSize,
+            position: 'absolute',
             left: left * scale + 'px',
             bottom: baselineBottom * scale + 'px',
             transformOrigin: 'left bottom',
@@ -91,7 +91,7 @@ var PageTextContent = function (_Component) {
               return;
             }
 
-            _this.alignTextItem(_ref2, textItem.width, fontFamily);
+            _this.alignTextItem(_ref2, textItem);
           }
         },
         textItem.str
@@ -129,38 +129,91 @@ var PageTextContent = function (_Component) {
       page.getTextContent().then(this.onGetTextSuccess).catch(this.onGetTextError);
     }
   }, {
+    key: 'getFontData',
+    value: function () {
+      var _ref3 = _asyncToGenerator(regeneratorRuntime.mark(function _callee(fontFamily) {
+        var page, font;
+        return regeneratorRuntime.wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                page = this.props.page;
+                _context.next = 3;
+                return page.commonObjs.ensureObj(fontFamily);
+
+              case 3:
+                font = _context.sent;
+                return _context.abrupt('return', font.data);
+
+              case 5:
+              case 'end':
+                return _context.stop();
+            }
+          }
+        }, _callee, this);
+      }));
+
+      function getFontData(_x2) {
+        return _ref3.apply(this, arguments);
+      }
+
+      return getFontData;
+    }()
+  }, {
     key: 'alignTextItem',
-    value: function alignTextItem(element, width, fontFamily) {
-      if (!element) {
-        return;
+    value: function () {
+      var _ref4 = _asyncToGenerator(regeneratorRuntime.mark(function _callee2(element, textItem) {
+        var scale, targetWidth, fontData, actualWidth, widthDisproportion, repairsNeeded, fallbackFontName, ascent;
+        return regeneratorRuntime.wrap(function _callee2$(_context2) {
+          while (1) {
+            switch (_context2.prev = _context2.next) {
+              case 0:
+                if (element) {
+                  _context2.next = 2;
+                  break;
+                }
+
+                return _context2.abrupt('return');
+
+              case 2:
+                scale = this.props.scale;
+                targetWidth = textItem.width * scale;
+                _context2.next = 6;
+                return this.getFontData(textItem.fontName);
+
+              case 6:
+                fontData = _context2.sent;
+                actualWidth = element.getBoundingClientRect().width;
+                widthDisproportion = Math.abs(targetWidth / actualWidth - 1);
+                repairsNeeded = widthDisproportion > BROKEN_FONT_ALARM_THRESHOLD;
+
+
+                if (repairsNeeded) {
+                  fallbackFontName = fontData ? fontData.fallbackName : 'sans-serif';
+
+                  element.style.fontFamily = fallbackFontName;
+
+                  actualWidth = element.getBoundingClientRect().width;
+                }
+
+                ascent = fontData ? fontData.ascent : 1;
+
+                element.style.transform = 'scaleX(' + targetWidth / actualWidth + ') translateY(' + (1 - ascent) * 100 + '%)';
+
+              case 13:
+              case 'end':
+                return _context2.stop();
+            }
+          }
+        }, _callee2, this);
+      }));
+
+      function alignTextItem(_x3, _x4) {
+        return _ref4.apply(this, arguments);
       }
 
-      var scale = this.props.scale;
-
-
-      var transforms = [];
-
-      var targetWidth = width * scale;
-      var actualWidth = element.getBoundingClientRect().width;
-      var fontOffset = (0, _util.measureFontOffset)(fontFamily);
-      var fontDisproportion = Math.abs(targetWidth / actualWidth - 1);
-
-      // Font has some rendering disproportions, possibly due to how spaces are handled
-      if (fontDisproportion > BROKEN_FONT_WARNING_THRESHOLD) {
-        // Font has severe rendering disproportions, possibly the font is broken completely
-        if (fontDisproportion > BROKEN_FONT_ALARM_THRESHOLD) {
-          var fallbackFontFamily = fontFamily.split(', ').slice(1).join(', ');
-          element.style.fontFamily = fallbackFontFamily;
-          actualWidth = element.getBoundingClientRect().width;
-          fontOffset = (0, _util.measureFontOffset)(fontFamily);
-        }
-        transforms.push('scaleX(' + targetWidth / actualWidth + ')');
-      }
-
-      transforms.push('translateY(' + fontOffset * 100 + '%)');
-
-      element.style.transform = transforms.join(' ');
-    }
+      return alignTextItem;
+    }()
   }, {
     key: 'renderTextItems',
     value: function renderTextItems() {
@@ -219,8 +272,14 @@ PageTextContent.propTypes = {
   onGetTextError: _propTypes2.default.func,
   onGetTextSuccess: _propTypes2.default.func,
   page: _propTypes2.default.shape({
+    commonObjs: _propTypes2.default.shape({
+      objs: _propTypes2.default.object.isRequired
+    }).isRequired,
     getTextContent: _propTypes2.default.func.isRequired,
-    getViewport: _propTypes2.default.func.isRequired
+    getViewport: _propTypes2.default.func.isRequired,
+    transport: _propTypes2.default.shape({
+      fontLoader: _propTypes2.default.object.isRequired
+    }).isRequired
   }).isRequired,
   rotate: _propTypes2.default.number,
   scale: _propTypes2.default.number
