@@ -6,6 +6,11 @@ import {
   measureFontOffset,
 } from './shared/util';
 
+// Render disproportion above which font will be scaled
+const BROKEN_FONT_WARNING_THRESHOLD = 0.025;
+// Render disproportion above which font will be considered broken and fallback will be used
+const BROKEN_FONT_ALARM_THRESHOLD = 0.1;
+
 export default class PageTextContent extends Component {
   state = {
     textItems: null,
@@ -66,23 +71,43 @@ export default class PageTextContent extends Component {
       .catch(this.onGetTextError);
   }
 
-  alignTextItem(item, targetWidth, fontOffset) {
-    if (!item) {
+  alignTextItem(element, width, fontFamily) {
+    if (!element) {
       return;
     }
 
-    const actualWidth = item.clientWidth;
+    const { scale } = this.props;
 
-    item.style.transform =
-      `scale(${targetWidth / actualWidth}) translateY(${fontOffset * 100}%)`;
+    const transforms = [];
+
+    const targetWidth = width * scale;
+    let actualWidth = element.getBoundingClientRect().width;
+    let fontOffset = measureFontOffset(fontFamily);
+    const fontDisproportion = Math.abs((targetWidth / actualWidth) - 1);
+
+    // Font has some rendering disproportions, possibly due to how spaces are handled
+    if (fontDisproportion > BROKEN_FONT_WARNING_THRESHOLD) {
+      // Font has severe rendering disproportions, possibly the font is broken completely
+      if (fontDisproportion > BROKEN_FONT_ALARM_THRESHOLD) {
+        const fallbackFontFamily = fontFamily.split(', ').slice(1).join(', ');
+        element.style.fontFamily = fallbackFontFamily;
+        actualWidth = element.getBoundingClientRect().width;
+        fontOffset = measureFontOffset(fontFamily);
+      }
+      transforms.push(`scaleX(${targetWidth / actualWidth})`);
+    }
+
+    transforms.push(`translateY(${fontOffset * 100}%)`);
+
+    element.style.transform = transforms.join(' ');
   }
 
   renderTextItem = (textItem, itemIndex) => {
-    const [, , , , left, baselineBottom] = textItem.transform;
+    const [fontSizePx, , , , left, baselineBottom] = textItem.transform;
     const { scale } = this.props;
     // Distance from top of the page to the baseline
     const fontFamily = `${textItem.fontName}, sans-serif`;
-    const fontSize = `${textItem.height}px`;
+    const fontSize = `${fontSizePx * scale}px`;
 
     return (
       <div
@@ -102,9 +127,7 @@ export default class PageTextContent extends Component {
             return;
           }
 
-          const targetWidth = textItem.width * scale;
-          const fontOffset = measureFontOffset(fontFamily);
-          this.alignTextItem(ref, targetWidth, fontOffset);
+          this.alignTextItem(ref, textItem.width, fontFamily);
         }}
       >
         {textItem.str}
