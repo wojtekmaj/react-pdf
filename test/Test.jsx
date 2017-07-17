@@ -18,28 +18,29 @@ export default class Test extends Component {
   }
 
   onDocumentLoadSuccess = ({ numPages }) =>
-    this.setState({ numPages })
+    this.setState({
+      numPages,
+      pageNumber: null,
+    })
 
   onDocumentLoadError = ({ errorMessage }) => {
     // eslint-disable-next-line no-console
     console.error(errorMessage);
   }
 
-  onItemClick = ({ pageNumber }) => {
-    this.setState({ pageNumber });
-  }
+  onItemClick = ({ pageNumber }) =>
+    this.setState({ pageNumber })
 
   setFile = file => this.setState({ file })
 
-  previousPage = () => this.changePage(-1);
+  previousPage = () => this.changePage(-1)
 
-  nextPage = () => this.changePage(1);
+  nextPage = () => this.changePage(1)
 
-  changePage(by) {
+  changePage = by =>
     this.setState(prevState => ({
       pageNumber: (prevState.pageNumber || 1) + by,
-    }));
-  }
+    }))
 
   render() {
     const {
