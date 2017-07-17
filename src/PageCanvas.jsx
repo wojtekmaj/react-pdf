@@ -59,7 +59,7 @@ export default class PageCanvas extends Component {
 
     const renderContext = {
       canvasContext,
-      viewport,
+      viewport: renderViewport,
     };
 
     // If another render is in progress, let's cancel it
