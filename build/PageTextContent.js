@@ -58,13 +58,13 @@ var PageTextContent = function (_Component) {
     }, _this.renderTextItem = function (textItem, itemIndex) {
       var _textItem$transform = _slicedToArray(textItem.transform, 6),
           left = _textItem$transform[4],
-          bottom = _textItem$transform[5];
+          baselineBottom = _textItem$transform[5];
 
       var scale = _this.props.scale;
-      var _this2 = _this,
-          viewport = _this2.unrotatedViewport;
+      // Distance from top of the page to the baseline
 
-      var top = viewport.height / scale - bottom - textItem.height;
+      var fontFamily = textItem.fontName + ', sans-serif';
+      var fontSize = textItem.height + 'px';
 
       return _react2.default.createElement(
         'div',
@@ -72,12 +72,11 @@ var PageTextContent = function (_Component) {
           key: itemIndex,
           style: {
             position: 'absolute',
-            fontSize: textItem.height + 'px',
-            fontFamily: textItem.fontName + ', sans-serif',
-            height: textItem.height + 'px',
-            top: top * scale + 'px',
+            fontSize: fontSize,
+            fontFamily: fontFamily,
+            height: '1em',
             left: left * scale + 'px',
-            bottom: bottom * scale + 'px',
+            bottom: baselineBottom * scale + 'px',
             transformOrigin: 'left bottom',
             whiteSpace: 'nowrap'
           },
@@ -86,7 +85,9 @@ var PageTextContent = function (_Component) {
               return;
             }
 
-            _this.scaleTextItem(_ref2, textItem.width * scale);
+            var targetWidth = textItem.width * scale;
+            var fontOffset = (0, _util.measureFontOffset)(fontFamily);
+            _this.alignTextItem(_ref2, targetWidth, fontOffset);
           }
         },
         textItem.str
@@ -124,15 +125,15 @@ var PageTextContent = function (_Component) {
       page.getTextContent().then(this.onGetTextSuccess).catch(this.onGetTextError);
     }
   }, {
-    key: 'scaleTextItem',
-    value: function scaleTextItem(item, targetWidth) {
+    key: 'alignTextItem',
+    value: function alignTextItem(item, targetWidth, fontOffset) {
       if (!item) {
         return;
       }
 
       var actualWidth = item.clientWidth;
 
-      item.style.transform = 'scale(' + targetWidth / actualWidth + ')';
+      item.style.transform = 'scale(' + targetWidth / actualWidth + ') translateY(' + fontOffset * 100 + '%)';
     }
   }, {
     key: 'renderTextItems',

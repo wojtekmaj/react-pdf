@@ -150,3 +150,34 @@ var callIfDefined = exports.callIfDefined = function callIfDefined(fn, args) {
 var getPixelRatio = exports.getPixelRatio = function getPixelRatio() {
   return window.devicePixelRatio || 1;
 };
+
+var fontOffsetCache = {};
+
+/**
+ * Measures the distance in percent between font's baseline and descender.
+ *
+ * @param {HTMLElement} container Container in which measurements shall be made.
+ */
+var measureFontOffset = exports.measureFontOffset = function measureFontOffset(fontFamily) {
+  if (!isDefined(fontOffsetCache[fontFamily])) {
+    var div = document.createElement('div');
+    var strut = document.createElement('span');
+
+    div.style.position = 'absolute';
+    div.style.fontFamily = fontFamily;
+
+    strut.textContent = 'T';
+    strut.style.lineHeight = 0;
+
+    div.appendChild(strut);
+    document.body.appendChild(div);
+
+    var result = div.offsetHeight / strut.offsetHeight - 1;
+
+    fontOffsetCache[fontFamily] = result;
+
+    div.parentNode.removeChild(div);
+  }
+
+  return fontOffsetCache[fontFamily];
+};
