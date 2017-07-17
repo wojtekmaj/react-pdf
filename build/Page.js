@@ -264,8 +264,8 @@ Page.propTypes = {
   onRenderError: _propTypes2.default.func,
   onRenderSuccess: _propTypes2.default.func,
   // @TODO: Check if > 0, < pdf.numPages
-  pageIndex: _propTypes2.default.number,
-  pageNumber: _propTypes2.default.number,
+  pageIndex: _propTypes2.default.number, // eslint-disable-line react/no-unused-prop-types
+  pageNumber: _propTypes2.default.number, // eslint-disable-line react/no-unused-prop-types
   pdf: _propTypes2.default.shape({
     getPage: _propTypes2.default.func.isRequired,
     numPages: _propTypes2.default.number.isRequired

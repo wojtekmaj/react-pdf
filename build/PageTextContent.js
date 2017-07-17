@@ -26,6 +26,11 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
+// Render disproportion above which font will be scaled
+var BROKEN_FONT_WARNING_THRESHOLD = 0.025;
+// Render disproportion above which font will be considered broken and fallback will be used
+var BROKEN_FONT_ALARM_THRESHOLD = 0.1;
+
 var PageTextContent = function (_Component) {
   _inherits(PageTextContent, _Component);
 
@@ -57,6 +62,7 @@ var PageTextContent = function (_Component) {
       _this.setState({ textItems: false });
     }, _this.renderTextItem = function (textItem, itemIndex) {
       var _textItem$transform = _slicedToArray(textItem.transform, 6),
+          fontSizePx = _textItem$transform[0],
           left = _textItem$transform[4],
           baselineBottom = _textItem$transform[5];
 
@@ -64,7 +70,7 @@ var PageTextContent = function (_Component) {
       // Distance from top of the page to the baseline
 
       var fontFamily = textItem.fontName + ', sans-serif';
-      var fontSize = textItem.height + 'px';
+      var fontSize = fontSizePx * scale + 'px';
 
       return _react2.default.createElement(
         'div',
@@ -78,16 +84,14 @@ var PageTextContent = function (_Component) {
             left: left * scale + 'px',
             bottom: baselineBottom * scale + 'px',
             transformOrigin: 'left bottom',
-            whiteSpace: 'nowrap'
+            whiteSpace: 'pre'
           },
           ref: function ref(_ref2) {
             if (!_ref2) {
               return;
             }
 
-            var targetWidth = textItem.width * scale;
-            var fontOffset = (0, _util.measureFontOffset)(fontFamily);
-            _this.alignTextItem(_ref2, targetWidth, fontOffset);
+            _this.alignTextItem(_ref2, textItem.width, fontFamily);
           }
         },
         textItem.str
@@ -126,14 +130,36 @@ var PageTextContent = function (_Component) {
     }
   }, {
     key: 'alignTextItem',
-    value: function alignTextItem(item, targetWidth, fontOffset) {
-      if (!item) {
+    value: function alignTextItem(element, width, fontFamily) {
+      if (!element) {
         return;
       }
 
-      var actualWidth = item.clientWidth;
+      var scale = this.props.scale;
 
-      item.style.transform = 'scale(' + targetWidth / actualWidth + ') translateY(' + fontOffset * 100 + '%)';
+
+      var transforms = [];
+
+      var targetWidth = width * scale;
+      var actualWidth = element.getBoundingClientRect().width;
+      var fontOffset = (0, _util.measureFontOffset)(fontFamily);
+      var fontDisproportion = Math.abs(targetWidth / actualWidth - 1);
+
+      // Font has some rendering disproportions, possibly due to how spaces are handled
+      if (fontDisproportion > BROKEN_FONT_WARNING_THRESHOLD) {
+        // Font has severe rendering disproportions, possibly the font is broken completely
+        if (fontDisproportion > BROKEN_FONT_ALARM_THRESHOLD) {
+          var fallbackFontFamily = fontFamily.split(', ').slice(1).join(', ');
+          element.style.fontFamily = fallbackFontFamily;
+          actualWidth = element.getBoundingClientRect().width;
+          fontOffset = (0, _util.measureFontOffset)(fontFamily);
+        }
+        transforms.push('scaleX(' + targetWidth / actualWidth + ')');
+      }
+
+      transforms.push('translateY(' + fontOffset * 100 + '%)');
+
+      element.style.transform = transforms.join(' ');
     }
   }, {
     key: 'renderTextItems',
