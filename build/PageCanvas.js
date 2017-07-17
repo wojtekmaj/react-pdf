@@ -65,7 +65,7 @@ var PageCanvas = function (_Component) {
 
       var renderContext = {
         canvasContext: canvasContext,
-        viewport: viewport
+        viewport: renderViewport
       };
 
       // If another render is in progress, let's cancel it
