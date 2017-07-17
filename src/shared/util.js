@@ -126,34 +126,3 @@ export const callIfDefined = (fn, args) => {
 };
 
 export const getPixelRatio = () => window.devicePixelRatio || 1;
-
-const fontOffsetCache = {};
-
-/**
- * Measures the distance in percent between font's baseline and descender.
- *
- * @param {HTMLElement} container Container in which measurements shall be made.
- */
-export const measureFontOffset = (fontFamily) => {
-  if (!isDefined(fontOffsetCache[fontFamily])) {
-    const div = document.createElement('div');
-    const strut = document.createElement('span');
-
-    div.style.position = 'absolute';
-    div.style.fontFamily = fontFamily;
-
-    strut.textContent = 'T';
-    strut.style.lineHeight = 0;
-
-    div.appendChild(strut);
-    document.body.appendChild(div);
-
-    const result = (div.offsetHeight / strut.offsetHeight) - 1;
-
-    fontOffsetCache[fontFamily] = result;
-
-    div.parentNode.removeChild(div);
-  }
-
-  return fontOffsetCache[fontFamily];
-};

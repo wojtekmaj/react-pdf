@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 
 import {
   callIfDefined,
-  measureFontOffset,
 } from './shared/util';
 
 // Render disproportion above which font will be considered broken and fallback will be used
@@ -69,34 +68,43 @@ export default class PageTextContent extends Component {
       .catch(this.onGetTextError);
   }
 
-  alignTextItem(element, width, fontFamily) {
+  async getFontData(fontFamily) {
+    const { page } = this.props;
+
+    const font = await page.commonObjs.ensureObj(fontFamily);
+
+    return font.data;
+  }
+
+  async alignTextItem(element, width, fontName) {
     if (!element) {
       return;
     }
 
     const { scale } = this.props;
-
     const targetWidth = width * scale;
+
     let actualWidth = element.getBoundingClientRect().width;
-    let fontOffset = measureFontOffset(fontFamily);
+
+    const fontData = await this.getFontData(fontName);
     const fontDisproportion = Math.abs((targetWidth / actualWidth) - 1);
 
     // Font has severe rendering disproportions, possibly the font is broken completely
     if (fontDisproportion > BROKEN_FONT_ALARM_THRESHOLD) {
-      const fallbackFontFamily = fontFamily.split(', ').slice(1).join(', ');
-      element.style.fontFamily = fallbackFontFamily;
+      const fallbackFontName = fontData ? fontData.fallbackName : 'sans-serif';
+      element.style.fontFamily = fallbackFontName;
       actualWidth = element.getBoundingClientRect().width;
-      fontOffset = measureFontOffset(fallbackFontFamily);
     }
 
-    element.style.transform = `scaleX(${targetWidth / actualWidth}) translateY(${fontOffset * 100}%)`;
+    const ascent = fontData ? fontData.ascent : 1;
+    element.style.transform = `scaleX(${targetWidth / actualWidth}) translateY(${(1 - ascent) * 100}%)`;
   }
 
   renderTextItem = (textItem, itemIndex) => {
     const [fontSizePx, , , , left, baselineBottom] = textItem.transform;
     const { scale } = this.props;
     // Distance from top of the page to the baseline
-    const fontFamily = `${textItem.fontName}, sans-serif`;
+    const fontName = textItem.fontName;
     const fontSize = `${fontSizePx * scale}px`;
 
     return (
@@ -104,7 +112,7 @@ export default class PageTextContent extends Component {
         key={itemIndex}
         style={{
           height: '1em',
-          fontFamily,
+          fontFamily: fontName,
           fontSize,
           position: 'absolute',
           left: `${left * scale}px`,
@@ -117,7 +125,7 @@ export default class PageTextContent extends Component {
             return;
           }
 
-          this.alignTextItem(ref, textItem.width, fontFamily);
+          this.alignTextItem(ref, textItem.width, fontName);
         }}
       >
         {textItem.str}
@@ -162,8 +170,14 @@ PageTextContent.propTypes = {
   onGetTextError: PropTypes.func,
   onGetTextSuccess: PropTypes.func,
   page: PropTypes.shape({
+    commonObjs: PropTypes.shape({
+      objs: PropTypes.object.isRequired,
+    }).isRequired,
     getTextContent: PropTypes.func.isRequired,
     getViewport: PropTypes.func.isRequired,
+    transport: PropTypes.shape({
+      fontLoader: PropTypes.object.isRequired,
+    }).isRequired,
   }).isRequired,
   rotate: PropTypes.number,
   scale: PropTypes.number,
