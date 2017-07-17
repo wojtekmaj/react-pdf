@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 
 import {
   callIfDefined,
+  measureFontOffset,
 } from './shared/util';
 
 export default class PageTextContent extends Component {
@@ -65,33 +66,34 @@ export default class PageTextContent extends Component {
       .catch(this.onGetTextError);
   }
 
-  scaleTextItem(item, targetWidth) {
+  alignTextItem(item, targetWidth, fontOffset) {
     if (!item) {
       return;
     }
 
     const actualWidth = item.clientWidth;
 
-    item.style.transform = `scale(${targetWidth / actualWidth})`;
+    item.style.transform =
+      `scale(${targetWidth / actualWidth}) translateY(${fontOffset * 100}%)`;
   }
 
   renderTextItem = (textItem, itemIndex) => {
-    const [, , , , left, bottom] = textItem.transform;
+    const [, , , , left, baselineBottom] = textItem.transform;
     const { scale } = this.props;
-    const { unrotatedViewport: viewport } = this;
-    const top = (viewport.height / scale) - bottom - textItem.height;
+    // Distance from top of the page to the baseline
+    const fontFamily = `${textItem.fontName}, sans-serif`;
+    const fontSize = `${textItem.height}px`;
 
     return (
       <div
         key={itemIndex}
         style={{
           position: 'absolute',
-          fontSize: `${textItem.height}px`,
-          fontFamily: `${textItem.fontName}, sans-serif`,
-          height: `${textItem.height}px`,
-          top: `${top * scale}px`,
+          fontSize,
+          fontFamily,
+          height: '1em',
           left: `${left * scale}px`,
-          bottom: `${bottom * scale}px`,
+          bottom: `${baselineBottom * scale}px`,
           transformOrigin: 'left bottom',
           whiteSpace: 'nowrap',
         }}
@@ -100,7 +102,9 @@ export default class PageTextContent extends Component {
             return;
           }
 
-          this.scaleTextItem(ref, textItem.width * scale);
+          const targetWidth = textItem.width * scale;
+          const fontOffset = measureFontOffset(fontFamily);
+          this.alignTextItem(ref, targetWidth, fontOffset);
         }}
       >
         {textItem.str}
