@@ -86,7 +86,7 @@ export default class PageTextContent extends Component {
       const fallbackFontFamily = fontFamily.split(', ').slice(1).join(', ');
       element.style.fontFamily = fallbackFontFamily;
       actualWidth = element.getBoundingClientRect().width;
-      fontOffset = measureFontOffset(fontFamily);
+      fontOffset = measureFontOffset(fallbackFontFamily);
     }
 
     element.style.transform = `scaleX(${targetWidth / actualWidth}) translateY(${fontOffset * 100}%)`;
@@ -103,10 +103,10 @@ export default class PageTextContent extends Component {
       <div
         key={itemIndex}
         style={{
-          position: 'absolute',
-          fontSize,
-          fontFamily,
           height: '1em',
+          fontFamily,
+          fontSize,
+          position: 'absolute',
           left: `${left * scale}px`,
           bottom: `${baselineBottom * scale}px`,
           transformOrigin: 'left bottom',
