@@ -95,7 +95,7 @@ export default class PageTextContent extends Component {
           left: `${left * scale}px`,
           bottom: `${baselineBottom * scale}px`,
           transformOrigin: 'left bottom',
-          whiteSpace: 'nowrap',
+          whiteSpace: 'pre',
         }}
         ref={(ref) => {
           if (!ref) {
