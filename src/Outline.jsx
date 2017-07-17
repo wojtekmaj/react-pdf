@@ -89,15 +89,20 @@ export default class Outline extends Component {
 
     const mappedItem = {
       title: item.title,
-      destinationId: item.dest,
+      destination: item.dest,
       async getDestination() {
-        const destinationId = this.destinationId;
-        return pdf.getDestination(destinationId);
+        if (typeof this.destination === 'string') {
+          return pdf.getDestination(this.destination);
+        }
+        return this.destination;
       },
       async getPageIndex() {
         if (!isDefined(this.pageIndex)) {
-          const [ref] = await this.getDestination();
-          this.pageIndex = pdf.getPageIndex(new Ref(ref));
+          const destination = await this.getDestination();
+          if (destination) {
+            const [ref] = destination;
+            this.pageIndex = pdf.getPageIndex(new Ref(ref));
+          }
         }
         return this.pageIndex;
       },
@@ -157,8 +162,14 @@ export default class Outline extends Component {
     return (
       <ul>
         {
-          outline.map(item => (
-            <li key={item.destinationId}>
+          outline.map((item, itemIndex) => (
+            <li
+              key={
+                typeof item.destination === 'string' ?
+                  item.destination :
+                  itemIndex
+              }
+            >
               <a
                 href="#"
                 onClick={(event) => {
