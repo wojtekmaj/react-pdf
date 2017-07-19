@@ -137,7 +137,7 @@ export default class Page extends Component {
       this.setState({ page: null });
     }
 
-    pdf.getPage(pageNumber)
+    return pdf.getPage(pageNumber)
       .then(this.onLoadSuccess)
       .catch(this.onLoadError);
   }

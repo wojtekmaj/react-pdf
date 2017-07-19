@@ -69,7 +69,7 @@ export default class PageTextContent extends Component {
       this.setState({ textItems: null });
     }
 
-    page.getTextContent()
+    return page.getTextContent()
       .then(this.onGetTextSuccess)
       .catch(this.onGetTextError);
   }

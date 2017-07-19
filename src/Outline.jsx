@@ -50,7 +50,7 @@ export default class Outline extends Component {
       this.props.onLoadSuccess,
     );
 
-    this.parseOutline(outline)
+    return this.parseOutline(outline)
       .then(this.onParseSuccess)
       .catch(this.onParseError);
   }
@@ -159,7 +159,7 @@ export default class Outline extends Component {
       this.setState({ outline: null });
     }
 
-    pdf.getOutline()
+    return pdf.getOutline()
       .then(this.onLoadSuccess)
       .catch(this.onLoadError);
   }

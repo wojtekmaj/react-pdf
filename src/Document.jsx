@@ -46,10 +46,10 @@ export default class Document extends Component {
     this.setState({ pdf: null });
 
     if (!source) {
-      return;
+      return null;
     }
 
-    PDFJS.getDocument(source)
+    return PDFJS.getDocument(source)
       .then(this.onLoadSuccess)
       .catch(this.onLoadError);
   }
@@ -120,7 +120,7 @@ export default class Document extends Component {
   }
 
   loadDocument(props = this.props) {
-    this.findDocumentSource(props)
+    return this.findDocumentSource(props)
       .then(this.onSourceSuccess)
       .catch(this.onSourceError);
   }
@@ -277,8 +277,8 @@ Document.propTypes = {
   ]),
   loading: PropTypes.node,
   noData: PropTypes.node,
-  onLoadSuccess: PropTypes.func,
   onLoadError: PropTypes.func,
+  onLoadSuccess: PropTypes.func,
   onSourceError: PropTypes.func,
   onSourceSuccess: PropTypes.func,
   rotate: PropTypes.number,

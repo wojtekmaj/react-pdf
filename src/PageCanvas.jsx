@@ -42,7 +42,7 @@ export default class PageCanvas extends Component {
 
   drawPageOnCanvas = (canvas) => {
     if (!canvas) {
-      return;
+      return null;
     }
 
     const { page } = this.props;
@@ -71,7 +71,7 @@ export default class PageCanvas extends Component {
 
     this.renderer = page.render(renderContext);
 
-    this.renderer
+    return this.renderer
       .then(this.onRenderSuccess)
       .catch((dismiss) => {
         if (dismiss === 'cancelled') {
