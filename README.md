@@ -89,6 +89,10 @@ Instead of directly importing/requiring `'react-pdf'`, use the following syntax:
 import ReactPDF from 'react-pdf/build/entry.webpack';
 ```
 
+#### Browserify
+
+On Browserify, you will have to manually make sure that your building process copies `pdf.worker.js` from `node_modules/pdfjs-dist/build` to your output folder.
+
 ## User guide
 
 ### Document
