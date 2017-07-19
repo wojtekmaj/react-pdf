@@ -6,6 +6,12 @@ import {
   isDefined,
 } from './shared/util';
 
+// eslint-disable-next-line no-underscore-dangle
+if (!window._babelPolyfill) {
+  // eslint-disable-next-line global-require
+  require('babel-polyfill');
+}
+
 class Ref {
   constructor({ num, gen }) {
     this.num = num;
