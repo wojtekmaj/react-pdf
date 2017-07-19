@@ -94,19 +94,29 @@ Check the sample directory of this repository for a full working example.
 
 ### Enable PDF.js worker
 
-It is crucial for performance to use PDF.js worker whenever possible. This ensures that your PDF file will be rendered in a separate thread without affecting page performance. While normal import should work just fine, it is recommended that you import an entry file specifically designed for your build environment.
+It is crucial for performance to use PDF.js worker whenever possible. This ensures that your PDF file will be rendered in a separate thread without affecting page performance. To make things a little easier, we've prepared several entry points you can use.
 
 #### Webpack
 
-Instead of directly importing/requiring `'react-pdf'`, use the following syntax:
+If you use Webpack, you're in luck. Instead of directly importing/requiring `'react-pdf'`, import it like so:
 
 ```js
-import ReactPDF from 'react-pdf/build/entry.webpack';
+import { Document } from 'react-pdf/build/entry.webpack';
 ```
 
-#### Browserify
+…and you're all set!
 
-On Browserify, you will have to manually make sure that your building process copies `pdf.worker.js` from `node_modules/pdfjs-dist/build` to your output folder.
+#### Browserify and others
+
+If you use Browserify or other bundling tools, you will have to make sure on your own that `pdf.worker.js` file from `pdfjs-dist/build` is copied to your project's output folder.
+
+#### I give up
+
+If you absolutely have to, you can import React PDF with worker disabled. You can do so by importing React-PDF like so:
+
+```js
+import { Document } from 'react-pdf/build/entry.noworker';
+```
 
 ## User guide
 
