@@ -6,16 +6,17 @@ Object.defineProperty(exports, "__esModule", {
 /**
  * Checks if we're running in a browser environment.
  */
-var isBrowser = exports.isBrowser = function isBrowser() {
-  return typeof window !== 'undefined';
-};
+var isBrowser = exports.isBrowser = typeof window !== 'undefined';
 
 /**
  * Checks whether we're running from a local file system.
  */
-var isLocalFileSystem = exports.isLocalFileSystem = function isLocalFileSystem() {
-  return isBrowser() && window.location.protocol === 'file:';
-};
+var isLocalFileSystem = exports.isLocalFileSystem = isBrowser && window.location.protocol === 'file:';
+
+/**
+ * Checks whether we're running on a production build or not.
+ */
+var isProduction = exports.isProduction = process.env.NODE_ENV === 'production';
 
 /**
  * Checks whether a variable is defined.
@@ -59,7 +60,7 @@ var isArrayBuffer = exports.isArrayBuffer = function isArrayBuffer(variable) {
  * @param {*} variable Variable to check
  */
 var isBlob = exports.isBlob = function isBlob(variable) {
-  if (!isBrowser()) {
+  if (!isBrowser) {
     throw new Error('Attempted to check if a variable is a Blob on a non-browser environment.');
   }
 
@@ -72,7 +73,7 @@ var isBlob = exports.isBlob = function isBlob(variable) {
  * @param {*} variable Variable to check
  */
 var isFile = exports.isFile = function isFile(variable) {
-  if (!isBrowser()) {
+  if (!isBrowser) {
     throw new Error('Attempted to check if a variable is a Blob on a non-browser environment.');
   }
 
@@ -149,4 +150,18 @@ var callIfDefined = exports.callIfDefined = function callIfDefined(fn, args) {
 
 var getPixelRatio = exports.getPixelRatio = function getPixelRatio() {
   return window.devicePixelRatio || 1;
+};
+
+var warnOnDev = exports.warnOnDev = function warnOnDev(message) {
+  if (!isProduction) {
+    // eslint-disable-next-line no-console
+    console.warn(message);
+  }
+};
+
+var displayCORSWarning = exports.displayCORSWarning = function displayCORSWarning() {
+  if (isLocalFileSystem) {
+    // eslint-disable-next-line no-console
+    warnOnDev('Loading PDF as base64 strings/URLs might not work on protocols other than HTTP/HTTPS. On Google Chrome, you can use --allow-file-access-from-files flag for debugging purposes.');
+  }
 };

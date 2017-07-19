@@ -46,7 +46,7 @@ var PageCanvas = function (_Component) {
       (0, _util.callIfDefined)(_this.props.onRenderError, error);
     }, _this.drawPageOnCanvas = function (canvas) {
       if (!canvas) {
-        return;
+        return null;
       }
 
       var page = _this.props.page;
@@ -77,7 +77,7 @@ var PageCanvas = function (_Component) {
 
       _this.renderer = page.render(renderContext);
 
-      _this.renderer.then(_this.onRenderSuccess).catch(function (dismiss) {
+      return _this.renderer.then(_this.onRenderSuccess).catch(function (dismiss) {
         if (dismiss === 'cancelled') {
           // Everything's alright
           return;

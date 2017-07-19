@@ -112,7 +112,6 @@ var Page = function (_Component) {
       }
 
       if ((0, _util.isProvided)(props.pageNumber)) {
-        // @TODO: Page number isn't always the same
         return props.pageNumber - 1;
       }
 
@@ -128,7 +127,6 @@ var Page = function (_Component) {
       }
 
       if ((0, _util.isProvided)(props.pageIndex)) {
-        // @TODO: Page index isn't always the same
         return props.pageIndex + 1;
       }
 
@@ -150,7 +148,7 @@ var Page = function (_Component) {
         this.setState({ page: null });
       }
 
-      pdf.getPage(pageNumber).then(this.onLoadSuccess).catch(this.onLoadError);
+      return pdf.getPage(pageNumber).then(this.onLoadSuccess).catch(this.onLoadError);
     }
   }, {
     key: 'render',
@@ -205,7 +203,6 @@ var Page = function (_Component) {
   }, {
     key: 'pageNumber',
     get: function get() {
-      // @TODO: Page numer isn't always the same
       return this.getPageNumber();
     }
   }, {
@@ -263,7 +260,6 @@ Page.propTypes = {
   onLoadSuccess: _propTypes2.default.func,
   onRenderError: _propTypes2.default.func,
   onRenderSuccess: _propTypes2.default.func,
-  // @TODO: Check if > 0, < pdf.numPages
   pageIndex: _propTypes2.default.number, // eslint-disable-line react/no-unused-prop-types
   pageNumber: _propTypes2.default.number, // eslint-disable-line react/no-unused-prop-types
   pdf: _propTypes2.default.shape({

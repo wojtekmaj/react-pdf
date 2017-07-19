@@ -28,6 +28,12 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
+// eslint-disable-next-line no-underscore-dangle
+if (!window._babelPolyfill) {
+  // eslint-disable-next-line global-require
+  require('babel-polyfill');
+}
+
 var Ref = function () {
   function Ref(_ref) {
     var num = _ref.num,
@@ -72,7 +78,7 @@ var Outline = function (_Component) {
     }, _this.onLoadSuccess = function (outline) {
       (0, _util.callIfDefined)(_this.props.onLoadSuccess);
 
-      _this.parseOutline(outline).then(_this.onParseSuccess).catch(_this.onParseError);
+      return _this.parseOutline(outline).then(_this.onParseSuccess).catch(_this.onParseError);
     }, _this.onLoadError = function (error) {
       (0, _util.callIfDefined)(_this.props.onLoadError, error);
 
@@ -350,7 +356,7 @@ var Outline = function (_Component) {
         this.setState({ outline: null });
       }
 
-      pdf.getOutline().then(this.onLoadSuccess).catch(this.onLoadError);
+      return pdf.getOutline().then(this.onLoadSuccess).catch(this.onLoadError);
     }
   }, {
     key: 'renderOutline',

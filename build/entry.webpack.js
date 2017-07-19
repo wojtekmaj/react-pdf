@@ -21,9 +21,9 @@ var _util = require('./shared/util');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-if ((0, _util.isLocalFileSystem)()) {
+if (_util.isLocalFileSystem) {
   // eslint-disable-next-line no-console
-  console.warn('You are running React-PDF from your local file system. PDF.js Worker may fail to load due to browser\'s security policies. If you\'re on Google Chrome, you can use --allow-file-access-from-files flag for debugging purposes.');
+  (0, _util.warnOnDev)('You are running React-PDF from your local file system. PDF.js Worker may fail to load due to browser\'s security policies. If you\'re on Google Chrome, you can use --allow-file-access-from-files flag for debugging purposes.');
 }
 
 require('pdfjs-dist/webpack');

@@ -55,10 +55,10 @@ var Document = function (_Component) {
       _this.setState({ pdf: null });
 
       if (!source) {
-        return;
+        return null;
       }
 
-      PDFJS.getDocument(source).then(_this.onLoadSuccess).catch(_this.onLoadError);
+      return PDFJS.getDocument(source).then(_this.onLoadSuccess).catch(_this.onLoadError);
     }, _this.onSourceError = function (error) {
       (0, _util.callIfDefined)(_this.props.onSourceError, error);
 
@@ -89,9 +89,7 @@ var Document = function (_Component) {
 
         // File is a string
         if ((0, _util.isString)(file)) {
-          if (_util.isLocalFileSystem) {
-            // @TODO: Display CORS warning
-          }
+          (0, _util.displayCORSWarning)();
 
           return resolve(file);
         }
@@ -110,8 +108,8 @@ var Document = function (_Component) {
               var _fileBlobURL = (0, _util.dataURItoURL)(modifiedFile.url);
 
               modifiedFile.url = _fileBlobURL;
-            } else if (_util.isLocalFileSystem) {
-              // @TODO: Display CORS warning
+            } else {
+              (0, _util.displayCORSWarning)();
             }
           }
 
@@ -205,7 +203,7 @@ var Document = function (_Component) {
     value: function loadDocument() {
       var props = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : this.props;
 
-      this.findDocumentSource(props).then(this.onSourceSuccess).catch(this.onSourceError);
+      return this.findDocumentSource(props).then(this.onSourceSuccess).catch(this.onSourceError);
     }
 
     /**
@@ -310,8 +308,8 @@ Document.propTypes = {
   })]),
   loading: _propTypes2.default.node,
   noData: _propTypes2.default.node,
-  onLoadSuccess: _propTypes2.default.func,
   onLoadError: _propTypes2.default.func,
+  onLoadSuccess: _propTypes2.default.func,
   onSourceError: _propTypes2.default.func,
   onSourceSuccess: _propTypes2.default.func,
   rotate: _propTypes2.default.number
