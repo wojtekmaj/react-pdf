@@ -9,6 +9,11 @@ export const isBrowser = typeof window !== 'undefined';
 export const isLocalFileSystem = isBrowser && window.location.protocol === 'file:';
 
 /**
+ * Checks whether we're running on a production build or not.
+ */
+export const isProduction = process.env.NODE_ENV === 'production';
+
+/**
  * Checks whether a variable is defined.
  *
  * @param {*} variable Variable to check
@@ -42,7 +47,7 @@ export const isArrayBuffer = variable => variable instanceof ArrayBuffer;
  * @param {*} variable Variable to check
  */
 export const isBlob = (variable) => {
-  if (!isBrowser()) {
+  if (!isBrowser) {
     throw new Error('Attempted to check if a variable is a Blob on a non-browser environment.');
   }
 
@@ -55,7 +60,7 @@ export const isBlob = (variable) => {
  * @param {*} variable Variable to check
  */
 export const isFile = (variable) => {
-  if (!isBrowser()) {
+  if (!isBrowser) {
     throw new Error('Attempted to check if a variable is a Blob on a non-browser environment.');
   }
 
@@ -126,3 +131,10 @@ export const callIfDefined = (fn, args) => {
 };
 
 export const getPixelRatio = () => window.devicePixelRatio || 1;
+
+export const warnOnDev = (message) => {
+  if (!isProduction) {
+    // eslint-disable-next-line no-console
+    console.warn(message);
+  }
+};
