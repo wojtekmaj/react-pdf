@@ -67,7 +67,6 @@ export default class Page extends Component {
     }
 
     if (isProvided(props.pageNumber)) {
-      // @TODO: Page number isn't always the same
       return props.pageNumber - 1;
     }
 
@@ -80,7 +79,6 @@ export default class Page extends Component {
     }
 
     if (isProvided(props.pageIndex)) {
-      // @TODO: Page index isn't always the same
       return props.pageIndex + 1;
     }
 
@@ -92,7 +90,6 @@ export default class Page extends Component {
   }
 
   get pageNumber() {
-    // @TODO: Page numer isn't always the same
     return this.getPageNumber();
   }
 
@@ -197,7 +194,6 @@ Page.propTypes = {
   onLoadSuccess: PropTypes.func,
   onRenderError: PropTypes.func,
   onRenderSuccess: PropTypes.func,
-  // @TODO: Check if > 0, < pdf.numPages
   pageIndex: PropTypes.number, // eslint-disable-line react/no-unused-prop-types
   pageNumber: PropTypes.number, // eslint-disable-line react/no-unused-prop-types
   pdf: PropTypes.shape({

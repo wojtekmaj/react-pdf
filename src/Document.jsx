@@ -7,6 +7,7 @@ import PropTypes from 'prop-types';
 import {
   callIfDefined,
   dataURItoURL,
+  displayCORSWarning,
   getBlobURL,
   isArrayBuffer,
   isBlob,
@@ -143,9 +144,7 @@ export default class Document extends Component {
 
     // File is a string
     if (isString(file)) {
-      if (isLocalFileSystem) {
-        // @TODO: Display CORS warning
-      }
+      displayCORSWarning();
 
       return resolve(file);
     }
@@ -164,8 +163,8 @@ export default class Document extends Component {
           const fileBlobURL = dataURItoURL(modifiedFile.url);
 
           modifiedFile.url = fileBlobURL;
-        } else if (isLocalFileSystem) {
-          // @TODO: Display CORS warning
+        } else {
+          displayCORSWarning();
         }
       }
 
