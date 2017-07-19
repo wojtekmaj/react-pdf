@@ -143,7 +143,7 @@ export default class Document extends Component {
 
     // File is a string
     if (isString(file)) {
-      if (isLocalFileSystem()) {
+      if (isLocalFileSystem) {
         // @TODO: Display CORS warning
       }
 
@@ -164,7 +164,7 @@ export default class Document extends Component {
           const fileBlobURL = dataURItoURL(modifiedFile.url);
 
           modifiedFile.url = fileBlobURL;
-        } else if (isLocalFileSystem()) {
+        } else if (isLocalFileSystem) {
           // @TODO: Display CORS warning
         }
       }
@@ -176,7 +176,7 @@ export default class Document extends Component {
      * The cases below are browser-only.
      * If you're running on a non-browser environment, these cases will be of no use.
      */
-    if (isBrowser()) {
+    if (isBrowser) {
       // File is a Blob
       if (isBlob(file)) {
         const fileURL = getBlobURL(file);

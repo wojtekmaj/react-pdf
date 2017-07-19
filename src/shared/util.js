@@ -1,12 +1,12 @@
 /**
  * Checks if we're running in a browser environment.
  */
-export const isBrowser = () => typeof window !== 'undefined';
+export const isBrowser = typeof window !== 'undefined';
 
 /**
  * Checks whether we're running from a local file system.
  */
-export const isLocalFileSystem = () => isBrowser() && window.location.protocol === 'file:';
+export const isLocalFileSystem = isBrowser && window.location.protocol === 'file:';
 
 /**
  * Checks whether a variable is defined.

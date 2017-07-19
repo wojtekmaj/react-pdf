@@ -89,7 +89,7 @@ var Document = function (_Component) {
 
         // File is a string
         if ((0, _util.isString)(file)) {
-          if ((0, _util.isLocalFileSystem)()) {
+          if (_util.isLocalFileSystem) {
             // @TODO: Display CORS warning
           }
 
@@ -110,7 +110,7 @@ var Document = function (_Component) {
               var _fileBlobURL = (0, _util.dataURItoURL)(modifiedFile.url);
 
               modifiedFile.url = _fileBlobURL;
-            } else if ((0, _util.isLocalFileSystem)()) {
+            } else if (_util.isLocalFileSystem) {
               // @TODO: Display CORS warning
             }
           }
@@ -122,7 +122,7 @@ var Document = function (_Component) {
          * The cases below are browser-only.
          * If you're running on a non-browser environment, these cases will be of no use.
          */
-        if ((0, _util.isBrowser)()) {
+        if (_util.isBrowser) {
           // File is a Blob
           if ((0, _util.isBlob)(file)) {
             var fileURL = (0, _util.getBlobURL)(file);
