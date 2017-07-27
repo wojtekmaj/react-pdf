@@ -6,7 +6,6 @@ module.exports = {
   context: __dirname,
   devtool: 'source-map',
   entry: [
-    'babel-polyfill',
     'react-hot-loader/patch',
     'webpack-dev-server/client?http://localhost:3000',
     './index',

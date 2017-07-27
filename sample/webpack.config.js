@@ -5,7 +5,6 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 module.exports = {
   context: __dirname,
   entry: [
-    'babel-polyfill',
     './Sample',
   ],
   output: {
