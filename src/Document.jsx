@@ -14,7 +14,6 @@ import {
   isBrowser,
   isDataURI,
   isFile,
-  isLocalFileSystem,
   isParamObject,
   isString,
 } from './shared/util';
