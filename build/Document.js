@@ -4,9 +4,37 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+var _typeof2 = require('babel-runtime/helpers/typeof');
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+var _typeof3 = _interopRequireDefault(_typeof2);
+
+var _assign = require('babel-runtime/core-js/object/assign');
+
+var _assign2 = _interopRequireDefault(_assign);
+
+var _promise = require('babel-runtime/core-js/promise');
+
+var _promise2 = _interopRequireDefault(_promise);
+
+var _getPrototypeOf = require('babel-runtime/core-js/object/get-prototype-of');
+
+var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
+
+var _classCallCheck2 = require('babel-runtime/helpers/classCallCheck');
+
+var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+
+var _createClass2 = require('babel-runtime/helpers/createClass');
+
+var _createClass3 = _interopRequireDefault(_createClass2);
+
+var _possibleConstructorReturn2 = require('babel-runtime/helpers/possibleConstructorReturn');
+
+var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
+
+var _inherits2 = require('babel-runtime/helpers/inherits');
+
+var _inherits3 = _interopRequireDefault(_inherits2);
 
 var _react = require('react');
 
@@ -20,30 +48,21 @@ var _util = require('./shared/util');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /**
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * Loads a PDF document. Passes it to all children.
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                */
-
-
 var Document = function (_Component) {
-  _inherits(Document, _Component);
+  (0, _inherits3.default)(Document, _Component);
 
   function Document() {
     var _ref;
 
     var _temp, _this, _ret;
 
-    _classCallCheck(this, Document);
+    (0, _classCallCheck3.default)(this, Document);
 
     for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
       args[_key] = arguments[_key];
     }
 
-    return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = Document.__proto__ || Object.getPrototypeOf(Document)).call.apply(_ref, [this].concat(args))), _this), _this.state = {
+    return _ret = (_temp = (_this = (0, _possibleConstructorReturn3.default)(this, (_ref = Document.__proto__ || (0, _getPrototypeOf2.default)(Document)).call.apply(_ref, [this].concat(args))), _this), _this.state = {
       pdf: null
     }, _this.onSourceSuccess = function (source) {
       (0, _util.callIfDefined)(_this.props.onSourceSuccess);
@@ -83,7 +102,7 @@ var Document = function (_Component) {
       _this.setState({ pdf: false });
     }, _this.findDocumentSource = function () {
       var props = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : _this.props;
-      return new Promise(function (resolve, reject) {
+      return new _promise2.default(function (resolve, reject) {
         var file = props.file;
 
 
@@ -110,7 +129,7 @@ var Document = function (_Component) {
 
         if ((0, _util.isParamObject)(file)) {
           // Prevent from modifying props
-          var modifiedFile = Object.assign({}, file);
+          var modifiedFile = (0, _assign2.default)({}, file);
 
           if ('url' in modifiedFile) {
             // File is data URI
@@ -150,10 +169,10 @@ var Document = function (_Component) {
         // No supported loading method worked
         return reject();
       });
-    }, _temp), _possibleConstructorReturn(_this, _ret);
+    }, _temp), (0, _possibleConstructorReturn3.default)(_this, _ret);
   }
 
-  _createClass(Document, [{
+  (0, _createClass3.default)(Document, [{
     key: 'componentDidMount',
     value: function componentDidMount() {
       this.loadDocument();
@@ -210,7 +229,7 @@ var Document = function (_Component) {
       }
 
       // We got file of different type - clearly there's been a change
-      if ((typeof nextFile === 'undefined' ? 'undefined' : _typeof(nextFile)) !== (typeof file === 'undefined' ? 'undefined' : _typeof(file))) {
+      if ((typeof nextFile === 'undefined' ? 'undefined' : (0, _typeof3.default)(nextFile)) !== (typeof file === 'undefined' ? 'undefined' : (0, _typeof3.default)(file))) {
         return true;
       }
 
@@ -303,9 +322,11 @@ var Document = function (_Component) {
       return this.renderChildren();
     }
   }]);
-
   return Document;
-}(_react.Component);
+}(_react.Component); /**
+                      * Loads a PDF document. Passes it to all children.
+                      */
+
 
 exports.default = Document;
 
