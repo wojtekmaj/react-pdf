@@ -94,7 +94,7 @@ export const dataURItoBlob = (dataURI) => {
     byteString = unescape(dataURI.split(',')[1]);
   }
 
-  const mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
+  const [mimeString] = dataURI.split(',')[0].split(':')[1].split(';');
 
   const ia = new Uint8Array(byteString.length);
   for (let i = 0; i < byteString.length; i += 1) {

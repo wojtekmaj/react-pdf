@@ -112,7 +112,7 @@ export default class PageTextContent extends Component {
     const [fontSizePx, , , , left, baselineBottom] = textItem.transform;
     const { scale } = this.props;
     // Distance from top of the page to the baseline
-    const fontName = textItem.fontName;
+    const { fontName } = textItem;
     const fontSize = `${fontSizePx * scale}px`;
 
     return (

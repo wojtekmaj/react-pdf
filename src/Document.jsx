@@ -92,7 +92,7 @@ export default class Document extends Component {
 
   shouldLoadDocument(nextProps) {
     const nextFile = nextProps.file;
-    const file = this.props.file;
+    const { file } = this.props;
 
     // We got an object and previously it was an object too - we need to compare deeply
     if (
