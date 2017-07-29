@@ -4,7 +4,7 @@ import { Document, Page } from 'react-pdf/build/entry.webpack';
 
 import './Sample.less';
 
-class Example extends Component {
+class Sample extends Component {
   state = {
     file: './sample.pdf',
     pageNumber: null,
@@ -69,4 +69,4 @@ class Example extends Component {
   }
 }
 
-render(<Example />, document.getElementById('react-container'));
+render(<Sample />, document.getElementById('react-container'));
