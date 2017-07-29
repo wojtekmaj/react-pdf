@@ -13,11 +13,13 @@ Easily display PDF files in your React application.
 * Put `<Page />` components inside `<Document />` to render pages.
 
 ## Demo
+
 Minimal demo page is included in sample directory.
 
 [Online demo](http://projekty.wojtekmaj.pl/react-pdf/) is also available!
 
 ## Getting started
+
 ### Prerequisites
 
 You'll need to have Node >= 4 on your machine.
@@ -65,7 +67,7 @@ import { Document, Page } from 'react-pdf';
 class MyApp extends Component {
   state = {
     numPages: null,
-    pageNumber: 1
+    pageNumber: 1,
   }
 
   onDocumentLoad({ numPages }) {
