@@ -73,13 +73,13 @@ export default class PageCanvas extends Component {
 
     return this.renderer
       .then(this.onRenderSuccess)
-      .catch((dismiss) => {
-        if (dismiss === 'cancelled') {
+      .catch((error) => {
+        if (error === 'cancelled') {
           // Everything's alright
           return;
         }
 
-        this.onRenderError(dismiss);
+        this.onRenderError(error);
       });
   }
 

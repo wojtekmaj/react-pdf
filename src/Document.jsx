@@ -16,6 +16,7 @@ import {
   isFile,
   isParamObject,
   isString,
+  makeCancellable,
 } from './shared/util';
 
 export default class Document extends Component {
@@ -30,6 +31,12 @@ export default class Document extends Component {
   componentWillReceiveProps(nextProps) {
     if (this.shouldLoadDocument(nextProps)) {
       this.loadDocument(nextProps);
+    }
+  }
+
+  componentWillUnmount() {
+    if (this.runningTask && this.runningTask.cancel) {
+      this.runningTask.cancel();
     }
   }
 
@@ -49,7 +56,9 @@ export default class Document extends Component {
       return null;
     }
 
-    return PDFJS.getDocument(source)
+    this.runningTask = makeCancellable(PDFJS.getDocument(source));
+
+    return this.runningTask.promise
       .then(this.onLoadSuccess)
       .catch(this.onLoadError);
   }
@@ -58,6 +67,10 @@ export default class Document extends Component {
    * Called when a document source failed to be resolved correctly
    */
   onSourceError = (error) => {
+    if (error === 'cancelled') {
+      return;
+    }
+
     callIfDefined(
       this.props.onSourceError,
       error,
@@ -82,6 +95,10 @@ export default class Document extends Component {
    * Called when a document failed to read successfully
    */
   onLoadError = (error) => {
+    if (error === 'cancelled') {
+      return;
+    }
+
     callIfDefined(
       this.props.onLoadError,
       error,
@@ -120,7 +137,9 @@ export default class Document extends Component {
   }
 
   loadDocument(props = this.props) {
-    return this.findDocumentSource(props)
+    this.runningTask = makeCancellable(this.findDocumentSource(props));
+
+    return this.runningTask.promise
       .then(this.onSourceSuccess)
       .catch(this.onSourceError);
   }

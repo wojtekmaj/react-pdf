@@ -145,3 +145,21 @@ export const displayCORSWarning = () => {
     warnOnDev('Loading PDF as base64 strings/URLs might not work on protocols other than HTTP/HTTPS. On Google Chrome, you can use --allow-file-access-from-files flag for debugging purposes.');
   }
 };
+
+export const makeCancellable = (promise) => {
+  let isCancelled = false;
+
+  const wrappedPromise = new Promise((resolve, reject) => {
+    promise.then(
+      (...args) => (isCancelled ? reject('cancelled') : resolve(...args)),
+      error => (isCancelled ? reject('cancelled') : reject(error)),
+    );
+  });
+
+  return {
+    promise: wrappedPromise,
+    cancel() {
+      isCancelled = true;
+    },
+  };
+};

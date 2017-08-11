@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import {
   callIfDefined,
   isDefined,
+  makeCancellable,
 } from './shared/util';
 
 // eslint-disable-next-line no-underscore-dangle
@@ -42,6 +43,12 @@ export default class Outline extends Component {
     }
   }
 
+  componentWillUnmount() {
+    if (this.runningTask && this.runningTask.cancel) {
+      this.runningTask.cancel();
+    }
+  }
+
   /**
    * Called when an outline is read successfully
    */
@@ -50,7 +57,9 @@ export default class Outline extends Component {
       this.props.onLoadSuccess,
     );
 
-    return this.parseOutline(outline)
+    this.runningTask = makeCancellable(this.parseOutline(outline));
+
+    return this.runningTask.promise
       .then(this.onParseSuccess)
       .catch(this.onParseError);
   }
@@ -59,6 +68,10 @@ export default class Outline extends Component {
    * Called when an outline failed to read successfully
    */
   onLoadError = (error) => {
+    if (error === 'cancelled') {
+      return;
+    }
+
     callIfDefined(
       this.props.onLoadError,
       error,
@@ -81,7 +94,11 @@ export default class Outline extends Component {
   /**
    * Called when an outline failed to read successfully
    */
-  onLoadError = (error) => {
+  onParseError = (error) => {
+    if (error === 'cancelled') {
+      return;
+    }
+
     callIfDefined(
       this.props.onParseError,
       error,
@@ -159,7 +176,9 @@ export default class Outline extends Component {
       this.setState({ outline: null });
     }
 
-    return pdf.getOutline()
+    this.runningTask = makeCancellable(pdf.getOutline());
+
+    return this.runningTask.promise
       .then(this.onLoadSuccess)
       .catch(this.onLoadError);
   }

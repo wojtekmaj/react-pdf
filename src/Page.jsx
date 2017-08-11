@@ -7,6 +7,7 @@ import PageTextContent from './PageTextContent';
 import {
   callIfDefined,
   isProvided,
+  makeCancellable,
 } from './shared/util';
 
 export default class Page extends Component {
@@ -24,6 +25,12 @@ export default class Page extends Component {
       this.getPageNumber(nextProps) !== this.getPageNumber()
     ) {
       this.loadPage(nextProps);
+    }
+  }
+
+  componentWillUnmount() {
+    if (this.runningTask && this.runningTask.cancel) {
+      this.runningTask.cancel();
     }
   }
 
@@ -134,7 +141,9 @@ export default class Page extends Component {
       this.setState({ page: null });
     }
 
-    return pdf.getPage(pageNumber)
+    this.runningTask = makeCancellable(pdf.getPage(pageNumber));
+
+    return this.runningTask.promise
       .then(this.onLoadSuccess)
       .catch(this.onLoadError);
   }
