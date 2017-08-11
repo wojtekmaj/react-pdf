@@ -32,7 +32,7 @@
   "license": "MIT",
   "dependencies": {
     "babel-polyfill": "^6.23.0",
-    "pdfjs-dist": "^1.8.532",
+    "pdfjs-dist": "^1.8.618",
     "prop-types": ">=15.5",
     "react": ">=15.5",
     "react-dom": ">=15.5"
