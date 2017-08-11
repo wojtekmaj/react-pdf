@@ -14,6 +14,7 @@ export default class Test extends Component {
     numPages: null,
     pageNumber: null,
     pageWidth: null,
+    render: true,
     rotate: null,
   }
 
@@ -49,6 +50,7 @@ export default class Test extends Component {
       numPages,
       pageNumber,
       pageWidth,
+      render,
       rotate,
     } = this.state;
 
@@ -61,6 +63,7 @@ export default class Test extends Component {
           <aside className="Test__container__options">
             <LoadingOptions
               setFile={this.setFile}
+              setState={state => this.setState(state)}
             />
             <ViewOptions
               setState={state => this.setState(state)}
@@ -70,57 +73,63 @@ export default class Test extends Component {
           </aside>
           <main className="Test__container__content">
             <div className="Test__container__content__toc">
-              <Document
-                file={file}
-                onLoadSuccess={this.onDocumentLoadSuccess}
-                onLoadError={this.onDocumentLoadError}
-              >
-                <Outline
-                  onItemClick={this.onItemClick}
-                />
-              </Document>
+              {
+                render &&
+                  <Document
+                    file={file}
+                    onLoadSuccess={this.onDocumentLoadSuccess}
+                    onLoadError={this.onDocumentLoadError}
+                  >
+                    <Outline
+                      onItemClick={this.onItemClick}
+                    />
+                  </Document>
+              }
             </div>
             <div className="Test__container__content__document">
-              <Document
-                file={file}
-                onLoadSuccess={this.onDocumentLoadSuccess}
-                onLoadError={this.onDocumentLoadError}
-                rotate={rotate}
-              >
-                {
-                  displayAll ?
-                    Array.from(
-                      new Array(numPages),
-                      (el, index) => (
-                        <Page
-                          ref={(ref) => {
-                            if (!ref) {
-                              return;
-                            }
+              {
+                render &&
+                  <Document
+                    file={file}
+                    onLoadSuccess={this.onDocumentLoadSuccess}
+                    onLoadError={this.onDocumentLoadError}
+                    rotate={rotate}
+                  >
+                    {
+                      displayAll ?
+                        Array.from(
+                          new Array(numPages),
+                          (el, index) => (
+                            <Page
+                              ref={(ref) => {
+                                if (!ref) {
+                                  return;
+                                }
 
-                            if (pageNumber === index + 1) {
-                              const node = findDOMNode(ref);
-                              if (!node) {
-                                return;
-                              }
-                              node.scrollIntoView();
-                            }
-                          }}
-                          key={`page_${index + 1}`}
-                          pageNumber={index + 1}
+                                if (pageNumber === index + 1) {
+                                  const node = findDOMNode(ref);
+                                  if (!node) {
+                                    return;
+                                  }
+                                  node.scrollIntoView();
+                                }
+                              }}
+                              key={`page_${index + 1}`}
+                              pageNumber={index + 1}
+                              width={pageWidth}
+                              onRenderSuccess={this.onPageRenderSuccess}
+                            />
+                          ),
+                        ) :
+                        <Page
+                          key={`page_${pageNumber}`}
+                          pageNumber={pageNumber || 1}
                           width={pageWidth}
                           onRenderSuccess={this.onPageRenderSuccess}
                         />
-                      ),
-                    ) :
-                    <Page
-                      key={`page_${pageNumber}`}
-                      pageNumber={pageNumber || 1}
-                      width={pageWidth}
-                      onRenderSuccess={this.onPageRenderSuccess}
-                    />
-                }
-              </Document>
+                    }
+                  </Document>
+              }
             </div>
             {
               displayAll ||

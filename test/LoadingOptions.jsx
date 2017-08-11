@@ -62,6 +62,23 @@ export default class LoadingOptions extends Component {
       this.setFile,
     )
 
+  onImportAndUnmount = () => {
+    this.setState(
+      { file: samplePDF },
+      this.setFile,
+    );
+
+    setTimeout(
+      () => this.props.setState({
+        render: false,
+      }), 20);
+
+    setTimeout(
+      () => this.props.setState({
+        render: true,
+      }), 1000);
+  }
+
   onPassObjChange = event =>
     this.setState(
       { passObj: event.target.checked },
@@ -124,6 +141,10 @@ export default class LoadingOptions extends Component {
           <button onClick={this.onUseImported}>Use imported file</button>
         </div>
 
+        <div>
+          <button onClick={this.onImportAndUnmount}>Import, unmount and mount</button>
+        </div>
+
         <input id="passobj" type="checkbox" onChange={this.onPassObjChange} />
         <label htmlFor="passobj">Pass as an object (URLs and imports only)</label>
 
@@ -142,4 +163,5 @@ export default class LoadingOptions extends Component {
 
 LoadingOptions.propTypes = {
   setFile: PropTypes.func.isRequired,
+  setState: PropTypes.func.isRequired,
 };
