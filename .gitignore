@@ -1,7 +1,8 @@
 .vscode
+build
+node_modules
 sample/build
 test/build
-node_modules
 npm-debug.log
 package-lock.json
 stats*.json
