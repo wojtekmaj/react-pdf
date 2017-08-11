@@ -58,8 +58,14 @@ var Document = function (_Component) {
         return null;
       }
 
-      return PDFJS.getDocument(source).then(_this.onLoadSuccess).catch(_this.onLoadError);
+      _this.runningTask = (0, _util.makeCancellable)(PDFJS.getDocument(source));
+
+      return _this.runningTask.promise.then(_this.onLoadSuccess).catch(_this.onLoadError);
     }, _this.onSourceError = function (error) {
+      if (error === 'cancelled') {
+        return;
+      }
+
       (0, _util.callIfDefined)(_this.props.onSourceError, error);
 
       _this.setState({ pdf: false });
@@ -68,6 +74,10 @@ var Document = function (_Component) {
 
       _this.setState({ pdf: pdf });
     }, _this.onLoadError = function (error) {
+      if (error === 'cancelled') {
+        return;
+      }
+
       (0, _util.callIfDefined)(_this.props.onLoadError, error);
 
       _this.setState({ pdf: false });
@@ -155,6 +165,13 @@ var Document = function (_Component) {
         this.loadDocument(nextProps);
       }
     }
+  }, {
+    key: 'componentWillUnmount',
+    value: function componentWillUnmount() {
+      if (this.runningTask && this.runningTask.cancel) {
+        this.runningTask.cancel();
+      }
+    }
 
     /**
      * Called when a document source is resolved correctly
@@ -182,6 +199,7 @@ var Document = function (_Component) {
       var file = this.props.file;
 
       // We got an object and previously it was an object too - we need to compare deeply
+
       if ((0, _util.isParamObject)(nextFile) && (0, _util.isParamObject)(file)) {
         return nextFile.data !== file.data || nextFile.range !== file.range || nextFile.url !== file.url;
       }
@@ -203,7 +221,9 @@ var Document = function (_Component) {
     value: function loadDocument() {
       var props = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : this.props;
 
-      return this.findDocumentSource(props).then(this.onSourceSuccess).catch(this.onSourceError);
+      this.runningTask = (0, _util.makeCancellable)(this.findDocumentSource(props));
+
+      return this.runningTask.promise.then(this.onSourceSuccess).catch(this.onSourceError);
     }
 
     /**

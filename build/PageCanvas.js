@@ -77,13 +77,13 @@ var PageCanvas = function (_Component) {
 
       _this.renderer = page.render(renderContext);
 
-      return _this.renderer.then(_this.onRenderSuccess).catch(function (dismiss) {
-        if (dismiss === 'cancelled') {
+      return _this.renderer.then(_this.onRenderSuccess).catch(function (error) {
+        if (error === 'cancelled') {
           // Everything's alright
           return;
         }
 
-        _this.onRenderError(dismiss);
+        _this.onRenderError(error);
       });
     }, _temp), _possibleConstructorReturn(_this, _ret);
   }

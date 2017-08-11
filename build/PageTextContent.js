@@ -76,6 +76,7 @@ var PageTextContent = function (_Component) {
       // Distance from top of the page to the baseline
 
       var fontName = textItem.fontName;
+
       var fontSize = fontSizePx * scale + 'px';
 
       return _react2.default.createElement(

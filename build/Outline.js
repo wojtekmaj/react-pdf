@@ -78,8 +78,14 @@ var Outline = function (_Component) {
     }, _this.onLoadSuccess = function (outline) {
       (0, _util.callIfDefined)(_this.props.onLoadSuccess);
 
-      return _this.parseOutline(outline).then(_this.onParseSuccess).catch(_this.onParseError);
+      _this.runningTask = (0, _util.makeCancellable)(_this.parseOutline(outline));
+
+      return _this.runningTask.promise.then(_this.onParseSuccess).catch(_this.onParseError);
     }, _this.onLoadError = function (error) {
+      if (error === 'cancelled') {
+        return;
+      }
+
       (0, _util.callIfDefined)(_this.props.onLoadError, error);
 
       _this.setState({ outline: false });
@@ -89,7 +95,11 @@ var Outline = function (_Component) {
       });
 
       _this.setState({ outline: outline });
-    }, _this.onLoadError = function (error) {
+    }, _this.onParseError = function (error) {
+      if (error === 'cancelled') {
+        return;
+      }
+
       (0, _util.callIfDefined)(_this.props.onParseError, error);
 
       _this.setState({ outline: false });
@@ -106,6 +116,13 @@ var Outline = function (_Component) {
     value: function componentWillReceiveProps(nextProps) {
       if (nextProps.pdf !== this.props.pdf) {
         this.loadOutline(nextProps);
+      }
+    }
+  }, {
+    key: 'componentWillUnmount',
+    value: function componentWillUnmount() {
+      if (this.runningTask && this.runningTask.cancel) {
+        this.runningTask.cancel();
       }
     }
 
@@ -356,7 +373,9 @@ var Outline = function (_Component) {
         this.setState({ outline: null });
       }
 
-      return pdf.getOutline().then(this.onLoadSuccess).catch(this.onLoadError);
+      this.runningTask = (0, _util.makeCancellable)(pdf.getOutline());
+
+      return this.runningTask.promise.then(this.onLoadSuccess).catch(this.onLoadError);
     }
   }, {
     key: 'renderOutline',

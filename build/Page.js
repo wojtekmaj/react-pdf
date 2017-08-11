@@ -92,6 +92,13 @@ var Page = function (_Component) {
         this.loadPage(nextProps);
       }
     }
+  }, {
+    key: 'componentWillUnmount',
+    value: function componentWillUnmount() {
+      if (this.runningTask && this.runningTask.cancel) {
+        this.runningTask.cancel();
+      }
+    }
 
     /**
      * Called when a page is loaded successfully
@@ -148,7 +155,9 @@ var Page = function (_Component) {
         this.setState({ page: null });
       }
 
-      return pdf.getPage(pageNumber).then(this.onLoadSuccess).catch(this.onLoadError);
+      this.runningTask = (0, _util.makeCancellable)(pdf.getPage(pageNumber));
+
+      return this.runningTask.promise.then(this.onLoadSuccess).catch(this.onLoadError);
     }
   }, {
     key: 'render',

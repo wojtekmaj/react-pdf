@@ -3,6 +3,9 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+
+var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
+
 /**
  * Checks if we're running in a browser environment.
  */
@@ -110,7 +113,9 @@ var dataURItoBlob = exports.dataURItoBlob = function dataURItoBlob(dataURI) {
     byteString = unescape(dataURI.split(',')[1]);
   }
 
-  var mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
+  var _dataURI$split$0$spli = dataURI.split(',')[0].split(':')[1].split(';'),
+      _dataURI$split$0$spli2 = _slicedToArray(_dataURI$split$0$spli, 1),
+      mimeString = _dataURI$split$0$spli2[0];
 
   var ia = new Uint8Array(byteString.length);
   for (var i = 0; i < byteString.length; i += 1) {
@@ -164,4 +169,23 @@ var displayCORSWarning = exports.displayCORSWarning = function displayCORSWarnin
     // eslint-disable-next-line no-console
     warnOnDev('Loading PDF as base64 strings/URLs might not work on protocols other than HTTP/HTTPS. On Google Chrome, you can use --allow-file-access-from-files flag for debugging purposes.');
   }
+};
+
+var makeCancellable = exports.makeCancellable = function makeCancellable(promise) {
+  var isCancelled = false;
+
+  var wrappedPromise = new Promise(function (resolve, reject) {
+    promise.then(function () {
+      return isCancelled ? reject('cancelled') : resolve.apply(undefined, arguments);
+    }, function (error) {
+      return isCancelled ? reject('cancelled') : reject(error);
+    });
+  });
+
+  return {
+    promise: wrappedPromise,
+    cancel: function cancel() {
+      isCancelled = true;
+    }
+  };
 };
