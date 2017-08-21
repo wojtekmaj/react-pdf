@@ -52,12 +52,6 @@ var _util = require('./shared/util');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-// eslint-disable-next-line no-underscore-dangle
-if (!window._babelPolyfill) {
-  // eslint-disable-next-line global-require
-  require('babel-polyfill');
-}
-
 var Ref = function () {
   function Ref(_ref) {
     var num = _ref.num,
@@ -165,7 +159,7 @@ var Outline = function (_Component) {
   }, {
     key: 'mapOutlineItem',
     value: function () {
-      var _ref3 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee4(item) {
+      var _ref3 = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee4(item) {
         var _this5 = this;
 
         var pdf, mappedItem;
@@ -180,7 +174,7 @@ var Outline = function (_Component) {
                   getDestination: function getDestination() {
                     var _this2 = this;
 
-                    return (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee() {
+                    return (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee() {
                       return _regenerator2.default.wrap(function _callee$(_context) {
                         while (1) {
                           switch (_context.prev = _context.next) {
@@ -206,7 +200,7 @@ var Outline = function (_Component) {
                   getPageIndex: function getPageIndex() {
                     var _this3 = this;
 
-                    return (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee2() {
+                    return (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee2() {
                       var destination, _destination, ref;
 
                       return _regenerator2.default.wrap(function _callee2$(_context2) {
@@ -244,7 +238,7 @@ var Outline = function (_Component) {
                   getPageNumber: function getPageNumber() {
                     var _this4 = this;
 
-                    return (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee3() {
+                    return (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee3() {
                       return _regenerator2.default.wrap(function _callee3$(_context3) {
                         while (1) {
                           switch (_context3.prev = _context3.next) {
@@ -307,7 +301,7 @@ var Outline = function (_Component) {
   }, {
     key: 'parseOutline',
     value: function () {
-      var _ref4 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee5(outline) {
+      var _ref4 = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee5(outline) {
         var _this6 = this;
 
         return _regenerator2.default.wrap(function _callee5$(_context5) {
@@ -343,7 +337,7 @@ var Outline = function (_Component) {
   }, {
     key: 'onItemClick',
     value: function () {
-      var _ref5 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee6(item) {
+      var _ref5 = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee6(item) {
         var pageIndex, pageNumber;
         return _regenerator2.default.wrap(function _callee6$(_context6) {
           while (1) {
