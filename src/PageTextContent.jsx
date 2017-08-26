@@ -5,12 +5,6 @@ import {
   callIfDefined,
 } from './shared/util';
 
-// eslint-disable-next-line no-underscore-dangle
-if (!window._babelPolyfill) {
-  // eslint-disable-next-line global-require
-  require('babel-polyfill');
-}
-
 // Render disproportion above which font will be considered broken and fallback will be used
 const BROKEN_FONT_ALARM_THRESHOLD = 0.1;
 
