@@ -2,6 +2,9 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 export default class ViewOptions extends Component {
+  onRenderTextLayersChange = event =>
+    this.props.setState({ renderTextLayer: event.target.checked })
+
   onDisplayAllChange = event =>
     this.props.setState({ displayAll: event.target.checked })
 
@@ -34,7 +37,7 @@ export default class ViewOptions extends Component {
   resetWidth = () => this.props.setState({ pageWidth: null })
 
   render() {
-    const { pageWidth, rotate } = this.props;
+    const { displayAll, pageWidth, renderTextLayer, rotate } = this.props;
 
     return (
       <fieldset id="viewoptions">
@@ -63,6 +66,14 @@ export default class ViewOptions extends Component {
           </button>
         </form>
 
+        <input
+          id="renderTextLayer"
+          type="checkbox"
+          checked={renderTextLayer}
+          onChange={this.onRenderTextLayersChange}
+        />
+        <label htmlFor="renderTextLayer">Render text layers</label>
+
         <div>
           <label htmlFor>Rotation:</label>
           <button onClick={this.rotateLeft}>Rotate left</button>&nbsp;
@@ -75,7 +86,12 @@ export default class ViewOptions extends Component {
           </button>
         </div>
 
-        <input id="displayAll" type="checkbox" onChange={this.onDisplayAllChange} />
+        <input
+          id="displayAll"
+          type="checkbox"
+          onChange={this.onDisplayAllChange}
+          checked={displayAll}
+        />
         <label htmlFor="displayAll">View all pages</label>
       </fieldset>
     );
@@ -83,7 +99,9 @@ export default class ViewOptions extends Component {
 }
 
 ViewOptions.propTypes = {
+  displayAll: PropTypes.bool,
   pageWidth: PropTypes.number,
+  renderTextLayer: PropTypes.bool,
   rotate: PropTypes.number,
   setState: PropTypes.func.isRequired,
 };

@@ -15,6 +15,7 @@ export default class Test extends Component {
     pageNumber: null,
     pageWidth: null,
     render: true,
+    renderTextLayer: true,
     rotate: null,
   }
 
@@ -51,6 +52,7 @@ export default class Test extends Component {
       pageNumber,
       pageWidth,
       render,
+      renderTextLayer,
       rotate,
     } = this.state;
 
@@ -68,9 +70,11 @@ export default class Test extends Component {
               setState={setState}
             />
             <ViewOptions
-              setState={setState}
+              displayAll={displayAll}
               pageWidth={pageWidth}
+              renderTextLayer={renderTextLayer}
               rotate={rotate}
+              setState={setState}
             />
           </aside>
           <main className="Test__container__content">
@@ -118,6 +122,7 @@ export default class Test extends Component {
                               }}
                               key={`page_${index + 1}`}
                               pageNumber={index + 1}
+                              renderTextLayer={renderTextLayer}
                               width={pageWidth}
                               onRenderSuccess={this.onPageRenderSuccess}
                             />
@@ -126,6 +131,7 @@ export default class Test extends Component {
                         <Page
                           key={`page_${pageNumber}`}
                           pageNumber={pageNumber || 1}
+                          renderTextLayer={renderTextLayer}
                           width={pageWidth}
                           onRenderSuccess={this.onPageRenderSuccess}
                         />

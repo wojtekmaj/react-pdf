@@ -166,6 +166,7 @@ export default class Page extends Component {
       onGetTextSuccess,
       onRenderError,
       onRenderSuccess,
+      renderTextLayer,
      } = this.props;
 
     return (
@@ -180,19 +181,23 @@ export default class Page extends Component {
           rotate={this.rotate}
           scale={this.scale}
         />
-        <PageTextContent
-          onGetTextError={onGetTextError}
-          onGetTextSuccess={onGetTextSuccess}
-          page={page}
-          rotate={this.rotate}
-          scale={this.scale}
-        />
+        {
+          renderTextLayer &&
+            <PageTextContent
+              onGetTextError={onGetTextError}
+              onGetTextSuccess={onGetTextSuccess}
+              page={page}
+              rotate={this.rotate}
+              scale={this.scale}
+            />
+        }
       </div>
     );
   }
 }
 
 Page.defaultProps = {
+  renderTextLayer: true,
   scale: 1.0,
 };
 
@@ -209,6 +214,7 @@ Page.propTypes = {
     getPage: PropTypes.func.isRequired,
     numPages: PropTypes.number.isRequired,
   }),
+  renderTextLayer: PropTypes.bool,
   rotate: PropTypes.number,
   scale: PropTypes.number,
   width: PropTypes.number,
