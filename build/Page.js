@@ -193,7 +193,8 @@ var Page = function (_Component) {
           onGetTextError = _props.onGetTextError,
           onGetTextSuccess = _props.onGetTextSuccess,
           onRenderError = _props.onRenderError,
-          onRenderSuccess = _props.onRenderSuccess;
+          onRenderSuccess = _props.onRenderSuccess,
+          renderTextLayer = _props.renderTextLayer;
 
 
       return _react2.default.createElement(
@@ -209,7 +210,7 @@ var Page = function (_Component) {
           rotate: this.rotate,
           scale: this.scale
         }),
-        _react2.default.createElement(_PageTextContent2.default, {
+        renderTextLayer && _react2.default.createElement(_PageTextContent2.default, {
           onGetTextError: onGetTextError,
           onGetTextSuccess: onGetTextSuccess,
           page: page,
@@ -272,6 +273,7 @@ exports.default = Page;
 
 
 Page.defaultProps = {
+  renderTextLayer: true,
   scale: 1.0
 };
 
@@ -288,6 +290,7 @@ Page.propTypes = {
     getPage: _propTypes2.default.func.isRequired,
     numPages: _propTypes2.default.number.isRequired
   }),
+  renderTextLayer: _propTypes2.default.bool,
   rotate: _propTypes2.default.number,
   scale: _propTypes2.default.number,
   width: _propTypes2.default.number

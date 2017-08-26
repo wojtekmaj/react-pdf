@@ -152,7 +152,7 @@ var PageTextContent = function (_Component) {
   }, {
     key: 'getFontData',
     value: function () {
-      var _ref3 = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee(fontFamily) {
+      var _ref3 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee(fontFamily) {
         var page, font;
         return _regenerator2.default.wrap(function _callee$(_context) {
           while (1) {
@@ -183,7 +183,7 @@ var PageTextContent = function (_Component) {
   }, {
     key: 'alignTextItem',
     value: function () {
-      var _ref4 = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee2(element, textItem) {
+      var _ref4 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee2(element, textItem) {
         var scale, targetWidth, fontData, actualWidth, widthDisproportion, repairsNeeded, fallbackFontName, ascent;
         return _regenerator2.default.wrap(function _callee2$(_context2) {
           while (1) {
