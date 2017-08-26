@@ -54,6 +54,8 @@ export default class Test extends Component {
       rotate,
     } = this.state;
 
+    const setState = state => this.setState(state);
+
     return (
       <div className="Test">
         <header>
@@ -63,10 +65,10 @@ export default class Test extends Component {
           <aside className="Test__container__options">
             <LoadingOptions
               setFile={this.setFile}
-              setState={state => this.setState(state)}
+              setState={setState}
             />
             <ViewOptions
-              setState={state => this.setState(state)}
+              setState={setState}
               pageWidth={pageWidth}
               rotate={rotate}
             />
