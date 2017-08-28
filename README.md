@@ -8,7 +8,6 @@ Easily display PDF files in your React application.
 ## tl;dr
 * Install by executing `npm install --save react-pdf`.
 * Import by addding `import { Document } from 'react-pdf'`.
-* If you use babel-polyfill, make sure to require it before `react-pdf`.
 * Use by adding `<Document file="..." />`. `file` can be an URL, base64 content, Uint8Array, and more.
 * Put `<Page />` components inside `<Document />` to render pages.
 
