@@ -23,7 +23,7 @@ Minimal demo page is included in sample directory.
 
 You'll need to have Node >= 4 on your machine.
 
-We strongly recommend to use Node >= 6 and npm >= 3 for faster installation speed and better disk usage.
+We strongly recommend to use Node >= 6 and npm >= 5 for faster installation speed and better disk usage.
 
 #### Compatibility
 
