@@ -4,6 +4,7 @@ engines:
     exclude_paths:
     - "webpack.config.js"
     - "test/webpack.config.js"
+    - "test/webpack.config.hot.js"
     - "sample/webpack.config.js"
     config:
       languages:

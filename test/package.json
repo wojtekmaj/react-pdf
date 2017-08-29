@@ -1,9 +1,11 @@
 {
   "name": "react-pdf-test-page",
-  "version": "1.8.3",
+  "version": "2.0.0-beta.4",
   "description": "A test page for React-PDF.",
   "scripts": {
-    "build": "webpack"
+    "preinstall": "cd ../ && npm install webpack@^2.7.0 --no-save",
+    "build": "webpack",
+    "start": "webpack-dev-server --config webpack.config.hot.js"
   },
   "author": {
     "name": "Wojciech Maj",
@@ -11,9 +13,10 @@
   },
   "license": "MIT",
   "dependencies": {
-    "react": ">=15.5",
-    "react-dom": ">=15.5",
-    "react-pdf": "latest"
+    "prop-types": "next",
+    "react": "next",
+    "react-dom": "next",
+    "react-pdf": "../"
   },
   "devDependencies": {
     "babel-core": "^6.25.0",
@@ -34,8 +37,10 @@
     "file-loader": "latest",
     "less": "^2.7.2",
     "less-loader": "latest",
+    "react-hot-loader": "^3.0.0-beta.7",
     "style-loader": "latest",
     "url-loader": "latest",
-    "webpack": "^2.7.0"
+    "webpack": "^2.7.0",
+    "webpack-dev-server": "^2.5.1"
   }
 }

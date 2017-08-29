@@ -12,5 +12,14 @@
     "ecmaFeatures": {
       "experimentalObjectRestSpread": true
     }
+  },
+  "rules": {
+    "global-require": "off",
+    "max-len": "error",
+    "no-param-reassign": ["error", { "props": true, "ignorePropertyModificationsFor": ["canvas", "element"] }],
+    "prefer-destructuring": "warn",
+    "prefer-spread": "warn",
+    "react/require-default-props": "off",
+    "react/sort-comp": "off"
   }
 }

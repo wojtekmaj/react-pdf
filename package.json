@@ -1,6 +1,6 @@
 {
   "name": "react-pdf",
-  "version": "1.8.3",
+  "version": "2.0.0-beta.4",
   "description": "Easily display PDF files in your React application.",
   "main": "build/entry.js",
   "es6": "src/entry.js",
@@ -31,27 +31,35 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "pdfjs-dist": "^1.8.532",
+    "babel-runtime": "^6.25.0",
+    "pdfjs-dist": "^1.9.489",
     "prop-types": ">=15.5",
     "react": ">=15.5",
     "react-dom": ">=15.5"
   },
   "devDependencies": {
-    "babel-cli": "^6.24.1",
-    "babel-core": "^6.25.0",
+    "babel-cli": "^6.26.0",
+    "babel-core": "^6.26.0",
     "babel-eslint": "^7.2.3",
     "babel-plugin-transform-class-properties": "^6.24.1",
-    "babel-plugin-transform-es2015-modules-commonjs": "^6.24.1",
+    "babel-plugin-transform-es2015-modules-commonjs": "^6.26.0",
+    "babel-plugin-transform-runtime": "^6.23.0",
     "babel-preset-es2015": "^6.24.1",
     "babel-preset-react": "^6.24.1",
     "babel-preset-stage-2": "^6.24.1",
     "eslint": "^3.19.0",
-    "eslint-config-airbnb": "^15.0.2",
+    "eslint-config-airbnb": "^15.1.0",
     "eslint-plugin-class-property": "^1.0.6",
     "eslint-plugin-import": "^2.7.0",
     "eslint-plugin-jsx-a11y": "^5.1.1",
-    "eslint-plugin-react": "^7.1.0"
+    "eslint-plugin-react": "^7.3.0"
   },
+  "files": [
+    "LICENSE",
+    "README.md",
+    "build/",
+    "src/"
+  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/wojtekmaj/react-pdf.git"

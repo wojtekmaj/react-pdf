@@ -1,8 +1,9 @@
 {
   "name": "react-pdf-sample-page",
-  "version": "1.8.3",
+  "version": "2.0.0-beta.4",
   "description": "A sample page for React-PDF.",
   "scripts": {
+    "preinstall": "cd ../ && npm install webpack@^2.7.0 --no-save",
     "build": "webpack"
   },
   "author": {
@@ -13,7 +14,7 @@
   "dependencies": {
     "react": ">=15.5",
     "react-dom": ">=15.5",
-    "react-pdf": "latest"
+    "react-pdf": "../"
   },
   "devDependencies": {
     "babel-core": "^6.25.0",
