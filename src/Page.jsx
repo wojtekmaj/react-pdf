@@ -60,6 +60,10 @@ export default class Page extends Component {
    * Called when a page failed to load
    */
   onLoadError = (error) => {
+    if (error === 'cancelled') {
+      return;
+    }
+
     callIfDefined(
       this.props.onLoadError,
       error,

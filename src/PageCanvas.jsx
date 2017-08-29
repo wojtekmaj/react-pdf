@@ -7,6 +7,14 @@ import {
 } from './shared/util';
 
 export default class PageCanvas extends Component {
+  componentWillUnmount() {
+    /* eslint-disable no-underscore-dangle */
+    if (this.renderer && this.renderer._internalRenderTask.running) {
+      this.renderer._internalRenderTask.cancel();
+    }
+    /* eslint-enable no-underscore-dangle */
+  }
+
   /**
    * Called when a page is rendered successfully.
    */
@@ -20,6 +28,10 @@ export default class PageCanvas extends Component {
    * Called when a page fails to render.
    */
   onRenderError = (error) => {
+    if (error === 'cancelled') {
+      return;
+    }
+
     callIfDefined(
       this.props.onRenderError,
       error,
@@ -73,14 +85,7 @@ export default class PageCanvas extends Component {
 
     return this.renderer
       .then(this.onRenderSuccess)
-      .catch((error) => {
-        if (error === 'cancelled') {
-          // Everything's alright
-          return;
-        }
-
-        this.onRenderError(error);
-      });
+      .catch(this.onRenderError);
   }
 
   render() {

@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 
 import {
   callIfDefined,
+  makeCancellable,
 } from './shared/util';
 
 // Render disproportion above which font will be considered broken and fallback will be used
@@ -20,6 +21,12 @@ export default class PageTextContent extends Component {
   componentWillReceiveProps(nextProps) {
     if (nextProps.page !== this.props.page) {
       this.getTextContent(nextProps);
+    }
+  }
+
+  componentWillUnmount() {
+    if (this.runningTask && this.runningTask.cancel) {
+      this.runningTask.cancel();
     }
   }
 
@@ -63,7 +70,9 @@ export default class PageTextContent extends Component {
       this.setState({ textItems: null });
     }
 
-    return page.getTextContent()
+    this.runningTask = makeCancellable(page.getTextContent());
+
+    return this.runningTask.promise
       .then(this.onGetTextSuccess)
       .catch(this.onGetTextError);
   }
