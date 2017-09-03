@@ -242,7 +242,7 @@ export default class Document extends Component {
     return (
       <div className="ReactPDF__Document">
         {
-          Children
+          children && Children
             .map(children, child => React.cloneElement(child, childProps))
         }
       </div>
