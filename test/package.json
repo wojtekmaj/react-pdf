@@ -13,7 +13,7 @@
   },
   "license": "MIT",
   "dependencies": {
-    "prop-types": "next",
+    "prop-types": "^15.5.10",
     "react": "next",
     "react-dom": "next",
     "react-pdf": "../"
