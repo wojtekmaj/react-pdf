@@ -1,5 +1,5 @@
-![](https://img.shields.io/npm/dt/react-pdf.svg) ![](https://img.shields.io/travis/wojtekmaj/react-pdf.svg) ![](https://img.shields.io/david/wojtekmaj/react-pdf.svg
-) ![](https://img.shields.io/david/dev/wojtekmaj/react-pdf.svg
+![downloads](https://img.shields.io/npm/dt/react-pdf.svg) ![build](https://img.shields.io/travis/wojtekmaj/react-pdf.svg) ![dependencies](https://img.shields.io/david/wojtekmaj/react-pdf.svg
+) ![dev dependencies](https://img.shields.io/david/dev/wojtekmaj/react-pdf.svg
 )
 
 # React-PDF
