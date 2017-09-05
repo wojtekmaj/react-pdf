@@ -1,6 +1,6 @@
 {
   "name": "react-pdf-sample-page",
-  "version": "2.0.0-beta.5",
+  "version": "2.0.0",
   "description": "A sample page for React-PDF.",
   "scripts": {
     "preinstall": "cd ../ && npm install webpack@^2.7.0 --no-save",
