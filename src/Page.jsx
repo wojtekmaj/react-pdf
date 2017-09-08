@@ -153,7 +153,23 @@ export default class Page extends Component {
   }
 
   render() {
-    const { pdf } = this.props;
+    const {
+      onGetTextError,
+      onGetTextSuccess,
+      onRenderError,
+      onRenderSuccess,
+      renderTextLayer,
+      className,
+      pdf,
+      scale,  // consume all props for ...other
+      width,  // consume all props for ...other
+      rotate, // consume all props for ...other
+      onLoadError,  // consume all props for ...other
+      onLoadSuccess,// consume all props for ...other
+      pageNumber,   // consume all props for ...other
+      ...other
+     } = this.props;
+
     const { page } = this.state;
     const { pageIndex } = this;
 
@@ -165,17 +181,10 @@ export default class Page extends Component {
       return null;
     }
 
-    const {
-      onGetTextError,
-      onGetTextSuccess,
-      onRenderError,
-      onRenderSuccess,
-      renderTextLayer,
-     } = this.props;
-
     return (
       <div
-        className="ReactPDF__Page"
+        {...other}
+        className={`ReactPDF__Page ${className}`}
         style={{ position: 'relative' }}
       >
         <PageCanvas
@@ -222,4 +231,5 @@ Page.propTypes = {
   rotate: PropTypes.number,
   scale: PropTypes.number,
   width: PropTypes.number,
+  className: PropTypes.string,
 };

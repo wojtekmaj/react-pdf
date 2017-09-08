@@ -231,7 +231,7 @@ export default class Document extends Component {
   }
 
   renderChildren() {
-    const { children, rotate } = this.props;
+    const { children, rotate, className } = this.props;
     const { pdf } = this.state;
 
     const childProps = {
@@ -240,7 +240,7 @@ export default class Document extends Component {
     };
 
     return (
-      <div className="ReactPDF__Document">
+      <div className={`ReactPDF__Document ${className}`}>
         {
           children && Children
             .map(children, child => React.cloneElement(child, childProps))
