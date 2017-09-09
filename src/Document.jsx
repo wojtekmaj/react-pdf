@@ -18,7 +18,6 @@ import {
   makeCancellable,
 } from './shared/util';
 import { makeEventProps } from './shared/events';
-import { readFile } from './shared/fileReader';
 
 import { eventsProps } from './shared/propTypes';
 
@@ -179,9 +178,9 @@ export default class Document extends Component {
   /**
    * Attempts to find a document source based on props.
    */
-  async findDocumentSource(file = this.props.file) {
+  findDocumentSource = (file = this.props.file) => new Promise((resolve, reject) => {
     if (!file) {
-      return null;
+      return resolve(null);
     }
 
     // File is a string
@@ -190,11 +189,11 @@ export default class Document extends Component {
         displayCORSWarning();
       }
 
-      return file;
+      return resolve(file);
     }
 
     if (isArrayBuffer(file)) {
-      return file;
+      return resolve(file);
     }
 
     if (isParamObject(file)) {
@@ -208,7 +207,7 @@ export default class Document extends Component {
         }
       }
 
-      return modifiedFile;
+      return resolve(modifiedFile);
     }
 
     /**
@@ -218,15 +217,32 @@ export default class Document extends Component {
     if (isBrowser) {
       // File is a Blob
       if (isBlob(file) || isFile(file)) {
-        const loadedFile = await readFile(file);
+        const reader = new FileReader();
 
-        return new Uint8Array(loadedFile);
+        reader.onload = () => resolve(new Uint8Array(reader.result));
+        reader.onerror = (event) => {
+          switch (event.target.error.code) {
+            case event.target.error.NOT_FOUND_ERR:
+              return reject('Error while reading a file: File not found.');
+            case event.target.error.NOT_READABLE_ERR:
+              return reject('Error while reading a file: File not readable.');
+            case event.target.error.SECURITY_ERR:
+              return reject('Error while reading a file: Security error.');
+            case event.target.error.ABORT_ERR:
+              return reject('cancelled');
+            default:
+              return reject('Error while reading a file.');
+          }
+        };
+        reader.readAsArrayBuffer(file);
+
+        return null;
       }
     }
 
     // No supported loading method worked
-    throw new Error({ message: 'Unsupported loading method.' });
-  }
+    return reject({ message: 'Unsupported loading method.' });
+  })
 
   renderNoData() {
     return (
