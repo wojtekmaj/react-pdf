@@ -61,16 +61,16 @@ class MyApp extends Component {
 
   render() {
     return (
+      const { pageNumber, numPages } = this.state;
+
       <div>
         <Document
           file="somefile.pdf"
           onLoadSuccess={this.onDocumentLoad}
         >
-          <Page
-            pageNumber={pageNumber}
-          />
+          <Page pageNumber={pageNumber} />
         </Document>
-        <p>Page {this.state.pageNumber} of {this.state.numPages}</p>
+        <p>Page {pageNumber} of {numPages}</p>
       </div>
     );
   }
