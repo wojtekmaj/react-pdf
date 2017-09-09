@@ -181,6 +181,7 @@ export default class Page extends Component {
     }
 
     const {
+      children,
       className,
       onGetTextError,
       onGetTextSuccess,
@@ -212,6 +213,7 @@ export default class Page extends Component {
               scale={this.scale}
             />
         }
+        {children}
       </div>
     );
   }
@@ -223,6 +225,7 @@ Page.defaultProps = {
 };
 
 Page.propTypes = {
+  children: PropTypes.node,
   className: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.arrayOf(PropTypes.string),
