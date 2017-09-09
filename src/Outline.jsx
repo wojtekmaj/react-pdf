@@ -7,6 +7,9 @@ import {
   isDefined,
   makeCancellable,
 } from './shared/util';
+import { makeEventProps } from './shared/events';
+
+import { eventsProps } from './shared/propTypes';
 
 class Ref {
   constructor({ num, gen }) {
@@ -42,6 +45,10 @@ export default class Outline extends Component {
     if (this.runningTask && this.runningTask.cancel) {
       this.runningTask.cancel();
     }
+  }
+
+  get eventProps() {
+    return makeEventProps(this.props, this.state.outline);
   }
 
   /**
@@ -219,7 +226,10 @@ export default class Outline extends Component {
     const { className } = this.props;
 
     return (
-      <div className={mergeClassNames('ReactPDF__Outline', className)}>
+      <div
+        className={mergeClassNames('ReactPDF__Outline', className)}
+        {...this.eventProps}
+      >
         {this.renderOutline()}
       </div>
     );
@@ -240,4 +250,5 @@ Outline.propTypes = {
     getDestination: PropTypes.func.isRequired,
     getOutline: PropTypes.func.isRequired,
   }),
+  ...eventsProps(),
 };

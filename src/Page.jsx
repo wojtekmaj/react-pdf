@@ -10,6 +10,9 @@ import {
   isProvided,
   makeCancellable,
 } from './shared/util';
+import { makeEventProps } from './shared/events';
+
+import { eventsProps } from './shared/propTypes';
 
 export default class Page extends Component {
   state = {
@@ -41,19 +44,11 @@ export default class Page extends Component {
   onLoadSuccess = (page) => {
     this.setState({ page });
 
-    const { scale } = this;
+    const { pageCallback } = this;
 
     callIfDefined(
       this.props.onLoadSuccess,
-      {
-        ...page,
-        // Legacy callback params
-        get width() { return page.view[2] * scale; },
-        get height() { return page.view[3] * scale; },
-        scale,
-        get originalWidth() { return page.view[2]; },
-        get originalHeight() { return page.view[3]; },
-      },
+      pageCallback,
     );
   }
 
@@ -134,6 +129,25 @@ export default class Page extends Component {
     return scale * pageScale;
   }
 
+  get pageCallback() {
+    const { page } = this.state;
+    const { scale } = this;
+
+    return {
+      ...page,
+      // Legacy callback params
+      get width() { return page.view[2] * scale; },
+      get height() { return page.view[3] * scale; },
+      scale,
+      get originalWidth() { return page.view[2]; },
+      get originalHeight() { return page.view[3]; },
+    };
+  }
+
+  get eventProps() {
+    return makeEventProps(this.props, this.pageCallback);
+  }
+
   loadPage(props = this.props) {
     const { pdf } = props;
     const pageNumber = this.getPageNumber(props);
@@ -179,6 +193,7 @@ export default class Page extends Component {
       <div
         className={mergeClassNames('ReactPDF__Page', className)}
         style={{ position: 'relative' }}
+        {...this.eventProps}
       >
         <PageCanvas
           onRenderError={onRenderError}
@@ -228,4 +243,5 @@ Page.propTypes = {
   rotate: PropTypes.number,
   scale: PropTypes.number,
   width: PropTypes.number,
+  ...eventsProps(),
 };

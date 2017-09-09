@@ -31,7 +31,7 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "babel-runtime": "^6.26.0",
+    "lodash.once": "^4.1.1",
     "merge-class-names": "^1.0.0",
     "pdfjs-dist": "^1.9.537",
     "prop-types": ">=15.5",
@@ -48,6 +48,7 @@
     "babel-preset-es2015": "^6.24.1",
     "babel-preset-react": "^6.24.1",
     "babel-preset-stage-2": "^6.24.1",
+    "babel-runtime": "^6.26.0",
     "eslint": "^3.19.0",
     "eslint-config-airbnb": "^15.1.0",
     "eslint-plugin-class-property": "^1.0.6",
