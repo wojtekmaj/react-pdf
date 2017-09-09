@@ -28,9 +28,9 @@ export default class Test extends Component {
       pageNumber: null,
     })
 
-  onDocumentLoadError = (error) => {
+  onDocumentLoadError = ({ message }) => {
     // eslint-disable-next-line no-console
-    console.error(error);
+    console.error(message);
   }
 
   onItemClick = ({ pageNumber }) =>

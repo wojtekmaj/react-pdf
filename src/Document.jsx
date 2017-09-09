@@ -223,15 +223,15 @@ export default class Document extends Component {
         reader.onerror = (event) => {
           switch (event.target.error.code) {
             case event.target.error.NOT_FOUND_ERR:
-              return reject('Error while reading a file: File not found.');
+              return reject({ message: 'Error while reading a file: File not found.' });
             case event.target.error.NOT_READABLE_ERR:
-              return reject('Error while reading a file: File not readable.');
+              return reject({ message: 'Error while reading a file: File not readable.' });
             case event.target.error.SECURITY_ERR:
-              return reject('Error while reading a file: Security error.');
+              return reject({ message: 'Error while reading a file: Security error.' });
             case event.target.error.ABORT_ERR:
               return reject('cancelled');
             default:
-              return reject('Error while reading a file.');
+              return reject({ message: 'Error while reading a file.' });
           }
         };
         reader.readAsArrayBuffer(file);
