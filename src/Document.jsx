@@ -19,6 +19,9 @@ import {
   isString,
   makeCancellable,
 } from './shared/util';
+import { makeEventProps } from './shared/events';
+
+import { eventsProps } from './shared/propTypes';
 
 export default class Document extends Component {
   state = {
@@ -39,6 +42,10 @@ export default class Document extends Component {
     if (this.runningTask && this.runningTask.cancel) {
       this.runningTask.cancel();
     }
+  }
+
+  get eventProps() {
+    return makeEventProps(this.props, this.state.pdf);
   }
 
   /**
@@ -241,7 +248,10 @@ export default class Document extends Component {
     };
 
     return (
-      <div className={mergeClassNames('ReactPDF__Document', className)}>
+      <div
+        className={mergeClassNames('ReactPDF__Document', className)}
+        {...this.eventProps}
+      >
         {
           children && Children
             .map(children, child => React.cloneElement(child, childProps))
@@ -304,4 +314,5 @@ Document.propTypes = {
   onSourceError: PropTypes.func,
   onSourceSuccess: PropTypes.func,
   rotate: PropTypes.number,
+  ...eventsProps(),
 };

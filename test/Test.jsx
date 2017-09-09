@@ -100,6 +100,7 @@ export default class Test extends Component {
                   <Document
                     className="custom-classname-document"
                     file={file}
+                    onClick={(event, pdf) => console.log('Clicked a document', { event, pdf })}
                     onLoadSuccess={this.onDocumentLoadSuccess}
                     onLoadError={this.onDocumentLoadError}
                     rotate={rotate}
@@ -125,6 +126,7 @@ export default class Test extends Component {
                                 }
                               }}
                               key={`page_${index + 1}`}
+                              onClick={(event, page) => console.log('Clicked a page', { event, page })}
                               pageNumber={index + 1}
                               renderTextLayer={renderTextLayer}
                               width={pageWidth}
@@ -135,6 +137,7 @@ export default class Test extends Component {
                         <Page
                           className="custom-classname-page"
                           key={`page_${pageNumber}`}
+                          onClick={(event, page) => console.log('Clicked a page', { event, page })}
                           pageNumber={pageNumber || 1}
                           renderTextLayer={renderTextLayer}
                           width={pageWidth}
