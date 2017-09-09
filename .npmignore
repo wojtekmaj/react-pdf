@@ -1,7 +1,0 @@
-.vscode
-node_modules
-test
-test_pdfs
-npm-debug.log
-package-lock.json
-stats*.json
