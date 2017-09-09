@@ -30,12 +30,8 @@ export default class Document extends Component {
     this.loadDocument();
   }
 
-  async componentWillReceiveProps(nextProps) {
-    if (await this.shouldLoadDocument(nextProps)) {
-      if (this.runningTask && this.runningTask.cancel) {
-        this.runningTask.cancel();
-      }
-
+  componentWillReceiveProps(nextProps) {
+    if (this.shouldLoadDocument(nextProps)) {
       this.loadDocument(nextProps);
     }
   }
@@ -119,7 +115,7 @@ export default class Document extends Component {
     this.setState({ pdf: false });
   }
 
-  async shouldLoadDocument(nextProps) {
+  shouldLoadDocument(nextProps) {
     const nextFile = nextProps.file;
     const { file } = this.props;
 
@@ -168,6 +164,10 @@ export default class Document extends Component {
   }
 
   loadDocument(props = this.props) {
+    if (this.runningTask && this.runningTask.cancel) {
+      this.runningTask.cancel();
+    }
+
     this.runningTask = makeCancellable(this.findDocumentSource(props.file));
 
     return this.runningTask.promise
