@@ -78,20 +78,6 @@ export const isParamObject = file =>
   file instanceof Object && ('data' in file || 'range' in file || 'url' in file);
 
 /**
- * Creates an URL of a Blob.
- *
- * @param {Blob} blob Blob from which an URL shall be created
- */
-export const getBlobURL = (blob) => {
-  if (!isBlob(blob)) {
-    throw new Error('getBlobURL was provided with an argument which is not a Blob.');
-  }
-
-  return URL.createObjectURL(blob);
-};
-
-
-/**
  * Calls a function, if it's defined, with specified arguments
  * @param {Function} fn
  * @param {Object} args

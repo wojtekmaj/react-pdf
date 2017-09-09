@@ -5,20 +5,14 @@ import samplePDF from './test.pdf';
 
 export default class LoadingOptions extends Component {
   onFileChange = (event) => {
-    this.setState(
-      { file: event.target.files[0] },
-      this.setFile,
-    );
+    this.props.setFile(event.target.files[0]);
   }
 
   onFileUintChange = (event) => {
     const reader = new FileReader();
 
     reader.onloadend = () => {
-      this.setState(
-        { file: reader.result },
-        this.setFile,
-      );
+      this.props.setFile(reader.result);
     };
 
     reader.readAsArrayBuffer(event.target.files[0]);
@@ -33,10 +27,7 @@ export default class LoadingOptions extends Component {
       return;
     }
 
-    this.setState(
-      { file: url },
-      this.setFile,
-    );
+    this.props.setFile(url);
   }
 
   onRequestChange = (event) => {
@@ -49,24 +40,14 @@ export default class LoadingOptions extends Component {
     }
 
     fetch(url).then(response => response.blob()).then((blob) => {
-      this.setState(
-        { file: blob },
-        this.setFile,
-      );
+      this.props.setFile(blob);
     });
   }
 
-  onUseImported = () =>
-    this.setState(
-      { file: samplePDF },
-      this.setFile,
-    )
+  onUseImported = () => this.props.setFile(samplePDF)
 
   onImportAndUnmount = () => {
-    this.setState(
-      { file: samplePDF },
-      this.setFile,
-    );
+    this.props.setFile(samplePDF);
 
     setTimeout(
       () => this.props.setState({
@@ -79,36 +60,19 @@ export default class LoadingOptions extends Component {
       }), 1000);
   }
 
-  onPassObjChange = event =>
-    this.setState(
-      { passObj: event.target.checked },
-      this.setFile,
-    )
+  onPassMethodChange = (event) => {
+    const passMethod = event.target.value;
 
-  unloadFile = () => this.setState(
-    { file: null },
-    this.setFile,
-  )
-
-  getTransformedFile = () => {
-    if (!this.state.passObj) {
-      return this.state.file;
-    }
-
-    const result = {};
-    if (typeof this.state.file === 'string') {
-      result.url = this.state.file;
-    } else {
-      return this.state.file;
-    }
-    return result;
+    this.props.setState({ passMethod });
   }
 
-  setFile() {
-    this.props.setFile(this.getTransformedFile());
-  }
+  unloadFile = () => this.props.setFile(null)
 
   render() {
+    const {
+      passMethod,
+    } = this.props;
+
     return (
       <fieldset id="load">
         <legend htmlFor="load">Load file</legend>
@@ -145,12 +109,43 @@ export default class LoadingOptions extends Component {
           <button onClick={this.onImportAndUnmount}>Import, unmount and mount</button>
         </div>
 
-        <input id="passobj" type="checkbox" onChange={this.onPassObjChange} />
-        <label htmlFor="passobj">Pass as an object (URLs and imports only)</label>
+        <div>
+          <input
+            checked={passMethod === 'normal'}
+            id="passNormal"
+            name="passMethod"
+            onChange={this.onPassMethodChange}
+            type="radio"
+            value="normal"
+          />
+          <label htmlFor="passNormal">Auto</label>
+        </div>
+        <div>
+          <input
+            checked={passMethod === 'object'}
+            id="passObject"
+            name="passMethod"
+            onChange={this.onPassMethodChange}
+            type="radio"
+            value="object"
+          />
+          <label htmlFor="passObject">Pass as an object (URLs and imports only)</label>
+        </div>
+        <div>
+          <input
+            checked={passMethod === 'blob'}
+            id="passBlob"
+            name="passMethod"
+            onChange={this.onPassMethodChange}
+            type="radio"
+            value="blob"
+          />
+          <label htmlFor="passBlob">Pass as a Blob (URLs and imports only</label>
+        </div>
 
         <div>
           <button
-            disabled={this.transformedFile === null}
+            disabled={this.props.file === null}
             onClick={this.unloadFile}
           >
             Unload file
@@ -162,6 +157,7 @@ export default class LoadingOptions extends Component {
 }
 
 LoadingOptions.propTypes = {
+  passMethod: PropTypes.oneOf(['normal', 'object', 'blob']),
   setFile: PropTypes.func.isRequired,
   setState: PropTypes.func.isRequired,
 };

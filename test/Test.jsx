@@ -7,6 +7,8 @@ import './Test.less';
 import LoadingOptions from './LoadingOptions';
 import ViewOptions from './ViewOptions';
 
+import { dataURItoBlob } from './shared/util';
+
 export default class Test extends Component {
   state = {
     displayAll: false,
@@ -14,6 +16,7 @@ export default class Test extends Component {
     numPages: null,
     pageNumber: null,
     pageWidth: null,
+    passMethod: 'normal',
     render: true,
     renderTextLayer: true,
     rotate: null,
@@ -25,9 +28,9 @@ export default class Test extends Component {
       pageNumber: null,
     })
 
-  onDocumentLoadError = ({ message }) => {
+  onDocumentLoadError = (error) => {
     // eslint-disable-next-line no-console
-    console.error(message);
+    console.error(error);
   }
 
   onItemClick = ({ pageNumber }) =>
@@ -44,17 +47,44 @@ export default class Test extends Component {
       pageNumber: (prevState.pageNumber || 1) + by,
     }))
 
+  get file() {
+    const { file } = this.state;
+    if (!file) {
+      return null;
+    }
+
+    switch (this.state.passMethod) {
+      case 'object': {
+        const result = {};
+        if (typeof file === 'string') {
+          result.url = file;
+          return result;
+        }
+        return file;
+      }
+      case 'blob':
+        if (file instanceof File || file instanceof Blob) {
+          return file;
+        }
+        return dataURItoBlob(file);
+      case 'normal':
+      default:
+        return file;
+    }
+  }
+
   render() {
     const {
       displayAll,
-      file,
       numPages,
       pageNumber,
       pageWidth,
+      passMethod,
       render,
       renderTextLayer,
       rotate,
     } = this.state;
+    const { file } = this;
 
     const setState = state => this.setState(state);
 
@@ -66,6 +96,8 @@ export default class Test extends Component {
         <div className="Test__container">
           <aside className="Test__container__options">
             <LoadingOptions
+              file={this.state.file}
+              passMethod={passMethod}
               setFile={this.setFile}
               setState={setState}
             />
@@ -86,6 +118,7 @@ export default class Test extends Component {
                     file={file}
                     onLoadSuccess={this.onDocumentLoadSuccess}
                     onLoadError={this.onDocumentLoadError}
+                    onSourceError={this.onDocumentLoadError}
                   >
                     <Outline
                       className="custom-classname-outline"
@@ -103,6 +136,7 @@ export default class Test extends Component {
                     onClick={(event, pdf) => console.log('Clicked a document', { event, pdf })}
                     onLoadSuccess={this.onDocumentLoadSuccess}
                     onLoadError={this.onDocumentLoadError}
+                    onSourceError={this.onDocumentLoadError}
                     rotate={rotate}
                   >
                     {

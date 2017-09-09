@@ -8,7 +8,6 @@ import mergeClassNames from 'merge-class-names';
 import {
   callIfDefined,
   displayCORSWarning,
-  getBlobURL,
   isArrayBuffer,
   isBlob,
   isBrowser,
@@ -19,6 +18,7 @@ import {
   makeCancellable,
 } from './shared/util';
 import { makeEventProps } from './shared/events';
+import { readFile } from './shared/fileReader';
 
 import { eventsProps } from './shared/propTypes';
 
@@ -31,8 +31,12 @@ export default class Document extends Component {
     this.loadDocument();
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (this.shouldLoadDocument(nextProps)) {
+  async componentWillReceiveProps(nextProps) {
+    if (await this.shouldLoadDocument(nextProps)) {
+      if (this.runningTask && this.runningTask.cancel) {
+        this.runningTask.cancel();
+      }
+
       this.loadDocument(nextProps);
     }
   }
@@ -116,7 +120,7 @@ export default class Document extends Component {
     this.setState({ pdf: false });
   }
 
-  shouldLoadDocument(nextProps) {
+  async shouldLoadDocument(nextProps) {
     const nextFile = nextProps.file;
     const { file } = this.props;
 
@@ -137,16 +141,35 @@ export default class Document extends Component {
       return true;
     }
 
-    // We got file of different type - clearly there's been a change
+    // We got file of different type - clearly there was a change
     if (typeof nextFile !== typeof file) {
       return true;
+    }
+
+    /**
+     * The cases below are browser-only.
+     * If you're running on a non-browser environment, these cases will be of no use.
+     */
+    if (isBrowser) {
+      // File is a Blob or a File
+      if (
+        (isBlob(nextFile) || isFile(nextFile)) &&
+        (isBlob(file) || isFile(file))
+      ) {
+        /**
+         * Theoretically, we could compare files here by reading them, but that would
+         * severely affect performance. Therefore, we're making a compromise here, agreeing
+         * on not loading the next file if its size is identical as the previous one's.
+         */
+        return nextFile.size !== file.size;
+      }
     }
 
     return nextFile !== file;
   }
 
   loadDocument(props = this.props) {
-    this.runningTask = makeCancellable(this.findDocumentSource(props));
+    this.runningTask = makeCancellable(this.findDocumentSource(props.file));
 
     return this.runningTask.promise
       .then(this.onSourceSuccess)
@@ -156,11 +179,9 @@ export default class Document extends Component {
   /**
    * Attempts to find a document source based on props.
    */
-  findDocumentSource = (props = this.props) => new Promise((resolve, reject) => {
-    const { file } = props;
-
+  async findDocumentSource(file = this.props.file) {
     if (!file) {
-      resolve(null);
+      return null;
     }
 
     // File is a string
@@ -169,11 +190,11 @@ export default class Document extends Component {
         displayCORSWarning();
       }
 
-      return resolve(file);
+      return file;
     }
 
     if (isArrayBuffer(file)) {
-      return resolve(file);
+      return file;
     }
 
     if (isParamObject(file)) {
@@ -187,7 +208,7 @@ export default class Document extends Component {
         }
       }
 
-      return resolve(modifiedFile);
+      return modifiedFile;
     }
 
     /**
@@ -196,22 +217,16 @@ export default class Document extends Component {
      */
     if (isBrowser) {
       // File is a Blob
-      if (isBlob(file)) {
-        const fileURL = getBlobURL(file);
-        return resolve(fileURL);
-      }
+      if (isBlob(file) || isFile(file)) {
+        const loadedFile = await readFile(file);
 
-      // File is a File
-      if (isFile(file)) {
-        const reader = new FileReader();
-        reader.onloadend = () => resolve(new Uint8Array(reader.result));
-        reader.readAsArrayBuffer(file);
+        return new Uint8Array(loadedFile);
       }
     }
 
     // No supported loading method worked
-    return reject();
-  })
+    throw new Error({ message: 'Unsupported loading method.' });
+  }
 
   renderNoData() {
     return (
