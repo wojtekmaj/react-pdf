@@ -78,33 +78,6 @@ export const isParamObject = file =>
   file instanceof Object && ('data' in file || 'range' in file || 'url' in file);
 
 /**
- * Parses data URI to Blob.
- *
- * @param {String} dataURI
- */
-export const dataURItoBlob = (dataURI) => {
-  if (!isDataURI(dataURI)) {
-    throw new Error('getDataURItoBlob was provided with an argument which is not a valid data URI.');
-  }
-
-  let byteString;
-  if (dataURI.split(',')[0].indexOf('base64') >= 0) {
-    byteString = atob(dataURI.split(',')[1]);
-  } else {
-    byteString = unescape(dataURI.split(',')[1]);
-  }
-
-  const [mimeString] = dataURI.split(',')[0].split(':')[1].split(';');
-
-  const ia = new Uint8Array(byteString.length);
-  for (let i = 0; i < byteString.length; i += 1) {
-    ia[i] = byteString.charCodeAt(i);
-  }
-
-  return new Blob([ia], { type: mimeString });
-};
-
-/**
  * Creates an URL of a Blob.
  *
  * @param {Blob} blob Blob from which an URL shall be created
@@ -117,7 +90,6 @@ export const getBlobURL = (blob) => {
   return URL.createObjectURL(blob);
 };
 
-export const dataURItoURL = dataURI => getBlobURL(dataURItoBlob(dataURI));
 
 /**
  * Calls a function, if it's defined, with specified arguments

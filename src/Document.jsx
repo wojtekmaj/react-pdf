@@ -7,7 +7,6 @@ import mergeClassNames from 'merge-class-names';
 
 import {
   callIfDefined,
-  dataURItoURL,
   displayCORSWarning,
   getBlobURL,
   isArrayBuffer,
@@ -58,7 +57,9 @@ export default class Document extends Component {
       throw new Error('Could not load the document. PDF.js is not loaded.');
     }
 
-    this.setState({ pdf: null });
+    if (this.state.pdf !== null) {
+      this.setState({ pdf: null });
+    }
 
     if (!source) {
       return null;
@@ -162,15 +163,11 @@ export default class Document extends Component {
       resolve(null);
     }
 
-    // File is data URI
-    if (isDataURI(file)) {
-      const fileBlobURL = dataURItoURL(file);
-      return resolve(fileBlobURL);
-    }
-
     // File is a string
     if (isString(file)) {
-      displayCORSWarning();
+      if (!isDataURI(file)) {
+        displayCORSWarning();
+      }
 
       return resolve(file);
     }
@@ -185,11 +182,7 @@ export default class Document extends Component {
 
       if ('url' in modifiedFile) {
         // File is data URI
-        if (isDataURI(modifiedFile.url)) {
-          const fileBlobURL = dataURItoURL(modifiedFile.url);
-
-          modifiedFile.url = fileBlobURL;
-        } else {
+        if (!isDataURI(modifiedFile.url)) {
           displayCORSWarning();
         }
       }
