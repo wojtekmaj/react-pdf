@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import mergeClassNames from 'merge-class-names';
 
 import PageCanvas from './PageCanvas';
 import PageTextContent from './PageTextContent';
@@ -166,6 +167,7 @@ export default class Page extends Component {
     }
 
     const {
+      className,
       onGetTextError,
       onGetTextSuccess,
       onRenderError,
@@ -175,7 +177,7 @@ export default class Page extends Component {
 
     return (
       <div
-        className="ReactPDF__Page"
+        className={mergeClassNames('ReactPDF__Page', className)}
         style={{ position: 'relative' }}
       >
         <PageCanvas
@@ -206,6 +208,10 @@ Page.defaultProps = {
 };
 
 Page.propTypes = {
+  className: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.arrayOf(PropTypes.string),
+  ]),
   onGetTextError: PropTypes.func,
   onGetTextSuccess: PropTypes.func,
   onLoadError: PropTypes.func,

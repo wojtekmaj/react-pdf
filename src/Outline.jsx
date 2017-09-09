@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import mergeClassNames from 'merge-class-names';
 
 import {
   callIfDefined,
@@ -215,8 +216,10 @@ export default class Outline extends Component {
       return null;
     }
 
+    const { className } = this.props;
+
     return (
-      <div className="ReactPDF__Outline">
+      <div className={mergeClassNames('ReactPDF__Outline', className)}>
         {this.renderOutline()}
       </div>
     );
@@ -224,6 +227,10 @@ export default class Outline extends Component {
 }
 
 Outline.propTypes = {
+  className: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.arrayOf(PropTypes.string),
+  ]),
   onItemClick: PropTypes.func,
   onLoadError: PropTypes.func,
   onLoadSuccess: PropTypes.func,

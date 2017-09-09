@@ -32,6 +32,7 @@
   "license": "MIT",
   "dependencies": {
     "babel-runtime": "^6.26.0",
+    "merge-class-names": "^1.0.0",
     "pdfjs-dist": "^1.9.537",
     "prop-types": ">=15.5",
     "react": ">=15.5",
