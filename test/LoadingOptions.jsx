@@ -156,7 +156,26 @@ export default class LoadingOptions extends Component {
   }
 }
 
+const fileTypes = [
+  PropTypes.string,
+  PropTypes.instanceOf(ArrayBuffer),
+  PropTypes.shape({
+    data: PropTypes.object,
+    httpHeaders: PropTypes.object,
+    range: PropTypes.object,
+    url: PropTypes.string,
+    withCredentials: PropTypes.bool,
+  }),
+];
+if (typeof File !== 'undefined') {
+  fileTypes.push(PropTypes.instanceOf(File));
+}
+if (typeof Blob !== 'undefined') {
+  fileTypes.push(PropTypes.instanceOf(Blob));
+}
+
 LoadingOptions.propTypes = {
+  file: PropTypes.oneOfType(fileTypes),
   passMethod: PropTypes.oneOf(['normal', 'object', 'blob']),
   setFile: PropTypes.func.isRequired,
   setState: PropTypes.func.isRequired,

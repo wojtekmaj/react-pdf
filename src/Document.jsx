@@ -295,6 +295,24 @@ Document.defaultProps = {
   noData: 'No PDF file specified.',
 };
 
+const fileTypes = [
+  PropTypes.string,
+  PropTypes.instanceOf(ArrayBuffer),
+  PropTypes.shape({
+    data: PropTypes.object,
+    httpHeaders: PropTypes.object,
+    range: PropTypes.object,
+    url: PropTypes.string,
+    withCredentials: PropTypes.bool,
+  }),
+];
+if (typeof File !== 'undefined') {
+  fileTypes.push(PropTypes.instanceOf(File));
+}
+if (typeof Blob !== 'undefined') {
+  fileTypes.push(PropTypes.instanceOf(Blob));
+}
+
 Document.propTypes = {
   children: PropTypes.node,
   className: PropTypes.oneOfType([
@@ -302,19 +320,7 @@ Document.propTypes = {
     PropTypes.arrayOf(PropTypes.string),
   ]),
   error: PropTypes.node,
-  file: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.instanceOf(File),
-    PropTypes.instanceOf(Blob),
-    PropTypes.instanceOf(ArrayBuffer),
-    PropTypes.shape({
-      data: PropTypes.object,
-      httpHeaders: PropTypes.object,
-      range: PropTypes.object,
-      url: PropTypes.string,
-      withCredentials: PropTypes.bool,
-    }),
-  ]),
+  file: PropTypes.oneOfType(fileTypes),
   loading: PropTypes.node,
   noData: PropTypes.node,
   onLoadError: PropTypes.func,
