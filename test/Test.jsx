@@ -116,7 +116,6 @@ export default class Test extends Component {
                   <Document
                     className="custom-classname-document"
                     file={file}
-                    onLoadSuccess={this.onDocumentLoadSuccess}
                     onLoadError={this.onDocumentLoadError}
                     onSourceError={this.onDocumentLoadError}
                   >
