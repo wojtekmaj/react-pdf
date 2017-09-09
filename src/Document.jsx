@@ -3,6 +3,7 @@
  */
 import React, { Children, Component } from 'react';
 import PropTypes from 'prop-types';
+import mergeClassNames from 'merge-class-names';
 
 import {
   callIfDefined,
@@ -231,7 +232,7 @@ export default class Document extends Component {
   }
 
   renderChildren() {
-    const { children, rotate } = this.props;
+    const { children, className, rotate } = this.props;
     const { pdf } = this.state;
 
     const childProps = {
@@ -240,7 +241,7 @@ export default class Document extends Component {
     };
 
     return (
-      <div className="ReactPDF__Document">
+      <div className={mergeClassNames('ReactPDF__Document', className)}>
         {
           children && Children
             .map(children, child => React.cloneElement(child, childProps))
@@ -278,6 +279,10 @@ Document.defaultProps = {
 
 Document.propTypes = {
   children: PropTypes.node,
+  className: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.arrayOf(PropTypes.string),
+  ]),
   error: PropTypes.node,
   file: PropTypes.oneOfType([
     PropTypes.string,

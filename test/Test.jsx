@@ -82,11 +82,13 @@ export default class Test extends Component {
               {
                 render &&
                   <Document
+                    className="custom-classname-document"
                     file={file}
                     onLoadSuccess={this.onDocumentLoadSuccess}
                     onLoadError={this.onDocumentLoadError}
                   >
                     <Outline
+                      className="custom-classname-outline"
                       onItemClick={this.onItemClick}
                     />
                   </Document>
@@ -96,6 +98,7 @@ export default class Test extends Component {
               {
                 render &&
                   <Document
+                    className="custom-classname-document"
                     file={file}
                     onLoadSuccess={this.onDocumentLoadSuccess}
                     onLoadError={this.onDocumentLoadError}
@@ -107,6 +110,7 @@ export default class Test extends Component {
                           new Array(numPages),
                           (el, index) => (
                             <Page
+                              className="custom-classname-page"
                               ref={(ref) => {
                                 if (!ref) {
                                   return;
@@ -129,6 +133,7 @@ export default class Test extends Component {
                           ),
                         ) :
                         <Page
+                          className="custom-classname-page"
                           key={`page_${pageNumber}`}
                           pageNumber={pageNumber || 1}
                           renderTextLayer={renderTextLayer}
