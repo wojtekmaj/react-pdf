@@ -10,6 +10,7 @@
     "react"
   ],
   "plugins": [
+    "transform-runtime",
     "transform-class-properties",
     "react-hot-loader/babel"
   ]
