@@ -16,7 +16,7 @@
   "rules": {
     "global-require": "off",
     "max-len": "error",
-    "no-param-reassign": ["error", { "props": true, "ignorePropertyModificationsFor": ["canvas", "element"] }],
+    "no-param-reassign": ["error", { "props": true, "ignorePropertyModificationsFor": ["canvas", "element", "svg"] }],
     "prefer-destructuring": "warn",
     "prefer-spread": "warn",
     "react/require-default-props": "off",

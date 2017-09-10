@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import mergeClassNames from 'merge-class-names';
 
 import PageCanvas from './PageCanvas';
+import PageSVG from './PageSVG';
 import PageTextContent from './PageTextContent';
 
 import {
@@ -167,6 +168,53 @@ export default class Page extends Component {
       .catch(this.onLoadError);
   }
 
+  renderSVG() {
+    const {
+      onRenderError,
+      onRenderSuccess,
+    } = this.props;
+    const { page } = this.state;
+
+    return (
+      <PageSVG
+        onRenderError={onRenderError}
+        onRenderSuccess={onRenderSuccess}
+        page={page}
+        rotate={this.rotate}
+        scale={this.scale}
+      />
+    );
+  }
+
+  renderCanvas() {
+    const {
+      onGetTextError,
+      onGetTextSuccess,
+      onRenderError,
+      onRenderSuccess,
+      renderTextLayer,
+    } = this.props;
+    const { page } = this.state;
+
+    return [
+      <PageCanvas
+        onRenderError={onRenderError}
+        onRenderSuccess={onRenderSuccess}
+        page={page}
+        rotate={this.rotate}
+        scale={this.scale}
+      />,
+      renderTextLayer &&
+        <PageTextContent
+          onGetTextError={onGetTextError}
+          onGetTextSuccess={onGetTextSuccess}
+          page={page}
+          rotate={this.rotate}
+          scale={this.scale}
+        />,
+    ];
+  }
+
   render() {
     const { pdf } = this.props;
     const { page } = this.state;
@@ -183,11 +231,7 @@ export default class Page extends Component {
     const {
       children,
       className,
-      onGetTextError,
-      onGetTextSuccess,
-      onRenderError,
-      onRenderSuccess,
-      renderTextLayer,
+      renderMode,
      } = this.props;
 
     return (
@@ -196,22 +240,10 @@ export default class Page extends Component {
         style={{ position: 'relative' }}
         {...this.eventProps}
       >
-        <PageCanvas
-          onRenderError={onRenderError}
-          onRenderSuccess={onRenderSuccess}
-          page={page}
-          rotate={this.rotate}
-          scale={this.scale}
-        />
         {
-          renderTextLayer &&
-            <PageTextContent
-              onGetTextError={onGetTextError}
-              onGetTextSuccess={onGetTextSuccess}
-              page={page}
-              rotate={this.rotate}
-              scale={this.scale}
-            />
+          renderMode === 'svg' ?
+            this.renderSVG() :
+            this.renderCanvas()
         }
         {children}
       </div>
@@ -220,6 +252,7 @@ export default class Page extends Component {
 }
 
 Page.defaultProps = {
+  renderMode: 'canvas',
   renderTextLayer: true,
   scale: 1.0,
 };
@@ -242,6 +275,7 @@ Page.propTypes = {
     getPage: PropTypes.func.isRequired,
     numPages: PropTypes.number.isRequired,
   }),
+  renderMode: PropTypes.oneOf(['canvas', 'svg']),
   renderTextLayer: PropTypes.bool,
   rotate: PropTypes.number,
   scale: PropTypes.number,
