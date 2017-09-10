@@ -96,11 +96,7 @@ export default class PageCanvas extends Component {
           display: 'block',
           userSelect: 'none',
         }}
-        ref={(ref) => {
-          if (!ref) return;
-
-          this.drawPageOnCanvas(ref);
-        }}
+        ref={this.drawPageOnCanvas}
       />
     );
   }
