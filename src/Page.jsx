@@ -198,6 +198,7 @@ export default class Page extends Component {
 
     return [
       <PageCanvas
+        key="pageCanvas"
         onRenderError={onRenderError}
         onRenderSuccess={onRenderSuccess}
         page={page}
@@ -206,6 +207,7 @@ export default class Page extends Component {
       />,
       renderTextLayer &&
         <PageTextContent
+          key="pageTextContent"
           onGetTextError={onGetTextError}
           onGetTextSuccess={onGetTextSuccess}
           page={page}
