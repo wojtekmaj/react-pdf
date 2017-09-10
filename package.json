@@ -36,7 +36,8 @@
     "pdfjs-dist": "^1.9.537",
     "prop-types": ">=15.5",
     "react": ">=15.5",
-    "react-dom": ">=15.5"
+    "react-dom": ">=15.5",
+    "webpack": "^2.7.0"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
