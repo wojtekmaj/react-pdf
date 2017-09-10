@@ -25,7 +25,7 @@ export default class Test extends Component {
   onDocumentLoadSuccess = ({ numPages }) =>
     this.setState({
       numPages,
-      pageNumber: null,
+      pageNumber: 1,
     })
 
   onDocumentLoadError = ({ message }) => {
