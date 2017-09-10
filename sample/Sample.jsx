@@ -55,9 +55,9 @@ class Sample extends Component {
                   (el, index) => (
                     <Page
                       key={`page_${index + 1}`}
-                      pageNumber={index + 1}
                       onRenderSuccess={this.onPageRenderSuccess}
-                      width={Math.min(600, document.body.clientWidth - 52)}
+                      pageNumber={index + 1}
+                      renderMode="svg"
                     />
                   ),
                 )
