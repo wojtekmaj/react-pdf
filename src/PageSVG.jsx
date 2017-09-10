@@ -45,16 +45,14 @@ export default class PageSVG extends Component {
 
     return this.renderer
       .then((operatorList) => {
-        System.import('pdfjs-dist/lib/display/svg').then((svgLib) => {
-          const svgGfx = new svgLib.SVGGraphics(page.commonObjs, page.objs);
-          this.renderer = svgGfx.getSVG(operatorList, viewport)
-            .then((svg) => {
-              svg.style.maxWidth = '100%';
-              svg.style.height = 'auto';
-              element.appendChild(svg);
-            })
-            .catch(this.onRenderError);
-        });
+        const svgGfx = new PDFJS.SVGGraphics(page.commonObjs, page.objs);
+        this.renderer = svgGfx.getSVG(operatorList, viewport)
+          .then((svg) => {
+            svg.style.maxWidth = '100%';
+            svg.style.height = 'auto';
+            element.appendChild(svg);
+          })
+          .catch(this.onRenderError);
       })
       .catch(this.onRenderError);
   }
