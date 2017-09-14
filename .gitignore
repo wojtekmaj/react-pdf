@@ -5,5 +5,4 @@ sample/build
 test/build
 test_pdfs
 npm-debug.log
-package-lock.json
-stats*.json
+yarn-error.log
