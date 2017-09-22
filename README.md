@@ -124,6 +124,8 @@ Loads a document passed using `file` prop.
 
 Displays a page. Must be placed inside `<Document />` or have `pdf` prop passed, which can be obtained from `<Document />`'s `onLoadSuccess` callback function.
 
+**Note:** `<Page/>` should be **direct child** of the `<Document />`, `<Document />` passes props only to its directly children.
+
 #### Props
 
 |Prop name|Description|Example values|
