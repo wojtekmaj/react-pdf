@@ -2,7 +2,9 @@
 build
 node_modules
 sample/build
+sample/package-lock.json
 test/build
+test/package-lock.json
 test_pdfs
 npm-debug.log
 yarn-error.log
