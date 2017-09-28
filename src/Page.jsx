@@ -7,6 +7,7 @@ import PageTextContent from './PageTextContent';
 
 import {
   callIfDefined,
+  errorOnDev,
   isProvided,
   makeCancellable,
 } from './shared/util';
@@ -59,6 +60,8 @@ export default class Page extends Component {
     if (error === 'cancelled') {
       return;
     }
+
+    errorOnDev(error.message, error);
 
     callIfDefined(
       this.props.onLoadError,

@@ -28,11 +28,6 @@ export default class Test extends Component {
       pageNumber: 1,
     })
 
-  onDocumentLoadError = ({ message }) => {
-    // eslint-disable-next-line no-console
-    console.error(message);
-  }
-
   onItemClick = ({ pageNumber }) =>
     this.setState({ pageNumber })
 
@@ -116,8 +111,6 @@ export default class Test extends Component {
                   <Document
                     className="custom-classname-document"
                     file={file}
-                    onLoadError={this.onDocumentLoadError}
-                    onSourceError={this.onDocumentLoadError}
                   >
                     <Outline
                       className="custom-classname-outline"

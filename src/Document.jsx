@@ -8,6 +8,7 @@ import mergeClassNames from 'merge-class-names';
 import {
   callIfDefined,
   displayCORSWarning,
+  errorOnDev,
   isArrayBuffer,
   isBlob,
   isBrowser,
@@ -79,6 +80,8 @@ export default class Document extends Component {
       return;
     }
 
+    errorOnDev(error.message, error);
+
     callIfDefined(
       this.props.onSourceError,
       error,
@@ -106,6 +109,8 @@ export default class Document extends Component {
     if (error === 'cancelled') {
       return;
     }
+
+    errorOnDev(error.message, error);
 
     callIfDefined(
       this.props.onLoadError,

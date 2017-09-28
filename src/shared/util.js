@@ -90,12 +90,16 @@ export const callIfDefined = (fn, args) => {
 
 export const getPixelRatio = () => window.devicePixelRatio || 1;
 
-export const warnOnDev = (message) => {
+const consoleOnDev = (method, ...message) => {
   if (!isProduction) {
     // eslint-disable-next-line no-console
-    console.warn(message);
+    console[method](...message);
   }
 };
+
+export const warnOnDev = (...message) => consoleOnDev('warn', ...message);
+
+export const errorOnDev = (...message) => consoleOnDev('error', ...message);
 
 export const displayCORSWarning = () => {
   if (isLocalFileSystem) {

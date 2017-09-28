@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 
 import {
   callIfDefined,
+  errorOnDev,
   makeCancellable,
 } from './shared/util';
 
@@ -48,6 +49,8 @@ export default class PageTextContent extends Component {
     if (error === 'cancelled') {
       return;
     }
+
+    errorOnDev(error.message, error);
 
     callIfDefined(
       this.props.onGetTextError,

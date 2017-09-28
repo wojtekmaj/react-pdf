@@ -4,6 +4,7 @@ import mergeClassNames from 'merge-class-names';
 
 import {
   callIfDefined,
+  errorOnDev,
   isDefined,
   makeCancellable,
 } from './shared/util';
@@ -74,6 +75,8 @@ export default class Outline extends Component {
       return;
     }
 
+    errorOnDev(error.message, error);
+
     callIfDefined(
       this.props.onLoadError,
       error,
@@ -100,6 +103,8 @@ export default class Outline extends Component {
     if (error === 'cancelled') {
       return;
     }
+
+    errorOnDev(error.message, error);
 
     callIfDefined(
       this.props.onParseError,
