@@ -2,6 +2,7 @@
   "name": "react-pdf-test-page",
   "version": "2.1.2",
   "description": "A test page for React-PDF.",
+  "private": true,
   "scripts": {
     "build": "webpack",
     "start": "webpack-dev-server --config webpack.config.hot.js"
