@@ -188,7 +188,8 @@ export default class Page extends Component {
       onRenderError,
       onRenderSuccess,
       renderTextLayer,
-     } = this.props;
+    } = this.props;
+    const { rotate, scale } = this;
 
     return (
       <div
@@ -197,20 +198,22 @@ export default class Page extends Component {
         {...this.eventProps}
       >
         <PageCanvas
+          key={`${page.pageIndex}@${rotate}_canvas`}
           onRenderError={onRenderError}
           onRenderSuccess={onRenderSuccess}
           page={page}
-          rotate={this.rotate}
-          scale={this.scale}
+          rotate={rotate}
+          scale={scale}
         />
         {
           renderTextLayer &&
             <PageTextContent
+              key={`${page.pageIndex}@${rotate}_text`}
               onGetTextError={onGetTextError}
               onGetTextSuccess={onGetTextSuccess}
               page={page}
-              rotate={this.rotate}
-              scale={this.scale}
+              rotate={rotate}
+              scale={scale}
             />
         }
         {children}

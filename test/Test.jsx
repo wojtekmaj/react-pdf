@@ -169,7 +169,6 @@ export default class Test extends Component {
                         ) :
                         <Page
                           className="custom-classname-page"
-                          key={`page_${pageNumber}`}
                           onClick={(event, page) => console.log('Clicked a page', { event, page })}
                           pageNumber={pageNumber || 1}
                           renderTextLayer={renderTextLayer}
