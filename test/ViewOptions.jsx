@@ -75,7 +75,12 @@ export default class ViewOptions extends Component {
         <label htmlFor="renderTextLayer">Render text layers</label>
 
         <div>
-          <label htmlFor>Rotation:</label>
+          <label htmlFor="rotation">Rotation:</label>
+          <input
+            style={{ width: '42px' }}
+            type="number"
+            value={rotate || ''}
+          />&nbsp;
           <button onClick={this.rotateLeft}>Rotate left</button>&nbsp;
           <button onClick={this.rotateRight}>Rotate right</button>&nbsp;
           <button
