@@ -41,7 +41,7 @@
     "react-hot-loader": "^3.0.0-beta.7",
     "style-loader": "latest",
     "url-loader": "latest",
-    "webpack": "^2.7.0",
+    "webpack": "^3.6.0",
     "webpack-dev-server": "^2.9.1"
   }
 }

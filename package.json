@@ -34,11 +34,11 @@
     "babel-runtime": "^6.26.0",
     "lodash.once": "^4.1.1",
     "merge-class-names": "^1.1.0",
-    "pdfjs-dist": "^1.9.602",
+    "pdfjs-dist": "^1.9.617",
     "prop-types": ">=15.5",
     "react": ">=15.5",
     "react-dom": ">=15.5",
-    "webpack": "^2.7.0"
+    "webpack": "^3.6.0"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
