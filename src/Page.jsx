@@ -201,7 +201,7 @@ export default class Page extends Component {
         {...this.eventProps}
       >
         <PageCanvas
-          key={`${page.pageIndex}@${rotate}_canvas`}
+          key={`${page.pageIndex}@${rotate}_canvas@${scale}_canvas`}
           onRenderError={onRenderError}
           onRenderSuccess={onRenderSuccess}
           page={page}
