@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
+import './annotation_layer_builder.css';
+
 import {
   makeCancellable,
 } from './shared/util';
@@ -12,13 +14,7 @@ export default class PageAnnotations extends Component {
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.page !== this.props.page) {
-      this.getAnnotations();
-    }
-  }
-
-  componentDidUpdate(prevProps) {
-    if (prevProps.scale !== this.props.scale) {
-      this.getAnnotations(true);
+      this.getAnnotations(nextProps);
     }
   }
 
@@ -28,34 +24,51 @@ export default class PageAnnotations extends Component {
     }
   }
 
-  getAnnotations(update = false) {
-    this.runningTask = makeCancellable(this.props.page.getAnnotations());
+  get unrotatedViewport() {
+    const { page, scale } = this.props;
+
+    return page.getViewport(scale);
+  }
+
+  getAnnotations(props = this.props) {
+    this.runningTask = makeCancellable(props.page.getAnnotations());
 
     return this.runningTask.promise.then((annotations) => {
-      this.renderAnnotations(annotations, update);
+      this.renderAnnotations(annotations);
     });
   }
 
-  renderAnnotations(annotations, update) {
+  renderAnnotations(annotations) {
     const { page, scale } = this.props;
     const viewport = page.getViewport(scale).clone({ dontFlip: true });
+
     const parameters = {
-      div: this.annotationLayer,
       annotations,
+      div: this.annotationLayer,
       page,
       viewport,
     };
 
-    if (update) {
-      PDFJS.AnnotationLayer.update(parameters);
-    } else {
-      PDFJS.AnnotationLayer.render(parameters);
-    }
+    PDFJS.AnnotationLayer.render(parameters);
   }
 
   render() {
+    const { rotate } = this.props;
+    const { unrotatedViewport: viewport } = this;
+
     return (
-      <div className="ReactPDF__Page__annotationLayer" ref={(ref) => { this.annotationLayer = ref; }} />
+      <div
+        className="ReactPDF__Page__annotations annotationLayer"
+        style={{
+          position: 'absolute',
+          top: '50%',
+          left: '50%',
+          width: `${viewport.width}px`,
+          height: `${viewport.height}px`,
+          transform: `translate(-50%, -50%) rotate(${rotate}deg)`,
+        }}
+        ref={(ref) => { this.annotationLayer = ref; }}
+      />
     );
   }
 }
@@ -65,5 +78,6 @@ PageAnnotations.propTypes = {
     getAnnotations: PropTypes.func.isRequired,
     getViewport: PropTypes.func.isRequired,
   }).isRequired,
+  rotate: PropTypes.number,
   scale: PropTypes.number,
 };
