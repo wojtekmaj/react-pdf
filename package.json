@@ -1,6 +1,6 @@
 {
   "name": "react-pdf",
-  "version": "2.1.6",
+  "version": "2.1.7",
   "description": "Easily display PDF files in your React application.",
   "main": "build/entry.js",
   "es6": "src/entry.js",
@@ -21,12 +21,24 @@
   },
   "contributors": [
     {
-      "name": "Niklas Närhinen",
-      "email": "niklas@narhinen.net"
+      "name": "Anenth",
+      "email": "anenthvishnu@gmail.com"
+    },
+    {
+      "name": "Artur Termenji",
+      "email": "atermenji@gmail.com"
     },
     {
       "name": "Bart Van Houtte",
       "email": "bart.van.houtte@ading.be"
+    },
+    {
+      "name": "Niklas Närhinen",
+      "email": "niklas@narhinen.net"
+    },
+    {
+      "name": "Thomas McCarthy",
+      "email": "tom@tomm.cc"
     }
   ],
   "license": "MIT",
@@ -36,8 +48,6 @@
     "merge-class-names": "^1.1.0",
     "pdfjs-dist": "^1.9.617",
     "prop-types": ">=15.5",
-    "react": ">=15.5",
-    "react-dom": ">=15.5",
     "webpack": "^3.6.0"
   },
   "devDependencies": {
@@ -56,6 +66,10 @@
     "eslint-plugin-import": "^2.7.0",
     "eslint-plugin-jsx-a11y": "^5.1.1",
     "eslint-plugin-react": "^7.4.0"
+  },
+  "peerDependencies": {
+    "react": "^15.5.0 || ^16.0.0",
+    "react-dom": "^15.5.0 || ^16.0.0"
   },
   "files": [
     "LICENSE",
