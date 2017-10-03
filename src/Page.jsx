@@ -4,6 +4,7 @@ import mergeClassNames from 'merge-class-names';
 
 import PageCanvas from './PageCanvas';
 import PageTextContent from './PageTextContent';
+import PageAnnotations from './PageAnnotations';
 
 import {
   callIfDefined,
@@ -190,6 +191,7 @@ export default class Page extends Component {
       onGetTextSuccess,
       onRenderError,
       onRenderSuccess,
+      renderAnnotations,
       renderTextLayer,
     } = this.props;
     const { rotate, scale } = this;
@@ -219,6 +221,7 @@ export default class Page extends Component {
               scale={scale}
             />
         }
+        {renderAnnotations && <PageAnnotations page={page} scale={scale} />}
         {children}
       </div>
     );
@@ -248,6 +251,7 @@ Page.propTypes = {
     getPage: PropTypes.func.isRequired,
     numPages: PropTypes.number.isRequired,
   }),
+  renderAnnotations: PropTypes.bool,
   renderTextLayer: PropTypes.bool,
   rotate: PropTypes.number,
   scale: PropTypes.number,
