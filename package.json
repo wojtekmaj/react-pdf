@@ -10,11 +10,7 @@
     "prepublishOnly": "npm run build",
     "test": "npm run eslint"
   },
-  "keywords": [
-    "pdf",
-    "pdf-viewer",
-    "react"
-  ],
+  "keywords": ["pdf", "pdf-viewer", "react"],
   "author": {
     "name": "Wojciech Maj",
     "email": "kontakt@wojtekmaj.pl"
@@ -36,8 +32,6 @@
     "merge-class-names": "^1.1.0",
     "pdfjs-dist": "^1.9.617",
     "prop-types": ">=15.5",
-    "react": ">=15.5",
-    "react-dom": ">=15.5",
     "webpack": "^3.6.0"
   },
   "devDependencies": {
@@ -57,12 +51,11 @@
     "eslint-plugin-jsx-a11y": "^5.1.1",
     "eslint-plugin-react": "^7.4.0"
   },
-  "files": [
-    "LICENSE",
-    "README.md",
-    "build/",
-    "src/"
-  ],
+  "peerDependencies": {
+    "react": "^15.5.0 || ^16.0.0",
+    "react-dom": "^15.5.0 || ^16.0.0"
+  },
+  "files": ["LICENSE", "README.md", "build/", "src/"],
   "repository": {
     "type": "git",
     "url": "https://github.com/wojtekmaj/react-pdf.git"
