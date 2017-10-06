@@ -43,13 +43,13 @@
   ],
   "license": "MIT",
   "dependencies": {
+    "babel-runtime": "^6.26.0",
     "lodash.once": "^4.1.1",
     "merge-class-names": "^1.1.0",
     "pdfjs-dist": "^1.9.617",
     "prop-types": ">=15.5"
   },
   "devDependencies": {
-    "babel-runtime": "^6.26.0",
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.0",
     "babel-eslint": "^8.0.1",
