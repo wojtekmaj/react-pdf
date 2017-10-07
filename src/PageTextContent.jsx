@@ -46,7 +46,7 @@ export default class PageTextContent extends Component {
   }
 
   onGetTextError = (error) => {
-    if (error === 'cancelled') {
+    if ((error.message || error) === 'cancelled') {
       return;
     }
 

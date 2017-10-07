@@ -57,7 +57,7 @@ export default class Page extends Component {
    * Called when a page failed to load
    */
   onLoadError = (error) => {
-    if (error === 'cancelled') {
+    if ((error.message || error) === 'cancelled') {
       return;
     }
 
@@ -197,6 +197,7 @@ export default class Page extends Component {
     return (
       <div
         className={mergeClassNames('ReactPDF__Page', className)}
+        ref={this.props.inputRef}
         style={{ position: 'relative' }}
         {...this.eventProps}
       >
@@ -236,6 +237,7 @@ Page.propTypes = {
     PropTypes.string,
     PropTypes.arrayOf(PropTypes.string),
   ]),
+  inputRef: PropTypes.func,
   onGetTextError: PropTypes.func,
   onGetTextSuccess: PropTypes.func,
   onLoadError: PropTypes.func,

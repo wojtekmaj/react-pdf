@@ -56,9 +56,7 @@ export default class Outline extends Component {
    * Called when an outline is read successfully
    */
   onLoadSuccess = (outline) => {
-    callIfDefined(
-      this.props.onLoadSuccess,
-    );
+    callIfDefined(this.props.onLoadSuccess);
 
     this.runningTask = makeCancellable(this.parseOutline(outline));
 
@@ -71,7 +69,7 @@ export default class Outline extends Component {
    * Called when an outline failed to read successfully
    */
   onLoadError = (error) => {
-    if (error === 'cancelled') {
+    if ((error.message || error) === 'cancelled') {
       return;
     }
 
@@ -100,7 +98,7 @@ export default class Outline extends Component {
    * Called when an outline failed to read successfully
    */
   onParseError = (error) => {
-    if (error === 'cancelled') {
+    if ((error.message || error) === 'cancelled') {
       return;
     }
 
@@ -233,6 +231,7 @@ export default class Outline extends Component {
     return (
       <div
         className={mergeClassNames('ReactPDF__Outline', className)}
+        ref={this.props.inputRef}
         {...this.eventProps}
       >
         {this.renderOutline()}
@@ -246,6 +245,7 @@ Outline.propTypes = {
     PropTypes.string,
     PropTypes.arrayOf(PropTypes.string),
   ]),
+  inputRef: PropTypes.func,
   onItemClick: PropTypes.func,
   onLoadError: PropTypes.func,
   onLoadSuccess: PropTypes.func,
