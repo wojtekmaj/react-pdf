@@ -47,8 +47,7 @@
     "lodash.once": "^4.1.1",
     "merge-class-names": "^1.1.0",
     "pdfjs-dist": "^1.9.617",
-    "prop-types": ">=15.5",
-    "webpack": "^3.6.0"
+    "prop-types": ">=15.5"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
@@ -65,7 +64,8 @@
     "eslint-plugin-class-property": "^1.0.6",
     "eslint-plugin-import": "^2.7.0",
     "eslint-plugin-jsx-a11y": "^5.1.1",
-    "eslint-plugin-react": "^7.4.0"
+    "eslint-plugin-react": "^7.4.0",
+    "webpack": "^3.6.0"
   },
   "peerDependencies": {
     "react": "^15.5.0 || ^16.0.0",
