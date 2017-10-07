@@ -237,6 +237,7 @@ export default class Page extends Component {
 }
 
 Page.defaultProps = {
+  renderAnnotations: true,
   renderTextLayer: true,
   scale: 1.0,
 };

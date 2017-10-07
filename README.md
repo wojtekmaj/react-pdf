@@ -137,6 +137,7 @@ Displays a page. Must be placed inside `<Document />` or have `pdf` prop passed,
 |onRenderSuccess|Function called when the page is successfully rendered on the screen.|`() => alert('Rendered the page!')`|
 |pageIndex|Defines which page from PDF file should be displayed. Defaults to 0.|`0`|
 |pageNumber|Defines which page from PDF file should be displayed. If provided, `pageIndex` prop will be ignored. Defaults to 1.|`1`|
+|renderAnnotations|Defined whether annotations (e.g. links) should be rendered. Defaults to true.|`false`|
 |renderTextLayer|Defines whether a text layer should be rendered. Defaults to true.|`false`|
 |rotate|Defines the rotation of the page in degrees. 90 = rotated to the right, 180 = upside down, 270 = rotated to the left. Defaults to page's default setting, usually 0.|`90`|
 |scale|Defines the scale in which PDF file should be rendered. Defaults to 1.0.|`0.5`|
