@@ -4,6 +4,7 @@ import mergeClassNames from 'merge-class-names';
 
 import PageCanvas from './PageCanvas';
 import PageTextContent from './PageTextContent';
+import PageAnnotations from './PageAnnotations';
 
 import {
   callIfDefined,
@@ -190,6 +191,7 @@ export default class Page extends Component {
       onGetTextSuccess,
       onRenderError,
       onRenderSuccess,
+      renderAnnotations,
       renderTextLayer,
     } = this.props;
     const { rotate, scale } = this;
@@ -212,9 +214,18 @@ export default class Page extends Component {
         {
           renderTextLayer &&
             <PageTextContent
-              key={`${page.pageIndex}@${rotate}_text`}
+              key={`${page.pageIndex}@${scale}/${rotate}_text`}
               onGetTextError={onGetTextError}
               onGetTextSuccess={onGetTextSuccess}
+              page={page}
+              rotate={rotate}
+              scale={scale}
+            />
+        }
+        {
+          renderAnnotations &&
+            <PageAnnotations
+              key={`${page.pageIndex}@${scale}/${rotate}_annotations`}
               page={page}
               rotate={rotate}
               scale={scale}
@@ -227,6 +238,7 @@ export default class Page extends Component {
 }
 
 Page.defaultProps = {
+  renderAnnotations: true,
   renderTextLayer: true,
   scale: 1.0,
 };
@@ -250,6 +262,7 @@ Page.propTypes = {
     getPage: PropTypes.func.isRequired,
     numPages: PropTypes.number.isRequired,
   }),
+  renderAnnotations: PropTypes.bool,
   renderTextLayer: PropTypes.bool,
   rotate: PropTypes.number,
   scale: PropTypes.number,

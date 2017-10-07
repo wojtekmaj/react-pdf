@@ -2,6 +2,9 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 export default class ViewOptions extends Component {
+  onRenderAnnotationsChange = event =>
+    this.props.setState({ renderAnnotations: event.target.checked })
+
   onRenderTextLayersChange = event =>
     this.props.setState({ renderTextLayer: event.target.checked })
 
@@ -37,7 +40,13 @@ export default class ViewOptions extends Component {
   resetWidth = () => this.props.setState({ pageWidth: null })
 
   render() {
-    const { displayAll, pageWidth, renderTextLayer, rotate } = this.props;
+    const {
+      displayAll,
+      pageWidth,
+      renderAnnotations,
+      renderTextLayer,
+      rotate,
+    } = this.props;
 
     return (
       <fieldset id="viewoptions">
@@ -66,13 +75,25 @@ export default class ViewOptions extends Component {
           </button>
         </form>
 
-        <input
-          id="renderTextLayer"
-          type="checkbox"
-          checked={renderTextLayer}
-          onChange={this.onRenderTextLayersChange}
-        />
-        <label htmlFor="renderTextLayer">Render text layers</label>
+        <div>
+          <input
+            id="renderTextLayer"
+            type="checkbox"
+            checked={renderTextLayer}
+            onChange={this.onRenderTextLayersChange}
+          />
+          <label htmlFor="renderTextLayer">Render text layers</label>
+        </div>
+
+        <div>
+          <input
+            id="renderAnnotations"
+            type="checkbox"
+            checked={renderAnnotations}
+            onChange={this.onRenderAnnotationsChange}
+          />
+          <label htmlFor="renderAnnotations">Render annotations</label>
+        </div>
 
         <div>
           <label htmlFor="rotation">Rotation:</label>
@@ -106,6 +127,7 @@ export default class ViewOptions extends Component {
 ViewOptions.propTypes = {
   displayAll: PropTypes.bool,
   pageWidth: PropTypes.number,
+  renderAnnotations: PropTypes.bool,
   renderTextLayer: PropTypes.bool,
   rotate: PropTypes.number,
   setState: PropTypes.func.isRequired,
