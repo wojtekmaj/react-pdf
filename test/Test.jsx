@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { findDOMNode } from 'react-dom';
 import { Document, Outline, Page } from 'react-pdf/src/entry.webpack';
 
 import './Test.less';
@@ -138,17 +137,13 @@ export default class Test extends Component {
                           (el, index) => (
                             <Page
                               className="custom-classname-page"
-                              ref={(ref) => {
+                              inputRef={(ref) => {
                                 if (!ref) {
                                   return;
                                 }
 
                                 if (pageNumber === index + 1) {
-                                  const node = findDOMNode(ref);
-                                  if (!node) {
-                                    return;
-                                  }
-                                  node.scrollIntoView();
+                                  ref.scrollIntoView();
                                 }
                               }}
                               key={`page_${index + 1}`}

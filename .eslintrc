@@ -15,6 +15,7 @@
   },
   "rules": {
     "global-require": "off",
+    "jsx-a11y/anchor-is-valid": "off",
     "max-len": "error",
     "no-param-reassign": ["error", { "props": true, "ignorePropertyModificationsFor": ["canvas", "element"] }],
     "prefer-destructuring": "warn",
