@@ -57,7 +57,7 @@ export default class Page extends Component {
    * Called when a page failed to load
    */
   onLoadError = (error) => {
-    if (error === 'cancelled') {
+    if ((error.message || error) === 'cancelled') {
       return;
     }
 

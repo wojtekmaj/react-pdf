@@ -56,9 +56,7 @@ export default class Outline extends Component {
    * Called when an outline is read successfully
    */
   onLoadSuccess = (outline) => {
-    callIfDefined(
-      this.props.onLoadSuccess,
-    );
+    callIfDefined(this.props.onLoadSuccess);
 
     this.runningTask = makeCancellable(this.parseOutline(outline));
 
@@ -71,7 +69,7 @@ export default class Outline extends Component {
    * Called when an outline failed to read successfully
    */
   onLoadError = (error) => {
-    if (error === 'cancelled') {
+    if ((error.message || error) === 'cancelled') {
       return;
     }
 
@@ -100,7 +98,7 @@ export default class Outline extends Component {
    * Called when an outline failed to read successfully
    */
   onParseError = (error) => {
-    if (error === 'cancelled') {
+    if ((error.message || error) === 'cancelled') {
       return;
     }
 
