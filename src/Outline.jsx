@@ -231,6 +231,7 @@ export default class Outline extends Component {
     return (
       <div
         className={mergeClassNames('ReactPDF__Outline', className)}
+        ref={this.props.inputRef}
         {...this.eventProps}
       >
         {this.renderOutline()}
@@ -244,6 +245,7 @@ Outline.propTypes = {
     PropTypes.string,
     PropTypes.arrayOf(PropTypes.string),
   ]),
+  inputRef: PropTypes.func,
   onItemClick: PropTypes.func,
   onLoadError: PropTypes.func,
   onLoadSuccess: PropTypes.func,
