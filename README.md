@@ -54,9 +54,9 @@ class MyApp extends Component {
   }
 
   render() {
+    const { pageNumber, numPages } = this.state;
+    
     return (
-      const { pageNumber, numPages } = this.state;
-
       <div>
         <Document
           file="somefile.pdf"
