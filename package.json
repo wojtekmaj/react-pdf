@@ -5,7 +5,7 @@
   "main": "build/entry.js",
   "es6": "src/entry.js",
   "scripts": {
-    "build": "babel src -d build",
+    "build": "babel ./src -d ./build --copy-files",
     "eslint": "eslint ./src",
     "prepublishOnly": "npm run build",
     "test": "npm run eslint"
