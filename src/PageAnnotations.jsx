@@ -24,10 +24,10 @@ export default class PageAnnotations extends Component {
     }
   }
 
-  get unrotatedViewport() {
-    const { page, scale } = this.props;
+  get viewport() {
+    const { page, rotate, scale } = this.props;
 
-    return page.getViewport(scale);
+    return page.getViewport(scale, rotate);
   }
 
   getAnnotations(props = this.props) {
@@ -39,8 +39,8 @@ export default class PageAnnotations extends Component {
   }
 
   renderAnnotations(annotations) {
-    const { page, scale } = this.props;
-    const viewport = page.getViewport(scale).clone({ dontFlip: true });
+    const { page } = this.props;
+    const viewport = this.viewport.clone({ dontFlip: true });
 
     const parameters = {
       annotations,
@@ -53,20 +53,9 @@ export default class PageAnnotations extends Component {
   }
 
   render() {
-    const { rotate } = this.props;
-    const { unrotatedViewport: viewport } = this;
-
     return (
       <div
         className="ReactPDF__Page__annotations annotationLayer"
-        style={{
-          position: 'absolute',
-          top: '50%',
-          left: '50%',
-          width: `${viewport.width}px`,
-          height: `${viewport.height}px`,
-          transform: `translate(-50%, -50%) rotate(${rotate}deg)`,
-        }}
         ref={(ref) => { this.annotationLayer = ref; }}
       />
     );
