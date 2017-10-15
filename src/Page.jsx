@@ -212,20 +212,20 @@ export default class Page extends Component {
           scale={scale}
         />
         {
-          renderAnnotations &&
-            <PageAnnotations
-              key={`${page.pageIndex}@${scale}/${rotate}_annotations`}
+          renderTextLayer &&
+            <PageTextContent
+              key={`${page.pageIndex}@${scale}/${rotate}_text`}
+              onGetTextError={onGetTextError}
+              onGetTextSuccess={onGetTextSuccess}
               page={page}
               rotate={rotate}
               scale={scale}
             />
         }
         {
-          renderTextLayer &&
-            <PageTextContent
-              key={`${page.pageIndex}@${scale}/${rotate}_text`}
-              onGetTextError={onGetTextError}
-              onGetTextSuccess={onGetTextSuccess}
+          renderAnnotations &&
+            <PageAnnotations
+              key={`${page.pageIndex}@${scale}/${rotate}_annotations`}
               page={page}
               rotate={rotate}
               scale={scale}
