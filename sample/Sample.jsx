@@ -7,7 +7,6 @@ import './Sample.less';
 class Sample extends Component {
   state = {
     file: './sample.pdf',
-    pageNumber: null,
     numPages: null,
   }
 
@@ -20,13 +19,7 @@ class Sample extends Component {
   onDocumentLoadSuccess = ({ numPages }) =>
     this.setState({
       numPages,
-      pageNumber: null,
     })
-
-  changePage = by =>
-    this.setState(prevState => ({
-      pageNumber: prevState.pageNumber + by,
-    }))
 
   render() {
     const { file, numPages } = this.state;

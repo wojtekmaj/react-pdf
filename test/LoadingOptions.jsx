@@ -49,15 +49,13 @@ export default class LoadingOptions extends Component {
   onImportAndUnmount = () => {
     this.props.setFile(samplePDF);
 
-    setTimeout(
-      () => this.props.setState({
-        render: false,
-      }), 20);
+    setTimeout(() => this.props.setState({
+      render: false,
+    }), 20);
 
-    setTimeout(
-      () => this.props.setState({
-        render: true,
-      }), 1000);
+    setTimeout(() => this.props.setState({
+      render: true,
+    }), 1000);
   }
 
   onPassMethodChange = (event) => {
@@ -79,25 +77,33 @@ export default class LoadingOptions extends Component {
 
         <label htmlFor="file">Load from file:</label>
         <input
+          id="file"
           type="file"
           onChange={this.onFileChange}
         />
 
-        <label htmlFor="file">Load from file to Uint8Array:</label>
+        <label htmlFor="fileUint8Array">Load from file to Uint8Array:</label>
         <input
+          id="fileUint8Array"
           type="file"
           onChange={this.onFileUintChange}
         />
 
         <form onSubmit={this.onURLChange}>
           <label htmlFor="url">Load from URL:</label>
-          <input type="text" />
+          <input
+            id="url"
+            type="text"
+          />
           <button type="submit">Apply</button>
         </form>
 
         <form onSubmit={this.onRequestChange}>
-          <label htmlFor="url">Fetch and pass:</label>
-          <input type="text" />
+          <label htmlFor="fetchAndPass">Fetch and pass:</label>
+          <input
+            id="fetchAndPass"
+            type="text"
+          />
           <button type="submit">Apply</button>
         </form>
 

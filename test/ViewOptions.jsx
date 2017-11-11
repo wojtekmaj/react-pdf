@@ -57,6 +57,7 @@ export default class ViewOptions extends Component {
           <input
             type="number"
             min={0}
+            id="pageWidth"
             name="pageWidth"
             defaultValue={pageWidth}
           />&nbsp;
@@ -98,6 +99,7 @@ export default class ViewOptions extends Component {
         <div>
           <label htmlFor="rotation">Rotation:</label>
           <input
+            id="rotation"
             style={{ width: '42px' }}
             type="number"
             value={rotate || ''}
