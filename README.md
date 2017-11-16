@@ -6,9 +6,9 @@
 Easily display PDF files in your React application.
 
 ## tl;dr
-* Install by executing `npm install --save react-pdf`.
+* Install by executing `npm install react-pdf` or `yarn add react-pdf`.
 * Import by addding `import { Document } from 'react-pdf'`.
-* Use by adding `<Document file="..." />`. `file` can be an URL, base64 content, Uint8Array, and more.
+* Use by adding `<Document file="..." />`. `file` can be a URL, base64 content, Uint8Array, and more.
 * Put `<Page />` components inside `<Document />` to render pages.
 
 ## Demo
@@ -18,12 +18,6 @@ Minimal demo page is included in sample directory.
 [Online demo](http://projekty.wojtekmaj.pl/react-pdf/) is also available!
 
 ## Getting started
-
-### Prerequisites
-
-You'll need to have Node >= 4 on your machine.
-
-We strongly recommend to use Node >= 6 and npm >= 5 for faster installation speed and better disk usage.
 
 #### Compatibility
 
@@ -39,7 +33,7 @@ Your project needs to use React 15.5 or later. If you use older version of React
 
 ### Installation
 
-Add React-PDF to your project by executing `npm install --save react-pdf`.
+Add React-PDF to your project by executing `npm install react-pdf` or `yarn add react-pdf`.
 
 ### Usage
 
@@ -60,9 +54,9 @@ class MyApp extends Component {
   }
 
   render() {
+    const { pageNumber, numPages } = this.state;
+    
     return (
-      const { pageNumber, numPages } = this.state;
-
       <div>
         <Document
           file="somefile.pdf"
@@ -130,6 +124,8 @@ Loads a document passed using `file` prop.
 
 Displays a page. Must be placed inside `<Document />` or have `pdf` prop passed, which can be obtained from `<Document />`'s `onLoadSuccess` callback function.
 
+**Note:** `<Page/>` must be a direct child of `<Document />` component. `<Document />` passes necessary props only to its direct children. If you wish to put a component in between of `<Document />` and `<Page/>`, you must ensure to pass all the props to `<Page/>` component by yourself.
+
 #### Props
 
 |Prop name|Description|Example values|
@@ -141,6 +137,7 @@ Displays a page. Must be placed inside `<Document />` or have `pdf` prop passed,
 |onRenderSuccess|Function called when the page is successfully rendered on the screen.|`() => alert('Rendered the page!')`|
 |pageIndex|Defines which page from PDF file should be displayed. Defaults to 0.|`0`|
 |pageNumber|Defines which page from PDF file should be displayed. If provided, `pageIndex` prop will be ignored. Defaults to 1.|`1`|
+|renderAnnotations|Defined whether annotations (e.g. links) should be rendered. Defaults to true.|`false`|
 |renderTextLayer|Defines whether a text layer should be rendered. Defaults to true.|`false`|
 |rotate|Defines the rotation of the page in degrees. 90 = rotated to the right, 180 = upside down, 270 = rotated to the left. Defaults to page's default setting, usually 0.|`90`|
 |scale|Defines the scale in which PDF file should be rendered. Defaults to 1.0.|`0.5`|

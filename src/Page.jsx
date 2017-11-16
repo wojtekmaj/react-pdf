@@ -5,9 +5,11 @@ import mergeClassNames from 'merge-class-names';
 import PageCanvas from './PageCanvas';
 import PageSVG from './PageSVG';
 import PageTextContent from './PageTextContent';
+import PageAnnotations from './PageAnnotations';
 
 import {
   callIfDefined,
+  errorOnDev,
   isProvided,
   makeCancellable,
 } from './shared/util';
@@ -57,9 +59,11 @@ export default class Page extends Component {
    * Called when a page failed to load
    */
   onLoadError = (error) => {
-    if (error === 'cancelled') {
+    if ((error.message || error) === 'cancelled') {
       return;
     }
+
+    errorOnDev(error.message, error);
 
     callIfDefined(
       this.props.onLoadError,
@@ -193,27 +197,38 @@ export default class Page extends Component {
       onRenderError,
       onRenderSuccess,
       renderTextLayer,
+      renderAnnotations,
     } = this.props;
     const { page } = this.state;
+    const { rotate, scale } = this;
 
     return [
       <PageCanvas
-        key="pageCanvas"
+        key={`${page.pageIndex}@${scale}/${rotate}_canvas`}
         onRenderError={onRenderError}
         onRenderSuccess={onRenderSuccess}
         page={page}
-        rotate={this.rotate}
-        scale={this.scale}
+        rotate={rotate}
+        scale={scale}
       />,
-      renderTextLayer &&
+      renderTextLayer && (
         <PageTextContent
-          key="pageTextContent"
+          key={`${page.pageIndex}@${scale}/${rotate}_text`}
           onGetTextError={onGetTextError}
           onGetTextSuccess={onGetTextSuccess}
           page={page}
-          rotate={this.rotate}
-          scale={this.scale}
-        />,
+          rotate={rotate}
+          scale={scale}
+        />
+      ),
+      renderAnnotations && (
+        <PageAnnotations
+          key={`${page.pageIndex}@${scale}/${rotate}_annotations`}
+          page={page}
+          rotate={rotate}
+          scale={scale}
+        />
+      ),
     ];
   }
 
@@ -234,11 +249,12 @@ export default class Page extends Component {
       children,
       className,
       renderMode,
-     } = this.props;
+    } = this.props;
 
     return (
       <div
         className={mergeClassNames('ReactPDF__Page', className)}
+        ref={this.props.inputRef}
         style={{ position: 'relative' }}
         {...this.eventProps}
       >
@@ -254,6 +270,7 @@ export default class Page extends Component {
 }
 
 Page.defaultProps = {
+  renderAnnotations: true,
   renderMode: 'canvas',
   renderTextLayer: true,
   scale: 1.0,
@@ -265,6 +282,7 @@ Page.propTypes = {
     PropTypes.string,
     PropTypes.arrayOf(PropTypes.string),
   ]),
+  inputRef: PropTypes.func,
   onGetTextError: PropTypes.func,
   onGetTextSuccess: PropTypes.func,
   onLoadError: PropTypes.func,
@@ -277,6 +295,7 @@ Page.propTypes = {
     getPage: PropTypes.func.isRequired,
     numPages: PropTypes.number.isRequired,
   }),
+  renderAnnotations: PropTypes.bool,
   renderMode: PropTypes.oneOf(['canvas', 'svg']),
   renderTextLayer: PropTypes.bool,
   rotate: PropTypes.number,

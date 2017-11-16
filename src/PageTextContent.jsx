@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 
 import {
   callIfDefined,
+  errorOnDev,
   makeCancellable,
 } from './shared/util';
 
@@ -45,9 +46,11 @@ export default class PageTextContent extends Component {
   }
 
   onGetTextError = (error) => {
-    if (error === 'cancelled') {
+    if ((error.message || error) === 'cancelled') {
       return;
     }
+
+    errorOnDev(error.message, error);
 
     callIfDefined(
       this.props.onGetTextError,
@@ -89,6 +92,12 @@ export default class PageTextContent extends Component {
     return font.data;
   }
 
+  getElementWidth = (element) => {
+    const { rotate } = this.props;
+    const sideways = rotate % 180 !== 0;
+    return element.getBoundingClientRect()[sideways ? 'height' : 'width'];
+  };
+
   async alignTextItem(element, textItem) {
     if (!element) {
       return;
@@ -99,7 +108,7 @@ export default class PageTextContent extends Component {
 
     const fontData = await this.getFontData(textItem.fontName);
 
-    let actualWidth = element.getBoundingClientRect().width;
+    let actualWidth = this.getElementWidth(element);
     const widthDisproportion = Math.abs((targetWidth / actualWidth) - 1);
 
     const repairsNeeded = widthDisproportion > BROKEN_FONT_ALARM_THRESHOLD;
@@ -108,7 +117,7 @@ export default class PageTextContent extends Component {
       const fallbackFontName = fontData ? fontData.fallbackName : 'sans-serif';
       element.style.fontFamily = fallbackFontName;
 
-      actualWidth = element.getBoundingClientRect().width;
+      actualWidth = this.getElementWidth(element);
     }
 
     const ascent = fontData ? fontData.ascent : 1;

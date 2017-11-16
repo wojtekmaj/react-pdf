@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 
 import {
   callIfDefined,
+  errorOnDev,
   getPixelRatio,
 } from './shared/util';
 
@@ -28,9 +29,11 @@ export default class PageCanvas extends Component {
    * Called when a page fails to render.
    */
   onRenderError = (error) => {
-    if (error === 'cancelled') {
+    if ((error.message || error) === 'cancelled') {
       return;
     }
+
+    errorOnDev(error.message, error);
 
     callIfDefined(
       this.props.onRenderError,

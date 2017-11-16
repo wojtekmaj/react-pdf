@@ -8,6 +8,7 @@ import mergeClassNames from 'merge-class-names';
 import {
   callIfDefined,
   displayCORSWarning,
+  errorOnDev,
   isArrayBuffer,
   isBlob,
   isBrowser,
@@ -75,9 +76,11 @@ export default class Document extends Component {
    * Called when a document source failed to be resolved correctly
    */
   onSourceError = (error) => {
-    if (error === 'cancelled') {
+    if ((error.message || error) === 'cancelled') {
       return;
     }
+
+    errorOnDev(error.message, error);
 
     callIfDefined(
       this.props.onSourceError,
@@ -103,9 +106,11 @@ export default class Document extends Component {
    * Called when a document failed to read successfully
    */
   onLoadError = (error) => {
-    if (error === 'cancelled') {
+    if ((error.message || error) === 'cancelled') {
       return;
     }
+
+    errorOnDev(error.message, error);
 
     callIfDefined(
       this.props.onLoadError,
@@ -223,15 +228,15 @@ export default class Document extends Component {
         reader.onerror = (event) => {
           switch (event.target.error.code) {
             case event.target.error.NOT_FOUND_ERR:
-              return reject({ message: 'Error while reading a file: File not found.' });
+              return reject(new Error('Error while reading a file: File not found.'));
             case event.target.error.NOT_READABLE_ERR:
-              return reject({ message: 'Error while reading a file: File not readable.' });
+              return reject(new Error('Error while reading a file: File not readable.'));
             case event.target.error.SECURITY_ERR:
-              return reject({ message: 'Error while reading a file: Security error.' });
+              return reject(new Error('Error while reading a file: Security error.'));
             case event.target.error.ABORT_ERR:
-              return reject('cancelled');
+              return reject(new Error('cancelled'));
             default:
-              return reject({ message: 'Error while reading a file.' });
+              return reject(new Error('Error while reading a file.'));
           }
         };
         reader.readAsArrayBuffer(file);
@@ -241,7 +246,7 @@ export default class Document extends Component {
     }
 
     // No supported loading method worked
-    return reject({ message: 'Unsupported loading method.' });
+    return reject(new Error('Unsupported loading method.'));
   })
 
   renderNoData() {

@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { findDOMNode } from 'react-dom';
 import { Document, Outline, Page } from 'react-pdf/src/entry.webpack';
 
 import './Test.less';
@@ -18,6 +17,7 @@ export default class Test extends Component {
     pageWidth: null,
     passMethod: 'normal',
     render: true,
+    renderAnnotations: true,
     renderMode: 'canvas',
     renderTextLayer: true,
     rotate: null,
@@ -28,11 +28,6 @@ export default class Test extends Component {
       numPages,
       pageNumber: 1,
     })
-
-  onDocumentLoadError = ({ message }) => {
-    // eslint-disable-next-line no-console
-    console.error(message);
-  }
 
   onItemClick = ({ pageNumber }) =>
     this.setState({ pageNumber })
@@ -82,6 +77,7 @@ export default class Test extends Component {
       pageWidth,
       passMethod,
       render,
+      renderAnnotations,
       renderMode,
       renderTextLayer,
       rotate,
@@ -106,6 +102,7 @@ export default class Test extends Component {
             <ViewOptions
               displayAll={displayAll}
               pageWidth={pageWidth}
+              renderAnnotations={renderAnnotations}
               renderMode={renderMode}
               renderTextLayer={renderTextLayer}
               rotate={rotate}
@@ -119,8 +116,6 @@ export default class Test extends Component {
                   <Document
                     className="custom-classname-document"
                     file={file}
-                    onLoadError={this.onDocumentLoadError}
-                    onSourceError={this.onDocumentLoadError}
                   >
                     <Outline
                       className="custom-classname-outline"
@@ -148,22 +143,19 @@ export default class Test extends Component {
                           (el, index) => (
                             <Page
                               className="custom-classname-page"
-                              ref={(ref) => {
+                              inputRef={(ref) => {
                                 if (!ref) {
                                   return;
                                 }
 
                                 if (pageNumber === index + 1) {
-                                  const node = findDOMNode(ref);
-                                  if (!node) {
-                                    return;
-                                  }
-                                  node.scrollIntoView();
+                                  ref.scrollIntoView();
                                 }
                               }}
                               key={`page_${index + 1}`}
                               onClick={(event, page) => console.log('Clicked a page', { event, page })}
                               pageNumber={index + 1}
+                              renderAnnotations={renderAnnotations}
                               renderMode={renderMode}
                               renderTextLayer={renderTextLayer}
                               width={pageWidth}
@@ -173,9 +165,9 @@ export default class Test extends Component {
                         ) :
                         <Page
                           className="custom-classname-page"
-                          key={`page_${pageNumber}`}
                           onClick={(event, page) => console.log('Clicked a page', { event, page })}
                           pageNumber={pageNumber || 1}
+                          renderAnnotations={renderAnnotations}
                           renderMode={renderMode}
                           renderTextLayer={renderTextLayer}
                           width={pageWidth}

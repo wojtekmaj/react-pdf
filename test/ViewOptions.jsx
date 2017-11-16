@@ -2,6 +2,9 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 export default class ViewOptions extends Component {
+  onRenderAnnotationsChange = event =>
+    this.props.setState({ renderAnnotations: event.target.checked })
+
   onRenderModeChange = event =>
     this.props.setState({ renderMode: event.target.value })
 
@@ -43,6 +46,7 @@ export default class ViewOptions extends Component {
     const {
       displayAll,
       pageWidth,
+      renderAnnotations,
       renderMode,
       renderTextLayer,
       rotate,
@@ -57,6 +61,7 @@ export default class ViewOptions extends Component {
           <input
             type="number"
             min={0}
+            id="pageWidth"
             name="pageWidth"
             defaultValue={pageWidth}
           />&nbsp;
@@ -99,17 +104,35 @@ export default class ViewOptions extends Component {
           <label htmlFor="renderSVG">SVG</label>
         </div>
 
-        <input
-          id="renderTextLayer"
-          type="checkbox"
-          checked={renderMode === 'canvas' && renderTextLayer}
-          disabled={renderMode !== 'canvas'}
-          onChange={this.onRenderTextLayersChange}
-        />
-        <label htmlFor="renderTextLayer">Render text layers</label>
+        <div>
+          <input
+            id="renderTextLayer"
+            type="checkbox"
+            checked={renderMode === 'canvas' && renderTextLayer}
+            disabled={renderMode !== 'canvas'}
+            onChange={this.onRenderTextLayersChange}
+          />
+          <label htmlFor="renderTextLayer">Render text layers</label>
+        </div>
 
         <div>
-          <label htmlFor>Rotation:</label>
+          <input
+            id="renderAnnotations"
+            type="checkbox"
+            checked={renderAnnotations}
+            onChange={this.onRenderAnnotationsChange}
+          />
+          <label htmlFor="renderAnnotations">Render annotations</label>
+        </div>
+
+        <div>
+          <label htmlFor="rotation">Rotation:</label>
+          <input
+            id="rotation"
+            style={{ width: '42px' }}
+            type="number"
+            value={rotate || ''}
+          />&nbsp;
           <button onClick={this.rotateLeft}>Rotate left</button>&nbsp;
           <button onClick={this.rotateRight}>Rotate right</button>&nbsp;
           <button
@@ -135,6 +158,7 @@ export default class ViewOptions extends Component {
 ViewOptions.propTypes = {
   displayAll: PropTypes.bool,
   pageWidth: PropTypes.number,
+  renderAnnotations: PropTypes.bool,
   renderMode: PropTypes.oneOf(['canvas', 'svg']),
   renderTextLayer: PropTypes.bool,
   rotate: PropTypes.number,
