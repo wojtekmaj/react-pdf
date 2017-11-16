@@ -172,32 +172,81 @@ export default class Page extends Component {
       .catch(this.onLoadError);
   }
 
+  renderTextLayer() {
+    const { renderTextLayer } = this.props;
+
+    if (!renderTextLayer) {
+      return null;
+    }
+
+    const {
+      onGetTextError,
+      onGetTextSuccess,
+    } = this.props;
+    const { page } = this.state;
+    const { rotate, scale } = this;
+
+    return (
+      <PageTextContent
+        key={`${page.pageIndex}@${scale}/${rotate}_text`}
+        onGetTextError={onGetTextError}
+        onGetTextSuccess={onGetTextSuccess}
+        page={page}
+        rotate={rotate}
+        scale={scale}
+      />
+    );
+  }
+
+  renderAnnotations() {
+    const { renderAnnotations } = this.props;
+
+    if (!renderAnnotations) {
+      return null;
+    }
+
+    const { page } = this.state;
+    const { rotate, scale } = this;
+
+    return (
+      <PageAnnotations
+        key={`${page.pageIndex}@${scale}/${rotate}_annotations`}
+        page={page}
+        rotate={rotate}
+        scale={scale}
+      />
+    );
+  }
+
   renderSVG() {
     const {
       onRenderError,
       onRenderSuccess,
     } = this.props;
     const { page } = this.state;
+    const { rotate, scale } = this;
 
-    return (
+    return [
       <PageSVG
+        key={`${page.pageIndex}@${scale}/${rotate}_svg`}
         onRenderError={onRenderError}
         onRenderSuccess={onRenderSuccess}
         page={page}
         rotate={this.rotate}
         scale={this.scale}
-      />
-    );
+      />,
+      /**
+       * As of now, PDF.js 2.0.120 returns warnings on unimplemented annotations.
+       * Therefore, as a fallback, we render "traditional" PageAnnotations component.
+       */
+      this.renderAnnotations(),
+    ];
   }
 
   renderCanvas() {
     const {
-      onGetTextError,
-      onGetTextSuccess,
       onRenderError,
       onRenderSuccess,
-      renderTextLayer,
-      renderAnnotations,
     } = this.props;
     const { page } = this.state;
     const { rotate, scale } = this;
@@ -211,24 +260,8 @@ export default class Page extends Component {
         rotate={rotate}
         scale={scale}
       />,
-      renderTextLayer && (
-        <PageTextContent
-          key={`${page.pageIndex}@${scale}/${rotate}_text`}
-          onGetTextError={onGetTextError}
-          onGetTextSuccess={onGetTextSuccess}
-          page={page}
-          rotate={rotate}
-          scale={scale}
-        />
-      ),
-      renderAnnotations && (
-        <PageAnnotations
-          key={`${page.pageIndex}@${scale}/${rotate}_annotations`}
-          page={page}
-          rotate={rotate}
-          scale={scale}
-        />
-      ),
+      this.renderTextLayer(),
+      this.renderAnnotations(),
     ];
   }
 
