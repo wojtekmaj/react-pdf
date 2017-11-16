@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { SimpleLinkService } from 'pdfjs-dist/lib/web/pdf_link_service';
 
 import './annotation_layer_builder.css';
 
@@ -45,6 +46,7 @@ export default class PageAnnotations extends Component {
     const parameters = {
       annotations,
       div: this.annotationLayer,
+      linkService: new SimpleLinkService(),
       page,
       viewport,
     };
