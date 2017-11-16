@@ -10,7 +10,6 @@ if (isLocalFileSystem) {
 }
 
 require('pdfjs-dist/webpack');
-require('pdfjs-dist/web/compatibility');
 
 export {
   Document,
