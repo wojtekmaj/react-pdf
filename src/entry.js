@@ -10,7 +10,6 @@ if (isLocalFileSystem) {
 }
 
 const pdfjs = require('pdfjs-dist');
-require('pdfjs-dist/web/compatibility');
 
 pdfjs.PDFJS.workerSrc = 'pdf.worker.js';
 
