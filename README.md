@@ -55,7 +55,7 @@ class MyApp extends Component {
 
   render() {
     const { pageNumber, numPages } = this.state;
-    
+
     return (
       <div>
         <Document
@@ -97,6 +97,66 @@ If you absolutely have to, you can import React PDF with worker disabled. You ca
 
 ```js
 import { Document } from 'react-pdf/build/entry.noworker';
+```
+
+### Support for non-latin characters
+
+If you want to ensure that PDFs with non-latin characters will render perfectly, or you have encountered the following warning:
+
+```
+Warning: CMap baseUrl must be specified, see "PDFJS.cMapUrl" (and also "PDFJS.cMapPacked").
+```
+
+then you would also need to include cMaps in your build and tell React-PDF where they are.
+
+#### Copying cMaps
+
+First, you need to copy cMaps from `pdfjs-dist` (React-PDF's dependency - it should be in your `node_modules` if you have React-PDF installed). cMaps are located in `pdfjs-dist/cmaps`.
+
+##### Webpack
+
+Add `copy-webpack-plugin` to your project if you haven't already:
+
+```
+npm install copy-webpack-plugin --save-dev
+```
+
+Now, in your Webpack config, import the plugin:
+
+```js
+import CopyWebpackPlugin from 'copy-webpack-plugin';
+```
+
+and in plugins section of your config, add the following:
+
+```js
+new CopyWebpackPlugin([
+  {
+    from: 'node_modules/pdfjs-dist/cmaps/',
+    to: 'cmaps/'
+  },
+]),
+```
+
+##### Browserify and others
+
+If you use Browserify or other bundling tools, you will have to make sure on your own that cMaps are copied to your project's output folder.
+
+#### Setting up React-PDF
+
+Now that you have cMaps in your build, import `setOptions` like so:
+
+```js
+import { setOptions } from 'react-pdf';
+```
+
+**Note:** If you're using a different entry point, for example `react-pdf/build/entry.webpack'`, you can should use the same entry point to import `setOptions`. You can also add `setOptions` to the same `import` you're using to import `Document`, `Page`, and/or other components.
+
+```js
+setOptions({
+  cMapUrl: 'cmaps/',
+  cMapPacked: true,
+});
 ```
 
 ## User guide
