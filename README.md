@@ -218,6 +218,23 @@ Displays an outline (table of contents). Must be placed inside `<Document />` or
 |onParseError|Function called in case of an error while parsing the outline.|`(error) => alert('Error while parsing the outline! ' + error.message)`|
 |onParseSuccess|Function called when the outline is successfully parsed.|`({ outline }) => alert('There are ' + outline.length + ' top level items in the table of contents.')`|
 
+### setOptions
+
+Allows to set custom options of PDF.js renderer. Currently supported properties are:
+
+  - cMapUrl
+  - cMapPacked
+  - disableWorker
+  - workerSrc
+
+Example usage:
+
+```js
+setOptions({
+  workerSrc: 'my-path-to-worker.js'
+});
+```
+
 ## License
 
 The MIT License.
