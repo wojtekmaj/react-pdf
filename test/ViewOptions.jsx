@@ -5,6 +5,9 @@ export default class ViewOptions extends Component {
   onRenderAnnotationsChange = event =>
     this.props.setState({ renderAnnotations: event.target.checked })
 
+  onRenderModeChange = event =>
+    this.props.setState({ renderMode: event.target.value })
+
   onRenderTextLayersChange = event =>
     this.props.setState({ renderTextLayer: event.target.checked })
 
@@ -44,6 +47,7 @@ export default class ViewOptions extends Component {
       displayAll,
       pageWidth,
       renderAnnotations,
+      renderMode,
       renderTextLayer,
       rotate,
     } = this.props;
@@ -76,11 +80,36 @@ export default class ViewOptions extends Component {
           </button>
         </form>
 
+        <label htmlFor="renderMode">Render mode:</label>
+        <div>
+          <input
+            checked={!renderMode || (renderMode === 'canvas')}
+            id="renderCanvas"
+            name="renderMode"
+            onChange={this.onRenderModeChange}
+            type="radio"
+            value="canvas"
+          />
+          <label htmlFor="renderCanvas">Canvas</label>
+        </div>
+        <div>
+          <input
+            checked={renderMode === 'svg'}
+            id="renderSVG"
+            name="renderMode"
+            onChange={this.onRenderModeChange}
+            type="radio"
+            value="svg"
+          />
+          <label htmlFor="renderSVG">SVG</label>
+        </div>
+
         <div>
           <input
             id="renderTextLayer"
             type="checkbox"
-            checked={renderTextLayer}
+            checked={renderMode === 'canvas' && renderTextLayer}
+            disabled={renderMode !== 'canvas'}
             onChange={this.onRenderTextLayersChange}
           />
           <label htmlFor="renderTextLayer">Render text layers</label>
@@ -130,6 +159,7 @@ ViewOptions.propTypes = {
   displayAll: PropTypes.bool,
   pageWidth: PropTypes.number,
   renderAnnotations: PropTypes.bool,
+  renderMode: PropTypes.oneOf(['canvas', 'svg']),
   renderTextLayer: PropTypes.bool,
   rotate: PropTypes.number,
   setState: PropTypes.func.isRequired,

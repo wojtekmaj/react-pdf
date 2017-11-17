@@ -23,6 +23,7 @@ export default class Test extends Component {
     passMethod: 'normal',
     render: true,
     renderAnnotations: true,
+    renderMode: 'canvas',
     renderTextLayer: true,
     rotate: null,
   }
@@ -82,6 +83,7 @@ export default class Test extends Component {
       passMethod,
       render,
       renderAnnotations,
+      renderMode,
       renderTextLayer,
       rotate,
     } = this.state;
@@ -106,6 +108,7 @@ export default class Test extends Component {
               displayAll={displayAll}
               pageWidth={pageWidth}
               renderAnnotations={renderAnnotations}
+              renderMode={renderMode}
               renderTextLayer={renderTextLayer}
               rotate={rotate}
               setState={setState}
@@ -158,6 +161,7 @@ export default class Test extends Component {
                               onClick={(event, page) => console.log('Clicked a page', { event, page })}
                               pageNumber={index + 1}
                               renderAnnotations={renderAnnotations}
+                              renderMode={renderMode}
                               renderTextLayer={renderTextLayer}
                               width={pageWidth}
                               onRenderSuccess={this.onPageRenderSuccess}
@@ -169,6 +173,7 @@ export default class Test extends Component {
                           onClick={(event, page) => console.log('Clicked a page', { event, page })}
                           pageNumber={pageNumber || 1}
                           renderAnnotations={renderAnnotations}
+                          renderMode={renderMode}
                           renderTextLayer={renderTextLayer}
                           width={pageWidth}
                           onRenderSuccess={this.onPageRenderSuccess}
