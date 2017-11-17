@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Document, Outline, Page } from 'react-pdf/src/entry.webpack';
+import { Document, Outline, Page, setOptions } from 'react-pdf/src/entry.webpack';
 
 import './Test.less';
 
@@ -7,6 +7,11 @@ import LoadingOptions from './LoadingOptions';
 import ViewOptions from './ViewOptions';
 
 import { dataURItoBlob } from './shared/util';
+
+setOptions({
+  cMapUrl: 'cmaps/',
+  cMapPacked: true,
+});
 
 export default class Test extends Component {
   state = {

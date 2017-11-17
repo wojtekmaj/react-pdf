@@ -1,8 +1,13 @@
 import React, { Component } from 'react';
 import { render } from 'react-dom';
-import { Document, Page } from 'react-pdf/build/entry.webpack';
+import { Document, Page, setOptions } from 'react-pdf/build/entry.webpack';
 
 import './Sample.less';
+
+setOptions({
+  cMapUrl: 'cmaps/',
+  cMapPacked: true,
+});
 
 class Sample extends Component {
   state = {
