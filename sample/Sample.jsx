@@ -53,9 +53,7 @@ class Sample extends Component {
                   (el, index) => (
                     <Page
                       key={`page_${index + 1}`}
-                      onRenderSuccess={this.onPageRenderSuccess}
                       pageNumber={index + 1}
-                      renderMode="svg"
                     />
                   ),
                 )
