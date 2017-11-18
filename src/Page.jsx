@@ -289,6 +289,7 @@ export default class Page extends Component {
         className={mergeClassNames('ReactPDF__Page', className)}
         ref={this.props.inputRef}
         style={{ position: 'relative' }}
+		{...{'data-page-number': page.pageIndex + 1}}
         {...this.eventProps}
       >
         {
