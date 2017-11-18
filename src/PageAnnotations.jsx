@@ -3,9 +3,9 @@ import PropTypes from 'prop-types';
 
 import './annotation_layer_builder.css';
 
-import {
-  makeCancellable,
-} from './shared/util';
+import { makeCancellable } from './shared/util';
+
+import { linkServiceProp, pageProp, rotateProp } from './shared/propTypes';
 
 export default class PageAnnotations extends Component {
   componentDidMount() {
@@ -39,12 +39,13 @@ export default class PageAnnotations extends Component {
   }
 
   renderAnnotations(annotations) {
-    const { page } = this.props;
+    const { linkService, page } = this.props;
     const viewport = this.viewport.clone({ dontFlip: true });
 
     const parameters = {
       annotations,
       div: this.annotationLayer,
+      linkService,
       page,
       viewport,
     };
@@ -63,10 +64,8 @@ export default class PageAnnotations extends Component {
 }
 
 PageAnnotations.propTypes = {
-  page: PropTypes.shape({
-    getAnnotations: PropTypes.func.isRequired,
-    getViewport: PropTypes.func.isRequired,
-  }).isRequired,
-  rotate: PropTypes.number,
+  linkService: linkServiceProp,
+  page: pageProp,
+  rotate: rotateProp,
   scale: PropTypes.number,
 };

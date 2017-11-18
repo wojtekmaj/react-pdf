@@ -7,6 +7,8 @@ import {
   getPixelRatio,
 } from './shared/util';
 
+import { pageProp, rotateProp } from './shared/propTypes';
+
 export default class PageCanvas extends Component {
   componentWillUnmount() {
     /* eslint-disable no-underscore-dangle */
@@ -108,10 +110,7 @@ export default class PageCanvas extends Component {
 PageCanvas.propTypes = {
   onRenderError: PropTypes.func,
   onRenderSuccess: PropTypes.func,
-  page: PropTypes.shape({
-    getViewport: PropTypes.func.isRequired,
-    render: PropTypes.func.isRequired,
-  }).isRequired,
-  rotate: PropTypes.number,
+  page: pageProp.isRequired,
+  rotate: rotateProp,
   scale: PropTypes.number,
 };

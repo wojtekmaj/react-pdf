@@ -82,9 +82,9 @@ export const isParamObject = file =>
  * @param {Function} fn
  * @param {Object} args
  */
-export const callIfDefined = (fn, args) => {
+export const callIfDefined = (fn, ...args) => {
   if (fn && typeof fn === 'function') {
-    fn(args);
+    fn(...args);
   }
 };
 
