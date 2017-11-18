@@ -10,7 +10,7 @@ import {
 } from './shared/util';
 import { makeEventProps } from './shared/events';
 
-import { eventsProps } from './shared/propTypes';
+import { eventsProps, pdfProp } from './shared/propTypes';
 
 class Ref {
   constructor({ num, gen }) {
@@ -251,9 +251,6 @@ Outline.propTypes = {
   onLoadSuccess: PropTypes.func,
   onParseError: PropTypes.func,
   onParseSuccess: PropTypes.func,
-  pdf: PropTypes.shape({
-    getDestination: PropTypes.func.isRequired,
-    getOutline: PropTypes.func.isRequired,
-  }),
+  pdf: pdfProp,
   ...eventsProps(),
 };

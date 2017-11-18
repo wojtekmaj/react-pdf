@@ -131,7 +131,7 @@ export default class ViewOptions extends Component {
             id="rotation"
             style={{ width: '42px' }}
             type="number"
-            value={rotate || ''}
+            value={rotate !== null ? rotate : ''}
           />&nbsp;
           <button onClick={this.rotateLeft}>Rotate left</button>&nbsp;
           <button onClick={this.rotateRight}>Rotate right</button>&nbsp;

@@ -170,10 +170,12 @@ Loads a document passed using `file` prop.
 |Prop name|Description|Example values|
 |----|----|----|
 |className|Defines custom class name(s), that will be added to rendered element along with the default `ReactPDF__Document`.|<ul><li>String:<br />`"custom-class-name-1 custom-class-name-2"`</li><li>Array of strings:<br />`["custom-class-name-1", "custom-class-name-2"]`</li></ul>|
-|error|Defines what the component should display in case of an error. Defaults to "Failed to load PDF file.".|<ul><li>String:<br />`"An error occurred!"`</li><li>React element:<Br />`<div>An error occurred!</div>`</li><li>Function:<Br />`this.renderError()`</li></ul>|
+|error|Defines what the component should display in case of an error. Defaults to "Failed to load PDF file.".|<ul><li>String:<br />`"An error occurred!"`</li><li>React element:<br />`<div>An error occurred!</div>`</li><li>Function:<br />`this.renderError()`</li></ul>|
 |file|Defines what PDF should be displayed.<br />Its value can be an URL, a file (imported using `import ... from ...` or from file input form element), or an object with parameters (`url` - URL; `data` - data, preferably Uint8Array; `range` - PDFDataRangeTransport; `httpHeaders` - custom request headers, e.g. for authorization), `withCredentials` - a boolean to indicate whether or not to include cookies in the request (defaults to `false`).|<ul><li>URL:<br />`"http://example.com/sample.pdf"`</li><li>File:<br />`import sample from '../static/sample.pdf'` and then<br />`sample`</li><li>Parameter object:<br />`{ url: 'http://example.com/sample.pdf', httpHeaders: { 'X-CustomHeader': '40359820958024350238508234' }, withCredentials: true }`</ul>|
-|loading|Defines what the component should display while loading. Defaults to "Loading PDF…".|<ul><li>String:<br />`"Please wait!"`</li><li>React element:<Br />`<div>Please wait!</div>`</li><li>Function:<Br />`this.renderLoader()`</li></ul>|
-|noData|Defines what the component should display in case of no data. Defaults to "No PDF file specified.".|<ul><li>String:<br />`"Please select a file."`</li><li>React element:<Br />`<div>Please select a file.</div>`</li><li>Function:<Br />`this.renderNoData()`</li></ul>|
+|inputRef|A function that behaves like ref, but it's passed to main `<div>` rendered by `<Document>` component.|`(ref) => { this.myDocument = ref; }`|
+|loading|Defines what the component should display while loading. Defaults to "Loading PDF…".|<ul><li>String:<br />`"Please wait!"`</li><li>React element:<br />`<div>Please wait!</div>`</li><li>Function:<br />`this.renderLoader()`</li></ul>|
+|noData|Defines what the component should display in case of no data. Defaults to "No PDF file specified.".|<ul><li>String:<br />`"Please select a file."`</li><li>React element:<br />`<div>Please select a file.</div>`</li><li>Function:<br />`this.renderNoData()`</li></ul>|
+|onItemClick|Function called when an item has been clicked. Usually, you would like to use this callback to move the user wherever they requested to.|`({ pageNumber }) => alert('Clicked an item from page ' + pageNumber + '!')`|
 |onLoadError|Function called in case of an error while loading a document.|`(error) => alert('Error while loading document! ' + error.message)`|
 |onLoadSuccess|Function called when the document is successfully loaded.|`(pdf) => alert('Loaded a file with ' + pdf.numPages + ' pages!')`|
 |onSourceError|Function called in case of an error while retrieving document source from `file` prop.|`(error) => alert('Error while retreiving document source! ' + error.message)`|
@@ -191,6 +193,7 @@ Displays a page. Must be placed inside `<Document />` or have `pdf` prop passed,
 |Prop name|Description|Example values|
 |----|----|----|
 |className|Defines custom class name(s), that will be added to rendered element along with the default `ReactPDF__Page`.|<ul><li>String:<br />`"custom-class-name-1 custom-class-name-2"`</li><li>Array of strings:<br />`["custom-class-name-1", "custom-class-name-2"]`</li></ul>|
+|inputRef|A function that behaves like ref, but it's passed to main `<div>` rendered by `<Page>` component.|`(ref) => { this.myPage = ref; }`|
 |onLoadError|Function called in case of an error while loading the page.|`(error) => alert('Error while loading page! ' + error.message)`|
 |onLoadSuccess|Function called when the page is successfully loaded.|`(page) => alert('Now displaying a page number ' + page.pageNumber + '!')`|
 |onRenderError|Function called in case of an error while rendering the page.|`(error) => alert('Error while loading page! ' + error.message)`|
@@ -212,7 +215,7 @@ Displays an outline (table of contents). Must be placed inside `<Document />` or
 |Prop name|Description|Example values|
 |----|----|----|
 |className|Defines custom class name(s), that will be added to rendered element along with the default `ReactPDF__Outline`.|<ul><li>String:<br />`"custom-class-name-1 custom-class-name-2"`</li><li>Array of strings:<br />`["custom-class-name-1", "custom-class-name-2"]`</li></ul>|
-|onItemClick|Function called when an item has been clicked.|`({ pageNumber }) => alert('Clicked an item from page ' + pageNumber + '!')`|
+|onItemClick|Function called when an item has been clicked. Usually, you would like to use this callback to move the user wherever they requested to.|`({ pageNumber }) => alert('Clicked an item from page ' + pageNumber + '!')`|
 |onLoadError|Function called in case of an error while retreiving the outline.|`(error) => alert('Error while retreiving the outline! ' + error.message)`|
 |onLoadSuccess|Function called when the outline is successfully retreived.|`() => alert('The outline has been successfully retreived.')`|
 |onParseError|Function called in case of an error while parsing the outline.|`(error) => alert('Error while parsing the outline! ' + error.message)`|

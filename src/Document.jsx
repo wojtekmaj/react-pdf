@@ -5,6 +5,8 @@ import React, { Children, Component } from 'react';
 import PropTypes from 'prop-types';
 import mergeClassNames from 'merge-class-names';
 
+import LinkService from './LinkService';
+
 import {
   callIfDefined,
   displayCORSWarning,
@@ -17,6 +19,7 @@ import {
   isParamObject,
   isString,
   makeCancellable,
+  warnOnDev,
 } from './shared/util';
 import { makeEventProps } from './shared/events';
 
@@ -27,8 +30,35 @@ export default class Document extends Component {
     pdf: null,
   }
 
+  viewer = {
+    scrollPageIntoView: ({ pageNumber }) => {
+      // Handling jumping to internal links target
+
+      // First, check if custom handling of onItemClick was provided
+      if (this.props.onItemClick) {
+        this.props.onItemClick({ pageNumber });
+        return;
+      }
+
+      // If not, try to look for target page inside the <Document>.
+      const page = this.pages[pageNumber - 1];
+
+      if (page) {
+        // Scroll to the page automatically
+        page.scrollIntoView();
+        return;
+      }
+
+      warnOnDev(`Warning: User clicked an internal link, which caused <Document> to attempt to scroll to the page ${pageNumber} on which the link target is placed. Either ensure that all pages are rendered within <Document> or handle changing the page by providing onItemClick to <Document>.`);
+    },
+  };
+
+  linkService = new LinkService();
+
   componentDidMount() {
     this.loadDocument();
+
+    this.linkService.setViewer(this.viewer);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -99,6 +129,8 @@ export default class Document extends Component {
       pdf,
     );
 
+    this.pages = new Array(pdf.numPages);
+    this.linkService.setDocument(pdf);
     this.setState({ pdf });
   }
 
@@ -249,6 +281,14 @@ export default class Document extends Component {
     return reject(new Error('Unsupported loading method.'));
   })
 
+  registerPage = (pageIndex, ref) => {
+    this.pages[pageIndex] = ref;
+  }
+
+  unregisterPage = (pageIndex) => {
+    delete this.pages[pageIndex];
+  }
+
   renderNoData() {
     return (
       <div className="ReactPDF__NoData">{this.props.noData}</div>
@@ -270,8 +310,12 @@ export default class Document extends Component {
   renderChildren() {
     const { children, className, rotate } = this.props;
     const { pdf } = this.state;
+    const { linkService, registerPage, unregisterPage } = this;
 
     const childProps = {
+      linkService,
+      registerPage,
+      unregisterPage,
       pdf,
       rotate,
     };
@@ -279,6 +323,14 @@ export default class Document extends Component {
     return (
       <div
         className={mergeClassNames('ReactPDF__Document', className)}
+        ref={(ref) => {
+          const { inputRef } = this.props;
+          if (inputRef) {
+            inputRef(ref);
+          }
+
+          this.ref = ref;
+        }}
         {...this.eventProps}
       >
         {
@@ -342,8 +394,10 @@ Document.propTypes = {
   ]),
   error: PropTypes.node,
   file: PropTypes.oneOfType(fileTypes),
+  inputRef: PropTypes.func,
   loading: PropTypes.node,
   noData: PropTypes.node,
+  onItemClick: PropTypes.func,
   onLoadError: PropTypes.func,
   onLoadSuccess: PropTypes.func,
   onSourceError: PropTypes.func,

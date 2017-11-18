@@ -13,6 +13,8 @@ setOptions({
   cMapPacked: true,
 });
 
+/* eslint-disable no-console */
+
 export default class Test extends Component {
   state = {
     displayAll: false,
@@ -134,6 +136,7 @@ export default class Test extends Component {
                 render &&
                   <Document
                     className="custom-classname-document"
+                    onItemClick={this.onItemClick}
                     file={file}
                     onClick={(event, pdf) => console.log('Clicked a document', { event, pdf })}
                     onLoadSuccess={this.onDocumentLoadSuccess}

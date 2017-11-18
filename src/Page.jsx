@@ -15,7 +15,7 @@ import {
 } from './shared/util';
 import { makeEventProps } from './shared/events';
 
-import { eventsProps } from './shared/propTypes';
+import { eventsProps, linkServiceProp, pdfProp } from './shared/propTypes';
 
 export default class Page extends Component {
   state = {
@@ -31,11 +31,21 @@ export default class Page extends Component {
       nextProps.pdf !== this.props.pdf ||
       this.getPageNumber(nextProps) !== this.getPageNumber()
     ) {
+      callIfDefined(
+        this.props.unregisterPage,
+        this.state.page.pageIndex,
+      );
+
       this.loadPage(nextProps);
     }
   }
 
   componentWillUnmount() {
+    callIfDefined(
+      this.props.unregisterPage,
+      this.state.page.pageIndex,
+    );
+
     if (this.runningTask && this.runningTask.cancel) {
       this.runningTask.cancel();
     }
@@ -52,6 +62,12 @@ export default class Page extends Component {
     callIfDefined(
       this.props.onLoadSuccess,
       pageCallback,
+    );
+
+    callIfDefined(
+      this.props.registerPage,
+      page.pageIndex,
+      this.ref,
     );
   }
 
@@ -205,12 +221,14 @@ export default class Page extends Component {
       return null;
     }
 
+    const { linkService } = this.props;
     const { page } = this.state;
     const { rotate, scale } = this;
 
     return (
       <PageAnnotations
         key={`${page.pageIndex}@${scale}/${rotate}_annotations`}
+        linkService={linkService}
         page={page}
         rotate={rotate}
         scale={scale}
@@ -287,8 +305,16 @@ export default class Page extends Component {
     return (
       <div
         className={mergeClassNames('ReactPDF__Page', className)}
-        ref={this.props.inputRef}
+        ref={(ref) => {
+          const { inputRef } = this.props;
+          if (inputRef) {
+            inputRef(ref);
+          }
+
+          this.ref = ref;
+        }}
         style={{ position: 'relative' }}
+        data-page-number={this.getPageNumber()}
         {...this.eventProps}
       >
         {
@@ -316,6 +342,7 @@ Page.propTypes = {
     PropTypes.arrayOf(PropTypes.string),
   ]),
   inputRef: PropTypes.func,
+  linkService: linkServiceProp,
   onGetTextError: PropTypes.func,
   onGetTextSuccess: PropTypes.func,
   onLoadError: PropTypes.func,
@@ -324,15 +351,14 @@ Page.propTypes = {
   onRenderSuccess: PropTypes.func,
   pageIndex: PropTypes.number, // eslint-disable-line react/no-unused-prop-types
   pageNumber: PropTypes.number, // eslint-disable-line react/no-unused-prop-types
-  pdf: PropTypes.shape({
-    getPage: PropTypes.func.isRequired,
-    numPages: PropTypes.number.isRequired,
-  }),
+  pdf: pdfProp,
+  registerPage: PropTypes.func,
   renderAnnotations: PropTypes.bool,
   renderMode: PropTypes.oneOf(['canvas', 'svg']),
   renderTextLayer: PropTypes.bool,
   rotate: PropTypes.number,
   scale: PropTypes.number,
+  unregisterPage: PropTypes.func,
   width: PropTypes.number,
   ...eventsProps(),
 };
