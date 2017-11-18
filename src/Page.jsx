@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import mergeClassNames from 'merge-class-names';
 
 import PageCanvas from './PageCanvas';
+import PageSVG from './PageSVG';
 import PageTextContent from './PageTextContent';
 import PageAnnotations from './PageAnnotations';
 
@@ -171,6 +172,99 @@ export default class Page extends Component {
       .catch(this.onLoadError);
   }
 
+  renderTextLayer() {
+    const { renderTextLayer } = this.props;
+
+    if (!renderTextLayer) {
+      return null;
+    }
+
+    const {
+      onGetTextError,
+      onGetTextSuccess,
+    } = this.props;
+    const { page } = this.state;
+    const { rotate, scale } = this;
+
+    return (
+      <PageTextContent
+        key={`${page.pageIndex}@${scale}/${rotate}_text`}
+        onGetTextError={onGetTextError}
+        onGetTextSuccess={onGetTextSuccess}
+        page={page}
+        rotate={rotate}
+        scale={scale}
+      />
+    );
+  }
+
+  renderAnnotations() {
+    const { renderAnnotations } = this.props;
+
+    if (!renderAnnotations) {
+      return null;
+    }
+
+    const { page } = this.state;
+    const { rotate, scale } = this;
+
+    return (
+      <PageAnnotations
+        key={`${page.pageIndex}@${scale}/${rotate}_annotations`}
+        page={page}
+        rotate={rotate}
+        scale={scale}
+      />
+    );
+  }
+
+  renderSVG() {
+    const {
+      onRenderError,
+      onRenderSuccess,
+    } = this.props;
+    const { page } = this.state;
+    const { rotate, scale } = this;
+
+    return [
+      <PageSVG
+        key={`${page.pageIndex}@${scale}/${rotate}_svg`}
+        onRenderError={onRenderError}
+        onRenderSuccess={onRenderSuccess}
+        page={page}
+        rotate={this.rotate}
+        scale={this.scale}
+      />,
+      /**
+       * As of now, PDF.js 2.0.120 returns warnings on unimplemented annotations.
+       * Therefore, as a fallback, we render "traditional" PageAnnotations component.
+       */
+      this.renderAnnotations(),
+    ];
+  }
+
+  renderCanvas() {
+    const {
+      onRenderError,
+      onRenderSuccess,
+    } = this.props;
+    const { page } = this.state;
+    const { rotate, scale } = this;
+
+    return [
+      <PageCanvas
+        key={`${page.pageIndex}@${scale}/${rotate}_canvas`}
+        onRenderError={onRenderError}
+        onRenderSuccess={onRenderSuccess}
+        page={page}
+        rotate={rotate}
+        scale={scale}
+      />,
+      this.renderTextLayer(),
+      this.renderAnnotations(),
+    ];
+  }
+
   render() {
     const { pdf } = this.props;
     const { page } = this.state;
@@ -187,14 +281,8 @@ export default class Page extends Component {
     const {
       children,
       className,
-      onGetTextError,
-      onGetTextSuccess,
-      onRenderError,
-      onRenderSuccess,
-      renderAnnotations,
-      renderTextLayer,
+      renderMode,
     } = this.props;
-    const { rotate, scale } = this;
 
     return (
       <div
@@ -203,33 +291,10 @@ export default class Page extends Component {
         style={{ position: 'relative' }}
         {...this.eventProps}
       >
-        <PageCanvas
-          key={`${page.pageIndex}@${scale}/${rotate}_canvas`}
-          onRenderError={onRenderError}
-          onRenderSuccess={onRenderSuccess}
-          page={page}
-          rotate={rotate}
-          scale={scale}
-        />
         {
-          renderTextLayer &&
-            <PageTextContent
-              key={`${page.pageIndex}@${scale}/${rotate}_text`}
-              onGetTextError={onGetTextError}
-              onGetTextSuccess={onGetTextSuccess}
-              page={page}
-              rotate={rotate}
-              scale={scale}
-            />
-        }
-        {
-          renderAnnotations &&
-            <PageAnnotations
-              key={`${page.pageIndex}@${scale}/${rotate}_annotations`}
-              page={page}
-              rotate={rotate}
-              scale={scale}
-            />
+          renderMode === 'svg' ?
+            this.renderSVG() :
+            this.renderCanvas()
         }
         {children}
       </div>
@@ -239,6 +304,7 @@ export default class Page extends Component {
 
 Page.defaultProps = {
   renderAnnotations: true,
+  renderMode: 'canvas',
   renderTextLayer: true,
   scale: 1.0,
 };
@@ -263,6 +329,7 @@ Page.propTypes = {
     numPages: PropTypes.number.isRequired,
   }),
   renderAnnotations: PropTypes.bool,
+  renderMode: PropTypes.oneOf(['canvas', 'svg']),
   renderTextLayer: PropTypes.bool,
   rotate: PropTypes.number,
   scale: PropTypes.number,

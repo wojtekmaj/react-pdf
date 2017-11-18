@@ -1,6 +1,7 @@
 import Document from './Document';
 import Outline from './Outline';
 import Page from './Page';
+import makeSetOptions from './setOptions';
 
 import { isLocalFileSystem, warnOnDev } from './shared/util';
 
@@ -11,10 +12,15 @@ if (isLocalFileSystem) {
 
 const pdfjs = require('pdfjs-dist');
 
-pdfjs.PDFJS.workerSrc = 'pdf.worker.js';
+const setOptions = makeSetOptions(pdfjs);
+
+setOptions({
+  workerSrc: 'pdf.worker.js',
+});
 
 export {
   Document,
   Outline,
   Page,
+  setOptions,
 };

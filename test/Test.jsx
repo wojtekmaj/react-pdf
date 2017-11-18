@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Document, Outline, Page } from 'react-pdf/src/entry.webpack';
+import { Document, Outline, Page, setOptions } from 'react-pdf/src/entry.webpack';
 
 import './Test.less';
 
@@ -7,6 +7,11 @@ import LoadingOptions from './LoadingOptions';
 import ViewOptions from './ViewOptions';
 
 import { dataURItoBlob } from './shared/util';
+
+setOptions({
+  cMapUrl: 'cmaps/',
+  cMapPacked: true,
+});
 
 export default class Test extends Component {
   state = {
@@ -18,6 +23,7 @@ export default class Test extends Component {
     passMethod: 'normal',
     render: true,
     renderAnnotations: true,
+    renderMode: 'canvas',
     renderTextLayer: true,
     rotate: null,
   }
@@ -77,6 +83,7 @@ export default class Test extends Component {
       passMethod,
       render,
       renderAnnotations,
+      renderMode,
       renderTextLayer,
       rotate,
     } = this.state;
@@ -101,6 +108,7 @@ export default class Test extends Component {
               displayAll={displayAll}
               pageWidth={pageWidth}
               renderAnnotations={renderAnnotations}
+              renderMode={renderMode}
               renderTextLayer={renderTextLayer}
               rotate={rotate}
               setState={setState}
@@ -153,6 +161,7 @@ export default class Test extends Component {
                               onClick={(event, page) => console.log('Clicked a page', { event, page })}
                               pageNumber={index + 1}
                               renderAnnotations={renderAnnotations}
+                              renderMode={renderMode}
                               renderTextLayer={renderTextLayer}
                               width={pageWidth}
                               onRenderSuccess={this.onPageRenderSuccess}
@@ -164,6 +173,7 @@ export default class Test extends Component {
                           onClick={(event, page) => console.log('Clicked a page', { event, page })}
                           pageNumber={pageNumber || 1}
                           renderAnnotations={renderAnnotations}
+                          renderMode={renderMode}
                           renderTextLayer={renderTextLayer}
                           width={pageWidth}
                           onRenderSuccess={this.onPageRenderSuccess}

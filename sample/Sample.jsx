@@ -1,8 +1,13 @@
 import React, { Component } from 'react';
 import { render } from 'react-dom';
-import { Document, Page } from 'react-pdf/build/entry.webpack';
+import { Document, Page, setOptions } from 'react-pdf/build/entry.webpack';
 
 import './Sample.less';
+
+setOptions({
+  cMapUrl: 'cmaps/',
+  cMapPacked: true,
+});
 
 class Sample extends Component {
   state = {
@@ -49,8 +54,6 @@ class Sample extends Component {
                     <Page
                       key={`page_${index + 1}`}
                       pageNumber={index + 1}
-                      onRenderSuccess={this.onPageRenderSuccess}
-                      width={Math.min(600, document.body.clientWidth - 52)}
                     />
                   ),
                 )
