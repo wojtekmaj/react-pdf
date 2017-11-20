@@ -145,6 +145,7 @@ export default class PageTextContent extends Component {
           bottom: `${baselineBottom * scale}px`,
           transformOrigin: 'left bottom',
           whiteSpace: 'pre',
+          pointerEvents: 'all',
         }}
         ref={(ref) => {
           if (!ref) {
@@ -184,6 +185,7 @@ export default class PageTextContent extends Component {
           height: `${viewport.height}px`,
           color: 'transparent',
           transform: `translate(-50%, -50%) rotate(${rotate}deg)`,
+          pointerEvents: 'none',
         }}
       >
         {this.renderTextItems()}
