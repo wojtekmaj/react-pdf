@@ -40,7 +40,7 @@ export default class Document extends Component {
         return;
       }
 
-      // If not, try to look for target page inside the <Document>.
+      // If not, try to look for target page within the <Document>.
       const page = this.pages[pageNumber - 1];
 
       if (page) {
@@ -49,7 +49,7 @@ export default class Document extends Component {
         return;
       }
 
-      warnOnDev(`Warning: User clicked an internal link, which caused <Document> to attempt to scroll to the page ${pageNumber} on which the link target is placed. Either ensure that all pages are rendered within <Document> or handle changing the page by providing onItemClick to <Document>.`);
+      warnOnDev(`Warning: An internal link leading to page ${pageNumber} was clicked, but neither <Document> was provided with onItemClick nor it was able to find the page within itself. Either provide onItemClick to <Document> and handle navigating by yourself or ensure that all pages are rendered within <Document>.`);
     },
   };
 
