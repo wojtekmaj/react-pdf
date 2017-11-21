@@ -9,6 +9,7 @@ import LinkService from './LinkService';
 
 import {
   callIfDefined,
+  dataURItoUint8Array,
   displayCORSWarning,
   errorOnDev,
   isArrayBuffer,
@@ -222,10 +223,12 @@ export default class Document extends Component {
 
     // File is a string
     if (isString(file)) {
-      if (!isDataURI(file)) {
-        displayCORSWarning();
+      if (isDataURI(file)) {
+        const fileUint8Array = dataURItoUint8Array(file);
+        return resolve(fileUint8Array);
       }
 
+      displayCORSWarning();
       return resolve(file);
     }
 
@@ -239,9 +242,12 @@ export default class Document extends Component {
 
       if ('url' in modifiedFile) {
         // File is data URI
-        if (!isDataURI(modifiedFile.url)) {
-          displayCORSWarning();
+        if (isDataURI(modifiedFile.url)) {
+          const fileUint8Array = dataURItoUint8Array(modifiedFile.url);
+          return resolve(fileUint8Array);
         }
+
+        displayCORSWarning();
       }
 
       return resolve(modifiedFile);
