@@ -1,6 +1,7 @@
 ![downloads](https://img.shields.io/npm/dt/react-pdf.svg) ![build](https://img.shields.io/travis/wojtekmaj/react-pdf.svg) ![dependencies](https://img.shields.io/david/wojtekmaj/react-pdf.svg
 ) ![dev dependencies](https://img.shields.io/david/dev/wojtekmaj/react-pdf.svg
 )
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fwojtekmaj%2Freact-pdf.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fwojtekmaj%2Freact-pdf?ref=badge_shield)
 
 # React-PDF
 Easily display PDF files in your React application.
@@ -241,6 +242,9 @@ setOptions({
 ## License
 
 The MIT License.
+
+
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fwojtekmaj%2Freact-pdf.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Fwojtekmaj%2Freact-pdf?ref=badge_large)
 
 ## Author
 
