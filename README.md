@@ -49,7 +49,7 @@ class MyApp extends Component {
     pageNumber: 1,
   }
 
-  onDocumentLoad({ numPages }) {
+  onDocumentLoad = ({ numPages }) => {
     this.setState({ numPages });
   }
 
