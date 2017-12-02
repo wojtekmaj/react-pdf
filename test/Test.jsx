@@ -93,6 +93,16 @@ export default class Test extends Component {
 
     const setState = state => this.setState(state);
 
+    const pageProps = {
+      className: 'custom-classname-page',
+      onClick: (event, page) => console.log('Clicked a page', { event, page }),
+      onRenderSuccess: this.onPageRenderSuccess,
+      renderAnnotations,
+      renderMode,
+      renderTextLayer,
+      width: pageWidth,
+    };
+
     return (
       <div className="Test">
         <header>
@@ -150,36 +160,20 @@ export default class Test extends Component {
                           new Array(numPages),
                           (el, index) => (
                             <Page
-                              className="custom-classname-page"
-                              inputRef={(ref) => {
-                                if (!ref) {
-                                  return;
-                                }
-
-                                if (pageNumber === index + 1) {
-                                  ref.scrollIntoView();
-                                }
-                              }}
+                              {...pageProps}
+                              inputRef={
+                                (pageNumber === index + 1) ?
+                                (ref => ref && ref.scrollIntoView()) :
+                                null
+                              }
                               key={`page_${index + 1}`}
-                              onClick={(event, page) => console.log('Clicked a page', { event, page })}
                               pageNumber={index + 1}
-                              renderAnnotations={renderAnnotations}
-                              renderMode={renderMode}
-                              renderTextLayer={renderTextLayer}
-                              width={pageWidth}
-                              onRenderSuccess={this.onPageRenderSuccess}
                             />
                           ),
                         ) :
                         <Page
-                          className="custom-classname-page"
-                          onClick={(event, page) => console.log('Clicked a page', { event, page })}
+                          {...pageProps}
                           pageNumber={pageNumber || 1}
-                          renderAnnotations={renderAnnotations}
-                          renderMode={renderMode}
-                          renderTextLayer={renderTextLayer}
-                          width={pageWidth}
-                          onRenderSuccess={this.onPageRenderSuccess}
                         />
                     }
                   </Document>
