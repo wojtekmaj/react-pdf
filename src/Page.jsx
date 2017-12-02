@@ -266,17 +266,13 @@ export default class Page extends Component {
       onRenderError,
       onRenderSuccess,
     } = this.props;
-    const { page } = this.state;
-    const { rotate, scale } = this;
 
     return [
       <PageCanvas
         key={`${this.pageKey}_canvas`}
         onRenderError={onRenderError}
         onRenderSuccess={onRenderSuccess}
-        page={page}
-        rotate={rotate}
-        scale={scale}
+        {...this.pageProps}
       />,
       this.renderTextLayer(),
       this.renderAnnotations(),
