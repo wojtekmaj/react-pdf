@@ -341,7 +341,9 @@ export default class Document extends Component {
       >
         {
           children && Children
-            .map(children, child => React.cloneElement(child, childProps))
+            .map(children, child =>
+              React.cloneElement(child, Object.assign({}, childProps, child.props)),
+            )
         }
       </div>
     );
