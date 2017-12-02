@@ -154,28 +154,23 @@ export default class Document extends Component {
   }
 
   shouldLoadDocument(nextProps) {
-    const nextFile = nextProps.file;
+    const { file: nextFile } = nextProps;
     const { file } = this.props;
 
+    // We got file of different type - clearly there was a change
+    if (typeof nextFile !== typeof file) {
+      return true;
+    }
+
     // We got an object and previously it was an object too - we need to compare deeply
-    if (
-      isParamObject(nextFile) &&
-      isParamObject(file)
-    ) {
+    if (isParamObject(nextFile) && isParamObject(file)) {
       return (
         nextFile.data !== file.data ||
         nextFile.range !== file.range ||
         nextFile.url !== file.url
       );
-    }
-
     // We either have or had an object - most likely there was a change
-    if (isParamObject(nextFile) !== isParamObject(file)) {
-      return true;
-    }
-
-    // We got file of different type - clearly there was a change
-    if (typeof nextFile !== typeof file) {
+    } else if (isParamObject(nextFile) || isParamObject(file)) {
       return true;
     }
 
@@ -183,19 +178,18 @@ export default class Document extends Component {
      * The cases below are browser-only.
      * If you're running on a non-browser environment, these cases will be of no use.
      */
-    if (isBrowser) {
+    if (
+      isBrowser &&
       // File is a Blob or a File
-      if (
-        (isBlob(nextFile) || isFile(nextFile)) &&
-        (isBlob(file) || isFile(file))
-      ) {
-        /**
-         * Theoretically, we could compare files here by reading them, but that would
-         * severely affect performance. Therefore, we're making a compromise here, agreeing
-         * on not loading the next file if its size is identical as the previous one's.
-         */
-        return nextFile.size !== file.size;
-      }
+      (isBlob(nextFile) || isFile(nextFile)) &&
+      (isBlob(file) || isFile(file))
+    ) {
+      /**
+       * Theoretically, we could compare files here by reading them, but that would severely affect
+       * performance. Therefore, we're making a compromise here, agreeing on not loading the next
+       * file if its size is identical as the previous one's.
+       */
+      return nextFile.size !== file.size;
     }
 
     return nextFile !== file;
@@ -314,7 +308,9 @@ export default class Document extends Component {
   }
 
   renderChildren() {
-    const { children, className, rotate } = this.props;
+    const {
+      children, className, inputRef, rotate,
+    } = this.props;
     const { pdf } = this.state;
     const { linkService, registerPage, unregisterPage } = this;
 
@@ -329,14 +325,11 @@ export default class Document extends Component {
     return (
       <div
         className={mergeClassNames('ReactPDF__Document', className)}
-        ref={(ref) => {
-          const { inputRef } = this.props;
-          if (inputRef) {
-            inputRef(ref);
-          }
-
-          this.ref = ref;
-        }}
+        ref={
+          inputRef ?
+            ((ref) => { inputRef(ref); }) :
+            null
+        }
         {...this.eventProps}
       >
         {
