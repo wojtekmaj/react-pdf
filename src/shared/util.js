@@ -61,7 +61,7 @@ export const isBlob = (variable) => {
  */
 export const isFile = (variable) => {
   if (!isBrowser) {
-    throw new Error('Attempted to check if a variable is a Blob on a non-browser environment.');
+    throw new Error('Attempted to check if a variable is a File on a non-browser environment.');
   }
 
   return variable instanceof File;
