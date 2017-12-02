@@ -235,6 +235,7 @@ export default class Page extends Component {
       <PageAnnotations
         key={`${this.pageKey}_annotations`}
         linkService={linkService}
+        renderInteractiveForms={this.props.renderInteractiveForms}
         {...this.pageProps}
       />
     );
@@ -272,6 +273,7 @@ export default class Page extends Component {
         key={`${this.pageKey}_canvas`}
         onRenderError={onRenderError}
         onRenderSuccess={onRenderSuccess}
+        renderInteractiveForms={this.props.renderInteractiveForms}
         {...this.pageProps}
       />,
       this.renderTextLayer(),
@@ -349,6 +351,7 @@ Page.propTypes = {
   pdf: pdfProp,
   registerPage: PropTypes.func,
   renderAnnotations: PropTypes.bool,
+  renderInteractiveForms: PropTypes.bool,
   renderMode: PropTypes.oneOf(['canvas', 'svg']),
   renderTextLayer: PropTypes.bool,
   rotate: PropTypes.number,

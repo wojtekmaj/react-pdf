@@ -39,7 +39,7 @@ export default class PageAnnotations extends Component {
   }
 
   renderAnnotations(annotations) {
-    const { linkService, page } = this.props;
+    const { linkService, page, renderInteractiveForms } = this.props;
     const viewport = this.viewport.clone({ dontFlip: true });
 
     const parameters = {
@@ -47,6 +47,7 @@ export default class PageAnnotations extends Component {
       div: this.annotationLayer,
       linkService,
       page,
+      renderInteractiveForms,
       viewport,
     };
 
@@ -66,6 +67,7 @@ export default class PageAnnotations extends Component {
 PageAnnotations.propTypes = {
   linkService: linkServiceProp,
   page: pageProp,
+  renderInteractiveForms: PropTypes.bool,
   rotate: rotateProp,
   scale: PropTypes.number,
 };

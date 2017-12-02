@@ -25,6 +25,7 @@ export default class Test extends Component {
     passMethod: 'normal',
     render: true,
     renderAnnotations: true,
+    renderInteractiveForms: true,
     renderMode: 'canvas',
     renderTextLayer: true,
     rotate: null,
@@ -85,6 +86,7 @@ export default class Test extends Component {
       passMethod,
       render,
       renderAnnotations,
+      renderInteractiveForms,
       renderMode,
       renderTextLayer,
       rotate,
@@ -98,6 +100,7 @@ export default class Test extends Component {
       onClick: (event, page) => console.log('Clicked a page', { event, page }),
       onRenderSuccess: this.onPageRenderSuccess,
       renderAnnotations,
+      renderInteractiveForms,
       renderMode,
       renderTextLayer,
       width: pageWidth,
@@ -120,6 +123,7 @@ export default class Test extends Component {
               displayAll={displayAll}
               pageWidth={pageWidth}
               renderAnnotations={renderAnnotations}
+              renderInteractiveForms={renderInteractiveForms}
               renderMode={renderMode}
               renderTextLayer={renderTextLayer}
               rotate={rotate}

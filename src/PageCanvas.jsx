@@ -62,7 +62,7 @@ export default class PageCanvas extends Component {
       return null;
     }
 
-    const { page } = this.props;
+    const { page, renderInteractiveForms } = this.props;
 
     const { renderViewport, viewport } = this;
 
@@ -77,6 +77,7 @@ export default class PageCanvas extends Component {
     const renderContext = {
       canvasContext,
       viewport: renderViewport,
+      renderInteractiveForms,
     };
 
     // If another render is in progress, let's cancel it
@@ -111,6 +112,7 @@ PageCanvas.propTypes = {
   onRenderError: PropTypes.func,
   onRenderSuccess: PropTypes.func,
   page: pageProp.isRequired,
+  renderInteractiveForms: PropTypes.bool,
   rotate: rotateProp,
   scale: PropTypes.number,
 };
