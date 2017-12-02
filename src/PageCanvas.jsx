@@ -10,7 +10,30 @@ import {
 import { pageProp, rotateProp } from './shared/propTypes';
 
 export default class PageCanvas extends Component {
+  componentDidMount() {
+    this.drawPageOnCanvas();
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const { props } = this;
+
+    if (nextProps.renderInteractiveForms !== props.renderInteractiveForms) {
+      nextProps.page.cleanup();
+    }
+
+    if (
+      nextProps.page !== props.page ||
+      nextProps.renderInteractiveForms !== props.renderInteractiveForms
+    ) {
+      this.drawPageOnCanvas(nextProps);
+    }
+  }
+
   componentWillUnmount() {
+    this.cancelRenderingTask();
+  }
+
+  cancelRenderingTask() {
     /* eslint-disable no-underscore-dangle */
     if (this.renderer && this.renderer._internalRenderTask.running) {
       this.renderer._internalRenderTask.cancel();
@@ -57,12 +80,14 @@ export default class PageCanvas extends Component {
     return page.getViewport(scale, rotate);
   }
 
-  drawPageOnCanvas = (canvas) => {
+  drawPageOnCanvas = (props = this.props) => {
+    const { canvasLayer: canvas } = this;
+
     if (!canvas) {
       return null;
     }
 
-    const { page, renderInteractiveForms } = this.props;
+    const { page, renderInteractiveForms } = props;
 
     const { renderViewport, viewport } = this;
 
@@ -81,11 +106,7 @@ export default class PageCanvas extends Component {
     };
 
     // If another render is in progress, let's cancel it
-    /* eslint-disable no-underscore-dangle */
-    if (this.renderer && this.renderer._internalRenderTask.running) {
-      this.renderer._internalRenderTask.cancel();
-    }
-    /* eslint-enable no-underscore-dangle */
+    this.cancelRenderingTask();
 
     this.renderer = page.render(renderContext);
 
@@ -102,7 +123,7 @@ export default class PageCanvas extends Component {
           display: 'block',
           userSelect: 'none',
         }}
-        ref={this.drawPageOnCanvas}
+        ref={(ref) => { this.canvasLayer = ref; }}
       />
     );
   }

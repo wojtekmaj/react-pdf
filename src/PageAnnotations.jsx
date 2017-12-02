@@ -13,7 +13,12 @@ export default class PageAnnotations extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.page !== this.props.page) {
+    const { props } = this;
+
+    if (
+      nextProps.page !== props.page ||
+      nextProps.renderInteractiveForms !== props.renderInteractiveForms
+    ) {
       this.getAnnotations(nextProps);
     }
   }

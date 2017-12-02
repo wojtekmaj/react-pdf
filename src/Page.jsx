@@ -229,13 +229,13 @@ export default class Page extends Component {
       return null;
     }
 
-    const { linkService } = this.props;
+    const { linkService, renderInteractiveForms } = this.props;
 
     return (
       <PageAnnotations
-        key={`${this.pageKey}_annotations`}
+        key={`${this.pageKey}_${renderInteractiveForms ? 'interactive-' : ''}annotations`}
         linkService={linkService}
-        renderInteractiveForms={this.props.renderInteractiveForms}
+        renderInteractiveForms={renderInteractiveForms}
         {...this.pageProps}
       />
     );
