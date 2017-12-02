@@ -169,6 +169,18 @@ export default class Page extends Component {
     return makeEventProps(this.props, this.pageCallback);
   }
 
+  get pageKey() {
+    return `${this.state.page.pageIndex}@${this.scale}/${this.rotate}`;
+  }
+
+  get pageProps() {
+    return {
+      page: this.state.page,
+      rotate: this.rotate,
+      scale: this.scale,
+    };
+  }
+
   loadPage(props = this.props) {
     const { pdf } = props;
     const pageNumber = this.getPageNumber(props);
@@ -199,17 +211,13 @@ export default class Page extends Component {
       onGetTextError,
       onGetTextSuccess,
     } = this.props;
-    const { page } = this.state;
-    const { rotate, scale } = this;
 
     return (
       <PageTextContent
-        key={`${page.pageIndex}@${scale}/${rotate}_text`}
+        key={`${this.pageKey}_text`}
         onGetTextError={onGetTextError}
         onGetTextSuccess={onGetTextSuccess}
-        page={page}
-        rotate={rotate}
-        scale={scale}
+        {...this.pageProps}
       />
     );
   }
@@ -222,16 +230,12 @@ export default class Page extends Component {
     }
 
     const { linkService } = this.props;
-    const { page } = this.state;
-    const { rotate, scale } = this;
 
     return (
       <PageAnnotations
-        key={`${page.pageIndex}@${scale}/${rotate}_annotations`}
+        key={`${this.pageKey}_annotations`}
         linkService={linkService}
-        page={page}
-        rotate={rotate}
-        scale={scale}
+        {...this.pageProps}
       />
     );
   }
@@ -241,17 +245,13 @@ export default class Page extends Component {
       onRenderError,
       onRenderSuccess,
     } = this.props;
-    const { page } = this.state;
-    const { rotate, scale } = this;
 
     return [
       <PageSVG
-        key={`${page.pageIndex}@${scale}/${rotate}_svg`}
+        key={`${this.pageKey}_svg`}
         onRenderError={onRenderError}
         onRenderSuccess={onRenderSuccess}
-        page={page}
-        rotate={this.rotate}
-        scale={this.scale}
+        {...this.pageProps}
       />,
       /**
        * As of now, PDF.js 2.0.120 returns warnings on unimplemented annotations.
@@ -271,7 +271,7 @@ export default class Page extends Component {
 
     return [
       <PageCanvas
-        key={`${page.pageIndex}@${scale}/${rotate}_canvas`}
+        key={`${this.pageKey}_canvas`}
         onRenderError={onRenderError}
         onRenderSuccess={onRenderSuccess}
         page={page}
@@ -288,11 +288,10 @@ export default class Page extends Component {
     const { page } = this.state;
     const { pageIndex } = this;
 
-    if (!pdf || !page) {
-      return null;
-    }
-
-    if (pageIndex < 0 || pageIndex > pdf.numPages) {
+    if (
+      (!pdf || !page) ||
+      (pageIndex < 0 || pageIndex > pdf.numPages)
+    ) {
       return null;
     }
 
@@ -314,7 +313,7 @@ export default class Page extends Component {
           this.ref = ref;
         }}
         style={{ position: 'relative' }}
-        data-page-number={this.getPageNumber()}
+        data-page-number={this.pageNumber}
         {...this.eventProps}
       >
         {

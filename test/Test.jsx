@@ -45,9 +45,9 @@ export default class Test extends Component {
 
   nextPage = () => this.changePage(1)
 
-  changePage = by =>
+  changePage = offset =>
     this.setState(prevState => ({
-      pageNumber: (prevState.pageNumber || 1) + by,
+      pageNumber: (prevState.pageNumber || 1) + offset,
     }))
 
   get file() {
@@ -58,10 +58,10 @@ export default class Test extends Component {
 
     switch (this.state.passMethod) {
       case 'object': {
-        const result = {};
         if (typeof file === 'string') {
-          result.url = file;
-          return result;
+          return {
+            url: file,
+          };
         }
         return file;
       }
@@ -163,8 +163,8 @@ export default class Test extends Component {
                               {...pageProps}
                               inputRef={
                                 (pageNumber === index + 1) ?
-                                (ref => ref && ref.scrollIntoView()) :
-                                null
+                                  (ref => ref && ref.scrollIntoView()) :
+                                  null
                               }
                               key={`page_${index + 1}`}
                               pageNumber={index + 1}
