@@ -133,6 +133,7 @@ export default class PageTextContent extends Component {
     const { fontName } = textItem;
     const fontSize = `${fontSizePx * scale}px`;
 
+    baselineBottom += 5;//somehow position ran down 5px, pushing up
     return (
       <div
         key={itemIndex}
