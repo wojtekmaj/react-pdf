@@ -151,7 +151,7 @@ export default class PageTextContent extends Component {
           if (!ref) {
             return;
           }
-
+          ref.style.transform = "";
           this.alignTextItem(ref, textItem);
         }}
       >
