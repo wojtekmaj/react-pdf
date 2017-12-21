@@ -133,7 +133,7 @@ export default class PageTextContent extends Component {
     const { fontName } = textItem;
     const fontSize = `${fontSizePx * scale}px`;
 
-    const bottom = parseInt(baselineBottom) + 5;
+    const bottom = parseInt(baselineBottom) + 3;
     return (
       <div
         key={itemIndex}
