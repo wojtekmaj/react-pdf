@@ -108,7 +108,7 @@ export const callIfDefined = (fn, ...args) => {
   }
 };
 
-export const getPixelRatio = () => window.devicePixelRatio || 1;
+export const getPixelRatio = () => (isBrowser && window.devicePixelRatio) || 1;
 
 const consoleOnDev = (method, ...message) => {
   if (!isProduction) {
