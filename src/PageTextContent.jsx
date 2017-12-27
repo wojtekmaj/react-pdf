@@ -171,20 +171,21 @@ export default class PageTextContent extends Component {
   }
 
   render() {
-    const { rotate } = this.props;
+    const { scale, rotate } = this.props;
     const { unrotatedViewport: viewport } = this;
+    const [xMin, yMin] = viewport.viewBox;
 
     return (
       <div
         className="ReactPDF__Page__textContent"
         style={{
           position: 'absolute',
-          top: '50%',
-          left: '50%',
+          bottom: `${-yMin * scale}px`,
+          left: `${-xMin * scale}px`,
           width: `${viewport.width}px`,
           height: `${viewport.height}px`,
           color: 'transparent',
-          transform: `translate(-50%, -50%) rotate(${rotate}deg)`,
+          transform: `rotate(${rotate}deg)`,
           pointerEvents: 'none',
         }}
       >
