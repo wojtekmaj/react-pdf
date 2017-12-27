@@ -1,6 +1,6 @@
 {
   "name": "react-pdf",
-  "version": "2.4.2",
+  "version": "2.5.0",
   "description": "Easily display PDF files in your React application.",
   "main": "build/entry.js",
   "es6": "src/entry.js",
