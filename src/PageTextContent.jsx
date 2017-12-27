@@ -68,6 +68,25 @@ export default class PageTextContent extends Component {
     return page.getViewport(scale);
   }
 
+  /**
+   * It might happen that the page is rotated by default. In such cases, we shouldn't rotate
+   * text content.
+   */
+  get rotate() {
+    const { page, rotate } = this.props;
+    return rotate - page.rotate;
+  }
+
+  get sideways() {
+    const { rotate } = this;
+    return rotate % 180 !== 0;
+  }
+
+  get defaultSideways() {
+    const { rotation } = this.unrotatedViewport;
+    return rotation % 180 !== 0;
+  }
+
   getTextContent(props = this.props) {
     const { page } = props;
 
@@ -95,8 +114,7 @@ export default class PageTextContent extends Component {
   }
 
   getElementWidth = (element) => {
-    const { rotate } = this.props;
-    const sideways = rotate % 180 !== 0;
+    const { sideways } = this;
     return element.getBoundingClientRect()[sideways ? 'height' : 'width'];
   };
 
@@ -104,6 +122,8 @@ export default class PageTextContent extends Component {
     if (!element) {
       return;
     }
+
+    element.style.transform = '';
 
     const { scale } = this.props;
     const targetWidth = textItem.width * scale;
@@ -114,7 +134,6 @@ export default class PageTextContent extends Component {
     const widthDisproportion = Math.abs((targetWidth / actualWidth) - 1);
 
     const repairsNeeded = widthDisproportion > BROKEN_FONT_ALARM_THRESHOLD;
-
     if (repairsNeeded) {
       const fallbackFontName = fontData ? fontData.fallbackName : 'sans-serif';
       element.style.fontFamily = fallbackFontName;
@@ -127,10 +146,18 @@ export default class PageTextContent extends Component {
   }
 
   renderTextItem = (textItem, itemIndex) => {
-    const [fontSizePx, , , , left, baselineBottom] = textItem.transform;
+    const { unrotatedViewport: viewport, defaultSideways } = this;
     const { scale } = this.props;
-    // Distance from top of the page to the baseline
-    const { fontName } = textItem;
+
+    const [xMin, yMin, /* xMax */, yMax] = viewport.viewBox;
+
+    const { fontName, transform } = textItem;
+    const [fontHeightPx, fontWidthPx, offsetX, offsetY, x, y] = transform;
+
+    const fontSizePx = defaultSideways ? fontWidthPx : fontHeightPx;
+    const top = defaultSideways ? x + offsetX : (yMax - yMin) - (y + offsetY);
+    const left = defaultSideways ? y : x;
+
     const fontSize = `${fontSizePx * scale}px`;
 
     return (
@@ -141,8 +168,8 @@ export default class PageTextContent extends Component {
           fontFamily: fontName,
           fontSize,
           position: 'absolute',
-          left: `${left * scale}px`,
-          bottom: `${baselineBottom * scale}px`,
+          top: `${(top + yMin) * scale}px`,
+          left: `${(left - xMin) * scale}px`,
           transformOrigin: 'left bottom',
           whiteSpace: 'pre',
           pointerEvents: 'all',
@@ -171,21 +198,19 @@ export default class PageTextContent extends Component {
   }
 
   render() {
-    const { scale, rotate } = this.props;
-    const { unrotatedViewport: viewport } = this;
-    const [xMin, yMin] = viewport.viewBox;
+    const { unrotatedViewport: viewport, rotate } = this;
 
     return (
       <div
         className="ReactPDF__Page__textContent"
         style={{
           position: 'absolute',
-          bottom: `${-yMin * scale}px`,
-          left: `${-xMin * scale}px`,
+          top: '50%',
+          left: '50%',
           width: `${viewport.width}px`,
           height: `${viewport.height}px`,
           color: 'transparent',
-          transform: `rotate(${rotate}deg)`,
+          transform: `translate(-50%, -50%) rotate(${rotate}deg)`,
           pointerEvents: 'none',
         }}
       >
