@@ -29,108 +29,112 @@ const makeAsyncCallback = (callbackValue) => {
 };
 
 describe('Document', () => {
-  it('renders "No PDF file specified." when given nothing', () => {
-    const component = mount(
-      <Document />
-    );
+  describe('loading', () => {
+    it('loads a file via data URI properly', async () => {
+      const { func: onSourceSuccess, promise: onSourceSuccessPromise } = makeAsyncCallback(OK);
+      const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
-    const noData = component.find('.ReactPDF__NoData');
+      mount(
+        <Document
+          file={fileDataURI}
+          onLoadSuccess={onLoadSuccess}
+          onSourceSuccess={onSourceSuccess}
+        />
+      );
 
-    expect(noData.text()).toBe('No PDF file specified.');
+      expect.assertions(2);
+      await expect(onSourceSuccessPromise).resolves.toBe(OK);
+      await expect(onLoadSuccessPromise).resolves.toBeInstanceOf(Object);
+    });
+
+    it('loads a file via data URI properly (param object)', async () => {
+      const { func: onSourceSuccess, promise: onSourceSuccessPromise } = makeAsyncCallback(OK);
+      const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
+
+      mount(
+        <Document
+          file={{ url: fileDataURI }}
+          onLoadSuccess={onLoadSuccess}
+          onSourceSuccess={onSourceSuccess}
+        />
+      );
+
+      expect.assertions(2);
+      await expect(onSourceSuccessPromise).resolves.toBe(OK);
+      await expect(onLoadSuccessPromise).resolves.toBeInstanceOf(Object);
+    });
+
+    it('loads a file via ArrayBuffer properly', async () => {
+      const { func: onSourceSuccess, promise: onSourceSuccessPromise } = makeAsyncCallback(OK);
+      const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
+
+      mount(
+        <Document
+          file={fileArrayBuffer}
+          onLoadSuccess={onLoadSuccess}
+          onSourceSuccess={onSourceSuccess}
+        />
+      );
+
+      expect.assertions(2);
+      await expect(onSourceSuccessPromise).resolves.toBe(OK);
+      await expect(onLoadSuccessPromise).resolves.toBeInstanceOf(Object);
+    });
+
+    it('loads a file via Blob properly', async () => {
+      const { func: onSourceSuccess, promise: onSourceSuccessPromise } = makeAsyncCallback(OK);
+      const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
+
+      mount(
+        <Document
+          file={fileBlob}
+          onLoadSuccess={onLoadSuccess}
+          onSourceSuccess={onSourceSuccess}
+        />
+      );
+
+      expect.assertions(2);
+      await expect(onSourceSuccessPromise).resolves.toBe(OK);
+      await expect(onLoadSuccessPromise).resolves.toBeInstanceOf(Object);
+    });
+
+    it('loads a file via File properly', async () => {
+      const { func: onSourceSuccess, promise: onSourceSuccessPromise } = makeAsyncCallback(OK);
+      const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
+
+      mount(
+        <Document
+          file={fileFile}
+          onLoadSuccess={onLoadSuccess}
+          onSourceSuccess={onSourceSuccess}
+        />
+      );
+
+      expect.assertions(2);
+      await expect(onSourceSuccessPromise).resolves.toBe(OK);
+      await expect(onLoadSuccessPromise).resolves.toBeInstanceOf(Object);
+    });
   });
 
-  it('renders custom no data message when given nothing', () => {
-    const component = mount(
-      <Document noData="Nothing here" />
-    );
+  describe('rendering', () => {
+    it('renders "No PDF file specified." when given nothing', () => {
+      const component = mount(
+        <Document />
+      );
 
-    const noData = component.find('.ReactPDF__NoData');
+      const noData = component.find('.ReactPDF__NoData');
 
-    expect(noData.text()).toBe('Nothing here');
-  });
+      expect(noData.text()).toBe('No PDF file specified.');
+    });
 
-  it('loads a file via data URI properly', async () => {
-    const { func: onSourceSuccess, promise: onSourceSuccessPromise } = makeAsyncCallback(OK);
-    const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
+    it('renders custom no data message when given nothing and noData prop is specified', () => {
+      const component = mount(
+        <Document noData="Nothing here" />
+      );
 
-    mount(
-      <Document
-        file={fileDataURI}
-        onLoadSuccess={onLoadSuccess}
-        onSourceSuccess={onSourceSuccess}
-      />
-    );
+      const noData = component.find('.ReactPDF__NoData');
 
-    expect.assertions(2);
-    await expect(onSourceSuccessPromise).resolves.toBe(OK);
-    await expect(onLoadSuccessPromise).resolves.toBeInstanceOf(Object);
-  });
-
-  it('loads a file via data URI properly (param object)', async () => {
-    const { func: onSourceSuccess, promise: onSourceSuccessPromise } = makeAsyncCallback(OK);
-    const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
-
-    mount(
-      <Document
-        file={{ url: fileDataURI }}
-        onLoadSuccess={onLoadSuccess}
-        onSourceSuccess={onSourceSuccess}
-      />
-    );
-
-    expect.assertions(2);
-    await expect(onSourceSuccessPromise).resolves.toBe(OK);
-    await expect(onLoadSuccessPromise).resolves.toBeInstanceOf(Object);
-  });
-
-  it('loads a file via ArrayBuffer properly', async () => {
-    const { func: onSourceSuccess, promise: onSourceSuccessPromise } = makeAsyncCallback(OK);
-    const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
-
-    mount(
-      <Document
-        file={fileArrayBuffer}
-        onLoadSuccess={onLoadSuccess}
-        onSourceSuccess={onSourceSuccess}
-      />
-    );
-
-    expect.assertions(2);
-    await expect(onSourceSuccessPromise).resolves.toBe(OK);
-    await expect(onLoadSuccessPromise).resolves.toBeInstanceOf(Object);
-  });
-
-  it('loads a file via Blob properly', async () => {
-    const { func: onSourceSuccess, promise: onSourceSuccessPromise } = makeAsyncCallback(OK);
-    const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
-
-    mount(
-      <Document
-        file={fileBlob}
-        onLoadSuccess={onLoadSuccess}
-        onSourceSuccess={onSourceSuccess}
-      />
-    );
-
-    expect.assertions(2);
-    await expect(onSourceSuccessPromise).resolves.toBe(OK);
-    await expect(onLoadSuccessPromise).resolves.toBeInstanceOf(Object);
-  });
-
-  it('loads a file via File properly', async () => {
-    const { func: onSourceSuccess, promise: onSourceSuccessPromise } = makeAsyncCallback(OK);
-    const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
-
-    mount(
-      <Document
-        file={fileFile}
-        onLoadSuccess={onLoadSuccess}
-        onSourceSuccess={onSourceSuccess}
-      />
-    );
-
-    expect.assertions(2);
-    await expect(onSourceSuccessPromise).resolves.toBe(OK);
-    await expect(onLoadSuccessPromise).resolves.toBeInstanceOf(Object);
+      expect(noData.text()).toBe('Nothing here');
+    });
   });
 });
