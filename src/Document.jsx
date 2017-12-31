@@ -1,7 +1,7 @@
 /**
  * Loads a PDF document. Passes it to all children.
  */
-import React, { Children, Component } from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import mergeClassNames from 'merge-class-names';
 
@@ -24,7 +24,7 @@ import {
 } from './shared/util';
 import { makeEventProps } from './shared/events';
 
-import { eventsProps } from './shared/propTypes';
+import { eventsProps, linkServiceProp, pdfProp } from './shared/propTypes';
 
 export default class Document extends Component {
   state = {
@@ -72,6 +72,19 @@ export default class Document extends Component {
     if (this.runningTask && this.runningTask.cancel) {
       this.runningTask.cancel();
     }
+  }
+
+  getChildContext() {
+    const { linkService, registerPage, unregisterPage } = this;
+    const { rotate } = this.props;
+
+    return {
+      linkService,
+      pdf: this.state.pdf,
+      registerPage,
+      rotate,
+      unregisterPage,
+    };
   }
 
   get eventProps() {
@@ -308,36 +321,15 @@ export default class Document extends Component {
   }
 
   renderChildren() {
-    const {
-      children, className, inputRef, rotate,
-    } = this.props;
-    const { pdf } = this.state;
-    const { linkService, registerPage, unregisterPage } = this;
-
-    const childProps = {
-      linkService,
-      registerPage,
-      unregisterPage,
-      pdf,
-      rotate,
-    };
+    const { children, className, inputRef } = this.props;
 
     return (
       <div
         className={mergeClassNames('ReactPDF__Document', className)}
-        ref={
-          inputRef ?
-            ((ref) => { inputRef(ref); }) :
-            null
-        }
+        ref={inputRef ? ((ref) => { inputRef(ref); }) : null}
         {...this.eventProps}
       >
-        {
-          children && Children
-            .map(children, child =>
-              React.cloneElement(child, Object.assign({}, childProps, child.props)),
-            )
-        }
+        {children}
       </div>
     );
   }
@@ -386,6 +378,14 @@ if (typeof File !== 'undefined') {
 if (typeof Blob !== 'undefined') {
   fileTypes.push(PropTypes.instanceOf(Blob));
 }
+
+Document.childContextTypes = {
+  linkService: linkServiceProp,
+  pdf: pdfProp,
+  registerPage: PropTypes.func,
+  rotate: PropTypes.number,
+  unregisterPage: PropTypes.func,
+};
 
 Document.propTypes = {
   children: PropTypes.node,

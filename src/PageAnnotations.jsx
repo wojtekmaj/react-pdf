@@ -12,9 +12,9 @@ export default class PageAnnotations extends Component {
     this.getAnnotations();
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.page !== this.props.page) {
-      this.getAnnotations(nextProps);
+  componentWillReceiveProps(nextProps, nextContext) {
+    if (nextContext.page !== this.context.page) {
+      this.getAnnotations(nextContext);
     }
   }
 
@@ -25,13 +25,13 @@ export default class PageAnnotations extends Component {
   }
 
   get viewport() {
-    const { page, rotate, scale } = this.props;
+    const { page, rotate, scale } = this.context;
 
     return page.getViewport(scale, rotate);
   }
 
-  getAnnotations(props = this.props) {
-    this.runningTask = makeCancellable(props.page.getAnnotations());
+  getAnnotations(context = this.context) {
+    this.runningTask = makeCancellable(context.page.getAnnotations());
 
     return this.runningTask.promise.then((annotations) => {
       this.renderAnnotations(annotations);
@@ -39,7 +39,7 @@ export default class PageAnnotations extends Component {
   }
 
   renderAnnotations(annotations) {
-    const { linkService, page } = this.props;
+    const { linkService, page } = this.context;
     const viewport = this.viewport.clone({ dontFlip: true });
 
     const parameters = {
@@ -63,7 +63,7 @@ export default class PageAnnotations extends Component {
   }
 }
 
-PageAnnotations.propTypes = {
+PageAnnotations.contextTypes = {
   linkService: linkServiceProp,
   page: pageProp,
   rotate: rotateProp,

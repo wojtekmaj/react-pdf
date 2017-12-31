@@ -21,9 +21,9 @@ export default class PageTextContent extends Component {
     this.getTextContent();
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.page !== this.props.page) {
-      this.getTextContent(nextProps);
+  componentWillReceiveProps(nextProps, nextContent) {
+    if (nextContent.page !== this.context.page) {
+      this.getTextContent(nextContent);
     }
   }
 
@@ -40,7 +40,7 @@ export default class PageTextContent extends Component {
     }
 
     callIfDefined(
-      this.props.onGetTextSuccess,
+      this.context.onGetTextSuccess,
       textItems,
     );
 
@@ -55,7 +55,7 @@ export default class PageTextContent extends Component {
     errorOnDev(error.message, error);
 
     callIfDefined(
-      this.props.onGetTextError,
+      this.context.onGetTextError,
       error,
     );
 
@@ -63,7 +63,7 @@ export default class PageTextContent extends Component {
   }
 
   get unrotatedViewport() {
-    const { page, scale } = this.props;
+    const { page, scale } = this.context;
 
     return page.getViewport(scale);
   }
@@ -73,7 +73,7 @@ export default class PageTextContent extends Component {
    * text content.
    */
   get rotate() {
-    const { page, rotate } = this.props;
+    const { page, rotate } = this.context;
     return rotate - page.rotate;
   }
 
@@ -87,8 +87,8 @@ export default class PageTextContent extends Component {
     return rotation % 180 !== 0;
   }
 
-  getTextContent(props = this.props) {
-    const { page } = props;
+  getTextContent(context = this.context) {
+    const { page } = context;
 
     if (!page) {
       throw new Error('Attempted to load page text content, but no page was specified.');
@@ -106,7 +106,7 @@ export default class PageTextContent extends Component {
   }
 
   async getFontData(fontFamily) {
-    const { page } = this.props;
+    const { page } = this.context;
 
     const font = await page.commonObjs.ensureObj(fontFamily);
 
@@ -147,7 +147,7 @@ export default class PageTextContent extends Component {
 
   renderTextItem = (textItem, itemIndex) => {
     const { unrotatedViewport: viewport, defaultSideways } = this;
-    const { scale } = this.props;
+    const { scale } = this.context;
 
     const [xMin, yMin, /* xMax */, yMax] = viewport.viewBox;
 
@@ -220,7 +220,7 @@ export default class PageTextContent extends Component {
   }
 }
 
-PageTextContent.propTypes = {
+PageTextContent.contextTypes = {
   onGetTextError: PropTypes.func,
   onGetTextSuccess: PropTypes.func,
   page: pageProp.isRequired,

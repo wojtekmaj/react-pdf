@@ -15,7 +15,7 @@ import {
 } from './shared/util';
 import { makeEventProps } from './shared/events';
 
-import { eventsProps, linkServiceProp, pdfProp } from './shared/propTypes';
+import { eventsProps, linkServiceProp, pageProp, pdfProp, rotateProp } from './shared/propTypes';
 
 export default class Page extends Component {
   state = {
@@ -26,9 +26,9 @@ export default class Page extends Component {
     this.loadPage();
   }
 
-  componentWillReceiveProps(nextProps) {
+  componentWillReceiveProps(nextProps, nextContext) {
     if (
-      nextProps.pdf !== this.props.pdf ||
+      nextContext.pdf !== this.context.pdf ||
       this.getPageNumber(nextProps) !== this.getPageNumber()
     ) {
       callIfDefined(
@@ -36,7 +36,7 @@ export default class Page extends Component {
         this.state.page.pageIndex,
       );
 
-      this.loadPage(nextProps);
+      this.loadPage(nextProps, nextContext);
     }
   }
 
@@ -49,6 +49,33 @@ export default class Page extends Component {
     if (this.runningTask && this.runningTask.cancel) {
       this.runningTask.cancel();
     }
+  }
+
+  getChildContext() {
+    if (!this.state.page) {
+      return {};
+    }
+
+    const context = {
+      page: this.state.page,
+      rotate: this.rotate,
+      scale: this.scale,
+    };
+
+    if (this.props.onRenderError) {
+      context.onRenderError = this.props.onRenderError;
+    }
+    if (this.props.onRenderSuccess) {
+      context.onRenderSuccess = this.props.onRenderSuccess;
+    }
+    if (this.props.onGetTextError) {
+      context.onGetTextError = this.props.onGetTextError;
+    }
+    if (this.props.onGetTextSuccess) {
+      context.onGetTextSuccess = this.props.onGetTextSuccess;
+    }
+
+    return context;
   }
 
   /**
@@ -122,10 +149,12 @@ export default class Page extends Component {
   }
 
   get rotate() {
-    const { rotate } = this.props;
+    if (isProvided(this.props.rotate)) {
+      return this.props.rotate;
+    }
 
-    if (isProvided(rotate)) {
-      return rotate;
+    if (isProvided(this.context.rotate)) {
+      return this.context.rotate;
     }
 
     const { page } = this.state;
@@ -136,6 +165,7 @@ export default class Page extends Component {
   get scale() {
     const { scale, width } = this.props;
     const { page } = this.state;
+
     const { rotate } = this;
 
     // Be default, we'll render page at 100% * scale width.
@@ -173,16 +203,8 @@ export default class Page extends Component {
     return `${this.state.page.pageIndex}@${this.scale}/${this.rotate}`;
   }
 
-  get pageProps() {
-    return {
-      page: this.state.page,
-      rotate: this.rotate,
-      scale: this.scale,
-    };
-  }
-
-  loadPage(props = this.props) {
-    const { pdf } = props;
+  loadPage(props = this.props, context = this.context) {
+    const { pdf } = context;
     const pageNumber = this.getPageNumber(props);
 
     if (!pdf) {
@@ -207,18 +229,8 @@ export default class Page extends Component {
       return null;
     }
 
-    const {
-      onGetTextError,
-      onGetTextSuccess,
-    } = this.props;
-
     return (
-      <PageTextContent
-        key={`${this.pageKey}_text`}
-        onGetTextError={onGetTextError}
-        onGetTextSuccess={onGetTextSuccess}
-        {...this.pageProps}
-      />
+      <PageTextContent key={`${this.pageKey}_text`} />
     );
   }
 
@@ -229,30 +241,14 @@ export default class Page extends Component {
       return null;
     }
 
-    const { linkService } = this.props;
-
     return (
-      <PageAnnotations
-        key={`${this.pageKey}_annotations`}
-        linkService={linkService}
-        {...this.pageProps}
-      />
+      <PageAnnotations key={`${this.pageKey}_annotations`} />
     );
   }
 
   renderSVG() {
-    const {
-      onRenderError,
-      onRenderSuccess,
-    } = this.props;
-
     return [
-      <PageSVG
-        key={`${this.pageKey}_svg`}
-        onRenderError={onRenderError}
-        onRenderSuccess={onRenderSuccess}
-        {...this.pageProps}
-      />,
+      <PageSVG key={`${this.pageKey}_svg`} />,
       /**
        * As of now, PDF.js 2.0.120 returns warnings on unimplemented annotations.
        * Therefore, as a fallback, we render "traditional" PageAnnotations component.
@@ -262,25 +258,15 @@ export default class Page extends Component {
   }
 
   renderCanvas() {
-    const {
-      onRenderError,
-      onRenderSuccess,
-    } = this.props;
-
     return [
-      <PageCanvas
-        key={`${this.pageKey}_canvas`}
-        onRenderError={onRenderError}
-        onRenderSuccess={onRenderSuccess}
-        {...this.pageProps}
-      />,
+      <PageCanvas key={`${this.pageKey}_canvas`} />,
       this.renderTextLayer(),
       this.renderAnnotations(),
     ];
   }
 
   render() {
-    const { pdf } = this.props;
+    const { pdf } = this.context;
     const { page } = this.state;
     const { pageIndex } = this;
 
@@ -330,6 +316,24 @@ Page.defaultProps = {
   scale: 1.0,
 };
 
+Page.childContextTypes = {
+  onRenderError: PropTypes.func,
+  onRenderSuccess: PropTypes.func,
+  onGetTextError: PropTypes.func,
+  onGetTextSuccess: PropTypes.func,
+  page: pageProp,
+  rotate: rotateProp,
+  scale: PropTypes.number,
+};
+
+Page.contextTypes = {
+  linkService: linkServiceProp,
+  pdf: pdfProp,
+  registerPage: PropTypes.func,
+  rotate: PropTypes.number,
+  unregisterPage: PropTypes.func,
+};
+
 Page.propTypes = {
   children: PropTypes.node,
   className: PropTypes.oneOfType([
@@ -337,7 +341,6 @@ Page.propTypes = {
     PropTypes.arrayOf(PropTypes.string),
   ]),
   inputRef: PropTypes.func,
-  linkService: linkServiceProp,
   onGetTextError: PropTypes.func,
   onGetTextSuccess: PropTypes.func,
   onLoadError: PropTypes.func,
@@ -346,14 +349,11 @@ Page.propTypes = {
   onRenderSuccess: PropTypes.func,
   pageIndex: PropTypes.number, // eslint-disable-line react/no-unused-prop-types
   pageNumber: PropTypes.number, // eslint-disable-line react/no-unused-prop-types
-  pdf: pdfProp,
-  registerPage: PropTypes.func,
   renderAnnotations: PropTypes.bool,
   renderMode: PropTypes.oneOf(['canvas', 'svg']),
   renderTextLayer: PropTypes.bool,
   rotate: PropTypes.number,
   scale: PropTypes.number,
-  unregisterPage: PropTypes.func,
   width: PropTypes.number,
   ...eventsProps(),
 };

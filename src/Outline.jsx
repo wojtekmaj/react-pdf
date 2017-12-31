@@ -36,9 +36,9 @@ export default class Outline extends Component {
     this.loadOutline();
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.pdf !== this.props.pdf) {
-      this.loadOutline(nextProps);
+  componentWillReceiveProps(nextProps, nextContext) {
+    if (nextContext.pdf !== this.context.pdf) {
+      this.loadOutline(nextContext);
     }
   }
 
@@ -113,7 +113,7 @@ export default class Outline extends Component {
   }
 
   async mapOutlineItem(item) {
-    const { pdf } = this.props;
+    const { pdf } = this.context;
 
     const mappedItem = {
       title: item.title,
@@ -170,8 +170,8 @@ export default class Outline extends Component {
     );
   }
 
-  loadOutline(props = this.props) {
-    const { pdf } = props;
+  loadOutline(context = this.context) {
+    const { pdf } = context;
 
     if (!pdf) {
       throw new Error('Attempted to load an outline, but no document was specified.');
@@ -219,7 +219,7 @@ export default class Outline extends Component {
   }
 
   render() {
-    const { pdf } = this.props;
+    const { pdf } = this.context;
     const { outline } = this.state;
 
     if (!pdf || !outline) {
@@ -240,6 +240,10 @@ export default class Outline extends Component {
   }
 }
 
+Outline.contextTypes = {
+  pdf: pdfProp,
+};
+
 Outline.propTypes = {
   className: PropTypes.oneOfType([
     PropTypes.string,
@@ -251,6 +255,5 @@ Outline.propTypes = {
   onLoadSuccess: PropTypes.func,
   onParseError: PropTypes.func,
   onParseSuccess: PropTypes.func,
-  pdf: pdfProp,
   ...eventsProps(),
 };
