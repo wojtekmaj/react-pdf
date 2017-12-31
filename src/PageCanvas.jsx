@@ -7,7 +7,7 @@ import {
   getPixelRatio,
 } from './shared/util';
 
-import { pageProp, rotateProp } from './shared/propTypes';
+import { isPage, isRotate } from './shared/propTypes';
 
 export default class PageCanvas extends Component {
   componentWillUnmount() {
@@ -110,7 +110,7 @@ export default class PageCanvas extends Component {
 PageCanvas.propTypes = {
   onRenderError: PropTypes.func,
   onRenderSuccess: PropTypes.func,
-  page: pageProp.isRequired,
-  rotate: rotateProp,
+  page: isPage.isRequired,
+  rotate: isRotate,
   scale: PropTypes.number,
 };

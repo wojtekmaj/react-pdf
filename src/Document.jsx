@@ -9,6 +9,7 @@ import LinkService from './LinkService';
 
 import {
   callIfDefined,
+  dataURItoUint8Array,
   displayCORSWarning,
   errorOnDev,
   isArrayBuffer,
@@ -23,7 +24,7 @@ import {
 } from './shared/util';
 import { makeEventProps } from './shared/events';
 
-import { eventsProps } from './shared/propTypes';
+import { eventsProps, isClassName } from './shared/propTypes';
 
 export default class Document extends Component {
   state = {
@@ -40,7 +41,7 @@ export default class Document extends Component {
         return;
       }
 
-      // If not, try to look for target page inside the <Document>.
+      // If not, try to look for target page within the <Document>.
       const page = this.pages[pageNumber - 1];
 
       if (page) {
@@ -49,7 +50,7 @@ export default class Document extends Component {
         return;
       }
 
-      warnOnDev(`Warning: User clicked an internal link, which caused <Document> to attempt to scroll to the page ${pageNumber} on which the link target is placed. Either ensure that all pages are rendered within <Document> or handle changing the page by providing onItemClick to <Document>.`);
+      warnOnDev(`Warning: An internal link leading to page ${pageNumber} was clicked, but neither <Document> was provided with onItemClick nor it was able to find the page within itself. Either provide onItemClick to <Document> and handle navigating by yourself or ensure that all pages are rendered within <Document>.`);
     },
   };
 
@@ -153,28 +154,23 @@ export default class Document extends Component {
   }
 
   shouldLoadDocument(nextProps) {
-    const nextFile = nextProps.file;
+    const { file: nextFile } = nextProps;
     const { file } = this.props;
 
+    // We got file of different type - clearly there was a change
+    if (typeof nextFile !== typeof file) {
+      return true;
+    }
+
     // We got an object and previously it was an object too - we need to compare deeply
-    if (
-      isParamObject(nextFile) &&
-      isParamObject(file)
-    ) {
+    if (isParamObject(nextFile) && isParamObject(file)) {
       return (
         nextFile.data !== file.data ||
         nextFile.range !== file.range ||
         nextFile.url !== file.url
       );
-    }
-
     // We either have or had an object - most likely there was a change
-    if (isParamObject(nextFile) !== isParamObject(file)) {
-      return true;
-    }
-
-    // We got file of different type - clearly there was a change
-    if (typeof nextFile !== typeof file) {
+    } else if (isParamObject(nextFile) || isParamObject(file)) {
       return true;
     }
 
@@ -182,19 +178,18 @@ export default class Document extends Component {
      * The cases below are browser-only.
      * If you're running on a non-browser environment, these cases will be of no use.
      */
-    if (isBrowser) {
+    if (
+      isBrowser &&
       // File is a Blob or a File
-      if (
-        (isBlob(nextFile) || isFile(nextFile)) &&
-        (isBlob(file) || isFile(file))
-      ) {
-        /**
-         * Theoretically, we could compare files here by reading them, but that would
-         * severely affect performance. Therefore, we're making a compromise here, agreeing
-         * on not loading the next file if its size is identical as the previous one's.
-         */
-        return nextFile.size !== file.size;
-      }
+      (isBlob(nextFile) || isFile(nextFile)) &&
+      (isBlob(file) || isFile(file))
+    ) {
+      /**
+       * Theoretically, we could compare files here by reading them, but that would severely affect
+       * performance. Therefore, we're making a compromise here, agreeing on not loading the next
+       * file if its size is identical as the previous one's.
+       */
+      return nextFile.size !== file.size;
     }
 
     return nextFile !== file;
@@ -222,10 +217,12 @@ export default class Document extends Component {
 
     // File is a string
     if (isString(file)) {
-      if (!isDataURI(file)) {
-        displayCORSWarning();
+      if (isDataURI(file)) {
+        const fileUint8Array = dataURItoUint8Array(file);
+        return resolve(fileUint8Array);
       }
 
+      displayCORSWarning();
       return resolve(file);
     }
 
@@ -239,9 +236,12 @@ export default class Document extends Component {
 
       if ('url' in modifiedFile) {
         // File is data URI
-        if (!isDataURI(modifiedFile.url)) {
-          displayCORSWarning();
+        if (isDataURI(modifiedFile.url)) {
+          const fileUint8Array = dataURItoUint8Array(modifiedFile.url);
+          return resolve(fileUint8Array);
         }
+
+        displayCORSWarning();
       }
 
       return resolve(modifiedFile);
@@ -308,7 +308,9 @@ export default class Document extends Component {
   }
 
   renderChildren() {
-    const { children, className, rotate } = this.props;
+    const {
+      children, className, inputRef, rotate,
+    } = this.props;
     const { pdf } = this.state;
     const { linkService, registerPage, unregisterPage } = this;
 
@@ -323,19 +325,18 @@ export default class Document extends Component {
     return (
       <div
         className={mergeClassNames('ReactPDF__Document', className)}
-        ref={(ref) => {
-          const { inputRef } = this.props;
-          if (inputRef) {
-            inputRef(ref);
-          }
-
-          this.ref = ref;
-        }}
+        ref={
+          inputRef ?
+            ((ref) => { inputRef(ref); }) :
+            null
+        }
         {...this.eventProps}
       >
         {
           children && Children
-            .map(children, child => React.cloneElement(child, childProps))
+            .map(children, child =>
+              React.cloneElement(child, Object.assign({}, childProps, child.props)),
+            )
         }
       </div>
     );
@@ -368,32 +369,11 @@ Document.defaultProps = {
   noData: 'No PDF file specified.',
 };
 
-const fileTypes = [
-  PropTypes.string,
-  PropTypes.instanceOf(ArrayBuffer),
-  PropTypes.shape({
-    data: PropTypes.object,
-    httpHeaders: PropTypes.object,
-    range: PropTypes.object,
-    url: PropTypes.string,
-    withCredentials: PropTypes.bool,
-  }),
-];
-if (typeof File !== 'undefined') {
-  fileTypes.push(PropTypes.instanceOf(File));
-}
-if (typeof Blob !== 'undefined') {
-  fileTypes.push(PropTypes.instanceOf(Blob));
-}
-
 Document.propTypes = {
   children: PropTypes.node,
-  className: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.arrayOf(PropTypes.string),
-  ]),
+  className: isClassName,
   error: PropTypes.node,
-  file: PropTypes.oneOfType(fileTypes),
+  file: isFile,
   inputRef: PropTypes.func,
   loading: PropTypes.node,
   noData: PropTypes.node,

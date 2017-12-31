@@ -1,6 +1,6 @@
 {
   "name": "react-pdf-test-page",
-  "version": "2.3.0",
+  "version": "2.5.1",
   "description": "A test page for React-PDF.",
   "private": true,
   "scripts": {

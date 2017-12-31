@@ -14,14 +14,34 @@ export const eventsProps = once(() => {
   return eventProps;
 });
 
-export const pdfProp = PropTypes.shape({
-  getDestination: PropTypes.func.isRequired,
-  getOutline: PropTypes.func.isRequired,
-  getPage: PropTypes.func.isRequired,
-  numPages: PropTypes.number.isRequired,
-});
+const fileTypes = [
+  PropTypes.string,
+  PropTypes.instanceOf(ArrayBuffer),
+  PropTypes.shape({
+    data: PropTypes.object,
+    httpHeaders: PropTypes.object,
+    range: PropTypes.object,
+    url: PropTypes.string,
+    withCredentials: PropTypes.bool,
+  }),
+];
+if (typeof File !== 'undefined') {
+  fileTypes.push(PropTypes.instanceOf(File));
+}
+if (typeof Blob !== 'undefined') {
+  fileTypes.push(PropTypes.instanceOf(Blob));
+}
 
-export const pageProp = PropTypes.shape({
+export const isClassName = PropTypes.oneOfType([
+  PropTypes.string,
+  PropTypes.arrayOf(PropTypes.string),
+]);
+
+export const isFile = PropTypes.oneOfType(fileTypes);
+
+export const isLinkService = PropTypes.instanceOf(LinkService);
+
+export const isPage = PropTypes.shape({
   commonObjs: PropTypes.shape({
     objs: PropTypes.object.isRequired,
   }).isRequired,
@@ -34,6 +54,11 @@ export const pageProp = PropTypes.shape({
   }).isRequired,
 });
 
-export const rotateProp = PropTypes.oneOf([0, 90, 180, 270]);
+export const isPdf = PropTypes.shape({
+  getDestination: PropTypes.func.isRequired,
+  getOutline: PropTypes.func.isRequired,
+  getPage: PropTypes.func.isRequired,
+  numPages: PropTypes.number.isRequired,
+});
 
-export const linkServiceProp = PropTypes.instanceOf(LinkService);
+export const isRotate = PropTypes.oneOf([0, 90, 180, 270]);
