@@ -35,7 +35,7 @@ export default class ViewOptions extends Component {
   rotateRight = () => this.changeRotation(90);
 
   changeRotation(by) {
-    this.props.setState(prevState => ({ rotate: (prevState.rotate + by) % 360 }));
+    this.props.setState(prevState => ({ rotate: (prevState.rotate + by + 360) % 360 }));
   }
 
   resetRotation = () => this.props.setState({ rotate: null })
