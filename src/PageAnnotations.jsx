@@ -5,7 +5,7 @@ import './annotation_layer_builder.css';
 
 import { makeCancellable } from './shared/util';
 
-import { linkServiceProp, pageProp, rotateProp } from './shared/propTypes';
+import { isLinkService, isPage, isRotate } from './shared/propTypes';
 
 export default class PageAnnotations extends Component {
   componentDidMount() {
@@ -64,8 +64,8 @@ export default class PageAnnotations extends Component {
 }
 
 PageAnnotations.propTypes = {
-  linkService: linkServiceProp,
-  page: pageProp,
-  rotate: rotateProp,
+  linkService: isLinkService,
+  page: isPage,
+  rotate: isRotate,
   scale: PropTypes.number,
 };

@@ -15,7 +15,7 @@ import {
 } from './shared/util';
 import { makeEventProps } from './shared/events';
 
-import { eventsProps, linkServiceProp, pdfProp } from './shared/propTypes';
+import { eventsProps, isClassName, isLinkService, isPdf } from './shared/propTypes';
 
 export default class Page extends Component {
   state = {
@@ -332,12 +332,9 @@ Page.defaultProps = {
 
 Page.propTypes = {
   children: PropTypes.node,
-  className: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.arrayOf(PropTypes.string),
-  ]),
+  className: isClassName,
   inputRef: PropTypes.func,
-  linkService: linkServiceProp,
+  linkService: isLinkService,
   onGetTextError: PropTypes.func,
   onGetTextSuccess: PropTypes.func,
   onLoadError: PropTypes.func,
@@ -346,7 +343,7 @@ Page.propTypes = {
   onRenderSuccess: PropTypes.func,
   pageIndex: PropTypes.number, // eslint-disable-line react/no-unused-prop-types
   pageNumber: PropTypes.number, // eslint-disable-line react/no-unused-prop-types
-  pdf: pdfProp,
+  pdf: isPdf,
   registerPage: PropTypes.func,
   renderAnnotations: PropTypes.bool,
   renderMode: PropTypes.oneOf(['canvas', 'svg']),

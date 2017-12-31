@@ -7,7 +7,7 @@ import {
   makeCancellable,
 } from './shared/util';
 
-import { pageProp, rotateProp } from './shared/propTypes';
+import { isPage, isRotate } from './shared/propTypes';
 
 // Render disproportion above which font will be considered broken and fallback will be used
 const BROKEN_FONT_ALARM_THRESHOLD = 0.1;
@@ -223,7 +223,7 @@ export default class PageTextContent extends Component {
 PageTextContent.propTypes = {
   onGetTextError: PropTypes.func,
   onGetTextSuccess: PropTypes.func,
-  page: pageProp.isRequired,
-  rotate: rotateProp,
+  page: isPage.isRequired,
+  rotate: isRotate,
   scale: PropTypes.number,
 };

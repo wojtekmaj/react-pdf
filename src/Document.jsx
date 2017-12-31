@@ -24,7 +24,7 @@ import {
 } from './shared/util';
 import { makeEventProps } from './shared/events';
 
-import { eventsProps } from './shared/propTypes';
+import { eventsProps, isClassName } from './shared/propTypes';
 
 export default class Document extends Component {
   state = {
@@ -369,32 +369,11 @@ Document.defaultProps = {
   noData: 'No PDF file specified.',
 };
 
-const fileTypes = [
-  PropTypes.string,
-  PropTypes.instanceOf(ArrayBuffer),
-  PropTypes.shape({
-    data: PropTypes.object,
-    httpHeaders: PropTypes.object,
-    range: PropTypes.object,
-    url: PropTypes.string,
-    withCredentials: PropTypes.bool,
-  }),
-];
-if (typeof File !== 'undefined') {
-  fileTypes.push(PropTypes.instanceOf(File));
-}
-if (typeof Blob !== 'undefined') {
-  fileTypes.push(PropTypes.instanceOf(Blob));
-}
-
 Document.propTypes = {
   children: PropTypes.node,
-  className: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.arrayOf(PropTypes.string),
-  ]),
+  className: isClassName,
   error: PropTypes.node,
-  file: PropTypes.oneOfType(fileTypes),
+  file: isFile,
   inputRef: PropTypes.func,
   loading: PropTypes.node,
   noData: PropTypes.node,

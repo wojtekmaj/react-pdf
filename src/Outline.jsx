@@ -10,7 +10,7 @@ import {
 } from './shared/util';
 import { makeEventProps } from './shared/events';
 
-import { eventsProps, pdfProp } from './shared/propTypes';
+import { eventsProps, isClassName, isPdf } from './shared/propTypes';
 
 class Ref {
   constructor({ num, gen }) {
@@ -241,16 +241,13 @@ export default class Outline extends Component {
 }
 
 Outline.propTypes = {
-  className: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.arrayOf(PropTypes.string),
-  ]),
+  className: isClassName,
   inputRef: PropTypes.func,
   onItemClick: PropTypes.func,
   onLoadError: PropTypes.func,
   onLoadSuccess: PropTypes.func,
   onParseError: PropTypes.func,
   onParseSuccess: PropTypes.func,
-  pdf: pdfProp,
+  pdf: isPdf,
   ...eventsProps(),
 };

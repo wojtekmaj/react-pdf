@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import { callIfDefined } from './shared/util';
 
-import { pageProp, rotateProp } from './shared/propTypes';
+import { isPage, isRotate } from './shared/propTypes';
 
 export default class PageSVG extends Component {
   /**
@@ -76,7 +76,7 @@ export default class PageSVG extends Component {
 PageSVG.propTypes = {
   onRenderError: PropTypes.func,
   onRenderSuccess: PropTypes.func,
-  page: pageProp.isRequired,
-  rotate: rotateProp,
+  page: isPage.isRequired,
+  rotate: isRotate,
   scale: PropTypes.number,
 };
