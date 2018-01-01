@@ -1,6 +1,6 @@
 import React from 'react';
-import { shallow } from 'enzyme';
-import pdfjs from 'pdfjs-dist';
+import { mount, shallow } from 'enzyme';
+import pdfjs, { RenderingCancelledException } from 'pdfjs-dist';
 
 import { Page } from '../entry.noworker';
 
@@ -25,6 +25,20 @@ const registerPageCallback = [
 const unregisterPageCallback = desiredLoadedPage.pageIndex;
 
 /* eslint-disable comma-dangle */
+
+const muteConsole = () => {
+  global.consoleBackup = global.console;
+
+  global.console = {
+    log: jest.fn(),
+    error: jest.fn(),
+    warn: jest.fn(),
+  };
+};
+
+const restoreConsole = () => {
+  global.console = global.consoleBackup;
+};
 
 describe('Page', async () => {
   let pdf;
@@ -52,6 +66,8 @@ describe('Page', async () => {
     it('calls onLoadError when failed to load a page', async () => {
       const { func: onLoadError, promise: onLoadErrorPromise } = makeAsyncCallback();
 
+      muteConsole();
+
       shallow(
         <Page
           pageIndex={-1}
@@ -62,6 +78,8 @@ describe('Page', async () => {
 
       expect.assertions(1);
       await expect(onLoadErrorPromise).resolves.toBeInstanceOf(Error);
+
+      restoreConsole();
     });
 
     it('loads page when given pageIndex', () => {
@@ -150,6 +168,33 @@ describe('Page', async () => {
       const wrapperClassName = component.find('.react-pdf__Page').prop('className');
 
       expect(wrapperClassName.includes(className)).toBe(true);
+    });
+
+    it('passes container element to inputRef properly', () => {
+      // We don't really want to initiate loading a page here
+      const silentlyFailingPdf = {
+        getDestination: () => {},
+        getOutline: () => {},
+        getPage: () => new Promise((resolve, reject) => reject(new RenderingCancelledException())),
+        numPages: 4,
+        pdfInfo: {
+          fingerprint: 'a62067476e69734bb8eb60122615dfbf',
+          numPages: 4,
+        },
+      };
+
+      const inputRef = jest.fn();
+
+      mount(
+        <Page
+          inputRef={inputRef}
+          pageIndex={1}
+          pdf={silentlyFailingPdf}
+        />
+      );
+
+      expect(inputRef).toHaveBeenCalled();
+      expect(inputRef.mock.calls[0][0]).toBeInstanceOf(HTMLElement);
     });
 
     it('ignores pageIndex when given pageIndex and pageNumber', () => {

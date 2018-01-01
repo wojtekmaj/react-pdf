@@ -148,6 +148,7 @@ export default class Test extends Component {
                     className="custom-classname-document"
                     onItemClick={this.onItemClick}
                     file={file}
+                    inputRef={() => console.log('Document says hi')}
                     onClick={(event, pdf) => console.log('Clicked a document', { event, pdf })}
                     onLoadSuccess={this.onDocumentLoadSuccess}
                     onLoadError={this.onDocumentLoadError}

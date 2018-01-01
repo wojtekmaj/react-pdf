@@ -20,6 +20,7 @@ const OK = Symbol('OK');
 
 const desiredLoadedPdf = {
   loadingTask: {},
+  numPages: 4,
   pdfInfo: {
     fingerprint: 'a62067476e69734bb8eb60122615dfbf',
     numPages: 4,
@@ -28,6 +29,7 @@ const desiredLoadedPdf = {
 };
 const desiredLoadedPdf2 = {
   loadingTask: {},
+  numPages: 5,
   pdfInfo: {
     fingerprint: '04d9eadd32916d728460daa283b37ff2',
     numPages: 5,
@@ -165,6 +167,17 @@ describe('Document', () => {
       const wrapperClassName = component.find('.react-pdf__Document').prop('className');
 
       expect(wrapperClassName.includes(className)).toBe(true);
+    });
+
+    it('passes container element to inputRef properly', () => {
+      const inputRef = jest.fn();
+
+      mount(
+        <Document inputRef={inputRef} />
+      );
+
+      expect(inputRef).toHaveBeenCalled();
+      expect(inputRef.mock.calls[0][0]).toBeInstanceOf(HTMLElement);
     });
 
     it('renders "No PDF file specified." when given nothing', () => {
