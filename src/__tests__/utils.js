@@ -31,3 +31,17 @@ export const loadPDF = (path) => {
     dataURI,
   };
 };
+
+export const muteConsole = () => {
+  global.consoleBackup = global.console;
+
+  global.console = {
+    log: jest.fn(),
+    error: jest.fn(),
+    warn: jest.fn(),
+  };
+};
+
+export const restoreConsole = () => {
+  global.console = global.consoleBackup;
+};

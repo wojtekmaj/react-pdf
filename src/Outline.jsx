@@ -56,7 +56,10 @@ export default class Outline extends Component {
    * Called when an outline is read successfully
    */
   onLoadSuccess = (outline) => {
-    callIfDefined(this.props.onLoadSuccess);
+    callIfDefined(
+      this.props.onLoadSuccess,
+      outline,
+    );
 
     this.runningTask = makeCancellable(this.parseOutline(outline));
 

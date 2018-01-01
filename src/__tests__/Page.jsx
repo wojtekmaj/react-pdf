@@ -4,37 +4,23 @@ import pdfjs from 'pdfjs-dist';
 
 import { Page } from '../entry.noworker';
 
+import failingPdf from '../../__mocks__/_failing_pdf';
 import silentlyFailingPdf from '../../__mocks__/_silently_failing_pdf';
-import { makeAsyncCallback, loadPDF } from './utils';
-
-const {
-  arrayBuffer: fileArrayBuffer,
-} = loadPDF('./__mocks__/_pdf.pdf');
+import { loadPDF, makeAsyncCallback, muteConsole, restoreConsole } from './utils';
 
 const { PDFJS } = pdfjs;
 
+const { arrayBuffer: fileArrayBuffer } = loadPDF('./__mocks__/_pdf.pdf');
+
 /* eslint-disable comma-dangle */
 
-const muteConsole = () => {
-  global.consoleBackup = global.console;
-
-  global.console = {
-    log: jest.fn(),
-    error: jest.fn(),
-    warn: jest.fn(),
-  };
-};
-
-const restoreConsole = () => {
-  global.console = global.consoleBackup;
-};
-
-describe('Page', async () => {
+describe('Page', () => {
   // Loaded PDF file
   let pdf;
 
   // Object with basic loaded page information that shall match after successful loading
   const desiredLoadedPage = {};
+  const desiredLoadedPage2 = {};
 
   // Callbacks used in registerPage and unregisterPage callbacks
   const registerPageArguments = [];
@@ -42,10 +28,14 @@ describe('Page', async () => {
 
   beforeAll(async () => {
     pdf = await PDFJS.getDocument({ data: fileArrayBuffer });
-    const page = await pdf.getPage(1);
 
+    const page = await pdf.getPage(1);
     desiredLoadedPage.pageIndex = page.pageIndex;
     desiredLoadedPage.pageInfo = page.pageInfo;
+
+    const page2 = await pdf.getPage(1);
+    desiredLoadedPage.pageIndex = page2.pageIndex;
+    desiredLoadedPage.pageInfo = page2.pageInfo;
 
     registerPageArguments.push(
       page.pageIndex,
@@ -60,9 +50,9 @@ describe('Page', async () => {
 
       shallow(
         <Page
+          onLoadSuccess={onLoadSuccess}
           pageIndex={0}
           pdf={pdf}
-          onLoadSuccess={onLoadSuccess}
         />
       );
 
@@ -77,9 +67,8 @@ describe('Page', async () => {
 
       shallow(
         <Page
-          pageIndex={-1}
-          pdf={pdf}
           onLoadError={onLoadError}
+          pdf={failingPdf}
         />
       );
 
@@ -94,9 +83,9 @@ describe('Page', async () => {
 
       const component = shallow(
         <Page
+          onLoadSuccess={onLoadSuccess}
           pageIndex={0}
           pdf={pdf}
-          onLoadSuccess={onLoadSuccess}
         />
       );
 
@@ -111,9 +100,9 @@ describe('Page', async () => {
 
       const component = shallow(
         <Page
+          onLoadSuccess={onLoadSuccess}
           pageNumber={1}
           pdf={pdf}
-          onLoadSuccess={onLoadSuccess}
         />
       );
 
@@ -153,6 +142,30 @@ describe('Page', async () => {
 
       expect.assertions(1);
       await expect(nuregisterPagePromise).resolves.toBe(unregisterPageArguments);
+    });
+
+    it('replaces a page properly', async () => {
+      const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
+
+      const mountedComponent = shallow(
+        <Page
+          onLoadSuccess={onLoadSuccess}
+          pageIndex={0}
+          pdf={pdf}
+        />
+      );
+
+      expect.assertions(2);
+      await expect(onLoadSuccessPromise).resolves.toMatchObject(desiredLoadedPage);
+
+      const { func: onLoadSuccess2, promise: onLoadSuccessPromise2 } = makeAsyncCallback();
+
+      mountedComponent.setProps({
+        onLoadSuccess: onLoadSuccess2,
+        pageIndex: 1,
+      });
+
+      await expect(onLoadSuccessPromise2).resolves.toMatchObject(desiredLoadedPage2);
     });
 
     it('throws an error when placed outside Document', () => {
