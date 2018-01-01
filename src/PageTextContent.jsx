@@ -5,7 +5,7 @@ import {
   callIfDefined,
   errorOnDev,
   makeCancellable,
-} from './shared/util';
+} from './shared/utils';
 
 import { isPage, isRotate } from './shared/propTypes';
 
@@ -205,7 +205,7 @@ export default class PageTextContent extends Component {
 
     return (
       <div
-        className="ReactPDF__Page__textContent"
+        className="react-pdf__Page__textContent"
         style={{
           position: 'absolute',
           top: '50%',

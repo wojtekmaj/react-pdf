@@ -7,7 +7,7 @@ import {
   callIfDefined,
   errorOnDev,
   makeCancellable,
-} from './shared/util';
+} from './shared/utils';
 
 import { isLinkService, isPage, isRotate } from './shared/propTypes';
 
@@ -97,7 +97,7 @@ export default class PageAnnotations extends Component {
   render() {
     return (
       <div
-        className="ReactPDF__Page__annotations annotationLayer"
+        className="react-pdf__Page__annotations annotationLayer"
         ref={(ref) => { this.annotationLayer = ref; }}
       >
         {this.renderAnnotations()}

@@ -7,7 +7,7 @@ import {
   errorOnDev,
   isDefined,
   makeCancellable,
-} from './shared/util';
+} from './shared/utils';
 import { makeEventProps } from './shared/events';
 
 import { eventsProps, isClassName, isPdf } from './shared/propTypes';
@@ -49,14 +49,17 @@ export default class Outline extends Component {
   }
 
   get eventProps() {
-    return makeEventProps(this.props, this.state.outline);
+    return makeEventProps(this.props, () => this.state.outline);
   }
 
   /**
    * Called when an outline is read successfully
    */
   onLoadSuccess = (outline) => {
-    callIfDefined(this.props.onLoadSuccess);
+    callIfDefined(
+      this.props.onLoadSuccess,
+      outline,
+    );
 
     this.runningTask = makeCancellable(this.parseOutline(outline));
 
@@ -236,7 +239,7 @@ export default class Outline extends Component {
 
     return (
       <div
-        className={mergeClassNames('ReactPDF__Outline', className)}
+        className={mergeClassNames('react-pdf__Outline', className)}
         ref={this.props.inputRef}
         {...this.eventProps}
       >
