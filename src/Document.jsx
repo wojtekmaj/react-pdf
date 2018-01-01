@@ -21,7 +21,7 @@ import {
   isString,
   makeCancellable,
   warnOnDev,
-} from './shared/util';
+} from './shared/utils';
 import { makeEventProps } from './shared/events';
 
 import { eventsProps, isClassName } from './shared/propTypes';

@@ -5,7 +5,7 @@ import {
   callIfDefined,
   errorOnDev,
   getPixelRatio,
-} from './shared/util';
+} from './shared/utils';
 
 import { isPage, isRotate } from './shared/propTypes';
 

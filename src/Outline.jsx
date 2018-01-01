@@ -7,7 +7,7 @@ import {
   errorOnDev,
   isDefined,
   makeCancellable,
-} from './shared/util';
+} from './shared/utils';
 import { makeEventProps } from './shared/events';
 
 import { eventsProps, isClassName, isPdf } from './shared/propTypes';

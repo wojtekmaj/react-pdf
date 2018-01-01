@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import once from 'lodash.once';
 
-import { isDefined } from './util';
+import { isDefined } from './utils';
 import { mouseEvents, touchEvents } from './events';
 
 import LinkService from '../LinkService';

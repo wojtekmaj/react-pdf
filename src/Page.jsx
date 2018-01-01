@@ -12,7 +12,7 @@ import {
   errorOnDev,
   isProvided,
   makeCancellable,
-} from './shared/util';
+} from './shared/utils';
 import { makeEventProps } from './shared/events';
 
 import { eventsProps, isClassName, isLinkService, isPageIndex, isPageNumber, isPdf } from './shared/propTypes';
@@ -113,7 +113,7 @@ export default class Page extends Component {
     return null;
   }
 
-  getPageCallback() {
+  getPageCallback = () => {
     const { page } = this.state;
     const { scale } = this;
 
@@ -191,6 +191,10 @@ export default class Page extends Component {
 
     if (this.state.page !== null) {
       this.setState({ page: null });
+    }
+
+    if (!pageNumber) {
+      return null;
     }
 
     this.runningTask = makeCancellable(pdf.getPage(pageNumber));

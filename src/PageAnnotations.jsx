@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import './annotation_layer_builder.css';
 
-import { makeCancellable } from './shared/util';
+import { makeCancellable } from './shared/utils';
 
 import { isLinkService, isPage, isRotate } from './shared/propTypes';
 

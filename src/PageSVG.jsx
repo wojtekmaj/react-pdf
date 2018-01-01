@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-import { callIfDefined } from './shared/util';
+import { callIfDefined } from './shared/utils';
 
 import { isPage, isRotate } from './shared/propTypes';
 
