@@ -90,12 +90,12 @@ export default class Page extends Component {
   }
 
   getPageIndex(props = this.props) {
-    if (isProvided(props.pageIndex)) {
-      return props.pageIndex;
-    }
-
     if (isProvided(props.pageNumber)) {
       return props.pageNumber - 1;
+    }
+
+    if (isProvided(props.pageIndex)) {
+      return props.pageIndex;
     }
 
     return null;
