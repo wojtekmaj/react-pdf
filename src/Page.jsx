@@ -55,20 +55,20 @@ export default class Page extends Component {
    * Called when a page is loaded successfully
    */
   onLoadSuccess = (page) => {
-    this.setState({ page });
+    this.setState({ page }, () => {
+      const { pageCallback } = this;
 
-    const { pageCallback } = this;
+      callIfDefined(
+        this.props.onLoadSuccess,
+        pageCallback,
+      );
 
-    callIfDefined(
-      this.props.onLoadSuccess,
-      pageCallback,
-    );
-
-    callIfDefined(
-      this.props.registerPage,
-      page.pageIndex,
-      this.ref,
-    );
+      callIfDefined(
+        this.props.registerPage,
+        page.pageIndex,
+        this.ref,
+      );
+    });
   }
 
   /**
@@ -163,6 +163,10 @@ export default class Page extends Component {
     }
 
     return scale * pageScale;
+  }
+
+  get pageCallback() {
+    return this.getPageCallback();
   }
 
   get eventProps() {
