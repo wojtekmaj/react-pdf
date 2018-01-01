@@ -49,7 +49,7 @@ export default class Outline extends Component {
   }
 
   get eventProps() {
-    return makeEventProps(this.props, this.state.outline);
+    return makeEventProps(this.props, () => this.state.outline);
   }
 
   /**
@@ -230,7 +230,7 @@ export default class Outline extends Component {
 
     return (
       <div
-        className={mergeClassNames('ReactPDF__Outline', className)}
+        className={mergeClassNames('react-pdf__Outline', className)}
         ref={this.props.inputRef}
         {...this.eventProps}
       >

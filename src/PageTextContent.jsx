@@ -202,7 +202,7 @@ export default class PageTextContent extends Component {
 
     return (
       <div
-        className="ReactPDF__Page__textContent"
+        className="react-pdf__Page__textContent"
         style={{
           position: 'absolute',
           top: '50%',

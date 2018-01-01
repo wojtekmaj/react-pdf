@@ -75,7 +75,7 @@ export default class Document extends Component {
   }
 
   get eventProps() {
-    return makeEventProps(this.props, this.state.pdf);
+    return makeEventProps(this.props, () => this.state.pdf);
   }
 
   /**
@@ -291,26 +291,24 @@ export default class Document extends Component {
 
   renderNoData() {
     return (
-      <div className="ReactPDF__NoData">{this.props.noData}</div>
+      <div className="react-pdf__message react-pdf__message--no-data">{this.props.noData}</div>
     );
   }
 
   renderError() {
     return (
-      <div className="ReactPDF__Error">{this.props.error}</div>
+      <div className="react-pdf__message react-pdf__message--error">{this.props.error}</div>
     );
   }
 
   renderLoader() {
     return (
-      <div className="ReactPDF__Loader">{this.props.loading}</div>
+      <div className="react-pdf__message react-pdf__message--loading">{this.props.loading}</div>
     );
   }
 
   renderChildren() {
-    const {
-      children, className, inputRef, rotate,
-    } = this.props;
+    const { children, rotate } = this.props;
     const { pdf } = this.state;
     const { linkService, registerPage, unregisterPage } = this;
 
@@ -323,43 +321,37 @@ export default class Document extends Component {
     };
 
     return (
-      <div
-        className={mergeClassNames('ReactPDF__Document', className)}
-        ref={
-          inputRef ?
-            ((ref) => { inputRef(ref); }) :
-            null
-        }
-        {...this.eventProps}
-      >
-        {
-          children && Children
-            .map(children, child =>
-              React.cloneElement(child, Object.assign({}, childProps, child.props)),
-            )
-        }
-      </div>
+      children && Children
+        .map(children, child =>
+          React.cloneElement(child, Object.assign({}, childProps, child.props)),
+        )
     );
   }
 
   render() {
-    const { file } = this.props;
-
-    if (!file) {
-      return this.renderNoData();
-    }
-
+    const { className, file, inputRef } = this.props;
     const { pdf } = this.state;
 
-    if (pdf === null) {
-      return this.renderLoader();
+    let content;
+    if (!file) {
+      content = this.renderNoData();
+    } else if (pdf === null) {
+      content = this.renderLoader();
+    } else if (pdf === false) {
+      content = this.renderError();
+    } else {
+      content = this.renderChildren();
     }
 
-    if (pdf === false) {
-      return this.renderError();
-    }
-
-    return this.renderChildren();
+    return (
+      <div
+        className={mergeClassNames('react-pdf__Document', className)}
+        ref={inputRef}
+        {...this.eventProps}
+      >
+        {content}
+      </div>
+    );
   }
 }
 

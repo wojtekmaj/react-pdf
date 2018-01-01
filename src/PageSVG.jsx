@@ -62,7 +62,7 @@ export default class PageSVG extends Component {
   render() {
     return (
       <div
-        className="ReactPDF__Page__svg"
+        className="react-pdf__Page__svg"
         style={{
           display: 'block',
           backgroundColor: 'white',

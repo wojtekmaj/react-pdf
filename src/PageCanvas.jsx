@@ -96,7 +96,7 @@ export default class PageCanvas extends Component {
   render() {
     return (
       <canvas
-        className="ReactPDF__Page__canvas"
+        className="react-pdf__Page__canvas"
         style={{
           display: 'block',
           userSelect: 'none',

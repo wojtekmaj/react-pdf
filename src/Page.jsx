@@ -113,6 +113,21 @@ export default class Page extends Component {
     return null;
   }
 
+  getPageCallback() {
+    const { page } = this.state;
+    const { scale } = this;
+
+    return {
+      ...page,
+      // Legacy callback params
+      get width() { return page.view[2] * scale; },
+      get height() { return page.view[3] * scale; },
+      scale,
+      get originalWidth() { return page.view[2]; },
+      get originalHeight() { return page.view[3]; },
+    };
+  }
+
   get pageIndex() {
     return this.getPageIndex();
   }
@@ -150,23 +165,8 @@ export default class Page extends Component {
     return scale * pageScale;
   }
 
-  get pageCallback() {
-    const { page } = this.state;
-    const { scale } = this;
-
-    return {
-      ...page,
-      // Legacy callback params
-      get width() { return page.view[2] * scale; },
-      get height() { return page.view[3] * scale; },
-      scale,
-      get originalWidth() { return page.view[2]; },
-      get originalHeight() { return page.view[3]; },
-    };
-  }
-
   get eventProps() {
-    return makeEventProps(this.props, this.pageCallback);
+    return makeEventProps(this.props, this.getPageCallback);
   }
 
   get pageKey() {
@@ -279,27 +279,50 @@ export default class Page extends Component {
     ];
   }
 
-  render() {
-    const { pdf } = this.props;
-    const { page } = this.state;
-    const { pageIndex } = this;
+  renderError() {
+    return (
+      <div className="react-pdf__message react-pdf__message--error">{this.props.error}</div>
+    );
+  }
 
-    if (
-      (!pdf || !page) ||
-      (pageIndex < 0 || pageIndex > pdf.numPages)
-    ) {
-      return null;
-    }
+  renderLoader() {
+    return (
+      <div className="react-pdf__message react-pdf__message--loading">{this.props.loading}</div>
+    );
+  }
 
+  renderChildren() {
     const {
       children,
-      className,
       renderMode,
     } = this.props;
 
+    return [
+      (
+        renderMode === 'svg' ?
+          this.renderSVG() :
+          this.renderCanvas()
+      ),
+      children,
+    ];
+  }
+
+  render() {
+    const { className, pdf } = this.props;
+    const { page } = this.state;
+
+    let content;
+    if (pdf === null || page === null) {
+      content = this.renderLoader();
+    } else if (pdf === false || page === false) {
+      content = this.renderError();
+    } else {
+      content = this.renderChildren();
+    }
+
     return (
       <div
-        className={mergeClassNames('ReactPDF__Page', className)}
+        className={mergeClassNames('react-pdf__Page', className)}
         ref={(ref) => {
           const { inputRef } = this.props;
           if (inputRef) {
@@ -312,12 +335,7 @@ export default class Page extends Component {
         data-page-number={this.pageNumber}
         {...this.eventProps}
       >
-        {
-          renderMode === 'svg' ?
-            this.renderSVG() :
-            this.renderCanvas()
-        }
-        {children}
+        {content}
       </div>
     );
   }

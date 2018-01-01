@@ -56,7 +56,7 @@ export default class PageAnnotations extends Component {
   render() {
     return (
       <div
-        className="ReactPDF__Page__annotations annotationLayer"
+        className="react-pdf__Page__annotations annotationLayer"
         ref={(ref) => { this.annotationLayer = ref; }}
       />
     );
