@@ -357,7 +357,7 @@ Page.contextTypes = {
   linkService: isLinkService,
   pdf: isPdf,
   registerPage: PropTypes.func,
-  rotate: PropTypes.number,
+  rotate: isRotate,
   unregisterPage: PropTypes.func,
 };
 
@@ -376,7 +376,7 @@ Page.propTypes = {
   renderAnnotations: PropTypes.bool,
   renderMode: PropTypes.oneOf(['canvas', 'svg']),
   renderTextLayer: PropTypes.bool,
-  rotate: PropTypes.number,
+  rotate: isRotate,
   scale: PropTypes.number,
   width: PropTypes.number,
   ...eventsProps(),
