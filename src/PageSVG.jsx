@@ -19,7 +19,7 @@ export default class PageSVG extends Component {
    * Called when a page fails to render.
    */
   onRenderError = (error) => {
-    if (error === 'cancelled') {
+    if (error.name === 'RenderingCancelledException') {
       return;
     }
 

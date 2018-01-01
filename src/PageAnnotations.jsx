@@ -3,7 +3,11 @@ import PropTypes from 'prop-types';
 
 import './annotation_layer_builder.css';
 
-import { makeCancellable } from './shared/util';
+import {
+  callIfDefined,
+  errorOnDev,
+  makeCancellable,
+} from './shared/util';
 
 import { isLinkService, isPage, isRotate } from './shared/propTypes';
 
@@ -35,6 +39,24 @@ export default class PageAnnotations extends Component {
     );
 
     this.setState({ annotations });
+  }
+
+  onGetAnnotationsError = (error) => {
+    if (
+      error.name === 'RenderingCancelledException' ||
+      error.name === 'PromiseCancelledException'
+    ) {
+      return;
+    }
+
+    errorOnDev(error.message, error);
+
+    callIfDefined(
+      this.props.onGetAnnotationsError,
+      error,
+    );
+
+    this.setState({ annotations: false });
   }
 
   get viewport() {
