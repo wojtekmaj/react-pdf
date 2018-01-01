@@ -33,7 +33,7 @@ export default class Page extends Component {
     ) {
       callIfDefined(
         this.props.unregisterPage,
-        this.state.page.pageIndex,
+        this.pageIndex,
       );
 
       this.loadPage(nextProps);
@@ -43,7 +43,7 @@ export default class Page extends Component {
   componentWillUnmount() {
     callIfDefined(
       this.props.unregisterPage,
-      this.state.page.pageIndex,
+      this.pageIndex,
     );
 
     if (this.runningTask && this.runningTask.cancel) {
@@ -186,7 +186,6 @@ export default class Page extends Component {
 
   loadPage(props = this.props) {
     const { pdf } = props;
-    const pageNumber = this.getPageNumber(props);
 
     if (!pdf) {
       throw new Error('Attempted to load a page, but no document was specified.');
@@ -195,6 +194,8 @@ export default class Page extends Component {
     if (this.state.page !== null) {
       this.setState({ page: null });
     }
+
+    const pageNumber = this.getPageNumber(props);
 
     this.runningTask = makeCancellable(pdf.getPage(pageNumber));
 
