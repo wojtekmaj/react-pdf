@@ -21,7 +21,7 @@ export const loadPDF = (path) => {
   const arrayBuffer = raw.buffer;
   const blob = new Blob([arrayBuffer], { type: 'application/pdf' });
   const file = new File([arrayBuffer], { type: 'application/pdf' });
-  const dataURI = `data:application/pdf;base64,${file.toString('base64')}`;
+  const dataURI = `data:application/pdf;base64,${raw.toString('base64')}`;
 
   return {
     raw,

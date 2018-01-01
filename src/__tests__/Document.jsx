@@ -13,33 +13,28 @@ const {
 } = loadPDF('./__mocks__/_pdf.pdf');
 
 const {
+  arrayBuffer: fileArrayBuffer2,
   file: fileFile2,
 } = loadPDF('./__mocks__/_pdf2.pdf');
 
 const OK = Symbol('OK');
 
-const desiredLoadedPdf = {
-  loadingTask: {},
-  numPages: 4,
-  pdfInfo: {
-    fingerprint: 'a62067476e69734bb8eb60122615dfbf',
-    numPages: 4,
-  },
-  transport: {},
-};
-const desiredLoadedPdf2 = {
-  loadingTask: {},
-  numPages: 5,
-  pdfInfo: {
-    fingerprint: '04d9eadd32916d728460daa283b37ff2',
-    numPages: 5,
-  },
-  transport: {},
-};
-
 /* eslint-disable comma-dangle */
 
 describe('Document', () => {
+  const desiredLoadedPdf = {};
+  const desiredLoadedPdf2 = {};
+
+  beforeAll(async () => {
+    PDFJS.getDocument({ data: fileArrayBuffer }).then((pdf) => {
+      desiredLoadedPdf.pdfInfo = pdf.pdfInfo;
+    });
+
+    PDFJS.getDocument({ data: fileArrayBuffer2 }).then((pdf) => {
+      desiredLoadedPdf2.pdfInfo = pdf.pdfInfo;
+    });
+  });
+
   describe('loading', () => {
     it('loads a file and calls onSourceSuccess and onLoadSuccess callbacks via data URI properly', async () => {
       const { func: onSourceSuccess, promise: onSourceSuccessPromise } = makeAsyncCallback(OK);
