@@ -15,7 +15,7 @@ import {
 } from './shared/util';
 import { makeEventProps } from './shared/events';
 
-import { eventsProps, isClassName, isLinkService, isPdf } from './shared/propTypes';
+import { eventsProps, isClassName, isLinkService, isPageIndex, isPageNumber, isPdf } from './shared/propTypes';
 
 export default class Page extends Component {
   state = {
@@ -341,8 +341,8 @@ Page.propTypes = {
   onLoadSuccess: PropTypes.func,
   onRenderError: PropTypes.func,
   onRenderSuccess: PropTypes.func,
-  pageIndex: PropTypes.number, // eslint-disable-line react/no-unused-prop-types
-  pageNumber: PropTypes.number, // eslint-disable-line react/no-unused-prop-types
+  pageIndex: isPageIndex,
+  pageNumber: isPageNumber,
   pdf: isPdf,
   registerPage: PropTypes.func,
   renderAnnotations: PropTypes.bool,
