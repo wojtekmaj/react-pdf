@@ -125,14 +125,15 @@ export default class Document extends Component {
    * Called when a document is read successfully
    */
   onLoadSuccess = (pdf) => {
-    callIfDefined(
-      this.props.onLoadSuccess,
-      pdf,
-    );
+    this.setState({ pdf }, () => {
+      callIfDefined(
+        this.props.onLoadSuccess,
+        pdf,
+      );
 
-    this.pages = new Array(pdf.numPages);
-    this.linkService.setDocument(pdf);
-    this.setState({ pdf });
+      this.pages = new Array(pdf.numPages);
+      this.linkService.setDocument(pdf);
+    });
   }
 
   /**
