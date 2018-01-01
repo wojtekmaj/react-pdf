@@ -22,17 +22,16 @@ const OK = Symbol('OK');
 /* eslint-disable comma-dangle */
 
 describe('Document', () => {
+  // Object with basic loaded PDF information that shall match after successful loading
   const desiredLoadedPdf = {};
   const desiredLoadedPdf2 = {};
 
   beforeAll(async () => {
-    PDFJS.getDocument({ data: fileArrayBuffer }).then((pdf) => {
-      desiredLoadedPdf.pdfInfo = pdf.pdfInfo;
-    });
+    const pdf = await PDFJS.getDocument({ data: fileArrayBuffer });
+    desiredLoadedPdf.pdfInfo = pdf.pdfInfo;
 
-    PDFJS.getDocument({ data: fileArrayBuffer2 }).then((pdf) => {
-      desiredLoadedPdf2.pdfInfo = pdf.pdfInfo;
-    });
+    const pdf2 = await PDFJS.getDocument({ data: fileArrayBuffer2 });
+    desiredLoadedPdf2.pdfInfo = pdf2.pdfInfo;
   });
 
   describe('loading', () => {

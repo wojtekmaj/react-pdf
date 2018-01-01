@@ -13,20 +13,6 @@ const {
 
 const { PDFJS } = pdfjs;
 
-const desiredLoadedPage = {
-  pageIndex: 0,
-  pageInfo: {
-    rotate: 0,
-  },
-};
-
-const registerPageCallback = [
-  desiredLoadedPage.pageIndex,
-  undefined, // Page reference is not defined in Enzyme
-];
-
-const unregisterPageCallback = desiredLoadedPage.pageIndex;
-
 /* eslint-disable comma-dangle */
 
 const muteConsole = () => {
@@ -44,10 +30,28 @@ const restoreConsole = () => {
 };
 
 describe('Page', async () => {
+  // Loaded PDF file
   let pdf;
+
+  // Object with basic loaded page information that shall match after successful loading
+  const desiredLoadedPage = {};
+
+  // Callbacks used in registerPage and unregisterPage callbacks
+  const registerPageArguments = [];
+  let unregisterPageArguments = null;
 
   beforeAll(async () => {
     pdf = await PDFJS.getDocument({ data: fileArrayBuffer });
+    const page = await pdf.getPage(1);
+
+    desiredLoadedPage.pageIndex = page.pageIndex;
+    desiredLoadedPage.pageInfo = page.pageInfo;
+
+    registerPageArguments.push(
+      page.pageIndex,
+      undefined, // Page reference is not defined in Enzyme
+    );
+    unregisterPageArguments = page.pageIndex;
   });
 
   describe('loading', () => {
@@ -131,7 +135,7 @@ describe('Page', async () => {
       );
 
       expect.assertions(1);
-      await expect(registerPagePromise).resolves.toMatchObject(registerPageCallback);
+      await expect(registerPagePromise).resolves.toMatchObject(registerPageArguments);
     });
 
     it('calls unregisterPage on unmount', async () => {
@@ -148,7 +152,7 @@ describe('Page', async () => {
       component.unmount();
 
       expect.assertions(1);
-      await expect(nuregisterPagePromise).resolves.toBe(unregisterPageCallback);
+      await expect(nuregisterPagePromise).resolves.toBe(unregisterPageArguments);
     });
 
     it('throws an error when placed outside Document', () => {
