@@ -7,10 +7,10 @@ import {
   errorOnDev,
   isDefined,
   makeCancellable,
-} from './shared/util';
+} from './shared/utils';
 import { makeEventProps } from './shared/events';
 
-import { eventsProps, pdfProp } from './shared/propTypes';
+import { eventsProps, isClassName, isPdf } from './shared/propTypes';
 
 class Ref {
   constructor({ num, gen }) {
@@ -49,14 +49,17 @@ export default class Outline extends Component {
   }
 
   get eventProps() {
-    return makeEventProps(this.props, this.state.outline);
+    return makeEventProps(this.props, () => this.state.outline);
   }
 
   /**
    * Called when an outline is read successfully
    */
   onLoadSuccess = (outline) => {
-    callIfDefined(this.props.onLoadSuccess);
+    callIfDefined(
+      this.props.onLoadSuccess,
+      outline,
+    );
 
     this.runningTask = makeCancellable(this.parseOutline(outline));
 
@@ -69,7 +72,10 @@ export default class Outline extends Component {
    * Called when an outline failed to read successfully
    */
   onLoadError = (error) => {
-    if ((error.message || error) === 'cancelled') {
+    if (
+      error.name === 'RenderingCancelledException' ||
+      error.name === 'PromiseCancelledException'
+    ) {
       return;
     }
 
@@ -98,7 +104,10 @@ export default class Outline extends Component {
    * Called when an outline failed to read successfully
    */
   onParseError = (error) => {
-    if ((error.message || error) === 'cancelled') {
+    if (
+      error.name === 'RenderingCancelledException' ||
+      error.name === 'PromiseCancelledException'
+    ) {
       return;
     }
 
@@ -230,7 +239,7 @@ export default class Outline extends Component {
 
     return (
       <div
-        className={mergeClassNames('ReactPDF__Outline', className)}
+        className={mergeClassNames('react-pdf__Outline', className)}
         ref={this.props.inputRef}
         {...this.eventProps}
       >
@@ -241,14 +250,11 @@ export default class Outline extends Component {
 }
 
 Outline.contextTypes = {
-  pdf: pdfProp,
+  pdf: isPdf,
 };
 
 Outline.propTypes = {
-  className: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.arrayOf(PropTypes.string),
-  ]),
+  className: isClassName,
   inputRef: PropTypes.func,
   onItemClick: PropTypes.func,
   onLoadError: PropTypes.func,

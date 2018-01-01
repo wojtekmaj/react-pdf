@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-import { callIfDefined } from './shared/util';
+import { callIfDefined } from './shared/utils';
 
-import { pageProp, rotateProp } from './shared/propTypes';
+import { isPage, isRotate } from './shared/propTypes';
 
 export default class PageSVG extends Component {
   /**
@@ -19,7 +19,7 @@ export default class PageSVG extends Component {
    * Called when a page fails to render.
    */
   onRenderError = (error) => {
-    if (error === 'cancelled') {
+    if (error.name === 'RenderingCancelledException') {
       return;
     }
 
@@ -53,6 +53,7 @@ export default class PageSVG extends Component {
             svg.style.maxWidth = '100%';
             svg.style.height = 'auto';
             element.appendChild(svg);
+            this.onRenderSuccess();
           })
           .catch(this.onRenderError);
       })
@@ -62,7 +63,7 @@ export default class PageSVG extends Component {
   render() {
     return (
       <div
-        className="ReactPDF__Page__svg"
+        className="react-pdf__Page__svg"
         style={{
           display: 'block',
           backgroundColor: 'white',
@@ -76,7 +77,7 @@ export default class PageSVG extends Component {
 PageSVG.contextTypes = {
   onRenderError: PropTypes.func,
   onRenderSuccess: PropTypes.func,
-  page: pageProp.isRequired,
-  rotate: rotateProp,
+  page: isPage.isRequired,
+  rotate: isRotate,
   scale: PropTypes.number,
 };

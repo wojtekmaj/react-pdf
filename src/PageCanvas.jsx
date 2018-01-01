@@ -5,9 +5,9 @@ import {
   callIfDefined,
   errorOnDev,
   getPixelRatio,
-} from './shared/util';
+} from './shared/utils';
 
-import { pageProp, rotateProp } from './shared/propTypes';
+import { isPage, isRotate } from './shared/propTypes';
 
 export default class PageCanvas extends Component {
   componentWillUnmount() {
@@ -31,7 +31,10 @@ export default class PageCanvas extends Component {
    * Called when a page fails to render.
    */
   onRenderError = (error) => {
-    if ((error.message || error) === 'cancelled') {
+    if (
+      error.name === 'RenderingCancelledException' ||
+      error.name === 'PromiseCancelledException'
+    ) {
       return;
     }
 
@@ -96,7 +99,7 @@ export default class PageCanvas extends Component {
   render() {
     return (
       <canvas
-        className="ReactPDF__Page__canvas"
+        className="react-pdf__Page__canvas"
         style={{
           display: 'block',
           userSelect: 'none',
@@ -110,7 +113,7 @@ export default class PageCanvas extends Component {
 PageCanvas.contextTypes = {
   onRenderError: PropTypes.func,
   onRenderSuccess: PropTypes.func,
-  page: pageProp.isRequired,
-  rotate: rotateProp,
+  page: isPage.isRequired,
+  rotate: isRotate,
   scale: PropTypes.number,
 };

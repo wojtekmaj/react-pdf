@@ -21,10 +21,10 @@ import {
   isString,
   makeCancellable,
   warnOnDev,
-} from './shared/util';
+} from './shared/utils';
 import { makeEventProps } from './shared/events';
 
-import { eventsProps, linkServiceProp, pdfProp } from './shared/propTypes';
+import { eventsProps, isClassName, isLinkService, isPdf } from './shared/propTypes';
 
 export default class Document extends Component {
   state = {
@@ -88,7 +88,7 @@ export default class Document extends Component {
   }
 
   get eventProps() {
-    return makeEventProps(this.props, this.state.pdf);
+    return makeEventProps(this.props, () => this.state.pdf);
   }
 
   /**
@@ -120,7 +120,10 @@ export default class Document extends Component {
    * Called when a document source failed to be resolved correctly
    */
   onSourceError = (error) => {
-    if ((error.message || error) === 'cancelled') {
+    if (
+      error.name === 'RenderingCancelledException' ||
+      error.name === 'PromiseCancelledException'
+    ) {
       return;
     }
 
@@ -138,21 +141,25 @@ export default class Document extends Component {
    * Called when a document is read successfully
    */
   onLoadSuccess = (pdf) => {
-    callIfDefined(
-      this.props.onLoadSuccess,
-      pdf,
-    );
+    this.setState({ pdf }, () => {
+      callIfDefined(
+        this.props.onLoadSuccess,
+        pdf,
+      );
 
-    this.pages = new Array(pdf.numPages);
-    this.linkService.setDocument(pdf);
-    this.setState({ pdf });
+      this.pages = new Array(pdf.numPages);
+      this.linkService.setDocument(pdf);
+    });
   }
 
   /**
    * Called when a document failed to read successfully
    */
   onLoadError = (error) => {
-    if ((error.message || error) === 'cancelled') {
+    if (
+      error.name === 'RenderingCancelledException' ||
+      error.name === 'PromiseCancelledException'
+    ) {
       return;
     }
 
@@ -279,7 +286,7 @@ export default class Document extends Component {
             case event.target.error.SECURITY_ERR:
               return reject(new Error('Error while reading a file: Security error.'));
             case event.target.error.ABORT_ERR:
-              return reject(new Error('cancelled'));
+              return reject(new Error('Error while reading a file: Aborted.'));
             default:
               return reject(new Error('Error while reading a file.'));
           }
@@ -304,19 +311,19 @@ export default class Document extends Component {
 
   renderNoData() {
     return (
-      <div className="ReactPDF__NoData">{this.props.noData}</div>
+      <div className="react-pdf__message react-pdf__message--no-data">{this.props.noData}</div>
     );
   }
 
   renderError() {
     return (
-      <div className="ReactPDF__Error">{this.props.error}</div>
+      <div className="react-pdf__message react-pdf__message--error">{this.props.error}</div>
     );
   }
 
   renderLoader() {
     return (
-      <div className="ReactPDF__Loader">{this.props.loading}</div>
+      <div className="react-pdf__message react-pdf__message--loading">{this.props.loading}</div>
     );
   }
 
@@ -335,25 +342,39 @@ export default class Document extends Component {
   }
 
   render() {
-    const { file } = this.props;
-
-    if (!file) {
-      return this.renderNoData();
-    }
-
+    const { className, file, inputRef } = this.props;
     const { pdf } = this.state;
 
-    if (pdf === null) {
-      return this.renderLoader();
+    let content;
+    if (!file) {
+      content = this.renderNoData();
+    } else if (pdf === null) {
+      content = this.renderLoader();
+    } else if (pdf === false) {
+      content = this.renderError();
+    } else {
+      content = this.renderChildren();
     }
 
-    if (pdf === false) {
-      return this.renderError();
-    }
-
-    return this.renderChildren();
+    return (
+      <div
+        className={mergeClassNames('react-pdf__Document', className)}
+        ref={inputRef}
+        {...this.eventProps}
+      >
+        {content}
+      </div>
+    );
   }
 }
+
+Document.childContextTypes = {
+  linkService: isLinkService,
+  pdf: isPdf,
+  registerPage: PropTypes.func,
+  rotate: PropTypes.number,
+  unregisterPage: PropTypes.func,
+};
 
 Document.defaultProps = {
   error: 'Failed to load PDF file.',
@@ -361,40 +382,11 @@ Document.defaultProps = {
   noData: 'No PDF file specified.',
 };
 
-const fileTypes = [
-  PropTypes.string,
-  PropTypes.instanceOf(ArrayBuffer),
-  PropTypes.shape({
-    data: PropTypes.object,
-    httpHeaders: PropTypes.object,
-    range: PropTypes.object,
-    url: PropTypes.string,
-    withCredentials: PropTypes.bool,
-  }),
-];
-if (typeof File !== 'undefined') {
-  fileTypes.push(PropTypes.instanceOf(File));
-}
-if (typeof Blob !== 'undefined') {
-  fileTypes.push(PropTypes.instanceOf(Blob));
-}
-
-Document.childContextTypes = {
-  linkService: linkServiceProp,
-  pdf: pdfProp,
-  registerPage: PropTypes.func,
-  rotate: PropTypes.number,
-  unregisterPage: PropTypes.func,
-};
-
 Document.propTypes = {
   children: PropTypes.node,
-  className: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.arrayOf(PropTypes.string),
-  ]),
+  className: isClassName,
   error: PropTypes.node,
-  file: PropTypes.oneOfType(fileTypes),
+  file: isFile,
   inputRef: PropTypes.func,
   loading: PropTypes.node,
   noData: PropTypes.node,

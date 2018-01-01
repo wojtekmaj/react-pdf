@@ -5,9 +5,9 @@ import {
   callIfDefined,
   errorOnDev,
   makeCancellable,
-} from './shared/util';
+} from './shared/utils';
 
-import { pageProp, rotateProp } from './shared/propTypes';
+import { isPage, isRotate } from './shared/propTypes';
 
 // Render disproportion above which font will be considered broken and fallback will be used
 const BROKEN_FONT_ALARM_THRESHOLD = 0.1;
@@ -48,7 +48,10 @@ export default class PageTextContent extends Component {
   }
 
   onGetTextError = (error) => {
-    if ((error.message || error) === 'cancelled') {
+    if (
+      error.name === 'RenderingCancelledException' ||
+      error.name === 'PromiseCancelledException'
+    ) {
       return;
     }
 
@@ -202,7 +205,7 @@ export default class PageTextContent extends Component {
 
     return (
       <div
-        className="ReactPDF__Page__textContent"
+        className="react-pdf__Page__textContent"
         style={{
           position: 'absolute',
           top: '50%',
@@ -223,7 +226,7 @@ export default class PageTextContent extends Component {
 PageTextContent.contextTypes = {
   onGetTextError: PropTypes.func,
   onGetTextSuccess: PropTypes.func,
-  page: pageProp.isRequired,
-  rotate: rotateProp,
+  page: isPage.isRequired,
+  rotate: isRotate,
   scale: PropTypes.number,
 };

@@ -128,13 +128,22 @@ export const displayCORSWarning = () => {
   }
 };
 
+class PromiseCancelledException extends Error {
+  constructor(message, type) {
+    super(message, type);
+    this.name = 'PromiseCancelledException';
+    this.message = message;
+    this.type = type;
+  }
+}
+
 export const makeCancellable = (promise) => {
   let isCancelled = false;
 
   const wrappedPromise = new Promise((resolve, reject) => {
     promise.then(
-      (...args) => (isCancelled ? reject(new Error('cancelled')) : resolve(...args)),
-      error => (isCancelled ? reject(new Error('cancelled')) : reject(error)),
+      (...args) => (isCancelled ? reject(new PromiseCancelledException('Promise cancelled')) : resolve(...args)),
+      error => (isCancelled ? reject(new PromiseCancelledException('Promise cancelled')) : reject(error)),
     );
   });
 
