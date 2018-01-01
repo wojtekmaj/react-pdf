@@ -43,7 +43,7 @@ export default class Page extends Component {
   componentWillUnmount() {
     callIfDefined(
       this.props.unregisterPage,
-      this.state.page.pageIndex,
+      this.pageIndex,
     );
 
     if (this.runningTask && this.runningTask.cancel) {
