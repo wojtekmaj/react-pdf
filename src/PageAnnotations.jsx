@@ -69,7 +69,8 @@ export default class PageAnnotations extends Component {
     this.runningTask = makeCancellable(props.page.getAnnotations());
 
     return this.runningTask.promise
-      .then(this.onGetAnnotationsSuccess);
+      .then(this.onGetAnnotationsSuccess)
+      .catch(this.onGetAnnotationsError);
   }
 
   renderAnnotations() {
