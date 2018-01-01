@@ -48,7 +48,10 @@ export default class PageTextContent extends Component {
   }
 
   onGetTextError = (error) => {
-    if ((error.message || error) === 'cancelled') {
+    if (
+      error.name === 'RenderingCancelledException' ||
+      error.name === 'PromiseCancelledException'
+    ) {
       return;
     }
 

@@ -31,7 +31,10 @@ export default class PageCanvas extends Component {
    * Called when a page fails to render.
    */
   onRenderError = (error) => {
-    if ((error.message || error) === 'cancelled') {
+    if (
+      error.name === 'RenderingCancelledException' ||
+      error.name === 'PromiseCancelledException'
+    ) {
       return;
     }
 

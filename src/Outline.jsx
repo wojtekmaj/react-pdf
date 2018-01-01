@@ -69,7 +69,10 @@ export default class Outline extends Component {
    * Called when an outline failed to read successfully
    */
   onLoadError = (error) => {
-    if ((error.message || error) === 'cancelled') {
+    if (
+      error.name === 'RenderingCancelledException' ||
+      error.name === 'PromiseCancelledException'
+    ) {
       return;
     }
 
@@ -98,7 +101,10 @@ export default class Outline extends Component {
    * Called when an outline failed to read successfully
    */
   onParseError = (error) => {
-    if ((error.message || error) === 'cancelled') {
+    if (
+      error.name === 'RenderingCancelledException' ||
+      error.name === 'PromiseCancelledException'
+    ) {
       return;
     }
 

@@ -107,7 +107,10 @@ export default class Document extends Component {
    * Called when a document source failed to be resolved correctly
    */
   onSourceError = (error) => {
-    if ((error.message || error) === 'cancelled') {
+    if (
+      error.name === 'RenderingCancelledException' ||
+      error.name === 'PromiseCancelledException'
+    ) {
       return;
     }
 
@@ -140,7 +143,10 @@ export default class Document extends Component {
    * Called when a document failed to read successfully
    */
   onLoadError = (error) => {
-    if ((error.message || error) === 'cancelled') {
+    if (
+      error.name === 'RenderingCancelledException' ||
+      error.name === 'PromiseCancelledException'
+    ) {
       return;
     }
 
@@ -267,7 +273,7 @@ export default class Document extends Component {
             case event.target.error.SECURITY_ERR:
               return reject(new Error('Error while reading a file: Security error.'));
             case event.target.error.ABORT_ERR:
-              return reject(new Error('cancelled'));
+              return reject(new Error('Error while reading a file: Aborted.'));
             default:
               return reject(new Error('Error while reading a file.'));
           }
