@@ -36,6 +36,10 @@ export default class Page extends Component {
         this.state.page.pageIndex,
       );
 
+      if (this.state.page !== null) {
+        this.setState({ page: null });
+      }
+
       this.loadPage(nextProps);
     }
   }
@@ -191,10 +195,6 @@ export default class Page extends Component {
 
     if (!pdf) {
       throw new Error('Attempted to load a page, but no document was specified.');
-    }
-
-    if (this.state.page !== null) {
-      this.setState({ page: null });
     }
 
     if (!pageNumber) {
