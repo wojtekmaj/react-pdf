@@ -53,6 +53,7 @@ export default class PageSVG extends Component {
             svg.style.maxWidth = '100%';
             svg.style.height = 'auto';
             element.appendChild(svg);
+            this.onRenderSuccess();
           })
           .catch(this.onRenderError);
       })
