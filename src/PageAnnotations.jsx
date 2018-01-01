@@ -8,6 +8,10 @@ import { makeCancellable } from './shared/util';
 import { isLinkService, isPage, isRotate } from './shared/propTypes';
 
 export default class PageAnnotations extends Component {
+  state = {
+    annotations: null,
+  }
+
   componentDidMount() {
     this.getAnnotations();
   }
@@ -24,6 +28,15 @@ export default class PageAnnotations extends Component {
     }
   }
 
+  onGetAnnotationsSuccess = (annotations) => {
+    callIfDefined(
+      this.props.onGetAnnotationsSuccess,
+      annotations,
+    );
+
+    this.setState({ annotations });
+  }
+
   get viewport() {
     const { page, rotate, scale } = this.props;
 
@@ -33,12 +46,17 @@ export default class PageAnnotations extends Component {
   getAnnotations(props = this.props) {
     this.runningTask = makeCancellable(props.page.getAnnotations());
 
-    return this.runningTask.promise.then((annotations) => {
-      this.renderAnnotations(annotations);
-    });
+    return this.runningTask.promise
+      .then(this.onGetAnnotationsSuccess);
   }
 
-  renderAnnotations(annotations) {
+  renderAnnotations() {
+    const { annotations } = this.state;
+
+    if (!annotations) {
+      return null;
+    }
+
     const { linkService, page } = this.props;
     const viewport = this.viewport.clone({ dontFlip: true });
 
@@ -50,7 +68,7 @@ export default class PageAnnotations extends Component {
       viewport,
     };
 
-    PDFJS.AnnotationLayer.render(parameters);
+    return PDFJS.AnnotationLayer.render(parameters);
   }
 
   render() {
@@ -58,7 +76,9 @@ export default class PageAnnotations extends Component {
       <div
         className="ReactPDF__Page__annotations annotationLayer"
         ref={(ref) => { this.annotationLayer = ref; }}
-      />
+      >
+        {this.renderAnnotations()}
+      </div>
     );
   }
 }
@@ -68,4 +88,6 @@ PageAnnotations.propTypes = {
   page: isPage,
   rotate: isRotate,
   scale: PropTypes.number,
+  onGetAnnotationsError: PropTypes.func,
+  onGetAnnotationsSuccess: PropTypes.func,
 };
