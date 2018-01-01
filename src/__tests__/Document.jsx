@@ -3,14 +3,18 @@ import { mount } from 'enzyme';
 
 import { Document } from '../entry.noworker';
 
-import file from './_pdf.buffer';
+import {
+  fileArrayBuffer,
+  fileBlob,
+  fileFile,
+  fileDataURI,
+} from '../../__mocks__/_pdf.buffer';
+
+import {
+  fileFile as fileFile2,
+} from '../../__mocks__/_pdf2.buffer';
 
 const OK = Symbol('OK');
-
-const fileArrayBuffer = file.buffer;
-const fileBlob = new Blob([fileArrayBuffer], { type: 'application/pdf' });
-const fileFile = new File([fileArrayBuffer], { type: 'application/pdf' });
-const fileDataURI = `data:application/pdf;base64,${file.toString('base64')}`;
 
 /* eslint-disable comma-dangle */
 
@@ -28,9 +32,27 @@ const makeAsyncCallback = (callbackValue) => {
   return { promise, func };
 };
 
+const desiredLoadedPdf = {
+  loadingTask: {},
+  pdfInfo: {
+    fingerprint: 'a62067476e69734bb8eb60122615dfbf',
+    numPages: 4,
+  },
+  transport: {},
+};
+const desiredLoadedPdf2 = {
+  loadingTask: {},
+  pdfInfo: {
+    fingerprint: '04d9eadd32916d728460daa283b37ff2',
+    numPages: 5,
+  },
+  transport: {},
+};
+
+
 describe('Document', () => {
   describe('loading', () => {
-    it('loads a file via data URI properly', async () => {
+    it('loads a file and calls onSourceSuccess and onLoadSuccess callbacks via data URI properly', async () => {
       const { func: onSourceSuccess, promise: onSourceSuccessPromise } = makeAsyncCallback(OK);
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
@@ -44,10 +66,10 @@ describe('Document', () => {
 
       expect.assertions(2);
       await expect(onSourceSuccessPromise).resolves.toBe(OK);
-      await expect(onLoadSuccessPromise).resolves.toBeInstanceOf(Object);
+      await expect(onLoadSuccessPromise).resolves.toMatchObject(desiredLoadedPdf);
     });
 
-    it('loads a file via data URI properly (param object)', async () => {
+    it('loads a file and calls onSourceSuccess and onLoadSuccess callbacks via data URI properly (param object)', async () => {
       const { func: onSourceSuccess, promise: onSourceSuccessPromise } = makeAsyncCallback(OK);
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
@@ -61,10 +83,10 @@ describe('Document', () => {
 
       expect.assertions(2);
       await expect(onSourceSuccessPromise).resolves.toBe(OK);
-      await expect(onLoadSuccessPromise).resolves.toBeInstanceOf(Object);
+      await expect(onLoadSuccessPromise).resolves.toMatchObject(desiredLoadedPdf);
     });
 
-    it('loads a file via ArrayBuffer properly', async () => {
+    it('loads a file and calls onSourceSuccess and onLoadSuccess callbacks via ArrayBuffer properly', async () => {
       const { func: onSourceSuccess, promise: onSourceSuccessPromise } = makeAsyncCallback(OK);
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
@@ -78,10 +100,10 @@ describe('Document', () => {
 
       expect.assertions(2);
       await expect(onSourceSuccessPromise).resolves.toBe(OK);
-      await expect(onLoadSuccessPromise).resolves.toBeInstanceOf(Object);
+      await expect(onLoadSuccessPromise).resolves.toMatchObject(desiredLoadedPdf);
     });
 
-    it('loads a file via Blob properly', async () => {
+    it('loads a file and calls onSourceSuccess and onLoadSuccess callbacks via Blob properly', async () => {
       const { func: onSourceSuccess, promise: onSourceSuccessPromise } = makeAsyncCallback(OK);
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
@@ -95,10 +117,10 @@ describe('Document', () => {
 
       expect.assertions(2);
       await expect(onSourceSuccessPromise).resolves.toBe(OK);
-      await expect(onLoadSuccessPromise).resolves.toBeInstanceOf(Object);
+      await expect(onLoadSuccessPromise).resolves.toMatchObject(desiredLoadedPdf);
     });
 
-    it('loads a file via File properly', async () => {
+    it('loads a file and calls onSourceSuccess and onLoadSuccess callbacks via File properly', async () => {
       const { func: onSourceSuccess, promise: onSourceSuccessPromise } = makeAsyncCallback(OK);
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
@@ -112,7 +134,36 @@ describe('Document', () => {
 
       expect.assertions(2);
       await expect(onSourceSuccessPromise).resolves.toBe(OK);
-      await expect(onLoadSuccessPromise).resolves.toBeInstanceOf(Object);
+      await expect(onLoadSuccessPromise).resolves.toMatchObject(desiredLoadedPdf);
+    });
+
+    it('replaces a file properly', async () => {
+      const { func: onSourceSuccess, promise: onSourceSuccessPromise } = makeAsyncCallback(OK);
+      const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
+
+      const mountedComponent = mount(
+        <Document
+          file={fileFile}
+          onLoadSuccess={onLoadSuccess}
+          onSourceSuccess={onSourceSuccess}
+        />
+      );
+
+      expect.assertions(4);
+      await expect(onSourceSuccessPromise).resolves.toBe(OK);
+      await expect(onLoadSuccessPromise).resolves.toMatchObject(desiredLoadedPdf);
+
+      const { func: onSourceSuccess2, promise: onSourceSuccessPromise2 } = makeAsyncCallback(OK);
+      const { func: onLoadSuccess2, promise: onLoadSuccessPromise2 } = makeAsyncCallback();
+
+      mountedComponent.setProps({
+        file: fileFile2,
+        onLoadSuccess: onLoadSuccess2,
+        onSourceSuccess: onSourceSuccess2,
+      });
+
+      await expect(onSourceSuccessPromise2).resolves.toBe(OK);
+      await expect(onLoadSuccessPromise2).resolves.toMatchObject(desiredLoadedPdf2);
     });
   });
 
