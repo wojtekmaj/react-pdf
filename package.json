@@ -24,7 +24,7 @@
       "\\.(css|less)$": "<rootDir>/__mocks__/styleMock.js"
     },
     "testPathIgnorePatterns": [
-      "_pdf.buffer.js"
+      "utils.js"
     ]
   },
   "keywords": [

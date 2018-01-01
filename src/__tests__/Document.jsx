@@ -1,5 +1,5 @@
 import React from 'react';
-import { mount } from 'enzyme';
+import { shallow } from 'enzyme';
 
 import { Document } from '../entry.noworker';
 
@@ -14,23 +14,9 @@ import {
   fileFile as fileFile2,
 } from '../../__mocks__/_pdf2.buffer';
 
+import { makeAsyncCallback } from './utils';
+
 const OK = Symbol('OK');
-
-/* eslint-disable comma-dangle */
-
-const makeAsyncCallback = (callbackValue) => {
-  let promiseResolve;
-  const promise = new Promise((resolve) => {
-    promiseResolve = resolve;
-  });
-  const func = jest.fn(
-    callbackValue ?
-      () => promiseResolve(callbackValue) :
-      promiseResolve
-  );
-
-  return { promise, func };
-};
 
 const desiredLoadedPdf = {
   loadingTask: {},
@@ -49,6 +35,7 @@ const desiredLoadedPdf2 = {
   transport: {},
 };
 
+/* eslint-disable comma-dangle */
 
 describe('Document', () => {
   describe('loading', () => {
@@ -56,7 +43,7 @@ describe('Document', () => {
       const { func: onSourceSuccess, promise: onSourceSuccessPromise } = makeAsyncCallback(OK);
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
-      mount(
+      shallow(
         <Document
           file={fileDataURI}
           onLoadSuccess={onLoadSuccess}
@@ -73,7 +60,7 @@ describe('Document', () => {
       const { func: onSourceSuccess, promise: onSourceSuccessPromise } = makeAsyncCallback(OK);
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
-      mount(
+      shallow(
         <Document
           file={{ url: fileDataURI }}
           onLoadSuccess={onLoadSuccess}
@@ -90,7 +77,7 @@ describe('Document', () => {
       const { func: onSourceSuccess, promise: onSourceSuccessPromise } = makeAsyncCallback(OK);
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
-      mount(
+      shallow(
         <Document
           file={fileArrayBuffer}
           onLoadSuccess={onLoadSuccess}
@@ -107,7 +94,7 @@ describe('Document', () => {
       const { func: onSourceSuccess, promise: onSourceSuccessPromise } = makeAsyncCallback(OK);
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
-      mount(
+      shallow(
         <Document
           file={fileBlob}
           onLoadSuccess={onLoadSuccess}
@@ -124,7 +111,7 @@ describe('Document', () => {
       const { func: onSourceSuccess, promise: onSourceSuccessPromise } = makeAsyncCallback(OK);
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
-      mount(
+      shallow(
         <Document
           file={fileFile}
           onLoadSuccess={onLoadSuccess}
@@ -141,7 +128,7 @@ describe('Document', () => {
       const { func: onSourceSuccess, promise: onSourceSuccessPromise } = makeAsyncCallback(OK);
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
-      const mountedComponent = mount(
+      const mountedComponent = shallow(
         <Document
           file={fileFile}
           onLoadSuccess={onLoadSuccess}
@@ -168,24 +155,77 @@ describe('Document', () => {
   });
 
   describe('rendering', () => {
+    it('applies className to its wrapper when given a string', () => {
+      const className = 'testClassName';
+
+      const component = shallow(
+        <Document className={className} />
+      );
+
+      const wrapperClassName = component.find('.react-pdf__Document').prop('className');
+
+      expect(wrapperClassName.includes(className)).toBe(true);
+    });
+
     it('renders "No PDF file specified." when given nothing', () => {
-      const component = mount(
+      const component = shallow(
         <Document />
       );
 
-      const noData = component.find('.ReactPDF__NoData');
+      const noData = component.find('.react-pdf__message--no-data');
 
+      expect(noData).toHaveLength(1);
       expect(noData.text()).toBe('No PDF file specified.');
     });
 
     it('renders custom no data message when given nothing and noData prop is specified', () => {
-      const component = mount(
+      const component = shallow(
         <Document noData="Nothing here" />
       );
 
-      const noData = component.find('.ReactPDF__NoData');
+      const noData = component.find('.react-pdf__message--no-data');
 
+      expect(noData).toHaveLength(1);
       expect(noData.text()).toBe('Nothing here');
+    });
+
+    it('renders "Loading PDF…" when loading a file', () => {
+      const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
+
+      const component = shallow(
+        <Document
+          file={fileFile}
+          onLoadSuccess={onLoadSuccess}
+        />
+      );
+
+      expect.assertions(2);
+      return onLoadSuccessPromise.then(() => {
+        const loading = component.find('.react-pdf__message--loading');
+
+        expect(loading).toHaveLength(1);
+        expect(loading.text()).toBe('Loading PDF…');
+      });
+    });
+
+    it('renders custom loading message when given nothing and loading prop is specified', () => {
+      const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
+
+      const component = shallow(
+        <Document
+          file={fileFile}
+          loading="Loading"
+          onLoadSuccess={onLoadSuccess}
+        />
+      );
+
+      expect.assertions(2);
+      return onLoadSuccessPromise.then(() => {
+        const loading = component.find('.react-pdf__message--loading');
+
+        expect(loading).toHaveLength(1);
+        expect(loading.text()).toBe('Loading');
+      });
     });
   });
 });
