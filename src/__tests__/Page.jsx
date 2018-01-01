@@ -1,12 +1,15 @@
 import React from 'react';
 import { mount, shallow } from 'enzyme';
-import pdfjs, { RenderingCancelledException } from 'pdfjs-dist';
+import pdfjs from 'pdfjs-dist';
 
 import { Page } from '../entry.noworker';
 
-import { fileArrayBuffer } from '../../__mocks__/_pdf.buffer';
+import silentlyFailingPdf from '../../__mocks__/_silently_failing_pdf';
+import { makeAsyncCallback, loadPDF } from './utils';
 
-import { makeAsyncCallback } from './utils';
+const {
+  arrayBuffer: fileArrayBuffer,
+} = loadPDF('./__mocks__/_pdf.pdf');
 
 const { PDFJS } = pdfjs;
 
@@ -171,18 +174,6 @@ describe('Page', async () => {
     });
 
     it('passes container element to inputRef properly', () => {
-      // We don't really want to initiate loading a page here
-      const silentlyFailingPdf = {
-        getDestination: () => {},
-        getOutline: () => {},
-        getPage: () => new Promise((resolve, reject) => reject(new RenderingCancelledException())),
-        numPages: 4,
-        pdfInfo: {
-          fingerprint: 'a62067476e69734bb8eb60122615dfbf',
-          numPages: 4,
-        },
-      };
-
       const inputRef = jest.fn();
 
       mount(

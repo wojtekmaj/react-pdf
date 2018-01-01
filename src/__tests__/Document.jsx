@@ -3,18 +3,18 @@ import { mount, shallow } from 'enzyme';
 
 import { Document } from '../entry.noworker';
 
-import {
-  fileArrayBuffer,
-  fileBlob,
-  fileFile,
-  fileDataURI,
-} from '../../__mocks__/_pdf.buffer';
+import { makeAsyncCallback, loadPDF } from './utils';
 
-import {
-  fileFile as fileFile2,
-} from '../../__mocks__/_pdf2.buffer';
+const {
+  arrayBuffer: fileArrayBuffer,
+  blob: fileBlob,
+  file: fileFile,
+  dataURI: fileDataURI,
+} = loadPDF('./__mocks__/_pdf.pdf');
 
-import { makeAsyncCallback } from './utils';
+const {
+  file: fileFile2,
+} = loadPDF('./__mocks__/_pdf2.pdf');
 
 const OK = Symbol('OK');
 
