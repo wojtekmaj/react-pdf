@@ -18,7 +18,9 @@
     ],
     "collectCoverageFrom": [
       "**/src/**.{js,jsx}",
-      "!**/src/entry.js"
+      "!**/src/entry.js",
+      "!**/src/entry.noworker.js",
+      "!**/src/entry.webpack.js"
     ],
     "moduleNameMapper": {
       "\\.(css|less)$": "<rootDir>/__mocks__/styleMock.js"
