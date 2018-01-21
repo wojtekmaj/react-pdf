@@ -198,6 +198,10 @@ Displays a page. Must be placed inside `<Document />` or have `pdf` prop passed,
 |onLoadSuccess|Function called when the page is successfully loaded.|`(page) => alert('Now displaying a page number ' + page.pageNumber + '!')`|
 |onRenderError|Function called in case of an error while rendering the page.|`(error) => alert('Error while loading page! ' + error.message)`|
 |onRenderSuccess|Function called when the page is successfully rendered on the screen.|`() => alert('Rendered the page!')`|
+|onGetAnnotationsError|Function called when annotations are successfully loaded.|`(annotations) => alert('Now displaying ' + annotations.length + ' annotations!')`|
+|onGetAnnotationsSuccess|Function called in case of an error while loading annotations.|`(error) => alert('Error while loading annotations! ' + error.message)`|
+|onGetTextError|Function called when text layer items are successfully loaded.|`(items) => alert('Now displaying ' + items.length + ' text layer items!')`|
+|onGetTextSuccess|Function called in case of an error while loading text layer items.|`(error) => alert('Error while loading text layer items! ' + error.message)`|
 |pageIndex|Defines which page from PDF file should be displayed. Defaults to 0.|`0`|
 |pageNumber|Defines which page from PDF file should be displayed. If provided, `pageIndex` prop will be ignored. Defaults to 1.|`1`|
 |renderAnnotations|Defined whether annotations (e.g. links) should be rendered. Defaults to true.|`false`|
