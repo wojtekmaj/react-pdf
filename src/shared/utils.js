@@ -154,3 +154,11 @@ export const makeCancellable = (promise) => {
     },
   };
 };
+
+export const cancelRunningTask = (runningTask) => {
+  if (!runningTask || !runningTask.cancel) {
+    return;
+  }
+
+  runningTask.cancel();
+};

@@ -5,6 +5,7 @@ import './annotation_layer_builder.css';
 
 import {
   callIfDefined,
+  cancelRunningTask,
   errorOnDev,
   makeCancellable,
 } from './shared/utils';
@@ -27,9 +28,7 @@ export default class PageAnnotations extends Component {
   }
 
   componentWillUnmount() {
-    if (this.runningTask && this.runningTask.cancel) {
-      this.runningTask.cancel();
-    }
+    cancelRunningTask(this.runningTask);
   }
 
   onGetAnnotationsSuccess = (annotations) => {

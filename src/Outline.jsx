@@ -4,6 +4,7 @@ import mergeClassNames from 'merge-class-names';
 
 import {
   callIfDefined,
+  cancelRunningTask,
   errorOnDev,
   isDefined,
   makeCancellable,
@@ -43,9 +44,7 @@ export default class Outline extends Component {
   }
 
   componentWillUnmount() {
-    if (this.runningTask && this.runningTask.cancel) {
-      this.runningTask.cancel();
-    }
+    cancelRunningTask(this.runningTask);
   }
 
   get eventProps() {

@@ -9,6 +9,7 @@ import LinkService from './LinkService';
 
 import {
   callIfDefined,
+  cancelRunningTask,
   dataURItoUint8Array,
   displayCORSWarning,
   errorOnDev,
@@ -69,9 +70,7 @@ export default class Document extends Component {
   }
 
   componentWillUnmount() {
-    if (this.runningTask && this.runningTask.cancel) {
-      this.runningTask.cancel();
-    }
+    cancelRunningTask(this.runningTask);
   }
 
   get eventProps() {
@@ -203,9 +202,7 @@ export default class Document extends Component {
   }
 
   loadDocument(props = this.props) {
-    if (this.runningTask && this.runningTask.cancel) {
-      this.runningTask.cancel();
-    }
+    cancelRunningTask(this.runningTask);
 
     this.runningTask = makeCancellable(this.findDocumentSource(props.file));
 

@@ -9,6 +9,7 @@ import PageAnnotations from './PageAnnotations';
 
 import {
   callIfDefined,
+  cancelRunningTask,
   errorOnDev,
   isProvided,
   makeCancellable,
@@ -50,9 +51,7 @@ export default class Page extends Component {
       this.pageIndex,
     );
 
-    if (this.runningTask && this.runningTask.cancel) {
-      this.runningTask.cancel();
-    }
+    cancelRunningTask(this.runningTask);
   }
 
   /**
