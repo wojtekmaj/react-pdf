@@ -6,7 +6,7 @@ import './Test.less';
 import LoadingOptions from './LoadingOptions';
 import ViewOptions from './ViewOptions';
 
-import { dataURItoBlob } from './shared/util';
+import { dataURItoBlob } from './shared/utils';
 
 setOptions({
   cMapUrl: 'cmaps/',

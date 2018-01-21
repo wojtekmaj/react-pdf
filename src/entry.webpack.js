@@ -3,7 +3,7 @@ import Outline from './Outline';
 import Page from './Page';
 import makeSetOptions from './setOptions';
 
-import { isLocalFileSystem, warnOnDev } from './shared/util';
+import { isLocalFileSystem, warnOnDev } from './shared/utils';
 
 if (isLocalFileSystem) {
   // eslint-disable-next-line no-console

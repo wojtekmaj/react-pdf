@@ -5,7 +5,7 @@ import {
   callIfDefined,
   errorOnDev,
   getPixelRatio,
-} from './shared/util';
+} from './shared/utils';
 
 import { isPage, isRotate } from './shared/propTypes';
 
@@ -75,10 +75,10 @@ export default class PageCanvas extends Component {
     canvas.style.width = `${Math.floor(viewport.width)}px`;
     canvas.style.height = `${Math.floor(viewport.height)}px`;
 
-    const canvasContext = canvas.getContext('2d');
-
     const renderContext = {
-      canvasContext,
+      get canvasContext() {
+        return canvas.getContext('2d');
+      },
       viewport: renderViewport,
     };
 
@@ -99,7 +99,7 @@ export default class PageCanvas extends Component {
   render() {
     return (
       <canvas
-        className="ReactPDF__Page__canvas"
+        className="react-pdf__Page__canvas"
         style={{
           display: 'block',
           userSelect: 'none',
