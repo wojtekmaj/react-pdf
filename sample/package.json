@@ -1,6 +1,6 @@
 {
   "name": "react-pdf-sample-page",
-  "version": "2.5.2",
+  "version": "3.0.0-alpha",
   "description": "A sample page for React-PDF.",
   "private": true,
   "scripts": {
