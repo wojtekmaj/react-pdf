@@ -37,10 +37,13 @@ describe('PageAnnotations', () => {
       muteConsole();
 
       shallow(
-        <PageAnnotations
-          onGetAnnotationsSuccess={onGetAnnotationsSuccess}
-          page={page}
-        />
+        <PageAnnotations />,
+        {
+          context: {
+            onGetAnnotationsSuccess,
+            page,
+          }
+        }
       );
 
       expect.assertions(1);
@@ -57,10 +60,13 @@ describe('PageAnnotations', () => {
       muteConsole();
 
       shallow(
-        <PageAnnotations
-          onGetAnnotationsError={onGetAnnotationsError}
-          page={failingPage}
-        />
+        <PageAnnotations />,
+        {
+          context: {
+            onGetAnnotationsError,
+            page: failingPage,
+          }
+        }
       );
 
       expect.assertions(1);

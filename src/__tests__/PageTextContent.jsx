@@ -34,10 +34,13 @@ describe('PageTextContent', () => {
       const { func: onGetTextSuccess, promise: onGetTextSuccessPromise } = makeAsyncCallback();
 
       shallow(
-        <PageTextContent
-          onGetTextSuccess={onGetTextSuccess}
-          page={page}
-        />
+        <PageTextContent />,
+        {
+          context: {
+            onGetTextSuccess,
+            page,
+          }
+        }
       );
 
       expect.assertions(1);
@@ -50,10 +53,13 @@ describe('PageTextContent', () => {
       muteConsole();
 
       shallow(
-        <PageTextContent
-          onGetTextError={onGetTextError}
-          page={failingPage}
-        />
+        <PageTextContent />,
+        {
+          context: {
+            onGetTextError,
+            page: failingPage,
+          }
+        }
       );
 
       expect.assertions(1);
@@ -68,10 +74,13 @@ describe('PageTextContent', () => {
       const { func: onGetTextSuccess, promise: onGetTextSuccessPromise } = makeAsyncCallback();
 
       const component = shallow(
-        <PageTextContent
-          onGetTextSuccess={onGetTextSuccess}
-          page={page}
-        />
+        <PageTextContent />,
+        {
+          context: {
+            onGetTextSuccess,
+            page,
+          }
+        }
       );
 
       expect.assertions(2);

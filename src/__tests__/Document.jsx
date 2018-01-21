@@ -296,8 +296,6 @@ describe('Document', () => {
     it('passes rotate prop to its children', () => {
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
-      const Child = () => <div className="Child" />;
-
       const component = shallow(
         <Document
           file={fileFile}
@@ -312,15 +310,12 @@ describe('Document', () => {
       expect.assertions(1);
       return onLoadSuccessPromise.then(() => {
         component.update();
-        const child = component.find('Child');
-        expect(child.prop('rotate')).toBe(90);
+        expect(component.instance().getChildContext().rotate).toBe(90);
       });
     });
 
     it('does not overwrite rotate prop in its children when given rotate prop to both Document and its children', () => {
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
-
-      const Child = () => <div className="Child" />;
 
       const component = shallow(
         <Document

@@ -20,10 +20,13 @@ describe('PageCanvas', () => {
       muteConsole();
 
       mount(
-        <PageCanvas
-          onRenderError={onRenderError}
-          page={failingPage}
-        />
+        <PageCanvas />,
+        {
+          context: {
+            onRenderError,
+            page: failingPage,
+          }
+        }
       );
 
       expect.assertions(1);
