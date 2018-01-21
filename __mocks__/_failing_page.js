@@ -13,8 +13,6 @@ export default {
   }),
   render: () => new Promise((resolve, reject) => reject(new Error())),
   transport: {
-    fontLoader: {
-
-    },
+    fontLoader: {},
   },
 };

@@ -75,10 +75,10 @@ export default class PageCanvas extends Component {
     canvas.style.width = `${Math.floor(viewport.width)}px`;
     canvas.style.height = `${Math.floor(viewport.height)}px`;
 
-    const canvasContext = canvas.getContext('2d');
-
     const renderContext = {
-      canvasContext,
+      get canvasContext() {
+        return canvas.getContext('2d');
+      },
       viewport: renderViewport,
     };
 
