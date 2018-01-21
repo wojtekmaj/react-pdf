@@ -2,31 +2,17 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import mergeClassNames from 'merge-class-names';
 
+import OutlineItem from './OutlineItem';
+
 import {
   callIfDefined,
   cancelRunningTask,
   errorOnDev,
-  isDefined,
   makeCancellable,
 } from './shared/utils';
 import { makeEventProps } from './shared/events';
 
 import { eventsProps, isClassName, isPdf } from './shared/propTypes';
-
-class Ref {
-  constructor({ num, gen }) {
-    this.num = num;
-    this.gen = gen;
-  }
-
-  toString() {
-    let str = `${this.num}R`;
-    if (this.gen !== 0) {
-      str += this.gen;
-    }
-    return str;
-  }
-}
 
 export default class Outline extends Component {
   state = {
@@ -55,16 +41,12 @@ export default class Outline extends Component {
    * Called when an outline is read successfully
    */
   onLoadSuccess = (outline) => {
-    callIfDefined(
-      this.props.onLoadSuccess,
-      outline,
-    );
-
-    this.runningTask = makeCancellable(this.parseOutline(outline));
-
-    return this.runningTask.promise
-      .then(this.onParseSuccess)
-      .catch(this.onParseError);
+    this.setState({ outline }, () => {
+      callIfDefined(
+        this.props.onLoadSuccess,
+        outline,
+      );
+    });
   }
 
   /**
@@ -88,87 +70,7 @@ export default class Outline extends Component {
     this.setState({ outline: false });
   }
 
-  onParseSuccess = (outline) => {
-    callIfDefined(
-      this.props.onParseSuccess,
-      {
-        outline,
-      },
-    );
-
-    this.setState({ outline });
-  }
-
-  /**
-   * Called when an outline failed to read successfully
-   */
-  onParseError = (error) => {
-    if (
-      error.name === 'RenderingCancelledException' ||
-      error.name === 'PromiseCancelledException'
-    ) {
-      return;
-    }
-
-    errorOnDev(error.message, error);
-
-    callIfDefined(
-      this.props.onParseError,
-      error,
-    );
-
-    this.setState({ outline: false });
-  }
-
-  async mapOutlineItem(item) {
-    const { pdf } = this.props;
-
-    const mappedItem = {
-      title: item.title,
-      destination: item.dest,
-      async getDestination() {
-        if (typeof this.destination === 'string') {
-          return pdf.getDestination(this.destination);
-        }
-        return this.destination;
-      },
-      async getPageIndex() {
-        if (!isDefined(this.pageIndex)) {
-          const destination = await this.getDestination();
-          if (destination) {
-            const [ref] = destination;
-            this.pageIndex = pdf.getPageIndex(new Ref(ref));
-          }
-        }
-        return this.pageIndex;
-      },
-      async getPageNumber() {
-        if (!isDefined(this.pageNumber)) {
-          this.pageNumber = await this.getPageIndex() + 1;
-        }
-        return this.pageNumber;
-      },
-    };
-
-    if (item.items && item.items.length) {
-      mappedItem.items = await Promise.all(item.items.map(subitem => this.mapOutlineItem(subitem)));
-    }
-
-    return mappedItem;
-  }
-
-  async parseOutline(outline) {
-    if (!outline) {
-      return null;
-    }
-
-    return Promise.all(outline.map(item => this.mapOutlineItem(item)));
-  }
-
-  async onItemClick(item) {
-    const pageIndex = await item.getPageIndex();
-    const pageNumber = await item.getPageNumber();
-
+  onItemClick = ({ pageIndex, pageNumber }) => {
     callIfDefined(
       this.props.onItemClick,
       {
@@ -196,30 +98,24 @@ export default class Outline extends Component {
       .catch(this.onLoadError);
   }
 
-  renderOutline(outline = this.state.outline) {
+  renderOutline() {
+    const { pdf } = this.props;
+    const { outline } = this.state;
+
     return (
       <ul>
         {
           outline.map((item, itemIndex) => (
-            <li
+            <OutlineItem
               key={
                 typeof item.destination === 'string' ?
                   item.destination :
                   itemIndex
               }
-            >
-              <a
-                href="#"
-                onClick={(event) => {
-                  event.preventDefault();
-
-                  this.onItemClick(item);
-                }}
-              >
-                {item.title}
-              </a>
-              {item.items && this.renderOutline(item.items)}
-            </li>
+              item={item}
+              onClick={this.onItemClick}
+              pdf={pdf}
+            />
           ))
         }
       </ul>
@@ -254,8 +150,6 @@ Outline.propTypes = {
   onItemClick: PropTypes.func,
   onLoadError: PropTypes.func,
   onLoadSuccess: PropTypes.func,
-  onParseError: PropTypes.func,
-  onParseSuccess: PropTypes.func,
   pdf: isPdf,
   ...eventsProps(),
 };

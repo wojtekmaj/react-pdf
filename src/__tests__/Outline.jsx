@@ -92,4 +92,25 @@ describe('Outline', () => {
       expect(() => shallow(<Outline />)).toThrow();
     });
   });
+
+  describe('rendering', () => {
+    it('renders OutlineItem components properly', async () => {
+      const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
+
+      const component = shallow(
+        <Outline
+          onLoadSuccess={onLoadSuccess}
+          pdf={pdf}
+        />
+      );
+
+      expect.assertions(1);
+      return onLoadSuccessPromise.then(() => {
+        component.update();
+        const items = component.children().find('OutlineItem');
+
+        expect(items).toHaveLength(desiredLoadedOutline.length);
+      });
+    });
+  });
 });
