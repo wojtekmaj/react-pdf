@@ -86,7 +86,7 @@ export default class PageAnnotations extends Component {
     const { annotations } = this.state;
 
     if (!annotations) {
-      return null;
+      return;
     }
 
     const { linkService, page } = this.props;
@@ -100,7 +100,11 @@ export default class PageAnnotations extends Component {
       viewport,
     };
 
-    return PDFJS.AnnotationLayer.render(parameters);
+    try {
+      PDFJS.AnnotationLayer.render(parameters);
+    } catch (error) {
+      errorOnDev(error.message, error);
+    }
   }
 
   render() {
