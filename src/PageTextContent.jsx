@@ -21,9 +21,9 @@ export default class PageTextContent extends Component {
     this.getTextContent();
   }
 
-  componentWillReceiveProps(nextProps, nextContent) {
-    if (nextContent.page !== this.context.page) {
-      this.getTextContent(nextContent);
+  componentWillReceiveProps(nextProps, nextContext) {
+    if (nextContext.page !== this.context.page) {
+      this.getTextContent(nextContext);
     }
   }
 
