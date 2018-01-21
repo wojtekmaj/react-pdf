@@ -33,9 +33,9 @@ describe('Page', () => {
     desiredLoadedPage.pageIndex = page.pageIndex;
     desiredLoadedPage.pageInfo = page.pageInfo;
 
-    const page2 = await pdf.getPage(1);
-    desiredLoadedPage.pageIndex = page2.pageIndex;
-    desiredLoadedPage.pageInfo = page2.pageInfo;
+    const page2 = await pdf.getPage(2);
+    desiredLoadedPage2.pageIndex = page2.pageIndex;
+    desiredLoadedPage2.pageInfo = page2.pageInfo;
 
     registerPageArguments.push(
       page.pageIndex,
