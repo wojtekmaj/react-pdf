@@ -65,7 +65,17 @@ export default class PageAnnotations extends Component {
   }
 
   getAnnotations(props = this.props) {
-    this.runningTask = makeCancellable(props.page.getAnnotations());
+    const { page } = props;
+
+    if (!page) {
+      throw new Error('Attempted to load page text content, but no page was specified.');
+    }
+
+    if (this.state.annotations !== null) {
+      this.setState({ annotations: null });
+    }
+
+    this.runningTask = makeCancellable(page.getAnnotations());
 
     return this.runningTask.promise
       .then(this.onGetAnnotationsSuccess)
