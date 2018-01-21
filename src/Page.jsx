@@ -72,6 +72,12 @@ export default class Page extends Component {
     if (this.props.onRenderSuccess) {
       context.onRenderSuccess = this.props.onRenderSuccess;
     }
+    if (this.props.onGetAnnotationsError) {
+      context.onGetAnnotationsError = this.props.onGetAnnotationsError;
+    }
+    if (this.props.onGetAnnotationsSuccess) {
+      context.onGetAnnotationsSuccess = this.props.onGetAnnotationsSuccess;
+    }
     if (this.props.onGetTextError) {
       context.onGetTextError = this.props.onGetTextError;
     }

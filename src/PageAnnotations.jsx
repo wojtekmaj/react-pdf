@@ -34,7 +34,7 @@ export default class PageAnnotations extends Component {
 
   onGetAnnotationsSuccess = (annotations) => {
     callIfDefined(
-      this.props.onGetAnnotationsSuccess,
+      this.context.onGetAnnotationsSuccess,
       annotations,
     );
 
@@ -52,7 +52,7 @@ export default class PageAnnotations extends Component {
     errorOnDev(error.message, error);
 
     callIfDefined(
-      this.props.onGetAnnotationsError,
+      this.context.onGetAnnotationsError,
       error,
     );
 
@@ -108,12 +108,8 @@ export default class PageAnnotations extends Component {
 
 PageAnnotations.contextTypes = {
   linkService: isLinkService,
-  page: isPage,
-  rotate: isRotate,
-};
-
-PageAnnotations.propTypes = {
-  page: isPage,
   onGetAnnotationsError: PropTypes.func,
   onGetAnnotationsSuccess: PropTypes.func,
+  page: isPage,
+  rotate: isRotate,
 };
