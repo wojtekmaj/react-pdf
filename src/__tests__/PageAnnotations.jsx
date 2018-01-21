@@ -18,14 +18,20 @@ const { arrayBuffer: fileArrayBuffer } = loadPDF('./__mocks__/_pdf.pdf');
 describe('PageAnnotations', () => {
   // Loaded page
   let page;
+  let page2;
 
   // Loaded page text items
   let desiredAnnotations;
+  let desiredAnnotations2;
 
   beforeAll(async () => {
     const pdf = await PDFJS.getDocument({ data: fileArrayBuffer });
+
     page = await pdf.getPage(1);
     desiredAnnotations = await page.getAnnotations();
+
+    page2 = await pdf.getPage(2);
+    desiredAnnotations2 = await page2.getAnnotations();
   });
 
   describe('loading', () => {
@@ -33,8 +39,6 @@ describe('PageAnnotations', () => {
       const {
         func: onGetAnnotationsSuccess, promise: onGetAnnotationsSuccessPromise
       } = makeAsyncCallback();
-
-      muteConsole();
 
       shallow(
         <PageAnnotations
@@ -45,8 +49,6 @@ describe('PageAnnotations', () => {
 
       expect.assertions(1);
       await expect(onGetAnnotationsSuccessPromise).resolves.toMatchObject(desiredAnnotations);
-
-      restoreConsole();
     });
 
     it('calls onGetAnnotationsError when failed to load annotations', async () => {
@@ -67,6 +69,33 @@ describe('PageAnnotations', () => {
       await expect(onGetAnnotationsErrorPromise).resolves.toBeInstanceOf(Error);
 
       restoreConsole();
+    });
+
+    it('replaces annotations properly', async () => {
+      const {
+        func: onGetAnnotationsSuccess, promise: onGetAnnotationsSuccessPromise
+      } = makeAsyncCallback();
+
+      const mountedComponent = shallow(
+        <PageAnnotations
+          onGetAnnotationsSuccess={onGetAnnotationsSuccess}
+          page={page}
+        />
+      );
+
+      expect.assertions(2);
+      await expect(onGetAnnotationsSuccessPromise).resolves.toMatchObject(desiredAnnotations);
+
+      const {
+        func: onGetAnnotationsSuccess2, promise: onGetAnnotationsSuccessPromise2
+      } = makeAsyncCallback();
+
+      mountedComponent.setProps({
+        onGetAnnotationsSuccess: onGetAnnotationsSuccess2,
+        page: page2,
+      });
+
+      await expect(onGetAnnotationsSuccessPromise2).resolves.toMatchObject(desiredAnnotations2);
     });
   });
 });

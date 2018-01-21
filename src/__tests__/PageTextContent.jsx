@@ -18,15 +18,22 @@ const { arrayBuffer: fileArrayBuffer } = loadPDF('./__mocks__/_pdf.pdf');
 describe('PageTextContent', () => {
   // Loaded page
   let page;
+  let page2;
 
   // Loaded page text items
   let desiredTextItems;
+  let desiredTextItems2;
 
   beforeAll(async () => {
     const pdf = await PDFJS.getDocument({ data: fileArrayBuffer });
+
     page = await pdf.getPage(1);
     const textContent = await page.getTextContent();
     desiredTextItems = textContent.items;
+
+    page2 = await pdf.getPage(2);
+    const textContent2 = await page2.getTextContent();
+    desiredTextItems2 = textContent2.items;
   });
 
   describe('loading', () => {
@@ -60,6 +67,29 @@ describe('PageTextContent', () => {
       await expect(onGetTextErrorPromise).resolves.toBeInstanceOf(Error);
 
       restoreConsole();
+    });
+
+    it('replaces text content properly', async () => {
+      const { func: onGetTextSuccess, promise: onGetTextSuccessPromise } = makeAsyncCallback();
+
+      const mountedComponent = shallow(
+        <PageTextContent
+          onGetTextSuccess={onGetTextSuccess}
+          page={page}
+        />
+      );
+
+      expect.assertions(2);
+      await expect(onGetTextSuccessPromise).resolves.toMatchObject(desiredTextItems);
+
+      const { func: onGetTextSuccess2, promise: onGetTextSuccessPromise2 } = makeAsyncCallback();
+
+      mountedComponent.setProps({
+        onGetTextSuccess: onGetTextSuccess2,
+        page: page2,
+      });
+
+      await expect(onGetTextSuccessPromise2).resolves.toMatchObject(desiredTextItems2);
     });
   });
 
