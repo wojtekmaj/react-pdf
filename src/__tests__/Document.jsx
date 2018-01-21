@@ -3,7 +3,7 @@ import { mount, shallow } from 'enzyme';
 
 import { Document } from '../entry.noworker';
 
-import { makeAsyncCallback, loadPDF } from './utils';
+import { makeAsyncCallback, loadPDF, muteConsole, restoreConsole } from './utils';
 
 const {
   arrayBuffer: fileArrayBuffer,
@@ -232,6 +232,57 @@ describe('Document', () => {
 
         expect(loading).toHaveLength(1);
         expect(loading.text()).toBe('Loading');
+      });
+    });
+
+    it('renders "Failed to load PDF file." when failed to load a document', () => {
+      const { func: onLoadError, promise: onLoadErrorPromise } = makeAsyncCallback();
+      const failingPdf = 'data:application/pdf;base64,abcdef';
+
+      muteConsole();
+
+      const component = shallow(
+        <Document
+          file={failingPdf}
+          onLoadError={onLoadError}
+        />
+      );
+
+      expect.assertions(2);
+      return onLoadErrorPromise.then(() => {
+        component.update();
+        const error = component.find('.react-pdf__message--error');
+
+        expect(error).toHaveLength(1);
+        expect(error.text()).toBe('Failed to load PDF file.');
+
+        restoreConsole();
+      });
+    });
+
+    it('renders custom error message when failed to load a document', () => {
+      const { func: onLoadError, promise: onLoadErrorPromise } = makeAsyncCallback();
+      const failingPdf = 'data:application/pdf;base64,abcdef';
+
+      muteConsole();
+
+      const component = shallow(
+        <Document
+          file={failingPdf}
+          error="Error"
+          onLoadError={onLoadError}
+        />
+      );
+
+      expect.assertions(2);
+      return onLoadErrorPromise.then(() => {
+        component.update();
+        const error = component.find('.react-pdf__message--error');
+
+        expect(error).toHaveLength(1);
+        expect(error.text()).toBe('Error');
+
+        restoreConsole();
       });
     });
 
