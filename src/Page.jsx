@@ -183,6 +183,10 @@ export default class Page extends Component {
     return `${this.state.page.pageIndex}@${this.scale}/${this.rotate}`;
   }
 
+  get pageKeyNoScale() {
+    return `${this.state.page.pageIndex}/${this.rotate}`;
+  }
+
   get pageProps() {
     return {
       page: this.state.page,
@@ -255,7 +259,7 @@ export default class Page extends Component {
 
     return [
       <PageSVG
-        key={`${this.pageKey}_svg`}
+        key={`${this.pageKeyNoScale}_svg`}
         onRenderError={onRenderError}
         onRenderSuccess={onRenderSuccess}
         {...this.pageProps}
