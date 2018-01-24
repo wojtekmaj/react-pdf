@@ -62,12 +62,10 @@ describe('OutlineItem', () => {
       const { func: onClick, promise: onClickPromise } = makeAsyncCallback();
 
       const component = mount(
-        <OutlineItem
-          item={outlineItem}
-          onClick={onClick}
-        />,
+        <OutlineItem item={outlineItem} />,
         {
           context: {
+            onClick,
             pdf,
           }
         }

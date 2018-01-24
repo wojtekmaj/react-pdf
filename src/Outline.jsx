@@ -33,6 +33,12 @@ export default class Outline extends Component {
     cancelRunningTask(this.runningTask);
   }
 
+  getChildContext() {
+    return {
+      onClick: this.onItemClick,
+    };
+  }
+
   get eventProps() {
     return makeEventProps(this.props, () => this.state.outline);
   }
@@ -99,7 +105,6 @@ export default class Outline extends Component {
   }
 
   renderOutline() {
-    const { pdf } = this.props;
     const { outline } = this.state;
 
     return (
@@ -113,8 +118,6 @@ export default class Outline extends Component {
                   itemIndex
               }
               item={item}
-              onClick={this.onItemClick}
-              pdf={pdf}
             />
           ))
         }
@@ -143,6 +146,10 @@ export default class Outline extends Component {
     );
   }
 }
+
+Outline.childContextTypes = {
+  onClick: PropTypes.func,
+};
 
 Outline.contextTypes = {
   pdf: isPdf,

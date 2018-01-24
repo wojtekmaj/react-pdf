@@ -52,7 +52,7 @@ export default class OutlineItem extends Component {
     const pageNumber = await this.getPageNumber();
 
     callIfDefined(
-      this.props.onClick,
+      this.context.onClick,
       {
         pageIndex,
         pageNumber,
@@ -67,8 +67,6 @@ export default class OutlineItem extends Component {
       return null;
     }
 
-    const { pdf } = this.context;
-    const { onClick } = this.props;
     const { items: subitems } = item;
 
     return (
@@ -82,7 +80,6 @@ export default class OutlineItem extends Component {
                   subitemIndex
               }
               item={subitem}
-              onClick={onClick}
             />
           ))
         }
@@ -114,6 +111,7 @@ const isDestination = PropTypes.oneOfType([
 ]);
 
 OutlineItem.contextTypes = {
+  onClick: PropTypes.func,
   pdf: isPdf.isRequired,
 };
 
@@ -126,5 +124,4 @@ OutlineItem.propTypes = {
       destination: isDestination,
     })),
   }).isRequired,
-  onClick: PropTypes.func,
 };
