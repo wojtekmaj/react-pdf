@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-import { callIfDefined } from './shared/utils';
+import { callIfDefined, makePageCallback } from './shared/utils';
 
 import { isPage, isRotate } from './shared/propTypes';
 
@@ -20,7 +20,12 @@ export default class PageSVG extends Component {
   onRenderSuccess = () => {
     this.renderer = null;
 
-    callIfDefined(this.props.onRenderSuccess);
+    const { page, scale } = this.props;
+
+    callIfDefined(
+      this.props.onRenderSuccess,
+      makePageCallback(page, scale),
+    );
   }
 
   /**

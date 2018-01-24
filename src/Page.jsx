@@ -13,6 +13,7 @@ import {
   errorOnDev,
   isProvided,
   makeCancellable,
+  makePageCallback,
 } from './shared/utils';
 import { makeEventProps } from './shared/events';
 
@@ -59,11 +60,9 @@ export default class Page extends Component {
    */
   onLoadSuccess = (page) => {
     this.setState({ page }, () => {
-      const { pageCallback } = this;
-
       callIfDefined(
         this.props.onLoadSuccess,
-        pageCallback,
+        makePageCallback(page, this.scale),
       );
 
       callIfDefined(
@@ -119,21 +118,6 @@ export default class Page extends Component {
     return null;
   }
 
-  getPageCallback = () => {
-    const { page } = this.state;
-    const { scale } = this;
-
-    return {
-      ...page,
-      // Legacy callback params
-      get width() { return page.view[2] * scale; },
-      get height() { return page.view[3] * scale; },
-      scale,
-      get originalWidth() { return page.view[2]; },
-      get originalHeight() { return page.view[3]; },
-    };
-  }
-
   get pageIndex() {
     return this.getPageIndex();
   }
@@ -171,12 +155,12 @@ export default class Page extends Component {
     return scale * pageScale;
   }
 
-  get pageCallback() {
-    return this.getPageCallback();
-  }
-
   get eventProps() {
-    return makeEventProps(this.props, this.getPageCallback);
+    return makeEventProps(this.props, () => {
+      const { scale } = this;
+      const { page } = this.state;
+      return makePageCallback(page, scale);
+    });
   }
 
   get pageKey() {

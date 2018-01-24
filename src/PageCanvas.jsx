@@ -5,6 +5,7 @@ import {
   callIfDefined,
   errorOnDev,
   getPixelRatio,
+  makePageCallback,
 } from './shared/utils';
 
 import { isPage, isRotate } from './shared/propTypes';
@@ -24,7 +25,12 @@ export default class PageCanvas extends Component {
   onRenderSuccess = () => {
     this.renderer = null;
 
-    callIfDefined(this.props.onRenderSuccess);
+    const { page, scale } = this.props;
+
+    callIfDefined(
+      this.props.onRenderSuccess,
+      makePageCallback(page, scale),
+    );
   }
 
   /**
