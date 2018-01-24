@@ -154,3 +154,21 @@ export const makeCancellable = (promise) => {
     },
   };
 };
+
+export const cancelRunningTask = (runningTask) => {
+  if (!runningTask || !runningTask.cancel) {
+    return;
+  }
+
+  runningTask.cancel();
+};
+
+export const makePageCallback = (page, scale) => ({
+  ...page,
+  // Legacy callback params
+  get width() { return page.view[2] * scale; },
+  get height() { return page.view[3] * scale; },
+  scale,
+  get originalWidth() { return page.view[2]; },
+  get originalHeight() { return page.view[3]; },
+});

@@ -1,18 +1,31 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-import { callIfDefined } from './shared/utils';
+import { callIfDefined, makePageCallback } from './shared/utils';
 
 import { isPage, isRotate } from './shared/propTypes';
 
 export default class PageSVG extends Component {
+  state = {
+    svg: null,
+  }
+
+  componentDidMount() {
+    this.renderSVG();
+  }
+
   /**
    * Called when a page is rendered successfully.
    */
   onRenderSuccess = () => {
     this.renderer = null;
 
-    callIfDefined(this.context.onRenderSuccess);
+    const { page, scale } = this.context;
+
+    callIfDefined(
+      this.context.onRenderSuccess,
+      makePageCallback(page, scale),
+    );
   }
 
   /**
@@ -35,12 +48,7 @@ export default class PageSVG extends Component {
     return page.getViewport(scale, rotate);
   }
 
-  drawPageOnContainer = (element) => {
-    if (!element) {
-      return null;
-    }
-
-    const { viewport } = this;
+  renderSVG = () => {
     const { page } = this.context;
 
     this.renderer = page.getOperatorList();
@@ -48,16 +56,32 @@ export default class PageSVG extends Component {
     return this.renderer
       .then((operatorList) => {
         const svgGfx = new PDFJS.SVGGraphics(page.commonObjs, page.objs);
-        this.renderer = svgGfx.getSVG(operatorList, viewport)
+        this.renderer = svgGfx.getSVG(operatorList, this.viewport)
           .then((svg) => {
             svg.style.maxWidth = '100%';
             svg.style.height = 'auto';
-            element.appendChild(svg);
-            this.onRenderSuccess();
+            this.setState({ svg }, () => this.onRenderSuccess());
           })
           .catch(this.onRenderError);
       })
       .catch(this.onRenderError);
+  }
+
+  drawPageOnContainer = (element) => {
+    const { svg } = this.state;
+
+    if (!element || !svg) {
+      return;
+    }
+
+    const renderedPage = element.firstElementChild;
+    if (renderedPage) {
+      const { width, height } = this.viewport;
+      renderedPage.setAttribute('width', width);
+      renderedPage.setAttribute('height', height);
+    } else {
+      element.appendChild(svg);
+    }
   }
 
   render() {
@@ -68,7 +92,8 @@ export default class PageSVG extends Component {
           display: 'block',
           backgroundColor: 'white',
         }}
-        ref={this.drawPageOnContainer}
+        // Note: This cannot be shortened, as we need this function to be called with each render.
+        ref={ref => this.drawPageOnContainer(ref)}
       />
     );
   }

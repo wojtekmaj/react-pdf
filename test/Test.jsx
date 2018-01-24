@@ -36,6 +36,9 @@ export default class Test extends Component {
       pageNumber: 1,
     })
 
+  onPageRenderSuccess = page =>
+    console.log('Rendered a page', page);
+
   onItemClick = ({ pageNumber }) =>
     this.setState({ pageNumber })
 

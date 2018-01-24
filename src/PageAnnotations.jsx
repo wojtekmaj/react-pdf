@@ -5,6 +5,7 @@ import './annotation_layer_builder.css';
 
 import {
   callIfDefined,
+  cancelRunningTask,
   errorOnDev,
   makeCancellable,
 } from './shared/utils';
@@ -27,9 +28,7 @@ export default class PageAnnotations extends Component {
   }
 
   componentWillUnmount() {
-    if (this.runningTask && this.runningTask.cancel) {
-      this.runningTask.cancel();
-    }
+    cancelRunningTask(this.runningTask);
   }
 
   onGetAnnotationsSuccess = (annotations) => {
@@ -66,7 +65,17 @@ export default class PageAnnotations extends Component {
   }
 
   getAnnotations(context = this.context) {
-    this.runningTask = makeCancellable(context.page.getAnnotations());
+    const { page } = context;
+
+    if (!page) {
+      throw new Error('Attempted to load page text content, but no page was specified.');
+    }
+
+    if (this.state.annotations !== null) {
+      this.setState({ annotations: null });
+    }
+
+    this.runningTask = makeCancellable(page.getAnnotations());
 
     return this.runningTask.promise
       .then(this.onGetAnnotationsSuccess)
@@ -77,7 +86,7 @@ export default class PageAnnotations extends Component {
     const { annotations } = this.state;
 
     if (!annotations) {
-      return null;
+      return;
     }
 
     const { linkService, page } = this.context;
@@ -91,7 +100,11 @@ export default class PageAnnotations extends Component {
       viewport,
     };
 
-    return PDFJS.AnnotationLayer.render(parameters);
+    try {
+      PDFJS.AnnotationLayer.render(parameters);
+    } catch (error) {
+      errorOnDev(error.message, error);
+    }
   }
 
   render() {

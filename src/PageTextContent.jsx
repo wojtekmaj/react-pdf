@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 
 import {
   callIfDefined,
+  cancelRunningTask,
   errorOnDev,
   makeCancellable,
 } from './shared/utils';
@@ -28,9 +29,7 @@ export default class PageTextContent extends Component {
   }
 
   componentWillUnmount() {
-    if (this.runningTask && this.runningTask.cancel) {
-      this.runningTask.cancel();
-    }
+    cancelRunningTask(this.runningTask);
   }
 
   onGetTextSuccess = (textContent) => {

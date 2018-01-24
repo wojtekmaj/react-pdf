@@ -66,20 +66,20 @@ export const isPageIndex = (props, propName, componentName) => {
 
   if (isDefined(pageIndex)) {
     if (typeof pageIndex !== 'number') {
-      return new Error(`Warning: Failed prop type: \`${propName}\` of type \`${typeof pageIndex}\` supplied to \`${componentName}\`, expected instance of \`Number\`.`);
+      return new Error(`\`${propName}\` of type \`${typeof pageIndex}\` supplied to \`${componentName}\`, expected \`number\`.`);
     }
 
     if (pageIndex < 0) {
-      return new Error(`Warning: Failed prop type: expected \`${propName}\` to be greater or equal to 0.`);
+      return new Error(`Expected \`${propName}\` to be greater or equal to 0.`);
     }
 
     const { numPages } = pdf.pdfInfo;
 
     if (pageIndex + 1 > numPages) {
-      return new Error(`Warning: Failed prop type: expected \`${propName}\` to be less or equal to ${numPages - 1}.`);
+      return new Error(`Expected \`${propName}\` to be less or equal to ${numPages - 1}.`);
     }
   } else if (!isDefined(pageNumber)) {
-    return new Error(`Warning: Failed prop type: \`${propName}\` not supplied. Either pageIndex or pageNumber must be supplied to \`${componentName}\`.`);
+    return new Error(`\`${propName}\` not supplied. Either pageIndex or pageNumber must be supplied to \`${componentName}\`.`);
   }
 
   // Everything is fine
@@ -96,20 +96,20 @@ export const isPageNumber = (props, propName, componentName) => {
 
   if (isDefined(pageNumber)) {
     if (typeof pageNumber !== 'number') {
-      return new Error(`Warning: Failed prop type: \`${propName}\` of type \`${typeof pageNumber}\` supplied to \`${componentName}\`, expected instance of \`Number\`.`);
+      return new Error(`\`${propName}\` of type \`${typeof pageNumber}\` supplied to \`${componentName}\`, expected \`number\`.`);
     }
 
     if (pageNumber < 1) {
-      return new Error(`Warning: Failed prop type: expected \`${propName}\` to be greater or equal to 1.`);
+      return new Error(`Expected \`${propName}\` to be greater or equal to 1.`);
     }
 
     const { numPages } = pdf.pdfInfo;
 
     if (pageNumber > numPages) {
-      return new Error(`Warning: Failed prop type: expected \`${propName}\` to be less or equal to ${numPages}.`);
+      return new Error(`Expected \`${propName}\` to be less or equal to ${numPages}.`);
     }
   } else if (!isDefined(pageIndex)) {
-    return new Error(`Warning: Failed prop type: \`${propName}\` not supplied. Either pageIndex or pageNumber must be supplied to \`${componentName}\`.`);
+    return new Error(`\`${propName}\` not supplied. Either pageIndex or pageNumber must be supplied to \`${componentName}\`.`);
   }
 
   // Everything is fine

@@ -9,9 +9,11 @@ import PageAnnotations from './PageAnnotations';
 
 import {
   callIfDefined,
+  cancelRunningTask,
   errorOnDev,
   isProvided,
   makeCancellable,
+  makePageCallback,
 } from './shared/utils';
 import { makeEventProps } from './shared/events';
 
@@ -50,9 +52,7 @@ export default class Page extends Component {
       this.pageIndex,
     );
 
-    if (this.runningTask && this.runningTask.cancel) {
-      this.runningTask.cancel();
-    }
+    cancelRunningTask(this.runningTask);
   }
 
   getChildContext() {
@@ -93,11 +93,9 @@ export default class Page extends Component {
    */
   onLoadSuccess = (page) => {
     this.setState({ page }, () => {
-      const { pageCallback } = this;
-
       callIfDefined(
         this.props.onLoadSuccess,
-        pageCallback,
+        makePageCallback(page, this.scale),
       );
 
       callIfDefined(
@@ -153,21 +151,6 @@ export default class Page extends Component {
     return null;
   }
 
-  getPageCallback = () => {
-    const { page } = this.state;
-    const { scale } = this;
-
-    return {
-      ...page,
-      // Legacy callback params
-      get width() { return page.view[2] * scale; },
-      get height() { return page.view[3] * scale; },
-      scale,
-      get originalWidth() { return page.view[2]; },
-      get originalHeight() { return page.view[3]; },
-    };
-  }
-
   get pageIndex() {
     return this.getPageIndex();
   }
@@ -208,16 +191,28 @@ export default class Page extends Component {
     return scale * pageScale;
   }
 
-  get pageCallback() {
-    return this.getPageCallback();
-  }
-
   get eventProps() {
-    return makeEventProps(this.props, this.getPageCallback);
+    return makeEventProps(this.props, () => {
+      const { scale } = this;
+      const { page } = this.state;
+      return makePageCallback(page, scale);
+    });
   }
 
   get pageKey() {
     return `${this.state.page.pageIndex}@${this.scale}/${this.rotate}`;
+  }
+
+  get pageKeyNoScale() {
+    return `${this.state.page.pageIndex}/${this.rotate}`;
+  }
+
+  get pageProps() {
+    return {
+      page: this.state.page,
+      rotate: this.rotate,
+      scale: this.scale,
+    };
   }
 
   loadPage(props = this.props, context = this.context) {
@@ -262,7 +257,7 @@ export default class Page extends Component {
 
   renderSVG() {
     return [
-      <PageSVG key={`${this.pageKey}_svg`} />,
+      <PageSVG key={`${this.pageKeyNoScale}_svg`} />,
       /**
        * As of now, PDF.js 2.0.120 returns warnings on unimplemented annotations.
        * Therefore, as a fallback, we render "traditional" PageAnnotations component.
