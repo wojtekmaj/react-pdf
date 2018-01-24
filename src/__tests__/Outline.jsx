@@ -102,10 +102,12 @@ describe('Outline', () => {
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
       const component = shallow(
-        <Outline
-          onLoadSuccess={onLoadSuccess}
-          pdf={pdf}
-        />
+        <Outline onLoadSuccess={onLoadSuccess} />,
+        {
+          context: {
+            pdf,
+          },
+        }
       );
 
       expect.assertions(1);

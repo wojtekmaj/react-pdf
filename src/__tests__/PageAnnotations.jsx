@@ -83,10 +83,13 @@ describe('PageAnnotations', () => {
       } = makeAsyncCallback();
 
       const mountedComponent = shallow(
-        <PageAnnotations
-          onGetAnnotationsSuccess={onGetAnnotationsSuccess}
-          page={page}
-        />
+        <PageAnnotations />,
+        {
+          context: {
+            onGetAnnotationsSuccess,
+            page,
+          }
+        }
       );
 
       expect.assertions(2);
@@ -96,7 +99,7 @@ describe('PageAnnotations', () => {
         func: onGetAnnotationsSuccess2, promise: onGetAnnotationsSuccessPromise2
       } = makeAsyncCallback();
 
-      mountedComponent.setProps({
+      mountedComponent.setContext({
         onGetAnnotationsSuccess: onGetAnnotationsSuccess2,
         page: page2,
       });

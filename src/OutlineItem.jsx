@@ -83,7 +83,6 @@ export default class OutlineItem extends Component {
               }
               item={subitem}
               onClick={onClick}
-              pdf={pdf}
             />
           ))
         }

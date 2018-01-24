@@ -79,10 +79,13 @@ describe('PageTextContent', () => {
       const { func: onGetTextSuccess, promise: onGetTextSuccessPromise } = makeAsyncCallback();
 
       const mountedComponent = shallow(
-        <PageTextContent
-          onGetTextSuccess={onGetTextSuccess}
-          page={page}
-        />
+        <PageTextContent />,
+        {
+          context: {
+            onGetTextSuccess,
+            page,
+          }
+        }
       );
 
       expect.assertions(2);
@@ -90,7 +93,7 @@ describe('PageTextContent', () => {
 
       const { func: onGetTextSuccess2, promise: onGetTextSuccessPromise2 } = makeAsyncCallback();
 
-      mountedComponent.setProps({
+      mountedComponent.setContext({
         onGetTextSuccess: onGetTextSuccess2,
         page: page2,
       });
