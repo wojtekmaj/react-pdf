@@ -30,7 +30,7 @@
     "eslint-plugin-class-property": "^1.1.0",
     "eslint-plugin-import": "^2.8.0",
     "eslint-plugin-jsx-a11y": "^6.0.3",
-    "eslint-plugin-react": "^7.5.1",
+    "eslint-plugin-react": "^7.6.0",
     "less": "^2.7.3",
     "parcel-bundler": "^1.5.0"
   }
