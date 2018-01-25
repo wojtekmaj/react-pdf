@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-import './annotation_layer_builder.css';
-
 import {
   callIfDefined,
   cancelRunningTask,

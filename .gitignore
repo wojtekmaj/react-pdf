@@ -5,7 +5,7 @@ coverage
 node_modules
 sample/**/dist
 sample/**/package-lock.json
-test/build
+test/dist
 test/package-lock.json
 test_pdfs
 npm-debug.log

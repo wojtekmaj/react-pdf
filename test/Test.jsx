@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Document, Outline, Page, setOptions } from 'react-pdf/src/entry.webpack';
+import 'react-pdf/src/Page/AnnotationLayer.css';
 
 import './Test.less';
 
