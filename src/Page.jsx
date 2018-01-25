@@ -345,10 +345,10 @@ Page.defaultProps = {
 };
 
 Page.childContextTypes = {
-  onRenderError: PropTypes.func,
-  onRenderSuccess: PropTypes.func,
   onGetTextError: PropTypes.func,
   onGetTextSuccess: PropTypes.func,
+  onRenderError: PropTypes.func,
+  onRenderSuccess: PropTypes.func,
   page: isPage,
   rotate: isRotate,
   scale: PropTypes.number,
