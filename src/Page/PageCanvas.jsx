@@ -6,9 +6,9 @@ import {
   errorOnDev,
   getPixelRatio,
   makePageCallback,
-} from './shared/utils';
+} from '../shared/utils';
 
-import { isPage, isRotate } from './shared/propTypes';
+import { isPage, isRotate } from '../shared/propTypes';
 
 export default class PageCanvas extends Component {
   componentWillUnmount() {

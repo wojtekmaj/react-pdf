@@ -8,11 +8,11 @@ import {
   cancelRunningTask,
   errorOnDev,
   makeCancellable,
-} from './shared/utils';
+} from '../shared/utils';
 
-import { isLinkService, isPage, isRotate } from './shared/propTypes';
+import { isLinkService, isPage, isRotate } from '../shared/propTypes';
 
-export default class PageAnnotations extends Component {
+export default class AnnotationLayer extends Component {
   state = {
     annotations: null,
   }
@@ -119,7 +119,7 @@ export default class PageAnnotations extends Component {
   }
 }
 
-PageAnnotations.contextTypes = {
+AnnotationLayer.contextTypes = {
   linkService: isLinkService,
   onGetAnnotationsError: PropTypes.func,
   onGetAnnotationsSuccess: PropTypes.func,

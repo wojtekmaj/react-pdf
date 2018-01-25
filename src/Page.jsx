@@ -2,10 +2,10 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import mergeClassNames from 'merge-class-names';
 
-import PageCanvas from './PageCanvas';
-import PageSVG from './PageSVG';
-import PageTextContent from './PageTextContent';
-import PageAnnotations from './PageAnnotations';
+import PageCanvas from './Page/PageCanvas';
+import PageSVG from './Page/PageSVG';
+import PageTextContent from './Page/TextLayer';
+import PageAnnotations from './Page/AnnotationLayer';
 
 import {
   callIfDefined,

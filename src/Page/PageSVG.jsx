@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-import { callIfDefined, makePageCallback } from './shared/utils';
+import { callIfDefined, makePageCallback } from '../shared/utils';
 
-import { isPage, isRotate } from './shared/propTypes';
+import { isPage, isRotate } from '../shared/propTypes';
 
 export default class PageSVG extends Component {
   state = {

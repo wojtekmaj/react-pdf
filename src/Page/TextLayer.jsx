@@ -6,14 +6,14 @@ import {
   cancelRunningTask,
   errorOnDev,
   makeCancellable,
-} from './shared/utils';
+} from '../shared/utils';
 
-import { isPage, isRotate } from './shared/propTypes';
+import { isPage, isRotate } from '../shared/propTypes';
 
 // Render disproportion above which font will be considered broken and fallback will be used
 const BROKEN_FONT_ALARM_THRESHOLD = 0.1;
 
-export default class PageTextContent extends Component {
+export default class TextLayer extends Component {
   state = {
     textItems: null,
   }
@@ -222,7 +222,7 @@ export default class PageTextContent extends Component {
   }
 }
 
-PageTextContent.contextTypes = {
+TextLayer.contextTypes = {
   onGetTextError: PropTypes.func,
   onGetTextSuccess: PropTypes.func,
   page: isPage.isRequired,
