@@ -8,7 +8,7 @@ module.exports = {
     './Sample',
   ],
   output: {
-    path: path.join(__dirname, 'build'),
+    path: path.join(__dirname, 'dist'),
     filename: '[name].bundle.js',
   },
   resolve: {

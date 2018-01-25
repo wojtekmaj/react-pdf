@@ -82,7 +82,7 @@ It is crucial for performance to use PDF.js worker whenever possible. This ensur
 If you use Webpack, you're in luck. Instead of directly importing/requiring `'react-pdf'`, import it like so:
 
 ```js
-import { Document } from 'react-pdf/build/entry.webpack';
+import { Document } from 'react-pdf/dist/entry.webpack';
 ```
 
 …and you're all set!
@@ -96,7 +96,7 @@ If you use Browserify or other bundling tools, you will have to make sure on you
 If you absolutely have to, you can import React PDF with worker disabled. You can do so by importing React-PDF like so:
 
 ```js
-import { Document } from 'react-pdf/build/entry.noworker';
+import { Document } from 'react-pdf/dist/entry.noworker';
 ```
 
 ### Support for non-latin characters
