@@ -2,10 +2,10 @@
   "name": "react-pdf",
   "version": "3.0.0-alpha.2",
   "description": "Easily display PDF files in your React application.",
-  "main": "build/entry.js",
+  "main": "dist/entry.js",
   "es6": "src/entry.js",
   "scripts": {
-    "build": "babel ./src -d ./build --copy-files --ignore **/__tests__",
+    "build": "babel ./src -d ./dist --copy-files --ignore **/__tests__",
     "prepublishOnly": "npm run build",
     "test": "npm run test-eslint && npm run test-jest",
     "test-eslint": "eslint ./src",

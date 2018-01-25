@@ -1,7 +1,9 @@
+.cache
 .vscode
-build
+dist
+coverage
 node_modules
-sample/**/build
+sample/**/dist
 sample/**/package-lock.json
 test/build
 test/package-lock.json
