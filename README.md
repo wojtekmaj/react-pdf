@@ -99,6 +99,14 @@ If you absolutely have to, you can import React PDF with worker disabled. You ca
 import { Document } from 'react-pdf/dist/entry.noworker';
 ```
 
+### Support for annotations
+
+If you want to use annotations (e.g. links) in PDFs rendered by React-PDF, then you would need to include stylesheet necessary for annotations to be correctly displayed like so:
+
+```js
+import 'react-pdf/dist/Page/AnnotationLayer.css';
+```
+
 ### Support for non-latin characters
 
 If you want to ensure that PDFs with non-latin characters will render perfectly, or you have encountered the following warning:
