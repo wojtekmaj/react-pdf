@@ -20,10 +20,10 @@ export default class PageSVG extends Component {
   onRenderSuccess = () => {
     this.renderer = null;
 
-    const { page, scale } = this.props;
+    const { page, scale } = this.context;
 
     callIfDefined(
-      this.props.onRenderSuccess,
+      this.context.onRenderSuccess,
       makePageCallback(page, scale),
     );
   }
@@ -37,19 +37,19 @@ export default class PageSVG extends Component {
     }
 
     callIfDefined(
-      this.props.onRenderError,
+      this.context.onRenderError,
       error,
     );
   }
 
   get viewport() {
-    const { page, rotate, scale } = this.props;
+    const { page, rotate, scale } = this.context;
 
     return page.getViewport(scale, rotate);
   }
 
   renderSVG = () => {
-    const { page } = this.props;
+    const { page } = this.context;
 
     this.renderer = page.getOperatorList();
 
@@ -99,7 +99,7 @@ export default class PageSVG extends Component {
   }
 }
 
-PageSVG.propTypes = {
+PageSVG.contextTypes = {
   onRenderError: PropTypes.func,
   onRenderSuccess: PropTypes.func,
   page: isPage.isRequired,

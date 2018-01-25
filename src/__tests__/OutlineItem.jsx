@@ -30,10 +30,12 @@ describe('OutlineItem', () => {
   describe('rendering', () => {
     it('renders an item properly', () => {
       const component = shallow(
-        <OutlineItem
-          item={outlineItem}
-          pdf={pdf}
-        />
+        <OutlineItem item={outlineItem} />,
+        {
+          context: {
+            pdf,
+          }
+        }
       );
 
       const title = component.find('a').first();
@@ -43,10 +45,12 @@ describe('OutlineItem', () => {
 
     it('renders item\'s subitems properly', () => {
       const component = mount(
-        <OutlineItem
-          item={outlineItem}
-          pdf={pdf}
-        />
+        <OutlineItem item={outlineItem} />,
+        {
+          context: {
+            pdf,
+          }
+        }
       );
 
       const subitems = component.children().find('OutlineItem');
@@ -58,11 +62,13 @@ describe('OutlineItem', () => {
       const { func: onClick, promise: onClickPromise } = makeAsyncCallback();
 
       const component = mount(
-        <OutlineItem
-          item={outlineItem}
-          onClick={onClick}
-          pdf={pdf}
-        />
+        <OutlineItem item={outlineItem} />,
+        {
+          context: {
+            onClick,
+            pdf,
+          }
+        }
       );
 
       const title = component.find('a').first();

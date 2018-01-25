@@ -21,9 +21,9 @@ export default class PageAnnotations extends Component {
     this.getAnnotations();
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.page !== this.props.page) {
-      this.getAnnotations(nextProps);
+  componentWillReceiveProps(nextProps, nextContext) {
+    if (nextContext.page !== this.context.page) {
+      this.getAnnotations(nextContext);
     }
   }
 
@@ -33,7 +33,7 @@ export default class PageAnnotations extends Component {
 
   onGetAnnotationsSuccess = (annotations) => {
     callIfDefined(
-      this.props.onGetAnnotationsSuccess,
+      this.context.onGetAnnotationsSuccess,
       annotations,
     );
 
@@ -51,7 +51,7 @@ export default class PageAnnotations extends Component {
     errorOnDev(error.message, error);
 
     callIfDefined(
-      this.props.onGetAnnotationsError,
+      this.context.onGetAnnotationsError,
       error,
     );
 
@@ -59,13 +59,13 @@ export default class PageAnnotations extends Component {
   }
 
   get viewport() {
-    const { page, rotate, scale } = this.props;
+    const { page, rotate, scale } = this.context;
 
     return page.getViewport(scale, rotate);
   }
 
-  getAnnotations(props = this.props) {
-    const { page } = props;
+  getAnnotations(context = this.context) {
+    const { page } = context;
 
     if (!page) {
       throw new Error('Attempted to load page text content, but no page was specified.');
@@ -89,7 +89,7 @@ export default class PageAnnotations extends Component {
       return;
     }
 
-    const { linkService, page } = this.props;
+    const { linkService, page } = this.context;
     const viewport = this.viewport.clone({ dontFlip: true });
 
     const parameters = {
@@ -119,11 +119,10 @@ export default class PageAnnotations extends Component {
   }
 }
 
-PageAnnotations.propTypes = {
+PageAnnotations.contextTypes = {
   linkService: isLinkService,
-  page: isPage,
-  rotate: isRotate,
-  scale: PropTypes.number,
   onGetAnnotationsError: PropTypes.func,
   onGetAnnotationsSuccess: PropTypes.func,
+  page: isPage,
+  rotate: isRotate,
 };

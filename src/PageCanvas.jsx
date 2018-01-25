@@ -25,10 +25,10 @@ export default class PageCanvas extends Component {
   onRenderSuccess = () => {
     this.renderer = null;
 
-    const { page, scale } = this.props;
+    const { page, scale } = this.context;
 
     callIfDefined(
-      this.props.onRenderSuccess,
+      this.context.onRenderSuccess,
       makePageCallback(page, scale),
     );
   }
@@ -47,13 +47,13 @@ export default class PageCanvas extends Component {
     errorOnDev(error.message, error);
 
     callIfDefined(
-      this.props.onRenderError,
+      this.context.onRenderError,
       error,
     );
   }
 
   get renderViewport() {
-    const { page, rotate, scale } = this.props;
+    const { page, rotate, scale } = this.context;
 
     const pixelRatio = getPixelRatio();
 
@@ -61,7 +61,7 @@ export default class PageCanvas extends Component {
   }
 
   get viewport() {
-    const { page, rotate, scale } = this.props;
+    const { page, rotate, scale } = this.context;
 
     return page.getViewport(scale, rotate);
   }
@@ -71,7 +71,7 @@ export default class PageCanvas extends Component {
       return null;
     }
 
-    const { page } = this.props;
+    const { page } = this.context;
 
     const { renderViewport, viewport } = this;
 
@@ -116,7 +116,7 @@ export default class PageCanvas extends Component {
   }
 }
 
-PageCanvas.propTypes = {
+PageCanvas.contextTypes = {
   onRenderError: PropTypes.func,
   onRenderSuccess: PropTypes.func,
   page: isPage.isRequired,

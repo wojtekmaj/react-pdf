@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { mount, shallow } from 'enzyme';
 
 import { Document } from '../entry.noworker';
@@ -20,6 +21,12 @@ const {
 const OK = Symbol('OK');
 
 /* eslint-disable comma-dangle */
+
+const Child = () => <div className="Child" />;
+
+Child.contextTypes = {
+  pdf: PropTypes.any,
+};
 
 describe('Document', () => {
   // Object with basic loaded PDF information that shall match after successful loading
@@ -289,8 +296,6 @@ describe('Document', () => {
     it('passes rotate prop to its children', () => {
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
-      const Child = () => <div className="Child" />;
-
       const component = shallow(
         <Document
           file={fileFile}
@@ -305,15 +310,12 @@ describe('Document', () => {
       expect.assertions(1);
       return onLoadSuccessPromise.then(() => {
         component.update();
-        const child = component.find('Child');
-        expect(child.prop('rotate')).toBe(90);
+        expect(component.instance().getChildContext().rotate).toBe(90);
       });
     });
 
     it('does not overwrite rotate prop in its children when given rotate prop to both Document and its children', () => {
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
-
-      const Child = () => <div className="Child" />;
 
       const component = shallow(
         <Document

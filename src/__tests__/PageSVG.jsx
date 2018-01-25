@@ -20,10 +20,13 @@ describe('PageSVG', () => {
       muteConsole();
 
       mount(
-        <PageSVG
-          onRenderError={onRenderError}
-          page={failingPage}
-        />
+        <PageSVG />,
+        {
+          context: {
+            onRenderError,
+            page: failingPage,
+          }
+        }
       );
 
       expect.assertions(1);

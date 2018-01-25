@@ -9,7 +9,8 @@ import { isPdf } from './shared/propTypes';
 
 export default class OutlineItem extends Component {
   getDestination = async () => {
-    const { pdf, item } = this.props;
+    const { pdf } = this.context;
+    const { item } = this.props;
 
     if (!isDefined(this.destination)) {
       if (typeof item.dest === 'string') {
@@ -23,7 +24,7 @@ export default class OutlineItem extends Component {
   }
 
   getPageIndex = async () => {
-    const { pdf } = this.props;
+    const { pdf } = this.context;
 
     if (!isDefined(this.pageIndex)) {
       const destination = await this.getDestination();
@@ -51,7 +52,7 @@ export default class OutlineItem extends Component {
     const pageNumber = await this.getPageNumber();
 
     callIfDefined(
-      this.props.onClick,
+      this.context.onClick,
       {
         pageIndex,
         pageNumber,
@@ -66,7 +67,6 @@ export default class OutlineItem extends Component {
       return null;
     }
 
-    const { pdf, onClick } = this.props;
     const { items: subitems } = item;
 
     return (
@@ -80,8 +80,6 @@ export default class OutlineItem extends Component {
                   subitemIndex
               }
               item={subitem}
-              onClick={onClick}
-              pdf={pdf}
             />
           ))
         }
@@ -112,6 +110,11 @@ const isDestination = PropTypes.oneOfType([
   PropTypes.arrayOf(PropTypes.any),
 ]);
 
+OutlineItem.contextTypes = {
+  onClick: PropTypes.func,
+  pdf: isPdf.isRequired,
+};
+
 OutlineItem.propTypes = {
   item: PropTypes.shape({
     title: PropTypes.string,
@@ -121,6 +124,4 @@ OutlineItem.propTypes = {
       destination: isDestination,
     })),
   }).isRequired,
-  onClick: PropTypes.func,
-  pdf: isPdf.isRequired,
 };
