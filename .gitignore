@@ -1,8 +1,8 @@
 .vscode
 build
 node_modules
-sample/build
-sample/package-lock.json
+sample/**/build
+sample/**/package-lock.json
 test/build
 test/package-lock.json
 test_pdfs
