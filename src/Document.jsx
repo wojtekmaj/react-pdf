@@ -324,20 +324,6 @@ export default class Document extends Component {
     );
   }
 
-  renderChildren() {
-    const { children, className, inputRef } = this.props;
-
-    return (
-      <div
-        className={mergeClassNames('ReactPDF__Document', className)}
-        ref={inputRef ? ((ref) => { inputRef(ref); }) : null}
-        {...this.eventProps}
-      >
-        {children}
-      </div>
-    );
-  }
-
   render() {
     const { className, file, inputRef } = this.props;
     const { pdf } = this.state;
@@ -350,7 +336,7 @@ export default class Document extends Component {
     } else if (pdf === false) {
       content = this.renderError();
     } else {
-      content = this.renderChildren();
+      content = this.props.children;
     }
 
     return (
