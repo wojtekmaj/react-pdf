@@ -4,8 +4,8 @@ import mergeClassNames from 'merge-class-names';
 
 import PageCanvas from './Page/PageCanvas';
 import PageSVG from './Page/PageSVG';
-import PageTextContent from './Page/TextLayer';
-import PageAnnotations from './Page/AnnotationLayer';
+import TextLayer from './Page/TextLayer';
+import AnnotationLayer from './Page/AnnotationLayer';
 
 import {
   callIfDefined,
@@ -239,7 +239,7 @@ export default class Page extends Component {
     }
 
     return (
-      <PageTextContent key={`${this.pageKey}_text`} />
+      <TextLayer key={`${this.pageKey}_text`} />
     );
   }
 
@@ -251,7 +251,7 @@ export default class Page extends Component {
     }
 
     return (
-      <PageAnnotations key={`${this.pageKey}_annotations`} />
+      <AnnotationLayer key={`${this.pageKey}_annotations`} />
     );
   }
 
@@ -260,7 +260,7 @@ export default class Page extends Component {
       <PageSVG key={`${this.pageKeyNoScale}_svg`} />,
       /**
        * As of now, PDF.js 2.0.120 returns warnings on unimplemented annotations.
-       * Therefore, as a fallback, we render "traditional" PageAnnotations component.
+       * Therefore, as a fallback, we render "traditional" AnnotationLayer component.
        */
       this.renderAnnotations(),
     ];

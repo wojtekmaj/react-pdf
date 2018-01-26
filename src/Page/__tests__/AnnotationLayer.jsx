@@ -2,12 +2,12 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import pdfjs from 'pdfjs-dist';
 
-import {} from '../entry.noworker';
-import PageAnnotations from '../PageAnnotations';
+import {} from '../../entry.noworker';
+import AnnotationLayer from '../AnnotationLayer';
 
-import failingPage from '../../__mocks__/_failing_page';
+import failingPage from '../../../__mocks__/_failing_page';
 
-import { loadPDF, makeAsyncCallback, muteConsole, restoreConsole } from './utils';
+import { loadPDF, makeAsyncCallback, muteConsole, restoreConsole } from '../../__tests__/utils';
 
 const { PDFJS } = pdfjs;
 
@@ -15,7 +15,7 @@ const { arrayBuffer: fileArrayBuffer } = loadPDF('./__mocks__/_pdf.pdf');
 
 /* eslint-disable comma-dangle */
 
-describe('PageAnnotations', () => {
+describe('AnnotationLayer', () => {
   // Loaded page
   let page;
   let page2;
@@ -41,7 +41,7 @@ describe('PageAnnotations', () => {
       } = makeAsyncCallback();
 
       shallow(
-        <PageAnnotations />,
+        <AnnotationLayer />,
         {
           context: {
             onGetAnnotationsSuccess,
@@ -62,7 +62,7 @@ describe('PageAnnotations', () => {
       muteConsole();
 
       shallow(
-        <PageAnnotations />,
+        <AnnotationLayer />,
         {
           context: {
             onGetAnnotationsError,
@@ -83,7 +83,7 @@ describe('PageAnnotations', () => {
       } = makeAsyncCallback();
 
       const mountedComponent = shallow(
-        <PageAnnotations />,
+        <AnnotationLayer />,
         {
           context: {
             onGetAnnotationsSuccess,
