@@ -13,7 +13,7 @@ if (isLocalFileSystem) {
 const pdfjs = require('pdfjs-dist');
 
 if (typeof window !== 'undefined' && 'Worker' in window) {
-  pdfjs.PDFJS.workerPort = new Worker('../node_modules/pdfjs-dist/build/pdf.worker');
+  pdfjs.PDFJS.workerPort = new Worker('./pdf.worker.entry.js');
 } else {
   pdfjs.PDFJS.disableWorker = true;
 }
