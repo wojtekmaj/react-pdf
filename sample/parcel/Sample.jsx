@@ -3,6 +3,8 @@ import { Document, Page, setOptions } from 'react-pdf/src/entry.parcel';
 
 import './Sample.less';
 
+import pdfFile from './sample.pdf';
+
 setOptions({
   cMapUrl: 'cmaps/',
   cMapPacked: true,
@@ -10,7 +12,7 @@ setOptions({
 
 export default class Sample extends Component {
   state = {
-    file: './sample.pdf',
+    file: pdfFile,
     numPages: null,
   }
 
