@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Document, Page, setOptions } from 'react-pdf/src/entry.parcel';
+import { Document, Page, setOptions } from 'react-pdf/dist/entry.parcel';
 
 import './Sample.less';
 
