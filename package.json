@@ -1,6 +1,6 @@
 {
   "name": "react-pdf",
-  "version": "3.0.0-alpha.2",
+  "version": "3.0.0-alpha.3",
   "description": "Easily display PDF files in your React application.",
   "main": "dist/entry.js",
   "es6": "src/entry.js",
@@ -71,7 +71,7 @@
     "babel-runtime": "^6.26.0",
     "lodash.once": "^4.1.1",
     "merge-class-names": "^1.1.1",
-    "pdfjs-dist": "^2.0.243",
+    "pdfjs-dist": "^2.0.290",
     "prop-types": "^15.6.0",
     "react": ">=15.5",
     "react-dom": ">=15.5"

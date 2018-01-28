@@ -440,8 +440,8 @@ describe('Page', () => {
       expect.assertions(1);
       return onLoadSuccessPromise.then(() => {
         component.update();
-        const pageTextContent = component.find('PageTextContent');
-        expect(pageTextContent).toHaveLength(1);
+        const textLayer = component.find('TextLayer');
+        expect(textLayer).toHaveLength(1);
       });
     });
 
@@ -464,8 +464,8 @@ describe('Page', () => {
       expect.assertions(1);
       return onLoadSuccessPromise.then(() => {
         component.update();
-        const pageTextContent = component.find('PageTextContent');
-        expect(pageTextContent).toHaveLength(1);
+        const textLayer = component.find('TextLayer');
+        expect(textLayer).toHaveLength(1);
       });
     });
 
@@ -488,12 +488,12 @@ describe('Page', () => {
       expect.assertions(1);
       return onLoadSuccessPromise.then(() => {
         component.update();
-        const pageTextContent = component.find('PageTextContent');
-        expect(pageTextContent).toHaveLength(0);
+        const textLayer = component.find('TextLayer');
+        expect(textLayer).toHaveLength(0);
       });
     });
 
-    it('does not render PageTextContent when given renderMode = "svg"', () => {
+    it('does not render TextLayer when given renderMode = "svg"', () => {
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
       const component = shallow(
@@ -513,8 +513,8 @@ describe('Page', () => {
       expect.assertions(1);
       return onLoadSuccessPromise.then(() => {
         component.update();
-        const pageTextContent = component.find('PageTextContent');
-        expect(pageTextContent).toHaveLength(0);
+        const textLayer = component.find('TextLayer');
+        expect(textLayer).toHaveLength(0);
       });
     });
 
@@ -536,8 +536,8 @@ describe('Page', () => {
       expect.assertions(1);
       return onLoadSuccessPromise.then(() => {
         component.update();
-        const pageAnnotations = component.find('PageAnnotations');
-        expect(pageAnnotations).toHaveLength(1);
+        const annotationLayer = component.find('AnnotationLayer');
+        expect(annotationLayer).toHaveLength(1);
       });
     });
 
@@ -560,8 +560,8 @@ describe('Page', () => {
       expect.assertions(1);
       return onLoadSuccessPromise.then(() => {
         component.update();
-        const pageAnnotations = component.find('PageAnnotations');
-        expect(pageAnnotations).toHaveLength(1);
+        const annotationLayer = component.find('AnnotationLayer');
+        expect(annotationLayer).toHaveLength(1);
       });
     });
 
@@ -584,8 +584,8 @@ describe('Page', () => {
       expect.assertions(1);
       return onLoadSuccessPromise.then(() => {
         component.update();
-        const pageAnnotations = component.find('PageAnnotations');
-        expect(pageAnnotations).toHaveLength(0);
+        const annotationLayer = component.find('AnnotationLayer');
+        expect(annotationLayer).toHaveLength(0);
       });
     });
   });

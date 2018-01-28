@@ -1,16 +1,16 @@
 import React from 'react';
 import { mount } from 'enzyme';
 
-import {} from '../entry.noworker';
-import PageCanvas from '../PageCanvas';
+import {} from '../../entry.noworker';
+import PageSVG from '../PageSVG';
 
-import failingPage from '../../__mocks__/_failing_page';
+import failingPage from '../../../__mocks__/_failing_page';
 
-import { makeAsyncCallback, muteConsole, restoreConsole } from './utils';
+import { makeAsyncCallback, muteConsole, restoreConsole } from '../../__tests__/utils';
 
 /* eslint-disable comma-dangle */
 
-describe('PageCanvas', () => {
+describe('PageSVG', () => {
   describe('loading', () => {
     it('calls onRenderError when failed to render canvas', async () => {
       const {
@@ -20,7 +20,7 @@ describe('PageCanvas', () => {
       muteConsole();
 
       mount(
-        <PageCanvas />,
+        <PageSVG />,
         {
           context: {
             onRenderError,

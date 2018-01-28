@@ -2,12 +2,12 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import pdfjs from 'pdfjs-dist';
 
-import {} from '../entry.noworker';
-import PageTextContent from '../PageTextContent';
+import {} from '../../entry.noworker';
+import TextLayer from '../TextLayer';
 
-import failingPage from '../../__mocks__/_failing_page';
+import failingPage from '../../../__mocks__/_failing_page';
 
-import { loadPDF, makeAsyncCallback, muteConsole, restoreConsole } from './utils';
+import { loadPDF, makeAsyncCallback, muteConsole, restoreConsole } from '../../__tests__/utils';
 
 const { PDFJS } = pdfjs;
 
@@ -15,7 +15,7 @@ const { arrayBuffer: fileArrayBuffer } = loadPDF('./__mocks__/_pdf.pdf');
 
 /* eslint-disable comma-dangle */
 
-describe('PageTextContent', () => {
+describe('TextLayer', () => {
   // Loaded page
   let page;
   let page2;
@@ -41,7 +41,7 @@ describe('PageTextContent', () => {
       const { func: onGetTextSuccess, promise: onGetTextSuccessPromise } = makeAsyncCallback();
 
       shallow(
-        <PageTextContent />,
+        <TextLayer />,
         {
           context: {
             onGetTextSuccess,
@@ -60,7 +60,7 @@ describe('PageTextContent', () => {
       muteConsole();
 
       shallow(
-        <PageTextContent />,
+        <TextLayer />,
         {
           context: {
             onGetTextError,
@@ -79,7 +79,7 @@ describe('PageTextContent', () => {
       const { func: onGetTextSuccess, promise: onGetTextSuccessPromise } = makeAsyncCallback();
 
       const mountedComponent = shallow(
-        <PageTextContent />,
+        <TextLayer />,
         {
           context: {
             onGetTextSuccess,
@@ -107,7 +107,7 @@ describe('PageTextContent', () => {
       const { func: onGetTextSuccess, promise: onGetTextSuccessPromise } = makeAsyncCallback();
 
       const component = shallow(
-        <PageTextContent />,
+        <TextLayer />,
         {
           context: {
             onGetTextSuccess,
