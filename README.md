@@ -3,7 +3,8 @@
 ) [![tested with jest](https://img.shields.io/badge/tested_with-jest-99424f.svg)](https://github.com/facebook/jest)
 
 # React-PDF
-Easily display PDF files in your React application.
+
+Display PDFs in your React app as easily as if they were images.
 
 ## tl;dr
 * Install by executing `npm install react-pdf` or `yarn add react-pdf`.
