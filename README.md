@@ -20,7 +20,7 @@ Minimal demo page is included in sample directory.
 
 ## Getting started
 
-#### Compatibility
+### Compatibility
 
 Your project needs to use React 15.5 or later. If you use older version of React, please refer to the table below to find suitable React-PDF version.
 
