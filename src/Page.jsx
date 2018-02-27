@@ -84,7 +84,9 @@ export default class Page extends Component {
     if (this.props.onGetTextSuccess) {
       context.onGetTextSuccess = this.props.onGetTextSuccess;
     }
-
+    if (this.props.customTextRenderer) {
+      context.customTextRenderer = this.props.customTextRenderer;
+    }
     return context;
   }
 
@@ -349,6 +351,7 @@ Page.childContextTypes = {
   onGetTextSuccess: PropTypes.func,
   onRenderError: PropTypes.func,
   onRenderSuccess: PropTypes.func,
+  customTextRenderer: PropTypes.func,
   page: isPage,
   rotate: isRotate,
   scale: PropTypes.number,
@@ -380,5 +383,6 @@ Page.propTypes = {
   rotate: isRotate,
   scale: PropTypes.number,
   width: PropTypes.number,
+  customTextRenderer: PropTypes.func,
   ...eventsProps(),
 };

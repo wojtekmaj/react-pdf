@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { Highlighter } from "react-highlight-words";
 
 import {
   callIfDefined,
   cancelRunningTask,
   errorOnDev,
   makeCancellable,
+  renderTextItem
 } from '../shared/utils';
 
 import { isPage, isRotate } from '../shared/propTypes';
@@ -147,9 +149,11 @@ export default class TextLayer extends Component {
     element.style.transform = `scaleX(${targetWidth / actualWidth}) translateY(${(1 - ascent) * 100}%)`;
   }
 
+
   renderTextItem = (textItem, itemIndex) => {
+
     const { unrotatedViewport: viewport, defaultSideways } = this;
-    const { scale } = this.context;
+    const { scale, page } = this.context;
 
     const [xMin, yMin, /* xMax */, yMax] = viewport.viewBox;
 
@@ -162,32 +166,39 @@ export default class TextLayer extends Component {
 
     const fontSize = `${fontSizePx * scale}px`;
 
+    const divStyle = {
+      height: '1em',
+      fontFamily: fontName,
+      fontSize,
+      position: 'absolute',
+      top: `${(top + yMin) * scale}px`,
+      left: `${(left - xMin) * scale}px`,
+      transformOrigin: 'left bottom',
+      whiteSpace: 'pre',
+      pointerEvents: 'all',
+    }
+
     return (
       <div
         key={itemIndex}
-        style={{
-          height: '1em',
-          fontFamily: fontName,
-          fontSize,
-          position: 'absolute',
-          top: `${(top + yMin) * scale}px`,
-          left: `${(left - xMin) * scale}px`,
-          transformOrigin: 'left bottom',
-          whiteSpace: 'pre',
-          pointerEvents: 'all',
-        }}
+        style={divStyle}
         ref={(ref) => {
           if (!ref) {
             return;
           }
-
           this.alignTextItem(ref, textItem);
         }}
       >
-        {textItem.str}
+      {(() => {
+        if (this.context.customTextRenderer) {
+          return this.context.customTextRenderer(textItem, itemIndex);
+        }
+        return textItem.str;
+      })()}
       </div>
     );
   }
+
 
   renderTextItems() {
     const { textItems } = this.state;
@@ -228,4 +239,5 @@ TextLayer.contextTypes = {
   page: isPage.isRequired,
   rotate: isRotate,
   scale: PropTypes.number,
+  customTextRenderer: PropTypes.func
 };
