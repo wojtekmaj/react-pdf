@@ -1,13 +1,11 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Highlighter } from "react-highlight-words";
 
 import {
   callIfDefined,
   cancelRunningTask,
   errorOnDev,
   makeCancellable,
-  renderTextItem
 } from '../shared/utils';
 
 import { isPage, isRotate } from '../shared/propTypes';
@@ -153,7 +151,7 @@ export default class TextLayer extends Component {
   renderTextItem = (textItem, itemIndex) => {
 
     const { unrotatedViewport: viewport, defaultSideways } = this;
-    const { scale, page } = this.context;
+    const { scale } = this.context;
 
     const [xMin, yMin, /* xMax */, yMax] = viewport.viewBox;
 
@@ -166,22 +164,20 @@ export default class TextLayer extends Component {
 
     const fontSize = `${fontSizePx * scale}px`;
 
-    const divStyle = {
-      height: '1em',
-      fontFamily: fontName,
-      fontSize,
-      position: 'absolute',
-      top: `${(top + yMin) * scale}px`,
-      left: `${(left - xMin) * scale}px`,
-      transformOrigin: 'left bottom',
-      whiteSpace: 'pre',
-      pointerEvents: 'all',
-    }
-
     return (
       <div
         key={itemIndex}
-        style={divStyle}
+        style={{
+          height: '1em',
+          fontFamily: fontName,
+          fontSize,
+          position: 'absolute',
+          top: `${(top + yMin) * scale}px`,
+          left: `${(left - xMin) * scale}px`,
+          transformOrigin: 'left bottom',
+          whiteSpace: 'pre',
+          pointerEvents: 'all',
+        }}
         ref={(ref) => {
           if (!ref) {
             return;
@@ -198,7 +194,6 @@ export default class TextLayer extends Component {
       </div>
     );
   }
-
 
   renderTextItems() {
     const { textItems } = this.state;
