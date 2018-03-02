@@ -186,10 +186,7 @@ export default class TextLayer extends Component {
         }}
       >
       {(() => {
-        if (this.context.customTextRenderer) {
-          return this.context.customTextRenderer(textItem, itemIndex);
-        }
-        return textItem.str;
+        return this.context.customTextRenderer ? this.context.customTextRenderer(textItem, itemIndex) : textItem.str;
       })()}
       </div>
     );
