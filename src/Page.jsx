@@ -347,11 +347,11 @@ Page.defaultProps = {
 };
 
 Page.childContextTypes = {
+  customTextRenderer: PropTypes.func,
   onGetTextError: PropTypes.func,
   onGetTextSuccess: PropTypes.func,
   onRenderError: PropTypes.func,
   onRenderSuccess: PropTypes.func,
-  customTextRenderer: PropTypes.func,
   page: isPage,
   rotate: isRotate,
   scale: PropTypes.number,
@@ -368,6 +368,7 @@ Page.contextTypes = {
 Page.propTypes = {
   children: PropTypes.node,
   className: isClassName,
+  customTextRenderer: PropTypes.func,
   inputRef: PropTypes.func,
   onGetTextError: PropTypes.func,
   onGetTextSuccess: PropTypes.func,
@@ -383,6 +384,5 @@ Page.propTypes = {
   rotate: isRotate,
   scale: PropTypes.number,
   width: PropTypes.number,
-  customTextRenderer: PropTypes.func,
   ...eventsProps(),
 };

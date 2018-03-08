@@ -592,17 +592,15 @@ describe('Page', () => {
     it('sets customTextRenderer prop correctly', () => {
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
-      const customTextRenderer = (textItem, itemIndex) => {
-        return (
-          <mark> {textItem.str} </mark>
-        );
-      }
+      const customTextRenderer = textItem => (
+        <mark>{textItem.str}</mark>
+      );
 
       const component = shallow(
         <Page
           onLoadSuccess={onLoadSuccess}
           pageIndex={0}
-          renderTextLayer={true}
+          renderTextLayer
           customTextRenderer={customTextRenderer}
         />,
         {
@@ -617,6 +615,5 @@ describe('Page', () => {
         expect(component.instance().props.customTextRenderer).toBe(customTextRenderer);
       });
     });
-
   });
 });
