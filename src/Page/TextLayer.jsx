@@ -147,7 +147,9 @@ export default class TextLayer extends Component {
     element.style.transform = `scaleX(${targetWidth / actualWidth}) translateY(${(1 - ascent) * 100}%)`;
   }
 
+
   renderTextItem = (textItem, itemIndex) => {
+
     const { unrotatedViewport: viewport, defaultSideways } = this;
     const { scale } = this.context;
 
@@ -180,11 +182,12 @@ export default class TextLayer extends Component {
           if (!ref) {
             return;
           }
-
           this.alignTextItem(ref, textItem);
         }}
       >
-        {textItem.str}
+      {(() => {
+        return this.context.customTextRenderer ? this.context.customTextRenderer(textItem, itemIndex) : textItem.str;
+      })()}
       </div>
     );
   }
@@ -228,4 +231,5 @@ TextLayer.contextTypes = {
   page: isPage.isRequired,
   rotate: isRotate,
   scale: PropTypes.number,
+  customTextRenderer: PropTypes.func
 };

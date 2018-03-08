@@ -588,5 +588,35 @@ describe('Page', () => {
         expect(annotationLayer).toHaveLength(0);
       });
     });
+
+    it('sets customTextRenderer prop correctly', () => {
+      const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
+
+      const customTextRenderer = (textItem, itemIndex) => {
+        return (
+          <mark> {textItem.str} </mark>
+        );
+      }
+
+      const component = shallow(
+        <Page
+          onLoadSuccess={onLoadSuccess}
+          pageIndex={0}
+          renderTextLayer={true}
+          customTextRenderer={customTextRenderer}
+        />,
+        {
+          context: {
+            pdf,
+          }
+        }
+      );
+
+      return onLoadSuccessPromise.then(() => {
+        component.update();
+        expect(component.instance().props.customTextRenderer).toBe(customTextRenderer);
+      });
+    });
+
   });
 });
