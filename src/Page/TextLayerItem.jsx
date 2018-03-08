@@ -72,6 +72,10 @@ export default class TextLayerItem extends PureComponent {
   }
 
   async alignTextItem() {
+    if (!this.item) {
+      return;
+    }
+
     const element = this.item;
     element.style.transform = '';
 

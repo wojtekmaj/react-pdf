@@ -34,6 +34,10 @@ describe('AnnotationLayer', () => {
     desiredAnnotations2 = await page2.getAnnotations();
   });
 
+  beforeEach(muteConsole);
+
+  afterEach(restoreConsole);
+
   describe('loading', () => {
     it('loads annotations and calls onGetAnnotationsSuccess callback properly', async () => {
       const {
@@ -59,8 +63,6 @@ describe('AnnotationLayer', () => {
         func: onGetAnnotationsError, promise: onGetAnnotationsErrorPromise
       } = makeAsyncCallback();
 
-      muteConsole();
-
       shallow(
         <AnnotationLayer />,
         {
@@ -73,8 +75,6 @@ describe('AnnotationLayer', () => {
 
       expect.assertions(1);
       await expect(onGetAnnotationsErrorPromise).resolves.toBeInstanceOf(Error);
-
-      restoreConsole();
     });
 
     it('replaces annotations properly', async () => {

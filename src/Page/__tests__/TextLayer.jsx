@@ -46,8 +46,8 @@ describe('TextLayer', () => {
           context: {
             onGetTextSuccess,
             page,
-          }
-        }
+          },
+        },
       );
 
       expect.assertions(1);
@@ -65,8 +65,8 @@ describe('TextLayer', () => {
           context: {
             onGetTextError,
             page: failingPage,
-          }
-        }
+          },
+        },
       );
 
       expect.assertions(1);
@@ -84,8 +84,8 @@ describe('TextLayer', () => {
           context: {
             onGetTextSuccess,
             page,
-          }
-        }
+          },
+        },
       );
 
       expect.assertions(2);
@@ -112,17 +112,16 @@ describe('TextLayer', () => {
           context: {
             onGetTextSuccess,
             page,
-          }
-        }
+          },
+        },
       );
 
-      expect.assertions(2);
+      expect.assertions(1);
       return onGetTextSuccessPromise.then(() => {
         component.update();
         const textItems = component.children();
 
         expect(textItems).toHaveLength(desiredTextItems.length);
-        expect(textItems.map(item => item.text())).toEqual(desiredTextItems.map(item => item.str));
       });
     });
   });
