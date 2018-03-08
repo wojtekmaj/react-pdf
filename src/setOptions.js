@@ -3,6 +3,7 @@ const allowedProperties = [
   'cMapPacked',
   'disableWorker',
   'workerSrc',
+  'workerPort',
 ];
 
 const makeSetOptions = pdfjs => (options) => {

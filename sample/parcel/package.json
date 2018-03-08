@@ -4,7 +4,8 @@
   "description": "A sample page for React-PDF.",
   "private": true,
   "scripts": {
-    "build": "webpack"
+    "build": "parcel build index.html --public-url ./",
+    "start": "parcel index.html"
   },
   "author": {
     "name": "Wojciech Maj",
@@ -19,25 +20,18 @@
   "devDependencies": {
     "babel-core": "^6.26.0",
     "babel-eslint": "^8.2.1",
-    "babel-loader": "^7.1.2",
     "babel-plugin-transform-class-properties": "^6.24.1",
     "babel-plugin-transform-runtime": "^6.23.0",
-    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-env": "^1.6.1",
     "babel-preset-react": "^6.24.1",
     "babel-preset-stage-2": "^6.24.1",
-    "copy-webpack-plugin": "^4.3.1",
-    "css-loader": "latest",
     "eslint": "^4.16.0",
     "eslint-config-airbnb": "^16.1.0",
     "eslint-plugin-class-property": "^1.1.0",
     "eslint-plugin-import": "^2.8.0",
     "eslint-plugin-jsx-a11y": "^6.0.3",
     "eslint-plugin-react": "^7.6.0",
-    "file-loader": "latest",
     "less": "^2.7.3",
-    "less-loader": "latest",
-    "style-loader": "latest",
-    "url-loader": "latest",
-    "webpack": "^3.10.0"
+    "parcel-bundler": "1.5.0"
   }
 }

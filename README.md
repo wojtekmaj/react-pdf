@@ -88,6 +88,16 @@ import { Document } from 'react-pdf/dist/entry.webpack';
 
 …and you're all set!
 
+#### Parcel
+
+If you use Parcel, it's not a problem either. Instead of directly importing/requiring `'react-pdf'`, import it like so:
+
+```js
+import { Document } from 'react-pdf/dist/entry.parcel';
+```
+
+…and you're done!
+
 #### Browserify and others
 
 If you use Browserify or other bundling tools, you will have to make sure on your own that `pdf.worker.js` file from `pdfjs-dist/build` is copied to your project's output folder.
@@ -147,9 +157,9 @@ new CopyWebpackPlugin([
 ]),
 ```
 
-##### Browserify and others
+##### Parcel, Browserify and others
 
-If you use Browserify or other bundling tools, you will have to make sure on your own that cMaps are copied to your project's output folder.
+If you use Parcel, Browserify or other bundling tools, you will have to make sure on your own that cMaps are copied to your project's output folder.
 
 #### Setting up React-PDF
 
