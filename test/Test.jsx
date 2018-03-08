@@ -105,6 +105,15 @@ export default class Test extends Component {
       renderMode,
       renderTextLayer,
       width: pageWidth,
+      customTextRenderer: textItem => (
+        textItem.str
+          .split('ipsum')
+          .reduce((strArray, currentValue, currentIndex) => (
+            currentIndex === 0 ?
+              ([...strArray, currentValue]) :
+              ([...strArray, <mark>ipsum</mark>, currentValue])
+          ), [])
+      ),
     };
 
     return (

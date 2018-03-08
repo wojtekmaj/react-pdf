@@ -1,6 +1,6 @@
 {
   "name": "react-pdf-sample-page",
-  "version": "3.0.0-alpha.3",
+  "version": "3.0.0-alpha.4",
   "description": "A sample page for React-PDF.",
   "private": true,
   "scripts": {
@@ -14,7 +14,7 @@
   "dependencies": {
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
-    "react-pdf": "../../"
+    "react-pdf": "latest"
   },
   "devDependencies": {
     "babel-core": "^6.26.0",

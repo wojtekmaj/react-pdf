@@ -84,7 +84,9 @@ export default class Page extends Component {
     if (this.props.onGetTextSuccess) {
       context.onGetTextSuccess = this.props.onGetTextSuccess;
     }
-
+    if (this.props.customTextRenderer) {
+      context.customTextRenderer = this.props.customTextRenderer;
+    }
     return context;
   }
 
@@ -345,6 +347,7 @@ Page.defaultProps = {
 };
 
 Page.childContextTypes = {
+  customTextRenderer: PropTypes.func,
   onGetTextError: PropTypes.func,
   onGetTextSuccess: PropTypes.func,
   onRenderError: PropTypes.func,
@@ -365,6 +368,7 @@ Page.contextTypes = {
 Page.propTypes = {
   children: PropTypes.node,
   className: isClassName,
+  customTextRenderer: PropTypes.func,
   inputRef: PropTypes.func,
   onGetTextError: PropTypes.func,
   onGetTextSuccess: PropTypes.func,

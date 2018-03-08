@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
+import TextLayerItem from './TextLayerItem';
+
 import {
   callIfDefined,
   cancelRunningTask,
@@ -9,9 +11,6 @@ import {
 } from '../shared/utils';
 
 import { isPage, isRotate } from '../shared/propTypes';
-
-// Render disproportion above which font will be considered broken and fallback will be used
-const BROKEN_FONT_ALARM_THRESHOLD = 0.1;
 
 export default class TextLayer extends Component {
   state = {
@@ -79,16 +78,6 @@ export default class TextLayer extends Component {
     return rotate - page.rotate;
   }
 
-  get sideways() {
-    const { rotate } = this;
-    return rotate % 180 !== 0;
-  }
-
-  get defaultSideways() {
-    const { rotation } = this.unrotatedViewport;
-    return rotation % 180 !== 0;
-  }
-
   getTextContent(context = this.context) {
     const { page } = context;
 
@@ -107,88 +96,6 @@ export default class TextLayer extends Component {
       .catch(this.onGetTextError);
   }
 
-  async getFontData(fontFamily) {
-    const { page } = this.context;
-
-    const font = await page.commonObjs.ensureObj(fontFamily);
-
-    return font.data;
-  }
-
-  getElementWidth = (element) => {
-    const { sideways } = this;
-    return element.getBoundingClientRect()[sideways ? 'height' : 'width'];
-  };
-
-  async alignTextItem(element, textItem) {
-    if (!element) {
-      return;
-    }
-
-    element.style.transform = '';
-
-    const { scale } = this.props;
-    const targetWidth = textItem.width * scale;
-
-    const fontData = await this.getFontData(textItem.fontName);
-
-    let actualWidth = this.getElementWidth(element);
-    const widthDisproportion = Math.abs((targetWidth / actualWidth) - 1);
-
-    const repairsNeeded = widthDisproportion > BROKEN_FONT_ALARM_THRESHOLD;
-    if (repairsNeeded) {
-      const fallbackFontName = fontData ? fontData.fallbackName : 'sans-serif';
-      element.style.fontFamily = fallbackFontName;
-
-      actualWidth = this.getElementWidth(element);
-    }
-
-    const ascent = fontData ? fontData.ascent : 1;
-    element.style.transform = `scaleX(${targetWidth / actualWidth}) translateY(${(1 - ascent) * 100}%)`;
-  }
-
-  renderTextItem = (textItem, itemIndex) => {
-    const { unrotatedViewport: viewport, defaultSideways } = this;
-    const { scale } = this.context;
-
-    const [xMin, yMin, /* xMax */, yMax] = viewport.viewBox;
-
-    const { fontName, transform } = textItem;
-    const [fontHeightPx, fontWidthPx, offsetX, offsetY, x, y] = transform;
-
-    const fontSizePx = defaultSideways ? fontWidthPx : fontHeightPx;
-    const top = defaultSideways ? x + offsetX : (yMax - yMin) - (y + offsetY);
-    const left = defaultSideways ? y : x;
-
-    const fontSize = `${fontSizePx * scale}px`;
-
-    return (
-      <div
-        key={itemIndex}
-        style={{
-          height: '1em',
-          fontFamily: fontName,
-          fontSize,
-          position: 'absolute',
-          top: `${(top + yMin) * scale}px`,
-          left: `${(left - xMin) * scale}px`,
-          transformOrigin: 'left bottom',
-          whiteSpace: 'pre',
-          pointerEvents: 'all',
-        }}
-        ref={(ref) => {
-          if (!ref) {
-            return;
-          }
-
-          this.alignTextItem(ref, textItem);
-        }}
-      >
-        {textItem.str}
-      </div>
-    );
-  }
-
   renderTextItems() {
     const { textItems } = this.state;
 
@@ -196,7 +103,13 @@ export default class TextLayer extends Component {
       return null;
     }
 
-    return textItems.map(this.renderTextItem);
+    return textItems.map((textItem, itemIndex) => (
+      <TextLayerItem
+        // eslint-disable-next-line react/no-array-index-key
+        key={itemIndex}
+        {...textItem}
+      />
+    ));
   }
 
   render() {
