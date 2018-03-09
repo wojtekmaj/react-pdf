@@ -340,6 +340,8 @@ export default class Page extends Component {
 }
 
 Page.defaultProps = {
+  error: 'Failed to load the page.',
+  loading: 'Loading page...',
   renderAnnotations: true,
   renderMode: 'canvas',
   renderTextLayer: true,
@@ -369,7 +371,9 @@ Page.propTypes = {
   children: PropTypes.node,
   className: isClassName,
   customTextRenderer: PropTypes.func,
+  error: PropTypes.string,
   inputRef: PropTypes.func,
+  loading: PropTypes.string,
   onGetTextError: PropTypes.func,
   onGetTextSuccess: PropTypes.func,
   onLoadError: PropTypes.func,
