@@ -16,7 +16,7 @@ Display PDFs in your React app as easily as if they were images.
 
 Minimal demo page is included in sample directory.
 
-[Online demo](http://projekty.wojtekmaj.pl/react-pdf/) is also available!
+[Online demo](http://projects.wojtekmaj.pl/react-pdf/) is also available!
 
 ## Getting started
 
