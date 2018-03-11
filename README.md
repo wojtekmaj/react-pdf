@@ -8,7 +8,7 @@ Display PDFs in your React app as easily as if they were images.
 
 ## tl;dr
 * Install by executing `npm install react-pdf` or `yarn add react-pdf`.
-* Import by addding `import { Document } from 'react-pdf'`.
+* Import by adding `import { Document } from 'react-pdf'`.
 * Use by adding `<Document file="..." />`. `file` can be a URL, base64 content, Uint8Array, and more.
 * Put `<Page />` components inside `<Document />` to render pages.
 
