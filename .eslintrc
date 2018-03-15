@@ -22,6 +22,7 @@
     "no-param-reassign": ["error", { "props": true, "ignorePropertyModificationsFor": ["canvas", "element", "svg"] }],
     "prefer-destructuring": "warn",
     "prefer-spread": "warn",
-    "react/require-default-props": "off"
+    "react/require-default-props": "off",
+    "react/sort-comp": "off"
   }
 }
