@@ -116,11 +116,14 @@ export const isPageNumber = (props, propName, componentName) => {
   return null;
 };
 
-export const isPdf = PropTypes.shape({
-  getDestination: PropTypes.func.isRequired,
-  getOutline: PropTypes.func.isRequired,
-  getPage: PropTypes.func.isRequired,
-  numPages: PropTypes.number.isRequired,
-});
+export const isPdf = PropTypes.oneOfType([
+  PropTypes.shape({
+    getDestination: PropTypes.func.isRequired,
+    getOutline: PropTypes.func.isRequired,
+    getPage: PropTypes.func.isRequired,
+    numPages: PropTypes.number.isRequired,
+  }),
+  PropTypes.bool,
+]);
 
 export const isRotate = PropTypes.oneOf([0, 90, 180, 270]);
