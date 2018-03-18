@@ -226,6 +226,10 @@ export default class Page extends Component {
 
     const pageNumber = this.getPageNumber(props);
 
+    if (!pageNumber) {
+      return null;
+    }
+
     this.runningTask = makeCancellable(pdf.getPage(pageNumber));
 
     return this.runningTask.promise
@@ -276,6 +280,12 @@ export default class Page extends Component {
     ];
   }
 
+  renderNoData() {
+    return (
+      <div className="react-pdf__message react-pdf__message--no-data">{this.props.noData}</div>
+    );
+  }
+
   renderError() {
     return (
       <div className="react-pdf__message react-pdf__message--error">{this.props.error}</div>
@@ -305,12 +315,15 @@ export default class Page extends Component {
   }
 
   render() {
+    const { pageNumber } = this;
     const { pdf } = this.context;
     const { className } = this.props;
     const { page } = this.state;
 
     let content;
-    if (pdf === null || page === null) {
+    if (!pageNumber) {
+      content = this.renderNoData();
+    } else if (pdf === null || page === null) {
       content = this.renderLoader();
     } else if (pdf === false || page === false) {
       content = this.renderError();
@@ -330,7 +343,7 @@ export default class Page extends Component {
           this.ref = ref;
         }}
         style={{ position: 'relative' }}
-        data-page-number={this.pageNumber}
+        data-page-number={pageNumber}
         {...this.eventProps}
       >
         {content}
@@ -341,7 +354,8 @@ export default class Page extends Component {
 
 Page.defaultProps = {
   error: 'Failed to load the page.',
-  loading: 'Loading page...',
+  loading: 'Loading page…',
+  noData: 'No page specified.',
   renderAnnotations: true,
   renderMode: 'canvas',
   renderTextLayer: true,
@@ -374,6 +388,7 @@ Page.propTypes = {
   error: PropTypes.string,
   inputRef: PropTypes.func,
   loading: PropTypes.string,
+  noData: PropTypes.node,
   onGetTextError: PropTypes.func,
   onGetTextSuccess: PropTypes.func,
   onLoadError: PropTypes.func,
