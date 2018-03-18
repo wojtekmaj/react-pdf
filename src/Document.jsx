@@ -65,6 +65,10 @@ export default class Document extends Component {
 
   componentWillReceiveProps(nextProps) {
     if (this.shouldLoadDocument(nextProps)) {
+      if (this.state.pdf !== null) {
+        this.setState({ pdf: null });
+      }
+
       this.loadDocument(nextProps);
     }
   }
@@ -98,10 +102,6 @@ export default class Document extends Component {
 
     if (!PDFJS) {
       throw new Error('Could not load the document. PDF.js is not loaded.');
-    }
-
-    if (this.state.pdf !== null) {
-      this.setState({ pdf: null });
     }
 
     if (!source) {
