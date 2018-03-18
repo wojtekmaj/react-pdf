@@ -111,7 +111,8 @@ export default class Test extends Component {
           .reduce((strArray, currentValue, currentIndex) => (
             currentIndex === 0 ?
               ([...strArray, currentValue]) :
-              ([...strArray, <mark>ipsum</mark>, currentValue])
+              // eslint-disable-next-line react/no-array-index-key
+              ([...strArray, <mark key={currentIndex}>ipsum</mark>, currentValue])
           ), [])
       ),
     };
