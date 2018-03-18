@@ -22,7 +22,9 @@
       "**/src/**.{js,jsx}",
       "!**/src/entry.js",
       "!**/src/entry.noworker.js",
-      "!**/src/entry.webpack.js"
+      "!**/src/entry.parcel.js",
+      "!**/src/entry.webpack.js",
+      "!**/src/pdf.worker.entry.js"
     ],
     "moduleNameMapper": {
       "\\.(css|less)$": "<rootDir>/__mocks__/styleMock.js"
