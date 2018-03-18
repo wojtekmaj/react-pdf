@@ -23,16 +23,20 @@ describe('TextLayerItem', () => {
 
   const defaultProps = {
     fontName: '',
+    itemIndex: 0,
+    str: 'Test',
     transform: [],
     width: 0,
   };
 
   describe('rendering', () => {
     it('renders text content properly', () => {
+      const str = 'Test string';
+
       const component = shallow(
         <TextLayerItem
           {...defaultProps}
-          str="Test"
+          str={str}
         />,
         {
           context: {
@@ -42,16 +46,42 @@ describe('TextLayerItem', () => {
       );
 
       const textItem = component.text();
-      expect(textItem).toEqual('Test');
+      expect(textItem).toEqual(str);
+    });
+
+    it('calls customTextRenderer with necessary arguments', () => {
+      const customTextRenderer = jest.fn();
+      const str = 'Test string';
+      const itemIndex = 5;
+
+      shallow(
+        <TextLayerItem
+          {...defaultProps}
+          itemIndex={itemIndex}
+          str={str}
+        />,
+        {
+          context: {
+            page,
+            customTextRenderer,
+          },
+        },
+      );
+
+      expect(customTextRenderer).toBeCalledWith(
+        expect.objectContaining({
+          str,
+          itemIndex,
+        }),
+      );
     });
 
     it('renders text content properly given customTextRenderer', () => {
-      const customTextRenderer = () => 'Test';
+      const customTextRenderer = () => 'Test value';
 
       const component = shallow(
         <TextLayerItem
           {...defaultProps}
-          str="Potato"
         />,
         {
           context: {
@@ -62,7 +92,7 @@ describe('TextLayerItem', () => {
       );
 
       const textItem = component.text();
-      expect(textItem).toEqual('Test');
+      expect(textItem).toEqual('Test value');
     });
   });
 });
