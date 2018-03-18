@@ -70,7 +70,7 @@ export default class AnnotationLayer extends Component {
     const { page } = context;
 
     if (!page) {
-      throw new Error('Attempted to load page text content, but no page was specified.');
+      throw new Error('Attempted to load page annotations, but no page was specified.');
     }
 
     this.runningTask = makeCancellable(page.getAnnotations());
