@@ -72,6 +72,7 @@ describe('Page', () => {
       shallow(
         <Page
           onLoadError={onLoadError}
+          pageIndex={0}
         />,
         {
           context: {
@@ -239,6 +240,87 @@ describe('Page', () => {
 
       expect(inputRef).toHaveBeenCalled();
       expect(inputRef.mock.calls[0][0]).toBeInstanceOf(HTMLElement);
+    });
+
+    it('renders "No page specified." when given neither pageIndex nor pageNumber', () => {
+      const component = shallow(
+        <Page />,
+        {
+          context: {
+            pdf,
+          }
+        }
+      );
+
+      const noData = component.find('.react-pdf__message--no-data');
+
+      expect(noData).toHaveLength(1);
+      expect(noData.text()).toBe('No page specified.');
+    });
+
+    it('renders custom no data message when given nothing and noData prop is specified', () => {
+      const component = shallow(
+        <Page noData="Nothing here" />,
+        {
+          context: {
+            pdf,
+          }
+        }
+      );
+
+      const noData = component.find('.react-pdf__message--no-data');
+
+      expect(noData).toHaveLength(1);
+      expect(noData.text()).toBe('Nothing here');
+    });
+
+    it('renders "Loading page…" when loading a page', () => {
+      const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
+
+      const component = shallow(
+        <Page
+          onLoadSuccess={onLoadSuccess}
+          pageIndex={0}
+        />,
+        {
+          context: {
+            pdf,
+          }
+        }
+      );
+
+      expect.assertions(2);
+      return onLoadSuccessPromise.then(() => {
+        const loading = component.find('.react-pdf__message--loading');
+
+        expect(loading).toHaveLength(1);
+        expect(loading.text()).toBe('Loading page…');
+      });
+    });
+
+    it('renders custom loading message when loading a page and loading prop is specified', () => {
+      const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
+
+      const component = shallow(
+        <Page
+          loading="Loading"
+          onLoadSuccess={onLoadSuccess}
+          pageIndex={0}
+        />,
+        {
+          context: {
+            pdf,
+          }
+        }
+      );
+
+      expect.assertions(2);
+      return onLoadSuccessPromise.then(() => {
+        const loading = component.find('.react-pdf__message--loading');
+
+        expect(loading).toHaveLength(1);
+        expect(loading.text()).toBe('Loading');
+      });
     });
 
     it('ignores pageIndex when given pageIndex and pageNumber', () => {
@@ -587,6 +669,30 @@ describe('Page', () => {
         const annotationLayer = component.find('AnnotationLayer');
         expect(annotationLayer).toHaveLength(0);
       });
+    });
+  });
+
+  it('requests page to be rendered with a proper scale when given width', () => {
+    const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
+    const width = 600;
+
+    const component = shallow(
+      <Page
+        onLoadSuccess={onLoadSuccess}
+        pageIndex={0}
+        width={width}
+      />,
+      {
+        context: {
+          pdf,
+        }
+      }
+    );
+
+    expect.assertions(1);
+    return onLoadSuccessPromise.then((page) => {
+      component.update();
+      expect(page.width).toEqual(width);
     });
   });
 });

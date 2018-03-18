@@ -222,7 +222,7 @@ describe('Document', () => {
       });
     });
 
-    it('renders custom loading message when given nothing and loading prop is specified', () => {
+    it('renders custom loading message when loading a file and loading prop is specified', () => {
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
       const component = shallow(
