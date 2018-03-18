@@ -23,6 +23,10 @@ export default class TextLayer extends Component {
 
   componentWillReceiveProps(nextProps, nextContext) {
     if (nextContext.page !== this.context.page) {
+      if (this.state.textItems !== null) {
+        this.setState({ textItems: null });
+      }
+
       this.getTextContent(nextContext);
     }
   }
@@ -83,10 +87,6 @@ export default class TextLayer extends Component {
 
     if (!page) {
       throw new Error('Attempted to load page text content, but no page was specified.');
-    }
-
-    if (this.state.textItems !== null) {
-      this.setState({ textItems: null });
     }
 
     this.runningTask = makeCancellable(page.getTextContent());
