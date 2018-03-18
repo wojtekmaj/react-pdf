@@ -212,7 +212,7 @@ Displays a page. Must be placed inside `<Document />` or have `pdf` prop passed,
 |Prop name|Description|Example values|
 |----|----|----|
 |className|Defines custom class name(s), that will be added to rendered element along with the default `react-pdf__Page`.|<ul><li>String:<br />`"custom-class-name-1 custom-class-name-2"`</li><li>Array of strings:<br />`["custom-class-name-1", "custom-class-name-2"]`</li></ul>|
-|customTextRenderer|A function that customizes how a text layer is rendered. Passes itext item and index for item.|`(textItem, itemIndex) => { return (<mark>{textItem.str}</mark>) }`|
+|customTextRenderer|A function that customizes how a text layer is rendered. Passes itext item and index for item.|`({ str, itemIndex }) => { return (<mark>{str}</mark>) }`|
 |inputRef|A function that behaves like ref, but it's passed to main `<div>` rendered by `<Page>` component.|`(ref) => { this.myPage = ref; }`|
 |onLoadError|Function called in case of an error while loading the page.|`(error) => alert('Error while loading page! ' + error.message)`|
 |onLoadSuccess|Function called when the page is successfully loaded.|`(page) => alert('Now displaying a page number ' + page.pageNumber + '!')`|

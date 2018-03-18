@@ -149,6 +149,7 @@ TextLayerItem.contextTypes = {
 
 TextLayerItem.propTypes = {
   fontName: PropTypes.string.isRequired,
+  itemIndex: PropTypes.number.isRequired, // eslint-disable-line react/no-unused-prop-types
   str: PropTypes.string.isRequired,
   transform: PropTypes.arrayOf(PropTypes.number).isRequired,
   width: PropTypes.number.isRequired,

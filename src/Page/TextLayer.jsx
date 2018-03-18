@@ -107,6 +107,7 @@ export default class TextLayer extends Component {
       <TextLayerItem
         // eslint-disable-next-line react/no-array-index-key
         key={itemIndex}
+        itemIndex={itemIndex}
         {...textItem}
       />
     ));
