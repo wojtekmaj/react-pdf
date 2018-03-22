@@ -133,5 +133,31 @@ describe('AnnotationLayer', () => {
         expect(annotationItems).toHaveLength(desiredAnnotations.length);
       });
     });
+
+    it('renders annotations at a given scale', async () => {
+      const {
+        func: onRenderAnnotationsSuccess, promise: onRenderAnnotationsSuccessPromise,
+      } = makeAsyncCallback();
+      const scale = 2;
+
+      const component = mount(
+        <AnnotationLayer />,
+        {
+          context: {
+            onRenderAnnotationsSuccess,
+            page,
+            scale,
+          },
+        },
+      );
+
+      expect.assertions(1);
+      return onRenderAnnotationsSuccessPromise.then(() => {
+        component.update();
+        const { viewport } = component.instance();
+
+        expect(viewport.scale).toEqual(scale);
+      });
+    });
   });
 });

@@ -124,5 +124,29 @@ describe('TextLayer', () => {
         expect(textItems).toHaveLength(desiredTextItems.length);
       });
     });
+
+    it('renders text content at a given scale', async () => {
+      const { func: onGetTextSuccess, promise: onGetTextSuccessPromise } = makeAsyncCallback();
+      const scale = 2;
+
+      const component = shallow(
+        <TextLayer />,
+        {
+          context: {
+            onGetTextSuccess,
+            page,
+            scale,
+          },
+        },
+      );
+
+      expect.assertions(1);
+      return onGetTextSuccessPromise.then(() => {
+        component.update();
+        const { unrotatedViewport: viewport } = component.instance();
+
+        expect(viewport.scale).toEqual(scale);
+      });
+    });
   });
 });
