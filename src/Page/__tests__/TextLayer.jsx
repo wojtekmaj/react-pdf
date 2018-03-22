@@ -125,6 +125,30 @@ describe('TextLayer', () => {
       });
     });
 
+    it('renders text content at a given rotation', async () => {
+      const { func: onGetTextSuccess, promise: onGetTextSuccessPromise } = makeAsyncCallback();
+      const rotate = 90;
+
+      const component = shallow(
+        <TextLayer />,
+        {
+          context: {
+            onGetTextSuccess,
+            page,
+            rotate,
+          },
+        },
+      );
+
+      expect.assertions(1);
+      return onGetTextSuccessPromise.then(() => {
+        component.update();
+        const { rotate: instanceRotate } = component.instance();
+
+        expect(instanceRotate).toEqual(rotate);
+      });
+    });
+
     it('renders text content at a given scale', async () => {
       const { func: onGetTextSuccess, promise: onGetTextSuccessPromise } = makeAsyncCallback();
       const scale = 2;

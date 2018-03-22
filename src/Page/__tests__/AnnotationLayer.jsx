@@ -134,6 +134,32 @@ describe('AnnotationLayer', () => {
       });
     });
 
+    it('renders annotations at a given rotation', async () => {
+      const {
+        func: onRenderAnnotationsSuccess, promise: onRenderAnnotationsSuccessPromise,
+      } = makeAsyncCallback();
+      const rotate = 90;
+
+      const component = mount(
+        <AnnotationLayer />,
+        {
+          context: {
+            onRenderAnnotationsSuccess,
+            page,
+            rotate,
+          },
+        },
+      );
+
+      expect.assertions(1);
+      return onRenderAnnotationsSuccessPromise.then(() => {
+        component.update();
+        const { viewport } = component.instance();
+
+        expect(viewport.rotation).toEqual(rotate);
+      });
+    });
+
     it('renders annotations at a given scale', async () => {
       const {
         func: onRenderAnnotationsSuccess, promise: onRenderAnnotationsSuccessPromise,
