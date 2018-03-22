@@ -1,5 +1,5 @@
 import React from 'react';
-import { shallow } from 'enzyme';
+import { mount } from 'enzyme';
 import pdfjs from 'pdfjs-dist';
 
 import {} from '../../entry.noworker';
@@ -34,17 +34,13 @@ describe('AnnotationLayer', () => {
     desiredAnnotations2 = await page2.getAnnotations();
   });
 
-  beforeEach(muteConsole);
-
-  afterEach(restoreConsole);
-
   describe('loading', () => {
     it('loads annotations and calls onGetAnnotationsSuccess callback properly', async () => {
       const {
         func: onGetAnnotationsSuccess, promise: onGetAnnotationsSuccessPromise
       } = makeAsyncCallback();
 
-      shallow(
+      mount(
         <AnnotationLayer />,
         {
           context: {
@@ -63,7 +59,9 @@ describe('AnnotationLayer', () => {
         func: onGetAnnotationsError, promise: onGetAnnotationsErrorPromise
       } = makeAsyncCallback();
 
-      shallow(
+      muteConsole();
+
+      mount(
         <AnnotationLayer />,
         {
           context: {
@@ -75,6 +73,8 @@ describe('AnnotationLayer', () => {
 
       expect.assertions(1);
       await expect(onGetAnnotationsErrorPromise).resolves.toBeInstanceOf(Error);
+
+      restoreConsole();
     });
 
     it('replaces annotations properly', async () => {
@@ -82,7 +82,7 @@ describe('AnnotationLayer', () => {
         func: onGetAnnotationsSuccess, promise: onGetAnnotationsSuccessPromise
       } = makeAsyncCallback();
 
-      const mountedComponent = shallow(
+      const mountedComponent = mount(
         <AnnotationLayer />,
         {
           context: {
@@ -105,6 +105,33 @@ describe('AnnotationLayer', () => {
       });
 
       await expect(onGetAnnotationsSuccessPromise2).resolves.toMatchObject(desiredAnnotations2);
+    });
+  });
+
+  describe('rendering', () => {
+    it('renders annotations properly', async () => {
+      const {
+        func: onRenderAnnotationsSuccess, promise: onRenderAnnotationsSuccessPromise,
+      } = makeAsyncCallback();
+
+      const component = mount(
+        <AnnotationLayer />,
+        {
+          context: {
+            onRenderAnnotationsSuccess,
+            page,
+          },
+        },
+      );
+
+      expect.assertions(1);
+
+      return onRenderAnnotationsSuccessPromise.then(() => {
+        component.update();
+        const annotationItems = component.children();
+
+        expect(annotationItems).toHaveLength(desiredAnnotations.length);
+      });
     });
   });
 });

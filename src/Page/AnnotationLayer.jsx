@@ -60,6 +60,31 @@ export default class AnnotationLayer extends Component {
     this.setState({ annotations: false });
   }
 
+  onRenderSuccess = () => {
+    callIfDefined(
+      this.context.onRenderAnnotationsSuccess,
+    );
+  }
+
+  /**
+   * Called when a annotations fails to render.
+   */
+  onRenderError = (error) => {
+    if (
+      error.name === 'RenderingCancelledException' ||
+      error.name === 'PromiseCancelledException'
+    ) {
+      return;
+    }
+
+    errorOnDev(error.message, error);
+
+    callIfDefined(
+      this.context.onRenderError,
+      error,
+    );
+  }
+
   get viewport() {
     const { page, rotate, scale } = this.context;
 
@@ -100,8 +125,9 @@ export default class AnnotationLayer extends Component {
 
     try {
       PDFJS.AnnotationLayer.render(parameters);
+      this.onRenderSuccess();
     } catch (error) {
-      errorOnDev(error.message, error);
+      this.onRenderError(error);
     }
   }
 
@@ -121,6 +147,8 @@ AnnotationLayer.contextTypes = {
   linkService: isLinkService,
   onGetAnnotationsError: PropTypes.func,
   onGetAnnotationsSuccess: PropTypes.func,
+  onRenderAnnotationsError: PropTypes.func,
+  onRenderAnnotationsSuccess: PropTypes.func,
   page: isPage,
   rotate: isRotate,
 };
