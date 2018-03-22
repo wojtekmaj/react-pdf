@@ -151,4 +151,5 @@ AnnotationLayer.contextTypes = {
   onRenderAnnotationsSuccess: PropTypes.func,
   page: isPage,
   rotate: isRotate,
+  scale: PropTypes.number,
 };
