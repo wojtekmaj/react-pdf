@@ -44,7 +44,7 @@ export default class PageCanvas extends Component {
       return;
     }
 
-    errorOnDev(error.message, error);
+    errorOnDev(error);
 
     callIfDefined(
       this.context.onRenderError,

@@ -20,17 +20,37 @@ export default class Outline extends Component {
   }
 
   componentDidMount() {
+    if (!this.context.pdf) {
+      throw new Error('Attempted to load an outline, but no document was specified.');
+    }
+
     this.loadOutline();
   }
 
-  componentWillReceiveProps(nextProps, nextContext) {
-    if (nextContext.pdf !== this.context.pdf) {
-      this.loadOutline(nextContext);
+  componentDidUpdate(prevProps) {
+    if (prevContext.pdf && (this.context.pdf !== prevContext.pdf)) {
+      this.loadOutline();
     }
   }
 
   componentWillUnmount() {
     cancelRunningTask(this.runningTask);
+  }
+
+  loadOutline = async () => {
+    console.log('loadOutline');
+    const { pdf } = this.context;
+
+    let outline = null;
+    try {
+      const cancellable = makeCancellable(pdf.getOutline());
+      this.runningTask = cancellable;
+      outline = await cancellable.promise;
+      this.setState({ outline }, this.onLoadSuccess);
+    } catch (error) {
+      this.setState({ outline: false });
+      this.onLoadError(error);
+    }
   }
 
   getChildContext() {
@@ -46,13 +66,11 @@ export default class Outline extends Component {
   /**
    * Called when an outline is read successfully
    */
-  onLoadSuccess = (outline) => {
-    this.setState({ outline }, () => {
-      callIfDefined(
-        this.props.onLoadSuccess,
-        outline,
-      );
-    });
+  onLoadSuccess = () => {
+    callIfDefined(
+      this.props.onLoadSuccess,
+      this.state.outline,
+    );
   }
 
   /**
@@ -66,14 +84,12 @@ export default class Outline extends Component {
       return;
     }
 
-    errorOnDev(error.message, error);
+    errorOnDev(error);
 
     callIfDefined(
       this.props.onLoadError,
       error,
     );
-
-    this.setState({ outline: false });
   }
 
   onItemClick = ({ pageIndex, pageNumber }) => {
@@ -84,24 +100,6 @@ export default class Outline extends Component {
         pageNumber,
       },
     );
-  }
-
-  loadOutline(context = this.context) {
-    const { pdf } = context;
-
-    if (!pdf) {
-      throw new Error('Attempted to load an outline, but no document was specified.');
-    }
-
-    if (this.state.outline !== null) {
-      this.setState({ outline: null });
-    }
-
-    this.runningTask = makeCancellable(pdf.getOutline());
-
-    return this.runningTask.promise
-      .then(this.onLoadSuccess)
-      .catch(this.onLoadError);
   }
 
   renderOutline() {

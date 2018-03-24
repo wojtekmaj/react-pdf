@@ -18,16 +18,16 @@ export default class TextLayer extends Component {
   }
 
   componentDidMount() {
-    this.getTextContent();
+    if (!this.context.page) {
+      throw new Error('Attempted to load page text content, but no page was specified.');
+    }
+
+    this.loadTextItems();
   }
 
-  componentWillReceiveProps(nextProps, nextContext) {
-    if (nextContext.page !== this.context.page) {
-      if (this.state.textItems !== null) {
-        this.setState({ textItems: null });
-      }
-
-      this.getTextContent(nextContext);
+  componentDidUpdate(prevProps) {
+    if (prevContext.page && (this.context.page !== prevContext.page)) {
+      this.loadTextItems();
     }
   }
 
@@ -35,21 +35,28 @@ export default class TextLayer extends Component {
     cancelRunningTask(this.runningTask);
   }
 
-  onGetTextSuccess = (textContent) => {
-    let textItems = null;
-    if (textContent) {
-      textItems = textContent.items;
+  loadTextItems = async () => {
+    const { page } = this.context;
+
+    try {
+      const cancellable = makeCancellable(page.getTextContent());
+      this.runningTask = cancellable;
+      const { textItems } = await cancellable.promise;
+      this.setState({ textItems }, this.onLoadSuccess);
+    } catch (error) {
+      this.setState({ textItems: false });
+      this.onLoadError(error);
     }
-
-    callIfDefined(
-      this.context.onGetTextSuccess,
-      textItems,
-    );
-
-    this.setState({ textItems });
   }
 
-  onGetTextError = (error) => {
+  onLoadSuccess = () => {
+    callIfDefined(
+      this.context.onGetTextSuccess,
+      this.state.textItems,
+    );
+  }
+
+  onLoadError = (error) => {
     if (
       error.name === 'RenderingCancelledException' ||
       error.name === 'PromiseCancelledException'
@@ -57,14 +64,12 @@ export default class TextLayer extends Component {
       return;
     }
 
-    errorOnDev(error.message, error);
+    errorOnDev(error);
 
     callIfDefined(
       this.context.onGetTextError,
       error,
     );
-
-    this.setState({ textItems: false });
   }
 
   get unrotatedViewport() {
@@ -80,20 +85,6 @@ export default class TextLayer extends Component {
   get rotate() {
     const { page, rotate } = this.context;
     return rotate - page.rotate;
-  }
-
-  getTextContent(context = this.context) {
-    const { page } = context;
-
-    if (!page) {
-      throw new Error('Attempted to load page text content, but no page was specified.');
-    }
-
-    this.runningTask = makeCancellable(page.getTextContent());
-
-    return this.runningTask.promise
-      .then(this.onGetTextSuccess)
-      .catch(this.onGetTextError);
   }
 
   renderTextItems() {

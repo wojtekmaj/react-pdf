@@ -60,7 +60,7 @@ export default class PageSVG extends Component {
           .then((svg) => {
             svg.style.maxWidth = '100%';
             svg.style.height = 'auto';
-            this.setState({ svg }, () => this.onRenderSuccess());
+            this.setState({ svg }, this.onRenderSuccess);
           })
           .catch(this.onRenderError);
       })

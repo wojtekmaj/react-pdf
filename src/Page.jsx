@@ -25,24 +25,24 @@ export default class Page extends Component {
   }
 
   componentDidMount() {
+    if (!this.context.pdf) {
+      throw new Error('Attempted to load a page, but no document was specified.');
+    }
+
     this.loadPage();
   }
 
-  componentWillReceiveProps(nextProps, nextContext) {
+  componentDidUpdate(prevProps) {
     if (
-      nextContext.pdf !== this.context.pdf ||
-      this.getPageNumber(nextProps) !== this.getPageNumber()
+      (prevContext.pdf && (this.context.pdf !== prevContext.pdf)) ||
+      this.getPageNumber() !== this.getPageNumber(prevProps)
     ) {
       callIfDefined(
         this.props.unregisterPage,
-        this.pageIndex,
+        this.getPageIndex(prevProps),
       );
 
-      if (this.state.page !== null) {
-        this.setState({ page: null });
-      }
-
-      this.loadPage(nextProps, nextContext);
+      this.loadPage();
     }
   }
 
@@ -93,19 +93,17 @@ export default class Page extends Component {
   /**
    * Called when a page is loaded successfully
    */
-  onLoadSuccess = (page) => {
-    this.setState({ page }, () => {
-      callIfDefined(
-        this.props.onLoadSuccess,
-        makePageCallback(page, this.scale),
-      );
+  onLoadSuccess = () => {
+    callIfDefined(
+      this.props.onLoadSuccess,
+      makePageCallback(this.state.page, this.scale),
+    );
 
-      callIfDefined(
-        this.props.registerPage,
-        page.pageIndex,
-        this.ref,
-      );
-    });
+    callIfDefined(
+      this.props.registerPage,
+      this.pageIndex,
+      this.ref,
+    );
   }
 
   /**
@@ -119,14 +117,12 @@ export default class Page extends Component {
       return;
     }
 
-    errorOnDev(error.message, error);
+    errorOnDev(error);
 
     callIfDefined(
       this.props.onLoadError,
       error,
     );
-
-    this.setState({ page: false });
   }
 
   getPageIndex(props = this.props) {
@@ -217,24 +213,25 @@ export default class Page extends Component {
     };
   }
 
-  loadPage(props = this.props, context = this.context) {
-    const { pdf } = context;
+  loadPage = async () => {
+    const { pdf } = this.context;
 
-    if (!pdf) {
-      throw new Error('Attempted to load a page, but no document was specified.');
-    }
-
-    const pageNumber = this.getPageNumber(props);
+    const pageNumber = this.getPageNumber();
 
     if (!pageNumber) {
-      return null;
+      return;
     }
 
-    this.runningTask = makeCancellable(pdf.getPage(pageNumber));
-
-    return this.runningTask.promise
-      .then(this.onLoadSuccess)
-      .catch(this.onLoadError);
+    let page = null;
+    try {
+      const cancellable = makeCancellable(pdf.getPage(pageNumber));
+      this.runningTask = cancellable;
+      page = await cancellable.promise;
+      this.setState({ page }, this.onLoadSuccess);
+    } catch (error) {
+      this.setState({ page: false });
+      this.onLoadError(error);
+    }
   }
 
   renderTextLayer() {

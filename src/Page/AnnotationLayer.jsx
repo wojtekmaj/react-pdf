@@ -16,16 +16,16 @@ export default class AnnotationLayer extends Component {
   }
 
   componentDidMount() {
-    this.getAnnotations();
+    if (!this.context.page) {
+      throw new Error('Attempted to load page annotations, but no page was specified.');
+    }
+
+    this.loadAnnotations();
   }
 
-  componentWillReceiveProps(nextProps, nextContext) {
-    if (nextContext.page !== this.context.page) {
-      if (this.state.annotations !== null) {
-        this.setState({ annotations: null });
-      }
-
-      this.getAnnotations(nextContext);
+  componentDidUpdate(prevProps) {
+    if (prevContext.page && (this.context.page !== prevContext.page)) {
+      this.loadAnnotations();
     }
   }
 
@@ -33,16 +33,28 @@ export default class AnnotationLayer extends Component {
     cancelRunningTask(this.runningTask);
   }
 
-  onGetAnnotationsSuccess = (annotations) => {
-    callIfDefined(
-      this.context.onGetAnnotationsSuccess,
-      annotations,
-    );
+  loadAnnotations = async () => {
+    const { page } = this.context;
 
-    this.setState({ annotations });
+    try {
+      const cancellable = makeCancellable(page.getAnnotations());
+      this.runningTask = cancellable;
+      const annotations = await cancellable.promise;
+      this.setState({ annotations }, this.onLoadSuccess);
+    } catch (error) {
+      this.setState({ annotations: false });
+      this.onLoadError(error);
+    }
   }
 
-  onGetAnnotationsError = (error) => {
+  onLoadSuccess = () => {
+    callIfDefined(
+      this.context.onGetAnnotationsSuccess,
+      this.state.annotations,
+    );
+  }
+
+  onLoadError = (error) => {
     if (
       error.name === 'RenderingCancelledException' ||
       error.name === 'PromiseCancelledException'
@@ -50,14 +62,12 @@ export default class AnnotationLayer extends Component {
       return;
     }
 
-    errorOnDev(error.message, error);
+    errorOnDev(error);
 
     callIfDefined(
       this.context.onGetAnnotationsError,
       error,
     );
-
-    this.setState({ annotations: false });
   }
 
   onRenderSuccess = () => {
@@ -77,7 +87,7 @@ export default class AnnotationLayer extends Component {
       return;
     }
 
-    errorOnDev(error.message, error);
+    errorOnDev(error);
 
     callIfDefined(
       this.context.onRenderError,
@@ -89,20 +99,6 @@ export default class AnnotationLayer extends Component {
     const { page, rotate, scale } = this.context;
 
     return page.getViewport(scale, rotate);
-  }
-
-  getAnnotations(context = this.context) {
-    const { page } = context;
-
-    if (!page) {
-      throw new Error('Attempted to load page annotations, but no page was specified.');
-    }
-
-    this.runningTask = makeCancellable(page.getAnnotations());
-
-    return this.runningTask.promise
-      .then(this.onGetAnnotationsSuccess)
-      .catch(this.onGetAnnotationsError);
   }
 
   renderAnnotations() {
