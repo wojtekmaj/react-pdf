@@ -1,5 +1,7 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
+
+import PageContext from '../PageContext';
 
 import TextLayerItem from './TextLayerItem';
 
@@ -12,13 +14,13 @@ import {
 
 import { isPage, isRotate } from '../shared/propTypes';
 
-export default class TextLayer extends Component {
+export class TextLayerInternal extends PureComponent {
   state = {
     textItems: null,
   }
 
   componentDidMount() {
-    if (!this.context.page) {
+    if (!this.props.page) {
       throw new Error('Attempted to load page text content, but no page was specified.');
     }
 
@@ -26,7 +28,7 @@ export default class TextLayer extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    if (prevContext.page && (this.context.page !== prevContext.page)) {
+    if (prevProps.page && (this.props.page !== prevProps.page)) {
       this.loadTextItems();
     }
   }
@@ -36,12 +38,12 @@ export default class TextLayer extends Component {
   }
 
   loadTextItems = async () => {
-    const { page } = this.context;
+    const { page } = this.props;
 
     try {
       const cancellable = makeCancellable(page.getTextContent());
       this.runningTask = cancellable;
-      const { textItems } = await cancellable.promise;
+      const { items: textItems } = await cancellable.promise;
       this.setState({ textItems }, this.onLoadSuccess);
     } catch (error) {
       this.setState({ textItems: false });
@@ -51,7 +53,7 @@ export default class TextLayer extends Component {
 
   onLoadSuccess = () => {
     callIfDefined(
-      this.context.onGetTextSuccess,
+      this.props.onGetTextSuccess,
       this.state.textItems,
     );
   }
@@ -67,13 +69,13 @@ export default class TextLayer extends Component {
     errorOnDev(error);
 
     callIfDefined(
-      this.context.onGetTextError,
+      this.props.onGetTextError,
       error,
     );
   }
 
   get unrotatedViewport() {
-    const { page, scale } = this.context;
+    const { page, scale } = this.props;
 
     return page.getViewport(scale);
   }
@@ -83,7 +85,7 @@ export default class TextLayer extends Component {
    * text content.
    */
   get rotate() {
-    const { page, rotate } = this.context;
+    const { page, rotate } = this.props;
     return rotate - page.rotate;
   }
 
@@ -127,10 +129,18 @@ export default class TextLayer extends Component {
   }
 }
 
-TextLayer.contextTypes = {
+TextLayerInternal.propTypes = {
   onGetTextError: PropTypes.func,
   onGetTextSuccess: PropTypes.func,
   page: isPage.isRequired,
   rotate: isRotate,
   scale: PropTypes.number,
 };
+
+const TextLayer = props => (
+  <PageContext.Consumer>
+    {context => <TextLayerInternal {...context} {...props} />}
+  </PageContext.Consumer>
+);
+
+export default TextLayer;

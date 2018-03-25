@@ -1,9 +1,11 @@
 /**
  * Loads a PDF document. Passes it to all children.
  */
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import mergeClassNames from 'merge-class-names';
+
+import DocumentContext from './DocumentContext';
 
 import LinkService from './LinkService';
 
@@ -25,7 +27,7 @@ import {
 } from './shared/utils';
 import { makeEventProps } from './shared/events';
 
-import { eventsProps, isClassName, isLinkService, isPdf } from './shared/propTypes';
+import { eventsProps, isClassName } from './shared/propTypes';
 
 const loadFromFile = file => new Promise((resolve, reject) => {
   const reader = new FileReader();
@@ -50,7 +52,7 @@ const loadFromFile = file => new Promise((resolve, reject) => {
   return null;
 });
 
-export default class Document extends Component {
+export default class Document extends PureComponent {
   state = {
     pdf: null,
   }
@@ -127,7 +129,7 @@ export default class Document extends Component {
     cancelRunningTask(this.runningTask);
   }
 
-  getChildContext() {
+  get childContext() {
     const { linkService, registerPage, unregisterPage } = this;
     const { rotate } = this.props;
 
@@ -283,6 +285,14 @@ export default class Document extends Component {
     );
   }
 
+  renderChildren() {
+    return (
+      <DocumentContext.Provider value={this.childContext}>
+        {this.props.children}
+      </DocumentContext.Provider>
+    )
+  }
+
   render() {
     const { className, file, inputRef } = this.props;
     const { pdf } = this.state;
@@ -295,7 +305,7 @@ export default class Document extends Component {
     } else if (pdf === false) {
       content = this.renderError();
     } else {
-      content = this.props.children;
+      content = this.renderChildren();
     }
 
     return (
@@ -309,14 +319,6 @@ export default class Document extends Component {
     );
   }
 }
-
-Document.childContextTypes = {
-  linkService: isLinkService,
-  pdf: isPdf,
-  registerPage: PropTypes.func,
-  rotate: PropTypes.number,
-  unregisterPage: PropTypes.func,
-};
 
 Document.defaultProps = {
   error: 'Failed to load PDF file.',

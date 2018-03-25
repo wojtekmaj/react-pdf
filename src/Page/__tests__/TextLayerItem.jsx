@@ -3,13 +3,15 @@ import { shallow } from 'enzyme';
 import pdfjs from 'pdfjs-dist';
 
 import {} from '../../entry.noworker';
-import TextLayerItem from '../TextLayerItem';
+import { TextLayerItemInternal as TextLayerItem } from '../TextLayerItem';
 
 import { loadPDF } from '../../__tests__/utils';
 
 const { PDFJS } = pdfjs;
 
 const { arrayBuffer: fileArrayBuffer } = loadPDF('./__mocks__/_pdf.pdf');
+
+/* eslint-disable comma-dangle */
 
 describe('TextLayerItem', () => {
   // Loaded page
@@ -36,13 +38,9 @@ describe('TextLayerItem', () => {
       const component = shallow(
         <TextLayerItem
           {...defaultProps}
+          page={page}
           str={str}
-        />,
-        {
-          context: {
-            page,
-          },
-        },
+        />
       );
 
       const textItem = component.text();
@@ -57,15 +55,11 @@ describe('TextLayerItem', () => {
       shallow(
         <TextLayerItem
           {...defaultProps}
+          customTextRenderer={customTextRenderer}
           itemIndex={itemIndex}
+          page={page}
           str={str}
-        />,
-        {
-          context: {
-            page,
-            customTextRenderer,
-          },
-        },
+        />
       );
 
       expect(customTextRenderer).toBeCalledWith(
@@ -82,13 +76,9 @@ describe('TextLayerItem', () => {
       const component = shallow(
         <TextLayerItem
           {...defaultProps}
-        />,
-        {
-          context: {
-            page,
-            customTextRenderer,
-          },
-        },
+          customTextRenderer={customTextRenderer}
+          page={page}
+        />
       );
 
       const textItem = component.text();

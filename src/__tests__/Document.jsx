@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { mount, shallow } from 'enzyme';
 
 import { Document } from '../entry.noworker';
@@ -23,10 +22,6 @@ const OK = Symbol('OK');
 /* eslint-disable comma-dangle */
 
 const Child = () => <div className="Child" />;
-
-Child.contextTypes = {
-  pdf: PropTypes.any,
-};
 
 describe('Document', () => {
   // Object with basic loaded PDF information that shall match after successful loading
@@ -310,7 +305,7 @@ describe('Document', () => {
       expect.assertions(1);
       return onLoadSuccessPromise.then(() => {
         component.update();
-        expect(component.instance().getChildContext().rotate).toBe(90);
+        expect(component.instance().childContext.rotate).toBe(90);
       });
     });
 

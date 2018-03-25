@@ -1,6 +1,9 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import mergeClassNames from 'merge-class-names';
+
+import DocumentContext from './DocumentContext';
+import OutlineContext from './OutlineContext';
 
 import OutlineItem from './OutlineItem';
 
@@ -14,13 +17,13 @@ import { makeEventProps } from './shared/events';
 
 import { eventsProps, isClassName, isPdf } from './shared/propTypes';
 
-export default class Outline extends Component {
+export class OutlineInternal extends PureComponent {
   state = {
     outline: null,
   }
 
   componentDidMount() {
-    if (!this.context.pdf) {
+    if (!this.props.pdf) {
       throw new Error('Attempted to load an outline, but no document was specified.');
     }
 
@@ -28,7 +31,7 @@ export default class Outline extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    if (prevContext.pdf && (this.context.pdf !== prevContext.pdf)) {
+    if (prevProps.pdf && (this.props.pdf !== prevProps.pdf)) {
       this.loadOutline();
     }
   }
@@ -38,8 +41,7 @@ export default class Outline extends Component {
   }
 
   loadOutline = async () => {
-    console.log('loadOutline');
-    const { pdf } = this.context;
+    const { pdf } = this.props;
 
     let outline = null;
     try {
@@ -53,7 +55,7 @@ export default class Outline extends Component {
     }
   }
 
-  getChildContext() {
+  get childContext() {
     return {
       onClick: this.onItemClick,
     };
@@ -124,7 +126,7 @@ export default class Outline extends Component {
   }
 
   render() {
-    const { pdf } = this.context;
+    const { pdf } = this.props;
     const { outline } = this.state;
 
     if (!pdf || !outline) {
@@ -139,25 +141,28 @@ export default class Outline extends Component {
         ref={this.props.inputRef}
         {...this.eventProps}
       >
-        {this.renderOutline()}
+        <OutlineContext.Provider value={this.childContext}>
+          {this.renderOutline()}
+        </OutlineContext.Provider>
       </div>
     );
   }
 }
 
-Outline.childContextTypes = {
-  onClick: PropTypes.func,
-};
-
-Outline.contextTypes = {
-  pdf: isPdf,
-};
-
-Outline.propTypes = {
+OutlineInternal.propTypes = {
   className: isClassName,
   inputRef: PropTypes.func,
   onItemClick: PropTypes.func,
   onLoadError: PropTypes.func,
   onLoadSuccess: PropTypes.func,
+  pdf: isPdf,
   ...eventsProps(),
 };
+
+const Outline = props => (
+  <DocumentContext.Consumer>
+    {context => <OutlineInternal {...context} {...props} />}
+  </DocumentContext.Consumer>
+);
+
+export default Outline;

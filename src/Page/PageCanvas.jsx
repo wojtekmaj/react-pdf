@@ -1,5 +1,7 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
+
+import PageContext from '../PageContext';
 
 import {
   callIfDefined,
@@ -10,7 +12,7 @@ import {
 
 import { isPage, isRotate } from '../shared/propTypes';
 
-export default class PageCanvas extends Component {
+export class PageCanvasInternal extends PureComponent {
   componentWillUnmount() {
     /* eslint-disable no-underscore-dangle */
     if (this.renderer && this.renderer._internalRenderTask.running) {
@@ -25,10 +27,10 @@ export default class PageCanvas extends Component {
   onRenderSuccess = () => {
     this.renderer = null;
 
-    const { page, scale } = this.context;
+    const { page, scale } = this.props;
 
     callIfDefined(
-      this.context.onRenderSuccess,
+      this.props.onRenderSuccess,
       makePageCallback(page, scale),
     );
   }
@@ -47,13 +49,13 @@ export default class PageCanvas extends Component {
     errorOnDev(error);
 
     callIfDefined(
-      this.context.onRenderError,
+      this.props.onRenderError,
       error,
     );
   }
 
   get renderViewport() {
-    const { page, rotate, scale } = this.context;
+    const { page, rotate, scale } = this.props;
 
     const pixelRatio = getPixelRatio();
 
@@ -61,7 +63,7 @@ export default class PageCanvas extends Component {
   }
 
   get viewport() {
-    const { page, rotate, scale } = this.context;
+    const { page, rotate, scale } = this.props;
 
     return page.getViewport(scale, rotate);
   }
@@ -71,7 +73,7 @@ export default class PageCanvas extends Component {
       return null;
     }
 
-    const { page } = this.context;
+    const { page } = this.props;
 
     const { renderViewport, viewport } = this;
 
@@ -116,10 +118,18 @@ export default class PageCanvas extends Component {
   }
 }
 
-PageCanvas.contextTypes = {
+PageCanvasInternal.propTypes = {
   onRenderError: PropTypes.func,
   onRenderSuccess: PropTypes.func,
   page: isPage.isRequired,
   rotate: isRotate,
   scale: PropTypes.number,
 };
+
+const PageCanvas = props => (
+  <PageContext.Consumer>
+    {context => <PageCanvasInternal {...context} {...props} />}
+  </PageContext.Consumer>
+);
+
+export default PageCanvas;

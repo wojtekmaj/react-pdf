@@ -2,7 +2,8 @@ import React from 'react';
 import { mount, shallow } from 'enzyme';
 import pdfjs from 'pdfjs-dist';
 
-import { Page } from '../entry.noworker';
+import {} from '../entry.noworker';
+import { PageInternal as Page } from '../Page';
 
 import failingPdf from '../../__mocks__/_failing_pdf';
 import silentlyFailingPdf from '../../__mocks__/_silently_failing_pdf';
@@ -52,12 +53,8 @@ describe('Page', () => {
         <Page
           onLoadSuccess={onLoadSuccess}
           pageIndex={0}
-        />,
-        {
-          context: {
-            pdf,
-          }
-        }
+          pdf={pdf}
+        />
       );
 
       expect.assertions(1);
@@ -73,12 +70,8 @@ describe('Page', () => {
         <Page
           onLoadError={onLoadError}
           pageIndex={0}
-        />,
-        {
-          context: {
-            pdf: failingPdf,
-          }
-        }
+          pdf={failingPdf}
+        />
       );
 
       expect.assertions(1);
@@ -94,12 +87,8 @@ describe('Page', () => {
         <Page
           onLoadSuccess={onLoadSuccess}
           pageIndex={0}
-        />,
-        {
-          context: {
-            pdf,
-          }
-        }
+          pdf={pdf}
+        />
       );
 
       expect.assertions(1);
@@ -115,12 +104,8 @@ describe('Page', () => {
         <Page
           onLoadSuccess={onLoadSuccess}
           pageNumber={1}
-        />,
-        {
-          context: {
-            pdf,
-          }
-        }
+          pdf={pdf}
+        />
       );
 
       expect.assertions(1);
@@ -133,13 +118,11 @@ describe('Page', () => {
       const { func: registerPage, promise: registerPagePromise } = makeAsyncCallback();
 
       shallow(
-        <Page pageIndex={0} />,
-        {
-          context: {
-            pdf,
-            registerPage,
-          }
-        }
+        <Page
+          pageIndex={0}
+          pdf={pdf}
+          registerPage={registerPage}
+        />
       );
 
       expect.assertions(1);
@@ -150,13 +133,11 @@ describe('Page', () => {
       const { func: unregisterPage, promise: nuregisterPagePromise } = makeAsyncCallback();
 
       const component = shallow(
-        <Page pageIndex={0} />,
-        {
-          context: {
-            pdf,
-            unregisterPage,
-          }
-        }
+        <Page
+          pageIndex={0}
+          pdf={pdf}
+          unregisterPage={unregisterPage}
+        />
       );
 
       component.unmount();
@@ -172,12 +153,8 @@ describe('Page', () => {
         <Page
           onLoadSuccess={onLoadSuccess}
           pageIndex={0}
-        />,
-        {
-          context: {
-            pdf,
-          }
-        }
+          pdf={pdf}
+        />
       );
 
       expect.assertions(2);
@@ -206,12 +183,8 @@ describe('Page', () => {
         <Page
           className={className}
           pageIndex={0}
-        />,
-        {
-          context: {
-            pdf,
-          }
-        }
+          pdf={pdf}
+        />
       );
 
       const wrapperClassName = component.find('.react-pdf__Page').prop('className');
@@ -226,12 +199,8 @@ describe('Page', () => {
         <Page
           inputRef={inputRef}
           pageIndex={1}
-        />,
-        {
-          context: {
-            pdf: silentlyFailingPdf,
-          }
-        }
+          pdf={silentlyFailingPdf}
+        />
       );
 
       expect(inputRef).toHaveBeenCalled();
@@ -239,35 +208,36 @@ describe('Page', () => {
     });
 
     it('renders "No page specified." when given neither pageIndex nor pageNumber', () => {
+      muteConsole();
+
       const component = shallow(
-        <Page />,
-        {
-          context: {
-            pdf,
-          }
-        }
+        <Page pdf={pdf} />
       );
 
       const noData = component.find('.react-pdf__message--no-data');
 
       expect(noData).toHaveLength(1);
       expect(noData.text()).toBe('No page specified.');
+
+      restoreConsole();
     });
 
     it('renders custom no data message when given nothing and noData prop is specified', () => {
+      muteConsole();
+
       const component = shallow(
-        <Page noData="Nothing here" />,
-        {
-          context: {
-            pdf,
-          }
-        }
+        <Page
+          noData="Nothing here"
+          pdf={pdf}
+        />
       );
 
       const noData = component.find('.react-pdf__message--no-data');
 
       expect(noData).toHaveLength(1);
       expect(noData.text()).toBe('Nothing here');
+
+      restoreConsole();
     });
 
     it('renders "Loading page…" when loading a page', () => {
@@ -277,12 +247,8 @@ describe('Page', () => {
         <Page
           onLoadSuccess={onLoadSuccess}
           pageIndex={0}
-        />,
-        {
-          context: {
-            pdf,
-          }
-        }
+          pdf={pdf}
+        />
       );
 
       expect.assertions(2);
@@ -302,12 +268,8 @@ describe('Page', () => {
           loading="Loading"
           onLoadSuccess={onLoadSuccess}
           pageIndex={0}
-        />,
-        {
-          context: {
-            pdf,
-          }
-        }
+          pdf={pdf}
+        />
       );
 
       expect.assertions(2);
@@ -326,13 +288,9 @@ describe('Page', () => {
         <Page
           pageIndex={1}
           pageNumber={1}
+          pdf={pdf}
           onLoadSuccess={onLoadSuccess}
-        />,
-        {
-          context: {
-            pdf,
-          }
-        }
+        />
       );
 
       expect.assertions(1);
@@ -348,12 +306,8 @@ describe('Page', () => {
         <Page
           onLoadSuccess={onLoadSuccess}
           pageIndex={0}
-        />,
-        {
-          context: {
-            pdf,
-          }
-        }
+          pdf={pdf}
+        />
       );
 
       expect.assertions(1);
@@ -369,63 +323,14 @@ describe('Page', () => {
         <Page
           onLoadSuccess={onLoadSuccess}
           pageIndex={0}
+          pdf={pdf}
           rotate={90}
-        />,
-        {
-          context: {
-            pdf,
-          }
-        }
+        />
       );
 
       expect.assertions(1);
       return onLoadSuccessPromise.then(() => {
         expect(component.instance().rotate).toBe(90);
-      });
-    });
-
-    it('requests page to be rendered with default rotation when given rotate context', () => {
-      const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
-
-      const component = shallow(
-        <Page
-          onLoadSuccess={onLoadSuccess}
-          pageIndex={0}
-        />,
-        {
-          context: {
-            pdf,
-            rotate: 90,
-          }
-        }
-      );
-
-      expect.assertions(1);
-      return onLoadSuccessPromise.then(() => {
-        expect(component.instance().rotate).toBe(90);
-      });
-    });
-
-    it('requests page to be rendered with rotation passed in props when given rotate both in props and context', () => {
-      const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
-
-      const component = shallow(
-        <Page
-          onLoadSuccess={onLoadSuccess}
-          pageIndex={0}
-          rotate={180}
-        />,
-        {
-          context: {
-            pdf,
-            rotate: 90,
-          }
-        }
-      );
-
-      expect.assertions(1);
-      return onLoadSuccessPromise.then(() => {
-        expect(component.instance().rotate).toBe(180);
       });
     });
 
@@ -436,12 +341,8 @@ describe('Page', () => {
         <Page
           onLoadSuccess={onLoadSuccess}
           pageIndex={0}
-        />,
-        {
-          context: {
-            pdf,
-          }
-        }
+          pdf={pdf}
+        />
       );
 
       expect.assertions(1);
@@ -459,13 +360,9 @@ describe('Page', () => {
         <Page
           onLoadSuccess={onLoadSuccess}
           pageIndex={0}
+          pdf={pdf}
           renderMode="canvas"
-        />,
-        {
-          context: {
-            pdf,
-          }
-        }
+        />
       );
 
       expect.assertions(1);
@@ -483,13 +380,9 @@ describe('Page', () => {
         <Page
           onLoadSuccess={onLoadSuccess}
           pageIndex={0}
+          pdf={pdf}
           renderMode="svg"
-        />,
-        {
-          context: {
-            pdf,
-          }
-        }
+        />
       );
 
       expect.assertions(1);
@@ -507,12 +400,8 @@ describe('Page', () => {
         <Page
           onLoadSuccess={onLoadSuccess}
           pageIndex={0}
-        />,
-        {
-          context: {
-            pdf,
-          }
-        }
+          pdf={pdf}
+        />
       );
 
       expect.assertions(1);
@@ -530,13 +419,9 @@ describe('Page', () => {
         <Page
           onLoadSuccess={onLoadSuccess}
           pageIndex={0}
+          pdf={pdf}
           renderTextLayer
-        />,
-        {
-          context: {
-            pdf,
-          }
-        }
+        />
       );
 
       expect.assertions(1);
@@ -554,13 +439,9 @@ describe('Page', () => {
         <Page
           onLoadSuccess={onLoadSuccess}
           pageIndex={0}
+          pdf={pdf}
           renderTextLayer={false}
-        />,
-        {
-          context: {
-            pdf,
-          }
-        }
+        />
       );
 
       expect.assertions(1);
@@ -578,14 +459,10 @@ describe('Page', () => {
         <Page
           onLoadSuccess={onLoadSuccess}
           pageIndex={0}
+          pdf={pdf}
           renderMode="svg"
           renderTextLayer
-        />,
-        {
-          context: {
-            pdf,
-          }
-        }
+        />
       );
 
       expect.assertions(1);
@@ -603,12 +480,8 @@ describe('Page', () => {
         <Page
           onLoadSuccess={onLoadSuccess}
           pageIndex={0}
-        />,
-        {
-          context: {
-            pdf,
-          }
-        }
+          pdf={pdf}
+        />
       );
 
       expect.assertions(1);
@@ -626,13 +499,9 @@ describe('Page', () => {
         <Page
           onLoadSuccess={onLoadSuccess}
           pageIndex={0}
+          pdf={pdf}
           renderAnnotations
-        />,
-        {
-          context: {
-            pdf,
-          }
-        }
+        />
       );
 
       expect.assertions(1);
@@ -650,13 +519,9 @@ describe('Page', () => {
         <Page
           onLoadSuccess={onLoadSuccess}
           pageIndex={0}
+          pdf={pdf}
           renderAnnotations={false}
-        />,
-        {
-          context: {
-            pdf,
-          }
-        }
+        />
       );
 
       expect.assertions(1);
@@ -676,13 +541,9 @@ describe('Page', () => {
       <Page
         onLoadSuccess={onLoadSuccess}
         pageIndex={0}
+        pdf={pdf}
         width={width}
-      />,
-      {
-        context: {
-          pdf,
-        }
-      }
+      />
     );
 
     expect.assertions(1);

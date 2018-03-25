@@ -1,5 +1,7 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
+
+import PageContext from '../PageContext';
 
 import {
   callIfDefined,
@@ -10,13 +12,13 @@ import {
 
 import { isLinkService, isPage, isRotate } from '../shared/propTypes';
 
-export default class AnnotationLayer extends Component {
+export class AnnotationLayerInternal extends PureComponent {
   state = {
     annotations: null,
   }
 
   componentDidMount() {
-    if (!this.context.page) {
+    if (!this.props.page) {
       throw new Error('Attempted to load page annotations, but no page was specified.');
     }
 
@@ -24,7 +26,7 @@ export default class AnnotationLayer extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    if (prevContext.page && (this.context.page !== prevContext.page)) {
+    if (prevProps.page && (this.props.page !== prevProps.page)) {
       this.loadAnnotations();
     }
   }
@@ -34,7 +36,7 @@ export default class AnnotationLayer extends Component {
   }
 
   loadAnnotations = async () => {
-    const { page } = this.context;
+    const { page } = this.props;
 
     try {
       const cancellable = makeCancellable(page.getAnnotations());
@@ -49,7 +51,7 @@ export default class AnnotationLayer extends Component {
 
   onLoadSuccess = () => {
     callIfDefined(
-      this.context.onGetAnnotationsSuccess,
+      this.props.onGetAnnotationsSuccess,
       this.state.annotations,
     );
   }
@@ -65,14 +67,14 @@ export default class AnnotationLayer extends Component {
     errorOnDev(error);
 
     callIfDefined(
-      this.context.onGetAnnotationsError,
+      this.props.onGetAnnotationsError,
       error,
     );
   }
 
   onRenderSuccess = () => {
     callIfDefined(
-      this.context.onRenderAnnotationsSuccess,
+      this.props.onRenderAnnotationsSuccess,
     );
   }
 
@@ -90,13 +92,13 @@ export default class AnnotationLayer extends Component {
     errorOnDev(error);
 
     callIfDefined(
-      this.context.onRenderError,
+      this.props.onRenderAnnotationsError,
       error,
     );
   }
 
   get viewport() {
-    const { page, rotate, scale } = this.context;
+    const { page, rotate, scale } = this.props;
 
     return page.getViewport(scale, rotate);
   }
@@ -108,7 +110,7 @@ export default class AnnotationLayer extends Component {
       return;
     }
 
-    const { linkService, page } = this.context;
+    const { linkService, page } = this.props;
     const viewport = this.viewport.clone({ dontFlip: true });
 
     const parameters = {
@@ -139,7 +141,7 @@ export default class AnnotationLayer extends Component {
   }
 }
 
-AnnotationLayer.contextTypes = {
+AnnotationLayerInternal.propTypes = {
   linkService: isLinkService,
   onGetAnnotationsError: PropTypes.func,
   onGetAnnotationsSuccess: PropTypes.func,
@@ -149,3 +151,11 @@ AnnotationLayer.contextTypes = {
   rotate: isRotate,
   scale: PropTypes.number,
 };
+
+const AnnotationLayer = props => (
+  <PageContext.Consumer>
+    {context => <AnnotationLayerInternal {...context} {...props} />}
+  </PageContext.Consumer>
+);
+
+export default AnnotationLayer;
