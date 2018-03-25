@@ -133,13 +133,11 @@ describe('Page', () => {
       const { func: registerPage, promise: registerPagePromise } = makeAsyncCallback();
 
       shallow(
-        <Page
-          pageIndex={0}
-          registerPage={registerPage}
-        />,
+        <Page pageIndex={0} />,
         {
           context: {
             pdf,
+            registerPage,
           }
         }
       );
@@ -152,13 +150,11 @@ describe('Page', () => {
       const { func: unregisterPage, promise: nuregisterPagePromise } = makeAsyncCallback();
 
       const component = shallow(
-        <Page
-          pageIndex={0}
-          unregisterPage={unregisterPage}
-        />,
+        <Page pageIndex={0} />,
         {
           context: {
             pdf,
+            unregisterPage,
           }
         }
       );

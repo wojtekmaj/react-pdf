@@ -38,7 +38,7 @@ export default class Page extends Component {
       this.getPageNumber() !== this.getPageNumber(prevProps)
     ) {
       callIfDefined(
-        this.props.unregisterPage,
+        this.context.unregisterPage,
         this.getPageIndex(prevProps),
       );
 
@@ -48,7 +48,7 @@ export default class Page extends Component {
 
   componentWillUnmount() {
     callIfDefined(
-      this.props.unregisterPage,
+      this.context.unregisterPage,
       this.pageIndex,
     );
 
@@ -100,7 +100,7 @@ export default class Page extends Component {
     );
 
     callIfDefined(
-      this.props.registerPage,
+      this.context.registerPage,
       this.pageIndex,
       this.ref,
     );
