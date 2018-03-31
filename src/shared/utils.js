@@ -163,12 +163,10 @@ export const cancelRunningTask = (runningTask) => {
   runningTask.cancel();
 };
 
-export const makePageCallback = (page, scale) => ({
-  ...page,
-  // Legacy callback params
-  get width() { return page.view[2] * scale; },
-  get height() { return page.view[3] * scale; },
-  scale,
-  get originalWidth() { return page.view[2]; },
-  get originalHeight() { return page.view[3]; },
-});
+export const makePageCallback = (page, scale) => {
+  Object.defineProperty(page, 'width', { get() { return this.view[2] * scale; }, configurable: true });
+  Object.defineProperty(page, 'height', { get() { return this.view[3] * scale; }, configurable: true });
+  Object.defineProperty(page, 'originalWidth', { get() { return this.view[2]; }, configurable: true });
+  Object.defineProperty(page, 'originalHeight', { get() { return this.view[3]; }, configurable: true });
+  return page;
+};
