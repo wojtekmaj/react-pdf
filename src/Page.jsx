@@ -195,9 +195,8 @@ export default class Page extends Component {
 
   get eventProps() {
     return makeEventProps(this.props, () => {
-      const { scale } = this;
       const { page } = this.state;
-      return makePageCallback(page, scale);
+      return makePageCallback(page, this.scale);
     });
   }
 
