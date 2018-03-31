@@ -552,4 +552,36 @@ describe('Page', () => {
       expect(page.width).toEqual(width);
     });
   });
+
+  it('calls onClick callback when clicked a page (sample of mouse events family)', () => {
+    const onClick = jest.fn();
+
+    const component = mount(
+      <Page
+        onClick={onClick}
+        pdf={pdf}
+      />
+    );
+
+    const page = component.find('.react-pdf__Page');
+    page.simulate('click');
+
+    expect(onClick).toHaveBeenCalled();
+  });
+
+  it('calls onTouchStart callback when touched a page (sample of touch events family)', () => {
+    const onTouchStart = jest.fn();
+
+    const component = mount(
+      <Page
+        onTouchStart={onTouchStart}
+        pdf={pdf}
+      />
+    );
+
+    const page = component.find('.react-pdf__Page');
+    page.simulate('touchstart');
+
+    expect(onTouchStart).toHaveBeenCalled();
+  });
 });

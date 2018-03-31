@@ -331,4 +331,30 @@ describe('Document', () => {
       });
     });
   });
+
+  it('calls onClick callback when clicked a page (sample of mouse events family)', () => {
+    const onClick = jest.fn();
+
+    const component = mount(
+      <Document onClick={onClick} />
+    );
+
+    const document = component.find('.react-pdf__Document');
+    document.simulate('click');
+
+    expect(onClick).toHaveBeenCalled();
+  });
+
+  it('calls onTouchStart callback when touched a page (sample of touch events family)', () => {
+    const onTouchStart = jest.fn();
+
+    const component = mount(
+      <Document onTouchStart={onTouchStart} />
+    );
+
+    const document = component.find('.react-pdf__Document');
+    document.simulate('touchstart');
+
+    expect(onTouchStart).toHaveBeenCalled();
+  });
 });
