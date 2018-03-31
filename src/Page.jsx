@@ -151,11 +151,11 @@ export class PageInternal extends PureComponent {
       return this.props.rotate;
     }
 
-    if (isProvided(this.props.rotate)) {
-      return this.props.rotate;
-    }
-
     const { page } = this.state;
+
+    if (!page) {
+      return null;
+    }
 
     return page.rotate;
   }
@@ -163,6 +163,10 @@ export class PageInternal extends PureComponent {
   get scale() {
     const { scale, width } = this.props;
     const { page } = this.state;
+
+    if (!page) {
+      return null;
+    }
 
     const { rotate } = this;
 
@@ -180,9 +184,11 @@ export class PageInternal extends PureComponent {
 
   get eventProps() {
     return makeEventProps(this.props, () => {
-      const { scale } = this;
-      const { page } = this.state;
-      return makePageCallback(page, scale);
+      if (!this.state.page) {
+        return this.state.page;
+      }
+
+      return makePageCallback(this.state.page, this.scale);
     });
   }
 
