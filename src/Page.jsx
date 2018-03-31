@@ -194,14 +194,6 @@ export class PageInternal extends PureComponent {
     return `${this.state.page.pageIndex}/${this.rotate}`;
   }
 
-  get pageProps() {
-    return {
-      page: this.state.page,
-      rotate: this.rotate,
-      scale: this.scale,
-    };
-  }
-
   loadPage = async () => {
     const { pdf } = this.props;
 
