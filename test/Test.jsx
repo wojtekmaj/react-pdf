@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { Document, Outline, Page, setOptions } from 'react-pdf/src/entry.webpack';
 import 'react-pdf/src/Page/AnnotationLayer.css';
 
@@ -16,7 +16,7 @@ setOptions({
 
 /* eslint-disable no-console */
 
-export default class Test extends Component {
+export default class Test extends PureComponent {
   state = {
     displayAll: false,
     file: null,
