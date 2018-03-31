@@ -290,7 +290,7 @@ export default class Document extends PureComponent {
       <DocumentContext.Provider value={this.childContext}>
         {this.props.children}
       </DocumentContext.Provider>
-    )
+    );
   }
 
   render() {
