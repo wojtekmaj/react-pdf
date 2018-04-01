@@ -20,7 +20,7 @@ import {
 } from './shared/utils';
 import { makeEventProps } from './shared/events';
 
-import { eventsProps, isClassName, isLinkService, isPageIndex, isPageNumber, isPdf, isRotate } from './shared/propTypes';
+import { eventsProps, isClassName, isPageIndex, isPageNumber, isPdf, isRotate } from './shared/propTypes';
 
 export class PageInternal extends PureComponent {
   state = {
@@ -353,7 +353,6 @@ PageInternal.propTypes = {
   customTextRenderer: PropTypes.func,
   error: PropTypes.string,
   inputRef: PropTypes.func,
-  linkService: isLinkService,
   loading: PropTypes.string,
   noData: PropTypes.node,
   onGetTextError: PropTypes.func,

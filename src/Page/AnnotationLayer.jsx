@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 
+import DocumentContext from '../DocumentContext';
 import PageContext from '../PageContext';
 
 import {
@@ -142,7 +143,7 @@ export class AnnotationLayerInternal extends PureComponent {
 }
 
 AnnotationLayerInternal.propTypes = {
-  linkService: isLinkService,
+  linkService: isLinkService.isRequired,
   onGetAnnotationsError: PropTypes.func,
   onGetAnnotationsSuccess: PropTypes.func,
   onRenderAnnotationsError: PropTypes.func,
@@ -153,9 +154,15 @@ AnnotationLayerInternal.propTypes = {
 };
 
 const AnnotationLayer = props => (
-  <PageContext.Consumer>
-    {context => <AnnotationLayerInternal {...context} {...props} />}
-  </PageContext.Consumer>
+  <DocumentContext.Consumer>
+    {documentContext => (
+      <PageContext.Consumer>
+        {pageContext =>
+          <AnnotationLayerInternal {...documentContext} {...pageContext} {...props} />
+        }
+      </PageContext.Consumer>
+    )}
+  </DocumentContext.Consumer>
 );
 
 export default AnnotationLayer;
