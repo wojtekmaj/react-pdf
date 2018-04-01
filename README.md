@@ -22,15 +22,16 @@ Minimal demo page is included in sample directory.
 
 ### Compatibility
 
-Your project needs to use React 15.5 or later. If you use older version of React, please refer to the table below to find suitable React-PDF version.
+To use the latest version of React-PDF, your project needs to use React 16.3 or later.
 
-|React version|Newest supported React-PDF|
-|----|----|
-|>15.5|latest|
-|>15.0|1.6.1|
-|>0.14|0.0.10|
-|>0.13|0.0.10|
-|>0.11|0.0.4|
+If you use older version of React, please refer to the table below to find suitable React-PDF version. Don't worry - as long as you're running React 15.5 or later, you won't be missing out a lot!
+
+| React version | Newest compatible React-PDF version |
+|-------|--------|
+| ≥16.3 | 4.x    |
+| ≥15.5 | 3.x    |
+| ≥0.13 | 0.0.10 |
+| ≥0.11 | 0.0.4  |
 
 ### Installation
 
