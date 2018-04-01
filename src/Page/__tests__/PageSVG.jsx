@@ -1,7 +1,6 @@
 import React from 'react';
 import { mount } from 'enzyme';
 
-import {} from '../../entry.noworker';
 import { PageSVGInternal as PageSVG } from '../PageSVG';
 
 import failingPage from '../../../__mocks__/_failing_page';

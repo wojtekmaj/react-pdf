@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { Document, Outline, Page, setOptions } from 'react-pdf/src/entry.webpack';
+import { Document, Outline, Page } from 'react-pdf/src/entry.webpack';
 import 'react-pdf/src/Page/AnnotationLayer.css';
 
 import './Test.less';
@@ -9,10 +9,10 @@ import ViewOptions from './ViewOptions';
 
 import { dataURItoBlob } from './shared/utils';
 
-setOptions({
+const options = {
   cMapUrl: 'cmaps/',
   cMapPacked: true,
-});
+};
 
 /* eslint-disable no-console */
 
@@ -97,6 +97,11 @@ export default class Test extends PureComponent {
 
     const setState = state => this.setState(state);
 
+    const documentProps = {
+      file,
+      options,
+    };
+
     const pageProps = {
       className: 'custom-classname-page',
       onClick: (event, page) => console.log('Clicked a page', { event, page }),
@@ -145,8 +150,8 @@ export default class Test extends PureComponent {
               {
                 render &&
                   <Document
+                    {...documentProps}
                     className="custom-classname-document"
-                    file={file}
                   >
                     <Outline
                       className="custom-classname-outline"
@@ -159,9 +164,9 @@ export default class Test extends PureComponent {
               {
                 render &&
                   <Document
+                    {...documentProps}
                     className="custom-classname-document"
                     onItemClick={this.onItemClick}
-                    file={file}
                     onClick={(event, pdf) => console.log('Clicked a document', { event, pdf })}
                     onLoadSuccess={this.onDocumentLoadSuccess}
                     onLoadError={this.onDocumentLoadError}

@@ -123,7 +123,6 @@ export const errorOnDev = (...message) => consoleOnDev('error', ...message);
 
 export const displayCORSWarning = () => {
   if (isLocalFileSystem) {
-    // eslint-disable-next-line no-console
     warnOnDev('Loading PDF as base64 strings/URLs might not work on protocols other than HTTP/HTTPS. On Google Chrome, you can use --allow-file-access-from-files flag for debugging purposes.');
   }
 };

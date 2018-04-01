@@ -4,6 +4,7 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import mergeClassNames from 'merge-class-names';
+import pdfjs from 'pdfjs-dist';
 
 import DocumentContext from './DocumentContext';
 
@@ -109,7 +110,7 @@ export default class Document extends PureComponent {
     }
 
     try {
-      const cancellable = makeCancellable(PDFJS.getDocument(source));
+      const cancellable = makeCancellable(pdfjs.getDocument(source));
       this.runningTask = cancellable;
       const pdf = await cancellable.promise;
       this.setState((prevState) => {
