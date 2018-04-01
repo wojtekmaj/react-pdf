@@ -1,12 +1,14 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 
+import PageContext from '../PageContext';
+
 import { isPage, isRotate } from '../shared/propTypes';
 
 // Render disproportion above which font will be considered broken and fallback will be used
 const BROKEN_FONT_ALARM_THRESHOLD = 0.1;
 
-export default class TextLayerItem extends PureComponent {
+export class TextLayerItemInternal extends PureComponent {
   state = {
     transform: null,
   }
@@ -16,7 +18,7 @@ export default class TextLayerItem extends PureComponent {
   }
 
   get unrotatedViewport() {
-    const { page, scale } = this.context;
+    const { page, scale } = this.props;
 
     return page.getViewport(scale);
   }
@@ -26,7 +28,7 @@ export default class TextLayerItem extends PureComponent {
    * text content.
    */
   get rotate() {
-    const { page, rotate } = this.context;
+    const { page, rotate } = this.props;
     return rotate - page.rotate;
   }
 
@@ -64,7 +66,7 @@ export default class TextLayerItem extends PureComponent {
   }
 
   async getFontData(fontFamily) {
-    const { page } = this.context;
+    const { page } = this.props;
 
     const font = await page.commonObjs.ensureObj(fontFamily);
 
@@ -79,8 +81,7 @@ export default class TextLayerItem extends PureComponent {
     const element = this.item;
     element.style.transform = '';
 
-    const { scale } = this.context;
-    const { fontName, width } = this.props;
+    const { fontName, scale, width } = this.props;
     const targetWidth = width * scale;
 
     const fontData = await this.getFontData(fontName);
@@ -110,8 +111,7 @@ export default class TextLayerItem extends PureComponent {
 
   render() {
     const { fontSize, top, left } = this;
-    const { scale } = this.context;
-    const { fontName, str: text } = this.props;
+    const { fontName, scale, str: text } = this.props;
     const { transform } = this.state;
 
     return (
@@ -131,8 +131,8 @@ export default class TextLayerItem extends PureComponent {
         ref={(ref) => { this.item = ref; }}
       >
         {
-          this.context.customTextRenderer ?
-            this.context.customTextRenderer(this.props) :
+          this.props.customTextRenderer ?
+            this.props.customTextRenderer(this.props) :
             text
         }
       </div>
@@ -140,17 +140,22 @@ export default class TextLayerItem extends PureComponent {
   }
 }
 
-TextLayerItem.contextTypes = {
+TextLayerItemInternal.propTypes = {
   customTextRenderer: PropTypes.func,
+  fontName: PropTypes.string.isRequired,
+  itemIndex: PropTypes.number.isRequired, // eslint-disable-line react/no-unused-prop-types
   page: isPage.isRequired,
   rotate: isRotate,
   scale: PropTypes.number,
-};
-
-TextLayerItem.propTypes = {
-  fontName: PropTypes.string.isRequired,
-  itemIndex: PropTypes.number.isRequired, // eslint-disable-line react/no-unused-prop-types
   str: PropTypes.string.isRequired,
   transform: PropTypes.arrayOf(PropTypes.number).isRequired,
   width: PropTypes.number.isRequired,
 };
+
+const TextLayerItem = props => (
+  <PageContext.Consumer>
+    {context => <TextLayerItemInternal {...context} {...props} />}
+  </PageContext.Consumer>
+);
+
+export default TextLayerItem;

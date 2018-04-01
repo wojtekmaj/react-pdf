@@ -1,7 +1,7 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 
-export default class ViewOptions extends Component {
+export default class ViewOptions extends PureComponent {
   onRenderAnnotationsChange = event =>
     this.props.setState({ renderAnnotations: event.target.checked })
 

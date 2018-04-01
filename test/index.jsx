@@ -1,13 +1,15 @@
-import React from 'react';
+import React, { StrictMode } from 'react';
 import ReactDOM from 'react-dom';
 import { AppContainer } from 'react-hot-loader';
 import Test from './Test';
 
 const render = (Component) => {
   ReactDOM.render(
-    <AppContainer>
-      <Component />
-    </AppContainer>,
+    <StrictMode>
+      <AppContainer>
+        <Component />
+      </AppContainer>
+    </StrictMode>,
     document.getElementById('react-container'),
   );
 };

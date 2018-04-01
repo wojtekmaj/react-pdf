@@ -2,7 +2,8 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import pdfjs from 'pdfjs-dist';
 
-import { Outline } from '../entry.noworker';
+import {} from '../entry.noworker';
+import { OutlineInternal as Outline } from '../Outline';
 
 import failingPdf from '../../__mocks__/_failing_pdf';
 import { loadPDF, makeAsyncCallback, muteConsole, restoreConsole } from './utils';
@@ -36,12 +37,10 @@ describe('Outline', () => {
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
       shallow(
-        <Outline onLoadSuccess={onLoadSuccess} />,
-        {
-          context: {
-            pdf,
-          },
-        }
+        <Outline
+          onLoadSuccess={onLoadSuccess}
+          pdf={pdf}
+        />
       );
 
       expect.assertions(1);
@@ -54,12 +53,10 @@ describe('Outline', () => {
       muteConsole();
 
       shallow(
-        <Outline onLoadError={onLoadError} />,
-        {
-          context: {
-            pdf: failingPdf,
-          },
-        }
+        <Outline
+          onLoadError={onLoadError}
+          pdf={failingPdf}
+        />
       );
 
       expect.assertions(1);
@@ -72,12 +69,10 @@ describe('Outline', () => {
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
       const mountedComponent = shallow(
-        <Outline onLoadSuccess={onLoadSuccess} />,
-        {
-          context: {
-            pdf,
-          },
-        }
+        <Outline
+          onLoadSuccess={onLoadSuccess}
+          pdf={pdf}
+        />
       );
 
       expect.assertions(2);
@@ -85,8 +80,10 @@ describe('Outline', () => {
 
       const { func: onLoadSuccess2, promise: onLoadSuccessPromise2 } = makeAsyncCallback();
 
-      mountedComponent.setProps({ onLoadSuccess: onLoadSuccess2 });
-      mountedComponent.setContext({ pdf: pdf2 });
+      mountedComponent.setProps({
+        onLoadSuccess: onLoadSuccess2,
+        pdf: pdf2,
+      });
 
       // It would have been .toMatchObject if not for the fact _pdf2.pdf has no outline
       await expect(onLoadSuccessPromise2).resolves.toBe(desiredLoadedOutline2);
@@ -102,12 +99,10 @@ describe('Outline', () => {
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
       const component = shallow(
-        <Outline onLoadSuccess={onLoadSuccess} />,
-        {
-          context: {
-            pdf,
-          },
-        }
+        <Outline
+          onLoadSuccess={onLoadSuccess}
+          pdf={pdf}
+        />
       );
 
       expect.assertions(1);

@@ -1,6 +1,9 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import mergeClassNames from 'merge-class-names';
+
+import DocumentContext from './DocumentContext';
+import OutlineContext from './OutlineContext';
 
 import OutlineItem from './OutlineItem';
 
@@ -14,18 +17,22 @@ import { makeEventProps } from './shared/events';
 
 import { eventsProps, isClassName, isPdf } from './shared/propTypes';
 
-export default class Outline extends Component {
+export class OutlineInternal extends PureComponent {
   state = {
     outline: null,
   }
 
   componentDidMount() {
+    if (!this.props.pdf) {
+      throw new Error('Attempted to load an outline, but no document was specified.');
+    }
+
     this.loadOutline();
   }
 
-  componentWillReceiveProps(nextProps, nextContext) {
-    if (nextContext.pdf !== this.context.pdf) {
-      this.loadOutline(nextContext);
+  componentDidUpdate(prevProps) {
+    if (prevProps.pdf && (this.props.pdf !== prevProps.pdf)) {
+      this.loadOutline();
     }
   }
 
@@ -33,7 +40,22 @@ export default class Outline extends Component {
     cancelRunningTask(this.runningTask);
   }
 
-  getChildContext() {
+  loadOutline = async () => {
+    const { pdf } = this.props;
+
+    let outline = null;
+    try {
+      const cancellable = makeCancellable(pdf.getOutline());
+      this.runningTask = cancellable;
+      outline = await cancellable.promise;
+      this.setState({ outline }, this.onLoadSuccess);
+    } catch (error) {
+      this.setState({ outline: false });
+      this.onLoadError(error);
+    }
+  }
+
+  get childContext() {
     return {
       onClick: this.onItemClick,
     };
@@ -46,13 +68,11 @@ export default class Outline extends Component {
   /**
    * Called when an outline is read successfully
    */
-  onLoadSuccess = (outline) => {
-    this.setState({ outline }, () => {
-      callIfDefined(
-        this.props.onLoadSuccess,
-        outline,
-      );
-    });
+  onLoadSuccess = () => {
+    callIfDefined(
+      this.props.onLoadSuccess,
+      this.state.outline,
+    );
   }
 
   /**
@@ -66,14 +86,12 @@ export default class Outline extends Component {
       return;
     }
 
-    errorOnDev(error.message, error);
+    errorOnDev(error);
 
     callIfDefined(
       this.props.onLoadError,
       error,
     );
-
-    this.setState({ outline: false });
   }
 
   onItemClick = ({ pageIndex, pageNumber }) => {
@@ -84,24 +102,6 @@ export default class Outline extends Component {
         pageNumber,
       },
     );
-  }
-
-  loadOutline(context = this.context) {
-    const { pdf } = context;
-
-    if (!pdf) {
-      throw new Error('Attempted to load an outline, but no document was specified.');
-    }
-
-    if (this.state.outline !== null) {
-      this.setState({ outline: null });
-    }
-
-    this.runningTask = makeCancellable(pdf.getOutline());
-
-    return this.runningTask.promise
-      .then(this.onLoadSuccess)
-      .catch(this.onLoadError);
   }
 
   renderOutline() {
@@ -126,7 +126,7 @@ export default class Outline extends Component {
   }
 
   render() {
-    const { pdf } = this.context;
+    const { pdf } = this.props;
     const { outline } = this.state;
 
     if (!pdf || !outline) {
@@ -141,25 +141,28 @@ export default class Outline extends Component {
         ref={this.props.inputRef}
         {...this.eventProps}
       >
-        {this.renderOutline()}
+        <OutlineContext.Provider value={this.childContext}>
+          {this.renderOutline()}
+        </OutlineContext.Provider>
       </div>
     );
   }
 }
 
-Outline.childContextTypes = {
-  onClick: PropTypes.func,
-};
-
-Outline.contextTypes = {
-  pdf: isPdf,
-};
-
-Outline.propTypes = {
+OutlineInternal.propTypes = {
   className: isClassName,
   inputRef: PropTypes.func,
   onItemClick: PropTypes.func,
   onLoadError: PropTypes.func,
   onLoadSuccess: PropTypes.func,
+  pdf: isPdf,
   ...eventsProps(),
 };
+
+const Outline = props => (
+  <DocumentContext.Consumer>
+    {context => <OutlineInternal {...context} {...props} />}
+  </DocumentContext.Consumer>
+);
+
+export default Outline;
