@@ -1,15 +1,13 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import pdfjs from 'pdfjs-dist';
 
-import {} from '../../entry.noworker';
+import { pdfjs } from '../../entry.jest';
+
 import { TextLayerItemInternal as TextLayerItem } from '../TextLayerItem';
 
 import { loadPDF } from '../../__tests__/utils';
 
-const { PDFJS } = pdfjs;
-
-const { arrayBuffer: fileArrayBuffer } = loadPDF('./__mocks__/_pdf.pdf');
+const pdfFile = loadPDF('./__mocks__/_pdf.pdf');
 
 /* eslint-disable comma-dangle */
 
@@ -18,7 +16,7 @@ describe('TextLayerItem', () => {
   let page;
 
   beforeAll(async () => {
-    const pdf = await PDFJS.getDocument({ data: fileArrayBuffer });
+    const pdf = await pdfjs.getDocument({ data: pdfFile.arrayBuffer });
 
     page = await pdf.getPage(1);
   });

@@ -74,9 +74,6 @@ export const isFile = (variable) => {
  */
 export const isDataURI = str => isString(str) && /^data:/.test(str);
 
-export const isParamObject = file =>
-  file instanceof Object && ('data' in file || 'range' in file || 'url' in file);
-
 export const dataURItoUint8Array = (dataURI) => {
   if (!isDataURI(dataURI)) {
     throw new Error('dataURItoUint8Array was provided with an argument which is not a valid data URI.');
@@ -123,7 +120,6 @@ export const errorOnDev = (...message) => consoleOnDev('error', ...message);
 
 export const displayCORSWarning = () => {
   if (isLocalFileSystem) {
-    // eslint-disable-next-line no-console
     warnOnDev('Loading PDF as base64 strings/URLs might not work on protocols other than HTTP/HTTPS. On Google Chrome, you can use --allow-file-access-from-files flag for debugging purposes.');
   }
 };

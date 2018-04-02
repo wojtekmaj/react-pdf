@@ -17,18 +17,23 @@ export const loadPDF = (path) => {
   const fs = require('fs');
 
   const raw = fs.readFileSync(path);
-
   const arrayBuffer = raw.buffer;
-  const blob = new Blob([arrayBuffer], { type: 'application/pdf' });
-  const file = new File([arrayBuffer], { type: 'application/pdf' });
-  const dataURI = `data:application/pdf;base64,${raw.toString('base64')}`;
 
   return {
     raw,
     arrayBuffer,
-    blob,
-    file,
-    dataURI,
+    get blob() {
+      return new Blob([arrayBuffer], { type: 'application/pdf' });
+    },
+    get data() {
+      return new Uint8Array(raw);
+    },
+    get dataURI() {
+      return `data:application/pdf;base64,${raw.toString('base64')}`;
+    },
+    get file() {
+      return new File([arrayBuffer], { type: 'application/pdf' });
+    },
   };
 };
 

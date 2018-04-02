@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
+import pdfjs from 'pdfjs-dist';
 
 import PageContext from '../PageContext';
 
@@ -57,7 +58,7 @@ export class PageSVGInternal extends PureComponent {
 
     return this.renderer
       .then((operatorList) => {
-        const svgGfx = new PDFJS.SVGGraphics(page.commonObjs, page.objs);
+        const svgGfx = new pdfjs.SVGGraphics(page.commonObjs, page.objs);
         this.renderer = svgGfx.getSVG(operatorList, this.viewport)
           .then((svg) => {
             svg.style.maxWidth = '100%';

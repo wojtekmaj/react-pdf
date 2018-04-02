@@ -1,17 +1,15 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import pdfjs from 'pdfjs-dist';
 
-import {} from '../entry.noworker';
+import { pdfjs } from '../entry.jest';
+
 import { OutlineInternal as Outline } from '../Outline';
 
 import failingPdf from '../../__mocks__/_failing_pdf';
 import { loadPDF, makeAsyncCallback, muteConsole, restoreConsole } from './utils';
 
-const { PDFJS } = pdfjs;
-
-const { arrayBuffer: fileArrayBuffer } = loadPDF('./__mocks__/_pdf.pdf');
-const { arrayBuffer: fileArrayBuffer2 } = loadPDF('./__mocks__/_pdf2.pdf');
+const pdfFile = loadPDF('./__mocks__/_pdf.pdf');
+const pdfFile2 = loadPDF('./__mocks__/_pdf2.pdf');
 
 /* eslint-disable comma-dangle */
 
@@ -25,8 +23,8 @@ describe('Outline', () => {
   let desiredLoadedOutline2 = null;
 
   beforeAll(async () => {
-    pdf = await PDFJS.getDocument({ data: fileArrayBuffer });
-    pdf2 = await PDFJS.getDocument({ data: fileArrayBuffer2 });
+    pdf = await pdfjs.getDocument({ data: pdfFile.arrayBuffer });
+    pdf2 = await pdfjs.getDocument({ data: pdfFile2.arrayBuffer });
 
     desiredLoadedOutline = await pdf.getOutline();
     desiredLoadedOutline2 = await pdf2.getOutline();
