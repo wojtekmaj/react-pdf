@@ -350,6 +350,7 @@ PageInternal.defaultProps = {
   loading: 'Loading page…',
   noData: 'No page specified.',
   renderAnnotations: true,
+  renderInteractiveForms: false,
   renderMode: 'canvas',
   renderTextLayer: true,
   scale: 1.0,
