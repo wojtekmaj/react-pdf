@@ -28,7 +28,10 @@ export class AnnotationLayerInternal extends PureComponent {
   }
 
   componentDidUpdate(prevProps) {
-    if (prevProps.page && (this.props.page !== prevProps.page)) {
+    if (
+      (prevProps.page && (this.props.page !== prevProps.page)) ||
+      this.props.renderInteractiveForms !== prevProps.renderInteractiveForms
+    ) {
       this.loadAnnotations();
     }
   }
@@ -112,7 +115,7 @@ export class AnnotationLayerInternal extends PureComponent {
       return;
     }
 
-    const { linkService, page } = this.props;
+    const { linkService, page, renderInteractiveForms } = this.props;
     const viewport = this.viewport.clone({ dontFlip: true });
 
     const parameters = {
@@ -120,8 +123,11 @@ export class AnnotationLayerInternal extends PureComponent {
       div: this.annotationLayer,
       linkService,
       page,
+      renderInteractiveForms,
       viewport,
     };
+
+    this.annotationLayer.innerHTML = '';
 
     try {
       pdfjs.AnnotationLayer.render(parameters);
@@ -150,6 +156,7 @@ AnnotationLayerInternal.propTypes = {
   onRenderAnnotationsError: PropTypes.func,
   onRenderAnnotationsSuccess: PropTypes.func,
   page: isPage,
+  renderInteractiveForms: PropTypes.bool,
   rotate: isRotate,
   scale: PropTypes.number,
 };

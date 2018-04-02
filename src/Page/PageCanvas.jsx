@@ -13,7 +13,23 @@ import {
 import { isPage, isRotate } from '../shared/propTypes';
 
 export class PageCanvasInternal extends PureComponent {
+  componentDidMount() {
+    this.drawPageOnCanvas();
+  }
+
+  componentDidUpdate(prevProps) {
+    if (this.props.renderInteractiveForms !== prevProps.renderInteractiveForms) {
+      // Ensures the canvas will be re-rendered from scratch. Otherwise all form data will stay.
+      this.props.page.cleanup();
+      this.drawPageOnCanvas();
+    }
+  }
+
   componentWillUnmount() {
+    this.cancelRenderingTask();
+  }
+
+  cancelRenderingTask() {
     /* eslint-disable no-underscore-dangle */
     if (this.renderer && this.renderer._internalRenderTask.running) {
       this.renderer._internalRenderTask.cancel();
@@ -68,14 +84,15 @@ export class PageCanvasInternal extends PureComponent {
     return page.getViewport(scale, rotate);
   }
 
-  drawPageOnCanvas = (canvas) => {
+  drawPageOnCanvas = () => {
+    const { canvasLayer: canvas } = this;
+
     if (!canvas) {
       return null;
     }
 
-    const { page } = this.props;
-
     const { renderViewport, viewport } = this;
+    const { page, renderInteractiveForms } = this.props;
 
     canvas.width = renderViewport.width;
     canvas.height = renderViewport.height;
@@ -88,14 +105,11 @@ export class PageCanvasInternal extends PureComponent {
         return canvas.getContext('2d');
       },
       viewport: renderViewport,
+      renderInteractiveForms,
     };
 
     // If another render is in progress, let's cancel it
-    /* eslint-disable no-underscore-dangle */
-    if (this.renderer && this.renderer._internalRenderTask.running) {
-      this.renderer._internalRenderTask.cancel();
-    }
-    /* eslint-enable no-underscore-dangle */
+    this.cancelRenderingTask();
 
     this.renderer = page.render(renderContext);
 
@@ -112,7 +126,7 @@ export class PageCanvasInternal extends PureComponent {
           display: 'block',
           userSelect: 'none',
         }}
-        ref={this.drawPageOnCanvas}
+        ref={(ref) => { this.canvasLayer = ref; }}
       />
     );
   }
@@ -122,6 +136,7 @@ PageCanvasInternal.propTypes = {
   onRenderError: PropTypes.func,
   onRenderSuccess: PropTypes.func,
   page: isPage.isRequired,
+  renderInteractiveForms: PropTypes.bool,
   rotate: isRotate,
   scale: PropTypes.number,
 };

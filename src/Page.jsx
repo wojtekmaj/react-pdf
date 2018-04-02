@@ -74,6 +74,7 @@ export class PageInternal extends PureComponent {
       onRenderError: this.props.onRenderError,
       onRenderSuccess: this.props.onRenderSuccess,
       page: this.state.page,
+      renderInteractiveForms: this.props.renderInteractiveForms,
       rotate: this.rotate,
       scale: this.scale,
     };
@@ -256,7 +257,7 @@ export class PageInternal extends PureComponent {
     return [
       <PageSVG key={`${this.pageKeyNoScale}_svg`} />,
       /**
-       * As of now, PDF.js 2.0.120 returns warnings on unimplemented annotations.
+       * As of now, PDF.js 2.0.474 returns warnings on unimplemented annotations.
        * Therefore, as a fallback, we render "traditional" AnnotationLayer component.
        */
       this.renderAnnotations(),
@@ -349,6 +350,7 @@ PageInternal.defaultProps = {
   loading: 'Loading page…',
   noData: 'No page specified.',
   renderAnnotations: true,
+  renderInteractiveForms: false,
   renderMode: 'canvas',
   renderTextLayer: true,
   scale: 1.0,
@@ -373,6 +375,7 @@ PageInternal.propTypes = {
   pdf: isPdf,
   registerPage: PropTypes.func,
   renderAnnotations: PropTypes.bool,
+  renderInteractiveForms: PropTypes.bool,
   renderMode: PropTypes.oneOf(['canvas', 'svg']),
   renderTextLayer: PropTypes.bool,
   rotate: isRotate,
