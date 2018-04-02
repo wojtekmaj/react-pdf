@@ -188,6 +188,7 @@ Loads a document passed using `file` prop.
 |onLoadSuccess|Function called when the document is successfully loaded.|`(pdf) => alert('Loaded a file with ' + pdf.numPages + ' pages!')`|
 |onSourceError|Function called in case of an error while retrieving document source from `file` prop.|`(error) => alert('Error while retreiving document source! ' + error.message)`|
 |onSourceSuccess|Function called when document source is successfully retreived from `file` prop.|`() => alert('Document source retreived!')`|
+|options|An object in which additional parameters to be passed to PDF.js can be defined. For a full list of possible parameters, check [PDF.js documentation on DocumentInitParameters](https://mozilla.github.io/pdf.js/api/draft/global.html#DocumentInitParameters).|`{ cMapUrl: 'cmaps/', cMapPacked: true }`|
 |rotate|Defines the rotation of the document in degrees. If provided, will change rotation globally, even for the pages which were given `rotate` prop of their own. 90 = rotated to the right, 180 = upside down, 270 = rotated to the left.|`90`|
 
 ### Page
