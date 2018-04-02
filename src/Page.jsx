@@ -209,6 +209,13 @@ export class PageInternal extends PureComponent {
       return;
     }
 
+    this.setState((prevState) => {
+      if (!prevState.page) {
+        return null;
+      }
+      return { page: null };
+    });
+
     let page = null;
     try {
       const cancellable = makeCancellable(pdf.getPage(pageNumber));

@@ -105,6 +105,13 @@ export default class Document extends PureComponent {
       return;
     }
 
+    this.setState((prevState) => {
+      if (!prevState.pdf) {
+        return null;
+      }
+      return { pdf: null };
+    });
+
     const { options } = this.props;
 
     try {

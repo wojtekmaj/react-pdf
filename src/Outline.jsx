@@ -43,6 +43,13 @@ export class OutlineInternal extends PureComponent {
   loadOutline = async () => {
     const { pdf } = this.props;
 
+    this.setState((prevState) => {
+      if (!prevState.outline) {
+        return null;
+      }
+      return { outline: null };
+    });
+
     let outline = null;
     try {
       const cancellable = makeCancellable(pdf.getOutline());
