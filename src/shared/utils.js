@@ -74,9 +74,6 @@ export const isFile = (variable) => {
  */
 export const isDataURI = str => isString(str) && /^data:/.test(str);
 
-export const isParamObject = file =>
-  file instanceof Object && ('data' in file || 'range' in file || 'url' in file);
-
 export const dataURItoUint8Array = (dataURI) => {
   if (!isDataURI(dataURI)) {
     throw new Error('dataURItoUint8Array was provided with an argument which is not a valid data URI.');

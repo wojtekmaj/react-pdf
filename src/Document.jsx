@@ -4,7 +4,7 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import mergeClassNames from 'merge-class-names';
-import pdfjs from 'pdfjs-dist';
+import pdfjs, { PDFDataRangeTransport } from 'pdfjs-dist';
 
 import DocumentContext from './DocumentContext';
 
@@ -21,8 +21,6 @@ import {
   isBrowser,
   isDataURI,
   isFile,
-  isParamObject,
-  isString,
   makeCancellable,
   warnOnDev,
 } from './shared/utils';
@@ -95,22 +93,22 @@ export default class Document extends PureComponent {
   }
 
   loadDocument = async () => {
-    const { file } = this.props;
-
-    if (!file) {
-      return;
-    }
-
     let source = null;
     try {
-      source = await this.findDocumentSource(file);
+      source = await this.findDocumentSource();
       this.onSourceSuccess();
     } catch (error) {
       this.onSourceError(error);
     }
 
+    if (!source) {
+      return;
+    }
+
+    const { options } = this.props;
+
     try {
-      const cancellable = makeCancellable(pdfjs.getDocument(source));
+      const cancellable = makeCancellable(pdfjs.getDocument({ ...source, ...options }));
       this.runningTask = cancellable;
       const pdf = await cancellable.promise;
       this.setState((prevState) => {
@@ -208,41 +206,32 @@ export default class Document extends PureComponent {
   /**
    * Finds a document source based on props.
    */
-  findDocumentSource = async (file) => {
+  findDocumentSource = async () => {
+    const { file } = this.props;
+
     if (!file) {
       return null;
     }
 
     // File is a string
-    if (isString(file)) {
+    if (typeof file === 'string') {
       if (isDataURI(file)) {
         const fileUint8Array = dataURItoUint8Array(file);
-        return fileUint8Array;
+        return { data: fileUint8Array };
       }
 
       displayCORSWarning();
-      return file;
+      return { url: file };
     }
 
+    // File is PDFDataRangeTransport
+    if (file instanceof PDFDataRangeTransport) {
+      return { range: file };
+    }
+
+    // File is an ArrayBuffer
     if (isArrayBuffer(file)) {
-      return file;
-    }
-
-    if (isParamObject(file)) {
-      // Prevent from modifying props
-      const modifiedFile = Object.assign({}, file);
-
-      if ('url' in modifiedFile) {
-        // File is data URI
-        if (isDataURI(modifiedFile.url)) {
-          const fileUint8Array = dataURItoUint8Array(modifiedFile.url);
-          return fileUint8Array;
-        }
-
-        displayCORSWarning();
-      }
-
-      return modifiedFile;
+      return { data: file };
     }
 
     /**
@@ -252,12 +241,31 @@ export default class Document extends PureComponent {
     if (isBrowser) {
       // File is a Blob
       if (isBlob(file) || isFile(file)) {
-        return loadFromFile(file);
+        return { data: await loadFromFile(file) };
       }
     }
 
-    // No supported loading method worked
-    throw new Error('Unsupported loading method.');
+    // At this point, file must be an object
+    if (typeof file !== 'object') {
+      throw new Error('Invalid parameter in file, need either Uint8Array, string or a parameter object');
+    }
+
+    if (!file.url && !file.data && !file.range) {
+      throw new Error('Invalid parameter object: need either .data, .range or .url');
+    }
+
+    // File .url is a string
+    if (typeof file.url === 'string') {
+      if (isDataURI(file.url)) {
+        const { url, ...otherParams } = file;
+        const fileUint8Array = dataURItoUint8Array(url);
+        return { data: fileUint8Array, ...otherParams };
+      }
+
+      displayCORSWarning();
+    }
+
+    return file;
   };
 
   registerPage = (pageIndex, ref) => {
