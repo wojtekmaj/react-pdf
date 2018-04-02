@@ -1,17 +1,18 @@
 import React, { Component } from 'react';
-import { render } from 'react-dom';
-import { Document, Page, setOptions } from 'react-pdf/build/entry.webpack';
+import { Document, Page } from 'react-pdf/dist/entry.parcel';
 
 import './Sample.less';
 
-setOptions({
+import pdfFile from './sample.pdf';
+
+const options = {
   cMapUrl: 'cmaps/',
   cMapPacked: true,
-});
+};
 
-class Sample extends Component {
+export default class Sample extends Component {
   state = {
-    file: './sample.pdf',
+    file: pdfFile,
     numPages: null,
   }
 
@@ -46,6 +47,7 @@ class Sample extends Component {
             <Document
               file={file}
               onLoadSuccess={this.onDocumentLoadSuccess}
+              options={options}
             >
               {
                 Array.from(
@@ -65,5 +67,3 @@ class Sample extends Component {
     );
   }
 }
-
-render(<Sample />, document.getElementById('react-container'));

@@ -1,7 +1,7 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 
-export default class ViewOptions extends Component {
+export default class ViewOptions extends PureComponent {
   onRenderAnnotationsChange = event =>
     this.props.setState({ renderAnnotations: event.target.checked })
 
@@ -38,7 +38,7 @@ export default class ViewOptions extends Component {
   rotateRight = () => this.changeRotation(90);
 
   changeRotation(by) {
-    this.props.setState(prevState => ({ rotate: (prevState.rotate + by) % 360 }));
+    this.props.setState(prevState => ({ rotate: (prevState.rotate + by + 360) % 360 }));
   }
 
   resetRotation = () => this.props.setState({ rotate: null })

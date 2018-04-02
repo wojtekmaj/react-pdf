@@ -74,9 +74,6 @@ export const isFile = (variable) => {
  */
 export const isDataURI = str => isString(str) && /^data:/.test(str);
 
-export const isParamObject = file =>
-  file instanceof Object && ('data' in file || 'range' in file || 'url' in file);
-
 export const dataURItoUint8Array = (dataURI) => {
   if (!isDataURI(dataURI)) {
     throw new Error('dataURItoUint8Array was provided with an argument which is not a valid data URI.');
@@ -108,7 +105,7 @@ export const callIfDefined = (fn, ...args) => {
   }
 };
 
-export const getPixelRatio = () => window.devicePixelRatio || 1;
+export const getPixelRatio = () => (isBrowser && window.devicePixelRatio) || 1;
 
 const consoleOnDev = (method, ...message) => {
   if (!isProduction) {
@@ -123,18 +120,26 @@ export const errorOnDev = (...message) => consoleOnDev('error', ...message);
 
 export const displayCORSWarning = () => {
   if (isLocalFileSystem) {
-    // eslint-disable-next-line no-console
     warnOnDev('Loading PDF as base64 strings/URLs might not work on protocols other than HTTP/HTTPS. On Google Chrome, you can use --allow-file-access-from-files flag for debugging purposes.');
   }
 };
+
+class PromiseCancelledException extends Error {
+  constructor(message, type) {
+    super(message, type);
+    this.name = 'PromiseCancelledException';
+    this.message = message;
+    this.type = type;
+  }
+}
 
 export const makeCancellable = (promise) => {
   let isCancelled = false;
 
   const wrappedPromise = new Promise((resolve, reject) => {
     promise.then(
-      (...args) => (isCancelled ? reject(new Error('cancelled')) : resolve(...args)),
-      error => (isCancelled ? reject(new Error('cancelled')) : reject(error)),
+      (...args) => (isCancelled ? reject(new PromiseCancelledException('Promise cancelled')) : resolve(...args)),
+      error => (isCancelled ? reject(new PromiseCancelledException('Promise cancelled')) : reject(error)),
     );
   });
 
@@ -144,4 +149,20 @@ export const makeCancellable = (promise) => {
       isCancelled = true;
     },
   };
+};
+
+export const cancelRunningTask = (runningTask) => {
+  if (!runningTask || !runningTask.cancel) {
+    return;
+  }
+
+  runningTask.cancel();
+};
+
+export const makePageCallback = (page, scale) => {
+  Object.defineProperty(page, 'width', { get() { return this.view[2] * scale; }, configurable: true });
+  Object.defineProperty(page, 'height', { get() { return this.view[3] * scale; }, configurable: true });
+  Object.defineProperty(page, 'originalWidth', { get() { return this.view[2]; }, configurable: true });
+  Object.defineProperty(page, 'originalHeight', { get() { return this.view[3]; }, configurable: true });
+  return page;
 };

@@ -1,6 +1,6 @@
 {
   "name": "react-pdf-test-page",
-  "version": "2.4.2",
+  "version": "3.0.4",
   "description": "A test page for React-PDF.",
   "private": true,
   "scripts": {
@@ -14,34 +14,34 @@
   "license": "MIT",
   "dependencies": {
     "prop-types": "^15.6.0",
-    "react": "^16.1.0",
-    "react-dom": "^16.1.0",
-    "react-pdf": "../"
+    "react": "^16.3.0",
+    "react-dom": "^16.3.0",
+    "react-pdf": "latest"
   },
   "devDependencies": {
     "babel-core": "^6.26.0",
-    "babel-eslint": "^8.0.2",
+    "babel-eslint": "^8.2.1",
     "babel-loader": "^7.1.2",
     "babel-plugin-transform-class-properties": "^6.24.1",
     "babel-plugin-transform-runtime": "^6.23.0",
-    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-env": "^1.6.1",
     "babel-preset-react": "^6.24.1",
     "babel-preset-stage-2": "^6.24.1",
-    "copy-webpack-plugin": "^4.2.0",
-    "css-loader": "latest",
-    "eslint": "^4.11.0",
+    "copy-webpack-plugin": "^4.3.1",
+    "css-loader": "^0.28.11",
+    "eslint": "^4.16.0",
     "eslint-config-airbnb": "^16.1.0",
-    "eslint-plugin-class-property": "^1.0.6",
+    "eslint-plugin-class-property": "^1.1.0",
     "eslint-plugin-import": "^2.8.0",
-    "eslint-plugin-jsx-a11y": "^6.0.2",
-    "eslint-plugin-react": "^7.4.0",
-    "file-loader": "latest",
+    "eslint-plugin-jsx-a11y": "^6.0.3",
+    "eslint-plugin-react": "^7.6.0",
+    "file-loader": "^1.1.11",
     "less": "^2.7.3",
-    "less-loader": "latest",
-    "react-hot-loader": "^3.1.2",
-    "style-loader": "latest",
-    "url-loader": "latest",
-    "webpack": "^3.8.1",
-    "webpack-dev-server": "^2.9.4"
+    "less-loader": "^4.1.0",
+    "react-hot-loader": "^4.0.0",
+    "style-loader": "^0.20.3",
+    "url-loader": "^1.0.1",
+    "webpack": "^3.10.0",
+    "webpack-dev-server": "^2.11.1"
   }
 }

@@ -1,21 +1,22 @@
-import React, { Component } from 'react';
-import { Document, Outline, Page, setOptions } from 'react-pdf/src/entry.webpack';
+import React, { PureComponent } from 'react';
+import { Document, Outline, Page } from 'react-pdf/src/entry.webpack';
+import 'react-pdf/src/Page/AnnotationLayer.css';
 
 import './Test.less';
 
 import LoadingOptions from './LoadingOptions';
 import ViewOptions from './ViewOptions';
 
-import { dataURItoBlob } from './shared/util';
+import { dataURItoBlob } from './shared/utils';
 
-setOptions({
+const options = {
   cMapUrl: 'cmaps/',
   cMapPacked: true,
-});
+};
 
 /* eslint-disable no-console */
 
-export default class Test extends Component {
+export default class Test extends PureComponent {
   state = {
     displayAll: false,
     file: null,
@@ -36,6 +37,9 @@ export default class Test extends Component {
       numPages,
       pageNumber: 1,
     })
+
+  onPageRenderSuccess = page =>
+    console.log('Rendered a page', page);
 
   onItemClick = ({ pageNumber }) =>
     this.setState({ pageNumber })
@@ -95,6 +99,11 @@ export default class Test extends Component {
 
     const setState = state => this.setState(state);
 
+    const documentProps = {
+      file,
+      options,
+    };
+
     const pageProps = {
       className: 'custom-classname-page',
       onClick: (event, page) => console.log('Clicked a page', { event, page }),
@@ -104,6 +113,16 @@ export default class Test extends Component {
       renderMode,
       renderTextLayer,
       width: pageWidth,
+      customTextRenderer: textItem => (
+        textItem.str
+          .split('ipsum')
+          .reduce((strArray, currentValue, currentIndex) => (
+            currentIndex === 0 ?
+              ([...strArray, currentValue]) :
+              // eslint-disable-next-line react/no-array-index-key
+              ([...strArray, <mark key={currentIndex}>ipsum</mark>, currentValue])
+          ), [])
+      ),
     };
 
     return (
@@ -135,8 +154,8 @@ export default class Test extends Component {
               {
                 render &&
                   <Document
+                    {...documentProps}
                     className="custom-classname-document"
-                    file={file}
                   >
                     <Outline
                       className="custom-classname-outline"
@@ -149,9 +168,9 @@ export default class Test extends Component {
               {
                 render &&
                   <Document
+                    {...documentProps}
                     className="custom-classname-document"
                     onItemClick={this.onItemClick}
-                    file={file}
                     onClick={(event, pdf) => console.log('Clicked a document', { event, pdf })}
                     onLoadSuccess={this.onDocumentLoadSuccess}
                     onLoadError={this.onDocumentLoadError}

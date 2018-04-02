@@ -1,14 +1,36 @@
 {
   "name": "react-pdf",
-  "version": "2.4.2",
-  "description": "Easily display PDF files in your React application.",
-  "main": "build/entry.js",
+  "version": "3.0.4",
+  "description": "Display PDFs in your React app as easily as if they were images.",
+  "main": "dist/entry.js",
   "es6": "src/entry.js",
   "scripts": {
-    "build": "babel ./src -d ./build --copy-files",
-    "eslint": "eslint ./src",
+    "build": "npm run build-js && npm run copy-styles",
+    "build-js": "babel src -d dist --ignore **/__tests__",
+    "copy-styles": "node ./copy-styles.js",
     "prepublishOnly": "npm run build",
-    "test": "npm run eslint"
+    "test": "npm run test-eslint && npm run test-jest",
+    "test-eslint": "eslint ./src",
+    "test-jest": "jest",
+    "test-jest-coverage": "jest --coverage"
+  },
+  "jest": {
+    "setupFiles": [
+      "<rootDir>/jest.setup.js"
+    ],
+    "collectCoverageFrom": [
+      "**/src/**.{js,jsx}",
+      "!**/src/entry.js",
+      "!**/src/entry.parcel.js",
+      "!**/src/entry.webpack.js",
+      "!**/src/pdf.worker.entry.js"
+    ],
+    "moduleNameMapper": {
+      "\\.(css|less)$": "<rootDir>/__mocks__/styleMock.js"
+    },
+    "testPathIgnorePatterns": [
+      "utils.js"
+    ]
   },
   "keywords": [
     "pdf",
@@ -37,6 +59,10 @@
       "email": "fegolac@gmail.com"
     },
     {
+      "name": "Julia Kieserman",
+      "email": "kieserman.julia@gmail.com"
+    },
+    {
       "name": "Niklas Närhinen",
       "email": "niklas@narhinen.net"
     },
@@ -50,33 +76,41 @@
     "babel-runtime": "^6.26.0",
     "lodash.once": "^4.1.1",
     "merge-class-names": "^1.1.1",
-    "pdfjs-dist": "^2.0.120",
-    "prop-types": ">=15.5",
-    "react": ">=15.5",
-    "react-dom": ">=15.5"
+    "pdfjs-dist": "^2.0.474",
+    "prop-types": "^15.6.1"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.0",
-    "babel-eslint": "^8.0.2",
+    "babel-eslint": "^8.2.2",
     "babel-plugin-transform-class-properties": "^6.24.1",
     "babel-plugin-transform-es2015-modules-commonjs": "^6.26.0",
     "babel-plugin-transform-runtime": "^6.23.0",
-    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-env": "^1.6.1",
     "babel-preset-react": "^6.24.1",
     "babel-preset-stage-2": "^6.24.1",
-    "eslint": "^4.11.0",
+    "enzyme": "^3.3.0",
+    "enzyme-adapter-react-16": "^1.1.1",
+    "eslint": "^4.19.0",
     "eslint-config-airbnb": "^16.1.0",
-    "eslint-plugin-class-property": "^1.0.6",
-    "eslint-plugin-import": "^2.8.0",
-    "eslint-plugin-jsx-a11y": "^6.0.2",
-    "eslint-plugin-react": "^7.4.0",
-    "webpack": "^3.8.1"
+    "eslint-plugin-class-property": "^1.1.0",
+    "eslint-plugin-import": "^2.9.0",
+    "eslint-plugin-jsx-a11y": "^6.0.3",
+    "eslint-plugin-react": "^7.7.0",
+    "jest": "^22.4.2",
+    "jest-cli": "^22.4.2",
+    "react": "^16.3.0",
+    "react-dom": "^16.3.0",
+    "webpack": "^3.11.0"
+  },
+  "peerDependencies": {
+    "react": "^16.3.0",
+    "react-dom": "^16.3.0"
   },
   "files": [
     "LICENSE",
     "README.md",
-    "build/",
+    "dist/",
     "src/"
   ],
   "repository": {

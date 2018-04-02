@@ -1,4 +1,4 @@
-import { dataURItoUint8Array } from '../../src/shared/util';
+import { dataURItoUint8Array } from '../../src/shared/utils';
 
 /* eslint-disable import/prefer-default-export */
 

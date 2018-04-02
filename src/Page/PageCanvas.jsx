@@ -1,31 +1,27 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
+
+import PageContext from '../PageContext';
 
 import {
   callIfDefined,
   errorOnDev,
   getPixelRatio,
-} from './shared/util';
+  makePageCallback,
+} from '../shared/utils';
 
-import { pageProp, rotateProp } from './shared/propTypes';
+import { isPage, isRotate } from '../shared/propTypes';
 
-export default class PageCanvas extends Component {
+export class PageCanvasInternal extends PureComponent {
   componentDidMount() {
     this.drawPageOnCanvas();
   }
 
-  componentWillReceiveProps(nextProps) {
-    const { props } = this;
-
-    if (nextProps.renderInteractiveForms !== props.renderInteractiveForms) {
-      nextProps.page.cleanup();
-    }
-
-    if (
-      nextProps.page !== props.page ||
-      nextProps.renderInteractiveForms !== props.renderInteractiveForms
-    ) {
-      this.drawPageOnCanvas(nextProps);
+  componentDidUpdate(prevProps) {
+    if (this.props.renderInteractiveForms !== prevProps.renderInteractiveForms) {
+      // Ensures the canvas will be re-rendered from scratch. Otherwise all form data will stay.
+      this.props.page.cleanup();
+      this.drawPageOnCanvas();
     }
   }
 
@@ -47,18 +43,26 @@ export default class PageCanvas extends Component {
   onRenderSuccess = () => {
     this.renderer = null;
 
-    callIfDefined(this.props.onRenderSuccess);
+    const { page, scale } = this.props;
+
+    callIfDefined(
+      this.props.onRenderSuccess,
+      makePageCallback(page, scale),
+    );
   }
 
   /**
    * Called when a page fails to render.
    */
   onRenderError = (error) => {
-    if ((error.message || error) === 'cancelled') {
+    if (
+      error.name === 'RenderingCancelledException' ||
+      error.name === 'PromiseCancelledException'
+    ) {
       return;
     }
 
-    errorOnDev(error.message, error);
+    errorOnDev(error);
 
     callIfDefined(
       this.props.onRenderError,
@@ -80,16 +84,15 @@ export default class PageCanvas extends Component {
     return page.getViewport(scale, rotate);
   }
 
-  drawPageOnCanvas = (props = this.props) => {
+  drawPageOnCanvas = () => {
     const { canvasLayer: canvas } = this;
 
     if (!canvas) {
       return null;
     }
 
-    const { page, renderInteractiveForms } = props;
-
     const { renderViewport, viewport } = this;
+    const { page, renderInteractiveForms } = this.props;
 
     canvas.width = renderViewport.width;
     canvas.height = renderViewport.height;
@@ -97,10 +100,10 @@ export default class PageCanvas extends Component {
     canvas.style.width = `${Math.floor(viewport.width)}px`;
     canvas.style.height = `${Math.floor(viewport.height)}px`;
 
-    const canvasContext = canvas.getContext('2d');
-
     const renderContext = {
-      canvasContext,
+      get canvasContext() {
+        return canvas.getContext('2d');
+      },
       viewport: renderViewport,
       renderInteractiveForms,
     };
@@ -118,7 +121,7 @@ export default class PageCanvas extends Component {
   render() {
     return (
       <canvas
-        className="ReactPDF__Page__canvas"
+        className="react-pdf__Page__canvas"
         style={{
           display: 'block',
           userSelect: 'none',
@@ -129,11 +132,19 @@ export default class PageCanvas extends Component {
   }
 }
 
-PageCanvas.propTypes = {
+PageCanvasInternal.propTypes = {
   onRenderError: PropTypes.func,
   onRenderSuccess: PropTypes.func,
-  page: pageProp.isRequired,
+  page: isPage.isRequired,
   renderInteractiveForms: PropTypes.bool,
-  rotate: rotateProp,
+  rotate: isRotate,
   scale: PropTypes.number,
 };
+
+const PageCanvas = props => (
+  <PageContext.Consumer>
+    {context => <PageCanvasInternal {...context} {...props} />}
+  </PageContext.Consumer>
+);
+
+export default PageCanvas;
