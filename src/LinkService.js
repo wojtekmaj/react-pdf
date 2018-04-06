@@ -1,3 +1,3 @@
-import { PDFLinkService } from 'pdfjs-dist/lib/web/pdf_link_service';
+import { PDFLinkService } from './linkService/index';
 
 export default PDFLinkService;
