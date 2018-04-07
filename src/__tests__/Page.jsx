@@ -59,6 +59,29 @@ describe('Page', () => {
       await expect(onLoadSuccessPromise).resolves.toMatchObject(desiredLoadedPage);
     });
 
+    it('returns all desired parameters in onLoadSuccess callback', () => {
+      const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
+
+      const component = shallow(
+        <Page
+          onLoadSuccess={onLoadSuccess}
+          pageIndex={0}
+          pdf={pdf}
+        />
+      );
+
+      expect.assertions(5);
+      return onLoadSuccessPromise.then((page) => {
+        component.update();
+        expect(page.width).toBeDefined();
+        expect(page.height).toBeDefined();
+        expect(page.originalWidth).toBeDefined();
+        expect(page.originalHeight).toBeDefined();
+        // Example of a method that got stripped away in the past
+        expect(page.getTextContent).toBeInstanceOf(Function);
+      });
+    });
+
     it('calls onLoadError when failed to load a page', async () => {
       const { func: onLoadError, promise: onLoadErrorPromise } = makeAsyncCallback();
 
