@@ -22,15 +22,16 @@ Minimal demo page is included in sample directory.
 
 ### Compatibility
 
-Your project needs to use React 15.5 or later. If you use older version of React, please refer to the table below to find suitable React-PDF version.
+To use the latest version of React-PDF, your project needs to use React 16.3 or later.
 
-|React version|Newest supported React-PDF|
-|----|----|
-|>15.5|latest|
-|>15.0|1.6.1|
-|>0.14|0.0.10|
-|>0.13|0.0.10|
-|>0.11|0.0.4|
+If you use older version of React, please refer to the table below to find suitable React-PDF version. Don't worry - as long as you're running React 15.5 or later, you won't be missing out a lot!
+
+| React version | Newest compatible React-PDF version |
+|-------|--------|
+| ≥16.3 | 4.x    |
+| ≥15.5 | 3.x    |
+| ≥0.13 | 0.0.10 |
+| ≥0.11 | 0.0.4  |
 
 ### Installation
 
@@ -102,14 +103,6 @@ import { Document } from 'react-pdf/dist/entry.parcel';
 
 If you use Browserify or other bundling tools, you will have to make sure on your own that `pdf.worker.js` file from `pdfjs-dist/build` is copied to your project's output folder.
 
-#### I give up
-
-If you absolutely have to, you can import React PDF with worker disabled. You can do so by importing React-PDF like so:
-
-```js
-import { Document } from 'react-pdf/dist/entry.noworker';
-```
-
 ### Support for annotations
 
 If you want to use annotations (e.g. links) in PDFs rendered by React-PDF, then you would need to include stylesheet necessary for annotations to be correctly displayed like so:
@@ -123,7 +116,7 @@ import 'react-pdf/dist/Page/AnnotationLayer.css';
 If you want to ensure that PDFs with non-latin characters will render perfectly, or you have encountered the following warning:
 
 ```
-Warning: CMap baseUrl must be specified, see "PDFJS.cMapUrl" (and also "PDFJS.cMapPacked").
+Warning: The CMap "baseUrl" parameter must be specified, ensure that the "cMapUrl" and "cMapPacked" API parameters are provided.
 ```
 
 then you would also need to include cMaps in your build and tell React-PDF where they are.
@@ -163,19 +156,15 @@ If you use Parcel, Browserify or other bundling tools, you will have to make sur
 
 #### Setting up React-PDF
 
-Now that you have cMaps in your build, import `setOptions` like so:
+Now that you have cMaps in your build, pass required options to Document component by using `options` prop, like so:
 
 ```js
-import { setOptions } from 'react-pdf';
-```
-
-**Note:** If you're using a different entry point, for example `react-pdf/build/entry.webpack'`, you can should use the same entry point to import `setOptions`. You can also add `setOptions` to the same `import` you're using to import `Document`, `Page`, and/or other components.
-
-```js
-setOptions({
-  cMapUrl: 'cmaps/',
-  cMapPacked: true,
-});
+<Document
+  options={{
+    cMapUrl: 'cmaps/',
+    cMapPacked: true,
+  }}
+/>
 ```
 
 ## User guide
@@ -199,6 +188,7 @@ Loads a document passed using `file` prop.
 |onLoadSuccess|Function called when the document is successfully loaded.|`(pdf) => alert('Loaded a file with ' + pdf.numPages + ' pages!')`|
 |onSourceError|Function called in case of an error while retrieving document source from `file` prop.|`(error) => alert('Error while retreiving document source! ' + error.message)`|
 |onSourceSuccess|Function called when document source is successfully retreived from `file` prop.|`() => alert('Document source retreived!')`|
+|options|An object in which additional parameters to be passed to PDF.js can be defined. For a full list of possible parameters, check [PDF.js documentation on DocumentInitParameters](https://mozilla.github.io/pdf.js/api/draft/global.html#DocumentInitParameters).|`{ cMapUrl: 'cmaps/', cMapPacked: true }`|
 |rotate|Defines the rotation of the document in degrees. If provided, will change rotation globally, even for the pages which were given `rotate` prop of their own. 90 = rotated to the right, 180 = upside down, 270 = rotated to the left.|`90`|
 
 ### Page
@@ -227,7 +217,8 @@ Displays a page. Must be placed inside `<Document />` or have `pdf` prop passed,
 |onGetTextError|Function called in case of an error while loading text layer items.|`(error) => alert('Error while loading text layer items! ' + error.message)`|
 |pageIndex|Defines which page from PDF file should be displayed. Defaults to 0.|`0`|
 |pageNumber|Defines which page from PDF file should be displayed. If provided, `pageIndex` prop will be ignored. Defaults to 1.|`1`|
-|renderAnnotations|Defined whether annotations (e.g. links) should be rendered. Defaults to true.|`false`|
+|renderAnnotations|Defines whether annotations (e.g. links) should be rendered. Defaults to true.|`false`|
+|renderInteractiveForms|Defines whether interactive forms should be rendered. Defaults to false.|`true`|
 |renderTextLayer|Defines whether a text layer should be rendered. Defaults to true.|`false`|
 |rotate|Defines the rotation of the page in degrees. 90 = rotated to the right, 180 = upside down, 270 = rotated to the left. Defaults to page's default setting, usually 0.|`90`|
 |scale|Defines the scale in which PDF file should be rendered. Defaults to 1.0.|`0.5`|
@@ -247,23 +238,6 @@ Displays an outline (table of contents). Must be placed inside `<Document />` or
 |onLoadSuccess|Function called when the outline is successfully retreived.|`() => alert('The outline has been successfully retreived.')`|
 |onParseError|Function called in case of an error while parsing the outline.|`(error) => alert('Error while parsing the outline! ' + error.message)`|
 |onParseSuccess|Function called when the outline is successfully parsed.|`({ outline }) => alert('There are ' + outline.length + ' top level items in the table of contents.')`|
-
-### setOptions
-
-Allows to set custom options of PDF.js renderer. Currently supported properties are:
-
-  - cMapUrl
-  - cMapPacked
-  - disableWorker
-  - workerSrc
-
-Example usage:
-
-```js
-setOptions({
-  workerSrc: 'my-path-to-worker.js'
-});
-```
 
 ## License
 

@@ -1,8 +1,7 @@
 import React from 'react';
 import { mount } from 'enzyme';
 
-import {} from '../../entry.noworker';
-import PageSVG from '../PageSVG';
+import { PageSVGInternal as PageSVG } from '../PageSVG';
 
 import failingPage from '../../../__mocks__/_failing_page';
 
@@ -20,13 +19,10 @@ describe('PageSVG', () => {
       muteConsole();
 
       mount(
-        <PageSVG />,
-        {
-          context: {
-            onRenderError,
-            page: failingPage,
-          }
-        }
+        <PageSVG
+          onRenderError={onRenderError}
+          page={failingPage}
+        />
       );
 
       expect.assertions(1);

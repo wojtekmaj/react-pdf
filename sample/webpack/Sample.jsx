@@ -1,14 +1,14 @@
 import React, { Component } from 'react';
 import { render } from 'react-dom';
-import { Document, Page, setOptions } from 'react-pdf/dist/entry.webpack';
+import { Document, Page } from 'react-pdf/dist/entry.webpack';
 import 'react-pdf/dist/Page/AnnotationLayer.css';
 
 import './Sample.less';
 
-setOptions({
+const options = {
   cMapUrl: 'cmaps/',
   cMapPacked: true,
-});
+};
 
 class Sample extends Component {
   state = {
@@ -47,6 +47,7 @@ class Sample extends Component {
             <Document
               file={file}
               onLoadSuccess={this.onDocumentLoadSuccess}
+              options={options}
             >
               {
                 Array.from(

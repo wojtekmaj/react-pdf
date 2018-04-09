@@ -1,5 +1,7 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
+
+import PageContext from '../PageContext';
 
 import TextLayerItem from './TextLayerItem';
 
@@ -12,22 +14,22 @@ import {
 
 import { isPage, isRotate } from '../shared/propTypes';
 
-export default class TextLayer extends Component {
+export class TextLayerInternal extends PureComponent {
   state = {
     textItems: null,
   }
 
   componentDidMount() {
-    this.getTextContent();
+    if (!this.props.page) {
+      throw new Error('Attempted to load page text content, but no page was specified.');
+    }
+
+    this.loadTextItems();
   }
 
-  componentWillReceiveProps(nextProps, nextContext) {
-    if (nextContext.page !== this.context.page) {
-      if (this.state.textItems !== null) {
-        this.setState({ textItems: null });
-      }
-
-      this.getTextContent(nextContext);
+  componentDidUpdate(prevProps) {
+    if (prevProps.page && (this.props.page !== prevProps.page)) {
+      this.loadTextItems();
     }
   }
 
@@ -35,21 +37,28 @@ export default class TextLayer extends Component {
     cancelRunningTask(this.runningTask);
   }
 
-  onGetTextSuccess = (textContent) => {
-    let textItems = null;
-    if (textContent) {
-      textItems = textContent.items;
+  loadTextItems = async () => {
+    const { page } = this.props;
+
+    try {
+      const cancellable = makeCancellable(page.getTextContent());
+      this.runningTask = cancellable;
+      const { items: textItems } = await cancellable.promise;
+      this.setState({ textItems }, this.onLoadSuccess);
+    } catch (error) {
+      this.setState({ textItems: false });
+      this.onLoadError(error);
     }
-
-    callIfDefined(
-      this.context.onGetTextSuccess,
-      textItems,
-    );
-
-    this.setState({ textItems });
   }
 
-  onGetTextError = (error) => {
+  onLoadSuccess = () => {
+    callIfDefined(
+      this.props.onGetTextSuccess,
+      this.state.textItems,
+    );
+  }
+
+  onLoadError = (error) => {
     if (
       error.name === 'RenderingCancelledException' ||
       error.name === 'PromiseCancelledException'
@@ -57,18 +66,16 @@ export default class TextLayer extends Component {
       return;
     }
 
-    errorOnDev(error.message, error);
+    errorOnDev(error);
 
     callIfDefined(
-      this.context.onGetTextError,
+      this.props.onGetTextError,
       error,
     );
-
-    this.setState({ textItems: false });
   }
 
   get unrotatedViewport() {
-    const { page, scale } = this.context;
+    const { page, scale } = this.props;
 
     return page.getViewport(scale);
   }
@@ -78,22 +85,8 @@ export default class TextLayer extends Component {
    * text content.
    */
   get rotate() {
-    const { page, rotate } = this.context;
+    const { page, rotate } = this.props;
     return rotate - page.rotate;
-  }
-
-  getTextContent(context = this.context) {
-    const { page } = context;
-
-    if (!page) {
-      throw new Error('Attempted to load page text content, but no page was specified.');
-    }
-
-    this.runningTask = makeCancellable(page.getTextContent());
-
-    return this.runningTask.promise
-      .then(this.onGetTextSuccess)
-      .catch(this.onGetTextError);
   }
 
   renderTextItems() {
@@ -136,10 +129,18 @@ export default class TextLayer extends Component {
   }
 }
 
-TextLayer.contextTypes = {
+TextLayerInternal.propTypes = {
   onGetTextError: PropTypes.func,
   onGetTextSuccess: PropTypes.func,
   page: isPage.isRequired,
   rotate: isRotate,
   scale: PropTypes.number,
 };
+
+const TextLayer = props => (
+  <PageContext.Consumer>
+    {context => <TextLayerInternal {...context} {...props} />}
+  </PageContext.Consumer>
+);
+
+export default TextLayer;

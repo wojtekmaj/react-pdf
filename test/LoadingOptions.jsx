@@ -1,9 +1,9 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 
 import samplePDF from './test.pdf';
 
-export default class LoadingOptions extends Component {
+export default class LoadingOptions extends PureComponent {
   onFileChange = (event) => {
     this.props.setFile(event.target.files[0]);
   }

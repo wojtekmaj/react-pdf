@@ -1,21 +1,22 @@
 import React from 'react';
 import { mount } from 'enzyme';
-import pdfjs from 'pdfjs-dist';
 
-import {} from '../../entry.noworker';
-import AnnotationLayer from '../AnnotationLayer';
+import { pdfjs } from '../../entry.jest';
+
+import { AnnotationLayerInternal as AnnotationLayer } from '../AnnotationLayer';
+import LinkService from '../../LinkService';
 
 import failingPage from '../../../__mocks__/_failing_page';
 
 import { loadPDF, makeAsyncCallback, muteConsole, restoreConsole } from '../../__tests__/utils';
 
-const { PDFJS } = pdfjs;
-
-const { arrayBuffer: fileArrayBuffer } = loadPDF('./__mocks__/_pdf.pdf');
+const pdfFile = loadPDF('./__mocks__/_pdf.pdf');
 
 /* eslint-disable comma-dangle */
 
 describe('AnnotationLayer', () => {
+  const linkService = new LinkService();
+
   // Loaded page
   let page;
   let page2;
@@ -25,7 +26,7 @@ describe('AnnotationLayer', () => {
   let desiredAnnotations2;
 
   beforeAll(async () => {
-    const pdf = await PDFJS.getDocument({ data: fileArrayBuffer });
+    const pdf = await pdfjs.getDocument({ data: pdfFile.arrayBuffer });
 
     page = await pdf.getPage(1);
     desiredAnnotations = await page.getAnnotations();
@@ -41,13 +42,11 @@ describe('AnnotationLayer', () => {
       } = makeAsyncCallback();
 
       mount(
-        <AnnotationLayer />,
-        {
-          context: {
-            onGetAnnotationsSuccess,
-            page,
-          }
-        }
+        <AnnotationLayer
+          linkService={linkService}
+          onGetAnnotationsSuccess={onGetAnnotationsSuccess}
+          page={page}
+        />
       );
 
       expect.assertions(1);
@@ -62,13 +61,11 @@ describe('AnnotationLayer', () => {
       muteConsole();
 
       mount(
-        <AnnotationLayer />,
-        {
-          context: {
-            onGetAnnotationsError,
-            page: failingPage,
-          }
-        }
+        <AnnotationLayer
+          linkService={linkService}
+          onGetAnnotationsError={onGetAnnotationsError}
+          page={failingPage}
+        />
       );
 
       expect.assertions(1);
@@ -83,13 +80,11 @@ describe('AnnotationLayer', () => {
       } = makeAsyncCallback();
 
       const mountedComponent = mount(
-        <AnnotationLayer />,
-        {
-          context: {
-            onGetAnnotationsSuccess,
-            page,
-          }
-        }
+        <AnnotationLayer
+          linkService={linkService}
+          onGetAnnotationsSuccess={onGetAnnotationsSuccess}
+          page={page}
+        />
       );
 
       expect.assertions(2);
@@ -99,7 +94,7 @@ describe('AnnotationLayer', () => {
         func: onGetAnnotationsSuccess2, promise: onGetAnnotationsSuccessPromise2
       } = makeAsyncCallback();
 
-      mountedComponent.setContext({
+      mountedComponent.setProps({
         onGetAnnotationsSuccess: onGetAnnotationsSuccess2,
         page: page2,
       });
@@ -115,13 +110,11 @@ describe('AnnotationLayer', () => {
       } = makeAsyncCallback();
 
       const component = mount(
-        <AnnotationLayer />,
-        {
-          context: {
-            onRenderAnnotationsSuccess,
-            page,
-          },
-        },
+        <AnnotationLayer
+          linkService={linkService}
+          onRenderAnnotationsSuccess={onRenderAnnotationsSuccess}
+          page={page}
+        />
       );
 
       expect.assertions(1);
@@ -141,14 +134,12 @@ describe('AnnotationLayer', () => {
       const rotate = 90;
 
       const component = mount(
-        <AnnotationLayer />,
-        {
-          context: {
-            onRenderAnnotationsSuccess,
-            page,
-            rotate,
-          },
-        },
+        <AnnotationLayer
+          linkService={linkService}
+          onRenderAnnotationsSuccess={onRenderAnnotationsSuccess}
+          page={page}
+          rotate={rotate}
+        />
       );
 
       expect.assertions(1);
@@ -167,14 +158,12 @@ describe('AnnotationLayer', () => {
       const scale = 2;
 
       const component = mount(
-        <AnnotationLayer />,
-        {
-          context: {
-            onRenderAnnotationsSuccess,
-            page,
-            scale,
-          },
-        },
+        <AnnotationLayer
+          linkService={linkService}
+          onRenderAnnotationsSuccess={onRenderAnnotationsSuccess}
+          page={page}
+          scale={scale}
+        />
       );
 
       expect.assertions(1);

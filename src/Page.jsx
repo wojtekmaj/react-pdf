@@ -1,6 +1,9 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import mergeClassNames from 'merge-class-names';
+
+import DocumentContext from './DocumentContext';
+import PageContext from './PageContext';
 
 import PageCanvas from './Page/PageCanvas';
 import PageSVG from './Page/PageSVG';
@@ -17,95 +20,80 @@ import {
 } from './shared/utils';
 import { makeEventProps } from './shared/events';
 
-import { eventsProps, isClassName, isLinkService, isPageIndex, isPageNumber, isPage, isPdf, isRotate } from './shared/propTypes';
+import { eventsProps, isClassName, isPageIndex, isPageNumber, isPdf, isRotate } from './shared/propTypes';
 
-export default class Page extends Component {
+export class PageInternal extends PureComponent {
   state = {
     page: null,
   }
 
   componentDidMount() {
+    if (!this.props.pdf) {
+      throw new Error('Attempted to load a page, but no document was specified.');
+    }
+
     this.loadPage();
   }
 
-  componentWillReceiveProps(nextProps, nextContext) {
+  componentDidUpdate(prevProps) {
     if (
-      nextContext.pdf !== this.context.pdf ||
-      this.getPageNumber(nextProps) !== this.getPageNumber()
+      (prevProps.pdf && (this.props.pdf !== prevProps.pdf)) ||
+      this.getPageNumber() !== this.getPageNumber(prevProps)
     ) {
       callIfDefined(
-        this.context.unregisterPage,
-        this.pageIndex,
+        this.props.unregisterPage,
+        this.getPageIndex(prevProps),
       );
 
-      if (this.state.page !== null) {
-        this.setState({ page: null });
-      }
-
-      this.loadPage(nextProps, nextContext);
+      this.loadPage();
     }
   }
 
   componentWillUnmount() {
     callIfDefined(
-      this.context.unregisterPage,
+      this.props.unregisterPage,
       this.pageIndex,
     );
 
     cancelRunningTask(this.runningTask);
   }
 
-  getChildContext() {
+  get childContext() {
     if (!this.state.page) {
       return {};
     }
 
-    const context = {
+    return {
+      customTextRenderer: this.props.customTextRenderer,
+      onGetAnnotationsError: this.props.onGetAnnotationsError,
+      onGetAnnotationsSuccess: this.props.onGetAnnotationsSuccess,
+      onGetTextError: this.props.onGetTextError,
+      onGetTextSuccess: this.props.onGetTextSuccess,
+      onRenderAnnotationsError: this.props.onRenderAnnotationsError,
+      onRenderAnnotationsSuccess: this.props.onRenderAnnotationsSuccess,
+      onRenderError: this.props.onRenderError,
+      onRenderSuccess: this.props.onRenderSuccess,
       page: this.state.page,
+      renderInteractiveForms: this.props.renderInteractiveForms,
       rotate: this.rotate,
       scale: this.scale,
     };
-
-    if (this.props.onRenderError) {
-      context.onRenderError = this.props.onRenderError;
-    }
-    if (this.props.onRenderSuccess) {
-      context.onRenderSuccess = this.props.onRenderSuccess;
-    }
-    if (this.props.onGetAnnotationsError) {
-      context.onGetAnnotationsError = this.props.onGetAnnotationsError;
-    }
-    if (this.props.onGetAnnotationsSuccess) {
-      context.onGetAnnotationsSuccess = this.props.onGetAnnotationsSuccess;
-    }
-    if (this.props.onGetTextError) {
-      context.onGetTextError = this.props.onGetTextError;
-    }
-    if (this.props.onGetTextSuccess) {
-      context.onGetTextSuccess = this.props.onGetTextSuccess;
-    }
-    if (this.props.customTextRenderer) {
-      context.customTextRenderer = this.props.customTextRenderer;
-    }
-    return context;
   }
 
   /**
    * Called when a page is loaded successfully
    */
-  onLoadSuccess = (page) => {
-    this.setState({ page }, () => {
-      callIfDefined(
-        this.props.onLoadSuccess,
-        makePageCallback(page, this.scale),
-      );
+  onLoadSuccess = () => {
+    callIfDefined(
+      this.props.onLoadSuccess,
+      makePageCallback(this.state.page, this.scale),
+    );
 
-      callIfDefined(
-        this.context.registerPage,
-        page.pageIndex,
-        this.ref,
-      );
-    });
+    callIfDefined(
+      this.props.registerPage,
+      this.pageIndex,
+      this.ref,
+    );
   }
 
   /**
@@ -119,14 +107,12 @@ export default class Page extends Component {
       return;
     }
 
-    errorOnDev(error.message, error);
+    errorOnDev(error);
 
     callIfDefined(
       this.props.onLoadError,
       error,
     );
-
-    this.setState({ page: false });
   }
 
   getPageIndex(props = this.props) {
@@ -166,11 +152,11 @@ export default class Page extends Component {
       return this.props.rotate;
     }
 
-    if (isProvided(this.context.rotate)) {
-      return this.context.rotate;
-    }
-
     const { page } = this.state;
+
+    if (!page) {
+      return null;
+    }
 
     return page.rotate;
   }
@@ -178,6 +164,10 @@ export default class Page extends Component {
   get scale() {
     const { scale, width } = this.props;
     const { page } = this.state;
+
+    if (!page) {
+      return null;
+    }
 
     const { rotate } = this;
 
@@ -195,8 +185,11 @@ export default class Page extends Component {
 
   get eventProps() {
     return makeEventProps(this.props, () => {
-      const { page } = this.state;
-      return makePageCallback(page, this.scale);
+      if (!this.state.page) {
+        return this.state.page;
+      }
+
+      return makePageCallback(this.state.page, this.scale);
     });
   }
 
@@ -208,32 +201,32 @@ export default class Page extends Component {
     return `${this.state.page.pageIndex}/${this.rotate}`;
   }
 
-  get pageProps() {
-    return {
-      page: this.state.page,
-      rotate: this.rotate,
-      scale: this.scale,
-    };
-  }
+  loadPage = async () => {
+    const { pdf } = this.props;
 
-  loadPage(props = this.props, context = this.context) {
-    const { pdf } = context;
-
-    if (!pdf) {
-      throw new Error('Attempted to load a page, but no document was specified.');
-    }
-
-    const pageNumber = this.getPageNumber(props);
+    const pageNumber = this.getPageNumber();
 
     if (!pageNumber) {
-      return null;
+      return;
     }
 
-    this.runningTask = makeCancellable(pdf.getPage(pageNumber));
+    this.setState((prevState) => {
+      if (!prevState.page) {
+        return null;
+      }
+      return { page: null };
+    });
 
-    return this.runningTask.promise
-      .then(this.onLoadSuccess)
-      .catch(this.onLoadError);
+    let page = null;
+    try {
+      const cancellable = makeCancellable(pdf.getPage(pageNumber));
+      this.runningTask = cancellable;
+      page = await cancellable.promise;
+      this.setState({ page }, this.onLoadSuccess);
+    } catch (error) {
+      this.setState({ page: false });
+      this.onLoadError(error);
+    }
   }
 
   renderTextLayer() {
@@ -264,7 +257,7 @@ export default class Page extends Component {
     return [
       <PageSVG key={`${this.pageKeyNoScale}_svg`} />,
       /**
-       * As of now, PDF.js 2.0.120 returns warnings on unimplemented annotations.
+       * As of now, PDF.js 2.0.474 returns warnings on unimplemented annotations.
        * Therefore, as a fallback, we render "traditional" AnnotationLayer component.
        */
       this.renderAnnotations(),
@@ -303,20 +296,21 @@ export default class Page extends Component {
       renderMode,
     } = this.props;
 
-    return [
-      (
-        renderMode === 'svg' ?
-          this.renderSVG() :
-          this.renderCanvas()
-      ),
-      children,
-    ];
+    return (
+      <PageContext.Provider value={this.childContext}>
+        {
+          renderMode === 'svg' ?
+            this.renderSVG() :
+            this.renderCanvas()
+        }
+        {children}
+      </PageContext.Provider>
+    );
   }
 
   render() {
     const { pageNumber } = this;
-    const { pdf } = this.context;
-    const { className } = this.props;
+    const { className, pdf } = this.props;
     const { page } = this.state;
 
     let content;
@@ -351,36 +345,18 @@ export default class Page extends Component {
   }
 }
 
-Page.defaultProps = {
+PageInternal.defaultProps = {
   error: 'Failed to load the page.',
   loading: 'Loading page…',
   noData: 'No page specified.',
   renderAnnotations: true,
+  renderInteractiveForms: false,
   renderMode: 'canvas',
   renderTextLayer: true,
   scale: 1.0,
 };
 
-Page.childContextTypes = {
-  customTextRenderer: PropTypes.func,
-  onGetTextError: PropTypes.func,
-  onGetTextSuccess: PropTypes.func,
-  onRenderError: PropTypes.func,
-  onRenderSuccess: PropTypes.func,
-  page: isPage,
-  rotate: isRotate,
-  scale: PropTypes.number,
-};
-
-Page.contextTypes = {
-  linkService: isLinkService,
-  pdf: isPdf,
-  registerPage: PropTypes.func,
-  rotate: isRotate,
-  unregisterPage: PropTypes.func,
-};
-
-Page.propTypes = {
+PageInternal.propTypes = {
   children: PropTypes.node,
   className: isClassName,
   customTextRenderer: PropTypes.func,
@@ -396,11 +372,23 @@ Page.propTypes = {
   onRenderSuccess: PropTypes.func,
   pageIndex: isPageIndex,
   pageNumber: isPageNumber,
+  pdf: isPdf,
+  registerPage: PropTypes.func,
   renderAnnotations: PropTypes.bool,
+  renderInteractiveForms: PropTypes.bool,
   renderMode: PropTypes.oneOf(['canvas', 'svg']),
   renderTextLayer: PropTypes.bool,
   rotate: isRotate,
   scale: PropTypes.number,
+  unregisterPage: PropTypes.func,
   width: PropTypes.number,
   ...eventsProps(),
 };
+
+const Page = props => (
+  <DocumentContext.Consumer>
+    {context => <PageInternal {...context} {...props} />}
+  </DocumentContext.Consumer>
+);
+
+export default Page;

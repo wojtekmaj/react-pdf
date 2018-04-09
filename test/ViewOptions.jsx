@@ -1,9 +1,12 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 
-export default class ViewOptions extends Component {
+export default class ViewOptions extends PureComponent {
   onRenderAnnotationsChange = event =>
     this.props.setState({ renderAnnotations: event.target.checked })
+
+  onRenderInteractiveFormsChange = event =>
+    this.props.setState({ renderInteractiveForms: event.target.checked })
 
   onRenderModeChange = event =>
     this.props.setState({ renderMode: event.target.value })
@@ -47,6 +50,7 @@ export default class ViewOptions extends Component {
       displayAll,
       pageWidth,
       renderAnnotations,
+      renderInteractiveForms,
       renderMode,
       renderTextLayer,
       rotate,
@@ -126,6 +130,16 @@ export default class ViewOptions extends Component {
         </div>
 
         <div>
+          <input
+            id="renderInteractiveForms"
+            type="checkbox"
+            checked={renderInteractiveForms}
+            onChange={this.onRenderInteractiveFormsChange}
+          />
+          <label htmlFor="renderInteractiveForms">Render interactive forms</label>
+        </div>
+
+        <div>
           <label htmlFor="rotation">Rotation:</label>
           <input
             id="rotation"
@@ -159,6 +173,7 @@ ViewOptions.propTypes = {
   displayAll: PropTypes.bool,
   pageWidth: PropTypes.number,
   renderAnnotations: PropTypes.bool,
+  renderInteractiveForms: PropTypes.bool,
   renderMode: PropTypes.oneOf(['canvas', 'svg']),
   renderTextLayer: PropTypes.bool,
   rotate: PropTypes.number,

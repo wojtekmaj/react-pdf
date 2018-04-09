@@ -1,15 +1,12 @@
 import React from 'react';
 import { shallow, mount } from 'enzyme';
-import pdfjs from 'pdfjs-dist';
 
-import {} from '../entry.noworker';
-import OutlineItem from '../OutlineItem';
+import { pdfjs } from '../entry.jest';
+import { OutlineItemInternal as OutlineItem } from '../OutlineItem';
 
 import { loadPDF, makeAsyncCallback } from './utils';
 
-const { PDFJS } = pdfjs;
-
-const { arrayBuffer: fileArrayBuffer } = loadPDF('./__mocks__/_pdf.pdf');
+const pdfFile = loadPDF('./__mocks__/_pdf.pdf');
 
 /* eslint-disable comma-dangle */
 
@@ -21,7 +18,7 @@ describe('OutlineItem', () => {
   let outlineItem = null;
 
   beforeAll(async () => {
-    pdf = await PDFJS.getDocument({ data: fileArrayBuffer });
+    pdf = await pdfjs.getDocument({ data: pdfFile.arrayBuffer });
 
     const outlineItems = await pdf.getOutline();
     [outlineItem] = outlineItems;
@@ -30,12 +27,10 @@ describe('OutlineItem', () => {
   describe('rendering', () => {
     it('renders an item properly', () => {
       const component = shallow(
-        <OutlineItem item={outlineItem} />,
-        {
-          context: {
-            pdf,
-          }
-        }
+        <OutlineItem
+          item={outlineItem}
+          pdf={pdf}
+        />
       );
 
       const title = component.find('a').first();
@@ -45,15 +40,13 @@ describe('OutlineItem', () => {
 
     it('renders item\'s subitems properly', () => {
       const component = mount(
-        <OutlineItem item={outlineItem} />,
-        {
-          context: {
-            pdf,
-          }
-        }
+        <OutlineItem
+          item={outlineItem}
+          pdf={pdf}
+        />
       );
 
-      const subitems = component.children().find('OutlineItem');
+      const subitems = component.children().find('OutlineItemInternal');
 
       expect(subitems).toHaveLength(outlineItem.items.length);
     });
@@ -62,13 +55,11 @@ describe('OutlineItem', () => {
       const { func: onClick, promise: onClickPromise } = makeAsyncCallback();
 
       const component = mount(
-        <OutlineItem item={outlineItem} />,
-        {
-          context: {
-            onClick,
-            pdf,
-          }
-        }
+        <OutlineItem
+          item={outlineItem}
+          onClick={onClick}
+          pdf={pdf}
+        />
       );
 
       const title = component.find('a').first();

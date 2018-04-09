@@ -1,22 +1,22 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import pdfjs from 'pdfjs-dist';
 
-import {} from '../../entry.noworker';
-import TextLayerItem from '../TextLayerItem';
+import { pdfjs } from '../../entry.jest';
+
+import { TextLayerItemInternal as TextLayerItem } from '../TextLayerItem';
 
 import { loadPDF } from '../../__tests__/utils';
 
-const { PDFJS } = pdfjs;
+const pdfFile = loadPDF('./__mocks__/_pdf.pdf');
 
-const { arrayBuffer: fileArrayBuffer } = loadPDF('./__mocks__/_pdf.pdf');
+/* eslint-disable comma-dangle */
 
 describe('TextLayerItem', () => {
   // Loaded page
   let page;
 
   beforeAll(async () => {
-    const pdf = await PDFJS.getDocument({ data: fileArrayBuffer });
+    const pdf = await pdfjs.getDocument({ data: pdfFile.arrayBuffer });
 
     page = await pdf.getPage(1);
   });
@@ -36,13 +36,9 @@ describe('TextLayerItem', () => {
       const component = shallow(
         <TextLayerItem
           {...defaultProps}
+          page={page}
           str={str}
-        />,
-        {
-          context: {
-            page,
-          },
-        },
+        />
       );
 
       const textItem = component.text();
@@ -57,15 +53,11 @@ describe('TextLayerItem', () => {
       shallow(
         <TextLayerItem
           {...defaultProps}
+          customTextRenderer={customTextRenderer}
           itemIndex={itemIndex}
+          page={page}
           str={str}
-        />,
-        {
-          context: {
-            page,
-            customTextRenderer,
-          },
-        },
+        />
       );
 
       expect(customTextRenderer).toBeCalledWith(
@@ -82,13 +74,9 @@ describe('TextLayerItem', () => {
       const component = shallow(
         <TextLayerItem
           {...defaultProps}
-        />,
-        {
-          context: {
-            page,
-            customTextRenderer,
-          },
-        },
+          customTextRenderer={customTextRenderer}
+          page={page}
+        />
       );
 
       const textItem = component.text();

@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import { Document, Outline, Page, setOptions } from 'react-pdf/src/entry.webpack';
+import React, { PureComponent } from 'react';
+import { Document, Outline, Page } from 'react-pdf/src/entry.webpack';
 import 'react-pdf/src/Page/AnnotationLayer.css';
 
 import './Test.less';
@@ -9,14 +9,14 @@ import ViewOptions from './ViewOptions';
 
 import { dataURItoBlob } from './shared/utils';
 
-setOptions({
+const options = {
   cMapUrl: 'cmaps/',
   cMapPacked: true,
-});
+};
 
 /* eslint-disable no-console */
 
-export default class Test extends Component {
+export default class Test extends PureComponent {
   state = {
     displayAll: false,
     file: null,
@@ -26,6 +26,7 @@ export default class Test extends Component {
     passMethod: 'normal',
     render: true,
     renderAnnotations: true,
+    renderInteractiveForms: true,
     renderMode: 'canvas',
     renderTextLayer: true,
     rotate: null,
@@ -89,6 +90,7 @@ export default class Test extends Component {
       passMethod,
       render,
       renderAnnotations,
+      renderInteractiveForms,
       renderMode,
       renderTextLayer,
       rotate,
@@ -97,11 +99,17 @@ export default class Test extends Component {
 
     const setState = state => this.setState(state);
 
+    const documentProps = {
+      file,
+      options,
+    };
+
     const pageProps = {
       className: 'custom-classname-page',
       onClick: (event, page) => console.log('Clicked a page', { event, page }),
       onRenderSuccess: this.onPageRenderSuccess,
       renderAnnotations,
+      renderInteractiveForms,
       renderMode,
       renderTextLayer,
       width: pageWidth,
@@ -134,6 +142,7 @@ export default class Test extends Component {
               displayAll={displayAll}
               pageWidth={pageWidth}
               renderAnnotations={renderAnnotations}
+              renderInteractiveForms={renderInteractiveForms}
               renderMode={renderMode}
               renderTextLayer={renderTextLayer}
               rotate={rotate}
@@ -145,8 +154,8 @@ export default class Test extends Component {
               {
                 render &&
                   <Document
+                    {...documentProps}
                     className="custom-classname-document"
-                    file={file}
                   >
                     <Outline
                       className="custom-classname-outline"
@@ -159,9 +168,9 @@ export default class Test extends Component {
               {
                 render &&
                   <Document
+                    {...documentProps}
                     className="custom-classname-document"
                     onItemClick={this.onItemClick}
-                    file={file}
                     onClick={(event, pdf) => console.log('Clicked a document', { event, pdf })}
                     onLoadSuccess={this.onDocumentLoadSuccess}
                     onLoadError={this.onDocumentLoadError}
