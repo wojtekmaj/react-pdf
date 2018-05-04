@@ -3784,6 +3784,10 @@ lru-cache@^4.0.1:
     pseudomap "^1.0.2"
     yallist "^2.1.2"
 
+make-event-props@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/make-event-props/-/make-event-props-1.0.0.tgz#c6f7c409fdd51bc58edb262124b343faf028a62a"
+
 makeerror@1.0.x:
   version "1.0.11"
   resolved "https://registry.yarnpkg.com/makeerror/-/makeerror-1.0.11.tgz#e01a5c9109f2af79660e4e8b9587790184f5a96c"
