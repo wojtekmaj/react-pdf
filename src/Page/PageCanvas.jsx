@@ -124,7 +124,6 @@ export class PageCanvasInternal extends PureComponent {
   }
 
   render() {
-    console.log(this.props.style);
     return (
       <canvas
         className="react-pdf__Page__canvas"
