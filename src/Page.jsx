@@ -266,7 +266,7 @@ export class PageInternal extends PureComponent {
 
   renderCanvas() {
     return [
-      <PageCanvas key={`${this.pageKey}_canvas`} />,
+      <PageCanvas style={this.props.canvasStyle} key={`${this.pageKey}_canvas`} />,
       this.renderTextLayer(),
       this.renderAnnotations(),
     ];
@@ -346,6 +346,7 @@ export class PageInternal extends PureComponent {
 }
 
 PageInternal.defaultProps = {
+  canvasStyle: {},
   error: 'Failed to load the page.',
   loading: 'Loading page…',
   noData: 'No page specified.',
@@ -357,6 +358,7 @@ PageInternal.defaultProps = {
 };
 
 PageInternal.propTypes = {
+  canvasStyle: PropTypes.objectOf(PropTypes.string),
   children: PropTypes.node,
   className: isClassName,
   customTextRenderer: PropTypes.func,

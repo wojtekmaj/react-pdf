@@ -97,8 +97,13 @@ export class PageCanvasInternal extends PureComponent {
     canvas.width = renderViewport.width;
     canvas.height = renderViewport.height;
 
-    canvas.style.width = `${Math.floor(viewport.width)}px`;
-    canvas.style.height = `${Math.floor(viewport.height)}px`;
+    // Avoid overwriting any user passed styles with computed values
+    if (!this.props.style.width) {
+      canvas.style.width = `${Math.floor(viewport.width)}px`;
+    }
+    if (!this.props.style.height) {
+      canvas.style.height = `${Math.floor(viewport.height)}px`;
+    }
 
     const renderContext = {
       get canvasContext() {
@@ -119,12 +124,14 @@ export class PageCanvasInternal extends PureComponent {
   }
 
   render() {
+    console.log(this.props.style);
     return (
       <canvas
         className="react-pdf__Page__canvas"
         style={{
           display: 'block',
           userSelect: 'none',
+          ...this.props.style,
         }}
         ref={(ref) => { this.canvasLayer = ref; }}
       />
@@ -139,6 +146,7 @@ PageCanvasInternal.propTypes = {
   renderInteractiveForms: PropTypes.bool,
   rotate: isRotate,
   scale: PropTypes.number,
+  style: PropTypes.objectOf(PropTypes.string),
 };
 
 const PageCanvas = props => (

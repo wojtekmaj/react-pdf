@@ -209,6 +209,7 @@ Displays a page. Must be placed inside `<Document />` or have `pdf` prop passed,
 
 |Prop name|Description|Example values|
 |----|----|----|
+|canvasStyle|A style object passed to the `<canvas>` element, allows a user to override the default inline styling.|`{ width: '100%', height: 'auto' }`|
 |className|Defines custom class name(s), that will be added to rendered element along with the default `react-pdf__Page`.|<ul><li>String:<br />`"custom-class-name-1 custom-class-name-2"`</li><li>Array of strings:<br />`["custom-class-name-1", "custom-class-name-2"]`</li></ul>|
 |customTextRenderer|A function that customizes how a text layer is rendered. Passes itext item and index for item.|`({ str, itemIndex }) => { return (<mark>{str}</mark>) }`|
 |error|Defines what the component should display in case of an error. Defaults to "Failed to load the page.".|<ul><li>String:<br />`"An error occurred!"`</li><li>React element:<br />`<div>An error occurred!</div>`</li><li>Function:<br />`this.renderError()`</li></ul>|
