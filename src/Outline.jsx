@@ -24,8 +24,8 @@ export default class Outline extends Component {
   }
 
   componentWillReceiveProps(nextProps, nextContext) {
-    if (nextContext.pdf !== this.context.pdf) {
-      this.loadOutline(nextContext);
+    if (this.getPdf(nextProps, nextContext) !== this.getPdf()) {
+      this.loadOutline(nextProps, nextContext);
     }
   }
 
@@ -33,8 +33,13 @@ export default class Outline extends Component {
     cancelRunningTask(this.runningTask);
   }
 
+  getPdf(props = this.props, context = this.context) {
+    return props.pdf || context.pdf;
+  }
+
   getChildContext() {
     return {
+      pdf: this.getPdf(),
       onClick: this.onItemClick,
     };
   }
@@ -86,8 +91,8 @@ export default class Outline extends Component {
     );
   }
 
-  loadOutline(context = this.context) {
-    const { pdf } = context;
+  loadOutline(props = this.props, context = this.context) {
+    const pdf = this.getPdf(props, context);
 
     if (!pdf) {
       throw new Error('Attempted to load an outline, but no document was specified.');
@@ -126,7 +131,7 @@ export default class Outline extends Component {
   }
 
   render() {
-    const { pdf } = this.context;
+    const pdf = this.getPdf();
     const { outline } = this.state;
 
     if (!pdf || !outline) {
@@ -149,6 +154,7 @@ export default class Outline extends Component {
 
 Outline.childContextTypes = {
   onClick: PropTypes.func,
+  pdf: isPdf,
 };
 
 Outline.contextTypes = {

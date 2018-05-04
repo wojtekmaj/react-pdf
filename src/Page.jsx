@@ -30,7 +30,7 @@ export default class Page extends Component {
 
   componentWillReceiveProps(nextProps, nextContext) {
     if (
-      nextContext.pdf !== this.context.pdf ||
+      this.getPdf(nextProps, nextContext) !== this.getPdf() ||
       this.getPageNumber(nextProps) !== this.getPageNumber()
     ) {
       callIfDefined(
@@ -55,6 +55,10 @@ export default class Page extends Component {
     cancelRunningTask(this.runningTask);
   }
 
+  getPdf(props = this.props, context = this.context) {
+    return props.pdf || context.pdf;
+  }
+
   getChildContext() {
     if (!this.state.page) {
       return {};
@@ -62,6 +66,7 @@ export default class Page extends Component {
 
     const context = {
       page: this.state.page,
+      pdf: this.getPdf(),
       rotate: this.rotate,
       scale: this.scale,
     };
@@ -217,7 +222,7 @@ export default class Page extends Component {
   }
 
   loadPage(props = this.props, context = this.context) {
-    const { pdf } = context;
+    const pdf = this.getPdf(props, context);
 
     if (!pdf) {
       throw new Error('Attempted to load a page, but no document was specified.');
@@ -315,7 +320,7 @@ export default class Page extends Component {
 
   render() {
     const { pageNumber } = this;
-    const { pdf } = this.context;
+    const pdf = this.getPdf();
     const { className } = this.props;
     const { page } = this.state;
 
@@ -368,6 +373,7 @@ Page.childContextTypes = {
   onRenderError: PropTypes.func,
   onRenderSuccess: PropTypes.func,
   page: isPage,
+  pdf: isPdf,
   rotate: isRotate,
   scale: PropTypes.number,
 };
