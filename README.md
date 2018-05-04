@@ -22,7 +22,7 @@ Minimal demo page is included in sample directory.
 
 React-PDF is under constant development. This documentation is written for React-PDF 4.x branch. If you want to see documentation for other versions of React-PDF, use dropdown on top of GitHub page to switch to an appropriate tag. Here are quick links to the newest docs from each branch:
 
-* [v3.x](https://github.com/wojtekmaj/react-pdf/blob/v3.0.4/README.md)
+* [v3.x](https://github.com/wojtekmaj/react-pdf/blob/v3.0.5/README.md)
 * [v2.x](https://github.com/wojtekmaj/react-pdf/blob/v2.5.3/README.md)
 * [v1.x](https://github.com/wojtekmaj/react-pdf/blob/v1.8.3/README.md)
 
@@ -85,27 +85,23 @@ Check the sample directory of this repository for a full working example.
 
 ### Enable PDF.js worker
 
-It is crucial for performance to use PDF.js worker whenever possible. This ensures that your PDF file will be rendered in a separate thread without affecting page performance. To make things a little easier, we've prepared several entry points you can use.
+It is crucial for performance to use PDF.js worker whenever possible. This ensures that PDF files will be rendered in a separate thread without affecting page performance. To make things a little easier, we've prepared several entry points you can use.
 
 #### Webpack
 
-If you use Webpack, you're in luck. Instead of directly importing/requiring `'react-pdf'`, import it like so:
+Instead of directly importing/requiring `'react-pdf'`, import it like so:
 
 ```js
 import { Document } from 'react-pdf/dist/entry.webpack';
 ```
 
-…and you're all set!
-
 #### Parcel
 
-If you use Parcel, it's not a problem either. Instead of directly importing/requiring `'react-pdf'`, import it like so:
+Instead of directly importing/requiring `'react-pdf'`, import it like so:
 
 ```js
 import { Document } from 'react-pdf/dist/entry.parcel';
 ```
-
-…and you're done!
 
 #### Browserify and others
 
@@ -201,9 +197,7 @@ Loads a document passed using `file` prop.
 
 ### Page
 
-Displays a page. Must be placed inside `<Document />` or have `pdf` prop passed, which can be obtained from `<Document />`'s `onLoadSuccess` callback function.
-
-**Note:** `<Page/>` must be a direct child of `<Document />` component. `<Document />` passes necessary props only to its direct children. If you wish to put a component in between of `<Document />` and `<Page/>`, you must ensure to pass all the props to `<Page/>` component by yourself.
+Displays a page. Should be placed inside `<Document />`. Alternatively, it can have `pdf` prop passed, which can be obtained from `<Document />`'s `onLoadSuccess` callback function, however some advanced functions like linking between pages inside a document may not be working correctly.
 
 #### Props
 
@@ -234,7 +228,7 @@ Displays a page. Must be placed inside `<Document />` or have `pdf` prop passed,
 
 ### Outline
 
-Displays an outline (table of contents). Must be placed inside `<Document />` or have `pdf` prop passed, which can be obtained from `<Document />`'s `onLoadSuccess` callback function.
+Displays an outline (table of contents). Should be placed inside `<Document />`. Alternatively, it can have `pdf` prop passed, which can be obtained from `<Document />`'s `onLoadSuccess` callback function.
 
 #### Props
 
