@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
+import makeEventProps from 'make-event-props';
 import mergeClassNames from 'merge-class-names';
 
 import DocumentContext from './DocumentContext';
@@ -18,7 +19,6 @@ import {
   makeCancellable,
   makePageCallback,
 } from './shared/utils';
-import { makeEventProps } from './shared/events';
 
 import { eventsProps, isClassName, isPageIndex, isPageNumber, isPdf, isRotate } from './shared/propTypes';
 
