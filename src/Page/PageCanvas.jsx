@@ -148,6 +148,10 @@ PageCanvasInternal.propTypes = {
   style: PropTypes.objectOf(PropTypes.string),
 };
 
+PageCanvasInternal.defaultProps = {
+  style: {},
+};
+
 const PageCanvas = props => (
   <PageContext.Consumer>
     {context => <PageCanvasInternal {...context} {...props} />}
