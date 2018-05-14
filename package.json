@@ -6,7 +6,7 @@
   "es6": "src/entry.js",
   "scripts": {
     "build": "npm run build-js && npm run copy-styles",
-    "build-js": "babel src -d dist --ignore **/__tests__",
+    "build-js": "babel src -d dist --ignore __tests__",
     "copy-styles": "node ./copy-styles.js",
     "prepublishOnly": "npm run build",
     "test": "npm run test-eslint && npm run test-jest",
