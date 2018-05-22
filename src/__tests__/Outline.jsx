@@ -63,7 +63,7 @@ describe('Outline', () => {
       restoreConsole();
     });
 
-    it('replaces an outline properly', async () => {
+    it('replaces an outline properly when pdf is changed', async () => {
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
       const mountedComponent = shallow(
