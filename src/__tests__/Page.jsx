@@ -10,16 +10,19 @@ import silentlyFailingPdf from '../../__mocks__/_silently_failing_pdf';
 import { loadPDF, makeAsyncCallback, muteConsole, restoreConsole } from './utils';
 
 const pdfFile = loadPDF('./__mocks__/_pdf.pdf');
+const pdfFile2 = loadPDF('./__mocks__/_pdf2.pdf');
 
 /* eslint-disable comma-dangle */
 
 describe('Page', () => {
   // Loaded PDF file
   let pdf;
+  let pdf2;
 
   // Object with basic loaded page information that shall match after successful loading
   const desiredLoadedPage = {};
   const desiredLoadedPage2 = {};
+  const desiredLoadedPage3 = {};
 
   // Callbacks used in registerPage and unregisterPage callbacks
   const registerPageArguments = [];
@@ -35,6 +38,12 @@ describe('Page', () => {
     const page2 = await pdf.getPage(2);
     desiredLoadedPage2.pageIndex = page2.pageIndex;
     desiredLoadedPage2.pageInfo = page2.pageInfo;
+
+    pdf2 = await pdfjs.getDocument({ data: pdfFile2.arrayBuffer });
+
+    const page3 = await pdf2.getPage(1);
+    desiredLoadedPage3.pageIndex = page3.pageIndex;
+    desiredLoadedPage3.pageInfo = page3.pageInfo;
 
     registerPageArguments.push(
       page.pageIndex,
@@ -167,7 +176,31 @@ describe('Page', () => {
       await expect(nuregisterPagePromise).resolves.toBe(unregisterPageArguments);
     });
 
-    it('replaces a page properly', async () => {
+    it('replaces a page properly when pdf is changed', async () => {
+      const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
+
+      const mountedComponent = shallow(
+        <Page
+          onLoadSuccess={onLoadSuccess}
+          pageIndex={0}
+          pdf={pdf}
+        />
+      );
+
+      expect.assertions(2);
+      await expect(onLoadSuccessPromise).resolves.toMatchObject(desiredLoadedPage);
+
+      const { func: onLoadSuccess2, promise: onLoadSuccessPromise2 } = makeAsyncCallback();
+
+      mountedComponent.setProps({
+        onLoadSuccess: onLoadSuccess2,
+        pdf: pdf2,
+      });
+
+      await expect(onLoadSuccessPromise2).resolves.toMatchObject(desiredLoadedPage3);
+    });
+
+    it('replaces a page properly when pageNumber is changed', async () => {
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
       const mountedComponent = shallow(
