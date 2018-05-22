@@ -74,7 +74,7 @@ describe('AnnotationLayer', () => {
       restoreConsole();
     });
 
-    it('replaces annotations properly', async () => {
+    it('replaces annotations properly when page is changed', async () => {
       const {
         func: onGetAnnotationsSuccess, promise: onGetAnnotationsSuccessPromise
       } = makeAsyncCallback();
