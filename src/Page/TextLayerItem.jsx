@@ -7,11 +7,11 @@ import { isPage, isRotate } from '../shared/propTypes';
 const BROKEN_FONT_ALARM_THRESHOLD = 0.1;
 
 export default class TextLayerItem extends PureComponent {
-  state = {
-    transform: null,
+  componentDidMount() {
+    this.alignTextItem();
   }
 
-  componentDidMount() {
+  componentDidUpdate() {
     this.alignTextItem();
   }
 
@@ -98,9 +98,7 @@ export default class TextLayerItem extends PureComponent {
 
     const ascent = fontData ? fontData.ascent : 1;
 
-    this.setState({
-      transform: `scaleX(${targetWidth / actualWidth}) translateY(${(1 - ascent) * 100}%)`,
-    });
+    element.style.transform = `scaleX(${targetWidth / actualWidth}) translateY(${(1 - ascent) * 100}%)`;
   }
 
   getElementWidth = (element) => {
@@ -112,7 +110,6 @@ export default class TextLayerItem extends PureComponent {
     const { fontSize, top, left } = this;
     const { scale } = this.context;
     const { fontName, str: text } = this.props;
-    const { transform } = this.state;
 
     return (
       <div
@@ -126,7 +123,6 @@ export default class TextLayerItem extends PureComponent {
           transformOrigin: 'left bottom',
           whiteSpace: 'pre',
           pointerEvents: 'all',
-          transform,
         }}
         ref={(ref) => { this.item = ref; }}
       >
