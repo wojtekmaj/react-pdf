@@ -70,7 +70,7 @@ class MyApp extends Component {
       <div>
         <Document
           file="somefile.pdf"
-          onLoadSuccess={this.onDocumentLoad}
+          onLoadSuccess={this.onDocumentLoad.bind(this)}
         >
           <Page pageNumber={pageNumber} />
         </Document>
