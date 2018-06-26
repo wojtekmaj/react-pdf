@@ -59,7 +59,7 @@ class MyApp extends Component {
     pageNumber: 1,
   }
 
-  onDocumentLoad = ({ numPages }) => {
+  onDocumentLoadSuccess = ({ numPages }) => {
     this.setState({ numPages });
   }
 
@@ -70,7 +70,7 @@ class MyApp extends Component {
       <div>
         <Document
           file="somefile.pdf"
-          onLoadSuccess={this.onDocumentLoad}
+          onLoadSuccess={this.onDocumentLoadSuccess}
         >
           <Page pageNumber={pageNumber} />
         </Document>

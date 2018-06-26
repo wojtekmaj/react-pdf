@@ -22,10 +22,9 @@ export default class Sample extends Component {
     });
   }
 
-  onDocumentLoadSuccess = ({ numPages }) =>
-    this.setState({
-      numPages,
-    })
+  onDocumentLoadSuccess = ({ numPages }) => {
+    this.setState({ numPages });
+  }
 
   render() {
     const { file, numPages } = this.state;
