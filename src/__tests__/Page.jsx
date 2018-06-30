@@ -607,6 +607,50 @@ describe('Page', () => {
     });
   });
 
+  it('requests page to be rendered with a proper scale when given height', () => {
+    const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
+    const height = 850;
+
+    const component = shallow(
+      <Page
+        height={height}
+        onLoadSuccess={onLoadSuccess}
+        pageIndex={0}
+        pdf={pdf}
+      />
+    );
+
+    expect.assertions(1);
+    return onLoadSuccessPromise.then((page) => {
+      component.update();
+      expect(page.height).toEqual(height);
+    });
+  });
+
+  it('requests page to be rendered with a proper scale when given width and height (ignores height)', () => {
+    const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
+    const width = 600;
+    const height = 100;
+
+    const component = shallow(
+      <Page
+        height={height}
+        onLoadSuccess={onLoadSuccess}
+        pageIndex={0}
+        pdf={pdf}
+        width={width}
+      />
+    );
+
+    expect.assertions(2);
+    return onLoadSuccessPromise.then((page) => {
+      component.update();
+      expect(page.width).toEqual(width);
+      // Expect proportions to be correct even though invalid height was provided
+      expect(page.height).toEqual(page.originalHeight * (page.width / page.originalWidth));
+    });
+  });
+
   it('calls onClick callback when clicked a page (sample of mouse events family)', () => {
     const onClick = jest.fn();
 

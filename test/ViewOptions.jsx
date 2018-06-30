@@ -17,12 +17,26 @@ export default class ViewOptions extends PureComponent {
   onDisplayAllChange = event =>
     this.props.setState({ displayAll: event.target.checked })
 
+  onPageHeightChange = (event) => {
+    event.preventDefault();
+
+    const form = event.target;
+    const { value: height } = form.pageHeight;
+
+    if (!height) {
+      return;
+    }
+
+    this.props.setState({
+      pageHeight: parseInt(height, 10),
+    });
+  }
+
   onPageWidthChange = (event) => {
     event.preventDefault();
 
     const form = event.target;
-
-    const width = form.pageWidth.value;
+    const { value: width } = form.pageWidth;
 
     if (!width) {
       return;
@@ -43,11 +57,14 @@ export default class ViewOptions extends PureComponent {
 
   resetRotation = () => this.props.setState({ rotate: null })
 
+  resetHeight = () => this.props.setState({ pageHeight: null })
+
   resetWidth = () => this.props.setState({ pageWidth: null })
 
   render() {
     const {
       displayAll,
+      pageHeight,
       pageWidth,
       renderAnnotations,
       renderInteractiveForms,
@@ -81,6 +98,30 @@ export default class ViewOptions extends PureComponent {
             type="button"
           >
             Reset width
+          </button>
+        </form>
+
+        <form onSubmit={this.onPageHeightChange}>
+          <label htmlFor="pageHeight">Page height:</label>&nbsp;
+          <input
+            type="number"
+            min={0}
+            id="pageHeight"
+            name="pageHeight"
+            defaultValue={pageHeight}
+          />&nbsp;
+          <button
+            style={{ display: 'none' }}
+            type="submit"
+          >
+            Set height
+          </button>
+          <button
+            disabled={pageHeight === null}
+            onClick={this.resetHeight}
+            type="button"
+          >
+            Reset height
           </button>
         </form>
 
@@ -171,6 +212,7 @@ export default class ViewOptions extends PureComponent {
 
 ViewOptions.propTypes = {
   displayAll: PropTypes.bool,
+  pageHeight: PropTypes.number,
   pageWidth: PropTypes.number,
   renderAnnotations: PropTypes.bool,
   renderInteractiveForms: PropTypes.bool,

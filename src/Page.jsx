@@ -162,22 +162,24 @@ export class PageInternal extends PureComponent {
   }
 
   get scale() {
-    const { scale, width } = this.props;
     const { page } = this.state;
 
     if (!page) {
       return null;
     }
 
+    const { scale, width, height } = this.props;
     const { rotate } = this;
 
     // Be default, we'll render page at 100% * scale width.
     let pageScale = 1;
 
-    // If width is defined, calculate the scale of the page so it could be of desired width.
-    if (width) {
+    // If width/height is defined, calculate the scale of the page so it could be of desired width.
+    if (width || height) {
       const viewport = page.getViewport(scale, rotate);
-      pageScale = width / viewport.width;
+      pageScale = width ?
+        width / viewport.width :
+        height / viewport.height;
     }
 
     return scale * pageScale;
@@ -361,6 +363,7 @@ PageInternal.propTypes = {
   className: isClassName,
   customTextRenderer: PropTypes.func,
   error: PropTypes.node,
+  height: PropTypes.number,
   inputRef: PropTypes.func,
   loading: PropTypes.node,
   noData: PropTypes.node,

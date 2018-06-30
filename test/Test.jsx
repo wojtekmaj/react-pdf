@@ -32,11 +32,14 @@ export default class Test extends PureComponent {
     rotate: null,
   }
 
-  onDocumentLoadSuccess = ({ numPages }) =>
+  onDocumentLoadSuccess = (document) => {
+    console.log('Loaded a document', document);
+    const { numPages } = document;
     this.setState({
       numPages,
       pageNumber: 1,
-    })
+    });
+  }
 
   onPageRenderSuccess = page =>
     console.log('Rendered a page', page);
@@ -85,6 +88,7 @@ export default class Test extends PureComponent {
     const {
       displayAll,
       numPages,
+      pageHeight,
       pageNumber,
       pageWidth,
       passMethod,
@@ -106,6 +110,7 @@ export default class Test extends PureComponent {
 
     const pageProps = {
       className: 'custom-classname-page',
+      height: pageHeight,
       onClick: (event, page) => console.log('Clicked a page', { event, page }),
       onRenderSuccess: this.onPageRenderSuccess,
       renderAnnotations,

@@ -206,6 +206,7 @@ Displays a page. Should be placed inside `<Document />`. Alternatively, it can h
 |className|Defines custom class name(s), that will be added to rendered element along with the default `react-pdf__Page`.|<ul><li>String:<br />`"custom-class-name-1 custom-class-name-2"`</li><li>Array of strings:<br />`["custom-class-name-1", "custom-class-name-2"]`</li></ul>|
 |customTextRenderer|A function that customizes how a text layer is rendered. Passes itext item and index for item.|`({ str, itemIndex }) => { return (<mark>{str}</mark>) }`|
 |error|Defines what the component should display in case of an error. Defaults to "Failed to load the page.".|<ul><li>String:<br />`"An error occurred!"`</li><li>React element:<br />`<div>An error occurred!</div>`</li><li>Function:<br />`this.renderError()`</li></ul>|
+|height|Defines the height of the page. If neither `height` nor `width` are defined, page will be rendered at the size defined in PDF. If you define `width` and `height` at the same time, `height` will be ignored. If you define `height` and `scale` at the same time, the height will be multiplied by a given factor.|`300`|
 |inputRef|A function that behaves like ref, but it's passed to main `<div>` rendered by `<Page>` component.|`(ref) => { this.myPage = ref; }`|
 |loading|Defines what the component should display while loading. Defaults to "Loading page…".|<ul><li>String:<br />`"Please wait!"`</li><li>React element:<br />`<div>Please wait!</div>`</li><li>Function:<br />`this.renderLoader()`</li></ul>|
 |noData|Defines what the component should display in case of no data. Defaults to "No page specified.".|<ul><li>String:<br />`"Please select a page."`</li><li>React element:<br />`<div>Please select a page.</div>`</li><li>Function:<br />`this.renderNoData()`</li></ul>|
@@ -224,7 +225,7 @@ Displays a page. Should be placed inside `<Document />`. Alternatively, it can h
 |renderTextLayer|Defines whether a text layer should be rendered. Defaults to true.|`false`|
 |rotate|Defines the rotation of the page in degrees. 90 = rotated to the right, 180 = upside down, 270 = rotated to the left. Defaults to page's default setting, usually 0.|`90`|
 |scale|Defines the scale in which PDF file should be rendered. Defaults to 1.0.|`0.5`|
-|width|Defines the width of the page. If not defined, canvas will be rendered at the width defined in PDF. If you define `width` and `scale` at the same time, the width will be multiplied by a given factor.|`300`|
+|width|Defines the width of the page. If neither `height` nor `width` are defined, page will be rendered at the size defined in PDF. If you define `width` and `height` at the same time, `height` will be ignored. If you define `width` and `scale` at the same time, the width will be multiplied by a given factor.|`300`|
 
 ### Outline
 
