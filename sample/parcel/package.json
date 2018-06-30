@@ -1,6 +1,6 @@
 {
   "name": "react-pdf-sample-page-parcel",
-  "version": "4.0.0-beta",
+  "version": "4.0.0-beta.2",
   "description": "A sample page for React-PDF.",
   "private": true,
   "scripts": {
