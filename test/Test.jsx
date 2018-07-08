@@ -32,6 +32,10 @@ export default class Test extends PureComponent {
     rotate: null,
   }
 
+  onDocumentLoadProgress = (progressData) => {
+    console.log('Loading a document', progressData.loaded / progressData.total);
+  }
+
   onDocumentLoadSuccess = (document) => {
     console.log('Loaded a document', document);
     const { numPages } = document;
@@ -177,6 +181,7 @@ export default class Test extends PureComponent {
                     className="custom-classname-document"
                     onItemClick={this.onItemClick}
                     onClick={(event, pdf) => console.log('Clicked a document', { event, pdf })}
+                    onLoadProgress={this.onDocumentLoadProgress}
                     onLoadSuccess={this.onDocumentLoadSuccess}
                     onLoadError={this.onDocumentLoadError}
                     onSourceError={this.onDocumentLoadError}

@@ -112,10 +112,14 @@ export default class Document extends PureComponent {
       return { pdf: null };
     });
 
-    const { options } = this.props;
+    const { options, onLoadProgress } = this.props;
 
     try {
-      const cancellable = makeCancellable(pdfjs.getDocument({ ...source, ...options }));
+      const loadingTask = pdfjs.getDocument({ ...source, ...options });
+      if (onLoadProgress) {
+        loadingTask.onProgress = onLoadProgress;
+      }
+      const cancellable = makeCancellable(loadingTask);
       this.runningTask = cancellable;
       const pdf = await cancellable.promise;
       this.setState((prevState) => {
@@ -353,6 +357,7 @@ Document.propTypes = {
   noData: PropTypes.node,
   onItemClick: PropTypes.func,
   onLoadError: PropTypes.func,
+  onLoadProgress: PropTypes.func,
   onLoadSuccess: PropTypes.func,
   onSourceError: PropTypes.func,
   onSourceSuccess: PropTypes.func,
