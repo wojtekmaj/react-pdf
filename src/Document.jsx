@@ -137,12 +137,13 @@ export default class Document extends PureComponent {
 
   get childContext() {
     const { linkService, registerPage, unregisterPage } = this;
-    const { rotate } = this.props;
+    const { renderMode, rotate } = this.props;
 
     return {
       linkService,
       pdf: this.state.pdf,
       registerPage,
+      renderMode,
       rotate,
       unregisterPage,
     };

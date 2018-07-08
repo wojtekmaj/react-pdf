@@ -20,7 +20,7 @@ import {
   makePageCallback,
 } from './shared/utils';
 
-import { eventsProps, isClassName, isPageIndex, isPageNumber, isPdf, isRotate } from './shared/propTypes';
+import { eventsProps, isClassName, isPageIndex, isPageNumber, isPdf, isRenderMode, isRotate } from './shared/propTypes';
 
 export class PageInternal extends PureComponent {
   state = {
@@ -379,7 +379,7 @@ PageInternal.propTypes = {
   registerPage: PropTypes.func,
   renderAnnotations: PropTypes.bool,
   renderInteractiveForms: PropTypes.bool,
-  renderMode: PropTypes.oneOf(['canvas', 'svg']),
+  renderMode: isRenderMode,
   renderTextLayer: PropTypes.bool,
   rotate: isRotate,
   scale: PropTypes.number,

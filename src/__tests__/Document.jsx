@@ -281,6 +281,27 @@ describe('Document', () => {
       });
     });
 
+    it('passes renderMode prop to its children', () => {
+      const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
+
+      const component = shallow(
+        <Document
+          file={pdfFile.file}
+          loading="Loading"
+          onLoadSuccess={onLoadSuccess}
+          renderMode="svg"
+        >
+          <Child />
+        </Document>
+      );
+
+      expect.assertions(1);
+      return onLoadSuccessPromise.then(() => {
+        component.update();
+        expect(component.instance().childContext.renderMode).toBe('svg');
+      });
+    });
+
     it('passes rotate prop to its children', () => {
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
@@ -299,6 +320,28 @@ describe('Document', () => {
       return onLoadSuccessPromise.then(() => {
         component.update();
         expect(component.instance().childContext.rotate).toBe(90);
+      });
+    });
+
+    it('does not overwrite renderMode prop in its children when given renderMode prop to both Document and its children', () => {
+      const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
+
+      const component = shallow(
+        <Document
+          file={pdfFile.file}
+          loading="Loading"
+          onLoadSuccess={onLoadSuccess}
+          renderMode="svg"
+        >
+          <Child renderMode="canvas" />
+        </Document>
+      );
+
+      expect.assertions(1);
+      return onLoadSuccessPromise.then(() => {
+        component.update();
+        const child = component.find('Child');
+        expect(child.prop('renderMode')).toBe('canvas');
       });
     });
 
