@@ -149,6 +149,7 @@ export default class Test extends PureComponent {
             />
             <ViewOptions
               displayAll={displayAll}
+              pageHeight={pageHeight}
               pageWidth={pageWidth}
               renderAnnotations={renderAnnotations}
               renderInteractiveForms={renderInteractiveForms}
