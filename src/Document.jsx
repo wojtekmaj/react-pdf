@@ -59,10 +59,11 @@ export default class Document extends PureComponent {
   viewer = {
     scrollPageIntoView: ({ pageNumber }) => {
       // Handling jumping to internal links target
+      const { onItemClick } = this.props;
 
       // First, check if custom handling of onItemClick was provided
-      if (this.props.onItemClick) {
-        this.props.onItemClick({ pageNumber });
+      if (onItemClick) {
+        onItemClick({ pageNumber });
         return;
       }
 
@@ -87,7 +88,8 @@ export default class Document extends PureComponent {
   }
 
   componentDidUpdate(prevProps) {
-    if (this.props.file !== prevProps.file) {
+    const { file } = this.props;
+    if (file !== prevProps.file) {
       this.loadDocument();
     }
   }
@@ -142,10 +144,11 @@ export default class Document extends PureComponent {
   get childContext() {
     const { linkService, registerPage, unregisterPage } = this;
     const { renderMode, rotate } = this.props;
+    const { pdf } = this.state;
 
     return {
       linkService,
-      pdf: this.state.pdf,
+      pdf,
       registerPage,
       renderMode,
       rotate,
@@ -154,6 +157,7 @@ export default class Document extends PureComponent {
   }
 
   get eventProps() {
+    // eslint-disable-next-line react/destructuring-assignment
     return makeEventProps(this.props, () => this.state.pdf);
   }
 
@@ -161,7 +165,8 @@ export default class Document extends PureComponent {
    * Called when a document source is resolved correctly
    */
   onSourceSuccess = () => {
-    callIfDefined(this.props.onSourceSuccess);
+    const { onSourceSuccess } = this.props;
+    callIfDefined(onSourceSuccess);
   }
 
   /**
@@ -169,16 +174,18 @@ export default class Document extends PureComponent {
    */
   onSourceError = (error) => {
     if (
-      error.name === 'RenderingCancelledException' ||
-      error.name === 'PromiseCancelledException'
+      error.name === 'RenderingCancelledException'
+      || error.name === 'PromiseCancelledException'
     ) {
       return;
     }
 
     errorOnDev(error);
 
+    const { onSourceError } = this.props;
+
     callIfDefined(
-      this.props.onSourceError,
+      onSourceError,
       error,
     );
   }
@@ -187,13 +194,16 @@ export default class Document extends PureComponent {
    * Called when a document is read successfully
    */
   onLoadSuccess = () => {
+    const { onLoadSuccess } = this.props;
+    const { pdf } = this.state;
+
     callIfDefined(
-      this.props.onLoadSuccess,
-      this.state.pdf,
+      onLoadSuccess,
+      pdf,
     );
 
-    this.pages = new Array(this.state.pdf.numPages);
-    this.linkService.setDocument(this.state.pdf);
+    this.pages = new Array(pdf.numPages);
+    this.linkService.setDocument(pdf);
   }
 
   /**
@@ -201,16 +211,18 @@ export default class Document extends PureComponent {
    */
   onLoadError = (error) => {
     if (
-      error.name === 'RenderingCancelledException' ||
-      error.name === 'PromiseCancelledException'
+      error.name === 'RenderingCancelledException'
+      || error.name === 'PromiseCancelledException'
     ) {
       return;
     }
 
     errorOnDev(error);
 
+    const { onLoadError } = this.props;
+
     callIfDefined(
-      this.props.onLoadError,
+      onLoadError,
       error,
     );
   }
@@ -289,27 +301,40 @@ export default class Document extends PureComponent {
   }
 
   renderNoData() {
+    const { noData } = this.props;
+
     return (
-      <div className="react-pdf__message react-pdf__message--no-data">{this.props.noData}</div>
+      <div className="react-pdf__message react-pdf__message--no-data">
+        {noData}
+      </div>
     );
   }
 
   renderError() {
+    const { error } = this.props;
     return (
-      <div className="react-pdf__message react-pdf__message--error">{this.props.error}</div>
+      <div className="react-pdf__message react-pdf__message--error">
+        {error}
+      </div>
     );
   }
 
   renderLoader() {
+    const { loading } = this.props;
+
     return (
-      <div className="react-pdf__message react-pdf__message--loading">{this.props.loading}</div>
+      <div className="react-pdf__message react-pdf__message--loading">
+        {loading}
+      </div>
     );
   }
 
   renderChildren() {
+    const { children } = this.props;
+
     return (
       <DocumentContext.Provider value={this.childContext}>
-        {this.props.children}
+        {children}
       </DocumentContext.Provider>
     );
   }

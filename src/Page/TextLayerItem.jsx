@@ -109,7 +109,9 @@ export class TextLayerItemInternal extends PureComponent {
 
   render() {
     const { fontSize, top, left } = this;
-    const { fontName, scale, str: text } = this.props;
+    const {
+      customTextRenderer, fontName, scale, str: text,
+    } = this.props;
 
     return (
       <div
@@ -127,9 +129,9 @@ export class TextLayerItemInternal extends PureComponent {
         ref={(ref) => { this.item = ref; }}
       >
         {
-          this.props.customTextRenderer ?
-            this.props.customTextRenderer(this.props) :
-            text
+          customTextRenderer
+            ? customTextRenderer(this.props)
+            : text
         }
       </div>
     );

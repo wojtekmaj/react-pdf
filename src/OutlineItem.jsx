@@ -48,13 +48,15 @@ export class OutlineItemInternal extends PureComponent {
   }
 
   onClick = async (event) => {
+    const { onClick } = this.props;
+
     event.preventDefault();
 
     const pageIndex = await this.getPageIndex();
     const pageNumber = await this.getPageNumber();
 
     callIfDefined(
-      this.props.onClick,
+      onClick,
       {
         pageIndex,
         pageNumber,
@@ -77,9 +79,9 @@ export class OutlineItemInternal extends PureComponent {
           subitems.map((subitem, subitemIndex) => (
             <OutlineItemInternal
               key={
-                typeof subitem.destination === 'string' ?
-                  subitem.destination :
-                  subitemIndex
+                typeof subitem.destination === 'string'
+                  ? subitem.destination
+                  : subitemIndex
               }
               item={subitem}
               {...otherProps}
@@ -129,9 +131,9 @@ const OutlineItem = props => (
   <DocumentContext.Consumer>
     {documentContext => (
       <OutlineContext.Consumer>
-        {outlineContext =>
+        {outlineContext => (
           <OutlineItemInternal {...documentContext} {...outlineContext} {...props} />
-        }
+        )}
       </OutlineContext.Consumer>
     )}
   </DocumentContext.Consumer>

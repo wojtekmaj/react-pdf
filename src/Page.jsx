@@ -20,7 +20,9 @@ import {
   makePageCallback,
 } from './shared/utils';
 
-import { eventsProps, isClassName, isPageIndex, isPageNumber, isPdf, isRenderMode, isRotate } from './shared/propTypes';
+import {
+  eventsProps, isClassName, isPageIndex, isPageNumber, isPdf, isRenderMode, isRotate,
+} from './shared/propTypes';
 
 export class PageInternal extends PureComponent {
   state = {
@@ -28,7 +30,9 @@ export class PageInternal extends PureComponent {
   }
 
   componentDidMount() {
-    if (!this.props.pdf) {
+    const { pdf } = this.props;
+
+    if (!pdf) {
       throw new Error('Attempted to load a page, but no document was specified.');
     }
 
@@ -36,12 +40,16 @@ export class PageInternal extends PureComponent {
   }
 
   componentDidUpdate(prevProps) {
+    const { pdf } = this.props;
+
     if (
-      (prevProps.pdf && (this.props.pdf !== prevProps.pdf)) ||
-      this.getPageNumber() !== this.getPageNumber(prevProps)
+      (prevProps.pdf && (pdf !== prevProps.pdf))
+      || this.getPageNumber() !== this.getPageNumber(prevProps)
     ) {
+      const { unregisterPage } = this.props;
+
       callIfDefined(
-        this.props.unregisterPage,
+        unregisterPage,
         this.getPageIndex(prevProps),
       );
 
@@ -50,8 +58,10 @@ export class PageInternal extends PureComponent {
   }
 
   componentWillUnmount() {
+    const { unregisterPage } = this.props;
+
     callIfDefined(
-      this.props.unregisterPage,
+      unregisterPage,
       this.pageIndex,
     );
 
@@ -59,22 +69,37 @@ export class PageInternal extends PureComponent {
   }
 
   get childContext() {
-    if (!this.state.page) {
+    const { page } = this.state;
+
+    if (!page) {
       return {};
     }
 
+    const {
+      customTextRenderer,
+      onGetAnnotationsError,
+      onGetAnnotationsSuccess,
+      onGetTextError,
+      onGetTextSuccess,
+      onRenderAnnotationsError,
+      onRenderAnnotationsSuccess,
+      onRenderError,
+      onRenderSuccess,
+      renderInteractiveForms,
+    } = this.props;
+
     return {
-      customTextRenderer: this.props.customTextRenderer,
-      onGetAnnotationsError: this.props.onGetAnnotationsError,
-      onGetAnnotationsSuccess: this.props.onGetAnnotationsSuccess,
-      onGetTextError: this.props.onGetTextError,
-      onGetTextSuccess: this.props.onGetTextSuccess,
-      onRenderAnnotationsError: this.props.onRenderAnnotationsError,
-      onRenderAnnotationsSuccess: this.props.onRenderAnnotationsSuccess,
-      onRenderError: this.props.onRenderError,
-      onRenderSuccess: this.props.onRenderSuccess,
-      page: this.state.page,
-      renderInteractiveForms: this.props.renderInteractiveForms,
+      customTextRenderer,
+      onGetAnnotationsError,
+      onGetAnnotationsSuccess,
+      onGetTextError,
+      onGetTextSuccess,
+      onRenderAnnotationsError,
+      onRenderAnnotationsSuccess,
+      onRenderError,
+      onRenderSuccess,
+      page,
+      renderInteractiveForms,
       rotate: this.rotate,
       scale: this.scale,
     };
@@ -84,13 +109,16 @@ export class PageInternal extends PureComponent {
    * Called when a page is loaded successfully
    */
   onLoadSuccess = () => {
+    const { onLoadSuccess, registerPage } = this.props;
+    const { page } = this.state;
+
     callIfDefined(
-      this.props.onLoadSuccess,
-      makePageCallback(this.state.page, this.scale),
+      onLoadSuccess,
+      makePageCallback(page, this.scale),
     );
 
     callIfDefined(
-      this.props.registerPage,
+      registerPage,
       this.pageIndex,
       this.ref,
     );
@@ -101,16 +129,18 @@ export class PageInternal extends PureComponent {
    */
   onLoadError = (error) => {
     if (
-      error.name === 'RenderingCancelledException' ||
-      error.name === 'PromiseCancelledException'
+      error.name === 'RenderingCancelledException'
+      || error.name === 'PromiseCancelledException'
     ) {
       return;
     }
 
     errorOnDev(error);
 
+    const { onLoadError } = this.props;
+
     callIfDefined(
-      this.props.onLoadError,
+      onLoadError,
       error,
     );
   }
@@ -148,8 +178,10 @@ export class PageInternal extends PureComponent {
   }
 
   get rotate() {
-    if (isProvided(this.props.rotate)) {
-      return this.props.rotate;
+    const { rotate } = this.props;
+
+    if (isProvided(rotate)) {
+      return rotate;
     }
 
     const { page } = this.state;
@@ -177,9 +209,9 @@ export class PageInternal extends PureComponent {
     // If width/height is defined, calculate the scale of the page so it could be of desired width.
     if (width || height) {
       const viewport = page.getViewport(scale, rotate);
-      pageScale = width ?
-        width / viewport.width :
-        height / viewport.height;
+      pageScale = width
+        ? width / viewport.width
+        : height / viewport.height;
     }
 
     return scale * pageScale;
@@ -187,20 +219,25 @@ export class PageInternal extends PureComponent {
 
   get eventProps() {
     return makeEventProps(this.props, () => {
-      if (!this.state.page) {
-        return this.state.page;
+      const { page } = this.state;
+      if (!page) {
+        return page;
       }
 
-      return makePageCallback(this.state.page, this.scale);
+      return makePageCallback(page, this.scale);
     });
   }
 
   get pageKey() {
-    return `${this.state.page.pageIndex}@${this.scale}/${this.rotate}`;
+    const { page } = this.state;
+
+    return `${page.pageIndex}@${this.scale}/${this.rotate}`;
   }
 
   get pageKeyNoScale() {
-    return `${this.state.page.pageIndex}/${this.rotate}`;
+    const { page } = this.state;
+
+    return `${page.pageIndex}/${this.rotate}`;
   }
 
   loadPage = async () => {
@@ -275,20 +312,32 @@ export class PageInternal extends PureComponent {
   }
 
   renderNoData() {
+    const { noData } = this.props;
+
     return (
-      <div className="react-pdf__message react-pdf__message--no-data">{this.props.noData}</div>
+      <div className="react-pdf__message react-pdf__message--no-data">
+        {noData}
+      </div>
     );
   }
 
   renderError() {
+    const { error } = this.props;
+
     return (
-      <div className="react-pdf__message react-pdf__message--error">{this.props.error}</div>
+      <div className="react-pdf__message react-pdf__message--error">
+        {error}
+      </div>
     );
   }
 
   renderLoader() {
+    const { loading } = this.props;
+
     return (
-      <div className="react-pdf__message react-pdf__message--loading">{this.props.loading}</div>
+      <div className="react-pdf__message react-pdf__message--loading">
+        {loading}
+      </div>
     );
   }
 
@@ -301,9 +350,9 @@ export class PageInternal extends PureComponent {
     return (
       <PageContext.Provider value={this.childContext}>
         {
-          renderMode === 'svg' ?
-            this.renderSVG() :
-            this.renderCanvas()
+          renderMode === 'svg'
+            ? this.renderSVG()
+            : this.renderCanvas()
         }
         {children}
       </PageContext.Provider>

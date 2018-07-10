@@ -20,7 +20,9 @@ export class TextLayerInternal extends PureComponent {
   }
 
   componentDidMount() {
-    if (!this.props.page) {
+    const { page } = this.props;
+
+    if (!page) {
       throw new Error('Attempted to load page text content, but no page was specified.');
     }
 
@@ -28,7 +30,9 @@ export class TextLayerInternal extends PureComponent {
   }
 
   componentDidUpdate(prevProps) {
-    if (prevProps.page && (this.props.page !== prevProps.page)) {
+    const { page } = this.props;
+
+    if (prevProps.page && (page !== prevProps.page)) {
       this.loadTextItems();
     }
   }
@@ -52,24 +56,29 @@ export class TextLayerInternal extends PureComponent {
   }
 
   onLoadSuccess = () => {
+    const { onGetTextSuccess } = this.props;
+    const { textItems } = this.state;
+
     callIfDefined(
-      this.props.onGetTextSuccess,
-      this.state.textItems,
+      onGetTextSuccess,
+      textItems,
     );
   }
 
   onLoadError = (error) => {
     if (
-      error.name === 'RenderingCancelledException' ||
-      error.name === 'PromiseCancelledException'
+      error.name === 'RenderingCancelledException'
+      || error.name === 'PromiseCancelledException'
     ) {
       return;
     }
 
     errorOnDev(error);
 
+    const { onGetTextError } = this.props;
+
     callIfDefined(
-      this.props.onGetTextError,
+      onGetTextError,
       error,
     );
   }

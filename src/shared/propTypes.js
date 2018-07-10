@@ -57,8 +57,7 @@ export const isPage = PropTypes.shape({
 });
 
 export const isPageIndex = (props, propName, componentName) => {
-  const pageIndex = props[propName];
-  const { pageNumber, pdf } = props;
+  const { [propName]: pageIndex, pageNumber, pdf } = props;
 
   if (!isDefined(pdf)) {
     return null;
@@ -87,8 +86,7 @@ export const isPageIndex = (props, propName, componentName) => {
 };
 
 export const isPageNumber = (props, propName, componentName) => {
-  const pageNumber = props[propName];
-  const { pageIndex, pdf } = props;
+  const { [propName]: pageNumber, pageIndex, pdf } = props;
 
   if (!isDefined(pdf)) {
     return null;

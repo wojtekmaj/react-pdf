@@ -23,7 +23,9 @@ export class OutlineInternal extends PureComponent {
   }
 
   componentDidMount() {
-    if (!this.props.pdf) {
+    const { pdf } = this.props;
+
+    if (!pdf) {
       throw new Error('Attempted to load an outline, but no document was specified.');
     }
 
@@ -31,7 +33,9 @@ export class OutlineInternal extends PureComponent {
   }
 
   componentDidUpdate(prevProps) {
-    if (prevProps.pdf && (this.props.pdf !== prevProps.pdf)) {
+    const { pdf } = this.props;
+
+    if (prevProps.pdf && (pdf !== prevProps.pdf)) {
       this.loadOutline();
     }
   }
@@ -69,6 +73,7 @@ export class OutlineInternal extends PureComponent {
   }
 
   get eventProps() {
+    // eslint-disable-next-line react/destructuring-assignment
     return makeEventProps(this.props, () => this.state.outline);
   }
 
@@ -76,9 +81,12 @@ export class OutlineInternal extends PureComponent {
    * Called when an outline is read successfully
    */
   onLoadSuccess = () => {
+    const { onLoadSuccess } = this.props;
+    const { outline } = this.state;
+
     callIfDefined(
-      this.props.onLoadSuccess,
-      this.state.outline,
+      onLoadSuccess,
+      outline,
     );
   }
 
@@ -87,23 +95,27 @@ export class OutlineInternal extends PureComponent {
    */
   onLoadError = (error) => {
     if (
-      error.name === 'RenderingCancelledException' ||
-      error.name === 'PromiseCancelledException'
+      error.name === 'RenderingCancelledException'
+      || error.name === 'PromiseCancelledException'
     ) {
       return;
     }
 
     errorOnDev(error);
 
+    const { onLoadError } = this.props;
+
     callIfDefined(
-      this.props.onLoadError,
+      onLoadError,
       error,
     );
   }
 
   onItemClick = ({ pageIndex, pageNumber }) => {
+    const { onItemClick } = this.props;
+
     callIfDefined(
-      this.props.onItemClick,
+      onItemClick,
       {
         pageIndex,
         pageNumber,
@@ -120,9 +132,9 @@ export class OutlineInternal extends PureComponent {
           outline.map((item, itemIndex) => (
             <OutlineItem
               key={
-                typeof item.destination === 'string' ?
-                  item.destination :
-                  itemIndex
+                typeof item.destination === 'string'
+                  ? item.destination
+                  : itemIndex
               }
               item={item}
             />
@@ -140,12 +152,12 @@ export class OutlineInternal extends PureComponent {
       return null;
     }
 
-    const { className } = this.props;
+    const { className, inputRef } = this.props;
 
     return (
       <div
         className={mergeClassNames('react-pdf__Outline', className)}
-        ref={this.props.inputRef}
+        ref={inputRef}
         {...this.eventProps}
       >
         <OutlineContext.Provider value={this.childContext}>

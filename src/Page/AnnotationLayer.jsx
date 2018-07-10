@@ -20,7 +20,9 @@ export class AnnotationLayerInternal extends PureComponent {
   }
 
   componentDidMount() {
-    if (!this.props.page) {
+    const { page } = this.props;
+
+    if (!page) {
       throw new Error('Attempted to load page annotations, but no page was specified.');
     }
 
@@ -28,9 +30,11 @@ export class AnnotationLayerInternal extends PureComponent {
   }
 
   componentDidUpdate(prevProps) {
+    const { page, renderInteractiveForms } = this.props;
+
     if (
-      (prevProps.page && (this.props.page !== prevProps.page)) ||
-      this.props.renderInteractiveForms !== prevProps.renderInteractiveForms
+      (prevProps.page && (page !== prevProps.page))
+      || renderInteractiveForms !== prevProps.renderInteractiveForms
     ) {
       this.loadAnnotations();
     }
@@ -55,32 +59,37 @@ export class AnnotationLayerInternal extends PureComponent {
   }
 
   onLoadSuccess = () => {
+    const { onGetAnnotationsSuccess } = this.props;
+    const { annotations } = this.state;
+
     callIfDefined(
-      this.props.onGetAnnotationsSuccess,
-      this.state.annotations,
+      onGetAnnotationsSuccess,
+      annotations,
     );
   }
 
   onLoadError = (error) => {
     if (
-      error.name === 'RenderingCancelledException' ||
-      error.name === 'PromiseCancelledException'
+      error.name === 'RenderingCancelledException'
+      || error.name === 'PromiseCancelledException'
     ) {
       return;
     }
 
     errorOnDev(error);
 
+    const { onGetAnnotationsError } = this.props;
+
     callIfDefined(
-      this.props.onGetAnnotationsError,
+      onGetAnnotationsError,
       error,
     );
   }
 
   onRenderSuccess = () => {
-    callIfDefined(
-      this.props.onRenderAnnotationsSuccess,
-    );
+    const { onRenderAnnotationsSuccess } = this.props;
+
+    callIfDefined(onRenderAnnotationsSuccess);
   }
 
   /**
@@ -88,16 +97,18 @@ export class AnnotationLayerInternal extends PureComponent {
    */
   onRenderError = (error) => {
     if (
-      error.name === 'RenderingCancelledException' ||
-      error.name === 'PromiseCancelledException'
+      error.name === 'RenderingCancelledException'
+      || error.name === 'PromiseCancelledException'
     ) {
       return;
     }
 
     errorOnDev(error);
 
+    const { onRenderAnnotationsError } = this.props;
+
     callIfDefined(
-      this.props.onRenderAnnotationsError,
+      onRenderAnnotationsError,
       error,
     );
   }
@@ -165,9 +176,9 @@ const AnnotationLayer = props => (
   <DocumentContext.Consumer>
     {documentContext => (
       <PageContext.Consumer>
-        {pageContext =>
+        {pageContext => (
           <AnnotationLayerInternal {...documentContext} {...pageContext} {...props} />
-        }
+        )}
       </PageContext.Consumer>
     )}
   </DocumentContext.Consumer>

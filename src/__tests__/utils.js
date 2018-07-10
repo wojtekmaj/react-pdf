@@ -5,9 +5,9 @@ export const makeAsyncCallback = (callbackValue) => {
     promiseResolve = resolve;
   });
   const func = jest.fn(
-    callbackValue ?
-      () => promiseResolve(callbackValue) :
-      (...args) => promiseResolve(args.length === 1 ? args[0] : args),
+    callbackValue
+      ? () => promiseResolve(callbackValue)
+      : (...args) => promiseResolve(args.length === 1 ? args[0] : args),
   );
 
   return { promise, func };

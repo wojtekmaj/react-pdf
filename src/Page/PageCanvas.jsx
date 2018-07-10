@@ -18,9 +18,10 @@ export class PageCanvasInternal extends PureComponent {
   }
 
   componentDidUpdate(prevProps) {
-    if (this.props.renderInteractiveForms !== prevProps.renderInteractiveForms) {
+    const { page, renderInteractiveForms } = this.props;
+    if (renderInteractiveForms !== prevProps.renderInteractiveForms) {
       // Ensures the canvas will be re-rendered from scratch. Otherwise all form data will stay.
-      this.props.page.cleanup();
+      page.cleanup();
       this.drawPageOnCanvas();
     }
   }
@@ -43,10 +44,10 @@ export class PageCanvasInternal extends PureComponent {
   onRenderSuccess = () => {
     this.renderer = null;
 
-    const { page, scale } = this.props;
+    const { onRenderSuccess, page, scale } = this.props;
 
     callIfDefined(
-      this.props.onRenderSuccess,
+      onRenderSuccess,
       makePageCallback(page, scale),
     );
   }
@@ -56,16 +57,18 @@ export class PageCanvasInternal extends PureComponent {
    */
   onRenderError = (error) => {
     if (
-      error.name === 'RenderingCancelledException' ||
-      error.name === 'PromiseCancelledException'
+      error.name === 'RenderingCancelledException'
+      || error.name === 'PromiseCancelledException'
     ) {
       return;
     }
 
     errorOnDev(error);
 
+    const { onRenderError } = this.props;
+
     callIfDefined(
-      this.props.onRenderError,
+      onRenderError,
       error,
     );
   }

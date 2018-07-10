@@ -5,7 +5,9 @@ import { pdfjs } from '../entry.jest';
 
 import Document from '../Document';
 
-import { makeAsyncCallback, loadPDF, muteConsole, restoreConsole } from './utils';
+import {
+  makeAsyncCallback, loadPDF, muteConsole, restoreConsole,
+} from './utils';
 
 const pdfFile = loadPDF('./__mocks__/_pdf.pdf');
 const pdfFile2 = loadPDF('./__mocks__/_pdf2.pdf');

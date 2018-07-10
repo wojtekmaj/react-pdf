@@ -23,10 +23,10 @@ export class PageSVGInternal extends PureComponent {
   onRenderSuccess = () => {
     this.renderer = null;
 
-    const { page, scale } = this.props;
+    const { onRenderSuccess, page, scale } = this.props;
 
     callIfDefined(
-      this.props.onRenderSuccess,
+      onRenderSuccess,
       makePageCallback(page, scale),
     );
   }
@@ -39,8 +39,10 @@ export class PageSVGInternal extends PureComponent {
       return;
     }
 
+    const { onRenderError } = this.props;
+
     callIfDefined(
-      this.props.onRenderError,
+      onRenderError,
       error,
     );
   }
