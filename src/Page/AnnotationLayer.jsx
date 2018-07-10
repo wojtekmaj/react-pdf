@@ -123,6 +123,8 @@ export default class AnnotationLayer extends Component {
       viewport,
     };
 
+    this.annotationLayer.innerHTML = '';
+
     try {
       PDFJS.AnnotationLayer.render(parameters);
       this.onRenderSuccess();
