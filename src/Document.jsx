@@ -114,10 +114,11 @@ export default class Document extends PureComponent {
       return { pdf: null };
     });
 
-    const { options, onLoadProgress } = this.props;
+    const { options, onLoadProgress, onPassword } = this.props;
 
     try {
       const loadingTask = pdfjs.getDocument({ ...source, ...options });
+      loadingTask.onPassword = onPassword;
       if (onLoadProgress) {
         loadingTask.onProgress = onLoadProgress;
       }
@@ -370,6 +371,21 @@ Document.defaultProps = {
   error: 'Failed to load PDF file.',
   loading: 'Loading PDF…',
   noData: 'No PDF file specified.',
+  onPassword: (callback, reason) => {
+    switch (reason) {
+      case 1: { // Needs password
+        // eslint-disable-next-line no-alert
+        const password = prompt('Enter the password to open this PDF file.');
+        return callback(password);
+      }
+      case 2: { // Invalid password
+        // eslint-disable-next-line no-alert
+        const password = prompt('Invalid password. Please try again.');
+        return callback(password);
+      }
+      default: return null;
+    }
+  },
 };
 
 Document.propTypes = {
@@ -384,6 +400,7 @@ Document.propTypes = {
   onLoadError: PropTypes.func,
   onLoadProgress: PropTypes.func,
   onLoadSuccess: PropTypes.func,
+  onPassword: PropTypes.func,
   onSourceError: PropTypes.func,
   onSourceSuccess: PropTypes.func,
   rotate: PropTypes.number,
