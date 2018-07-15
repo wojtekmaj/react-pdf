@@ -24,6 +24,8 @@ import {
   eventsProps, isClassName, isPageIndex, isPageNumber, isPdf, isRenderMode, isRotate,
 } from './shared/propTypes';
 
+const defaultScale = 1.0;
+
 export class PageInternal extends PureComponent {
   state = {
     page: null,
@@ -214,7 +216,10 @@ export class PageInternal extends PureComponent {
         : height / viewport.height;
     }
 
-    return scale * pageScale;
+    // Passing scale explicitly null would cause the page not to render
+    const scaleWithDefault = scale === null ? defaultScale : scale;
+
+    return scaleWithDefault * pageScale;
   }
 
   get eventProps() {
@@ -404,7 +409,7 @@ PageInternal.defaultProps = {
   renderInteractiveForms: false,
   renderMode: 'canvas',
   renderTextLayer: true,
-  scale: 1.0,
+  scale: defaultScale,
 };
 
 PageInternal.propTypes = {
