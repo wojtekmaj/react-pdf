@@ -212,7 +212,9 @@ Displays a page. Should be placed inside `<Document />`. Alternatively, it can h
 |loading|Defines what the component should display while loading. Defaults to "Loading page…".|<ul><li>String:<br />`"Please wait!"`</li><li>React element:<br />`<div>Please wait!</div>`</li><li>Function:<br />`this.renderLoader()`</li></ul>|
 |noData|Defines what the component should display in case of no data. Defaults to "No page specified.".|<ul><li>String:<br />`"Please select a page."`</li><li>React element:<br />`<div>Please select a page.</div>`</li><li>Function:<br />`this.renderNoData()`</li></ul>|
 |onLoadError|Function called in case of an error while loading the page.|`(error) => alert('Error while loading page! ' + error.message)`|
+|onLoadProgress|Function called, potentially multiple times, as the loading progresses.|`({ loaded, total }) => alert('Loading a document: ' + (loaded / total) * 100 + '%');`|
 |onLoadSuccess|Function called when the page is successfully loaded.|`(page) => alert('Now displaying a page number ' + page.pageNumber + '!')`|
+|onPassword|Function called when a password-protected PDF is loaded. Defaults to a function that prompts the user for password.|`(callback) => callback('s3cr3t_p4ssw0rd')`|
 |onRenderError|Function called in case of an error while rendering the page.|`(error) => alert('Error while loading page! ' + error.message)`|
 |onRenderSuccess|Function called when the page is successfully rendered on the screen.|`() => alert('Rendered the page!')`|
 |onGetAnnotationsSuccess|Function called when annotations are successfully loaded.|`(annotations) => alert('Now displaying ' + annotations.length + ' annotations!')`|
