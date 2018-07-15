@@ -10,6 +10,7 @@ import pdfjs, { PDFDataRangeTransport } from 'pdfjs-dist';
 import DocumentContext from './DocumentContext';
 
 import LinkService from './LinkService';
+import PasswordResponses from './PasswordResponses';
 
 import {
   callIfDefined,
@@ -373,17 +374,19 @@ Document.defaultProps = {
   noData: 'No PDF file specified.',
   onPassword: (callback, reason) => {
     switch (reason) {
-      case 1: { // Needs password
+      case PasswordResponses.NEED_PASSWORD: {
         // eslint-disable-next-line no-alert
         const password = prompt('Enter the password to open this PDF file.');
-        return callback(password);
+        callback(password);
+        break;
       }
-      case 2: { // Invalid password
+      case PasswordResponses.INCORRECT_PASSWORD: {
         // eslint-disable-next-line no-alert
         const password = prompt('Invalid password. Please try again.');
-        return callback(password);
+        callback(password);
+        break;
       }
-      default: return null;
+      default:
     }
   },
 };
