@@ -32,6 +32,21 @@ export default class ViewOptions extends PureComponent {
     });
   }
 
+  onPageScaleChange = (event) => {
+    event.preventDefault();
+
+    const form = event.target;
+    const { value: scale } = form.pageScale;
+
+    if (!scale) {
+      return;
+    }
+
+    this.props.setState({
+      pageScale: parseFloat(scale),
+    });
+  }
+
   onPageWidthChange = (event) => {
     event.preventDefault();
 
@@ -65,6 +80,7 @@ export default class ViewOptions extends PureComponent {
     const {
       displayAll,
       pageHeight,
+      pageScale,
       pageWidth,
       renderAnnotations,
       renderInteractiveForms,
@@ -122,6 +138,31 @@ export default class ViewOptions extends PureComponent {
             type="button"
           >
             Reset height
+          </button>
+        </form>
+
+        <form onSubmit={this.onPageScaleChange}>
+          <label htmlFor="pageScale">Page scale:</label>&nbsp;
+          <input
+            type="number"
+            min={0}
+            id="pageScale"
+            name="pageScale"
+            step="0.01"
+            defaultValue={pageScale}
+          />&nbsp;
+          <button
+            style={{ display: 'none' }}
+            type="submit"
+          >
+            Set scale
+          </button>
+          <button
+            disabled={pageScale === null}
+            onClick={this.resetScale}
+            type="button"
+          >
+            Reset scale
           </button>
         </form>
 
@@ -213,6 +254,7 @@ export default class ViewOptions extends PureComponent {
 ViewOptions.propTypes = {
   displayAll: PropTypes.bool,
   pageHeight: PropTypes.number,
+  pageScale: PropTypes.number,
   pageWidth: PropTypes.number,
   renderAnnotations: PropTypes.bool,
   renderInteractiveForms: PropTypes.bool,

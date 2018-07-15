@@ -21,7 +21,9 @@ export default class Test extends PureComponent {
     displayAll: false,
     file: null,
     numPages: null,
+    pageHeight: null,
     pageNumber: null,
+    pageScale: null,
     pageWidth: null,
     passMethod: 'normal',
     render: true,
@@ -88,31 +90,18 @@ export default class Test extends PureComponent {
     }
   }
 
-  render() {
+  get pageProps() {
     const {
-      displayAll,
-      numPages,
       pageHeight,
-      pageNumber,
+      pageScale,
       pageWidth,
-      passMethod,
-      render,
       renderAnnotations,
       renderInteractiveForms,
       renderMode,
       renderTextLayer,
-      rotate,
     } = this.state;
-    const { file } = this;
 
-    const setState = state => this.setState(state);
-
-    const documentProps = {
-      file,
-      options,
-    };
-
-    const pageProps = {
+    return {
       className: 'custom-classname-page',
       height: pageHeight,
       onClick: (event, page) => console.log('Clicked a page', { event, page }),
@@ -121,6 +110,7 @@ export default class Test extends PureComponent {
       renderInteractiveForms,
       renderMode,
       renderTextLayer,
+      scale: pageScale,
       width: pageWidth,
       customTextRenderer: textItem => (
         textItem.str
@@ -132,6 +122,32 @@ export default class Test extends PureComponent {
               ([...strArray, <mark key={currentIndex}>ipsum</mark>, currentValue])
           ), [])
       ),
+    };
+  }
+
+  render() {
+    const {
+      displayAll,
+      numPages,
+      pageHeight,
+      pageNumber,
+      pageScale,
+      pageWidth,
+      passMethod,
+      render,
+      renderAnnotations,
+      renderInteractiveForms,
+      renderMode,
+      renderTextLayer,
+      rotate,
+    } = this.state;
+    const { file, pageProps } = this;
+
+    const setState = state => this.setState(state);
+
+    const documentProps = {
+      file,
+      options,
     };
 
     return (
@@ -150,6 +166,7 @@ export default class Test extends PureComponent {
             <ViewOptions
               displayAll={displayAll}
               pageHeight={pageHeight}
+              pageScale={pageScale}
               pageWidth={pageWidth}
               renderAnnotations={renderAnnotations}
               renderInteractiveForms={renderInteractiveForms}
