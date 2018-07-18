@@ -117,6 +117,26 @@ describe('Document', () => {
       await expect(onLoadSuccessPromise).resolves.toMatchObject(desiredLoadedPdf);
     });
 
+    it('fails to load a file and calls onSourceError given invalid file source', async () => {
+      const { func: onSourceError, promise: onSourceErrorPromise } = makeAsyncCallback();
+
+      muteConsole();
+
+      shallow(
+        <Document
+          file={() => null}
+          onSourceError={onSourceError}
+        />
+      );
+
+      expect.assertions(1);
+      return onSourceErrorPromise.then((error) => {
+        expect(error).toMatchObject(expect.any(Error));
+
+        restoreConsole();
+      });
+    });
+
     it('replaces a file properly', async () => {
       const { func: onSourceSuccess, promise: onSourceSuccessPromise } = makeAsyncCallback(OK);
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
