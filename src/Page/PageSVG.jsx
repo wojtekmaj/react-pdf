@@ -4,7 +4,12 @@ import pdfjs from 'pdfjs-dist';
 
 import PageContext from '../PageContext';
 
-import { callIfDefined, isCancelException, makePageCallback } from '../shared/utils';
+import {
+  callIfDefined,
+  errorOnDev,
+  isCancelException,
+  makePageCallback,
+} from '../shared/utils';
 
 import { isPage, isRotate } from '../shared/propTypes';
 
@@ -38,6 +43,8 @@ export class PageSVGInternal extends PureComponent {
     if (isCancelException(error)) {
       return;
     }
+
+    errorOnDev(error);
 
     const { onRenderError } = this.props;
 
