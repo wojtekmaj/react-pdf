@@ -21,8 +21,7 @@
     "collectCoverageFrom": [
       "**/src/**.{js,jsx}",
       "!**/src/entry.js",
-      "!**/src/entry.parcel.js",
-      "!**/src/entry.webpack.js",
+      "!**/src/entry.*.js",
       "!**/src/pdf.worker.entry.js"
     ],
     "moduleNameMapper": {
