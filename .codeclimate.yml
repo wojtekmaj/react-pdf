@@ -16,4 +16,5 @@ ratings:
   - "**.jsx"
 exclude_paths:
 - "test"
+- "**/__mocks__"
 - "**/__tests__"
