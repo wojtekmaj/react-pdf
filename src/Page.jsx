@@ -266,11 +266,10 @@ export class PageInternal extends PureComponent {
       return { page: null };
     });
 
-    let page = null;
     try {
       const cancellable = makeCancellable(pdf.getPage(pageNumber));
       this.runningTask = cancellable;
-      page = await cancellable.promise;
+      const page = await cancellable.promise;
       this.setState({ page }, this.onLoadSuccess);
     } catch (error) {
       this.setState({ page: false });

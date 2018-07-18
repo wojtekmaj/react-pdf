@@ -55,11 +55,10 @@ export class OutlineInternal extends PureComponent {
       return { outline: null };
     });
 
-    let outline = null;
     try {
       const cancellable = makeCancellable(pdf.getOutline());
       this.runningTask = cancellable;
-      outline = await cancellable.promise;
+      const outline = await cancellable.promise;
       this.setState({ outline }, this.onLoadSuccess);
     } catch (error) {
       this.setState({ outline: false });
