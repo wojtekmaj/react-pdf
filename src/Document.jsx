@@ -9,6 +9,8 @@ import pdfjs, { PDFDataRangeTransport } from 'pdfjs-dist';
 
 import DocumentContext from './DocumentContext';
 
+import Message from './Message';
+
 import LinkService from './LinkService';
 import PasswordResponses from './PasswordResponses';
 
@@ -297,35 +299,6 @@ export default class Document extends PureComponent {
     delete this.pages[pageIndex];
   }
 
-  renderNoData() {
-    const { noData } = this.props;
-
-    return (
-      <div className="react-pdf__message react-pdf__message--no-data">
-        {noData}
-      </div>
-    );
-  }
-
-  renderError() {
-    const { error } = this.props;
-    return (
-      <div className="react-pdf__message react-pdf__message--error">
-        {error}
-      </div>
-    );
-  }
-
-  renderLoader() {
-    const { loading } = this.props;
-
-    return (
-      <div className="react-pdf__message react-pdf__message--loading">
-        {loading}
-      </div>
-    );
-  }
-
   renderChildren() {
     const { children } = this.props;
 
@@ -336,20 +309,45 @@ export default class Document extends PureComponent {
     );
   }
 
-  render() {
-    const { className, file, inputRef } = this.props;
+  renderContent() {
+    const { file } = this.props;
     const { pdf } = this.state;
 
-    let content;
     if (!file) {
-      content = this.renderNoData();
-    } else if (pdf === null) {
-      content = this.renderLoader();
-    } else if (pdf === false) {
-      content = this.renderError();
-    } else {
-      content = this.renderChildren();
+      const { noData } = this.props;
+
+      return (
+        <Message type="no-data">
+          {noData}
+        </Message>
+      );
     }
+
+    if (pdf === null) {
+      const { loading } = this.props;
+
+      return (
+        <Message type="loading">
+          {loading}
+        </Message>
+      );
+    }
+
+    if (pdf === false) {
+      const { error } = this.props;
+
+      return (
+        <Message type="error">
+          {error}
+        </Message>
+      );
+    }
+
+    return this.renderChildren();
+  }
+
+  render() {
+    const { className, inputRef } = this.props;
 
     return (
       <div
@@ -357,7 +355,7 @@ export default class Document extends PureComponent {
         ref={inputRef}
         {...this.eventProps}
       >
-        {content}
+        {this.renderContent()}
       </div>
     );
   }

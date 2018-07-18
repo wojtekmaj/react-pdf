@@ -6,6 +6,7 @@ import mergeClassNames from 'merge-class-names';
 import DocumentContext from './DocumentContext';
 import PageContext from './PageContext';
 
+import Message from './Message';
 import PageCanvas from './Page/PageCanvas';
 import PageSVG from './Page/PageSVG';
 import TextLayer from './Page/TextLayer';
@@ -320,36 +321,6 @@ export class PageInternal extends PureComponent {
     ];
   }
 
-  renderNoData() {
-    const { noData } = this.props;
-
-    return (
-      <div className="react-pdf__message react-pdf__message--no-data">
-        {noData}
-      </div>
-    );
-  }
-
-  renderError() {
-    const { error } = this.props;
-
-    return (
-      <div className="react-pdf__message react-pdf__message--error">
-        {error}
-      </div>
-    );
-  }
-
-  renderLoader() {
-    const { loading } = this.props;
-
-    return (
-      <div className="react-pdf__message react-pdf__message--loading">
-        {loading}
-      </div>
-    );
-  }
-
   renderChildren() {
     const {
       children,
@@ -368,21 +339,47 @@ export class PageInternal extends PureComponent {
     );
   }
 
-  render() {
+  renderContent() {
     const { pageNumber } = this;
-    const { className, pdf } = this.props;
+    const { pdf } = this.props;
     const { page } = this.state;
 
-    let content;
     if (!pageNumber) {
-      content = this.renderNoData();
-    } else if (pdf === null || page === null) {
-      content = this.renderLoader();
-    } else if (pdf === false || page === false) {
-      content = this.renderError();
-    } else {
-      content = this.renderChildren();
+      const { noData } = this.props;
+
+      return (
+        <Message type="no-data">
+          {noData}
+        </Message>
+      );
     }
+
+    if (pdf === null || page === null) {
+      const { loading } = this.props;
+
+      return (
+        <Message type="loading">
+          {loading}
+        </Message>
+      );
+    }
+
+    if (pdf === false || page === false) {
+      const { error } = this.props;
+
+      return (
+        <Message type="error">
+          {error}
+        </Message>
+      );
+    }
+
+    return this.renderChildren();
+  }
+
+  render() {
+    const { pageNumber } = this;
+    const { className } = this.props;
 
     return (
       <div
@@ -399,7 +396,7 @@ export class PageInternal extends PureComponent {
         data-page-number={pageNumber}
         {...this.eventProps}
       >
-        {content}
+        {this.renderContent()}
       </div>
     );
   }

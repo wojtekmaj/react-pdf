@@ -176,10 +176,10 @@ describe('Document', () => {
         <Document />
       );
 
-      const noData = component.find('.react-pdf__message--no-data');
+      const noData = component.find('Message');
 
       expect(noData).toHaveLength(1);
-      expect(noData.text()).toBe('No PDF file specified.');
+      expect(noData.prop('children')).toBe('No PDF file specified.');
     });
 
     it('renders custom no data message when given nothing and noData prop is specified', () => {
@@ -187,10 +187,10 @@ describe('Document', () => {
         <Document noData="Nothing here" />
       );
 
-      const noData = component.find('.react-pdf__message--no-data');
+      const noData = component.find('Message');
 
       expect(noData).toHaveLength(1);
-      expect(noData.text()).toBe('Nothing here');
+      expect(noData.prop('children')).toBe('Nothing here');
     });
 
     it('renders "Loading PDF…" when loading a file', () => {
@@ -205,10 +205,10 @@ describe('Document', () => {
 
       expect.assertions(2);
       return onLoadSuccessPromise.then(() => {
-        const loading = component.find('.react-pdf__message--loading');
+        const loading = component.find('Message');
 
         expect(loading).toHaveLength(1);
-        expect(loading.text()).toBe('Loading PDF…');
+        expect(loading.prop('children')).toBe('Loading PDF…');
       });
     });
 
@@ -225,10 +225,10 @@ describe('Document', () => {
 
       expect.assertions(2);
       return onLoadSuccessPromise.then(() => {
-        const loading = component.find('.react-pdf__message--loading');
+        const loading = component.find('Message');
 
         expect(loading).toHaveLength(1);
-        expect(loading.text()).toBe('Loading');
+        expect(loading.prop('children')).toBe('Loading');
       });
     });
 
@@ -248,10 +248,10 @@ describe('Document', () => {
       expect.assertions(2);
       return onLoadErrorPromise.then(() => {
         component.update();
-        const error = component.find('.react-pdf__message--error');
+        const error = component.find('Message');
 
         expect(error).toHaveLength(1);
-        expect(error.text()).toBe('Failed to load PDF file.');
+        expect(error.prop('children')).toBe('Failed to load PDF file.');
 
         restoreConsole();
       });
@@ -274,10 +274,10 @@ describe('Document', () => {
       expect.assertions(2);
       return onLoadErrorPromise.then(() => {
         component.update();
-        const error = component.find('.react-pdf__message--error');
+        const error = component.find('Message');
 
         expect(error).toHaveLength(1);
-        expect(error.text()).toBe('Error');
+        expect(error.prop('children')).toBe('Error');
 
         restoreConsole();
       });

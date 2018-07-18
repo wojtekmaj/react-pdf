@@ -270,10 +270,10 @@ describe('Page', () => {
         <Page pdf={pdf} />
       );
 
-      const noData = component.find('.react-pdf__message--no-data');
+      const noData = component.find('Message');
 
       expect(noData).toHaveLength(1);
-      expect(noData.text()).toBe('No page specified.');
+      expect(noData.prop('children')).toBe('No page specified.');
 
       restoreConsole();
     });
@@ -288,10 +288,10 @@ describe('Page', () => {
         />
       );
 
-      const noData = component.find('.react-pdf__message--no-data');
+      const noData = component.find('Message');
 
       expect(noData).toHaveLength(1);
-      expect(noData.text()).toBe('Nothing here');
+      expect(noData.prop('children')).toBe('Nothing here');
 
       restoreConsole();
     });
@@ -309,10 +309,10 @@ describe('Page', () => {
 
       expect.assertions(2);
       return onLoadSuccessPromise.then(() => {
-        const loading = component.find('.react-pdf__message--loading');
+        const loading = component.find('Message');
 
         expect(loading).toHaveLength(1);
-        expect(loading.text()).toBe('Loading page…');
+        expect(loading.prop('children')).toBe('Loading page…');
       });
     });
 
@@ -330,10 +330,10 @@ describe('Page', () => {
 
       expect.assertions(2);
       return onLoadSuccessPromise.then(() => {
-        const loading = component.find('.react-pdf__message--loading');
+        const loading = component.find('Message');
 
         expect(loading).toHaveLength(1);
-        expect(loading.text()).toBe('Loading');
+        expect(loading.prop('children')).toBe('Loading');
       });
     });
 
