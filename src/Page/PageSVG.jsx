@@ -4,7 +4,7 @@ import pdfjs from 'pdfjs-dist';
 
 import PageContext from '../PageContext';
 
-import { callIfDefined, makePageCallback } from '../shared/utils';
+import { callIfDefined, isCancelException, makePageCallback } from '../shared/utils';
 
 import { isPage, isRotate } from '../shared/propTypes';
 
@@ -35,7 +35,7 @@ export class PageSVGInternal extends PureComponent {
    * Called when a page fails to render.
    */
   onRenderError = (error) => {
-    if (error.name === 'RenderingCancelledException') {
+    if (isCancelException(error)) {
       return;
     }
 

@@ -9,6 +9,7 @@ import {
   callIfDefined,
   cancelRunningTask,
   errorOnDev,
+  isCancelException,
   makeCancellable,
 } from '../shared/utils';
 
@@ -69,10 +70,7 @@ export class AnnotationLayerInternal extends PureComponent {
   }
 
   onLoadError = (error) => {
-    if (
-      error.name === 'RenderingCancelledException'
-      || error.name === 'PromiseCancelledException'
-    ) {
+    if (isCancelException(error)) {
       return;
     }
 
@@ -96,10 +94,7 @@ export class AnnotationLayerInternal extends PureComponent {
    * Called when a annotations fails to render.
    */
   onRenderError = (error) => {
-    if (
-      error.name === 'RenderingCancelledException'
-      || error.name === 'PromiseCancelledException'
-    ) {
+    if (isCancelException(error)) {
       return;
     }
 

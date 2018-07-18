@@ -166,3 +166,8 @@ export const makePageCallback = (page, scale) => {
   Object.defineProperty(page, 'originalHeight', { get() { return this.view[3]; }, configurable: true });
   return page;
 };
+
+export const isCancelException = error => (
+  error.name === 'RenderingCancelledException'
+  || error.name === 'PromiseCancelledException'
+);

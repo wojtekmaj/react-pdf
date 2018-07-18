@@ -12,6 +12,7 @@ import {
   callIfDefined,
   cancelRunningTask,
   errorOnDev,
+  isCancelException,
   makeCancellable,
 } from './shared/utils';
 
@@ -94,10 +95,7 @@ export class OutlineInternal extends PureComponent {
    * Called when an outline failed to read successfully
    */
   onLoadError = (error) => {
-    if (
-      error.name === 'RenderingCancelledException'
-      || error.name === 'PromiseCancelledException'
-    ) {
+    if (isCancelException(error)) {
       return;
     }
 

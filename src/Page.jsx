@@ -15,13 +15,20 @@ import {
   callIfDefined,
   cancelRunningTask,
   errorOnDev,
+  isCancelException,
   isProvided,
   makeCancellable,
   makePageCallback,
 } from './shared/utils';
 
 import {
-  eventsProps, isClassName, isPageIndex, isPageNumber, isPdf, isRenderMode, isRotate,
+  eventsProps,
+  isClassName,
+  isPageIndex,
+  isPageNumber,
+  isPdf,
+  isRenderMode,
+  isRotate,
 } from './shared/propTypes';
 
 const defaultScale = 1.0;
@@ -130,10 +137,7 @@ export class PageInternal extends PureComponent {
    * Called when a page failed to load
    */
   onLoadError = (error) => {
-    if (
-      error.name === 'RenderingCancelledException'
-      || error.name === 'PromiseCancelledException'
-    ) {
+    if (isCancelException(error)) {
       return;
     }
 

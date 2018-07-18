@@ -9,6 +9,7 @@ import {
   callIfDefined,
   cancelRunningTask,
   errorOnDev,
+  isCancelException,
   makeCancellable,
 } from '../shared/utils';
 
@@ -66,10 +67,7 @@ export class TextLayerInternal extends PureComponent {
   }
 
   onLoadError = (error) => {
-    if (
-      error.name === 'RenderingCancelledException'
-      || error.name === 'PromiseCancelledException'
-    ) {
+    if (isCancelException(error)) {
       return;
     }
 

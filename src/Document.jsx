@@ -21,6 +21,7 @@ import {
   isArrayBuffer,
   isBlob,
   isBrowser,
+  isCancelException,
   isDataURI,
   isFile,
   makeCancellable,
@@ -175,10 +176,7 @@ export default class Document extends PureComponent {
    * Called when a document source failed to be resolved correctly
    */
   onSourceError = (error) => {
-    if (
-      error.name === 'RenderingCancelledException'
-      || error.name === 'PromiseCancelledException'
-    ) {
+    if (isCancelException(error)) {
       return;
     }
 
@@ -212,10 +210,7 @@ export default class Document extends PureComponent {
    * Called when a document failed to read successfully
    */
   onLoadError = (error) => {
-    if (
-      error.name === 'RenderingCancelledException'
-      || error.name === 'PromiseCancelledException'
-    ) {
+    if (isCancelException(error)) {
       return;
     }
 

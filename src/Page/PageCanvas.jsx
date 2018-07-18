@@ -7,6 +7,7 @@ import {
   callIfDefined,
   errorOnDev,
   getPixelRatio,
+  isCancelException,
   makePageCallback,
 } from '../shared/utils';
 
@@ -56,10 +57,7 @@ export class PageCanvasInternal extends PureComponent {
    * Called when a page fails to render.
    */
   onRenderError = (error) => {
-    if (
-      error.name === 'RenderingCancelledException'
-      || error.name === 'PromiseCancelledException'
-    ) {
+    if (isCancelException(error)) {
       return;
     }
 
