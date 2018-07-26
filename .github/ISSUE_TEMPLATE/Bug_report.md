@@ -28,4 +28,5 @@ If applicable, add screenshots (preferably with browser console open) and files 
 
 **Environment**
  - Browser [e.g. Chrome 57, Firefox 59]:
- - React-PDF version [e.g 3.0.4]:
+ - React-PDF version [e.g. 3.0.4]:
+ - React version [e.g. 16.3.0]:
