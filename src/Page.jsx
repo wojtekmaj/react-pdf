@@ -213,16 +213,16 @@ export class PageInternal extends PureComponent {
     // Be default, we'll render page at 100% * scale width.
     let pageScale = 1;
 
+    // Passing scale explicitly null would cause the page not to render
+    const scaleWithDefault = scale === null ? defaultScale : scale;
+
     // If width/height is defined, calculate the scale of the page so it could be of desired width.
     if (width || height) {
-      const viewport = page.getViewport(scale, rotate);
+      const viewport = page.getViewport(scaleWithDefault, rotate);
       pageScale = width
         ? width / viewport.width
         : height / viewport.height;
     }
-
-    // Passing scale explicitly null would cause the page not to render
-    const scaleWithDefault = scale === null ? defaultScale : scale;
 
     return scaleWithDefault * pageScale;
   }
