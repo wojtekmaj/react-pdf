@@ -70,8 +70,6 @@ export class PageSVGInternal extends PureComponent {
         const svgGfx = new pdfjs.SVGGraphics(page.commonObjs, page.objs);
         this.renderer = svgGfx.getSVG(operatorList, this.viewport)
           .then((svg) => {
-            svg.style.maxWidth = '100%';
-            svg.style.height = 'auto';
             this.setState({ svg }, this.onRenderSuccess);
           })
           .catch(this.onRenderError);
@@ -86,23 +84,28 @@ export class PageSVGInternal extends PureComponent {
       return;
     }
 
-    const renderedPage = element.firstElementChild;
-    if (renderedPage) {
-      const { width, height } = this.viewport;
-      renderedPage.setAttribute('width', width);
-      renderedPage.setAttribute('height', height);
-    } else {
+    // Append SVG element to the main container, if this hasn't been done already
+    if (!element.firstElementChild) {
       element.appendChild(svg);
     }
+
+    const { width, height } = this.viewport;
+    svg.setAttribute('width', width);
+    svg.setAttribute('height', height);
   }
 
   render() {
+    const { width, height } = this.viewport;
+
     return (
       <div
         className="react-pdf__Page__svg"
         style={{
           display: 'block',
           backgroundColor: 'white',
+          overflow: 'hidden',
+          width,
+          height,
         }}
         // Note: This cannot be shortened, as we need this function to be called with each render.
         ref={ref => this.drawPageOnContainer(ref)}
