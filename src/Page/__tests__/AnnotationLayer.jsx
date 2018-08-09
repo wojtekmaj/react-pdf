@@ -8,7 +8,9 @@ import LinkService from '../../LinkService';
 
 import failingPage from '../../../__mocks__/_failing_page';
 
-import { loadPDF, makeAsyncCallback, muteConsole, restoreConsole } from '../../__tests__/utils';
+import {
+  loadPDF, makeAsyncCallback, muteConsole, restoreConsole,
+} from '../../__tests__/utils';
 
 const pdfFile = loadPDF('./__mocks__/_pdf.pdf');
 

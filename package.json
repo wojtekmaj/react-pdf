@@ -10,7 +10,7 @@
     "copy-styles": "node ./copy-styles.js",
     "prepublishOnly": "yarn run build",
     "test": "yarn run test-eslint && yarn run test-jest",
-    "test-eslint": "eslint ./src",
+    "test-eslint": "eslint --ext .jsx,.js src/",
     "test-jest": "jest",
     "test-jest-coverage": "jest --coverage"
   },
