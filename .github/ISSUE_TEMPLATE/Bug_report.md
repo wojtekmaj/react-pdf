@@ -29,7 +29,7 @@ What you expected to happen?
 
 **Additional information**
 
-If applicable, add screenshots (preferably with browser console open) and files you have an issue with to help explain your problem. You can also attach a mini-repo which helps reproducing an issue, if you think the context will matter.
+If applicable, add screenshots (preferably with browser console open) and files you have an issue with to help explain your problem.
 
 **Environment**
 
