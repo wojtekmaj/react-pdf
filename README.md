@@ -268,3 +268,15 @@ The MIT License.
 ## Thank you
 
 This project wouldn't be possible without awesome work of Niklas Närhinen <niklas@narhinen.net> who created its initial version and without Mozilla, author of [pdf.js](http://mozilla.github.io/pdf.js). Thank you!
+
+### Sponsors
+
+Thank you to all our sponsors! [Become a sponsor](https://opencollective.com/react-pdf-950#sponsor) and get your image on our README on GitHub.
+
+<a href="https://opencollective.com/react-pdf-950#sponsors" target="_blank"><img src="https://opencollective.com/react-pdf-950/sponsors.svg?width=890"></a>
+
+### Backers
+
+Thank you to all our backers! [Become a backer](https://opencollective.com/react-pdf-950#backer) and get your image on our README on GitHub.
+
+<a href="https://opencollective.com/react-pdf-950#backers" target="_blank"><img src="https://opencollective.com/react-pdf-950/backers.svg?width=890"></a>
