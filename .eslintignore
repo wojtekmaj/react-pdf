@@ -1,4 +1,2 @@
-# Ignore compiled files
-dist/*
-sample/dist/*
-test/dist/*
+**/dist/*
+**/node_modules/*
