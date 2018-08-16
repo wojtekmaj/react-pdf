@@ -1,5 +1,6 @@
 import React, { StrictMode } from 'react';
 import ReactDOM from 'react-dom';
+// eslint-disable-next-line import/no-unresolved
 import { AppContainer } from 'react-hot-loader';
 import Test from './Test';
 

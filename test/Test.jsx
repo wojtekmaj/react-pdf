@@ -1,5 +1,7 @@
 import React, { PureComponent } from 'react';
+// eslint-disable-next-line import/no-unresolved
 import { Document, Outline, Page } from 'react-pdf/src/entry.webpack';
+// eslint-disable-next-line import/no-unresolved
 import 'react-pdf/src/Page/AnnotationLayer.css';
 
 import './Test.less';

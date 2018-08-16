@@ -1,4 +1,5 @@
 const webpack = require('webpack');
+// eslint-disable-next-line import/no-unresolved
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = {
