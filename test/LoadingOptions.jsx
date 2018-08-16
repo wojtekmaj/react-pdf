@@ -5,20 +5,26 @@ import samplePDF from './test.pdf';
 
 export default class LoadingOptions extends PureComponent {
   onFileChange = (event) => {
-    this.props.setFile(event.target.files[0]);
+    const { setFile } = this.props;
+
+    setFile(event.target.files[0]);
   }
 
   onFileUintChange = (event) => {
+    const { setFile } = this.props;
+
     const reader = new FileReader();
 
     reader.onloadend = () => {
-      this.props.setFile(reader.result);
+      setFile(reader.result);
     };
 
     reader.readAsArrayBuffer(event.target.files[0]);
   }
 
   onURLChange = (event) => {
+    const { setFile } = this.props;
+
     event.preventDefault();
 
     const url = event.target.querySelector('input').value;
@@ -27,10 +33,12 @@ export default class LoadingOptions extends PureComponent {
       return;
     }
 
-    this.props.setFile(url);
+    setFile(url);
   }
 
   onRequestChange = (event) => {
+    const { setFile } = this.props;
+
     event.preventDefault();
 
     const url = event.target.querySelector('input').value;
@@ -40,49 +48,68 @@ export default class LoadingOptions extends PureComponent {
     }
 
     fetch(url).then(response => response.blob()).then((blob) => {
-      this.props.setFile(blob);
+      setFile(blob);
     });
   }
 
-  onUseImported = () => this.props.setFile(samplePDF)
+  onUseImported = () => {
+    const { setFile } = this.props;
+
+    setFile(samplePDF);
+  }
 
   onImportAndUnmount = () => {
-    this.props.setFile(samplePDF);
+    const { setFile, setState } = this.props;
 
-    setTimeout(() => this.props.setState({
+    setFile(samplePDF);
+
+    setTimeout(() => setState({
       render: false,
     }), 20);
 
-    setTimeout(() => this.props.setState({
+    setTimeout(() => setState({
       render: true,
     }), 1000);
   }
 
   onPassMethodChange = (event) => {
+    const { setState } = this.props;
+
     const passMethod = event.target.value;
 
-    this.props.setState({ passMethod });
+    setState({ passMethod });
   }
 
-  unloadFile = () => this.props.setFile(null)
+  unloadFile = () => {
+    const { setFile } = this.props;
+
+    setFile(null);
+  }
 
   render() {
     const {
+      file,
       passMethod,
     } = this.props;
 
     return (
       <fieldset id="load">
-        <legend htmlFor="load">Load file</legend>
+        <legend htmlFor="load">
+          Load file
+        </legend>
 
-        <label htmlFor="file">Load from file:</label>
+        <label htmlFor="file">
+          Load from file:
+        </label>
         <input
           id="file"
           type="file"
           onChange={this.onFileChange}
         />
 
-        <label htmlFor="fileUint8Array">Load from file to Uint8Array:</label>
+        <label htmlFor="fileUint8Array">
+          Load from file to Uint8Array:
+        </label>
         <input
           id="fileUint8Array"
           type="file"
@@ -90,29 +117,47 @@ export default class LoadingOptions extends PureComponent {
         />
 
         <form onSubmit={this.onURLChange}>
-          <label htmlFor="url">Load from URL:</label>
+          <label htmlFor="url">
+            Load from URL:
+          </label>
           <input
             id="url"
             type="text"
           />
-          <button type="submit">Apply</button>
+          <button type="submit">
+            Apply
+          </button>
         </form>
 
         <form onSubmit={this.onRequestChange}>
-          <label htmlFor="fetchAndPass">Fetch and pass:</label>
+          <label htmlFor="fetchAndPass">
+            Fetch and pass:
+          </label>
           <input
             id="fetchAndPass"
             type="text"
           />
-          <button type="submit">Apply</button>
+          <button type="submit">
+            Apply
+          </button>
         </form>
 
         <div>
-          <button onClick={this.onUseImported}>Use imported file</button>
+          <button
+            type="button"
+            onClick={this.onUseImported}
+          >
+            Use imported file
+          </button>
         </div>
 
         <div>
-          <button onClick={this.onImportAndUnmount}>Import, unmount and mount</button>
+          <button
+            type="button"
+            onClick={this.onImportAndUnmount}
+          >
+            Import, unmount and mount
+          </button>
         </div>
 
         <div>
@@ -124,7 +169,9 @@ export default class LoadingOptions extends PureComponent {
             type="radio"
             value="normal"
           />
-          <label htmlFor="passNormal">Auto</label>
+          <label htmlFor="passNormal">
+            Auto
+          </label>
         </div>
         <div>
           <input
@@ -135,7 +182,9 @@ export default class LoadingOptions extends PureComponent {
             type="radio"
             value="object"
           />
-          <label htmlFor="passObject">Pass as an object (URLs and imports only)</label>
+          <label htmlFor="passObject">
+            Pass as an object (URLs and imports only)
+          </label>
         </div>
         <div>
           <input
@@ -146,12 +195,15 @@ export default class LoadingOptions extends PureComponent {
             type="radio"
             value="blob"
           />
-          <label htmlFor="passBlob">Pass as a Blob (URLs and imports only</label>
+          <label htmlFor="passBlob">
+            Pass as a Blob (URLs and imports only)
+          </label>
         </div>
 
         <div>
           <button
-            disabled={this.props.file === null}
+            type="button"
+            disabled={file === null}
             onClick={this.unloadFile}
           >
             Unload file

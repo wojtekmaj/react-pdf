@@ -47,11 +47,9 @@ export default class Test extends PureComponent {
     });
   }
 
-  onPageRenderSuccess = page =>
-    console.log('Rendered a page', page);
+  onPageRenderSuccess = page => console.log('Rendered a page', page);
 
-  onItemClick = ({ pageNumber }) =>
-    this.setState({ pageNumber })
+  onItemClick = ({ pageNumber }) => this.setState({ pageNumber })
 
   setFile = file => this.setState({ file })
 
@@ -59,18 +57,20 @@ export default class Test extends PureComponent {
 
   nextPage = () => this.changePage(1)
 
-  changePage = offset =>
-    this.setState(prevState => ({
-      pageNumber: (prevState.pageNumber || 1) + offset,
-    }))
+  changePage = offset => this.setState(prevState => ({
+    pageNumber: (prevState.pageNumber || 1) + offset,
+  }))
 
   get file() {
     const { file } = this.state;
+
     if (!file) {
       return null;
     }
 
-    switch (this.state.passMethod) {
+    const { passMethod } = this.state;
+
+    switch (passMethod) {
       case 'object': {
         if (typeof file === 'string') {
           return {
@@ -116,10 +116,14 @@ export default class Test extends PureComponent {
         textItem.str
           .split('ipsum')
           .reduce((strArray, currentValue, currentIndex) => (
-            currentIndex === 0 ?
-              ([...strArray, currentValue]) :
-              // eslint-disable-next-line react/no-array-index-key
-              ([...strArray, <mark key={currentIndex}>ipsum</mark>, currentValue])
+            currentIndex === 0
+              ? ([...strArray, currentValue])
+              : ([...strArray, (
+                // eslint-disable-next-line react/no-array-index-key
+                <mark key={currentIndex}>
+                  ipsum
+                </mark>
+              ), currentValue])
           ), [])
       ),
     };
@@ -128,6 +132,7 @@ export default class Test extends PureComponent {
   render() {
     const {
       displayAll,
+      file: fileState,
       numPages,
       pageHeight,
       pageNumber,
@@ -153,12 +158,14 @@ export default class Test extends PureComponent {
     return (
       <div className="Test">
         <header>
-          <h1>react-pdf test page</h1>
+          <h1>
+            react-pdf test page
+          </h1>
         </header>
         <div className="Test__container">
           <aside className="Test__container__options">
             <LoadingOptions
-              file={this.state.file}
+              file={fileState}
               passMethod={passMethod}
               setFile={this.setFile}
               setState={setState}
@@ -178,76 +185,79 @@ export default class Test extends PureComponent {
           </aside>
           <main className="Test__container__content">
             <div className="Test__container__content__toc">
-              {
-                render &&
-                  <Document
-                    {...documentProps}
-                    className="custom-classname-document"
-                  >
-                    <Outline
-                      className="custom-classname-outline"
-                      onItemClick={this.onItemClick}
-                    />
-                  </Document>
-              }
+              {render && (
+                <Document
+                  {...documentProps}
+                  className="custom-classname-document"
+                >
+                  <Outline
+                    className="custom-classname-outline"
+                    onItemClick={this.onItemClick}
+                  />
+                </Document>
+              )}
             </div>
             <div className="Test__container__content__document">
-              {
-                render &&
-                  <Document
-                    {...documentProps}
-                    className="custom-classname-document"
-                    onItemClick={this.onItemClick}
-                    onClick={(event, pdf) => console.log('Clicked a document', { event, pdf })}
-                    onLoadProgress={this.onDocumentLoadProgress}
-                    onLoadSuccess={this.onDocumentLoadSuccess}
-                    onLoadError={this.onDocumentLoadError}
-                    onSourceError={this.onDocumentLoadError}
-                    rotate={rotate}
-                  >
-                    {
-                      displayAll ?
-                        Array.from(
-                          new Array(numPages),
-                          (el, index) => (
-                            <Page
-                              {...pageProps}
-                              inputRef={
-                                (pageNumber === index + 1) ?
-                                  (ref => ref && ref.scrollIntoView()) :
-                                  null
-                              }
-                              key={`page_${index + 1}`}
-                              pageNumber={index + 1}
-                            />
-                          ),
-                        ) :
+              {render && (
+                <Document
+                  {...documentProps}
+                  className="custom-classname-document"
+                  onItemClick={this.onItemClick}
+                  onClick={(event, pdf) => console.log('Clicked a document', { event, pdf })}
+                  onLoadProgress={this.onDocumentLoadProgress}
+                  onLoadSuccess={this.onDocumentLoadSuccess}
+                  onLoadError={this.onDocumentLoadError}
+                  onSourceError={this.onDocumentLoadError}
+                  rotate={rotate}
+                >
+                  {
+                    displayAll
+                      ? Array.from(
+                        new Array(numPages),
+                        (el, index) => (
+                          <Page
+                            {...pageProps}
+                            inputRef={
+                              (pageNumber === index + 1)
+                                ? (ref => ref && ref.scrollIntoView())
+                                : null
+                            }
+                            key={`page_${index + 1}`}
+                            pageNumber={index + 1}
+                          />
+                        ),
+                      )
+                      : (
                         <Page
                           {...pageProps}
                           pageNumber={pageNumber || 1}
                         />
-                    }
-                  </Document>
-              }
+                      )
+                  }
+                </Document>
+              )}
             </div>
-            {
-              displayAll ||
-                <div className="Test__container__content__controls">
-                  <button
-                    disabled={pageNumber <= 1}
-                    onClick={this.previousPage}
-                  >
-                    Previous
-                  </button>
-                  <span>Page {pageNumber || (numPages ? 1 : '--')} of {numPages || '--'}</span>
-                  <button
-                    disabled={pageNumber >= numPages}
-                    onClick={this.nextPage}
-                  >
-                    Next
-                  </button>
-                </div>
-            }
+            {displayAll || (
+              <div className="Test__container__content__controls">
+                <button
+                  type="button"
+                  disabled={pageNumber <= 1}
+                  onClick={this.previousPage}
+                >
+                  Previous
+                </button>
+                <span>
+                  {`Page ${pageNumber || (numPages ? 1 : '--')} of ${numPages || '--'}`}
+                </span>
+                <button
+                  type="button"
+                  disabled={pageNumber >= numPages}
+                  onClick={this.nextPage}
+                >
+                  Next
+                </button>
+              </div>
+            )}
           </main>
         </div>
       </div>
