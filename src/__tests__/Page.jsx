@@ -309,6 +309,9 @@ describe('Page', () => {
 
       expect.assertions(2);
       return onLoadSuccessPromise.then(() => {
+        // Since the page loads automatically, we need to simulate its loading state
+        component.setState({ page: null });
+
         const loading = component.find('Message');
 
         expect(loading).toHaveLength(1);
@@ -330,6 +333,9 @@ describe('Page', () => {
 
       expect.assertions(2);
       return onLoadSuccessPromise.then(() => {
+        // Since the page loads automatically, we need to simulate its loading state
+        component.setState({ page: null });
+
         const loading = component.find('Message');
 
         expect(loading).toHaveLength(1);
