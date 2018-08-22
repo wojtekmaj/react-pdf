@@ -3,6 +3,7 @@ const path = require('path');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = {
+  mode: 'production',
   context: __dirname,
   devtool: 'source-map',
   entry: [
