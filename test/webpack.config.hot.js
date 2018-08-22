@@ -3,6 +3,7 @@ const webpack = require('webpack');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = {
+  mode: 'development',
   context: __dirname,
   devtool: 'source-map',
   entry: [
@@ -12,6 +13,7 @@ module.exports = {
   ],
   output: {
     filename: '[name].bundle.js',
+    globalObject: 'this', // See: https://github.com/webpack/webpack/issues/6642
   },
   resolve: {
     extensions: ['.js', '.jsx'],

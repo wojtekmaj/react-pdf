@@ -81,20 +81,20 @@
     "make-event-props": "^1.0.0",
     "merge-class-names": "^1.1.1",
     "pdfjs-dist": "^2.0.550",
-    "prop-types": "^15.6.1"
+    "prop-types": "^15.6.2"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
-    "babel-core": "^6.26.0",
-    "babel-eslint": "^8.2.5",
+    "babel-core": "^6.26.3",
+    "babel-eslint": "^8.2.6",
     "babel-plugin-transform-class-properties": "^6.24.1",
-    "babel-plugin-transform-es2015-modules-commonjs": "^6.26.0",
+    "babel-plugin-transform-es2015-modules-commonjs": "^6.26.2",
     "babel-plugin-transform-runtime": "^6.23.0",
-    "babel-preset-env": "^1.6.1",
+    "babel-preset-env": "^1.7.0",
     "babel-preset-react": "^6.24.1",
     "babel-preset-stage-2": "^6.24.1",
-    "enzyme": "^3.3.0",
-    "enzyme-adapter-react-16": "^1.1.1",
+    "enzyme": "^3.4.0",
+    "enzyme-adapter-react-16": "^1.2.0",
     "eslint": "^4.19.1",
     "eslint-config-airbnb": "^17.1.0",
     "eslint-plugin-import": "^2.14.0",
@@ -102,9 +102,9 @@
     "eslint-plugin-react": "^7.11.1",
     "jest": "^23.5.0",
     "jest-cli": "^23.5.0",
-    "react": "^16.4.1",
-    "react-dom": "^16.4.1",
-    "webpack": "^3.11.0"
+    "react": "^16.4.2",
+    "react-dom": "^16.4.2",
+    "webpack": "^4.6.15"
   },
   "peerDependencies": {
     "react": "^16.3.0",

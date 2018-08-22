@@ -1,6 +1,6 @@
 {
   "name": "react-pdf-test-page",
-  "version": "4.0.0-beta.3",
+  "version": "4.0.0",
   "description": "A test page for React-PDF.",
   "private": true,
   "scripts": {
@@ -13,22 +13,22 @@
   },
   "license": "MIT",
   "dependencies": {
-    "prop-types": "^15.6.0",
-    "react": "^16.4.1",
-    "react-dom": "^16.4.1",
+    "prop-types": "^15.6.2",
+    "react": "^16.4.2",
+    "react-dom": "^16.4.2",
     "react-pdf": "latest"
   },
   "devDependencies": {
-    "babel-core": "^6.26.0",
-    "babel-eslint": "^8.2.1",
-    "babel-loader": "^7.1.2",
+    "babel-core": "^6.26.3",
+    "babel-eslint": "^8.2.6",
+    "babel-loader": "^7.1.5",
     "babel-plugin-transform-class-properties": "^6.24.1",
     "babel-plugin-transform-runtime": "^6.23.0",
-    "babel-preset-env": "^1.6.1",
+    "babel-preset-env": "^1.7.0",
     "babel-preset-react": "^6.24.1",
     "babel-preset-stage-2": "^6.24.1",
-    "copy-webpack-plugin": "^4.3.1",
-    "css-loader": "^0.28.11",
+    "copy-webpack-plugin": "^4.5.2",
+    "css-loader": "^1.0.0",
     "eslint": "^4.19.1",
     "eslint-config-airbnb": "^17.1.0",
     "eslint-plugin-import": "^2.14.0",
@@ -37,10 +37,11 @@
     "file-loader": "^1.1.11",
     "less": "~3.7.1",
     "less-loader": "^4.1.0",
-    "react-hot-loader": "^4.0.0",
-    "style-loader": "^0.20.3",
-    "url-loader": "^1.0.1",
-    "webpack": "^3.10.0",
-    "webpack-dev-server": "^2.11.1"
+    "react-hot-loader": "^4.3.4",
+    "style-loader": "^0.22.1",
+    "url-loader": "^1.1.1",
+    "webpack": "^4.6.15",
+    "webpack-cli": "^3.1.0",
+    "webpack-dev-server": "^3.1.5"
   }
 }
