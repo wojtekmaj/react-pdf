@@ -45,11 +45,13 @@ module.exports = {
         NODE_ENV: JSON.stringify('production'),
       },
     }),
-    new webpack.optimize.UglifyJsPlugin(),
     new CopyWebpackPlugin([
       { from: './index.html' },
       { from: './sample.pdf' },
       { from: 'node_modules/pdfjs-dist/cmaps/', to: 'cmaps/' },
     ]),
   ],
+  optimization: {
+    minimize: true,
+  },
 };
