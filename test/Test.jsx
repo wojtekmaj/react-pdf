@@ -6,6 +6,7 @@ import 'react-pdf/src/Page/AnnotationLayer.css';
 
 import './Test.less';
 
+import LayerOptions from './LayerOptions';
 import LoadingOptions from './LoadingOptions';
 import ViewOptions from './ViewOptions';
 
@@ -172,15 +173,19 @@ export default class Test extends PureComponent {
               setFile={this.setFile}
               setState={setState}
             />
+            <LayerOptions
+              renderAnnotations={renderAnnotations}
+              renderInteractiveForms={renderInteractiveForms}
+              renderMode={renderMode}
+              renderTextLayer={renderTextLayer}
+              setState={setState}
+            />
             <ViewOptions
               displayAll={displayAll}
               pageHeight={pageHeight}
               pageScale={pageScale}
               pageWidth={pageWidth}
-              renderAnnotations={renderAnnotations}
-              renderInteractiveForms={renderInteractiveForms}
               renderMode={renderMode}
-              renderTextLayer={renderTextLayer}
               rotate={rotate}
               setState={setState}
             />

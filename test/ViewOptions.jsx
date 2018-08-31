@@ -2,28 +2,10 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 
 export default class ViewOptions extends PureComponent {
-  onRenderAnnotationsChange = (event) => {
-    const { setState } = this.props;
-
-    setState({ renderAnnotations: event.target.checked });
-  }
-
-  onRenderInteractiveFormsChange = (event) => {
-    const { setState } = this.props;
-
-    setState({ renderInteractiveForms: event.target.checked });
-  }
-
   onRenderModeChange = (event) => {
     const { setState } = this.props;
 
     setState({ renderMode: event.target.value });
-  }
-
-  onRenderTextLayersChange = (event) => {
-    const { setState } = this.props;
-
-    setState({ renderTextLayer: event.target.checked });
   }
 
   onDisplayAllChange = (event) => {
@@ -117,10 +99,7 @@ export default class ViewOptions extends PureComponent {
       pageHeight,
       pageScale,
       pageWidth,
-      renderAnnotations,
-      renderInteractiveForms,
       renderMode,
-      renderTextLayer,
       rotate,
     } = this.props;
 
@@ -246,43 +225,6 @@ export default class ViewOptions extends PureComponent {
         </div>
 
         <div>
-          <input
-            id="renderTextLayer"
-            type="checkbox"
-            checked={renderMode === 'canvas' && renderTextLayer}
-            disabled={renderMode !== 'canvas'}
-            onChange={this.onRenderTextLayersChange}
-          />
-          <label htmlFor="renderTextLayer">
-            Render text layers
-          </label>
-        </div>
-
-        <div>
-          <input
-            id="renderAnnotations"
-            type="checkbox"
-            checked={renderAnnotations}
-            onChange={this.onRenderAnnotationsChange}
-          />
-          <label htmlFor="renderAnnotations">
-            Render annotations
-          </label>
-        </div>
-
-        <div>
-          <input
-            id="renderInteractiveForms"
-            type="checkbox"
-            checked={renderInteractiveForms}
-            onChange={this.onRenderInteractiveFormsChange}
-          />
-          <label htmlFor="renderInteractiveForms">
-            Render interactive forms
-          </label>
-        </div>
-
-        <div>
           <label htmlFor="rotation">
             Rotation:
           </label>
@@ -335,10 +277,7 @@ ViewOptions.propTypes = {
   pageHeight: PropTypes.number,
   pageScale: PropTypes.number,
   pageWidth: PropTypes.number,
-  renderAnnotations: PropTypes.bool,
-  renderInteractiveForms: PropTypes.bool,
   renderMode: PropTypes.oneOf(['canvas', 'svg']),
-  renderTextLayer: PropTypes.bool,
   rotate: PropTypes.number,
   setState: PropTypes.func.isRequired,
 };
