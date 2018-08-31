@@ -43,6 +43,8 @@ export const isFile = PropTypes.oneOfType(fileTypes);
 
 export const isLinkService = PropTypes.instanceOf(LinkService);
 
+export const isLinkTarget = PropTypes.oneOf(['_self', '_blank', '_parent', '_top']);
+
 export const isPage = PropTypes.shape({
   commonObjs: PropTypes.shape({
     objs: PropTypes.object.isRequired,

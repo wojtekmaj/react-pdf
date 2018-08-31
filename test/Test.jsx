@@ -6,6 +6,7 @@ import 'react-pdf/src/Page/AnnotationLayer.css';
 
 import './Test.less';
 
+import AnnotationOptions from './AnnotationOptions';
 import LayerOptions from './LayerOptions';
 import LoadingOptions from './LoadingOptions';
 import ViewOptions from './ViewOptions';
@@ -22,6 +23,7 @@ const options = {
 export default class Test extends PureComponent {
   state = {
     displayAll: false,
+    externalLinkTarget: null,
     file: null,
     numPages: null,
     pageHeight: null,
@@ -135,6 +137,7 @@ export default class Test extends PureComponent {
   render() {
     const {
       displayAll,
+      externalLinkTarget,
       file: fileState,
       numPages,
       pageHeight,
@@ -154,6 +157,7 @@ export default class Test extends PureComponent {
     const setState = state => this.setState(state);
 
     const documentProps = {
+      externalLinkTarget,
       file,
       options,
     };
@@ -187,6 +191,10 @@ export default class Test extends PureComponent {
               pageWidth={pageWidth}
               renderMode={renderMode}
               rotate={rotate}
+              setState={setState}
+            />
+            <AnnotationOptions
+              externalLinkTarget={externalLinkTarget}
               setState={setState}
             />
           </aside>

@@ -88,7 +88,7 @@ export default class Document extends PureComponent {
 
   componentDidMount() {
     this.loadDocument();
-    this.linkService.setViewer(this.viewer);
+    this.setupLinkService();
   }
 
   componentDidUpdate(prevProps) {
@@ -96,6 +96,10 @@ export default class Document extends PureComponent {
     if (file !== prevProps.file) {
       this.loadDocument();
     }
+  }
+
+  componentWillUnmount() {
+    cancelRunningTask(this.runningTask);
   }
 
   loadDocument = async () => {
@@ -142,8 +146,21 @@ export default class Document extends PureComponent {
     }
   }
 
-  componentWillUnmount() {
-    cancelRunningTask(this.runningTask);
+  setupLinkService = () => {
+    this.linkService.setViewer(this.viewer);
+    const documentInstance = this;
+    Object.defineProperty(this.linkService, 'externalLinkTarget', {
+      get() {
+        const { externalLinkTarget } = documentInstance.props;
+        switch (externalLinkTarget) {
+          case '_self': return 1;
+          case '_blank': return 2;
+          case '_parent': return 3;
+          case '_top': return 4;
+          default: return 0;
+        }
+      },
+    });
   }
 
   get childContext() {
