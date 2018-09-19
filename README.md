@@ -282,7 +282,7 @@ Thank you to all our backers! [Become a backer](https://opencollective.com/react
 
 <a href="https://opencollective.com/react-pdf-950#backers" target="_blank"><img src="https://opencollective.com/react-pdf-950/backers.svg?width=890"></a>
 
-## Top Contributors
+### Top Contributors
 
 Thank you to all our contributors that helped on this project!
 
