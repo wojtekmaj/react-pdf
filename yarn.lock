@@ -3740,9 +3740,9 @@ make-dir@^1.0.0:
   dependencies:
     pify "^3.0.0"
 
-make-event-props@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/make-event-props/-/make-event-props-1.0.0.tgz#c6f7c409fdd51bc58edb262124b343faf028a62a"
+make-event-props@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/make-event-props/-/make-event-props-1.1.0.tgz#900a4818aeda72ec0ab6b5dc2c3407291592da76"
 
 makeerror@1.0.x:
   version "1.0.11"
