@@ -281,3 +281,17 @@ Thank you to all our sponsors! [Become a sponsor](https://opencollective.com/rea
 Thank you to all our backers! [Become a backer](https://opencollective.com/react-pdf-950#backer) and get your image on our README on GitHub.
 
 <a href="https://opencollective.com/react-pdf-950#backers" target="_blank"><img src="https://opencollective.com/react-pdf-950/backers.svg?width=890"></a>
+
+### Top Contributors
+
+Thank you to all our contributors that helped on this project!
+
+[![0](https://sourcerer.io/fame/wojtekmaj/wojtekmaj/react-pdf/images/0)](https://sourcerer.io/fame/wojtekmaj/wojtekmaj/react-pdf/links/0)
+[![1](https://sourcerer.io/fame/wojtekmaj/wojtekmaj/react-pdf/images/1)](https://sourcerer.io/fame/wojtekmaj/wojtekmaj/react-pdf/links/1)
+[![2](https://sourcerer.io/fame/wojtekmaj/wojtekmaj/react-pdf/images/2)](https://sourcerer.io/fame/wojtekmaj/wojtekmaj/react-pdf/links/2)
+[![3](https://sourcerer.io/fame/wojtekmaj/wojtekmaj/react-pdf/images/3)](https://sourcerer.io/fame/wojtekmaj/wojtekmaj/react-pdf/links/3)
+[![4](https://sourcerer.io/fame/wojtekmaj/wojtekmaj/react-pdf/images/4)](https://sourcerer.io/fame/wojtekmaj/wojtekmaj/react-pdf/links/4)
+[![5](https://sourcerer.io/fame/wojtekmaj/wojtekmaj/react-pdf/images/5)](https://sourcerer.io/fame/wojtekmaj/wojtekmaj/react-pdf/links/5)
+[![6](https://sourcerer.io/fame/wojtekmaj/wojtekmaj/react-pdf/images/6)](https://sourcerer.io/fame/wojtekmaj/wojtekmaj/react-pdf/links/6)
+[![7](https://sourcerer.io/fame/wojtekmaj/wojtekmaj/react-pdf/images/7)](https://sourcerer.io/fame/wojtekmaj/wojtekmaj/react-pdf/links/7)
+
