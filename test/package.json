@@ -19,12 +19,12 @@
     "react-pdf": "latest"
   },
   "devDependencies": {
-    "@babel/core": "^7.0.0",
-    "@babel/plugin-proposal-class-properties": "^7.0.0",
-    "@babel/plugin-transform-runtime": "^7.0.0",
-    "@babel/preset-env": "^7.0.0",
+    "@babel/core": "^7.1.0",
+    "@babel/plugin-proposal-class-properties": "^7.1.0",
+    "@babel/plugin-transform-runtime": "^7.1.0",
+    "@babel/preset-env": "^7.1.0",
     "@babel/preset-react": "^7.0.0",
-    "babel-eslint": "^9.0.0",
+    "babel-eslint": "^10.0.0",
     "babel-loader": "^8.0.2",
     "copy-webpack-plugin": "^4.5.2",
     "css-loader": "^1.0.0",
@@ -33,14 +33,14 @@
     "eslint-plugin-import": "^2.14.0",
     "eslint-plugin-jsx-a11y": "^6.1.1",
     "eslint-plugin-react": "^7.11.1",
-    "file-loader": "^1.1.11",
+    "file-loader": "^2.0.0",
     "less": "^3.8.1",
     "less-loader": "^4.1.0",
-    "react-hot-loader": "^4.3.4",
-    "style-loader": "^0.22.1",
+    "react-hot-loader": "^4.3.11",
+    "style-loader": "^0.23.0",
     "url-loader": "^1.1.1",
-    "webpack": "^4.6.15",
-    "webpack-cli": "^3.1.0",
-    "webpack-dev-server": "^3.1.5"
+    "webpack": "^4.20.2",
+    "webpack-cli": "^3.1.1",
+    "webpack-dev-server": "^3.1.9"
   }
 }
