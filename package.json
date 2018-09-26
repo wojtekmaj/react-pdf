@@ -79,7 +79,7 @@
   "dependencies": {
     "@babel/runtime": "^7.0.0",
     "lodash.once": "^4.1.1",
-    "make-event-props": "^1.0.0",
+    "make-event-props": "^1.1.0",
     "merge-class-names": "^1.1.1",
     "pdfjs-dist": "^2.0.550",
     "prop-types": "^15.6.2"
@@ -94,19 +94,19 @@
     "babel-core": "^7.0.0-bridge.0",
     "babel-jest": "^23.6.0",
     "babel-eslint": "^9.0.0",
-    "enzyme": "^3.4.0",
-    "enzyme-adapter-react-16": "^1.2.0",
-    "eslint": "^4.19.1",
+    "enzyme": "^3.6.0",
+    "enzyme-adapter-react-16": "^1.5.0",
+    "eslint": "^5.5.0",
     "eslint-config-airbnb": "^17.1.0",
     "eslint-plugin-import": "^2.14.0",
     "eslint-plugin-jsx-a11y": "^6.1.1",
     "eslint-plugin-react": "^7.11.1",
     "jest": "^23.6.0",
     "jest-cli": "^23.6.0",
-    "react": "^16.4.2",
-    "react-dom": "^16.4.2",
+    "react": "^16.5.0",
+    "react-dom": "^16.5.0",
     "rimraf": "^2.6.2",
-    "webpack": "^4.6.15"
+    "webpack": "^4.18.0"
   },
   "peerDependencies": {
     "react": "^16.3.0",

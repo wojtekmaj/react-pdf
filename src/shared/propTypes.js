@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import once from 'lodash.once';
-import { mouseEvents, touchEvents } from 'make-event-props';
+import { mouseEvents, touchEvents, keyboardEvents } from 'make-event-props';
 
 import { isDefined } from './utils';
 
@@ -9,7 +9,7 @@ import LinkService from '../LinkService';
 export const eventsProps = once(() => {
   const eventProps = {};
 
-  [...mouseEvents, ...touchEvents].forEach((eventName) => {
+  [...mouseEvents, ...touchEvents, ...keyboardEvents].forEach((eventName) => {
     eventProps[eventName] = PropTypes.func;
   });
 
