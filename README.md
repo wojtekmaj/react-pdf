@@ -103,9 +103,20 @@ Instead of directly importing/requiring `'react-pdf'`, import it like so:
 import { Document } from 'react-pdf/dist/entry.parcel';
 ```
 
+#### Create React App
+
+Create React App uses Webpack under the hood, but instructions for Webpack will not work. [Standard instructions](#browserify-and-others) apply.
+
 #### Browserify and others
 
 If you use Browserify or other bundling tools, you will have to make sure on your own that `pdf.worker.js` file from `pdfjs-dist/build` is copied to your project's output folder.
+
+Alternatively, you could use `pdf.worker.js` from an external CDN:
+
+```js
+import { pdfjs } from 'react-pdf';
+pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
+```
 
 ### Support for annotations
 
