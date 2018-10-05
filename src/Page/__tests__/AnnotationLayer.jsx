@@ -108,20 +108,20 @@ describe('AnnotationLayer', () => {
   describe('rendering', () => {
     it('renders annotations properly', async () => {
       const {
-        func: onRenderAnnotationsSuccess, promise: onRenderAnnotationsSuccessPromise,
+        func: onRenderAnnotationLayerSuccess, promise: onRenderAnnotationLayerSuccessPromise,
       } = makeAsyncCallback();
 
       const component = mount(
         <AnnotationLayer
           linkService={linkService}
-          onRenderAnnotationsSuccess={onRenderAnnotationsSuccess}
+          onRenderAnnotationLayerSuccess={onRenderAnnotationLayerSuccess}
           page={page}
         />
       );
 
       expect.assertions(1);
 
-      return onRenderAnnotationsSuccessPromise.then(() => {
+      return onRenderAnnotationLayerSuccessPromise.then(() => {
         component.update();
         const annotationItems = component.children();
 
@@ -131,21 +131,21 @@ describe('AnnotationLayer', () => {
 
     it('renders annotations at a given rotation', async () => {
       const {
-        func: onRenderAnnotationsSuccess, promise: onRenderAnnotationsSuccessPromise,
+        func: onRenderAnnotationLayerSuccess, promise: onRenderAnnotationLayerSuccessPromise,
       } = makeAsyncCallback();
       const rotate = 90;
 
       const component = mount(
         <AnnotationLayer
           linkService={linkService}
-          onRenderAnnotationsSuccess={onRenderAnnotationsSuccess}
+          onRenderAnnotationLayerSuccess={onRenderAnnotationLayerSuccess}
           page={page}
           rotate={rotate}
         />
       );
 
       expect.assertions(1);
-      return onRenderAnnotationsSuccessPromise.then(() => {
+      return onRenderAnnotationLayerSuccessPromise.then(() => {
         component.update();
         const { viewport } = component.instance();
 
@@ -155,21 +155,21 @@ describe('AnnotationLayer', () => {
 
     it('renders annotations at a given scale', async () => {
       const {
-        func: onRenderAnnotationsSuccess, promise: onRenderAnnotationsSuccessPromise,
+        func: onRenderAnnotationLayerSuccess, promise: onRenderAnnotationLayerSuccessPromise,
       } = makeAsyncCallback();
       const scale = 2;
 
       const component = mount(
         <AnnotationLayer
           linkService={linkService}
-          onRenderAnnotationsSuccess={onRenderAnnotationsSuccess}
+          onRenderAnnotationLayerSuccess={onRenderAnnotationLayerSuccess}
           page={page}
           scale={scale}
         />
       );
 
       expect.assertions(1);
-      return onRenderAnnotationsSuccessPromise.then(() => {
+      return onRenderAnnotationLayerSuccessPromise.then(() => {
         component.update();
         const { viewport } = component.instance();
 

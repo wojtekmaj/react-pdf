@@ -91,8 +91,8 @@ export class PageInternal extends PureComponent {
       onGetAnnotationsSuccess,
       onGetTextError,
       onGetTextSuccess,
-      onRenderAnnotationsError,
-      onRenderAnnotationsSuccess,
+      onRenderAnnotationLayerError,
+      onRenderAnnotationLayerSuccess,
       onRenderError,
       onRenderSuccess,
       renderInteractiveForms,
@@ -104,8 +104,8 @@ export class PageInternal extends PureComponent {
       onGetAnnotationsSuccess,
       onGetTextError,
       onGetTextSuccess,
-      onRenderAnnotationsError,
-      onRenderAnnotationsSuccess,
+      onRenderAnnotationLayerError,
+      onRenderAnnotationLayerSuccess,
       onRenderError,
       onRenderSuccess,
       page,
@@ -289,10 +289,11 @@ export class PageInternal extends PureComponent {
     );
   }
 
-  renderAnnotations() {
-    const { renderAnnotations } = this.props;
+  renderAnnotationLayer() {
+    const { renderAnnotationLayer } = this.props;
 
-    if (!renderAnnotations) {
+    console.log(renderAnnotationLayer);
+    if (!renderAnnotationLayer) {
       return null;
     }
 
@@ -308,7 +309,7 @@ export class PageInternal extends PureComponent {
        * As of now, PDF.js 2.0.474 returns warnings on unimplemented annotations.
        * Therefore, as a fallback, we render "traditional" AnnotationLayer component.
        */
-      this.renderAnnotations(),
+      this.renderAnnotationLayer(),
     ];
   }
 
@@ -316,7 +317,7 @@ export class PageInternal extends PureComponent {
     return [
       <PageCanvas key={`${this.pageKey}_canvas`} />,
       this.renderTextLayer(),
-      this.renderAnnotations(),
+      this.renderAnnotationLayer(),
     ];
   }
 
@@ -405,7 +406,7 @@ PageInternal.defaultProps = {
   error: 'Failed to load the page.',
   loading: 'Loading page…',
   noData: 'No page specified.',
-  renderAnnotations: true,
+  renderAnnotationLayer: true,
   renderInteractiveForms: false,
   renderMode: 'canvas',
   renderTextLayer: true,
@@ -431,7 +432,7 @@ PageInternal.propTypes = {
   pageNumber: isPageNumber,
   pdf: isPdf,
   registerPage: PropTypes.func,
-  renderAnnotations: PropTypes.bool,
+  renderAnnotationLayer: PropTypes.bool,
   renderInteractiveForms: PropTypes.bool,
   renderMode: isRenderMode,
   renderTextLayer: PropTypes.bool,
@@ -444,7 +445,18 @@ PageInternal.propTypes = {
 
 const Page = props => (
   <DocumentContext.Consumer>
-    {context => <PageInternal {...context} {...props} />}
+    {context => (
+      <PageInternal
+        {...context}
+        {...props}
+        // For backwards compatibility
+        renderAnnotationLayer={
+          typeof props.renderAnnotationLayer !== 'undefined'
+            ? props.renderAnnotationLayer
+            : props.renderAnnotations
+        }
+      />
+    )}
   </DocumentContext.Consumer>
 );
 

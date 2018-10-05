@@ -2,10 +2,10 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 
 export default class LayerOptions extends PureComponent {
-  onRenderAnnotationsChange = (event) => {
+  onRenderAnnotationLayerChange = (event) => {
     const { setState } = this.props;
 
-    setState({ renderAnnotations: event.target.checked });
+    setState({ renderAnnotationLayer: event.target.checked });
   }
 
   onRenderInteractiveFormsChange = (event) => {
@@ -22,7 +22,7 @@ export default class LayerOptions extends PureComponent {
 
   render() {
     const {
-      renderAnnotations,
+      renderAnnotationLayer,
       renderInteractiveForms,
       renderMode,
       renderTextLayer,
@@ -43,19 +43,19 @@ export default class LayerOptions extends PureComponent {
             onChange={this.onRenderTextLayersChange}
           />
           <label htmlFor="renderTextLayer">
-            Render text layers
+            Render text layer
           </label>
         </div>
 
         <div>
           <input
-            id="renderAnnotations"
+            id="renderAnnotationLayer"
             type="checkbox"
-            checked={renderAnnotations}
-            onChange={this.onRenderAnnotationsChange}
+            checked={renderAnnotationLayer}
+            onChange={this.onRenderAnnotationLayerChange}
           />
-          <label htmlFor="renderAnnotations">
-            Render annotations
+          <label htmlFor="renderAnnotationLayer">
+            Render annotation layer
           </label>
         </div>
 
@@ -63,8 +63,9 @@ export default class LayerOptions extends PureComponent {
           <input
             id="renderInteractiveForms"
             type="checkbox"
-            checked={renderInteractiveForms}
+            checked={renderAnnotationLayer && renderInteractiveForms}
             onChange={this.onRenderInteractiveFormsChange}
+            disabled={!renderAnnotationLayer}
           />
           <label htmlFor="renderInteractiveForms">
             Render interactive forms
@@ -76,7 +77,7 @@ export default class LayerOptions extends PureComponent {
 }
 
 LayerOptions.propTypes = {
-  renderAnnotations: PropTypes.bool,
+  renderAnnotationLayer: PropTypes.bool,
   renderInteractiveForms: PropTypes.bool,
   renderMode: PropTypes.oneOf(['canvas', 'svg']),
   renderTextLayer: PropTypes.bool,

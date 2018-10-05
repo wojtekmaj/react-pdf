@@ -224,8 +224,8 @@ Displays a page. Should be placed inside `<Document />`. Alternatively, it can h
 |onGetTextError|Function called in case of an error while loading text layer items.|`(error) => alert('Error while loading text layer items! ' + error.message)`|
 |pageIndex|Defines which page from PDF file should be displayed. Defaults to 0.|`0`|
 |pageNumber|Defines which page from PDF file should be displayed. If provided, `pageIndex` prop will be ignored. Defaults to 1.|`1`|
-|renderAnnotations|Defines whether annotations (e.g. links) should be rendered. Defaults to true.|`false`|
-|renderInteractiveForms|Defines whether interactive forms should be rendered. `renderAnnotations` prop must be set to `true`. Defaults to false.|`true`|
+|renderAnnotationLayer|Defines whether annotations (e.g. links) should be rendered. Defaults to true.|`false`|
+|renderInteractiveForms|Defines whether interactive forms should be rendered. `renderAnnotationLayer` prop must be set to `true`. Defaults to false.|`true`|
 |renderMode|Defines the rendering mode of the page. Can be `canvas` or `svg`. Defaults to `canvas`.|`"svg"`
 |renderTextLayer|Defines whether a text layer should be rendered. Defaults to true.|`false`|
 |rotate|Defines the rotation of the page in degrees. 90 = rotated to the right, 180 = upside down, 270 = rotated to the left. Defaults to page's default setting, usually 0.|`90`|

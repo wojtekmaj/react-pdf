@@ -85,9 +85,9 @@ export class AnnotationLayerInternal extends PureComponent {
   }
 
   onRenderSuccess = () => {
-    const { onRenderAnnotationsSuccess } = this.props;
+    const { onRenderAnnotationLayerSuccess } = this.props;
 
-    callIfDefined(onRenderAnnotationsSuccess);
+    callIfDefined(onRenderAnnotationLayerSuccess);
   }
 
   /**
@@ -100,10 +100,10 @@ export class AnnotationLayerInternal extends PureComponent {
 
     errorOnDev(error);
 
-    const { onRenderAnnotationsError } = this.props;
+    const { onRenderAnnotationLayerError } = this.props;
 
     callIfDefined(
-      onRenderAnnotationsError,
+      onRenderAnnotationLayerError,
       error,
     );
   }
@@ -114,7 +114,7 @@ export class AnnotationLayerInternal extends PureComponent {
     return page.getViewport(scale, rotate);
   }
 
-  renderAnnotations() {
+  renderAnnotationLayer() {
     const { annotations } = this.state;
 
     if (!annotations) {
@@ -149,7 +149,7 @@ export class AnnotationLayerInternal extends PureComponent {
         className="react-pdf__Page__annotations annotationLayer"
         ref={(ref) => { this.annotationLayer = ref; }}
       >
-        {this.renderAnnotations()}
+        {this.renderAnnotationLayer()}
       </div>
     );
   }
@@ -159,8 +159,8 @@ AnnotationLayerInternal.propTypes = {
   linkService: isLinkService.isRequired,
   onGetAnnotationsError: PropTypes.func,
   onGetAnnotationsSuccess: PropTypes.func,
-  onRenderAnnotationsError: PropTypes.func,
-  onRenderAnnotationsSuccess: PropTypes.func,
+  onRenderAnnotationLayerError: PropTypes.func,
+  onRenderAnnotationLayerSuccess: PropTypes.func,
   page: isPage,
   renderInteractiveForms: PropTypes.bool,
   rotate: isRotate,

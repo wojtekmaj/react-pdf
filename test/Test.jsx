@@ -32,7 +32,7 @@ export default class Test extends PureComponent {
     pageWidth: null,
     passMethod: 'normal',
     render: true,
-    renderAnnotations: true,
+    renderAnnotationLayer: true,
     renderInteractiveForms: true,
     renderMode: 'canvas',
     renderTextLayer: true,
@@ -100,7 +100,7 @@ export default class Test extends PureComponent {
       pageHeight,
       pageScale,
       pageWidth,
-      renderAnnotations,
+      renderAnnotationLayer,
       renderInteractiveForms,
       renderMode,
       renderTextLayer,
@@ -111,7 +111,7 @@ export default class Test extends PureComponent {
       height: pageHeight,
       onClick: (event, page) => console.log('Clicked a page', { event, page }),
       onRenderSuccess: this.onPageRenderSuccess,
-      renderAnnotations,
+      renderAnnotationLayer,
       renderInteractiveForms,
       renderMode,
       renderTextLayer,
@@ -146,7 +146,7 @@ export default class Test extends PureComponent {
       pageWidth,
       passMethod,
       render,
-      renderAnnotations,
+      renderAnnotationLayer,
       renderInteractiveForms,
       renderMode,
       renderTextLayer,
@@ -178,7 +178,7 @@ export default class Test extends PureComponent {
               setState={setState}
             />
             <LayerOptions
-              renderAnnotations={renderAnnotations}
+              renderAnnotationLayer={renderAnnotationLayer}
               renderInteractiveForms={renderInteractiveForms}
               renderMode={renderMode}
               renderTextLayer={renderTextLayer}

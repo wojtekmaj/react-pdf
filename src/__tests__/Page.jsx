@@ -554,7 +554,7 @@ describe('Page', () => {
       });
     });
 
-    it('requests annotations to be rendered when given renderAnnotations = true', () => {
+    it('requests annotations to be rendered when given renderAnnotationLayer = true', () => {
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
       const component = shallow(
@@ -562,7 +562,7 @@ describe('Page', () => {
           onLoadSuccess={onLoadSuccess}
           pageIndex={0}
           pdf={pdf}
-          renderAnnotations
+          renderAnnotationLayer
         />
       );
 
@@ -574,7 +574,7 @@ describe('Page', () => {
       });
     });
 
-    it('does not request annotations to be rendered when given renderAnnotations = false', () => {
+    it('does not request annotations to be rendered when given renderAnnotationLayer = false', () => {
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
       const component = shallow(
@@ -582,7 +582,7 @@ describe('Page', () => {
           onLoadSuccess={onLoadSuccess}
           pageIndex={0}
           pdf={pdf}
-          renderAnnotations={false}
+          renderAnnotationLayer={false}
         />
       );
 
