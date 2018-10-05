@@ -79,7 +79,7 @@ export default class LayerOptions extends PureComponent {
 LayerOptions.propTypes = {
   renderAnnotationLayer: PropTypes.bool,
   renderInteractiveForms: PropTypes.bool,
-  renderMode: PropTypes.oneOf(['canvas', 'svg']),
+  renderMode: PropTypes.oneOf(['canvas', 'none', 'svg']),
   renderTextLayer: PropTypes.bool,
   setState: PropTypes.func.isRequired,
 };

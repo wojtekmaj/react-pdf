@@ -415,6 +415,28 @@ describe('Page', () => {
       });
     });
 
+    it('requests page not to be rendered when given renderMode = "none"', () => {
+      const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
+
+      const component = shallow(
+        <Page
+          onLoadSuccess={onLoadSuccess}
+          pageIndex={0}
+          pdf={pdf}
+          renderMode="none"
+        />
+      );
+
+      expect.assertions(2);
+      return onLoadSuccessPromise.then(() => {
+        component.update();
+        const pageCanvas = component.find('PageCanvas');
+        const pageSVG = component.find('PageSVG');
+        expect(pageCanvas).toHaveLength(0);
+        expect(pageSVG).toHaveLength(0);
+      });
+    });
+
     it('requests page to be rendered in canvas mode when given renderMode = "canvas"', () => {
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
@@ -450,8 +472,8 @@ describe('Page', () => {
       expect.assertions(1);
       return onLoadSuccessPromise.then(() => {
         component.update();
-        const pageCanvas = component.find('PageSVG');
-        expect(pageCanvas).toHaveLength(1);
+        const pageSVG = component.find('PageSVG');
+        expect(pageSVG).toHaveLength(1);
       });
     });
 

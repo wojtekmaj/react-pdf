@@ -199,6 +199,19 @@ export default class ViewOptions extends PureComponent {
         </label>
         <div>
           <input
+            checked={renderMode === 'none'}
+            id="renderNone"
+            name="renderMode"
+            onChange={this.onRenderModeChange}
+            type="radio"
+            value="none"
+          />
+          <label htmlFor="renderNone">
+            None
+          </label>
+        </div>
+        <div>
+          <input
             checked={!renderMode || (renderMode === 'canvas')}
             id="renderCanvas"
             name="renderMode"
@@ -277,7 +290,7 @@ ViewOptions.propTypes = {
   pageHeight: PropTypes.number,
   pageScale: PropTypes.number,
   pageWidth: PropTypes.number,
-  renderMode: PropTypes.oneOf(['canvas', 'svg']),
+  renderMode: PropTypes.oneOf(['canvas', 'none', 'svg']),
   rotate: PropTypes.number,
   setState: PropTypes.func.isRequired,
 };

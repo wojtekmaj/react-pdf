@@ -277,10 +277,32 @@ export class PageInternal extends PureComponent {
     }
   }
 
+  renderMainLayer() {
+    const { renderMode } = this.props;
+
+    switch (renderMode) {
+      case 'none':
+        return null;
+      case 'svg':
+        return (
+          <PageSVG key={`${this.pageKeyNoScale}_svg`} />
+        );
+      case 'canvas':
+      default:
+        return (
+          <PageCanvas key={`${this.pageKey}_canvas`} />
+        );
+    }
+  }
+
   renderTextLayer() {
-    const { renderTextLayer } = this.props;
+    const { renderMode, renderTextLayer } = this.props;
 
     if (!renderTextLayer) {
+      return null;
+    }
+
+    if (renderMode === 'svg') {
       return null;
     }
 
@@ -292,48 +314,31 @@ export class PageInternal extends PureComponent {
   renderAnnotationLayer() {
     const { renderAnnotationLayer } = this.props;
 
-    console.log(renderAnnotationLayer);
     if (!renderAnnotationLayer) {
       return null;
     }
+
+    /**
+     * As of now, PDF.js 2.0.550 returns warnings on unimplemented annotations in SVG mode.
+     * Therefore, as a fallback, we render "traditional" AnnotationLayer component.
+     */
 
     return (
       <AnnotationLayer key={`${this.pageKey}_annotations`} />
     );
   }
 
-  renderSVG() {
-    return [
-      <PageSVG key={`${this.pageKeyNoScale}_svg`} />,
-      /**
-       * As of now, PDF.js 2.0.474 returns warnings on unimplemented annotations.
-       * Therefore, as a fallback, we render "traditional" AnnotationLayer component.
-       */
-      this.renderAnnotationLayer(),
-    ];
-  }
-
-  renderCanvas() {
-    return [
-      <PageCanvas key={`${this.pageKey}_canvas`} />,
-      this.renderTextLayer(),
-      this.renderAnnotationLayer(),
-    ];
-  }
-
   renderChildren() {
     const {
       children,
-      renderMode,
     } = this.props;
+
 
     return (
       <PageContext.Provider value={this.childContext}>
-        {
-          renderMode === 'svg'
-            ? this.renderSVG()
-            : this.renderCanvas()
-        }
+        {this.renderMainLayer()}
+        {this.renderTextLayer()}
+        {this.renderAnnotationLayer()}
         {children}
       </PageContext.Provider>
     );

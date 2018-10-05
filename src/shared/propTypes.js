@@ -126,6 +126,6 @@ export const isPdf = PropTypes.oneOfType([
   PropTypes.bool,
 ]);
 
-export const isRenderMode = PropTypes.oneOf(['canvas', 'svg']);
+export const isRenderMode = PropTypes.oneOf(['canvas', 'none', 'svg']);
 
 export const isRotate = PropTypes.oneOf([0, 90, 180, 270]);
