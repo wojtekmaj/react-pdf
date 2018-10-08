@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { render } from 'react-dom';
 import { Document, Page } from 'react-pdf/dist/entry.webpack';
 import 'react-pdf/dist/Page/AnnotationLayer.css';
 
@@ -10,7 +9,7 @@ const options = {
   cMapPacked: true,
 };
 
-class Sample extends Component {
+export default class Sample extends Component {
   state = {
     file: './sample.pdf',
     numPages: null,
@@ -67,5 +66,3 @@ class Sample extends Component {
     );
   }
 }
-
-render(<Sample />, document.getElementById('react-container'));

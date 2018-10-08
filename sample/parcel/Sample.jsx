@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Document, Page } from 'react-pdf/dist/entry.parcel';
+import 'react-pdf/dist/Page/AnnotationLayer.css';
 
 import './Sample.less';
 
