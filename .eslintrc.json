@@ -7,9 +7,6 @@
   },
   "parser": "babel-eslint",
   "rules": {
-    "function-paren-newline": "off",
-    "global-require": "off",
-    "jsx-a11y/anchor-is-valid": "off",
     "jsx-a11y/label-has-associated-control": "off",
     "jsx-a11y/label-has-for": ["error", { "required": { "some": ["id", "nesting"] }}],
     "no-param-reassign": ["error", { "props": true, "ignorePropertyModificationsFor": ["canvas", "element", "svg"] }],
