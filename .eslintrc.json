@@ -6,11 +6,6 @@
     "jest": true
   },
   "parser": "babel-eslint",
-  "parserOptions": {
-    "ecmaFeatures": {
-      "experimentalObjectRestSpread": true
-    }
-  },
   "rules": {
     "function-paren-newline": "off",
     "global-require": "off",
