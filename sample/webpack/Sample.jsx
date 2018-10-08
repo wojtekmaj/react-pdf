@@ -36,7 +36,8 @@ class Sample extends Component {
         </header>
         <div className="Example__container">
           <div className="Example__container__load">
-            <label htmlFor="file">Load from file:</label>&nbsp;
+            <label htmlFor="file">Load from file:</label>
+            {' '}
             <input
               type="file"
               onChange={this.onFileChange}

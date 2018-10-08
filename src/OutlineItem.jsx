@@ -95,6 +95,7 @@ export class OutlineItemInternal extends PureComponent {
   render() {
     const { item } = this.props;
 
+    /* eslint-disable jsx-a11y/anchor-is-valid */
     return (
       <li>
         <a

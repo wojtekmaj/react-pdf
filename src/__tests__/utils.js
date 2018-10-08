@@ -1,4 +1,5 @@
-// eslint-disable-next-line import/prefer-default-export
+const fs = require('fs');
+
 export const makeAsyncCallback = (callbackValue) => {
   let promiseResolve;
   const promise = new Promise((resolve) => {
@@ -14,8 +15,6 @@ export const makeAsyncCallback = (callbackValue) => {
 };
 
 export const loadPDF = (path) => {
-  const fs = require('fs');
-
   const raw = fs.readFileSync(path);
   const arrayBuffer = raw.buffer;
 
