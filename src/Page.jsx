@@ -392,7 +392,7 @@ Page.propTypes = {
   customTextRenderer: PropTypes.func,
   error: PropTypes.string,
   inputRef: PropTypes.func,
-  loading: PropTypes.string,
+  loading: PropTypes.node,
   noData: PropTypes.node,
   onGetTextError: PropTypes.func,
   onGetTextSuccess: PropTypes.func,
