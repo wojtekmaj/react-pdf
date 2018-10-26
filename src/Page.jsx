@@ -390,7 +390,7 @@ Page.propTypes = {
   children: PropTypes.node,
   className: isClassName,
   customTextRenderer: PropTypes.func,
-  error: PropTypes.string,
+  error: PropTypes.node,
   inputRef: PropTypes.func,
   loading: PropTypes.node,
   noData: PropTypes.node,
