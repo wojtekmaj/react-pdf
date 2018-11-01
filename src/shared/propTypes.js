@@ -74,7 +74,7 @@ export const isPageIndex = (props, propName, componentName) => {
       return new Error(`Expected \`${propName}\` to be greater or equal to 0.`);
     }
 
-    const { numPages } = pdf.pdfInfo;
+    const { numPages } = pdf._pdfInfo;
 
     if (pageIndex + 1 > numPages) {
       return new Error(`Expected \`${propName}\` to be less or equal to ${numPages - 1}.`);
@@ -103,7 +103,7 @@ export const isPageNumber = (props, propName, componentName) => {
       return new Error(`Expected \`${propName}\` to be greater or equal to 1.`);
     }
 
-    const { numPages } = pdf.pdfInfo;
+    const { numPages } = pdf._pdfInfo;
 
     if (pageNumber > numPages) {
       return new Error(`Expected \`${propName}\` to be less or equal to ${numPages}.`);

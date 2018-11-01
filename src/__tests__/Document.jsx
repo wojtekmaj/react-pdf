@@ -25,10 +25,10 @@ describe('Document', () => {
 
   beforeAll(async () => {
     const pdf = await pdfjs.getDocument({ data: pdfFile.arrayBuffer });
-    desiredLoadedPdf.pdfInfo = pdf.pdfInfo;
+    desiredLoadedPdf._pdfInfo = pdf._pdfInfo;
 
     const pdf2 = await pdfjs.getDocument({ data: pdfFile2.arrayBuffer });
-    desiredLoadedPdf2.pdfInfo = pdf2.pdfInfo;
+    desiredLoadedPdf2._pdfInfo = pdf2._pdfInfo;
   });
 
   describe('loading', () => {
