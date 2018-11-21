@@ -19,6 +19,8 @@ import { makeEventProps } from './shared/events';
 
 import { eventsProps, isClassName, isLinkService, isPageIndex, isPageNumber, isPage, isPdf, isRotate } from './shared/propTypes';
 
+const defaultScale = 1.0;
+
 export default class Page extends Component {
   state = {
     page: null,
@@ -195,7 +197,10 @@ export default class Page extends Component {
       pageScale = width / viewport.width;
     }
 
-    return scale * pageScale;
+    // Passing scale explicitly null would cause the page not to render
+    const scaleWithDefault = scale === null ? defaultScale : scale;
+
+    return scaleWithDefault * pageScale;
   }
 
   get eventProps() {
@@ -363,7 +368,7 @@ Page.defaultProps = {
   renderAnnotations: true,
   renderMode: 'canvas',
   renderTextLayer: true,
-  scale: 1.0,
+  scale: defaultScale,
 };
 
 Page.childContextTypes = {
