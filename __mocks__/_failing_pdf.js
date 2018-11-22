@@ -1,4 +1,5 @@
 export default {
+  fingerprint: 'a62067476e69734bb8eb60122615dfbf',
   getDestination: () => new Promise((resolve, reject) => reject(new Error())),
   getOutline: () => new Promise((resolve, reject) => reject(new Error())),
   getPage: () => new Promise((resolve, reject) => reject(new Error())),
