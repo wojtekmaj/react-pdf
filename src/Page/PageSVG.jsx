@@ -106,6 +106,7 @@ export class PageSVGInternal extends PureComponent {
           overflow: 'hidden',
           width,
           height,
+          userSelect: 'none',
         }}
         // Note: This cannot be shortened, as we need this function to be called with each render.
         ref={ref => this.drawPageOnContainer(ref)}
