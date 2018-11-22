@@ -81,7 +81,7 @@
     "lodash.once": "^4.1.1",
     "make-event-props": "^1.1.0",
     "merge-class-names": "^1.1.1",
-    "pdfjs-dist": "^2.0.943",
+    "pdfjs-dist": "2.0.943",
     "prop-types": "^15.6.2"
   },
   "devDependencies": {
