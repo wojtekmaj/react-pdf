@@ -22,8 +22,8 @@ Minimal demo page is included in sample directory.
 
 React-PDF is under constant development. This documentation is written for React-PDF 4.x branch. If you want to see documentation for other versions of React-PDF, use dropdown on top of GitHub page to switch to an appropriate tag. Here are quick links to the newest docs from each branch:
 
-* [v3.x](https://github.com/wojtekmaj/react-pdf/blob/v3.0.5/README.md)
-* [v2.x](https://github.com/wojtekmaj/react-pdf/blob/v2.5.3/README.md)
+* [v3.x](https://github.com/wojtekmaj/react-pdf/blob/v3.x/README.md)
+* [v2.x](https://github.com/wojtekmaj/react-pdf/blob/v2.x/README.md)
 * [v1.x](https://github.com/wojtekmaj/react-pdf/blob/v1.8.3/README.md)
 
 ## Getting started
@@ -297,12 +297,4 @@ Thank you to all our backers! [Become a backer](https://opencollective.com/react
 
 Thank you to all our contributors that helped on this project!
 
-[![0](https://sourcerer.io/fame/wojtekmaj/wojtekmaj/react-pdf/images/0)](https://sourcerer.io/fame/wojtekmaj/wojtekmaj/react-pdf/links/0)
-[![1](https://sourcerer.io/fame/wojtekmaj/wojtekmaj/react-pdf/images/1)](https://sourcerer.io/fame/wojtekmaj/wojtekmaj/react-pdf/links/1)
-[![2](https://sourcerer.io/fame/wojtekmaj/wojtekmaj/react-pdf/images/2)](https://sourcerer.io/fame/wojtekmaj/wojtekmaj/react-pdf/links/2)
-[![3](https://sourcerer.io/fame/wojtekmaj/wojtekmaj/react-pdf/images/3)](https://sourcerer.io/fame/wojtekmaj/wojtekmaj/react-pdf/links/3)
-[![4](https://sourcerer.io/fame/wojtekmaj/wojtekmaj/react-pdf/images/4)](https://sourcerer.io/fame/wojtekmaj/wojtekmaj/react-pdf/links/4)
-[![5](https://sourcerer.io/fame/wojtekmaj/wojtekmaj/react-pdf/images/5)](https://sourcerer.io/fame/wojtekmaj/wojtekmaj/react-pdf/links/5)
-[![6](https://sourcerer.io/fame/wojtekmaj/wojtekmaj/react-pdf/images/6)](https://sourcerer.io/fame/wojtekmaj/wojtekmaj/react-pdf/links/6)
-[![7](https://sourcerer.io/fame/wojtekmaj/wojtekmaj/react-pdf/images/7)](https://sourcerer.io/fame/wojtekmaj/wojtekmaj/react-pdf/links/7)
-
+![Top Contributors](https://opencollective.com/react-pdf/contributors.svg?width=890&button=false)
