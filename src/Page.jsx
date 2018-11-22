@@ -315,7 +315,7 @@ export class PageInternal extends PureComponent {
     }
 
     /**
-     * As of now, PDF.js 2.0.550 returns warnings on unimplemented annotations in SVG mode.
+     * As of now, PDF.js 2.0.943 returns warnings on unimplemented annotations in SVG mode.
      * Therefore, as a fallback, we render "traditional" AnnotationLayer component.
      */
 
