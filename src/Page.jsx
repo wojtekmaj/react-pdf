@@ -296,13 +296,9 @@ export class PageInternal extends PureComponent {
   }
 
   renderTextLayer() {
-    const { renderMode, renderTextLayer } = this.props;
+    const { renderTextLayer } = this.props;
 
     if (!renderTextLayer) {
-      return null;
-    }
-
-    if (renderMode === 'svg') {
       return null;
     }
 
