@@ -60,7 +60,7 @@ describe('TextLayerItem', () => {
         />
       );
 
-      expect(customTextRenderer).toBeCalledWith(
+      expect(customTextRenderer).toHaveBeenCalledWith(
         expect.objectContaining({
           str,
           itemIndex,

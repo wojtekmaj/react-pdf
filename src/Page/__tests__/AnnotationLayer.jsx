@@ -1,5 +1,5 @@
 import React from 'react';
-import { mount } from 'enzyme';
+import { mount, shallow } from 'enzyme';
 
 import { pdfjs } from '../../entry.jest';
 
@@ -102,6 +102,12 @@ describe('AnnotationLayer', () => {
       });
 
       await expect(onGetAnnotationsSuccessPromise2).resolves.toMatchObject(desiredAnnotations2);
+    });
+
+    it('throws an error when placed outside Page', () => {
+      muteConsole();
+      expect(() => shallow(<AnnotationLayer />)).toThrow();
+      restoreConsole();
     });
   });
 

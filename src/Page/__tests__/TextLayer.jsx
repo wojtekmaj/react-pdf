@@ -91,6 +91,12 @@ describe('TextLayer', () => {
 
       await expect(onGetTextSuccessPromise2).resolves.toMatchObject(desiredTextItems2);
     });
+
+    it('throws an error when placed outside Page', () => {
+      muteConsole();
+      expect(() => shallow(<TextLayer />)).toThrow();
+      restoreConsole();
+    });
   });
 
   describe('rendering', () => {

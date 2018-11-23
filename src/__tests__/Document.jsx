@@ -396,6 +396,58 @@ describe('Document', () => {
     });
   });
 
+  describe('viewer', () => {
+    it('calls onItemClick if defined', () => {
+      const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
+
+      const onItemClick = jest.fn();
+
+      const component = shallow(
+        <Document
+          file={pdfFile.file}
+          onItemClick={onItemClick}
+          onLoadSuccess={onLoadSuccess}
+        />
+      );
+
+      expect.assertions(2);
+      return onLoadSuccessPromise.then(() => {
+        const pageNumber = 6;
+
+        // Simulate clicking on an outline item
+        component.instance().viewer.scrollPageIntoView({ pageNumber });
+
+        expect(onItemClick).toHaveBeenCalledTimes(1);
+        expect(onItemClick).toHaveBeenCalledWith({ pageNumber });
+      });
+    });
+
+    it('attempts to find a page and scroll it into view if onItemClick is not given', () => {
+      const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
+
+      const component = shallow(
+        <Document
+          file={pdfFile.file}
+          onLoadSuccess={onLoadSuccess}
+        />
+      );
+
+      expect.assertions(1);
+      return onLoadSuccessPromise.then(() => {
+        const scrollIntoView = jest.fn();
+        const pageNumber = 6;
+
+        // Register fake page in Document viewer
+        component.instance().pages[pageNumber - 1] = { scrollIntoView };
+
+        // Simulate clicking on an outline item
+        component.instance().viewer.scrollPageIntoView({ pageNumber });
+
+        expect(scrollIntoView).toHaveBeenCalledTimes(1);
+      });
+    });
+  });
+
   it('calls onClick callback when clicked a page (sample of mouse events family)', () => {
     const onClick = jest.fn();
 
