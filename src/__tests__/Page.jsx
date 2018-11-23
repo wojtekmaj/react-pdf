@@ -536,7 +536,28 @@ describe('Page', () => {
       });
     });
 
-    it('does not render TextLayer when given renderMode = "svg"', () => {
+    it('renders TextLayer when given renderMode = "canvas"', () => {
+      const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
+
+      const component = shallow(
+        <Page
+          onLoadSuccess={onLoadSuccess}
+          pageIndex={0}
+          pdf={pdf}
+          renderMode="canvas"
+          renderTextLayer
+        />
+      );
+
+      expect.assertions(1);
+      return onLoadSuccessPromise.then(() => {
+        component.update();
+        const textLayer = component.find('TextLayer');
+        expect(textLayer).toHaveLength(1);
+      });
+    });
+
+    it('renders TextLayer when given renderMode = "svg"', () => {
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
       const component = shallow(
@@ -553,7 +574,7 @@ describe('Page', () => {
       return onLoadSuccessPromise.then(() => {
         component.update();
         const textLayer = component.find('TextLayer');
-        expect(textLayer).toHaveLength(0);
+        expect(textLayer).toHaveLength(1);
       });
     });
 
