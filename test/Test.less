@@ -123,6 +123,16 @@ body {
             max-width: calc(~"100% - 2em");
             box-shadow: 0 0 8px rgba(0, 0, 0, .5);
             margin: 1em;
+
+            &__textContent {
+              mark {
+                opacity: 0.5;
+                background: #ff0;
+                box-shadow: 0px 2px 10px #ff0;
+                color: transparent;
+                white-space: pre;
+              }
+            }
           }
 
           &__message {

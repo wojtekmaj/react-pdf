@@ -10,6 +10,7 @@
     "jsx-a11y/label-has-associated-control": "off",
     "jsx-a11y/label-has-for": ["error", { "required": { "some": ["id", "nesting"] }}],
     "no-param-reassign": ["error", { "props": true, "ignorePropertyModificationsFor": ["canvas", "element", "svg"] }],
+    "no-underscore-dangle": ["error", { "allow": ["_pdfInfo", "_pageInfo"] }],
     "prefer-destructuring": "warn",
     "prefer-spread": "warn",
     "react/require-default-props": "off",
