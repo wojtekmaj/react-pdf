@@ -1,6 +1,6 @@
 {
   "name": "react-pdf-sample-page-webpack",
-  "version": "4.0.0-beta.6",
+  "version": "4.0.0",
   "description": "A sample page for React-PDF.",
   "private": true,
   "scripts": {
