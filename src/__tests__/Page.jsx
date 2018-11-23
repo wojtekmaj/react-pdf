@@ -35,17 +35,17 @@ describe('Page', () => {
 
     const page = await pdf.getPage(1);
     desiredLoadedPage.pageIndex = page.pageIndex;
-    desiredLoadedPage.pageInfo = page.pageInfo;
+    desiredLoadedPage._pageInfo = page._pageInfo;
 
     const page2 = await pdf.getPage(2);
     desiredLoadedPage2.pageIndex = page2.pageIndex;
-    desiredLoadedPage2.pageInfo = page2.pageInfo;
+    desiredLoadedPage2._pageInfo = page2._pageInfo;
 
     pdf2 = await pdfjs.getDocument({ data: pdfFile2.arrayBuffer });
 
     const page3 = await pdf2.getPage(1);
     desiredLoadedPage3.pageIndex = page3.pageIndex;
-    desiredLoadedPage3.pageInfo = page3.pageInfo;
+    desiredLoadedPage3._pageInfo = page3._pageInfo;
 
     registerPageArguments.push(
       page.pageIndex,
