@@ -448,6 +448,35 @@ describe('Document', () => {
     });
   });
 
+  describe('linkService', () => {
+    /* eslint-disable indent */
+    it.each`
+      externalLinkTarget | linkServiceTarget
+      ${null}            | ${0}
+      ${'_self'}         | ${1}
+      ${'_blank'}        | ${2}
+      ${'_parent'}       | ${3}
+      ${'_top'}          | ${4}
+    `('returns externalLinkTarget = $linkServiceTarget given externalLinkTarget prop = $externalLinkTarget',
+    ({ externalLinkTarget, linkServiceTarget }) => {
+      const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
+
+      const component = shallow(
+        <Document
+          externalLinkTarget={externalLinkTarget}
+          file={pdfFile.file}
+          onLoadSuccess={onLoadSuccess}
+        />
+      );
+
+      expect.assertions(1);
+      return onLoadSuccessPromise.then(() => {
+        expect(component.instance().linkService.externalLinkTarget).toBe(linkServiceTarget);
+      });
+    });
+    /* eslint-enable indent */
+  });
+
   it('calls onClick callback when clicked a page (sample of mouse events family)', () => {
     const onClick = jest.fn();
 

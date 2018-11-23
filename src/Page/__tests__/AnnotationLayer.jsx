@@ -129,11 +129,50 @@ describe('AnnotationLayer', () => {
 
       return onRenderAnnotationLayerSuccessPromise.then(() => {
         component.update();
-        const annotationItems = component.children();
+        const renderedLayer = component.getDOMNode();
+        const annotationItems = [...renderedLayer.children];
 
         expect(annotationItems).toHaveLength(desiredAnnotations.length);
       });
     });
+
+    /* eslint-disable indent */
+    it.each`
+      linkServiceTarget | target
+      ${1}              | ${'_self'}
+      ${2}              | ${'_blank'}
+      ${3}              | ${'_parent'}
+      ${4}              | ${'_top'}
+    `('renders all links with target $target given externalLinkTarget = $target',
+    ({ linkServiceTarget, target }) => {
+      const {
+        func: onRenderAnnotationLayerSuccess, promise: onRenderAnnotationLayerSuccessPromise,
+      } = makeAsyncCallback();
+      const customLinkService = new LinkService();
+      customLinkService.externalLinkTarget = linkServiceTarget;
+
+      const component = mount(
+        <AnnotationLayer
+          linkService={customLinkService}
+          onRenderAnnotationLayerSuccess={onRenderAnnotationLayerSuccess}
+          page={page}
+        />
+      );
+
+      expect.assertions(desiredAnnotations.length);
+
+      return onRenderAnnotationLayerSuccessPromise.then(() => {
+        component.update();
+        const renderedLayer = component.getDOMNode();
+        const annotationItems = [...renderedLayer.children];
+        const annotationLinkItems = annotationItems
+          .map(item => item.firstChild)
+          .filter(item => item.tagName === 'A');
+
+        annotationLinkItems.forEach(link => expect(link.getAttribute('target')).toBe(target));
+      });
+    });
+    /* eslint-enable indent */
 
     it('renders annotations at a given rotation', async () => {
       const {
