@@ -60,9 +60,7 @@ export default class LoadingOptions extends PureComponent {
       return;
     }
 
-    fetch(url).then(response => response.blob()).then((blob) => {
-      setFile(blob);
-    });
+    fetch(url).then(response => response.blob()).then(setFile);
   }
 
   onUseImported = () => {
