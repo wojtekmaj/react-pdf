@@ -160,6 +160,7 @@ export default class Test extends PureComponent {
       externalLinkTarget,
       file,
       options,
+      rotate,
     };
 
     return (
@@ -208,7 +209,6 @@ export default class Test extends PureComponent {
               onLoadSuccess={this.onDocumentLoadSuccess}
               onLoadError={this.onDocumentLoadError}
               onSourceError={this.onDocumentLoadError}
-              rotate={rotate}
             >
               <div className="Test__container__content__toc">
                 {render && (
