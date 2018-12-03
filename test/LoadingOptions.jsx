@@ -3,36 +3,13 @@ import PropTypes from 'prop-types';
 
 import samplePDF from './test.pdf';
 
+import { isFile } from './shared/propTypes';
+
 export default class LoadingOptions extends PureComponent {
   onFileChange = (event) => {
     const { setFile } = this.props;
 
     setFile(event.target.files[0]);
-  }
-
-  onFileUintChange = (event) => {
-    const { setFile } = this.props;
-
-    const reader = new FileReader();
-
-    reader.onloadend = () => {
-      setFile(reader.result);
-    };
-
-    reader.readAsArrayBuffer(event.target.files[0]);
-  }
-
-  onFileDataURLChange = (event) => {
-    const { setFile } = this.props;
-
-    const reader = new FileReader();
-
-    reader.onloadend = () => {
-      console.log(reader.result);
-      setFile(reader.result);
-    };
-
-    reader.readAsDataURL(event.target.files[0]);
   }
 
   onURLChange = (event) => {
@@ -83,14 +60,6 @@ export default class LoadingOptions extends PureComponent {
     }), 1000);
   }
 
-  onPassMethodChange = (event) => {
-    const { setState } = this.props;
-
-    const passMethod = event.target.value;
-
-    setState({ passMethod });
-  }
-
   unloadFile = () => {
     const { setFile } = this.props;
 
@@ -98,10 +67,7 @@ export default class LoadingOptions extends PureComponent {
   }
 
   render() {
-    const {
-      file,
-      passMethod,
-    } = this.props;
+    const { file } = this.props;
 
     return (
       <fieldset id="load">
@@ -116,24 +82,6 @@ export default class LoadingOptions extends PureComponent {
           id="file"
           type="file"
           onChange={this.onFileChange}
-        />
-
-        <label htmlFor="fileUint8Array">
-          Load from file to Uint8Array:
-        </label>
-        <input
-          id="fileUint8Array"
-          type="file"
-          onChange={this.onFileUintChange}
-        />
-
-        <label htmlFor="fileUint8Array">
-          Load from file to Data URL:
-        </label>
-        <input
-          id="fileDataURL"
-          type="file"
-          onChange={this.onFileDataURLChange}
         />
 
         <form onSubmit={this.onURLChange}>
@@ -181,46 +129,6 @@ export default class LoadingOptions extends PureComponent {
         </div>
 
         <div>
-          <input
-            checked={passMethod === 'normal'}
-            id="passNormal"
-            name="passMethod"
-            onChange={this.onPassMethodChange}
-            type="radio"
-            value="normal"
-          />
-          <label htmlFor="passNormal">
-            Auto
-          </label>
-        </div>
-        <div>
-          <input
-            checked={passMethod === 'object'}
-            id="passObject"
-            name="passMethod"
-            onChange={this.onPassMethodChange}
-            type="radio"
-            value="object"
-          />
-          <label htmlFor="passObject">
-            Pass as an object (URLs and imports only)
-          </label>
-        </div>
-        <div>
-          <input
-            checked={passMethod === 'blob'}
-            id="passBlob"
-            name="passMethod"
-            onChange={this.onPassMethodChange}
-            type="radio"
-            value="blob"
-          />
-          <label htmlFor="passBlob">
-            Pass as a Blob (URLs and imports only)
-          </label>
-        </div>
-
-        <div>
           <button
             type="button"
             disabled={file === null}
@@ -234,27 +142,8 @@ export default class LoadingOptions extends PureComponent {
   }
 }
 
-const fileTypes = [
-  PropTypes.string,
-  PropTypes.instanceOf(ArrayBuffer),
-  PropTypes.shape({
-    data: PropTypes.object,
-    httpHeaders: PropTypes.object,
-    range: PropTypes.object,
-    url: PropTypes.string,
-    withCredentials: PropTypes.bool,
-  }),
-];
-if (typeof File !== 'undefined') {
-  fileTypes.push(PropTypes.instanceOf(File));
-}
-if (typeof Blob !== 'undefined') {
-  fileTypes.push(PropTypes.instanceOf(Blob));
-}
-
 LoadingOptions.propTypes = {
-  file: PropTypes.oneOfType(fileTypes),
-  passMethod: PropTypes.oneOf(['normal', 'object', 'blob']),
+  file: isFile,
   setFile: PropTypes.func.isRequired,
   setState: PropTypes.func.isRequired,
 };

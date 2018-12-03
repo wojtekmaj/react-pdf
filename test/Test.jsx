@@ -1,4 +1,6 @@
 import React, { PureComponent } from 'react';
+// eslint-disable-next-line import/no-extraneous-dependencies
+import { PDFDataRangeTransport } from 'pdfjs-dist';
 // eslint-disable-next-line import/no-unresolved
 import { Document, Outline, Page } from 'react-pdf/src/entry.webpack';
 // eslint-disable-next-line import/no-unresolved
@@ -9,14 +11,46 @@ import './Test.less';
 import AnnotationOptions from './AnnotationOptions';
 import LayerOptions from './LayerOptions';
 import LoadingOptions from './LoadingOptions';
+import PassingOptions from './PassingOptions';
 import ViewOptions from './ViewOptions';
 
 import { dataURItoBlob } from './shared/utils';
+import {
+  isArrayBuffer,
+  isBlob,
+  isBrowser,
+  isFile,
+  loadFromFile,
+} from '../src/shared/utils';
 
 const options = {
   cMapUrl: 'cmaps/',
   cMapPacked: true,
 };
+
+export const readAsDataURL = file => new Promise((resolve, reject) => {
+  const reader = new FileReader();
+
+  reader.onload = () => resolve(reader.result);
+  reader.onerror = (event) => {
+    switch (event.target.error.code) {
+      case event.target.error.NOT_FOUND_ERR:
+        return reject(new Error('Error while reading a file: File not found.'));
+      case event.target.error.NOT_READABLE_ERR:
+        return reject(new Error('Error while reading a file: File not readable.'));
+      case event.target.error.SECURITY_ERR:
+        return reject(new Error('Error while reading a file: Security error.'));
+      case event.target.error.ABORT_ERR:
+        return reject(new Error('Error while reading a file: Aborted.'));
+      default:
+        return reject(new Error('Error while reading a file.'));
+    }
+  };
+  reader.readAsDataURL(file);
+
+  return null;
+});
+
 
 /* eslint-disable no-console */
 
@@ -30,7 +64,7 @@ export default class Test extends PureComponent {
     pageNumber: null,
     pageScale: null,
     pageWidth: null,
-    passMethod: 'normal',
+    passMethod: null,
     render: true,
     renderAnnotationLayer: true,
     renderInteractiveForms: true,
@@ -56,7 +90,74 @@ export default class Test extends PureComponent {
 
   onItemClick = ({ pageNumber }) => this.setState({ pageNumber });
 
-  setFile = file => this.setState({ file });
+  setFile = file => this.setState({ file }, this.setFileForProps);
+
+  setPassMethod = passMethod => this.setState({ passMethod }, this.setFileForProps);
+
+  setFileForProps = async () => {
+    const fileForProps = await (async () => {
+      const { file } = this.state;
+
+      if (!file) {
+        return null;
+      }
+
+      const { passMethod } = this.state;
+
+      switch (passMethod) {
+        case 'blob': {
+          if (file instanceof File || file instanceof Blob) {
+            return file;
+          }
+          return dataURItoBlob(file);
+        }
+
+        case 'string': {
+          if (typeof file === 'string') {
+            return file;
+          }
+
+          if (file instanceof File || file instanceof Blob) {
+            return readAsDataURL(file);
+          }
+
+          return file;
+        }
+        case 'object': {
+          // File is a string
+          if (typeof file === 'string') {
+            return { url: file };
+          }
+
+          // File is PDFDataRangeTransport
+          if (file instanceof PDFDataRangeTransport) {
+            return { range: file };
+          }
+
+          // File is an ArrayBuffer
+          if (isArrayBuffer(file)) {
+            return { data: file };
+          }
+
+          /**
+           * The cases below are browser-only.
+           * If you're running on a non-browser environment, these cases will be of no use.
+           */
+          if (isBrowser) {
+            // File is a Blob
+            if (isBlob(file) || isFile(file)) {
+              return { data: await loadFromFile(file) };
+            }
+          }
+          return file;
+        }
+        default:
+          return file;
+      }
+    })();
+
+    this.setState({ fileForProps });
+  }
 
   previousPage = () => this.changePage(-1);
 
@@ -65,35 +166,6 @@ export default class Test extends PureComponent {
   changePage = offset => this.setState(prevState => ({
     pageNumber: (prevState.pageNumber || 1) + offset,
   }));
-
-  get file() {
-    const { file } = this.state;
-
-    if (!file) {
-      return null;
-    }
-
-    const { passMethod } = this.state;
-
-    switch (passMethod) {
-      case 'object': {
-        if (typeof file === 'string') {
-          return {
-            url: file,
-          };
-        }
-        return file;
-      }
-      case 'blob':
-        if (file instanceof File || file instanceof Blob) {
-          return file;
-        }
-        return dataURItoBlob(file);
-      case 'normal':
-      default:
-        return file;
-    }
-  }
 
   get pageProps() {
     const {
@@ -138,7 +210,8 @@ export default class Test extends PureComponent {
     const {
       displayAll,
       externalLinkTarget,
-      file: fileState,
+      file,
+      fileForProps,
       numPages,
       pageHeight,
       pageNumber,
@@ -152,13 +225,13 @@ export default class Test extends PureComponent {
       renderTextLayer,
       rotate,
     } = this.state;
-    const { file, pageProps } = this;
+    const { pageProps } = this;
 
     const setState = state => this.setState(state);
 
     const documentProps = {
       externalLinkTarget,
-      file,
+      file: fileForProps,
       options,
       rotate,
     };
@@ -173,10 +246,14 @@ export default class Test extends PureComponent {
         <div className="Test__container">
           <aside className="Test__container__options">
             <LoadingOptions
-              file={fileState}
-              passMethod={passMethod}
+              file={file}
               setFile={this.setFile}
               setState={setState}
+            />
+            <PassingOptions
+              file={file}
+              passMethod={passMethod}
+              setPassMethod={this.setPassMethod}
             />
             <LayerOptions
               renderAnnotationLayer={renderAnnotationLayer}
