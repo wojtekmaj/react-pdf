@@ -22,6 +22,19 @@ export default class LoadingOptions extends PureComponent {
     reader.readAsArrayBuffer(event.target.files[0]);
   }
 
+  onFileDataURLChange = (event) => {
+    const { setFile } = this.props;
+
+    const reader = new FileReader();
+
+    reader.onloadend = () => {
+      console.log(reader.result);
+      setFile(reader.result);
+    };
+
+    reader.readAsDataURL(event.target.files[0]);
+  }
+
   onURLChange = (event) => {
     const { setFile } = this.props;
 
@@ -114,6 +127,15 @@ export default class LoadingOptions extends PureComponent {
           id="fileUint8Array"
           type="file"
           onChange={this.onFileUintChange}
+        />
+
+        <label htmlFor="fileUint8Array">
+          Load from file to Data URL:
+        </label>
+        <input
+          id="fileDataURL"
+          type="file"
+          onChange={this.onFileDataURLChange}
         />
 
         <form onSubmit={this.onURLChange}>
