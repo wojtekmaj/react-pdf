@@ -40,7 +40,7 @@ export default class Test extends PureComponent {
   }
 
   onDocumentLoadProgress = (progressData) => {
-    console.log('Loading a document', progressData.loaded / progressData.total);
+    console.log('Loading a document', progressData.total ? progressData.loaded / progressData.total : '(unknown progress)');
   }
 
   onDocumentLoadSuccess = (document) => {
