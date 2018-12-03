@@ -199,80 +199,73 @@ export default class Test extends PureComponent {
             />
           </aside>
           <main className="Test__container__content">
-            <div className="Test__container__content__toc">
-              {render && (
-                <Document
-                  {...documentProps}
-                  className="custom-classname-document"
-                >
+            <Document
+              {...documentProps}
+              className="custom-classname-document"
+              onItemClick={this.onItemClick}
+              onClick={(event, pdf) => console.log('Clicked a document', { event, pdf })}
+              onLoadProgress={this.onDocumentLoadProgress}
+              onLoadSuccess={this.onDocumentLoadSuccess}
+              onLoadError={this.onDocumentLoadError}
+              onSourceError={this.onDocumentLoadError}
+              rotate={rotate}
+            >
+              <div className="Test__container__content__toc">
+                {render && (
                   <Outline
                     className="custom-classname-outline"
                     onItemClick={this.onItemClick}
                   />
-                </Document>
-              )}
-            </div>
-            <div className="Test__container__content__document">
-              {render && (
-                <Document
-                  {...documentProps}
-                  className="custom-classname-document"
-                  onItemClick={this.onItemClick}
-                  onClick={(event, pdf) => console.log('Clicked a document', { event, pdf })}
-                  onLoadProgress={this.onDocumentLoadProgress}
-                  onLoadSuccess={this.onDocumentLoadSuccess}
-                  onLoadError={this.onDocumentLoadError}
-                  onSourceError={this.onDocumentLoadError}
-                  rotate={rotate}
-                >
-                  {
-                    displayAll
-                      ? Array.from(
-                        new Array(numPages),
-                        (el, index) => (
-                          <Page
-                            {...pageProps}
-                            inputRef={
-                              (pageNumber === index + 1)
-                                ? (ref => ref && ref.scrollIntoView())
-                                : null
-                            }
-                            key={`page_${index + 1}`}
-                            pageNumber={index + 1}
-                          />
-                        ),
-                      )
-                      : (
+                )}
+              </div>
+              <div className="Test__container__content__document">
+                {render && (
+                  displayAll
+                    ? Array.from(
+                      new Array(numPages),
+                      (el, index) => (
                         <Page
                           {...pageProps}
-                          pageNumber={pageNumber || 1}
+                          inputRef={
+                            (pageNumber === index + 1)
+                              ? (ref => ref && ref.scrollIntoView())
+                              : null
+                          }
+                          key={`page_${index + 1}`}
+                          pageNumber={index + 1}
                         />
-                      )
-                  }
-                </Document>
-              )}
-            </div>
-            {displayAll || (
-              <div className="Test__container__content__controls">
-                <button
-                  type="button"
-                  disabled={pageNumber <= 1}
-                  onClick={this.previousPage}
-                >
-                  Previous
-                </button>
-                <span>
-                  {`Page ${pageNumber || (numPages ? 1 : '--')} of ${numPages || '--'}`}
-                </span>
-                <button
-                  type="button"
-                  disabled={pageNumber >= numPages}
-                  onClick={this.nextPage}
-                >
-                  Next
-                </button>
+                      ),
+                    )
+                    : (
+                      <Page
+                        {...pageProps}
+                        pageNumber={pageNumber || 1}
+                      />
+                    )
+                )}
               </div>
-            )}
+              {displayAll || (
+                <div className="Test__container__content__controls">
+                  <button
+                    type="button"
+                    disabled={pageNumber <= 1}
+                    onClick={this.previousPage}
+                  >
+                    Previous
+                  </button>
+                  <span>
+                    {`Page ${pageNumber || (numPages ? 1 : '--')} of ${numPages || '--'}`}
+                  </span>
+                  <button
+                    type="button"
+                    disabled={pageNumber >= numPages}
+                    onClick={this.nextPage}
+                  >
+                    Next
+                  </button>
+                </div>
+              )}
+            </Document>
           </main>
         </div>
       </div>
