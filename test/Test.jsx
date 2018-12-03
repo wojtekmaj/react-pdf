@@ -37,11 +37,11 @@ export default class Test extends PureComponent {
     renderMode: 'canvas',
     renderTextLayer: true,
     rotate: null,
-  }
+  };
 
   onDocumentLoadProgress = (progressData) => {
     console.log('Loading a document', progressData.total ? progressData.loaded / progressData.total : '(unknown progress)');
-  }
+  };
 
   onDocumentLoadSuccess = (document) => {
     console.log('Loaded a document', document);
@@ -50,21 +50,21 @@ export default class Test extends PureComponent {
       numPages,
       pageNumber: 1,
     });
-  }
+  };
 
   onPageRenderSuccess = page => console.log('Rendered a page', page);
 
-  onItemClick = ({ pageNumber }) => this.setState({ pageNumber })
+  onItemClick = ({ pageNumber }) => this.setState({ pageNumber });
 
-  setFile = file => this.setState({ file })
+  setFile = file => this.setState({ file });
 
-  previousPage = () => this.changePage(-1)
+  previousPage = () => this.changePage(-1);
 
-  nextPage = () => this.changePage(1)
+  nextPage = () => this.changePage(1);
 
   changePage = offset => this.setState(prevState => ({
     pageNumber: (prevState.pageNumber || 1) + offset,
-  }))
+  }));
 
   get file() {
     const { file } = this.state;
