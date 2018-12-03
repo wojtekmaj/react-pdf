@@ -171,8 +171,9 @@ export default class ViewOptions extends PureComponent {
           </label>
           &nbsp;
           <input
-            type="number"
+            type="range"
             min={0}
+            max={2}
             id="pageScale"
             name="pageScale"
             step="0.01"
