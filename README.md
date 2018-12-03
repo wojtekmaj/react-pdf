@@ -55,7 +55,7 @@ import { Document, Page } from 'react-pdf';
 
 class MyApp extends Component {
   state = {
-    numPages: null,
+    numPages: 1,
     pageNumber: 1,
   }
 
