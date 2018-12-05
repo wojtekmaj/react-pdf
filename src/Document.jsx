@@ -17,6 +17,7 @@ import PasswordResponses from './PasswordResponses';
 import {
   callIfDefined,
   cancelRunningTask,
+  dataURItoUint8Array,
   displayCORSWarning,
   errorOnDev,
   isArrayBuffer,
@@ -233,10 +234,12 @@ export default class Document extends PureComponent {
 
     // File is a string
     if (typeof file === 'string') {
-      if (!isDataURI(file)) {
-        displayCORSWarning();
+      if (isDataURI(file)) {
+        const fileUint8Array = dataURItoUint8Array(file);
+        return { data: fileUint8Array };
       }
 
+      displayCORSWarning();
       return { url: file };
     }
 
@@ -272,9 +275,13 @@ export default class Document extends PureComponent {
 
     // File .url is a string
     if (typeof file.url === 'string') {
-      if (!isDataURI(file.url)) {
-        displayCORSWarning();
+      if (isDataURI(file.url)) {
+        const { url, ...otherParams } = file;
+        const fileUint8Array = dataURItoUint8Array(url);
+        return { data: fileUint8Array, ...otherParams };
       }
+
+      displayCORSWarning();
     }
 
     return file;
