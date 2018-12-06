@@ -283,15 +283,15 @@ This project wouldn't be possible without awesome work of Niklas Närhinen <nikl
 
 ### Sponsors
 
-Thank you to all our sponsors! [Become a sponsor](https://opencollective.com/react-pdf-950#sponsor) and get your image on our README on GitHub.
+Thank you to all our sponsors! [Become a sponsor](https://opencollective.com/react-pdf-wojtekmaj#sponsor) and get your image on our README on GitHub.
 
-<a href="https://opencollective.com/react-pdf-950#sponsors" target="_blank"><img src="https://opencollective.com/react-pdf-950/sponsors.svg?width=890"></a>
+<a href="https://opencollective.com/react-pdf-wojtekmaj#sponsors" target="_blank"><img src="https://opencollective.com/react-pdf-wojtekmaj/sponsors.svg?width=890"></a>
 
 ### Backers
 
-Thank you to all our backers! [Become a backer](https://opencollective.com/react-pdf-950#backer) and get your image on our README on GitHub.
+Thank you to all our backers! [Become a backer](https://opencollective.com/react-pdf-wojtekmaj#backer) and get your image on our README on GitHub.
 
-<a href="https://opencollective.com/react-pdf-950#backers" target="_blank"><img src="https://opencollective.com/react-pdf-950/backers.svg?width=890"></a>
+<a href="https://opencollective.com/react-pdf-wojtekmaj#backers" target="_blank"><img src="https://opencollective.com/react-pdf-wojtekmaj/backers.svg?width=890"></a>
 
 ### Top Contributors
 
