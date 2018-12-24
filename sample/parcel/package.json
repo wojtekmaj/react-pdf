@@ -30,6 +30,6 @@
     "eslint-plugin-jsx-a11y": "^6.1.1",
     "eslint-plugin-react": "^7.11.1",
     "less": "^3.8.1",
-    "parcel-bundler": "^1.10.0"
+    "parcel-bundler": "^1.11.0"
   }
 }
