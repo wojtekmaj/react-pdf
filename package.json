@@ -3,7 +3,7 @@
   "version": "4.0.0",
   "description": "Display PDFs in your React app as easily as if they were images.",
   "main": "dist/entry.js",
-  "es6": "src/entry.js",
+  "source": "src/entry.js",
   "scripts": {
     "build": "yarn run build-js && yarn run copy-styles",
     "build-js": "babel src -d dist --ignore **/__tests__",
