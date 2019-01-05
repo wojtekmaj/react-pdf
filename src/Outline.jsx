@@ -61,7 +61,6 @@ export class OutlineInternal extends PureComponent {
       const outline = await cancellable.promise;
       this.setState({ outline }, this.onLoadSuccess);
     } catch (error) {
-      this.setState({ outline: false });
       this.onLoadError(error);
     }
   }
@@ -97,6 +96,8 @@ export class OutlineInternal extends PureComponent {
     if (isCancelException(error)) {
       return;
     }
+
+    this.setState({ outline: false });
 
     errorOnDev(error);
 

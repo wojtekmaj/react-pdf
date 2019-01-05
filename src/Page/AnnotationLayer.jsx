@@ -54,7 +54,6 @@ export class AnnotationLayerInternal extends PureComponent {
       const annotations = await cancellable.promise;
       this.setState({ annotations }, this.onLoadSuccess);
     } catch (error) {
-      this.setState({ annotations: false });
       this.onLoadError(error);
     }
   }
@@ -73,6 +72,8 @@ export class AnnotationLayerInternal extends PureComponent {
     if (isCancelException(error)) {
       return;
     }
+
+    this.setState({ annotations: false });
 
     errorOnDev(error);
 

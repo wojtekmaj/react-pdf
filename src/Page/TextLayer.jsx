@@ -51,7 +51,6 @@ export class TextLayerInternal extends PureComponent {
       const { items: textItems } = await cancellable.promise;
       this.setState({ textItems }, this.onLoadSuccess);
     } catch (error) {
-      this.setState({ textItems: false });
       this.onLoadError(error);
     }
   }
@@ -70,6 +69,8 @@ export class TextLayerInternal extends PureComponent {
     if (isCancelException(error)) {
       return;
     }
+
+    this.setState({ textItems: false });
 
     errorOnDev(error);
 

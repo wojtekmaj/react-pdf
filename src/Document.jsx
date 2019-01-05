@@ -120,7 +120,6 @@ export default class Document extends PureComponent {
         return { pdf };
       }, this.onLoadSuccess);
     } catch (error) {
-      this.setState({ pdf: false });
       this.onLoadError(error);
     }
   }
@@ -211,6 +210,8 @@ export default class Document extends PureComponent {
     if (isCancelException(error)) {
       return;
     }
+
+    this.setState({ pdf: false });
 
     errorOnDev(error);
 
