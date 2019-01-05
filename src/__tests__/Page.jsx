@@ -638,6 +638,45 @@ describe('Page', () => {
     });
   });
 
+
+  it('requests page to be rendered at its original size given nothing', () => {
+    const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
+
+    const component = shallow(
+      <Page
+        onLoadSuccess={onLoadSuccess}
+        pageIndex={0}
+        pdf={pdf}
+      />
+    );
+
+    expect.assertions(1);
+    return onLoadSuccessPromise.then((page) => {
+      component.update();
+      expect(page.width).toEqual(page.originalWidth);
+    });
+  });
+
+  it('requests page to be rendered with a proper scale when given scale', () => {
+    const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
+    const scale = 1.5;
+
+    const component = shallow(
+      <Page
+        onLoadSuccess={onLoadSuccess}
+        pageIndex={0}
+        pdf={pdf}
+        scale={scale}
+      />
+    );
+
+    expect.assertions(1);
+    return onLoadSuccessPromise.then((page) => {
+      component.update();
+      expect(page.width).toEqual(page.originalWidth * scale);
+    });
+  });
+
   it('requests page to be rendered with a proper scale when given width', () => {
     const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
     const width = 600;
@@ -655,6 +694,28 @@ describe('Page', () => {
     return onLoadSuccessPromise.then((page) => {
       component.update();
       expect(page.width).toEqual(width);
+    });
+  });
+
+  it('requests page to be rendered with a proper scale when given width and scale (multiplies)', () => {
+    const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
+    const width = 600;
+    const scale = 1.5;
+
+    const component = shallow(
+      <Page
+        onLoadSuccess={onLoadSuccess}
+        pageIndex={0}
+        pdf={pdf}
+        width={width}
+        scale={scale}
+      />
+    );
+
+    expect.assertions(1);
+    return onLoadSuccessPromise.then((page) => {
+      component.update();
+      expect(page.width).toBeCloseTo(width * scale);
     });
   });
 
@@ -678,6 +739,28 @@ describe('Page', () => {
     });
   });
 
+  it('requests page to be rendered with a proper scale when given height and scale (multiplies)', () => {
+    const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
+    const height = 850;
+    const scale = 1.5;
+
+    const component = shallow(
+      <Page
+        height={height}
+        onLoadSuccess={onLoadSuccess}
+        pageIndex={0}
+        pdf={pdf}
+        scale={scale}
+      />
+    );
+
+    expect.assertions(1);
+    return onLoadSuccessPromise.then((page) => {
+      component.update();
+      expect(page.height).toBeCloseTo(height * scale);
+    });
+  });
+
   it('requests page to be rendered with a proper scale when given width and height (ignores height)', () => {
     const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
     const width = 600;
@@ -697,6 +780,32 @@ describe('Page', () => {
     return onLoadSuccessPromise.then((page) => {
       component.update();
       expect(page.width).toEqual(width);
+      // Expect proportions to be correct even though invalid height was provided
+      expect(page.height).toEqual(page.originalHeight * (page.width / page.originalWidth));
+    });
+  });
+
+  it('requests page to be rendered with a proper scale when given width, height and scale (ignores height, multiplies)', () => {
+    const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
+    const width = 600;
+    const height = 100;
+    const scale = 1.5;
+
+    const component = shallow(
+      <Page
+        height={height}
+        onLoadSuccess={onLoadSuccess}
+        pageIndex={0}
+        pdf={pdf}
+        width={width}
+        scale={scale}
+      />
+    );
+
+    expect.assertions(2);
+    return onLoadSuccessPromise.then((page) => {
+      component.update();
+      expect(page.width).toBeCloseTo(width * scale);
       // Expect proportions to be correct even though invalid height was provided
       expect(page.height).toEqual(page.originalHeight * (page.width / page.originalWidth));
     });
