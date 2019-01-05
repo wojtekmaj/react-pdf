@@ -87,6 +87,12 @@ export default class ViewOptions extends PureComponent {
     setState({ pageHeight: null });
   }
 
+  resetScale = () => {
+    const { setState } = this.props;
+
+    setState({ pageScale: null });
+  }
+
   resetWidth = () => {
     const { setState } = this.props;
 
