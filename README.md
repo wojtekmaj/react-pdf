@@ -202,6 +202,7 @@ Loads a document passed using `file` prop.
 |onItemClick|Function called when an outline item has been clicked. Usually, you would like to use this callback to move the user wherever they requested to.|`({ pageNumber }) => alert('Clicked an item from page ' + pageNumber + '!')`|
 |onLoadError|Function called in case of an error while loading a document.|`(error) => alert('Error while loading document! ' + error.message)`|
 |onLoadSuccess|Function called when the document is successfully loaded.|`(pdf) => alert('Loaded a file with ' + pdf.numPages + ' pages!')`|
+|onPassword|Function called when a password-protected PDF is loaded. Defaults to a function that prompts the user for password.|`(callback) => callback('s3cr3t_p4ssw0rd')`|
 |onSourceError|Function called in case of an error while retrieving document source from `file` prop.|`(error) => alert('Error while retrieving document source! ' + error.message)`|
 |onSourceSuccess|Function called when document source is successfully retrieved from `file` prop.|`() => alert('Document source retrieved!')`|
 |options|An object in which additional parameters to be passed to PDF.js can be defined. For a full list of possible parameters, check [PDF.js documentation on DocumentInitParameters](https://mozilla.github.io/pdf.js/api/draft/global.html#DocumentInitParameters).|`{ cMapUrl: 'cmaps/', cMapPacked: true }`|
@@ -226,7 +227,6 @@ Displays a page. Should be placed inside `<Document />`. Alternatively, it can h
 |onLoadError|Function called in case of an error while loading the page.|`(error) => alert('Error while loading page! ' + error.message)`|
 |onLoadProgress|Function called, potentially multiple times, as the loading progresses.|`({ loaded, total }) => alert('Loading a document: ' + (loaded / total) * 100 + '%');`|
 |onLoadSuccess|Function called when the page is successfully loaded.|`(page) => alert('Now displaying a page number ' + page.pageNumber + '!')`|
-|onPassword|Function called when a password-protected PDF is loaded. Defaults to a function that prompts the user for password.|`(callback) => callback('s3cr3t_p4ssw0rd')`|
 |onRenderError|Function called in case of an error while rendering the page.|`(error) => alert('Error while loading page! ' + error.message)`|
 |onRenderSuccess|Function called when the page is successfully rendered on the screen.|`() => alert('Rendered the page!')`|
 |onGetAnnotationsSuccess|Function called when annotations are successfully loaded.|`(annotations) => alert('Now displaying ' + annotations.length + ' annotations!')`|
