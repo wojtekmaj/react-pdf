@@ -96,6 +96,7 @@ export class PageInternal extends PureComponent {
       onRenderError,
       onRenderSuccess,
       renderInteractiveForms,
+      textStyle,
     } = this.props;
 
     return {
@@ -111,6 +112,7 @@ export class PageInternal extends PureComponent {
       page,
       renderInteractiveForms,
       rotate: this.rotate,
+      textStyle,
       scale: this.scale,
     };
   }
@@ -438,6 +440,7 @@ PageInternal.propTypes = {
   renderMode: isRenderMode,
   renderTextLayer: PropTypes.bool,
   rotate: isRotate,
+  textStyle: textStyle,
   scale: PropTypes.number,
   unregisterPage: PropTypes.func,
   width: PropTypes.number,

@@ -101,10 +101,10 @@ export class TextLayerItemInternal extends PureComponent {
 
   render() {
     const { fontSize, top, left } = this;
-    const { customTextRenderer, scale, str: text } = this.props;
+    const { customTextRenderer, scale, str: text, textStyle } = this.props;
 
     return (
-      <div
+      <span
         style={{
           height: '1em',
           fontFamily: 'sans-serif',
@@ -115,6 +115,7 @@ export class TextLayerItemInternal extends PureComponent {
           transformOrigin: 'left bottom',
           whiteSpace: 'pre',
           pointerEvents: 'all',
+          ...textStyle
         }}
         ref={(ref) => { this.item = ref; }}
       >
@@ -123,7 +124,7 @@ export class TextLayerItemInternal extends PureComponent {
             ? customTextRenderer(this.props)
             : text
         }
-      </div>
+      </span>
     );
   }
 }
