@@ -9,7 +9,6 @@
     "build-js": "babel src -d dist --ignore **/__tests__",
     "clean": "rimraf dist",
     "copy-styles": "node ./copy-styles.js",
-    "prepare": "npm run prepublishOnly",
     "prepublishOnly": "yarn run clean && yarn run build",
     "test": "yarn run test-eslint && yarn run test-jest",
     "test-eslint": "eslint src/ test/ --ext .jsx,.js",
