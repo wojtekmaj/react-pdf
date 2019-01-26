@@ -81,7 +81,7 @@ class MyApp extends Component {
 }
 ```
 
-Check the sample directory of this repository for a full working example.
+Check the [sample directory](https://github.com/wojtekmaj/react-pdf/tree/master/sample) in this repository for a full working example. For more examples and more advanced use cases, check [Recipes](https://github.com/wojtekmaj/react-pdf/wiki/Recipes) in React-PDF Wiki.
 
 ### Enable PDF.js worker
 
