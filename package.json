@@ -11,7 +11,7 @@
     "copy-styles": "node ./copy-styles.js",
     "prepublishOnly": "yarn run clean && yarn run build",
     "test": "yarn run test-eslint && yarn run test-jest",
-    "test-eslint": "eslint src/ test/ --ext .jsx,.js",
+    "test-eslint": "eslint sample/ src/ test/ --ext .jsx,.js",
     "test-jest": "jest",
     "test-jest-coverage": "jest --coverage"
   },

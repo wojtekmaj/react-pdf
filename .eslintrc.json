@@ -15,5 +15,16 @@
     "prefer-spread": "warn",
     "react/require-default-props": "off",
     "react/sort-comp": "off"
-  }
+  },
+  "overrides": [
+    {
+      "files": [
+        "sample/**",
+        "test/**"
+      ],
+      "rules": {
+        "import/no-unresolved": "off"
+      }
+    }
+  ]
 }
