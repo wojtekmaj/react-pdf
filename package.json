@@ -11,7 +11,7 @@
     "copy-styles": "node ./copy-styles.js",
     "prepublishOnly": "yarn run clean && yarn run build",
     "test": "yarn run test-eslint && yarn run test-jest",
-    "test-eslint": "eslint src/ test/ --ext .jsx,.js",
+    "test-eslint": "eslint sample/ src/ test/ --ext .jsx,.js",
     "test-jest": "jest",
     "test-jest-coverage": "jest --coverage"
   },
@@ -78,6 +78,7 @@
   "license": "MIT",
   "dependencies": {
     "@babel/runtime": "^7.0.0",
+    "babel-runtime": "^6.26.0",
     "lodash.once": "^4.1.1",
     "make-event-props": "^1.1.0",
     "merge-class-names": "^1.1.1",
@@ -91,9 +92,8 @@
     "@babel/plugin-transform-runtime": "^7.1.0",
     "@babel/preset-env": "^7.1.0",
     "@babel/preset-react": "^7.0.0",
-    "babel-core": "^7.0.0-bridge.0",
     "babel-eslint": "^10.0.0",
-    "babel-jest": "^23.6.0",
+    "babel-jest": "^24.0.0",
     "enzyme": "^3.8.0",
     "enzyme-adapter-react-16": "^1.7.1",
     "eslint": "^5.11.0",
@@ -101,8 +101,7 @@
     "eslint-plugin-import": "^2.14.0",
     "eslint-plugin-jsx-a11y": "^6.1.1",
     "eslint-plugin-react": "^7.11.1",
-    "jest": "^23.6.0",
-    "jest-cli": "^23.6.0",
+    "jest": "^24.0.0",
     "react": "^16.7.0",
     "react-dom": "^16.7.0",
     "react-test-renderer": "^16.7.0",
@@ -121,6 +120,6 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/rogordan/react-pdf.git"
+    "url": "https://github.com/wojtekmaj/react-pdf.git"
   }
 }

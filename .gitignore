@@ -1,9 +1,9 @@
 .cache
 .idea
 .vscode
+dist
 coverage
 node_modules
 test_pdfs
 npm-debug.log
 yarn-error.log
-dist
