@@ -115,7 +115,7 @@ export class TextLayerItemInternal extends PureComponent {
           transformOrigin: 'left bottom',
           whiteSpace: 'pre',
           pointerEvents: 'all',
-          ...textStyle
+          ...textStyle,
         }}
         ref={(ref) => { this.item = ref; }}
       >
@@ -137,6 +137,7 @@ TextLayerItemInternal.propTypes = {
   rotate: isRotate,
   scale: PropTypes.number,
   str: PropTypes.string.isRequired,
+  textStyle: PropTypes.style,
   transform: PropTypes.arrayOf(PropTypes.number).isRequired,
   width: PropTypes.number.isRequired,
 };

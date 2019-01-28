@@ -414,7 +414,7 @@ PageInternal.defaultProps = {
   renderMode: 'canvas',
   renderTextLayer: true,
   scale: defaultScale,
-  textStyle: {}
+  textStyle: {},
 };
 
 PageInternal.propTypes = {
@@ -442,7 +442,7 @@ PageInternal.propTypes = {
   renderTextLayer: PropTypes.bool,
   rotate: isRotate,
   scale: PropTypes.number,
-  textStyle: PropTypes.object,
+  textStyle: PropTypes.style,
   unregisterPage: PropTypes.func,
   width: PropTypes.number,
   ...eventsProps(),
