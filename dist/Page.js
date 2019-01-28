@@ -471,7 +471,8 @@ PageInternal.defaultProps = {
   renderInteractiveForms: false,
   renderMode: 'canvas',
   renderTextLayer: true,
-  scale: defaultScale
+  scale: defaultScale,
+  textStyle: {}
 };
 PageInternal.propTypes = (0, _objectSpread2.default)({
   children: _propTypes.default.node,

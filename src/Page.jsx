@@ -414,6 +414,7 @@ PageInternal.defaultProps = {
   renderMode: 'canvas',
   renderTextLayer: true,
   scale: defaultScale,
+  textStyle: {}
 };
 
 PageInternal.propTypes = {
