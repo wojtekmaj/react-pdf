@@ -498,7 +498,7 @@ PageInternal.propTypes = (0, _objectSpread2.default)({
   renderMode: _propTypes2.isRenderMode,
   renderTextLayer: _propTypes.default.bool,
   rotate: _propTypes2.isRotate,
-  textStyle: textStyle,
+  textStyle: _propTypes.default.object,
   scale: _propTypes.default.number,
   unregisterPage: _propTypes.default.func,
   width: _propTypes.default.number

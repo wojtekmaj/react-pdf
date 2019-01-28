@@ -441,7 +441,7 @@ PageInternal.propTypes = {
   renderMode: isRenderMode,
   renderTextLayer: PropTypes.bool,
   rotate: isRotate,
-  textStyle: textStyle,
+  textStyle: PropTypes.object,
   scale: PropTypes.number,
   unregisterPage: PropTypes.func,
   width: PropTypes.number,
