@@ -218,7 +218,7 @@ export class PageInternal extends PureComponent {
 
     // If width/height is defined, calculate the scale of the page so it could be of desired width.
     if (width || height) {
-      const viewport = page.getViewport(1, rotate);
+      const viewport = page.getViewport({ scale: 1, rotation: rotate });
       pageScale = width
         ? width / viewport.width
         : height / viewport.height;

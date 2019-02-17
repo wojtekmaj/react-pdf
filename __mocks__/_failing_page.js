@@ -1,7 +1,10 @@
 export default {
+  _transport: {
+    fontLoader: {},
+  },
   commonObjs: {
-    objs: {},
-    ensureObj: () => {},
+    _ensureObj: () => {},
+    _objs: {},
   },
   getAnnotations: () => new Promise((resolve, reject) => reject(new Error())),
   getOperatorList: () => new Promise((resolve, reject) => reject(new Error())),
@@ -12,7 +15,4 @@ export default {
     rotation: 0,
   }),
   render: () => new Promise((resolve, reject) => reject(new Error())),
-  transport: {
-    fontLoader: {},
-  },
 };

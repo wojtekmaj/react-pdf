@@ -31,7 +31,7 @@ describe('Page', () => {
   let unregisterPageArguments = null;
 
   beforeAll(async () => {
-    pdf = await pdfjs.getDocument({ data: pdfFile.arrayBuffer });
+    pdf = await pdfjs.getDocument({ data: pdfFile.arrayBuffer }).promise;
 
     const page = await pdf.getPage(1);
     desiredLoadedPage.pageIndex = page.pageIndex;
@@ -41,7 +41,7 @@ describe('Page', () => {
     desiredLoadedPage2.pageIndex = page2.pageIndex;
     desiredLoadedPage2._pageInfo = page2._pageInfo;
 
-    pdf2 = await pdfjs.getDocument({ data: pdfFile2.arrayBuffer });
+    pdf2 = await pdfjs.getDocument({ data: pdfFile2.arrayBuffer }).promise;
 
     const page3 = await pdf2.getPage(1);
     desiredLoadedPage3.pageIndex = page3.pageIndex;

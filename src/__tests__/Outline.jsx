@@ -25,8 +25,8 @@ describe('Outline', () => {
   let desiredLoadedOutline2 = null;
 
   beforeAll(async () => {
-    pdf = await pdfjs.getDocument({ data: pdfFile.arrayBuffer });
-    pdf2 = await pdfjs.getDocument({ data: pdfFile2.arrayBuffer });
+    pdf = await pdfjs.getDocument({ data: pdfFile.arrayBuffer }).promise;
+    pdf2 = await pdfjs.getDocument({ data: pdfFile2.arrayBuffer }).promise;
 
     desiredLoadedOutline = await pdf.getOutline();
     desiredLoadedOutline2 = await pdf2.getOutline();

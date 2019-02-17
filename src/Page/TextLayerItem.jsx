@@ -17,7 +17,7 @@ export class TextLayerItemInternal extends PureComponent {
   get unrotatedViewport() {
     const { page, scale } = this.props;
 
-    return page.getViewport(scale);
+    return page.getViewport({ scale });
   }
 
   /**
@@ -65,7 +65,8 @@ export class TextLayerItemInternal extends PureComponent {
   async getFontData(fontName) {
     const { page } = this.props;
 
-    const font = await page.commonObjs.ensureObj(fontName);
+    /* eslint-disable no-underscore-dangle */
+    const font = await page.commonObjs._ensureObj(fontName);
 
     return font.data;
   }

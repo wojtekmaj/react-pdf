@@ -85,7 +85,7 @@ export class TextLayerInternal extends PureComponent {
   get unrotatedViewport() {
     const { page, scale } = this.props;
 
-    return page.getViewport(scale);
+    return page.getViewport({ scale });
   }
 
   /**

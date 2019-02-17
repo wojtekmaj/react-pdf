@@ -112,7 +112,7 @@ export class AnnotationLayerInternal extends PureComponent {
   get viewport() {
     const { page, rotate, scale } = this.props;
 
-    return page.getViewport(scale, rotate);
+    return page.getViewport({ scale, rotation: rotate });
   }
 
   renderAnnotationLayer() {
