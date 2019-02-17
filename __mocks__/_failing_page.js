@@ -3,8 +3,8 @@ export default {
     fontLoader: {},
   },
   commonObjs: {
-    _ensureObj: () => {},
     _objs: {},
+    get: () => {},
   },
   getAnnotations: () => new Promise((resolve, reject) => reject(new Error())),
   getOperatorList: () => new Promise((resolve, reject) => reject(new Error())),

@@ -65,10 +65,11 @@ export class TextLayerItemInternal extends PureComponent {
   async getFontData(fontName) {
     const { page } = this.props;
 
-    /* eslint-disable no-underscore-dangle */
-    const font = await page.commonObjs._ensureObj(fontName);
+    const font = await new Promise((resolve) => {
+      page.commonObjs.get(fontName, resolve);
+    });
 
-    return font.data;
+    return font;
   }
 
   async alignTextItem() {
