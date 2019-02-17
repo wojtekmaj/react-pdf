@@ -106,7 +106,7 @@ export class TextLayerItemInternal extends PureComponent {
     const { customTextRenderer, scale, str: text } = this.props;
 
     return (
-      <div
+      <span
         style={{
           height: '1em',
           fontFamily: 'sans-serif',
@@ -125,7 +125,7 @@ export class TextLayerItemInternal extends PureComponent {
             ? customTextRenderer(this.props)
             : text
         }
-      </div>
+      </span>
     );
   }
 }
