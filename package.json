@@ -78,11 +78,10 @@
   "license": "MIT",
   "dependencies": {
     "@babel/runtime": "^7.0.0",
-    "babel-runtime": "^6.26.0",
     "lodash.once": "^4.1.1",
     "make-event-props": "^1.1.0",
     "merge-class-names": "^1.1.1",
-    "pdfjs-dist": "2.0.943",
+    "pdfjs-dist": "2.1.266",
     "prop-types": "^15.6.2"
   },
   "devDependencies": {
