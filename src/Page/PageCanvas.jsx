@@ -114,7 +114,7 @@ export class PageCanvasInternal extends PureComponent {
 
     this.renderer = page.render(renderContext);
 
-    return this.renderer
+    return this.renderer.promise
       .then(this.onRenderSuccess)
       .catch(this.onRenderError);
   }
