@@ -38,8 +38,7 @@ export default class LayerOptions extends PureComponent {
           <input
             id="renderTextLayer"
             type="checkbox"
-            checked={renderMode === 'canvas' && renderTextLayer}
-            disabled={renderMode !== 'canvas'}
+            checked={renderTextLayer}
             onChange={this.onRenderTextLayersChange}
           />
           <label htmlFor="renderTextLayer">
