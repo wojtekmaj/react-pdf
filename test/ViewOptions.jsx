@@ -69,6 +69,12 @@ export default class ViewOptions extends PureComponent {
 
   rotateRight = () => this.changeRotation(90);
 
+  onChangeRotate = (event) => {
+    const { rotate } = this.props;
+    const newRotate = Number(event.target.value);
+    this.changeRotation(newRotate - rotate);
+  }
+
   changeRotation(by) {
     const { setState } = this.props;
 
@@ -252,7 +258,9 @@ export default class ViewOptions extends PureComponent {
             id="rotation"
             style={{ width: '42px' }}
             type="number"
+            onChange={this.onChangeRotate}
             value={rotate !== null ? rotate : ''}
+            step="90"
           />
           &nbsp;
           <button
