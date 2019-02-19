@@ -256,7 +256,6 @@ export default class Test extends PureComponent {
             <LayerOptions
               renderAnnotationLayer={renderAnnotationLayer}
               renderInteractiveForms={renderInteractiveForms}
-              renderMode={renderMode}
               renderTextLayer={renderTextLayer}
               setState={setState}
             />

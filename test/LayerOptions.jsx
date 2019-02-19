@@ -24,7 +24,6 @@ export default class LayerOptions extends PureComponent {
     const {
       renderAnnotationLayer,
       renderInteractiveForms,
-      renderMode,
       renderTextLayer,
     } = this.props;
 
@@ -78,7 +77,6 @@ export default class LayerOptions extends PureComponent {
 LayerOptions.propTypes = {
   renderAnnotationLayer: PropTypes.bool,
   renderInteractiveForms: PropTypes.bool,
-  renderMode: PropTypes.oneOf(['canvas', 'none', 'svg']),
   renderTextLayer: PropTypes.bool,
   setState: PropTypes.func.isRequired,
 };
