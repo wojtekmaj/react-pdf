@@ -29,6 +29,11 @@ export class PageCanvasInternal extends PureComponent {
 
   componentWillUnmount() {
     this.cancelRenderingTask();
+
+    /**
+     * Zeroing the width and height cause most browsers to release graphics
+     * resources immediately, which can greatly reduce memory consumption.
+     */
     if (this.canvasLayer) {
       this.canvasLayer.width = 0;
       this.canvasLayer.height = 0;
