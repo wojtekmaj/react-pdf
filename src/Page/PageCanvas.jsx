@@ -29,6 +29,11 @@ export class PageCanvasInternal extends PureComponent {
 
   componentWillUnmount() {
     this.cancelRenderingTask();
+    if (this.canvasLayer) {
+      this.canvasLayer.width = 0;
+      this.canvasLayer.height = 0;
+      this.canvasLayer = null;
+    }
   }
 
   cancelRenderingTask() {
