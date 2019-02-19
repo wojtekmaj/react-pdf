@@ -14,5 +14,7 @@ export default {
     height: 800,
     rotation: 0,
   }),
-  render: () => new Promise((resolve, reject) => reject(new Error())),
+  render: () => ({
+    promise: new Promise((resolve, reject) => reject(new Error())),
+  }),
 };
