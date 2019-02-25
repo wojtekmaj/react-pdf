@@ -101,7 +101,7 @@ export default class Document extends PureComponent {
       return { pdf: null };
     });
 
-    const { options, onLoadProgress, onPassword } = this.props;
+    const { options, onLoadProgress, onPassword, onTaskCreated } = this.props;
 
     try {
       const loadingTask = pdfjs.getDocument({ ...source, ...options }).promise;
@@ -111,6 +111,9 @@ export default class Document extends PureComponent {
       }
       const cancellable = makeCancellable(loadingTask);
       this.runningTask = cancellable;
+      if (onTaskCreated) {
+        onTaskCreated(cancellable);
+      }
       const pdf = await cancellable.promise;
       this.setState((prevState) => {
         if (prevState.pdf && prevState.pdf.fingerprint === pdf.fingerprint) {
@@ -392,6 +395,7 @@ Document.propTypes = {
   onItemClick: PropTypes.func,
   onLoadError: PropTypes.func,
   onLoadProgress: PropTypes.func,
+  onTaskCreated: PropTypes.func,
   onLoadSuccess: PropTypes.func,
   onPassword: PropTypes.func,
   onSourceError: PropTypes.func,

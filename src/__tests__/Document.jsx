@@ -165,6 +165,78 @@ describe('Document', () => {
       await expect(onSourceSuccessPromise2).resolves.toBe(OK);
       await expect(onLoadSuccessPromise2).resolves.toMatchObject(desiredLoadedPdf2);
     });
+
+    it('not providing an onTaskCreated allows pdfs to load just fine', async () => {
+      const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
+
+      shallow(
+        <Document
+          file={pdfFile.file}
+          onLoadSuccess={onLoadSuccess}
+        />
+      );
+
+      return expect(onLoadSuccessPromise).resolves.toEqual(expect.anything());
+    });
+
+    it('calls onTaskCreated when provided and passes the created task to the callback', async () => {
+      const { func: onTaskCreated, promise: onTaskCreatedPromise } = makeAsyncCallback();
+
+      shallow(
+        <Document
+          file={pdfFile.file}
+          onTaskCreated={onTaskCreated}
+        />
+      );
+
+      return onTaskCreatedPromise.then((task) => {
+        expect(task).toHaveProperty('cancel');
+        expect(task).toHaveProperty('promise');
+      });
+    });
+
+    it('cancelling a task will reject the task promise', async () => {
+      const { func: onTaskCreated, promise: onTaskCreatedPromise } = makeAsyncCallback();
+      const onLoadError = jest.fn();
+
+      shallow(
+        <Document
+          file={pdfFile.file}
+          onLoadError={onLoadError}
+          onTaskCreated={onTaskCreated}
+        />
+      );
+
+      return onTaskCreatedPromise.then((task) => {
+        task.cancel();
+
+        return task.promise;
+      }).catch((error) => {
+        expect(error).toMatchObject(expect.any(Error));
+      });
+    });
+
+    it('cancelling a task will bypass onLoadError from being called', async () => {
+      const { func: onTaskCreated, promise: onTaskCreatedPromise } = makeAsyncCallback();
+      const onLoadError = jest.fn();
+      const failingPdf = 'data:application/pdf;base64,abcdef';
+
+      shallow(
+        <Document
+          file={failingPdf}
+          onLoadError={onLoadError}
+          onTaskCreated={onTaskCreated}
+        />
+      );
+
+      return onTaskCreatedPromise.then((task) => {
+        task.cancel();
+
+        return task.promise;
+      }).catch(() => {
+        expect(onLoadError).not.toBeCalled();
+      });
+    });
   });
 
   describe('rendering', () => {
