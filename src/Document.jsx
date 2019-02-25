@@ -101,7 +101,12 @@ export default class Document extends PureComponent {
       return { pdf: null };
     });
 
-    const { options, onLoadProgress, onPassword, onTaskCreated } = this.props;
+    const {
+      options,
+      onLoadProgress,
+      onPassword,
+      onTaskCreated,
+    } = this.props;
 
     try {
       const loadingTask = pdfjs.getDocument({ ...source, ...options }).promise;
