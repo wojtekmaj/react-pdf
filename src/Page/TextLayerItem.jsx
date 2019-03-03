@@ -91,9 +91,14 @@ export class TextLayerItemInternal extends PureComponent {
     const targetWidth = width * scale;
     const actualWidth = this.getElementWidth(element);
 
-    const ascent = fontData ? fontData.ascent : 1;
+    let transform = `scaleX(${targetWidth / actualWidth})`;
 
-    element.style.transform = `scaleX(${targetWidth / actualWidth}) translateY(${(1 - ascent) * 100}%)`;
+    const ascent = fontData ? fontData.ascent : 0;
+    if (ascent) {
+      transform += ` translateY(${(1 - ascent) * 100}%)`;
+    }
+
+    element.style.transform = transform;
   }
 
   getElementWidth = (element) => {
