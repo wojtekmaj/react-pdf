@@ -105,7 +105,7 @@ import { Document } from 'react-pdf/dist/entry.parcel';
 
 Create React App uses Webpack under the hood, but instructions for Webpack will not work. [Standard instructions](#browserify-and-others) apply.
 
-#### Browserify and others
+#### Standard (Browserify and others)
 
 If you use Browserify or other bundling tools, you will have to make sure on your own that `pdf.worker.js` file from `pdfjs-dist/build` is copied to your project's output folder.
 
