@@ -104,6 +104,9 @@ export default class Document extends PureComponent {
     const { options, onLoadProgress, onPassword } = this.props;
 
     try {
+      // If another loading is in progress, let's cancel it
+      cancelRunningTask(this.runningTask);
+
       const loadingTask = pdfjs.getDocument({ ...source, ...options });
       loadingTask.onPassword = onPassword;
       if (onLoadProgress) {
@@ -112,6 +115,7 @@ export default class Document extends PureComponent {
       const cancellable = makeCancellable(loadingTask.promise);
       this.runningTask = cancellable;
       const pdf = await cancellable.promise;
+
       this.setState((prevState) => {
         if (prevState.pdf && prevState.pdf.fingerprint === pdf.fingerprint) {
           return null;
