@@ -122,12 +122,12 @@ export class TextLayerInternal extends PureComponent {
         className="react-pdf__Page__textContent"
         style={{
           position: 'absolute',
-          top: '50%',
-          left: '50%',
+          top: 0,
+          left: 0,
           width: `${viewport.width}px`,
           height: `${viewport.height}px`,
           color: 'transparent',
-          transform: `translate(-50%, -50%) rotate(${rotate}deg)`,
+          transform: `rotate(${rotate}deg)`,
           pointerEvents: 'none',
         }}
       >
