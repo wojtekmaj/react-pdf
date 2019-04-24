@@ -278,12 +278,30 @@ describe('Page', () => {
       restoreConsole();
     });
 
-    it('renders custom no data message when given nothing and noData prop is specified', () => {
+    it('renders custom no data message when given nothing and noData is given', () => {
       muteConsole();
 
       const component = shallow(
         <Page
           noData="Nothing here"
+          pdf={pdf}
+        />
+      );
+
+      const noData = component.find('Message');
+
+      expect(noData).toHaveLength(1);
+      expect(noData.prop('children')).toBe('Nothing here');
+
+      restoreConsole();
+    });
+
+    it('renders custom no data message when given nothing and noData is given as a function', () => {
+      muteConsole();
+
+      const component = shallow(
+        <Page
+          noData={() => 'Nothing here'}
           pdf={pdf}
         />
       );
@@ -319,7 +337,31 @@ describe('Page', () => {
       });
     });
 
-    it('renders custom loading message when loading a page and loading prop is specified', () => {
+    it('renders custom loading message when loading a page and loading prop is given', () => {
+      const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
+
+      const component = shallow(
+        <Page
+          loading="Loading"
+          onLoadSuccess={onLoadSuccess}
+          pageIndex={0}
+          pdf={pdf}
+        />
+      );
+
+      expect.assertions(2);
+      return onLoadSuccessPromise.then(() => {
+        // Since the page loads automatically, we need to simulate its loading state
+        component.setState({ page: null });
+
+        const loading = component.find('Message');
+
+        expect(loading).toHaveLength(1);
+        expect(loading.prop('children')).toBe('Loading');
+      });
+    });
+
+    it('renders custom loading message when loading a page and loading prop is given as a function', () => {
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
       const component = shallow(

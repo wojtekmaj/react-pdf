@@ -350,7 +350,7 @@ export class PageInternal extends PureComponent {
 
       return (
         <Message type="no-data">
-          {noData}
+          {typeof noData === 'function' ? noData() : noData}
         </Message>
       );
     }
@@ -360,7 +360,7 @@ export class PageInternal extends PureComponent {
 
       return (
         <Message type="loading">
-          {loading}
+          {typeof loading === 'function' ? loading() : loading}
         </Message>
       );
     }
@@ -370,7 +370,7 @@ export class PageInternal extends PureComponent {
 
       return (
         <Message type="error">
-          {error}
+          {typeof error === 'function' ? error() : error}
         </Message>
       );
     }
