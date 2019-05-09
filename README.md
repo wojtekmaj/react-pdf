@@ -252,9 +252,7 @@ Displays an outline (table of contents). Should be placed inside `<Document />`.
 |className|Defines custom class name(s), that will be added to rendered element along with the default `react-pdf__Outline`.|<ul><li>String:<br />`"custom-class-name-1 custom-class-name-2"`</li><li>Array of strings:<br />`["custom-class-name-1", "custom-class-name-2"]`</li></ul>|
 |onItemClick|Function called when an outline item has been clicked. Usually, you would like to use this callback to move the user wherever they requested to.|`({ pageNumber }) => alert('Clicked an item from page ' + pageNumber + '!')`|
 |onLoadError|Function called in case of an error while retrieving the outline.|`(error) => alert('Error while retrieving the outline! ' + error.message)`|
-|onLoadSuccess|Function called when the outline is successfully retrieved.|`() => alert('The outline has been successfully retrieved.')`|
-|onParseError|Function called in case of an error while parsing the outline.|`(error) => alert('Error while parsing the outline! ' + error.message)`|
-|onParseSuccess|Function called when the outline is successfully parsed.|`({ outline }) => alert('There are ' + outline.length + ' top level items in the table of contents.')`|
+|onLoadSuccess|Function called when the outline is successfully retrieved.|`(outline) => alert('The outline has been successfully retrieved.')`|
 
 ## License
 
