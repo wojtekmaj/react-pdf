@@ -111,7 +111,9 @@ export class TextLayerItemInternal extends PureComponent {
   render() {
     const { fontSize, top, left } = this;
     const { customTextRenderer, scale, str: text } = this.props;
-
+    if (customTextRenderer && !customTextRenderer(this.props)) {
+      return null
+    }
     return (
       <span
         style={{
