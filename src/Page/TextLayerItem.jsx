@@ -17,7 +17,7 @@ export class TextLayerItemInternal extends PureComponent {
   get unrotatedViewport() {
     const { page, scale } = this.props;
 
-    return page.getViewport(scale);
+    return page.getViewport({ scale });
   }
 
   /**
@@ -65,9 +65,11 @@ export class TextLayerItemInternal extends PureComponent {
   async getFontData(fontName) {
     const { page } = this.props;
 
-    const font = await page.commonObjs.ensureObj(fontName);
+    const font = await new Promise((resolve) => {
+      page.commonObjs.get(fontName, resolve);
+    });
 
-    return font.data;
+    return font;
   }
 
   async alignTextItem() {
@@ -81,6 +83,8 @@ export class TextLayerItemInternal extends PureComponent {
 
     const { fontName, scale, width } = this.props;
 
+    element.style.fontFamily = `${fontName}, sans-serif`;
+
     const fontData = await this.getFontData(fontName);
 
     const fallbackFontName = fontData ? fontData.fallbackName : 'sans-serif';
@@ -89,9 +93,14 @@ export class TextLayerItemInternal extends PureComponent {
     const targetWidth = width * scale;
     const actualWidth = this.getElementWidth(element);
 
-    const ascent = fontData ? fontData.ascent : 1;
+    let transform = `scaleX(${targetWidth / actualWidth})`;
 
-    element.style.transform = `scaleX(${targetWidth / actualWidth}) translateY(${(1 - ascent) * 100}%)`;
+    const ascent = fontData ? fontData.ascent : 0;
+    if (ascent) {
+      transform += ` translateY(${(1 - ascent) * 100}%)`;
+    }
+
+    element.style.transform = transform;
   }
 
   getElementWidth = (element) => {
@@ -104,7 +113,7 @@ export class TextLayerItemInternal extends PureComponent {
     const { customTextRenderer, scale, str: text } = this.props;
 
     return (
-      <div
+      <span
         style={{
           height: '1em',
           fontFamily: 'sans-serif',
@@ -123,7 +132,7 @@ export class TextLayerItemInternal extends PureComponent {
             ? customTextRenderer(this.props)
             : text
         }
-      </div>
+      </span>
     );
   }
 }

@@ -24,10 +24,10 @@ describe('Document', () => {
   const desiredLoadedPdf2 = {};
 
   beforeAll(async () => {
-    const pdf = await pdfjs.getDocument({ data: pdfFile.arrayBuffer });
+    const pdf = await pdfjs.getDocument({ data: pdfFile.arrayBuffer }).promise;
     desiredLoadedPdf._pdfInfo = pdf._pdfInfo;
 
-    const pdf2 = await pdfjs.getDocument({ data: pdfFile2.arrayBuffer });
+    const pdf2 = await pdfjs.getDocument({ data: pdfFile2.arrayBuffer }).promise;
     desiredLoadedPdf2._pdfInfo = pdf2._pdfInfo;
   });
 
@@ -202,9 +202,20 @@ describe('Document', () => {
       expect(noData.prop('children')).toBe('No PDF file specified.');
     });
 
-    it('renders custom no data message when given nothing and noData prop is specified', () => {
+    it('renders custom no data message when given nothing and noData prop is given', () => {
       const component = shallow(
         <Document noData="Nothing here" />
+      );
+
+      const noData = component.find('Message');
+
+      expect(noData).toHaveLength(1);
+      expect(noData.prop('children')).toBe('Nothing here');
+    });
+
+    it('renders custom no data message when given nothing and noData prop is given as a function', () => {
+      const component = shallow(
+        <Document noData={() => 'Nothing here'} />
       );
 
       const noData = component.find('Message');
@@ -235,13 +246,36 @@ describe('Document', () => {
       });
     });
 
-    it('renders custom loading message when loading a file and loading prop is specified', () => {
+    it('renders custom loading message when loading a file and loading prop is given', () => {
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
       const component = shallow(
         <Document
           file={pdfFile.file}
           loading="Loading"
+          onLoadSuccess={onLoadSuccess}
+        />
+      );
+
+      expect.assertions(2);
+      return onLoadSuccessPromise.then(() => {
+        // Since the pdf loads automatically, we need to simulate its loading state
+        component.setState({ pdf: null });
+
+        const loading = component.find('Message');
+
+        expect(loading).toHaveLength(1);
+        expect(loading.prop('children')).toBe('Loading');
+      });
+    });
+
+    it('renders custom loading message when loading a file and loading prop is given as a function', () => {
+      const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
+
+      const component = shallow(
+        <Document
+          file={pdfFile.file}
+          loading={() => 'Loading'}
           onLoadSuccess={onLoadSuccess}
         />
       );

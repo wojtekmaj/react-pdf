@@ -29,6 +29,16 @@ export class PageCanvasInternal extends PureComponent {
 
   componentWillUnmount() {
     this.cancelRenderingTask();
+
+    /**
+     * Zeroing the width and height cause most browsers to release graphics
+     * resources immediately, which can greatly reduce memory consumption.
+     */
+    if (this.canvasLayer) {
+      this.canvasLayer.width = 0;
+      this.canvasLayer.height = 0;
+      this.canvasLayer = null;
+    }
   }
 
   cancelRenderingTask() {
@@ -76,13 +86,13 @@ export class PageCanvasInternal extends PureComponent {
 
     const pixelRatio = getPixelRatio();
 
-    return page.getViewport(scale * pixelRatio, rotate);
+    return page.getViewport({ scale: scale * pixelRatio, rotation: rotate });
   }
 
   get viewport() {
     const { page, rotate, scale } = this.props;
 
-    return page.getViewport(scale, rotate);
+    return page.getViewport({ scale, rotation: rotate });
   }
 
   drawPageOnCanvas = () => {
@@ -114,7 +124,7 @@ export class PageCanvasInternal extends PureComponent {
 
     this.renderer = page.render(renderContext);
 
-    return this.renderer
+    return this.renderer.promise
       .then(this.onRenderSuccess)
       .catch(this.onRenderError);
   }

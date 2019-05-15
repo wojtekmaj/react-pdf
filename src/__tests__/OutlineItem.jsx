@@ -18,7 +18,7 @@ describe('OutlineItem', () => {
   let outlineItem = null;
 
   beforeAll(async () => {
-    pdf = await pdfjs.getDocument({ data: pdfFile.arrayBuffer });
+    pdf = await pdfjs.getDocument({ data: pdfFile.arrayBuffer }).promise;
 
     const outlineItems = await pdf.getOutline();
     [outlineItem] = outlineItems;

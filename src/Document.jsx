@@ -104,14 +104,18 @@ export default class Document extends PureComponent {
     const { options, onLoadProgress, onPassword } = this.props;
 
     try {
+      // If another loading is in progress, let's cancel it
+      cancelRunningTask(this.runningTask);
+
       const loadingTask = pdfjs.getDocument({ ...source, ...options });
       loadingTask.onPassword = onPassword;
       if (onLoadProgress) {
         loadingTask.onProgress = onLoadProgress;
       }
-      const cancellable = makeCancellable(loadingTask);
+      const cancellable = makeCancellable(loadingTask.promise);
       this.runningTask = cancellable;
       const pdf = await cancellable.promise;
+
       this.setState((prevState) => {
         if (prevState.pdf && prevState.pdf.fingerprint === pdf.fingerprint) {
           return null;
@@ -315,7 +319,7 @@ export default class Document extends PureComponent {
 
       return (
         <Message type="no-data">
-          {noData}
+          {typeof noData === 'function' ? noData() : noData}
         </Message>
       );
     }
@@ -325,7 +329,7 @@ export default class Document extends PureComponent {
 
       return (
         <Message type="loading">
-          {loading}
+          {typeof loading === 'function' ? loading() : loading}
         </Message>
       );
     }
@@ -335,7 +339,7 @@ export default class Document extends PureComponent {
 
       return (
         <Message type="error">
-          {error}
+          {typeof error === 'function' ? error() : error}
         </Message>
       );
     }

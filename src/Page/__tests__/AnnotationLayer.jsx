@@ -28,7 +28,7 @@ describe('AnnotationLayer', () => {
   let desiredAnnotations2;
 
   beforeAll(async () => {
-    const pdf = await pdfjs.getDocument({ data: pdfFile.arrayBuffer });
+    const pdf = await pdfjs.getDocument({ data: pdfFile.arrayBuffer }).promise;
 
     page = await pdf.getPage(1);
     desiredAnnotations = await page.getAnnotations();

@@ -37,15 +37,13 @@ export const loadPDF = (path) => {
 };
 
 export const muteConsole = () => {
-  global.consoleBackup = global.console;
-
-  global.console = {
-    log: jest.fn(),
-    error: jest.fn(),
-    warn: jest.fn(),
-  };
+  jest.spyOn(global.console, 'log').mockImplementation(() => {});
+  jest.spyOn(global.console, 'error').mockImplementation(() => {});
+  jest.spyOn(global.console, 'warn').mockImplementation(() => {});
 };
 
 export const restoreConsole = () => {
-  global.console = global.consoleBackup;
+  global.console.log.mockClear();
+  global.console.error.mockClear();
+  global.console.warn.mockClear();
 };

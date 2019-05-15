@@ -1,6 +1,6 @@
 {
   "name": "react-pdf",
-  "version": "4.0.2",
+  "version": "4.0.5",
   "description": "Display PDFs in your React app as easily as if they were images.",
   "main": "dist/entry.js",
   "source": "src/entry.js",
@@ -11,7 +11,7 @@
     "copy-styles": "node ./copy-styles.js",
     "prepublishOnly": "yarn run clean && yarn run build",
     "test": "yarn run test-eslint && yarn run test-jest",
-    "test-eslint": "eslint src/ test/ --ext .jsx,.js",
+    "test-eslint": "eslint sample/ src/ test/ --ext .jsx,.js",
     "test-jest": "jest",
     "test-jest-coverage": "jest --coverage"
   },
@@ -71,6 +71,10 @@
       "email": "niklas@narhinen.net"
     },
     {
+      "name": "Robert Scott",
+      "email": "rs@robsco.info"
+    },
+    {
       "name": "Thomas McCarthy",
       "email": "tom@tomm.cc"
     }
@@ -81,7 +85,7 @@
     "lodash.once": "^4.1.1",
     "make-event-props": "^1.1.0",
     "merge-class-names": "^1.1.1",
-    "pdfjs-dist": "2.0.943",
+    "pdfjs-dist": "2.1.266",
     "prop-types": "^15.6.2"
   },
   "devDependencies": {
@@ -91,9 +95,8 @@
     "@babel/plugin-transform-runtime": "^7.1.0",
     "@babel/preset-env": "^7.1.0",
     "@babel/preset-react": "^7.0.0",
-    "babel-core": "^7.0.0-bridge.0",
     "babel-eslint": "^10.0.0",
-    "babel-jest": "^23.6.0",
+    "babel-jest": "^24.0.0",
     "enzyme": "^3.8.0",
     "enzyme-adapter-react-16": "^1.7.1",
     "eslint": "^5.11.0",
@@ -101,8 +104,7 @@
     "eslint-plugin-import": "^2.14.0",
     "eslint-plugin-jsx-a11y": "^6.1.1",
     "eslint-plugin-react": "^7.11.1",
-    "jest": "^23.6.0",
-    "jest-cli": "^23.6.0",
+    "jest": "^24.0.0",
     "react": "^16.7.0",
     "react-dom": "^16.7.0",
     "react-test-renderer": "^16.7.0",

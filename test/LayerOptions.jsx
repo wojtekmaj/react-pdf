@@ -24,7 +24,6 @@ export default class LayerOptions extends PureComponent {
     const {
       renderAnnotationLayer,
       renderInteractiveForms,
-      renderMode,
       renderTextLayer,
     } = this.props;
 
@@ -38,8 +37,7 @@ export default class LayerOptions extends PureComponent {
           <input
             id="renderTextLayer"
             type="checkbox"
-            checked={renderMode === 'canvas' && renderTextLayer}
-            disabled={renderMode !== 'canvas'}
+            checked={renderTextLayer}
             onChange={this.onRenderTextLayersChange}
           />
           <label htmlFor="renderTextLayer">
@@ -79,7 +77,6 @@ export default class LayerOptions extends PureComponent {
 LayerOptions.propTypes = {
   renderAnnotationLayer: PropTypes.bool,
   renderInteractiveForms: PropTypes.bool,
-  renderMode: PropTypes.oneOf(['canvas', 'none', 'svg']),
   renderTextLayer: PropTypes.bool,
   setState: PropTypes.func.isRequired,
 };
