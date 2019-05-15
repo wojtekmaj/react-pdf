@@ -512,5 +512,9 @@ var Page = function Page(props) {
   });
 };
 
+Page.propTypes = {
+  renderAnnotationLayer: _propTypes["default"].bool,
+  renderAnnotations: _propTypes["default"].bool
+};
 var _default = Page;
 exports["default"] = _default;

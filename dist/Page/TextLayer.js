@@ -66,13 +66,13 @@ function (_PureComponent) {
     (0, _asyncToGenerator2["default"])(
     /*#__PURE__*/
     _regenerator["default"].mark(function _callee() {
-      var page, cancellable, _ref2, textItems;
+      var _this$props, page, textItemFilter, cancellable, _ref2, textItems, filteredTextItems;
 
       return _regenerator["default"].wrap(function _callee$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
-              page = _this.props.page;
+              _this$props = _this.props, page = _this$props.page, textItemFilter = _this$props.textItemFilter;
               _context.prev = 1;
               cancellable = (0, _utils.makeCancellable)(page.getTextContent());
               _this.runningTask = cancellable;
@@ -82,26 +82,27 @@ function (_PureComponent) {
             case 6:
               _ref2 = _context.sent;
               textItems = _ref2.items;
+              filteredTextItems = textItemFilter ? textItems.filter(textItemFilter) : textItems;
 
               _this.setState({
-                textItems: textItems
+                textItems: filteredTextItems
               }, _this.onLoadSuccess);
 
-              _context.next = 14;
+              _context.next = 15;
               break;
 
-            case 11:
-              _context.prev = 11;
+            case 12:
+              _context.prev = 12;
               _context.t0 = _context["catch"](1);
 
               _this.onLoadError(_context.t0);
 
-            case 14:
+            case 15:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee, null, [[1, 11]]);
+      }, _callee, null, [[1, 12]]);
     })));
     (0, _defineProperty2["default"])((0, _assertThisInitialized2["default"])(_this), "onLoadSuccess", function () {
       var onGetTextSuccess = _this.props.onGetTextSuccess;
@@ -188,9 +189,9 @@ function (_PureComponent) {
   }, {
     key: "unrotatedViewport",
     get: function get() {
-      var _this$props = this.props,
-          page = _this$props.page,
-          scale = _this$props.scale;
+      var _this$props2 = this.props,
+          page = _this$props2.page,
+          scale = _this$props2.scale;
       return page.getViewport({
         scale: scale
       });
@@ -203,9 +204,9 @@ function (_PureComponent) {
   }, {
     key: "rotate",
     get: function get() {
-      var _this$props2 = this.props,
-          page = _this$props2.page,
-          rotate = _this$props2.rotate;
+      var _this$props3 = this.props,
+          page = _this$props3.page,
+          rotate = _this$props3.rotate;
       return rotate - page.rotate;
     }
   }]);
@@ -216,6 +217,7 @@ exports.TextLayerInternal = TextLayerInternal;
 TextLayerInternal.propTypes = {
   onGetTextError: _propTypes["default"].func,
   onGetTextSuccess: _propTypes["default"].func,
+  textItemFilter: _propTypes["default"].func,
   page: _propTypes2.isPage.isRequired,
   rotate: _propTypes2.isRotate,
   scale: _propTypes["default"].number

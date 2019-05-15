@@ -461,4 +461,9 @@ const Page = props => (
   </DocumentContext.Consumer>
 );
 
+Page.propTypes = {
+  renderAnnotationLayer: PropTypes.bool,
+  renderAnnotations: PropTypes.bool,
+};
+
 export default Page;

@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
+import pdfjs from 'pdfjs-dist';
 
 import PageContext from '../PageContext';
 
@@ -34,16 +35,35 @@ export class TextLayerItemInternal extends PureComponent {
     return rotate % 180 !== 0;
   }
 
+  get angle() {
+    const { transform } = this.props;
+
+    const tx = pdfjs.Util.transform(this.unrotatedViewport.transform, transform);
+    let angle = Math.atan2(tx[1], tx[0]);
+
+    if (angle !== 0) {
+      angle *= (180 / Math.PI);
+    }
+
+    return angle;
+  }
+
   get defaultSideways() {
     const { rotation } = this.unrotatedViewport;
     return rotation % 180 !== 0;
   }
 
+  get isTextSideways() {
+    const { rotation } = this.unrotatedViewport;
+    const rotationWithText = rotation + this.angle;
+    return rotationWithText % 180 !== 0;
+  }
+
   get fontSize() {
     const { transform } = this.props;
-    const { defaultSideways } = this;
+    const { isTextSideways } = this;
     const [fontHeightPx, fontWidthPx] = transform;
-    return defaultSideways ? fontWidthPx : fontHeightPx;
+    return isTextSideways ? fontWidthPx : fontHeightPx;
   }
 
   get top() {
@@ -99,6 +119,9 @@ export class TextLayerItemInternal extends PureComponent {
     if (ascent) {
       transform += ` translateY(${(1 - ascent) * 100}%)`;
     }
+    if (this.angle !== 0) {
+      transform += ` rotate(${this.angle}deg)`;
+    }
 
     element.style.transform = transform;
   }
@@ -112,7 +135,7 @@ export class TextLayerItemInternal extends PureComponent {
     const { fontSize, top, left } = this;
     const { customTextRenderer, scale, str: text } = this.props;
     if (customTextRenderer && !customTextRenderer(this.props)) {
-      return null
+      return null;
     }
     return (
       <span

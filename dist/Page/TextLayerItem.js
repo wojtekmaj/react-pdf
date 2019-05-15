@@ -35,6 +35,8 @@ var _react = _interopRequireWildcard(require("react"));
 
 var _propTypes = _interopRequireDefault(require("prop-types"));
 
+var _pdfjsDist = _interopRequireDefault(require("pdfjs-dist"));
+
 var _PageContext = _interopRequireDefault(require("../PageContext"));
 
 var _propTypes2 = require("../shared/propTypes");
@@ -151,9 +153,13 @@ function (_PureComponent) {
                   transform += " translateY(".concat((1 - ascent) * 100, "%)");
                 }
 
+                if (this.angle !== 0) {
+                  transform += " rotate(".concat(this.angle, "deg)");
+                }
+
                 element.style.transform = transform;
 
-              case 17:
+              case 18:
               case "end":
                 return _context2.stop();
             }
@@ -231,22 +237,44 @@ function (_PureComponent) {
       return rotate % 180 !== 0;
     }
   }, {
+    key: "angle",
+    get: function get() {
+      var transform = this.props.transform;
+
+      var tx = _pdfjsDist["default"].Util.transform(this.unrotatedViewport.transform, transform);
+
+      var angle = Math.atan2(tx[1], tx[0]);
+
+      if (angle !== 0) {
+        angle *= 180 / Math.PI;
+      }
+
+      return angle;
+    }
+  }, {
     key: "defaultSideways",
     get: function get() {
       var rotation = this.unrotatedViewport.rotation;
       return rotation % 180 !== 0;
     }
   }, {
+    key: "isTextSideways",
+    get: function get() {
+      var rotation = this.unrotatedViewport.rotation;
+      var rotationWithText = rotation + this.angle;
+      return rotationWithText % 180 !== 0;
+    }
+  }, {
     key: "fontSize",
     get: function get() {
       var transform = this.props.transform;
-      var defaultSideways = this.defaultSideways;
+      var isTextSideways = this.isTextSideways;
 
       var _transform = (0, _slicedToArray2["default"])(transform, 2),
           fontHeightPx = _transform[0],
           fontWidthPx = _transform[1];
 
-      return defaultSideways ? fontWidthPx : fontHeightPx;
+      return isTextSideways ? fontWidthPx : fontHeightPx;
     }
   }, {
     key: "top",
