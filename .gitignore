@@ -3,6 +3,7 @@
 .idea
 .vscode
 coverage
+dist
 node_modules
 test_pdfs
 npm-debug.log
