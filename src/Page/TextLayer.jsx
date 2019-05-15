@@ -143,10 +143,10 @@ export class TextLayerInternal extends PureComponent {
 TextLayerInternal.propTypes = {
   onGetTextError: PropTypes.func,
   onGetTextSuccess: PropTypes.func,
-  textItemFilter: PropTypes.func,
   page: isPage.isRequired,
   rotate: isRotate,
   scale: PropTypes.number,
+  textItemFilter: PropTypes.func,
 };
 
 const TextLayer = props => (
