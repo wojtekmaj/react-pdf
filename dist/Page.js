@@ -347,6 +347,7 @@ function (_PureComponent) {
 
       var _this$props2 = this.props,
           customTextRenderer = _this$props2.customTextRenderer,
+          textItemFilter = _this$props2.textItemFilter,
           onGetAnnotationsError = _this$props2.onGetAnnotationsError,
           onGetAnnotationsSuccess = _this$props2.onGetAnnotationsSuccess,
           onGetTextError = _this$props2.onGetTextError,
@@ -358,6 +359,7 @@ function (_PureComponent) {
           renderInteractiveForms = _this$props2.renderInteractiveForms;
       return {
         customTextRenderer: customTextRenderer,
+        textItemFilter: textItemFilter,
         onGetAnnotationsError: onGetAnnotationsError,
         onGetAnnotationsSuccess: onGetAnnotationsSuccess,
         onGetTextError: onGetTextError,

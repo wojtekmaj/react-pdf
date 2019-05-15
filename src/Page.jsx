@@ -87,6 +87,7 @@ export class PageInternal extends PureComponent {
 
     const {
       customTextRenderer,
+      textItemFilter,
       onGetAnnotationsError,
       onGetAnnotationsSuccess,
       onGetTextError,
@@ -100,6 +101,7 @@ export class PageInternal extends PureComponent {
 
     return {
       customTextRenderer,
+      textItemFilter,
       onGetAnnotationsError,
       onGetAnnotationsSuccess,
       onGetTextError,
