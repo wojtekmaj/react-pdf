@@ -2,8 +2,8 @@
 .cache
 .idea
 .vscode
-coverage
 dist
+coverage
 node_modules
 test_pdfs
 npm-debug.log
