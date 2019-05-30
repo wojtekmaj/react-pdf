@@ -87,6 +87,7 @@ export class PageInternal extends PureComponent {
 
     const {
       customTextRenderer,
+      textItemFilter,
       onGetAnnotationsError,
       onGetAnnotationsSuccess,
       onGetTextError,
@@ -100,6 +101,7 @@ export class PageInternal extends PureComponent {
 
     return {
       customTextRenderer,
+      textItemFilter,
       onGetAnnotationsError,
       onGetAnnotationsSuccess,
       onGetTextError,
@@ -460,5 +462,10 @@ const Page = props => (
     )}
   </DocumentContext.Consumer>
 );
+
+Page.propTypes = {
+  renderAnnotationLayer: PropTypes.bool,
+  renderAnnotations: PropTypes.bool,
+};
 
 export default Page;

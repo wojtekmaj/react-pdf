@@ -43,13 +43,16 @@ export class TextLayerInternal extends PureComponent {
   }
 
   loadTextItems = async () => {
-    const { page } = this.props;
+    const { page, textItemFilter } = this.props;
 
     try {
       const cancellable = makeCancellable(page.getTextContent());
       this.runningTask = cancellable;
       const { items: textItems } = await cancellable.promise;
-      this.setState({ textItems }, this.onLoadSuccess);
+      const filteredTextItems = textItemFilter
+        ? textItems.filter(textItemFilter)
+        : textItems;
+      this.setState({ textItems: filteredTextItems }, this.onLoadSuccess);
     } catch (error) {
       this.onLoadError(error);
     }
@@ -143,6 +146,7 @@ TextLayerInternal.propTypes = {
   page: isPage.isRequired,
   rotate: isRotate,
   scale: PropTypes.number,
+  textItemFilter: PropTypes.func,
 };
 
 const TextLayer = props => (
