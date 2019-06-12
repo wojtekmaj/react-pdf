@@ -145,10 +145,10 @@ TextLayerInternal.propTypes = {
   scale: PropTypes.number,
 };
 
-const TextLayer = props => (
-  <PageContext.Consumer>
-    {context => <TextLayerInternal {...context} {...props} />}
-  </PageContext.Consumer>
-);
-
-export default TextLayer;
+export default function TextLayer(props) {
+  return (
+    <PageContext.Consumer>
+      {context => <TextLayerInternal {...context} {...props} />}
+    </PageContext.Consumer>
+  );
+}

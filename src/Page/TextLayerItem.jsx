@@ -149,10 +149,10 @@ TextLayerItemInternal.propTypes = {
   width: PropTypes.number.isRequired,
 };
 
-const TextLayerItem = props => (
-  <PageContext.Consumer>
-    {context => <TextLayerItemInternal {...context} {...props} />}
-  </PageContext.Consumer>
-);
-
-export default TextLayerItem;
+export default function TextLayerItem(props) {
+  return (
+    <PageContext.Consumer>
+      {context => <TextLayerItemInternal {...context} {...props} />}
+    </PageContext.Consumer>
+  );
+}

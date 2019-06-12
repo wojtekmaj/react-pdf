@@ -152,10 +152,10 @@ PageCanvasInternal.propTypes = {
   scale: PropTypes.number,
 };
 
-const PageCanvas = props => (
-  <PageContext.Consumer>
-    {context => <PageCanvasInternal {...context} {...props} />}
-  </PageContext.Consumer>
-);
-
-export default PageCanvas;
+export default function PageCanvas(props) {
+  return (
+    <PageContext.Consumer>
+      {context => <PageCanvasInternal {...context} {...props} />}
+    </PageContext.Consumer>
+  );
+}

@@ -176,10 +176,10 @@ OutlineInternal.propTypes = {
   ...eventsProps(),
 };
 
-const Outline = props => (
-  <DocumentContext.Consumer>
-    {context => <OutlineInternal {...context} {...props} />}
-  </DocumentContext.Consumer>
-);
-
-export default Outline;
+export default function Outline(props) {
+  return (
+    <DocumentContext.Consumer>
+      {context => <OutlineInternal {...context} {...props} />}
+    </DocumentContext.Consumer>
+  );
+}

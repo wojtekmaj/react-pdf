@@ -444,21 +444,21 @@ PageInternal.propTypes = {
   ...eventsProps(),
 };
 
-const Page = props => (
-  <DocumentContext.Consumer>
-    {context => (
-      <PageInternal
-        {...context}
-        {...props}
-        // For backwards compatibility
-        renderAnnotationLayer={
-          typeof props.renderAnnotationLayer !== 'undefined'
-            ? props.renderAnnotationLayer
-            : props.renderAnnotations
-        }
-      />
-    )}
-  </DocumentContext.Consumer>
-);
-
-export default Page;
+export default function Page(props) {
+  return (
+    <DocumentContext.Consumer>
+      {context => (
+        <PageInternal
+          {...context}
+          {...props}
+          // For backwards compatibility
+          renderAnnotationLayer={
+            typeof props.renderAnnotationLayer !== 'undefined'
+              ? props.renderAnnotationLayer
+              : props.renderAnnotations
+          }
+        />
+      )}
+    </DocumentContext.Consumer>
+  );
+}

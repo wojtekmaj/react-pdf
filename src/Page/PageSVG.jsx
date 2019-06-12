@@ -123,10 +123,10 @@ PageSVGInternal.propTypes = {
   scale: PropTypes.number,
 };
 
-const PageSVG = props => (
-  <PageContext.Consumer>
-    {context => <PageSVGInternal {...context} {...props} />}
-  </PageContext.Consumer>
-);
-
-export default PageSVG;
+export default function PageSVG(props) {
+  return (
+    <PageContext.Consumer>
+      {context => <PageSVGInternal {...context} {...props} />}
+    </PageContext.Consumer>
+  );
+}
