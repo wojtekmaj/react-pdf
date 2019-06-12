@@ -444,11 +444,12 @@ PageInternal.propTypes = {
   ...eventsProps(),
 };
 
-export default function Page(props) {
+function Page(props, ref) {
   return (
     <DocumentContext.Consumer>
       {context => (
         <PageInternal
+          ref={ref}
           {...context}
           {...props}
           // For backwards compatibility
@@ -462,3 +463,5 @@ export default function Page(props) {
     </DocumentContext.Consumer>
   );
 }
+
+export default React.forwardRef(Page);

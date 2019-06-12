@@ -176,10 +176,12 @@ OutlineInternal.propTypes = {
   ...eventsProps(),
 };
 
-export default function Outline(props) {
+function Outline(props, ref) {
   return (
     <DocumentContext.Consumer>
-      {context => <OutlineInternal {...context} {...props} />}
+      {context => <OutlineInternal ref={ref} {...context} {...props} />}
     </DocumentContext.Consumer>
   );
 }
+
+export default React.forwardRef(Outline);
