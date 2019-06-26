@@ -118,10 +118,10 @@ const isDestination = PropTypes.oneOfType([
 OutlineItemInternal.propTypes = {
   item: PropTypes.shape({
     title: PropTypes.string,
-    destination: isDestination,
+    dest: isDestination,
     items: PropTypes.arrayOf(PropTypes.shape({
       title: PropTypes.string,
-      destination: isDestination,
+      dest: isDestination,
     })),
   }).isRequired,
   onClick: PropTypes.func,
