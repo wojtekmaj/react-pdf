@@ -1,20 +1,20 @@
-import React, { PureComponent } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 
 import samplePDF from './test.pdf';
 
 import { isFile } from './shared/propTypes';
 
-export default class LoadingOptions extends PureComponent {
-  onFileChange = (event) => {
-    const { setFile } = this.props;
-
+export default function LoadingOptions({
+  file,
+  setFile,
+  setState,
+}) {
+  function onFileChange(event) {
     setFile(event.target.files[0]);
   }
 
-  onURLChange = (event) => {
-    const { setFile } = this.props;
-
+  function onURLChange(event) {
     event.preventDefault();
 
     const url = event.target.querySelector('input').value;
@@ -26,9 +26,7 @@ export default class LoadingOptions extends PureComponent {
     setFile(url);
   }
 
-  onRequestChange = (event) => {
-    const { setFile } = this.props;
-
+  function onRequestChange(event) {
     event.preventDefault();
 
     const url = event.target.querySelector('input').value;
@@ -40,15 +38,11 @@ export default class LoadingOptions extends PureComponent {
     fetch(url).then(response => response.blob()).then(setFile);
   }
 
-  onUseImported = () => {
-    const { setFile } = this.props;
-
+  function onUseImported() {
     setFile(samplePDF);
   }
 
-  onImportAndUnmount = () => {
-    const { setFile, setState } = this.props;
-
+  function onImportAndUnmount() {
     setFile(samplePDF);
 
     setTimeout(() => setState({
@@ -60,86 +54,80 @@ export default class LoadingOptions extends PureComponent {
     }), 1000);
   }
 
-  unloadFile = () => {
-    const { setFile } = this.props;
-
+  function unloadFile() {
     setFile(null);
   }
 
-  render() {
-    const { file } = this.props;
+  return (
+    <fieldset id="load">
+      <legend htmlFor="load">
+        Load file
+      </legend>
 
-    return (
-      <fieldset id="load">
-        <legend htmlFor="load">
-          Load file
-        </legend>
+      <label htmlFor="file">
+        Load from file:
+      </label>
+      <input
+        id="file"
+        type="file"
+        onChange={onFileChange}
+      />
 
-        <label htmlFor="file">
-          Load from file:
+      <form onSubmit={onURLChange}>
+        <label htmlFor="url">
+          Load from URL:
         </label>
         <input
-          id="file"
-          type="file"
-          onChange={this.onFileChange}
+          id="url"
+          type="text"
         />
+        <button type="submit">
+          Apply
+        </button>
+      </form>
 
-        <form onSubmit={this.onURLChange}>
-          <label htmlFor="url">
-            Load from URL:
-          </label>
-          <input
-            id="url"
-            type="text"
-          />
-          <button type="submit">
-            Apply
-          </button>
-        </form>
+      <form onSubmit={onRequestChange}>
+        <label htmlFor="fetchAndPass">
+          Fetch and pass:
+        </label>
+        <input
+          id="fetchAndPass"
+          type="text"
+        />
+        <button type="submit">
+          Apply
+        </button>
+      </form>
 
-        <form onSubmit={this.onRequestChange}>
-          <label htmlFor="fetchAndPass">
-            Fetch and pass:
-          </label>
-          <input
-            id="fetchAndPass"
-            type="text"
-          />
-          <button type="submit">
-            Apply
-          </button>
-        </form>
+      <div>
+        <button
+          type="button"
+          onClick={onUseImported}
+        >
+          Use imported file
+        </button>
+      </div>
 
-        <div>
-          <button
-            type="button"
-            onClick={this.onUseImported}
-          >
-            Use imported file
-          </button>
-        </div>
+      <div>
+        <button
+          type="button"
+          onClick={onImportAndUnmount}
+        >
+          Import, unmount and mount
+        </button>
+      </div>
 
-        <div>
-          <button
-            type="button"
-            onClick={this.onImportAndUnmount}
-          >
-            Import, unmount and mount
-          </button>
-        </div>
-
-        <div>
-          <button
-            type="button"
-            disabled={file === null}
-            onClick={this.unloadFile}
-          >
-            Unload file
-          </button>
-        </div>
-      </fieldset>
-    );
-  }
+      <div>
+        <button
+          type="button"
+          disabled={file === null}
+          onClick={unloadFile}
+        >
+          Unload file
+        </button>
+      </div>
+    </fieldset>
+  );
 }
 
 LoadingOptions.propTypes = {
