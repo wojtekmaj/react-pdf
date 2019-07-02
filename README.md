@@ -180,6 +180,19 @@ Now that you have cMaps in your build, pass required options to Document compone
 />
 ```
 
+Alternatively, you could use cMaps from external CDN:
+
+```js
+import { pdfjs } from 'react-pdf';
+
+<Document
+  options={{
+    cMapUrl: `//cdn.jsdelivr.net/npm/pdfjs-dist@${pdfjs.version}/cmaps/`
+    cMapPacked: true,
+  }}
+/>
+```
+
 ## User guide
 
 ### Document
