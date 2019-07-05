@@ -6,7 +6,7 @@
   "source": "src/entry.js",
   "scripts": {
     "build": "yarn build-js && yarn copy-styles",
-    "build-js": "babel src -d dist --ignore **/__tests__",
+    "build-js": "babel src -d dist --ignore **/__tests__,**/**/__tests__",
     "clean": "rimraf dist",
     "copy-styles": "node ./copy-styles.js",
     "jest": "jest",
