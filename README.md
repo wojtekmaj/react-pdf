@@ -201,24 +201,24 @@ Loads a document passed using `file` prop.
 
 #### Props
 
-|Prop name|Description|Example values|
-|----|----|----|
-|className|Defines custom class name(s), that will be added to rendered element along with the default `react-pdf__Document`.|<ul><li>String:<br />`"custom-class-name-1 custom-class-name-2"`</li><li>Array of strings:<br />`["custom-class-name-1", "custom-class-name-2"]`</li></ul>|
-|error|Defines what the component should display in case of an error. Defaults to "Failed to load PDF file.".|<ul><li>String:<br />`"An error occurred!"`</li><li>React element:<br />`<div>An error occurred!</div>`</li><li>Function:<br />`this.renderError`</li></ul>|
-|externalLinkTarget|Defines link target for external links rendered in annotations. Defaults to unset, which means that default behavior will be used.|One of valid [values for `target` attribute](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/a#Attributes).<ul><li>`"_self"`</li><li>`"_blank"`</li><li>`"_parent"`</li><li>`"_top"`</li></ul>
-|file|Defines what PDF should be displayed.<br />Its value can be an URL, a file (imported using `import ... from ...` or from file input form element), or an object with parameters (`url` - URL; `data` - data, preferably Uint8Array; `range` - PDFDataRangeTransport; `httpHeaders` - custom request headers, e.g. for authorization), `withCredentials` - a boolean to indicate whether or not to include cookies in the request (defaults to `false`).|<ul><li>URL:<br />`"http://example.com/sample.pdf"`</li><li>File:<br />`import sample from '../static/sample.pdf'` and then<br />`sample`</li><li>Parameter object:<br />`{ url: 'http://example.com/sample.pdf', httpHeaders: { 'X-CustomHeader': '40359820958024350238508234' }, withCredentials: true }`</ul>|
-|inputRef|A function that behaves like ref, but it's passed to main `<div>` rendered by `<Document>` component.|`(ref) => { this.myDocument = ref; }`|
-|loading|Defines what the component should display while loading. Defaults to "Loading PDF…".|<ul><li>String:<br />`"Please wait!"`</li><li>React element:<br />`<div>Please wait!</div>`</li><li>Function:<br />`this.renderLoader`</li></ul>|
-|noData|Defines what the component should display in case of no data. Defaults to "No PDF file specified.".|<ul><li>String:<br />`"Please select a file."`</li><li>React element:<br />`<div>Please select a file.</div>`</li><li>Function:<br />`this.renderNoData`</li></ul>|
-|onItemClick|Function called when an outline item has been clicked. Usually, you would like to use this callback to move the user wherever they requested to.|`({ pageNumber }) => alert('Clicked an item from page ' + pageNumber + '!')`|
-|onLoadError|Function called in case of an error while loading a document.|`(error) => alert('Error while loading document! ' + error.message)`|
-|onLoadSuccess|Function called when the document is successfully loaded.|`(pdf) => alert('Loaded a file with ' + pdf.numPages + ' pages!')`|
-|onPassword|Function called when a password-protected PDF is loaded. Defaults to a function that prompts the user for password.|`(callback) => callback('s3cr3t_p4ssw0rd')`|
-|onSourceError|Function called in case of an error while retrieving document source from `file` prop.|`(error) => alert('Error while retrieving document source! ' + error.message)`|
-|onSourceSuccess|Function called when document source is successfully retrieved from `file` prop.|`() => alert('Document source retrieved!')`|
-|options|An object in which additional parameters to be passed to PDF.js can be defined. For a full list of possible parameters, check [PDF.js documentation on DocumentInitParameters](https://mozilla.github.io/pdf.js/api/draft/global.html#DocumentInitParameters).|`{ cMapUrl: 'cmaps/', cMapPacked: true }`|
-|renderMode|Defines the rendering mode of the document. Can be `canvas`, `svg` or `none`. Defaults to `canvas`.|`"svg"`
-|rotate|Defines the rotation of the document in degrees. If provided, will change rotation globally, even for the pages which were given `rotate` prop of their own. 90 = rotated to the right, 180 = upside down, 270 = rotated to the left.|`90`|
+|Prop name|Description|Default value|Example values|
+|----|----|----|----|
+|className|Class name(s) that will be added to rendered element along with the default `react-pdf__Document`.|n/a|<ul><li>String:<br />`"custom-class-name-1 custom-class-name-2"`</li><li>Array of strings:<br />`["custom-class-name-1", "custom-class-name-2"]`</li></ul>|
+|error|What the component should display in case of an error.|`"Failed to load PDF file."`|<ul><li>String:<br />`"An error occurred!"`</li><li>React element:<br />`<div>An error occurred!</div>`</li><li>Function:<br />`this.renderError`</li></ul>|
+|externalLinkTarget|Link target for external links rendered in annotations.|unset, which means that default behavior will be used|One of valid [values for `target` attribute](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/a#Attributes).<ul><li>`"_self"`</li><li>`"_blank"`</li><li>`"_parent"`</li><li>`"_top"`</li></ul>
+|file|What PDF should be displayed.<br />Its value can be an URL, a file (imported using `import ... from ...` or from file input form element), or an object with parameters (`url` - URL; `data` - data, preferably Uint8Array; `range` - PDFDataRangeTransport; `httpHeaders` - custom request headers, e.g. for authorization), `withCredentials` - a boolean to indicate whether or not to include cookies in the request (defaults to `false`).|n/a|<ul><li>URL:<br />`"http://example.com/sample.pdf"`</li><li>File:<br />`import sample from '../static/sample.pdf'` and then<br />`sample`</li><li>Parameter object:<br />`{ url: 'http://example.com/sample.pdf', httpHeaders: { 'X-CustomHeader': '40359820958024350238508234' }, withCredentials: true }`</ul>|
+|inputRef|A function that behaves like ref, but it's passed to main `<div>` rendered by `<Document>` component.|n/a|`(ref) => { this.myDocument = ref; }`|
+|loading|What the component should display while loading.|`"Loading PDF…"`|<ul><li>String:<br />`"Please wait!"`</li><li>React element:<br />`<div>Please wait!</div>`</li><li>Function:<br />`this.renderLoader`</li></ul>|
+|noData|What the component should display in case of no data.|`"No PDF file specified."`|<ul><li>String:<br />`"Please select a file."`</li><li>React element:<br />`<div>Please select a file.</div>`</li><li>Function:<br />`this.renderNoData`</li></ul>|
+|onItemClick|Function called when an outline item has been clicked. Usually, you would like to use this callback to move the user wherever they requested to.|n/a|`({ pageNumber }) => alert('Clicked an item from page ' + pageNumber + '!')`|
+|onLoadError|Function called in case of an error while loading a document.|n/a|`(error) => alert('Error while loading document! ' + error.message)`|
+|onLoadSuccess|Function called when the document is successfully loaded.|n/a|`(pdf) => alert('Loaded a file with ' + pdf.numPages + ' pages!')`|
+|onPassword|Function called when a password-protected PDF is loaded.|A function that prompts the user for password|`(callback) => callback('s3cr3t_p4ssw0rd')`|
+|onSourceError|Function called in case of an error while retrieving document source from `file` prop.|n/a|`(error) => alert('Error while retrieving document source! ' + error.message)`|
+|onSourceSuccess|Function called when document source is successfully retrieved from `file` prop.|n/a|`() => alert('Document source retrieved!')`|
+|options|An object in which additional parameters to be passed to PDF.js can be defined. For a full list of possible parameters, check [PDF.js documentation on DocumentInitParameters](https://mozilla.github.io/pdf.js/api/draft/global.html#DocumentInitParameters).|n/a|`{ cMapUrl: 'cmaps/', cMapPacked: true }`|
+|renderMode|Rendering mode of the document. Can be `"canvas"`, `"svg"` or `"none"`.|`"canvas"`|`"svg"`|
+|rotate|Rotation of the document in degrees. If provided, will change rotation globally, even for the pages which were given `rotate` prop of their own. `90` = rotated to the right, `180` = upside down, `270` = rotated to the left.|n/a|`90`|
 
 ### Page
 
@@ -226,33 +226,33 @@ Displays a page. Should be placed inside `<Document />`. Alternatively, it can h
 
 #### Props
 
-|Prop name|Description|Example values|
-|----|----|----|
-|className|Defines custom class name(s), that will be added to rendered element along with the default `react-pdf__Page`.|<ul><li>String:<br />`"custom-class-name-1 custom-class-name-2"`</li><li>Array of strings:<br />`["custom-class-name-1", "custom-class-name-2"]`</li></ul>|
-|customTextRenderer|A function that customizes how a text layer is rendered. Passes itext item and index for item.|`({ str, itemIndex }) => { return (<mark>{str}</mark>) }`|
-|error|Defines what the component should display in case of an error. Defaults to "Failed to load the page.".|<ul><li>String:<br />`"An error occurred!"`</li><li>React element:<br />`<div>An error occurred!</div>`</li><li>Function:<br />`this.renderError`</li></ul>|
-|height|Defines the height of the page. If neither `height` nor `width` are defined, page will be rendered at the size defined in PDF. If you define `width` and `height` at the same time, `height` will be ignored. If you define `height` and `scale` at the same time, the height will be multiplied by a given factor.|`300`|
-|inputRef|A function that behaves like ref, but it's passed to main `<div>` rendered by `<Page>` component.|`(ref) => { this.myPage = ref; }`|
-|loading|Defines what the component should display while loading. Defaults to "Loading page…".|<ul><li>String:<br />`"Please wait!"`</li><li>React element:<br />`<div>Please wait!</div>`</li><li>Function:<br />`this.renderLoader`</li></ul>|
-|noData|Defines what the component should display in case of no data. Defaults to "No page specified.".|<ul><li>String:<br />`"Please select a page."`</li><li>React element:<br />`<div>Please select a page.</div>`</li><li>Function:<br />`this.renderNoData`</li></ul>|
-|onLoadError|Function called in case of an error while loading the page.|`(error) => alert('Error while loading page! ' + error.message)`|
-|onLoadProgress|Function called, potentially multiple times, as the loading progresses.|`({ loaded, total }) => alert('Loading a document: ' + (loaded / total) * 100 + '%');`|
-|onLoadSuccess|Function called when the page is successfully loaded.|`(page) => alert('Now displaying a page number ' + page.pageNumber + '!')`|
-|onRenderError|Function called in case of an error while rendering the page.|`(error) => alert('Error while loading page! ' + error.message)`|
-|onRenderSuccess|Function called when the page is successfully rendered on the screen.|`() => alert('Rendered the page!')`|
-|onGetAnnotationsSuccess|Function called when annotations are successfully loaded.|`(annotations) => alert('Now displaying ' + annotations.length + ' annotations!')`|
-|onGetAnnotationsError|Function called in case of an error while loading annotations.|`(error) => alert('Error while loading annotations! ' + error.message)`|
-|onGetTextSuccess|Function called when text layer items are successfully loaded.|`(items) => alert('Now displaying ' + items.length + ' text layer items!')`|
-|onGetTextError|Function called in case of an error while loading text layer items.|`(error) => alert('Error while loading text layer items! ' + error.message)`|
-|pageIndex|Defines which page from PDF file should be displayed. Defaults to 0.|`0`|
-|pageNumber|Defines which page from PDF file should be displayed. If provided, `pageIndex` prop will be ignored. Defaults to 1.|`1`|
-|renderAnnotationLayer|Defines whether annotations (e.g. links) should be rendered. Defaults to true.|`false`|
-|renderInteractiveForms|Defines whether interactive forms should be rendered. `renderAnnotationLayer` prop must be set to `true`. Defaults to false.|`true`|
-|renderMode|Defines the rendering mode of the page. Can be `canvas`, `svg` or `none`. Defaults to `canvas`.|`"svg"`
-|renderTextLayer|Defines whether a text layer should be rendered. Defaults to true.|`false`|
-|rotate|Defines the rotation of the page in degrees. 90 = rotated to the right, 180 = upside down, 270 = rotated to the left. Defaults to page's default setting, usually 0.|`90`|
-|scale|Defines the scale in which PDF file should be rendered. Defaults to 1.0.|`0.5`|
-|width|Defines the width of the page. If neither `height` nor `width` are defined, page will be rendered at the size defined in PDF. If you define `width` and `height` at the same time, `height` will be ignored. If you define `width` and `scale` at the same time, the width will be multiplied by a given factor.|`300`|
+|Prop name|Description|Default value|Example values|
+|----|----|----|----|
+|className|Class name(s) that will be added to rendered element along with the default `react-pdf__Page`.|n/a|<ul><li>String:<br />`"custom-class-name-1 custom-class-name-2"`</li><li>Array of strings:<br />`["custom-class-name-1", "custom-class-name-2"]`</li></ul>|
+|customTextRenderer|A function that customizes how a text layer is rendered. Passes itext item and index for item.|n/a|`({ str, itemIndex }) => { return (<mark>{str}</mark>) }`|
+|error|What the component should display in case of an error.|`"Failed to load the page."`|<ul><li>String:<br />`"An error occurred!"`</li><li>React element:<br />`<div>An error occurred!</div>`</li><li>Function:<br />`this.renderError`</li></ul>|
+|height|Page height. If neither `height` nor `width` are defined, page will be rendered at the size defined in PDF. If you define `width` and `height` at the same time, `height` will be ignored. If you define `height` and `scale` at the same time, the height will be multiplied by a given factor.|Page's default height|`300`|
+|inputRef|A function that behaves like ref, but it's passed to main `<div>` rendered by `<Page>` component.|n/a|`(ref) => { this.myPage = ref; }`|
+|loading|What the component should display while loading.|`"Loading page…"`|<ul><li>String:<br />`"Please wait!"`</li><li>React element:<br />`<div>Please wait!</div>`</li><li>Function:<br />`this.renderLoader`</li></ul>|
+|noData|What the component should display in case of no data.|`"No page specified."`|<ul><li>String:<br />`"Please select a page."`</li><li>React element:<br />`<div>Please select a page.</div>`</li><li>Function:<br />`this.renderNoData`</li></ul>|
+|onLoadError|Function called in case of an error while loading the page.|n/a|`(error) => alert('Error while loading page! ' + error.message)`|
+|onLoadProgress|Function called, potentially multiple times, as the loading progresses.|n/a|`({ loaded, total }) => alert('Loading a document: ' + (loaded / total) * 100 + '%');`|
+|onLoadSuccess|Function called when the page is successfully loaded.|n/a|`(page) => alert('Now displaying a page number ' + page.pageNumber + '!')`|
+|onRenderError|Function called in case of an error while rendering the page.|n/a|`(error) => alert('Error while loading page! ' + error.message)`|
+|onRenderSuccess|Function called when the page is successfully rendered on the screen.|n/a|`() => alert('Rendered the page!')`|
+|onGetAnnotationsSuccess|Function called when annotations are successfully loaded.|n/a|`(annotations) => alert('Now displaying ' + annotations.length + ' annotations!')`|
+|onGetAnnotationsError|Function called in case of an error while loading annotations.|n/a|`(error) => alert('Error while loading annotations! ' + error.message)`|
+|onGetTextSuccess|Function called when text layer items are successfully loaded.|n/a|`(items) => alert('Now displaying ' + items.length + ' text layer items!')`|
+|onGetTextError|Function called in case of an error while loading text layer items.|n/a|`(error) => alert('Error while loading text layer items! ' + error.message)`|
+|pageIndex|Which page from PDF file should be displayed, by page index.|`0`|`1`|
+|pageNumber|Which page from PDF file should be displayed, by page number. If provided, `pageIndex` prop will be ignored.|`1`|`2`|
+|renderAnnotationLayer|Whether annotations (e.g. links) should be rendered.|`true`|`false`|
+|renderInteractiveForms|Whether interactive forms should be rendered. `renderAnnotationLayer` prop must be set to `true`.|`false`|`true`|
+|renderMode|Rendering mode of the document. Can be `"canvas"`, `"svg"` or `"none"`.|`"canvas"`|`"svg"`|
+|renderTextLayer|Whether a text layer should be rendered.|`true`|`false`|
+|rotate|Rotation of the page in degrees. `90` = rotated to the right, `180` = upside down, `270` = rotated to the left.|Page's default setting, usually `0`|`90`|
+|scale|Page scale.|`1.0`|`0.5`|
+|width|Page width. If neither `height` nor `width` are defined, page will be rendered at the size defined in PDF. If you define `width` and `height` at the same time, `height` will be ignored. If you define `width` and `scale` at the same time, the width will be multiplied by a given factor.|Page's default width|`300`|
 
 ### Outline
 
@@ -260,12 +260,12 @@ Displays an outline (table of contents). Should be placed inside `<Document />`.
 
 #### Props
 
-|Prop name|Description|Example values|
-|----|----|----|
-|className|Defines custom class name(s), that will be added to rendered element along with the default `react-pdf__Outline`.|<ul><li>String:<br />`"custom-class-name-1 custom-class-name-2"`</li><li>Array of strings:<br />`["custom-class-name-1", "custom-class-name-2"]`</li></ul>|
-|onItemClick|Function called when an outline item has been clicked. Usually, you would like to use this callback to move the user wherever they requested to.|`({ pageNumber }) => alert('Clicked an item from page ' + pageNumber + '!')`|
-|onLoadError|Function called in case of an error while retrieving the outline.|`(error) => alert('Error while retrieving the outline! ' + error.message)`|
-|onLoadSuccess|Function called when the outline is successfully retrieved.|`(outline) => alert('The outline has been successfully retrieved.')`|
+|Prop name|Description|Default value|Example values|
+|----|----|----|----|
+|className|Class name(s) that will be added to rendered element along with the default `react-pdf__Outline`.|n/a|<ul><li>String:<br />`"custom-class-name-1 custom-class-name-2"`</li><li>Array of strings:<br />`["custom-class-name-1", "custom-class-name-2"]`</li></ul>|
+|onItemClick|Function called when an outline item has been clicked. Usually, you would like to use this callback to move the user wherever they requested to.|n/a|`({ pageNumber }) => alert('Clicked an item from page ' + pageNumber + '!')`|
+|onLoadError|Function called in case of an error while retrieving the outline.|n/a|`(error) => alert('Error while retrieving the outline! ' + error.message)`|
+|onLoadSuccess|Function called when the outline is successfully retrieved.|n/a|`(outline) => alert('The outline has been successfully retrieved.')`|
 
 ## License
 
