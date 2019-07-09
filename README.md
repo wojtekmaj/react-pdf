@@ -103,7 +103,7 @@ import { Document } from 'react-pdf/dist/entry.parcel';
 
 #### Create React App
 
-Create React App uses Webpack under the hood, but instructions for Webpack will not work. [Standard instructions](#browserify-and-others) apply.
+Create React App uses Webpack under the hood, but instructions for Webpack will not work. [Standard instructions](#standard-browserify-and-others) apply.
 
 #### Standard (Browserify and others)
 
