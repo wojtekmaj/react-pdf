@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
+import makeCancellable from 'make-cancellable-promise';
 
 import PageContext from '../PageContext';
 
@@ -9,8 +10,6 @@ import {
   callIfDefined,
   cancelRunningTask,
   errorOnDev,
-  isCancelException,
-  makeCancellable,
 } from '../shared/utils';
 
 import { isPage, isRotate } from '../shared/propTypes';
@@ -66,10 +65,6 @@ export class TextLayerInternal extends PureComponent {
   }
 
   onLoadError = (error) => {
-    if (isCancelException(error)) {
-      return;
-    }
-
     this.setState({ textItems: false });
 
     errorOnDev(error);

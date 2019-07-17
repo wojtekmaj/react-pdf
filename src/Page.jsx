@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
+import makeCancellable from 'make-cancellable-promise';
 import makeEventProps from 'make-event-props';
 import mergeClassNames from 'merge-class-names';
 
@@ -16,9 +17,7 @@ import {
   callIfDefined,
   cancelRunningTask,
   errorOnDev,
-  isCancelException,
   isProvided,
-  makeCancellable,
   makePageCallback,
 } from './shared/utils';
 
@@ -138,10 +137,6 @@ export class PageInternal extends PureComponent {
    * Called when a page failed to load
    */
   onLoadError = (error) => {
-    if (isCancelException(error)) {
-      return;
-    }
-
     errorOnDev(error);
 
     const { onLoadError } = this.props;
