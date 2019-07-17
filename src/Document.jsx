@@ -4,6 +4,7 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import makeEventProps from 'make-event-props';
+import makeCancellable from 'make-cancellable-promise';
 import mergeClassNames from 'merge-class-names';
 import pdfjs, { PDFDataRangeTransport } from 'pdfjs-dist';
 
@@ -23,11 +24,9 @@ import {
   isArrayBuffer,
   isBlob,
   isBrowser,
-  isCancelException,
   isDataURI,
   isFile,
   loadFromFile,
-  makeCancellable,
   warnOnDev,
 } from './shared/utils';
 
@@ -177,10 +176,6 @@ export default class Document extends PureComponent {
    * Called when a document source failed to be resolved correctly
    */
   onSourceError = (error) => {
-    if (isCancelException(error)) {
-      return;
-    }
-
     errorOnDev(error);
 
     const { onSourceError } = this.props;
@@ -211,10 +206,6 @@ export default class Document extends PureComponent {
    * Called when a document failed to read successfully
    */
   onLoadError = (error) => {
-    if (isCancelException(error)) {
-      return;
-    }
-
     this.setState({ pdf: false });
 
     errorOnDev(error);

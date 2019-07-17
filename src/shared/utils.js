@@ -124,33 +124,6 @@ export const displayCORSWarning = () => {
   }
 };
 
-class PromiseCancelledException extends Error {
-  constructor(message, type) {
-    super(message, type);
-    this.name = 'PromiseCancelledException';
-    this.message = message;
-    this.type = type;
-  }
-}
-
-export const makeCancellable = (promise) => {
-  let isCancelled = false;
-
-  const wrappedPromise = new Promise((resolve, reject) => {
-    promise.then(
-      (...args) => (isCancelled ? reject(new PromiseCancelledException('Promise cancelled')) : resolve(...args)),
-      error => (isCancelled ? reject(new PromiseCancelledException('Promise cancelled')) : reject(error)),
-    );
-  });
-
-  return {
-    promise: wrappedPromise,
-    cancel() {
-      isCancelled = true;
-    },
-  };
-};
-
 export const cancelRunningTask = (runningTask) => {
   if (!runningTask || !runningTask.cancel) {
     return;
@@ -167,10 +140,7 @@ export const makePageCallback = (page, scale) => {
   return page;
 };
 
-export const isCancelException = error => (
-  error.name === 'RenderingCancelledException'
-  || error.name === 'PromiseCancelledException'
-);
+export const isCancelException = error => error.name === 'RenderingCancelledException';
 
 export const loadFromFile = file => new Promise((resolve, reject) => {
   const reader = new FileReader();

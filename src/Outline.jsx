@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
+import makeCancellable from 'make-cancellable-promise';
 import makeEventProps from 'make-event-props';
 import mergeClassNames from 'merge-class-names';
 
@@ -12,8 +13,6 @@ import {
   callIfDefined,
   cancelRunningTask,
   errorOnDev,
-  isCancelException,
-  makeCancellable,
 } from './shared/utils';
 
 import { eventsProps, isClassName, isPdf } from './shared/propTypes';
@@ -93,10 +92,6 @@ export class OutlineInternal extends PureComponent {
    * Called when an outline failed to read successfully
    */
   onLoadError = (error) => {
-    if (isCancelException(error)) {
-      return;
-    }
-
     this.setState({ outline: false });
 
     errorOnDev(error);

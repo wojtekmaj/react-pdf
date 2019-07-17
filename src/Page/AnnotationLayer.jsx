@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import pdfjs from 'pdfjs-dist';
+import makeCancellable from 'make-cancellable-promise';
 
 import DocumentContext from '../DocumentContext';
 import PageContext from '../PageContext';
@@ -9,8 +10,6 @@ import {
   callIfDefined,
   cancelRunningTask,
   errorOnDev,
-  isCancelException,
-  makeCancellable,
 } from '../shared/utils';
 
 import { isLinkService, isPage, isRotate } from '../shared/propTypes';
@@ -69,10 +68,6 @@ export class AnnotationLayerInternal extends PureComponent {
   }
 
   onLoadError = (error) => {
-    if (isCancelException(error)) {
-      return;
-    }
-
     this.setState({ annotations: false });
 
     errorOnDev(error);
@@ -95,10 +90,6 @@ export class AnnotationLayerInternal extends PureComponent {
    * Called when a annotations fails to render.
    */
   onRenderError = (error) => {
-    if (isCancelException(error)) {
-      return;
-    }
-
     errorOnDev(error);
 
     const { onRenderAnnotationLayerError } = this.props;
