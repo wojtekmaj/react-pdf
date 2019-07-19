@@ -36,8 +36,8 @@ export default function PassingOptions({
   }
 
   return (
-    <fieldset id="load">
-      <legend htmlFor="load">
+    <fieldset id="passingoptions">
+      <legend htmlFor="passingoptions">
         Passing options
       </legend>
 

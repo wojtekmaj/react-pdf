@@ -20,8 +20,8 @@ export default function LayerOptions({
   }
 
   return (
-    <fieldset id="viewoptions">
-      <legend htmlFor="viewoptions">
+    <fieldset id="layeroptions">
+      <legend htmlFor="layeroptions">
         Layer options
       </legend>
 

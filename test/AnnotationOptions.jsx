@@ -12,8 +12,8 @@ export default function AnnotationOptions({
   }
 
   return (
-    <fieldset id="viewoptions">
-      <legend htmlFor="viewoptions">
+    <fieldset id="annotationoptions">
+      <legend htmlFor="annotationoptions">
         Annotation options
       </legend>
 

@@ -59,8 +59,8 @@ export default function LoadingOptions({
   }
 
   return (
-    <fieldset id="load">
-      <legend htmlFor="load">
+    <fieldset id="loadingoptions">
+      <legend htmlFor="loadingoptions">
         Load file
       </legend>
 
