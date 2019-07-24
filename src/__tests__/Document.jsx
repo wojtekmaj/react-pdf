@@ -325,8 +325,8 @@ describe('Document', () => {
 
       const component = shallow(
         <Document
-          file={failingPdf}
           error="Error"
+          file={failingPdf}
           onLoadError={onLoadError}
         />
       );

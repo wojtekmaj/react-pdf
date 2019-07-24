@@ -390,10 +390,10 @@ describe('Page', () => {
 
       const component = shallow(
         <Page
+          onLoadSuccess={onLoadSuccess}
           pageIndex={1}
           pageNumber={1}
           pdf={pdf}
-          onLoadSuccess={onLoadSuccess}
         />
       );
 
@@ -749,8 +749,8 @@ describe('Page', () => {
         onLoadSuccess={onLoadSuccess}
         pageIndex={0}
         pdf={pdf}
-        width={width}
         scale={scale}
+        width={width}
       />
     );
 
@@ -839,8 +839,8 @@ describe('Page', () => {
         onLoadSuccess={onLoadSuccess}
         pageIndex={0}
         pdf={pdf}
-        width={width}
         scale={scale}
+        width={width}
       />
     );
 

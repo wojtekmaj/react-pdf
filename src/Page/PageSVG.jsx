@@ -100,6 +100,8 @@ export class PageSVGInternal extends PureComponent {
     return (
       <div
         className="react-pdf__Page__svg"
+        // Note: This cannot be shortened, as we need this function to be called with each render.
+        ref={ref => this.drawPageOnContainer(ref)}
         style={{
           display: 'block',
           backgroundColor: 'white',
@@ -108,8 +110,6 @@ export class PageSVGInternal extends PureComponent {
           height,
           userSelect: 'none',
         }}
-        // Note: This cannot be shortened, as we need this function to be called with each render.
-        ref={ref => this.drawPageOnContainer(ref)}
       />
     );
   }

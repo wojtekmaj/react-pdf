@@ -108,11 +108,11 @@ export default function ViewOptions({
         </label>
         &nbsp;
         <input
-          type="number"
-          min={0}
-          id="pageWidth"
-          name="pageWidth"
           defaultValue={pageWidth}
+          id="pageWidth"
+          min={0}
+          name="pageWidth"
+          type="number"
         />
         &nbsp;
         <button
@@ -136,11 +136,11 @@ export default function ViewOptions({
         </label>
         &nbsp;
         <input
-          type="number"
-          min={0}
-          id="pageHeight"
-          name="pageHeight"
           defaultValue={pageHeight}
+          id="pageHeight"
+          min={0}
+          name="pageHeight"
+          type="number"
         />
         &nbsp;
         <button
@@ -164,13 +164,13 @@ export default function ViewOptions({
         </label>
         &nbsp;
         <input
-          type="range"
-          min={0}
-          max={2}
+          defaultValue={pageScale}
           id="pageScale"
+          max={2}
+          min={0}
           name="pageScale"
           step="0.01"
-          defaultValue={pageScale}
+          type="range"
         />
         &nbsp;
         <button
@@ -237,41 +237,41 @@ export default function ViewOptions({
         </label>
         <input
           id="rotation"
+          onChange={onChangeRotate}
+          step="90"
           style={{ width: '42px' }}
           type="number"
-          onChange={onChangeRotate}
           value={rotate !== null ? rotate : ''}
-          step="90"
         />
         &nbsp;
         <button
-          type="button"
           onClick={rotateLeft}
+          type="button"
         >
           Rotate left
         </button>
         &nbsp;
         <button
-          type="button"
           onClick={rotateRight}
+          type="button"
         >
           Rotate right
         </button>
         &nbsp;
         <button
-          type="button"
           disabled={rotate === null}
           onClick={resetRotation}
+          type="button"
         >
           Reset rotation
         </button>
       </div>
 
       <input
-        id="displayAll"
-        type="checkbox"
-        onChange={onDisplayAllChange}
         checked={displayAll}
+        id="displayAll"
+        onChange={onDisplayAllChange}
+        type="checkbox"
       />
       <label htmlFor="displayAll">
         View all pages
