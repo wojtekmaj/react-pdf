@@ -277,11 +277,11 @@ export default class Test extends PureComponent {
             <Document
               {...documentProps}
               className="custom-classname-document"
-              onItemClick={this.onItemClick}
               onClick={(event, pdf) => console.log('Clicked a document', { event, pdf })}
+              onItemClick={this.onItemClick}
+              onLoadError={this.onDocumentLoadError}
               onLoadProgress={this.onDocumentLoadProgress}
               onLoadSuccess={this.onDocumentLoadSuccess}
-              onLoadError={this.onDocumentLoadError}
               onSourceError={this.onDocumentLoadError}
             >
               <div className="Test__container__content__toc">
@@ -300,12 +300,12 @@ export default class Test extends PureComponent {
                       (el, index) => (
                         <Page
                           {...pageProps}
+                          key={`page_${index + 1}`}
                           inputRef={
                             (pageNumber === index + 1)
                               ? (ref => ref && ref.scrollIntoView())
                               : null
                           }
-                          key={`page_${index + 1}`}
                           pageNumber={index + 1}
                         />
                       ),
@@ -321,9 +321,9 @@ export default class Test extends PureComponent {
               {displayAll || (
                 <div className="Test__container__content__controls">
                   <button
-                    type="button"
                     disabled={pageNumber <= 1}
                     onClick={this.previousPage}
+                    type="button"
                   >
                     Previous
                   </button>
@@ -331,9 +331,9 @@ export default class Test extends PureComponent {
                     {`Page ${pageNumber || (numPages ? 1 : '--')} of ${numPages || '--'}`}
                   </span>
                   <button
-                    type="button"
                     disabled={pageNumber >= numPages}
                     onClick={this.nextPage}
+                    type="button"
                   >
                     Next
                   </button>

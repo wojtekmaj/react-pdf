@@ -133,11 +133,11 @@ export class PageCanvasInternal extends PureComponent {
     return (
       <canvas
         className="react-pdf__Page__canvas"
+        ref={(ref) => { this.canvasLayer = ref; }}
         style={{
           display: 'block',
           userSelect: 'none',
         }}
-        ref={(ref) => { this.canvasLayer = ref; }}
       />
     );
   }

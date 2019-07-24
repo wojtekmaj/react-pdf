@@ -114,6 +114,7 @@ export class TextLayerItemInternal extends PureComponent {
 
     return (
       <span
+        ref={(ref) => { this.item = ref; }}
         style={{
           height: '1em',
           fontFamily: 'sans-serif',
@@ -125,7 +126,6 @@ export class TextLayerItemInternal extends PureComponent {
           whiteSpace: 'pre',
           pointerEvents: 'all',
         }}
-        ref={(ref) => { this.item = ref; }}
       >
         {
           customTextRenderer

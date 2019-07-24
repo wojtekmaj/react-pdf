@@ -13,8 +13,12 @@
     "no-underscore-dangle": ["error", { "allow": ["_pdfInfo", "_pageInfo"] }],
     "prefer-destructuring": "warn",
     "prefer-spread": "warn",
+    "react/jsx-sort-props": ["error", {
+      "reservedFirst": ["key"]
+    }],
     "react/require-default-props": "off",
-    "react/sort-comp": "off"
+    "react/sort-comp": "off",
+    "react/sort-prop-types": "error"
   },
   "overrides": [
     {

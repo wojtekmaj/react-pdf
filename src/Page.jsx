@@ -380,6 +380,7 @@ export class PageInternal extends PureComponent {
     return (
       <div
         className={mergeClassNames('react-pdf__Page', className)}
+        data-page-number={pageNumber}
         ref={(ref) => {
           const { inputRef } = this.props;
           if (inputRef) {
@@ -389,7 +390,6 @@ export class PageInternal extends PureComponent {
           this.ref = ref;
         }}
         style={{ position: 'relative' }}
-        data-page-number={pageNumber}
         {...this.eventProps}
       >
         {this.renderContent()}

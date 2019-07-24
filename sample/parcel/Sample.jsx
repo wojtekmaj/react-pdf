@@ -40,8 +40,8 @@ export default class Sample extends Component {
             <label htmlFor="file">Load from file:</label>
             {' '}
             <input
-              type="file"
               onChange={this.onFileChange}
+              type="file"
             />
           </div>
           <div className="Example__container__document">

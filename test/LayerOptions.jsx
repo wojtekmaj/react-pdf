@@ -27,10 +27,10 @@ export default function LayerOptions({
 
       <div>
         <input
-          id="renderTextLayer"
-          type="checkbox"
           checked={renderTextLayer}
+          id="renderTextLayer"
           onChange={onRenderTextLayersChange}
+          type="checkbox"
         />
         <label htmlFor="renderTextLayer">
           Render text layer
@@ -39,10 +39,10 @@ export default function LayerOptions({
 
       <div>
         <input
-          id="renderAnnotationLayer"
-          type="checkbox"
           checked={renderAnnotationLayer}
+          id="renderAnnotationLayer"
           onChange={onRenderAnnotationLayerChange}
+          type="checkbox"
         />
         <label htmlFor="renderAnnotationLayer">
           Render annotation layer
@@ -51,11 +51,11 @@ export default function LayerOptions({
 
       <div>
         <input
-          id="renderInteractiveForms"
-          type="checkbox"
           checked={renderAnnotationLayer && renderInteractiveForms}
-          onChange={onRenderInteractiveFormsChange}
           disabled={!renderAnnotationLayer}
+          id="renderInteractiveForms"
+          onChange={onRenderInteractiveFormsChange}
+          type="checkbox"
         />
         <label htmlFor="renderInteractiveForms">
           Render interactive forms

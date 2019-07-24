@@ -117,12 +117,12 @@ const isDestination = PropTypes.oneOfType([
 
 OutlineItemInternal.propTypes = {
   item: PropTypes.shape({
-    title: PropTypes.string,
     dest: isDestination,
     items: PropTypes.arrayOf(PropTypes.shape({
-      title: PropTypes.string,
       dest: isDestination,
+      title: PropTypes.string,
     })),
+    title: PropTypes.string,
   }).isRequired,
   onClick: PropTypes.func,
   pdf: isPdf.isRequired,

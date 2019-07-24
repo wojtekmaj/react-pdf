@@ -69,8 +69,8 @@ export default function LoadingOptions({
       </label>
       <input
         id="file"
-        type="file"
         onChange={onFileChange}
+        type="file"
       />
 
       <form onSubmit={onURLChange}>
@@ -101,8 +101,8 @@ export default function LoadingOptions({
 
       <div>
         <button
-          type="button"
           onClick={onUseImported}
+          type="button"
         >
           Use imported file
         </button>
@@ -110,8 +110,8 @@ export default function LoadingOptions({
 
       <div>
         <button
-          type="button"
           onClick={onImportAndUnmount}
+          type="button"
         >
           Import, unmount and mount
         </button>
@@ -119,9 +119,9 @@ export default function LoadingOptions({
 
       <div>
         <button
-          type="button"
           disabled={file === null}
           onClick={unloadFile}
+          type="button"
         >
           Unload file
         </button>
