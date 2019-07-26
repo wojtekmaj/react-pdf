@@ -7,6 +7,7 @@ import makeEventProps from 'make-event-props';
 import makeCancellable from 'make-cancellable-promise';
 import mergeClassNames from 'merge-class-names';
 import pdfjs, { PDFDataRangeTransport } from 'pdfjs-dist';
+import isEqual from 'react-fast-compare';
 
 import DocumentContext from './DocumentContext';
 
@@ -31,8 +32,6 @@ import {
 } from './shared/utils';
 
 import { eventsProps, isClassName } from './shared/propTypes';
-
-import isEqual from 'react-fast-compare';
 
 export default class Document extends PureComponent {
   state = {
