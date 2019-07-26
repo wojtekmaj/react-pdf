@@ -82,13 +82,13 @@
   "license": "MIT",
   "dependencies": {
     "@babel/runtime": "^7.0.0",
+    "lodash": "^4.17.15",
     "lodash.once": "^4.1.1",
     "make-cancellable-promise": "^1.0.0",
     "make-event-props": "^1.1.0",
     "merge-class-names": "^1.1.1",
     "pdfjs-dist": "2.1.266",
-    "prop-types": "^15.6.2",
-    "react-fast-compare": "^2.0.4"
+    "prop-types": "^15.6.2"
   },
   "devDependencies": {
     "@babel/cli": "^7.5.0",
