@@ -87,7 +87,8 @@
     "make-event-props": "^1.1.0",
     "merge-class-names": "^1.1.1",
     "pdfjs-dist": "2.1.266",
-    "prop-types": "^15.6.2"
+    "prop-types": "^15.6.2",
+    "react-fast-compare": "^2.0.4"
   },
   "devDependencies": {
     "@babel/cli": "^7.5.0",
