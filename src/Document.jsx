@@ -7,7 +7,7 @@ import makeEventProps from 'make-event-props';
 import makeCancellable from 'make-cancellable-promise';
 import mergeClassNames from 'merge-class-names';
 import pdfjs, { PDFDataRangeTransport } from 'pdfjs-dist';
-import isEqual from 'react-fast-compare';
+import { isEqual } from 'lodash';
 
 import DocumentContext from './DocumentContext';
 
