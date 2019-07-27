@@ -125,11 +125,7 @@ export const displayCORSWarning = () => {
 };
 
 export const cancelRunningTask = (runningTask) => {
-  if (!runningTask || !runningTask.cancel) {
-    return;
-  }
-
-  runningTask.cancel();
+  callIfDefined(runningTask && runningTask.cancel);
 };
 
 export const makePageCallback = (page, scale) => {
