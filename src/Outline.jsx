@@ -15,7 +15,7 @@ import {
   errorOnDev,
 } from './shared/utils';
 
-import { eventsProps, isClassName, isPdf } from './shared/propTypes';
+import { eventProps, isClassName, isPdf } from './shared/propTypes';
 
 export class OutlineInternal extends PureComponent {
   state = {
@@ -168,7 +168,7 @@ OutlineInternal.propTypes = {
   onLoadError: PropTypes.func,
   onLoadSuccess: PropTypes.func,
   pdf: isPdf,
-  ...eventsProps(),
+  ...eventProps,
 };
 
 function Outline(props, ref) {
