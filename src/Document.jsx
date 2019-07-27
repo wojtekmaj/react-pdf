@@ -30,7 +30,7 @@ import {
   warnOnDev,
 } from './shared/utils';
 
-import { eventsProps, isClassName } from './shared/propTypes';
+import { eventProps, isClassName } from './shared/propTypes';
 
 export default class Document extends PureComponent {
   state = {
@@ -392,5 +392,5 @@ Document.propTypes = {
   onSourceError: PropTypes.func,
   onSourceSuccess: PropTypes.func,
   rotate: PropTypes.number,
-  ...eventsProps(),
+  ...eventProps,
 };

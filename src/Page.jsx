@@ -22,7 +22,7 @@ import {
 } from './shared/utils';
 
 import {
-  eventsProps,
+  eventProps,
   isClassName,
   isPageIndex,
   isPageNumber,
@@ -436,7 +436,7 @@ PageInternal.propTypes = {
   scale: PropTypes.number,
   unregisterPage: PropTypes.func,
   width: PropTypes.number,
-  ...eventsProps(),
+  ...eventProps,
 };
 
 // forwardRef render functions do not support propTypes

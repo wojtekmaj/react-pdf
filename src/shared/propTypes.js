@@ -1,20 +1,19 @@
 import PropTypes from 'prop-types';
-import once from 'lodash.once';
 import { mouseEvents, touchEvents, keyboardEvents } from 'make-event-props';
 
 import { isDefined } from './utils';
 
 import LinkService from '../LinkService';
 
-export const eventsProps = once(() => {
-  const eventProps = {};
+export const eventProps = (() => {
+  const result = {};
 
   [...mouseEvents, ...touchEvents, ...keyboardEvents].forEach((eventName) => {
-    eventProps[eventName] = PropTypes.func;
+    result[eventName] = PropTypes.func;
   });
 
-  return eventProps;
-});
+  return result;
+})();
 
 const fileTypes = [
   PropTypes.string,
