@@ -320,7 +320,7 @@ export class PageInternal extends PureComponent {
      */
 
     return (
-      <AnnotationLayer key={`${this.pageKey}_annotations`} />
+      <AnnotationLayer key={`${this.pageKey}_annotations`} {...this.props} />
     );
   }
 
