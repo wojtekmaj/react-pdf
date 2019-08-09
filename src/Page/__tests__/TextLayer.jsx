@@ -1,15 +1,12 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import pdfjs from 'pdfjs-dist';
 
-import {} from '../../entry.noworker';
+import { pdfjs } from '../../entry.jest';
 import TextLayer from '../TextLayer';
 
 import failingPage from '../../../__mocks__/_failing_page';
 
 import { loadPDF, makeAsyncCallback, muteConsole, restoreConsole } from '../../__tests__/utils';
-
-const { PDFJS } = pdfjs;
 
 const { arrayBuffer: fileArrayBuffer } = loadPDF('./__mocks__/_pdf.pdf');
 
@@ -25,7 +22,7 @@ describe('TextLayer', () => {
   let desiredTextItems2;
 
   beforeAll(async () => {
-    const pdf = await PDFJS.getDocument({ data: fileArrayBuffer });
+    const pdf = await pdfjs.getDocument({ data: fileArrayBuffer });
 
     page = await pdf.getPage(1);
     const textContent = await page.getTextContent();

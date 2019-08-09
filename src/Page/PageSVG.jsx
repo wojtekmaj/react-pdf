@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import pdfjs from 'pdfjs-dist';
 
 import { callIfDefined, makePageCallback } from '../shared/utils';
 
@@ -55,7 +56,7 @@ export default class PageSVG extends Component {
 
     return this.renderer
       .then((operatorList) => {
-        const svgGfx = new PDFJS.SVGGraphics(page.commonObjs, page.objs);
+        const svgGfx = new pdfjs.SVGGraphics(page.commonObjs, page.objs);
         this.renderer = svgGfx.getSVG(operatorList, this.viewport)
           .then((svg) => {
             svg.style.maxWidth = '100%';

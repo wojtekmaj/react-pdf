@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { mount, shallow } from 'enzyme';
 
-import { Document } from '../entry.noworker';
+import { Document, pdfjs } from '../entry.jest';
 
 import { makeAsyncCallback, loadPDF, muteConsole, restoreConsole } from './utils';
 
@@ -34,10 +34,10 @@ describe('Document', () => {
   const desiredLoadedPdf2 = {};
 
   beforeAll(async () => {
-    const pdf = await PDFJS.getDocument({ data: fileArrayBuffer });
+    const pdf = await pdfjs.getDocument({ data: fileArrayBuffer });
     desiredLoadedPdf.pdfInfo = pdf.pdfInfo;
 
-    const pdf2 = await PDFJS.getDocument({ data: fileArrayBuffer2 });
+    const pdf2 = await pdfjs.getDocument({ data: fileArrayBuffer2 });
     desiredLoadedPdf2.pdfInfo = pdf2.pdfInfo;
   });
 

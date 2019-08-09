@@ -4,6 +4,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import mergeClassNames from 'merge-class-names';
+import pdfjs from 'pdfjs-dist';
 
 import LinkService from './LinkService';
 
@@ -100,15 +101,11 @@ export default class Document extends Component {
   onSourceSuccess = (source) => {
     callIfDefined(this.props.onSourceSuccess);
 
-    if (!PDFJS) {
-      throw new Error('Could not load the document. PDF.js is not loaded.');
-    }
-
     if (!source) {
       return null;
     }
 
-    this.runningTask = makeCancellable(PDFJS.getDocument(source));
+    this.runningTask = makeCancellable(pdfjs.getDocument(source));
 
     return this.runningTask.promise
       .then(this.onLoadSuccess)

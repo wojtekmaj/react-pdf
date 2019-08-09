@@ -102,14 +102,6 @@ import { Document } from 'react-pdf/dist/entry.parcel';
 
 If you use Browserify or other bundling tools, you will have to make sure on your own that `pdf.worker.js` file from `pdfjs-dist/build` is copied to your project's output folder.
 
-#### I give up
-
-If you absolutely have to, you can import React PDF with worker disabled. You can do so by importing React-PDF like so:
-
-```js
-import { Document } from 'react-pdf/dist/entry.noworker';
-```
-
 ### Support for annotations
 
 If you want to use annotations (e.g. links) in PDFs rendered by React-PDF, then you would need to include stylesheet necessary for annotations to be correctly displayed like so:

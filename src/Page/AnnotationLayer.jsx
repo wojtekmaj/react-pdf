@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import pdfjs from 'pdfjs-dist';
 
 import {
   callIfDefined,
@@ -126,7 +127,7 @@ export default class AnnotationLayer extends Component {
     this.annotationLayer.innerHTML = '';
 
     try {
-      PDFJS.AnnotationLayer.render(parameters);
+      pdfjs.AnnotationLayer.render(parameters);
       this.onRenderSuccess();
     } catch (error) {
       this.onRenderError(error);

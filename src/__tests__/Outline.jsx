@@ -1,8 +1,7 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import pdfjs from 'pdfjs-dist';
 
-import { Outline } from '../entry.noworker';
+import { Outline, pdfjs } from '../entry.jest';
 
 import failingPdf from '../../__mocks__/_failing_pdf';
 import { loadPDF, makeAsyncCallback, muteConsole, restoreConsole } from './utils';
@@ -24,8 +23,8 @@ describe('Outline', () => {
   let desiredLoadedOutline2 = null;
 
   beforeAll(async () => {
-    pdf = await PDFJS.getDocument({ data: fileArrayBuffer });
-    pdf2 = await PDFJS.getDocument({ data: fileArrayBuffer2 });
+    pdf = await pdfjs.getDocument({ data: fileArrayBuffer });
+    pdf2 = await pdfjs.getDocument({ data: fileArrayBuffer2 });
 
     desiredLoadedOutline = await pdf.getOutline();
     desiredLoadedOutline2 = await pdf2.getOutline();
