@@ -4354,7 +4354,7 @@ pbkdf2@^3.0.3:
 
 pdfjs-dist@2.0.550:
   version "2.0.550"
-  resolved "https://unpm.uberinternal.com/pdfjs-dist/-/pdfjs-dist-2.0.550.tgz#52a5bd05d8b250206ccd2843209cfa3b8f1ea4ae"
+  resolved "https://registry.yarnpkg.com/pdfjs-dist/-/pdfjs-dist-2.0.550.tgz#52a5bd05d8b250206ccd2843209cfa3b8f1ea4ae"
   dependencies:
     node-ensure "^0.0.0"
     worker-loader "^2.0.0"
@@ -5639,7 +5639,7 @@ wordwrap@~1.0.0:
 
 worker-loader@^2.0.0:
   version "2.0.0"
-  resolved "https://unpm.uberinternal.com/worker-loader/-/worker-loader-2.0.0.tgz#45fda3ef76aca815771a89107399ee4119b430ac"
+  resolved "https://registry.yarnpkg.com/worker-loader/-/worker-loader-2.0.0.tgz#45fda3ef76aca815771a89107399ee4119b430ac"
   dependencies:
     loader-utils "^1.0.0"
     schema-utils "^0.4.0"
