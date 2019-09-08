@@ -187,7 +187,7 @@ import { pdfjs } from 'react-pdf';
 
 <Document
   options={{
-    cMapUrl: `//cdn.jsdelivr.net/npm/pdfjs-dist@${pdfjs.version}/cmaps/`
+    cMapUrl: `//cdn.jsdelivr.net/npm/pdfjs-dist@${pdfjs.version}/cmaps/`,
     cMapPacked: true,
   }}
 />
