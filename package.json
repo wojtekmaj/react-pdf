@@ -109,7 +109,7 @@
     "react": "^16.7.0",
     "react-dom": "^16.7.0",
     "react-test-renderer": "^16.7.0",
-    "rimraf": "^2.6.2",
+    "rimraf": "^3.0.0",
     "webpack": "^4.35.0"
   },
   "peerDependencies": {
