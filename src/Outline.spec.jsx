@@ -1,14 +1,14 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 
-import { pdfjs } from '../entry.jest';
+import { pdfjs } from './entry.jest';
 
-import { OutlineInternal as Outline } from '../Outline';
+import { OutlineInternal as Outline } from './Outline';
 
-import failingPdf from '../../__mocks__/_failing_pdf';
+import failingPdf from '../__mocks__/_failing_pdf';
 import {
   loadPDF, makeAsyncCallback, muteConsole, restoreConsole,
-} from './utils';
+} from '../test-utils';
 
 const pdfFile = loadPDF('./__mocks__/_pdf.pdf');
 const pdfFile2 = loadPDF('./__mocks__/_pdf2.pdf');

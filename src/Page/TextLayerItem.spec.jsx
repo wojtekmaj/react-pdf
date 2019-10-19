@@ -1,11 +1,11 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 
-import { pdfjs } from '../../entry.jest';
+import { pdfjs } from '../entry.jest';
 
-import { TextLayerItemInternal as TextLayerItem } from '../TextLayerItem';
+import { TextLayerItemInternal as TextLayerItem } from './TextLayerItem';
 
-import { loadPDF } from '../../__tests__/utils';
+import { loadPDF } from '../../test-utils';
 
 const pdfFile = loadPDF('./__mocks__/_pdf.pdf');
 

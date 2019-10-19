@@ -1,4 +1,4 @@
-import Ref from '../Ref';
+import Ref from './Ref';
 
 describe('Ref', () => {
   it('returns proper reference for given num and gen', () => {
