@@ -1,11 +1,11 @@
 import React from 'react';
 import { mount } from 'enzyme';
 
-import { PageCanvasInternal as PageCanvas } from '../PageCanvas';
+import { PageCanvasInternal as PageCanvas } from './PageCanvas';
 
-import failingPage from '../../../__mocks__/_failing_page';
+import failingPage from '../../__mocks__/_failing_page';
 
-import { makeAsyncCallback, muteConsole, restoreConsole } from '../../__tests__/utils';
+import { makeAsyncCallback, muteConsole, restoreConsole } from '../../test-utils';
 
 /* eslint-disable comma-dangle */
 

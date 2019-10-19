@@ -1,10 +1,10 @@
 import React from 'react';
 import { shallow, mount } from 'enzyme';
 
-import { pdfjs } from '../entry.jest';
-import { OutlineItemInternal as OutlineItem } from '../OutlineItem';
+import { pdfjs } from './entry.jest';
+import { OutlineItemInternal as OutlineItem } from './OutlineItem';
 
-import { loadPDF, makeAsyncCallback } from './utils';
+import { loadPDF, makeAsyncCallback } from '../test-utils';
 
 const pdfFile = loadPDF('./__mocks__/_pdf.pdf');
 

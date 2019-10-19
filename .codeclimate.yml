@@ -15,4 +15,5 @@ ratings:
 exclude_paths:
 - "test"
 - "**/__mocks__"
-- "**/__tests__"
+- "**/*.spec.js"
+- "**/*.spec.jsx"

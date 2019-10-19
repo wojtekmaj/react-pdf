@@ -1,13 +1,13 @@
 import React from 'react';
 import { mount, shallow } from 'enzyme';
 
-import { pdfjs } from '../entry.jest';
+import { pdfjs } from './entry.jest';
 
-import Document from '../Document';
+import Document from './Document';
 
 import {
   makeAsyncCallback, loadPDF, muteConsole, restoreConsole,
-} from './utils';
+} from '../test-utils';
 
 const pdfFile = loadPDF('./__mocks__/_pdf.pdf');
 const pdfFile2 = loadPDF('./__mocks__/_pdf2.pdf');
