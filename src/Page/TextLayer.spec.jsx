@@ -1,15 +1,15 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 
-import { pdfjs } from '../../entry.jest';
+import { pdfjs } from '../entry.jest';
 
-import { TextLayerInternal as TextLayer } from '../TextLayer';
+import { TextLayerInternal as TextLayer } from './TextLayer';
 
-import failingPage from '../../../__mocks__/_failing_page';
+import failingPage from '../../__mocks__/_failing_page';
 
 import {
   loadPDF, makeAsyncCallback, muteConsole, restoreConsole,
-} from '../../__tests__/utils';
+} from '../../test-utils';
 
 const pdfFile = loadPDF('./__mocks__/_pdf.pdf');
 

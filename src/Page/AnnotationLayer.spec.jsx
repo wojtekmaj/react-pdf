@@ -1,16 +1,16 @@
 import React from 'react';
 import { mount, shallow } from 'enzyme';
 
-import { pdfjs } from '../../entry.jest';
+import { pdfjs } from '../entry.jest';
 
-import { AnnotationLayerInternal as AnnotationLayer } from '../AnnotationLayer';
-import LinkService from '../../LinkService';
+import { AnnotationLayerInternal as AnnotationLayer } from './AnnotationLayer';
+import LinkService from '../LinkService';
 
-import failingPage from '../../../__mocks__/_failing_page';
+import failingPage from '../../__mocks__/_failing_page';
 
 import {
   loadPDF, makeAsyncCallback, muteConsole, restoreConsole,
-} from '../../__tests__/utils';
+} from '../../test-utils';
 
 const pdfFile = loadPDF('./__mocks__/_pdf.pdf');
 

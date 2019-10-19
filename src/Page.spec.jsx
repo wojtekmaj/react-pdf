@@ -1,15 +1,15 @@
 import React from 'react';
 import { mount, shallow } from 'enzyme';
 
-import { pdfjs } from '../entry.jest';
+import { pdfjs } from './entry.jest';
 
-import { PageInternal as Page } from '../Page';
+import { PageInternal as Page } from './Page';
 
-import failingPdf from '../../__mocks__/_failing_pdf';
-import silentlyFailingPdf from '../../__mocks__/_silently_failing_pdf';
+import failingPdf from '../__mocks__/_failing_pdf';
+import silentlyFailingPdf from '../__mocks__/_silently_failing_pdf';
 import {
   loadPDF, makeAsyncCallback, muteConsole, restoreConsole,
-} from './utils';
+} from '../test-utils';
 
 const pdfFile = loadPDF('./__mocks__/_pdf.pdf');
 const pdfFile2 = loadPDF('./__mocks__/_pdf2.pdf');
