@@ -123,6 +123,7 @@ export class TextLayerInternal extends PureComponent {
           height: `${viewport.height}px`,
           color: 'transparent',
           transform: `translate(-50%, -50%) rotate(${rotate}deg)`,
+          WebkitTransform: `translate(-50%, -50%) rotate(${rotate}deg)`,
           pointerEvents: 'none',
         }}
       >
