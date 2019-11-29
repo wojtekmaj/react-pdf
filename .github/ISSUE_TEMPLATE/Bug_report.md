@@ -9,6 +9,7 @@ about: Something is not working in a way we promised
  - [ ] I followed instructions in documentation written for my React-PDF version
  - [ ] I have checked if this bug is not already reported
  - [ ] I have checked if an issue is not listed in [Known issues](https://github.com/wojtekmaj/react-pdf/wiki/Known-issues)
+ - [ ] If I have a problem with PDF rendering, I checked if my PDF renders properly in Mozilla Firefox
 
 **Description**
 
