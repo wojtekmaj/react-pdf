@@ -9,8 +9,8 @@
   "scripts": {
     "build": "yarn build-js-all && yarn copy-styles",
     "build-js-all": "yarn build-js-esm && yarn build-js-umd",
-    "build-js-esm": "BABEL_ENV=production-esm babel src -d dist/esm --ignore **/*.spec.js,**/*.spec.jsx",
-    "build-js-umd": "BABEL_ENV=production-umd babel src -d dist/umd --ignore **/*.spec.js,**/*.spec.jsx",
+    "build-js-esm": "cross-env BABEL_ENV=production-esm babel src -d dist/esm --ignore **/*.spec.js,**/*.spec.jsx",
+    "build-js-umd": "cross-env BABEL_ENV=production-umd babel src -d dist/umd --ignore **/*.spec.js,**/*.spec.jsx",
     "clean": "rimraf dist",
     "copy-styles": "node ./copy-styles.js",
     "jest": "jest",
@@ -101,6 +101,7 @@
     "@babel/preset-react": "^7.0.0",
     "babel-eslint": "^10.0.0",
     "babel-jest": "^24.0.0",
+    "cross-env": "^6.0.3",
     "enzyme": "^3.10.0",
     "enzyme-adapter-react-16": "^1.14.0",
     "eslint": "^6.1.0",
