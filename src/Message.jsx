@@ -7,6 +7,7 @@ export default function Message({ children, type }) {
       {children}
     </div>
   );
+}
 
 Message.propTypes = {
   children: PropTypes.node,
