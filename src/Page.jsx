@@ -437,12 +437,6 @@ function Page(props, ref) {
           ref={ref}
           {...context}
           {...props}
-          // For backwards compatibility
-          renderAnnotationLayer={
-            typeof props.renderAnnotationLayer !== 'undefined'
-              ? props.renderAnnotationLayer
-              : props.renderAnnotations
-          }
         />
       )}
     </DocumentContext.Consumer>
