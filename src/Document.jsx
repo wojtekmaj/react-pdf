@@ -76,6 +76,7 @@ export default class Document extends PureComponent {
   }
 
   componentWillUnmount() {
+    this.loadingTask.destroy();
     cancelRunningTask(this.runningTask);
   }
 
@@ -106,12 +107,12 @@ export default class Document extends PureComponent {
       // If another loading is in progress, let's cancel it
       cancelRunningTask(this.runningTask);
 
-      const loadingTask = pdfjs.getDocument({ ...source, ...options });
-      loadingTask.onPassword = onPassword;
+      this.loadingTask = pdfjs.getDocument({ ...source, ...options });
+      this.loadingTask.onPassword = onPassword;
       if (onLoadProgress) {
-        loadingTask.onProgress = onLoadProgress;
+        this.loadingTask.onProgress = onLoadProgress;
       }
-      const cancellable = makeCancellable(loadingTask.promise);
+      const cancellable = makeCancellable(this.loadingTask.promise);
       this.runningTask = cancellable;
       const pdf = await cancellable.promise;
 
