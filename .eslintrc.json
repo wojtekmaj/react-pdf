@@ -19,7 +19,8 @@
     }],
     "react/require-default-props": "off",
     "react/sort-comp": "off",
-    "react/sort-prop-types": "error"
+    "react/sort-prop-types": "error",
+    "react/state-in-constructor": ["error", "never"]
   },
   "overrides": [
     {
