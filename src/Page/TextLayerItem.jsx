@@ -111,10 +111,16 @@ export class TextLayerItemInternal extends PureComponent {
 
   render() {
     const { fontSize, top, left } = this;
-    const { customTextRenderer, scale, str: text } = this.props;
+    const {
+      customTextRenderer,
+      itemIndex,
+      scale,
+      str: text,
+    } = this.props;
 
     return (
       <span
+        id={`pdfSpan-${itemIndex}`}
         ref={(ref) => { this.item = ref; }}
         style={{
           height: '1em',
