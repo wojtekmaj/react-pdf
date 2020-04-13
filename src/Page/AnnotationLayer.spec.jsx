@@ -11,13 +11,14 @@ import failingPage from '../../__mocks__/_failing_page';
 import {
   loadPDF, makeAsyncCallback, muteConsole, restoreConsole,
 } from '../../test-utils';
+import eventBus from '../eventBus';
 
 const pdfFile = loadPDF('./__mocks__/_pdf.pdf');
 
 /* eslint-disable comma-dangle */
 
 describe('AnnotationLayer', () => {
-  const linkService = new LinkService();
+  const linkService = new LinkService({ eventBus });
 
   // Loaded page
   let page;
