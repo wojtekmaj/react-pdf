@@ -88,7 +88,7 @@
     "make-cancellable-promise": "^1.0.0",
     "make-event-props": "^1.1.0",
     "merge-class-names": "^1.1.1",
-    "pdfjs-dist": "2.2.228",
+    "pdfjs-dist": "2.3.200",
     "prop-types": "^15.6.2"
   },
   "devDependencies": {
