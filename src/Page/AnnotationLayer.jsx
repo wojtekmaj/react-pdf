@@ -7,7 +7,6 @@ import DocumentContext from '../DocumentContext';
 import PageContext from '../PageContext';
 
 import {
-  callIfDefined,
   cancelRunningTask,
   errorOnDev,
 } from '../shared/utils';
@@ -61,10 +60,7 @@ export class AnnotationLayerInternal extends PureComponent {
     const { onGetAnnotationsSuccess } = this.props;
     const { annotations } = this.state;
 
-    callIfDefined(
-      onGetAnnotationsSuccess,
-      annotations,
-    );
+    if (onGetAnnotationsSuccess) onGetAnnotationsSuccess(annotations);
   }
 
   onLoadError = (error) => {
@@ -74,16 +70,13 @@ export class AnnotationLayerInternal extends PureComponent {
 
     const { onGetAnnotationsError } = this.props;
 
-    callIfDefined(
-      onGetAnnotationsError,
-      error,
-    );
+    if (onGetAnnotationsError) onGetAnnotationsError(error);
   }
 
   onRenderSuccess = () => {
     const { onRenderAnnotationLayerSuccess } = this.props;
 
-    callIfDefined(onRenderAnnotationLayerSuccess);
+    if (onRenderAnnotationLayerSuccess) onRenderAnnotationLayerSuccess();
   }
 
   /**
@@ -94,10 +87,7 @@ export class AnnotationLayerInternal extends PureComponent {
 
     const { onRenderAnnotationLayerError } = this.props;
 
-    callIfDefined(
-      onRenderAnnotationLayerError,
-      error,
-    );
+    if (onRenderAnnotationLayerError) onRenderAnnotationLayerError(error);
   }
 
   get viewport() {

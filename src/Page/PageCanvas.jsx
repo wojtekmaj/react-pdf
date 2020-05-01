@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import PageContext from '../PageContext';
 
 import {
-  callIfDefined,
   errorOnDev,
   getPixelRatio,
   isCancelException,
@@ -57,10 +56,7 @@ export class PageCanvasInternal extends PureComponent {
 
     const { onRenderSuccess, page, scale } = this.props;
 
-    callIfDefined(
-      onRenderSuccess,
-      makePageCallback(page, scale),
-    );
+    if (onRenderSuccess) onRenderSuccess(makePageCallback(page, scale));
   }
 
   /**
@@ -75,10 +71,7 @@ export class PageCanvasInternal extends PureComponent {
 
     const { onRenderError } = this.props;
 
-    callIfDefined(
-      onRenderError,
-      error,
-    );
+    if (onRenderError) onRenderError(error);
   }
 
   get renderViewport() {

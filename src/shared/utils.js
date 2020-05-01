@@ -94,17 +94,6 @@ export const dataURItoUint8Array = (dataURI) => {
   return ia;
 };
 
-/**
- * Calls a function, if it's defined, with specified arguments
- * @param {Function} fn
- * @param {Object} args
- */
-export const callIfDefined = (fn, ...args) => {
-  if (fn && typeof fn === 'function') {
-    fn(...args);
-  }
-};
-
 export const getPixelRatio = () => (isBrowser && window.devicePixelRatio) || 1;
 
 const consoleOnDev = (method, ...message) => {
@@ -125,7 +114,7 @@ export const displayCORSWarning = () => {
 };
 
 export const cancelRunningTask = (runningTask) => {
-  callIfDefined(runningTask && runningTask.cancel);
+  if (runningTask && runningTask.cancel) runningTask.cancel();
 };
 
 export const makePageCallback = (page, scale) => {

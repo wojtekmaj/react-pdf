@@ -5,7 +5,6 @@ import pdfjs from 'pdfjs-dist';
 import PageContext from '../PageContext';
 
 import {
-  callIfDefined,
   errorOnDev,
   isCancelException,
   makePageCallback,
@@ -30,10 +29,7 @@ export class PageSVGInternal extends PureComponent {
 
     const { onRenderSuccess, page, scale } = this.props;
 
-    callIfDefined(
-      onRenderSuccess,
-      makePageCallback(page, scale),
-    );
+    if (onRenderSuccess) onRenderSuccess(makePageCallback(page, scale));
   }
 
   /**
@@ -48,10 +44,7 @@ export class PageSVGInternal extends PureComponent {
 
     const { onRenderError } = this.props;
 
-    callIfDefined(
-      onRenderError,
-      error,
-    );
+    if (onRenderError) onRenderError(error);
   }
 
   get viewport() {

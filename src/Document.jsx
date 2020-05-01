@@ -16,7 +16,6 @@ import LinkService from './LinkService';
 import PasswordResponses from './PasswordResponses';
 
 import {
-  callIfDefined,
   cancelRunningTask,
   dataURItoUint8Array,
   displayCORSWarning,
@@ -170,7 +169,8 @@ export default class Document extends PureComponent {
    */
   onSourceSuccess = () => {
     const { onSourceSuccess } = this.props;
-    callIfDefined(onSourceSuccess);
+
+    if (onSourceSuccess) onSourceSuccess();
   }
 
   /**
@@ -181,10 +181,7 @@ export default class Document extends PureComponent {
 
     const { onSourceError } = this.props;
 
-    callIfDefined(
-      onSourceError,
-      error,
-    );
+    if (onSourceError) onSourceError(error);
   }
 
   /**
@@ -194,10 +191,7 @@ export default class Document extends PureComponent {
     const { onLoadSuccess } = this.props;
     const { pdf } = this.state;
 
-    callIfDefined(
-      onLoadSuccess,
-      pdf,
-    );
+    if (onLoadSuccess) onLoadSuccess(pdf);
 
     this.pages = new Array(pdf.numPages);
     this.linkService.setDocument(pdf);
@@ -213,10 +207,7 @@ export default class Document extends PureComponent {
 
     const { onLoadError } = this.props;
 
-    callIfDefined(
-      onLoadError,
-      error,
-    );
+    if (onLoadError) onLoadError(error);
   }
 
   /**

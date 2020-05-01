@@ -10,7 +10,6 @@ import OutlineContext from './OutlineContext';
 import OutlineItem from './OutlineItem';
 
 import {
-  callIfDefined,
   cancelRunningTask,
   errorOnDev,
 } from './shared/utils';
@@ -82,10 +81,7 @@ export class OutlineInternal extends PureComponent {
     const { onLoadSuccess } = this.props;
     const { outline } = this.state;
 
-    callIfDefined(
-      onLoadSuccess,
-      outline,
-    );
+    if (onLoadSuccess) onLoadSuccess(outline);
   }
 
   /**
@@ -98,22 +94,18 @@ export class OutlineInternal extends PureComponent {
 
     const { onLoadError } = this.props;
 
-    callIfDefined(
-      onLoadError,
-      error,
-    );
+    if (onLoadError) onLoadError(error);
   }
 
   onItemClick = ({ pageIndex, pageNumber }) => {
     const { onItemClick } = this.props;
 
-    callIfDefined(
-      onItemClick,
-      {
+    if (onItemClick) {
+      onItemClick({
         pageIndex,
         pageNumber,
-      },
-    );
+      });
+    }
   }
 
   renderOutline() {

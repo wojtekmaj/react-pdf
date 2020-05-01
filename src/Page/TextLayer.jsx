@@ -7,7 +7,6 @@ import PageContext from '../PageContext';
 import TextLayerItem from './TextLayerItem';
 
 import {
-  callIfDefined,
   cancelRunningTask,
   errorOnDev,
 } from '../shared/utils';
@@ -58,10 +57,7 @@ export class TextLayerInternal extends PureComponent {
     const { onGetTextSuccess } = this.props;
     const { textItems } = this.state;
 
-    callIfDefined(
-      onGetTextSuccess,
-      textItems,
-    );
+    if (onGetTextSuccess) onGetTextSuccess(textItems);
   }
 
   onLoadError = (error) => {
@@ -71,10 +67,7 @@ export class TextLayerInternal extends PureComponent {
 
     const { onGetTextError } = this.props;
 
-    callIfDefined(
-      onGetTextError,
-      error,
-    );
+    if (onGetTextError) onGetTextError(error);
   }
 
   get unrotatedViewport() {
