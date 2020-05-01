@@ -14,7 +14,6 @@ import TextLayer from './Page/TextLayer';
 import AnnotationLayer from './Page/AnnotationLayer';
 
 import {
-  callIfDefined,
   cancelRunningTask,
   errorOnDev,
   isProvided,
@@ -57,10 +56,7 @@ export class PageInternal extends PureComponent {
     ) {
       const { unregisterPage } = this.props;
 
-      callIfDefined(
-        unregisterPage,
-        this.getPageIndex(prevProps),
-      );
+      if (unregisterPage) unregisterPage(this.getPageIndex(prevProps));
 
       this.loadPage();
     }
@@ -69,10 +65,7 @@ export class PageInternal extends PureComponent {
   componentWillUnmount() {
     const { unregisterPage } = this.props;
 
-    callIfDefined(
-      unregisterPage,
-      this.pageIndex,
-    );
+    if (unregisterPage) unregisterPage(this.pageIndex);
 
     cancelRunningTask(this.runningTask);
   }
@@ -121,16 +114,9 @@ export class PageInternal extends PureComponent {
     const { onLoadSuccess, registerPage } = this.props;
     const { page } = this.state;
 
-    callIfDefined(
-      onLoadSuccess,
-      makePageCallback(page, this.scale),
-    );
+    if (onLoadSuccess) onLoadSuccess(makePageCallback(page, this.scale));
 
-    callIfDefined(
-      registerPage,
-      this.pageIndex,
-      this.ref,
-    );
+    if (registerPage) registerPage(this.pageIndex, this.ref);
   }
 
   /**
@@ -141,10 +127,7 @@ export class PageInternal extends PureComponent {
 
     const { onLoadError } = this.props;
 
-    callIfDefined(
-      onLoadError,
-      error,
-    );
+    if (onLoadError) onLoadError(error);
   }
 
   getPageIndex(props = this.props) {

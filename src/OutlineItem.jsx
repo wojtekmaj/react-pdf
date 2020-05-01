@@ -6,7 +6,7 @@ import OutlineContext from './OutlineContext';
 
 import Ref from './Ref';
 
-import { callIfDefined, isDefined } from './shared/utils';
+import { isDefined } from './shared/utils';
 
 import { isPdf } from './shared/propTypes';
 
@@ -55,13 +55,12 @@ export class OutlineItemInternal extends PureComponent {
     const pageIndex = await this.getPageIndex();
     const pageNumber = await this.getPageNumber();
 
-    callIfDefined(
-      onClick,
-      {
+    if (onClick) {
+      onClick({
         pageIndex,
         pageNumber,
-      },
-    );
+      });
+    }
   }
 
   renderSubitems() {
