@@ -18,8 +18,9 @@ A minimal demo page can be found in `sample` directory.
 
 ## Before you continue
 
-React-PDF is under constant development. This documentation is written for React-PDF 4.x branch. If you want to see documentation for other versions of React-PDF, use dropdown on top of GitHub page to switch to an appropriate tag. Here are quick links to the newest docs from each branch:
+React-PDF is under constant development. This documentation is written for React-PDF 5.x branch. If you want to see documentation for other versions of React-PDF, use dropdown on top of GitHub page to switch to an appropriate tag. Here are quick links to the newest docs from each branch:
 
+* [v4.x](https://github.com/wojtekmaj/react-pdf/blob/v4.x/README.md)
 * [v3.x](https://github.com/wojtekmaj/react-pdf/blob/v3.x/README.md)
 * [v2.x](https://github.com/wojtekmaj/react-pdf/blob/v2.x/README.md)
 * [v1.x](https://github.com/wojtekmaj/react-pdf/blob/v1.8.3/README.md)
