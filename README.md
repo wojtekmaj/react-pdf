@@ -48,34 +48,28 @@ Add React-PDF to your project by executing `npm install react-pdf` or `yarn add 
 Here's an example of basic usage:
 
 ```js
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import { Document, Page } from 'react-pdf';
 
-class MyApp extends Component {
-  state = {
-    numPages: null,
-    pageNumber: 1,
+function MyApp() {
+  const [numPages, setNumPages] = useState(null);
+  const [pageNumber, setPageNumber] = useState(1);
+
+  function onDocumentLoadSuccess({ numPages }) {
+    setNumPages(numPages);
   }
 
-  onDocumentLoadSuccess = ({ numPages }) => {
-    this.setState({ numPages });
-  }
-
-  render() {
-    const { pageNumber, numPages } = this.state;
-
-    return (
-      <div>
-        <Document
-          file="somefile.pdf"
-          onLoadSuccess={this.onDocumentLoadSuccess}
-        >
-          <Page pageNumber={pageNumber} />
-        </Document>
-        <p>Page {pageNumber} of {numPages}</p>
-      </div>
-    );
-  }
+  return (
+    <div>
+      <Document
+        file="somefile.pdf"
+        onLoadSuccess={onDocumentLoadSuccess}
+      >
+        <Page pageNumber={pageNumber} />
+      </Document>
+      <p>Page {pageNumber} of {numPages}</p>
+    </div>
+  );
 }
 ```
 
