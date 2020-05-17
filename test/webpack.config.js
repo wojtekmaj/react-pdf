@@ -1,17 +1,25 @@
 const path = require('path');
-// eslint-disable-next-line import/no-unresolved
+
 const CopyWebpackPlugin = require('copy-webpack-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+
+const isProduction = process.env.NODE_ENV === 'production';
+const isDevelopment = !isProduction;
 
 module.exports = {
-  mode: 'production',
-  context: __dirname,
-  devtool: 'source-map',
-  entry: [
-    './index',
-  ],
+  mode: isProduction ? 'production' : 'development',
+  bail: isProduction,
+  context: path.join(__dirname),
+  entry: {
+    src: [
+      isDevelopment && 'react-hot-loader/patch',
+      './index.jsx',
+    ].filter(Boolean),
+  },
   output: {
-    path: path.join(__dirname, 'dist'),
-    filename: '[name].bundle.js',
+    path: path.resolve(__dirname, 'dist'),
+    filename: '[name].[hash:8].js',
   },
   resolve: {
     extensions: ['.js', '.jsx'],
@@ -19,13 +27,27 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.pdf$/,
-        use: 'url-loader',
+        test: /\.jsx?$/,
+        exclude: /node_modules/,
+        use: [
+          {
+            loader: 'babel-loader',
+            options: {
+              babelrcRoots: ['.', '../'],
+              plugins: [isDevelopment && 'react-hot-loader/babel'].filter(Boolean),
+            },
+          },
+        ],
+      },
+      isDevelopment && {
+        test: /\.jsx?$/,
+        include: /node_modules\/react-dom/,
+        use: 'react-hot-loader/webpack',
       },
       {
         test: /\.less$/,
         use: [
-          'style-loader',
+          isProduction ? MiniCssExtractPlugin.loader : 'style-loader',
           'css-loader',
           'less-loader',
         ],
@@ -33,23 +55,41 @@ module.exports = {
       {
         test: /\.css$/,
         use: [
-          'style-loader',
+          isProduction ? MiniCssExtractPlugin.loader : 'style-loader',
           'css-loader',
         ],
       },
       {
-        test: /\.jsx?$/,
-        exclude: /node_modules/,
-        loader: 'babel-loader',
-        options: { babelrcRoots: ['.', '../'] },
+        test: /\.pdf$/,
+        use: 'url-loader',
       },
-    ],
+    ].filter(Boolean),
   },
   plugins: [
     new CopyWebpackPlugin([
-      { from: './index.html' },
-      { from: './test.pdf' },
+      'test.pdf',
       { from: 'node_modules/pdfjs-dist/cmaps/', to: 'cmaps/' },
     ]),
-  ],
+    new HtmlWebpackPlugin({
+      template: 'index.html',
+    }),
+    isProduction && new MiniCssExtractPlugin({
+      filename: '[name].[chunkhash:8].css',
+      chunkFilename: '[name].[chunkhash:8].css',
+    }),
+  ].filter(Boolean),
+  optimization: {
+    moduleIds: 'named',
+  },
+  stats: {
+    assetsSort: '!size',
+    entrypoints: false,
+  },
+  devServer: {
+    compress: true,
+    historyApiFallback: true, // respond to 404s with index.html
+    host: 'localhost',
+    hot: true, // enable HMR on the server
+    port: 3000,
+  },
 };
