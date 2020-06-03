@@ -34,24 +34,24 @@ describe('Page', () => {
     pdf = await pdfjs.getDocument({ data: pdfFile.arrayBuffer }).promise;
 
     const page = await pdf.getPage(1);
-    desiredLoadedPage.pageIndex = page.pageIndex;
+    desiredLoadedPage._pageIndex = page._pageIndex;
     desiredLoadedPage._pageInfo = page._pageInfo;
 
     const page2 = await pdf.getPage(2);
-    desiredLoadedPage2.pageIndex = page2.pageIndex;
+    desiredLoadedPage2._pageIndex = page2._pageIndex;
     desiredLoadedPage2._pageInfo = page2._pageInfo;
 
     pdf2 = await pdfjs.getDocument({ data: pdfFile2.arrayBuffer }).promise;
 
     const page3 = await pdf2.getPage(1);
-    desiredLoadedPage3.pageIndex = page3.pageIndex;
+    desiredLoadedPage3._pageIndex = page3._pageIndex;
     desiredLoadedPage3._pageInfo = page3._pageInfo;
 
     registerPageArguments.push(
-      page.pageIndex,
+      page._pageIndex,
       undefined, // Page reference is not defined in Enzyme
     );
-    unregisterPageArguments = page.pageIndex;
+    unregisterPageArguments = page._pageIndex;
   });
 
   describe('loading', () => {
