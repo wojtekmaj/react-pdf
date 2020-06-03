@@ -1,4 +1,4 @@
-import { RenderingCancelledException } from 'pdfjs-dist';
+import { RenderingCancelledException } from 'pdfjs-dist/es5/build/pdf';
 
 export default {
   _pdfInfo: {
