@@ -5,13 +5,13 @@ import { pdfjs } from '../entry.jest';
 
 import { AnnotationLayerInternal as AnnotationLayer } from './AnnotationLayer';
 import LinkService from '../LinkService';
+import eventBus from '../eventBus';
 
 import failingPage from '../../__mocks__/_failing_page';
 
 import {
   loadPDF, makeAsyncCallback, muteConsole, restoreConsole,
 } from '../../test-utils';
-import eventBus from '../eventBus';
 
 const pdfFile = loadPDF('./__mocks__/_pdf.pdf');
 
