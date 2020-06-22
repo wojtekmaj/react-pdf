@@ -392,15 +392,21 @@ PageInternal.defaultProps = {
   scale: defaultScale,
 };
 
+const isFunctionOrNode = PropTypes.oneOfType([
+  PropTypes.func,
+  PropTypes.node,
+]);
+
 PageInternal.propTypes = {
+  ...eventProps,
   children: PropTypes.node,
   className: isClassName,
   customTextRenderer: PropTypes.func,
-  error: PropTypes.node,
+  error: isFunctionOrNode,
   height: PropTypes.number,
   inputRef: PropTypes.func,
-  loading: PropTypes.node,
-  noData: PropTypes.node,
+  loading: isFunctionOrNode,
+  noData: isFunctionOrNode,
   onGetTextError: PropTypes.func,
   onGetTextSuccess: PropTypes.func,
   onLoadError: PropTypes.func,
@@ -419,7 +425,6 @@ PageInternal.propTypes = {
   scale: PropTypes.number,
   unregisterPage: PropTypes.func,
   width: PropTypes.number,
-  ...eventProps,
 };
 
 // forwardRef render functions do not support propTypes

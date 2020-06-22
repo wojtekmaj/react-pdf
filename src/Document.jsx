@@ -368,14 +368,20 @@ Document.defaultProps = {
   },
 };
 
+const isFunctionOrNode = PropTypes.oneOfType([
+  PropTypes.func,
+  PropTypes.node,
+]);
+
 Document.propTypes = {
+  ...eventProps,
   children: PropTypes.node,
   className: isClassName,
-  error: PropTypes.node,
+  error: isFunctionOrNode,
   file: isFile,
   inputRef: PropTypes.func,
-  loading: PropTypes.node,
-  noData: PropTypes.node,
+  loading: isFunctionOrNode,
+  noData: isFunctionOrNode,
   onItemClick: PropTypes.func,
   onLoadError: PropTypes.func,
   onLoadProgress: PropTypes.func,
@@ -384,5 +390,4 @@ Document.propTypes = {
   onSourceError: PropTypes.func,
   onSourceSuccess: PropTypes.func,
   rotate: PropTypes.number,
-  ...eventProps,
 };
