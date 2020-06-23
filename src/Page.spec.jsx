@@ -680,7 +680,6 @@ describe('Page', () => {
     });
   });
 
-
   it('requests page to be rendered at its original size given nothing', () => {
     const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 

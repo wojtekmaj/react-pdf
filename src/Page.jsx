@@ -307,7 +307,6 @@ export class PageInternal extends PureComponent {
       children,
     } = this.props;
 
-
     return (
       <PageContext.Provider value={this.childContext}>
         {this.renderMainLayer()}

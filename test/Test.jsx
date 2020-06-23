@@ -49,7 +49,6 @@ export const readAsDataURL = file => new Promise((resolve, reject) => {
   return null;
 });
 
-
 /* eslint-disable no-console */
 
 export default class Test extends PureComponent {
