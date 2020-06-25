@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 import makeEventProps from 'make-event-props';
 import makeCancellable from 'make-cancellable-promise';
 import mergeClassNames from 'merge-class-names';
-import pdfjs, { PDFDataRangeTransport } from 'pdfjs-dist/es5/build/pdf';
+import pdfjs from 'pdfjs-dist/es5/build/pdf';
 
 import DocumentContext from './DocumentContext';
 
@@ -31,6 +31,8 @@ import {
 } from './shared/utils';
 
 import { eventProps, isClassName } from './shared/propTypes';
+
+const { PDFDataRangeTransport } = pdfjs;
 
 export default class Document extends PureComponent {
   state = {
