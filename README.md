@@ -12,7 +12,7 @@ Display PDFs in your React app as easily as if they were images.
 
 ## Demo
 
-Minimal demo page is included in sample directory.
+A minimal demo page can be found in `sample` directory.
 
 [Online demo](http://projects.wojtekmaj.pl/react-pdf/) is also available!
 
@@ -30,7 +30,7 @@ React-PDF is under constant development. This documentation is written for React
 
 To use the latest version of React-PDF, your project needs to use React 16.3 or later.
 
-If you use older version of React, please refer to the table below to find suitable React-PDF version. Don't worry - as long as you're running React 15.5 or later, you won't be missing out a lot!
+If you use an older version of React, please refer to the table below to a find suitable React-PDF version. Don't worry - as long as you're running React 15.5 or later, you won't be missing out a lot!
 
 | React version | Newest compatible React-PDF version |
 |-------|--------|
@@ -146,7 +146,7 @@ Now, in your Webpack config, import the plugin:
 import CopyWebpackPlugin from 'copy-webpack-plugin';
 ```
 
-and in plugins section of your config, add the following:
+and in `plugins` section of your config, add the following:
 
 ```js
 new CopyWebpackPlugin([
