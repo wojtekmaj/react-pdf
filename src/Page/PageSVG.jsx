@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import pdfjs from 'pdfjs-dist/es5/build/pdf';
+import pdfjs from 'pdfjs-dist/build/pdf';
 
 import PageContext from '../PageContext';
 
