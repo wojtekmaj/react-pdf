@@ -3,6 +3,7 @@ const path = require('path');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
 
 const isProduction = process.env.NODE_ENV === 'production';
 const isDevelopment = !isProduction;
@@ -12,10 +13,7 @@ module.exports = {
   bail: isProduction,
   context: path.join(__dirname),
   entry: {
-    src: [
-      isDevelopment && 'react-hot-loader/patch',
-      './index.jsx',
-    ].filter(Boolean),
+    src: './index.jsx',
   },
   output: {
     path: path.resolve(__dirname, 'dist'),
@@ -34,15 +32,10 @@ module.exports = {
             loader: 'babel-loader',
             options: {
               babelrcRoots: ['.', '../'],
-              plugins: [isDevelopment && 'react-hot-loader/babel'].filter(Boolean),
+              plugins: [isDevelopment && 'react-refresh/babel'].filter(Boolean),
             },
           },
         ],
-      },
-      isDevelopment && {
-        test: /\.jsx?$/,
-        include: /node_modules\/react-dom/,
-        use: 'react-hot-loader/webpack',
       },
       {
         test: /\.less$/,
@@ -77,6 +70,7 @@ module.exports = {
       filename: '[name].[chunkhash:8].css',
       chunkFilename: '[name].[chunkhash:8].css',
     }),
+    isDevelopment && new ReactRefreshWebpackPlugin(),
   ].filter(Boolean),
   optimization: {
     moduleIds: 'named',
