@@ -2,8 +2,7 @@ import pdfjs from 'pdfjs-dist/build/pdf';
 import Document from './Document';
 import Outline from './Outline';
 import Page from './Page';
-// eslint-disable-next-line
-import PdfjsWorker from 'worker-loader!./pdf.worker.entry.js';
+import PdfjsWorker from './pdf.worker.entry';
 
 import { isLocalFileSystem, warnOnDev } from './shared/utils';
 
@@ -12,7 +11,7 @@ if (isLocalFileSystem) {
 }
 
 if (typeof window !== 'undefined' && 'Worker' in window) {
-  pdfjs.GlobalWorkerOptions.workerPort = new PdfjsWorker();
+  pdfjs.GlobalWorkerOptions.workerSrc = PdfjsWorker;
 }
 
 export {
