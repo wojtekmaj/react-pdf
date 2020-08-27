@@ -80,7 +80,7 @@ function MyApp() {
 }
 ```
 
-Check the [sample directory](https://github.com/wojtekmaj/react-pdf/tree/master/sample) in this repository for a full working example. For more examples and more advanced use cases, check [Recipes](https://github.com/wojtekmaj/react-pdf/wiki/Recipes) in React-PDF Wiki.
+Check the [sample directory](https://github.com/wojtekmaj/react-pdf/tree/master/sample) in this repository for a full working example. For more examples and more advanced use cases, check [Recipes](https://github.com/wojtekmaj/react-pdf/wiki/Recipes) in [React-PDF Wiki](https://github.com/wojtekmaj/react-pdf/wiki/).
 
 ### Enable PDF.js worker
 
@@ -279,6 +279,10 @@ Displays an outline (table of contents). Should be placed inside `<Document />`.
 |onItemClick|Function called when an outline item has been clicked. Usually, you would like to use this callback to move the user wherever they requested to.|n/a|`({ pageNumber }) => alert('Clicked an item from page ' + pageNumber + '!')`|
 |onLoadError|Function called in case of an error while retrieving the outline.|n/a|`(error) => alert('Error while retrieving the outline! ' + error.message)`|
 |onLoadSuccess|Function called when the outline is successfully retrieved.|n/a|`(outline) => alert('The outline has been successfully retrieved.')`|
+
+## Useful links
+
+* [React-PDF Wiki](https://github.com/wojtekmaj/react-pdf/wiki/)
 
 ## License
 
