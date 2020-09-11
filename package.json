@@ -8,8 +8,8 @@
   "scripts": {
     "build": "yarn build-js-all && yarn copy-styles",
     "build-js-all": "yarn build-js-esm && yarn build-js-umd",
-    "build-js-esm": "cross-env BABEL_ENV=production-esm babel src -d dist/esm --ignore **/*.spec.js,**/*.spec.jsx",
-    "build-js-umd": "cross-env BABEL_ENV=production-umd babel src -d dist/umd --ignore **/*.spec.js,**/*.spec.jsx",
+    "build-js-esm": "cross-env BABEL_ENV=production-esm babel src -d dist/esm --ignore \"**/*.spec.js,**/*.spec.jsx\"",
+    "build-js-umd": "cross-env BABEL_ENV=production-umd babel src -d dist/umd --ignore \"**/*.spec.js,**/*.spec.jsx\"",
     "clean": "rimraf dist",
     "copy-styles": "node ./copy-styles.js",
     "jest": "jest",
