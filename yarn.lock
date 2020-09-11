@@ -9411,7 +9411,7 @@ fsevents@^1.2.7:
     prop-types: ^15.6.2
     react: ^16.5.0
     react-dom: ^16.5.0
-    react-pdf: "workspace:*"
+    react-pdf: "portal:../"
     react-refresh: ^0.8.3
     style-loader: ^0.23.0
     url-loader: ^1.1.1
@@ -9421,7 +9421,46 @@ fsevents@^1.2.7:
   languageName: unknown
   linkType: soft
 
-"react-pdf@workspace:*, react-pdf@workspace:.":
+"react-pdf@portal:../::locator=react-pdf-test-page%40workspace%3Atest":
+  version: 0.0.0-use.local
+  resolution: "react-pdf@portal:../::locator=react-pdf-test-page%40workspace%3Atest"
+  dependencies:
+    "@babel/cli": ^7.8.0
+    "@babel/core": ^7.9.0
+    "@babel/plugin-proposal-class-properties": ^7.8.0
+    "@babel/plugin-transform-runtime": ^7.9.0
+    "@babel/preset-env": ^7.9.0
+    "@babel/preset-react": ^7.9.0
+    "@babel/runtime": ^7.0.0
+    babel-eslint: ^10.0.0
+    cross-env: ^7.0.0
+    enzyme: ^3.10.0
+    enzyme-adapter-react-16: ^1.14.0
+    eslint: ~7.2.0
+    eslint-config-airbnb: ^18.2.0
+    eslint-plugin-import: ^2.21.2
+    eslint-plugin-jsx-a11y: ^6.3.0
+    eslint-plugin-react: ^7.20.0
+    eslint-plugin-react-hooks: ^4.0.0
+    jest: ^26.0.0
+    make-cancellable-promise: ^1.0.0
+    make-event-props: ^1.1.0
+    merge-class-names: ^1.1.1
+    pdfjs-dist: 2.4.456
+    prop-types: ^15.6.2
+    react: ^16.7.0
+    react-dom: ^16.7.0
+    react-test-renderer: ^16.7.0
+    rimraf: ^3.0.0
+    webpack: ^4.35.0
+    worker-loader: ^3.0.0
+  peerDependencies:
+    react: ^16.3.0
+    react-dom: ^16.3.0
+  languageName: node
+  linkType: soft
+
+"react-pdf@workspace:.":
   version: 0.0.0-use.local
   resolution: "react-pdf@workspace:."
   dependencies:
