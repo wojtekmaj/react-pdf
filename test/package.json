@@ -16,7 +16,7 @@
     "prop-types": "^15.6.2",
     "react": "^16.5.0",
     "react-dom": "^16.5.0",
-    "react-pdf": "latest"
+    "react-pdf": "portal:../"
   },
   "devDependencies": {
     "@babel/core": "^7.5.5",
