@@ -1,4 +1,4 @@
-import { dataURItoUint8Array } from '../../src/shared/utils';
+import { dataURItoUint8Array } from 'react-pdf/src/shared/utils';
 
 /* eslint-disable import/prefer-default-export */
 

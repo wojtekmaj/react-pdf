@@ -17,16 +17,22 @@ module.exports = {
   },
   output: {
     path: path.resolve(__dirname, 'dist'),
-    filename: '[name].[hash:8].js',
+    filename: '[name].[chunkhash:8].js',
   },
   resolve: {
     extensions: ['.js', '.jsx'],
+    symlinks: false,
+  },
+  resolveLoader: {
+    alias: {
+      'worker-loader': require.resolve('worker-loader'),
+    },
   },
   module: {
     rules: [
       {
         test: /\.jsx?$/,
-        exclude: /node_modules/,
+        exclude: /node_modules(?!\/react-pdf)/,
         use: [
           {
             loader: 'babel-loader',

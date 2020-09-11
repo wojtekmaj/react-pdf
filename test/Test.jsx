@@ -4,6 +4,14 @@ import { PDFDataRangeTransport } from 'pdfjs-dist';
 import { Document, Outline, Page } from 'react-pdf/src/entry.webpack';
 import 'react-pdf/src/Page/AnnotationLayer.css';
 
+import {
+  isArrayBuffer,
+  isBlob,
+  isBrowser,
+  isFile,
+  loadFromFile,
+} from 'react-pdf/src/shared/utils';
+
 import './Test.less';
 
 import AnnotationOptions from './AnnotationOptions';
@@ -13,13 +21,6 @@ import PassingOptions from './PassingOptions';
 import ViewOptions from './ViewOptions';
 
 import { dataURItoBlob } from './shared/utils';
-import {
-  isArrayBuffer,
-  isBlob,
-  isBrowser,
-  isFile,
-  loadFromFile,
-} from '../src/shared/utils';
 
 const options = {
   cMapUrl: 'cmaps/',

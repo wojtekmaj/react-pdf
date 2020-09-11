@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { isDataURI } from 'react-pdf/src/shared/utils';
 
-import { isDataURI } from '../src/shared/utils';
 import { isFile } from './shared/propTypes';
 
 export default function PassingOptions({
