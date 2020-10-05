@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import makeCancellable from 'make-cancellable-promise';
 import makeEventProps from 'make-event-props';
 import mergeClassNames from 'merge-class-names';
+import mergeRefs from 'merge-refs';
 
 import DocumentContext from './DocumentContext';
 import PageContext from './PageContext';
@@ -26,6 +27,7 @@ import {
   isPageIndex,
   isPageNumber,
   isPdf,
+  isRef,
   isRenderMode,
   isRotate,
 } from './shared/propTypes';
@@ -357,20 +359,13 @@ export class PageInternal extends PureComponent {
 
   render() {
     const { pageNumber } = this;
-    const { className } = this.props;
+    const { className, inputRef } = this.props;
 
     return (
       <div
         className={mergeClassNames('react-pdf__Page', className)}
         data-page-number={pageNumber}
-        ref={(ref) => {
-          const { inputRef } = this.props;
-          if (inputRef) {
-            inputRef(ref);
-          }
-
-          this.ref = ref;
-        }}
+        ref={mergeRefs(inputRef, this.ref)}
         style={{ position: 'relative' }}
         {...this.eventProps}
       >
@@ -403,7 +398,7 @@ PageInternal.propTypes = {
   customTextRenderer: PropTypes.func,
   error: isFunctionOrNode,
   height: PropTypes.number,
-  inputRef: PropTypes.func,
+  inputRef: isRef,
   loading: isFunctionOrNode,
   noData: isFunctionOrNode,
   onGetTextError: PropTypes.func,

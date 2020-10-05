@@ -14,7 +14,12 @@ import {
   errorOnDev,
 } from './shared/utils';
 
-import { eventProps, isClassName, isPdf } from './shared/propTypes';
+import {
+  eventProps,
+  isClassName,
+  isPdf,
+  isRef,
+} from './shared/propTypes';
 
 export class OutlineInternal extends PureComponent {
   state = {
@@ -155,7 +160,7 @@ export class OutlineInternal extends PureComponent {
 
 OutlineInternal.propTypes = {
   className: isClassName,
-  inputRef: PropTypes.func,
+  inputRef: isRef,
   onItemClick: PropTypes.func,
   onLoadError: PropTypes.func,
   onLoadSuccess: PropTypes.func,

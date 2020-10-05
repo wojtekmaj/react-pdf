@@ -5900,6 +5900,13 @@ fsevents@^2.1.2:
   languageName: node
   linkType: hard
 
+"merge-refs@npm:^1.0.0":
+  version: 1.0.0
+  resolution: "merge-refs@npm:1.0.0"
+  checksum: 75e0b1a301e3ac9f057e4f4f8fc5c286af169e5cc7afc0786653ee7e7d338b8756c6b10a934793dfb80a9fbdb7bf2b002ddb173b0106329dfcf27909550a62fc
+  languageName: node
+  linkType: hard
+
 "merge-stream@npm:^2.0.0":
   version: 2.0.0
   resolution: "merge-stream@npm:2.0.0"
@@ -7030,6 +7037,7 @@ fsevents@^2.1.2:
     make-cancellable-promise: ^1.0.0
     make-event-props: ^1.1.0
     merge-class-names: ^1.1.1
+    merge-refs: ^1.0.0
     pdfjs-dist: 2.4.456
     prop-types: ^15.6.2
     react: ^16.7.0
