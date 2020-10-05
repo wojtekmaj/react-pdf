@@ -1,5 +1,5 @@
 import React from 'react';
-import { shallow } from 'enzyme';
+import { mount, shallow } from 'enzyme';
 
 import { pdfjs } from './entry.jest';
 
@@ -95,6 +95,47 @@ describe('Outline', () => {
   });
 
   describe('rendering', () => {
+    it('applies className to its wrapper when given a string', async () => {
+      const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
+
+      const className = 'testClassName';
+
+      const component = shallow(
+        <Outline
+          className={className}
+          onLoadSuccess={onLoadSuccess}
+          pdf={pdf}
+        />
+      );
+
+      expect.assertions(1);
+      await onLoadSuccessPromise;
+
+      const wrapperClassName = component.find('.react-pdf__Outline').prop('className');
+
+      expect(wrapperClassName.includes(className)).toBe(true);
+    });
+
+    it('passes container element to inputRef properly', async () => {
+      const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
+
+      const inputRef = jest.fn();
+
+      mount(
+        <Outline
+          inputRef={inputRef}
+          onLoadSuccess={onLoadSuccess}
+          pdf={pdf}
+        />
+      );
+
+      expect.assertions(2);
+      await onLoadSuccessPromise;
+
+      expect(inputRef).toHaveBeenCalled();
+      expect(inputRef.mock.calls[0][0]).toBeInstanceOf(HTMLElement);
+    });
+
     it('renders OutlineItem components properly', async () => {
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
@@ -106,12 +147,11 @@ describe('Outline', () => {
       );
 
       expect.assertions(1);
-      return onLoadSuccessPromise.then(() => {
-        component.update();
-        const items = component.children().find('OutlineItem');
+      await onLoadSuccessPromise;
 
-        expect(items).toHaveLength(desiredLoadedOutline.length);
-      });
+      const items = component.children().find('OutlineItem');
+
+      expect(items).toHaveLength(desiredLoadedOutline.length);
     });
   });
 });
