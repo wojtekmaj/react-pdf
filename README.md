@@ -276,6 +276,7 @@ Displays an outline (table of contents). Should be placed inside `<Document />`.
 |Prop name|Description|Default value|Example values|
 |----|----|----|----|
 |className|Class name(s) that will be added to rendered element along with the default `react-pdf__Outline`.|n/a|<ul><li>String:<br />`"custom-class-name-1 custom-class-name-2"`</li><li>Array of strings:<br />`["custom-class-name-1", "custom-class-name-2"]`</li></ul>|
+|inputRef|A function that behaves like ref, but it's passed to main `<div>` rendered by `<Outline>` component.|n/a|`(ref) => { this.myOutline = ref; }`|
 |onItemClick|Function called when an outline item has been clicked. Usually, you would like to use this callback to move the user wherever they requested to.|n/a|`({ pageNumber }) => alert('Clicked an item from page ' + pageNumber + '!')`|
 |onLoadError|Function called in case of an error while retrieving the outline.|n/a|`(error) => alert('Error while retrieving the outline! ' + error.message)`|
 |onLoadSuccess|Function called when the outline is successfully retrieved.|n/a|`(outline) => alert('The outline has been successfully retrieved.')`|
