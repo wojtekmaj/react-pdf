@@ -7047,8 +7047,8 @@ fsevents@^2.1.2:
     webpack: ^5.0.0-0
     worker-loader: ^3.0.0
   peerDependencies:
-    react: ^16.3.0
-    react-dom: ^16.3.0
+    react: ^16.3.0 || ^17.0.0-0
+    react-dom: ^16.3.0 || ^17.0.0-0
   languageName: unknown
   linkType: soft
 
