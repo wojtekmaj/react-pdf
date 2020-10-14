@@ -258,7 +258,7 @@ export class PageInternal extends PureComponent {
   }
 
   renderMainLayer() {
-    const { renderMode } = this.props;
+    const { canvasRef, renderMode } = this.props;
 
     switch (renderMode) {
       case 'none':
@@ -270,7 +270,10 @@ export class PageInternal extends PureComponent {
       case 'canvas':
       default:
         return (
-          <PageCanvas key={`${this.pageKey}_canvas`} />
+          <PageCanvas
+            key={`${this.pageKey}_canvas`}
+            canvasRef={canvasRef}
+          />
         );
     }
   }

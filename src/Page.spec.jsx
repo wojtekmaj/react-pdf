@@ -263,6 +263,29 @@ describe('Page', () => {
       expect(inputRef.mock.calls[0][0]).toBeInstanceOf(HTMLElement);
     });
 
+    it('passes canvas element to PageCanvas properly', async () => {
+      const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
+
+      const canvasRef = jest.fn();
+
+      const component = shallow(
+        <Page
+          canvasRef={canvasRef}
+          onLoadSuccess={onLoadSuccess}
+          pageIndex={0}
+          pdf={pdf}
+        />
+      );
+
+      expect.assertions(1);
+
+      await onLoadSuccessPromise;
+
+      const pageCanvas = component.find('PageCanvas');
+
+      expect(pageCanvas.prop('canvasRef')).toBe(canvasRef);
+    });
+
     it('renders "No page specified." when given neither pageIndex nor pageNumber', () => {
       muteConsole();
 
