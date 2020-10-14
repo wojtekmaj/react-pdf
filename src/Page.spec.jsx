@@ -314,7 +314,7 @@ describe('Page', () => {
       restoreConsole();
     });
 
-    it('renders "Loading page…" when loading a page', () => {
+    it('renders "Loading page…" when loading a page', async () => {
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
       const component = shallow(
@@ -326,42 +326,19 @@ describe('Page', () => {
       );
 
       expect.assertions(2);
-      return onLoadSuccessPromise.then(() => {
-        // Since the page loads automatically, we need to simulate its loading state
-        component.setState({ page: null });
 
-        const loading = component.find('Message');
+      await onLoadSuccessPromise;
 
-        expect(loading).toHaveLength(1);
-        expect(loading.prop('children')).toBe('Loading page…');
-      });
+      // Since the page loads automatically, we need to simulate its loading state
+      component.setState({ page: null });
+
+      const loading = component.find('Message');
+
+      expect(loading).toHaveLength(1);
+      expect(loading.prop('children')).toBe('Loading page…');
     });
 
-    it('renders custom loading message when loading a page and loading prop is given', () => {
-      const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
-
-      const component = shallow(
-        <Page
-          loading="Loading"
-          onLoadSuccess={onLoadSuccess}
-          pageIndex={0}
-          pdf={pdf}
-        />
-      );
-
-      expect.assertions(2);
-      return onLoadSuccessPromise.then(() => {
-        // Since the page loads automatically, we need to simulate its loading state
-        component.setState({ page: null });
-
-        const loading = component.find('Message');
-
-        expect(loading).toHaveLength(1);
-        expect(loading.prop('children')).toBe('Loading');
-      });
-    });
-
-    it('renders custom loading message when loading a page and loading prop is given as a function', () => {
+    it('renders custom loading message when loading a page and loading prop is given', async () => {
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
       const component = shallow(
@@ -374,18 +351,44 @@ describe('Page', () => {
       );
 
       expect.assertions(2);
-      return onLoadSuccessPromise.then(() => {
-        // Since the page loads automatically, we need to simulate its loading state
-        component.setState({ page: null });
 
-        const loading = component.find('Message');
+      await onLoadSuccessPromise;
 
-        expect(loading).toHaveLength(1);
-        expect(loading.prop('children')).toBe('Loading');
-      });
+      // Since the page loads automatically, we need to simulate its loading state
+      component.setState({ page: null });
+
+      const loading = component.find('Message');
+
+      expect(loading).toHaveLength(1);
+      expect(loading.prop('children')).toBe('Loading');
     });
 
-    it('ignores pageIndex when given pageIndex and pageNumber', () => {
+    it('renders custom loading message when loading a page and loading prop is given as a function', async () => {
+      const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
+
+      const component = shallow(
+        <Page
+          loading="Loading"
+          onLoadSuccess={onLoadSuccess}
+          pageIndex={0}
+          pdf={pdf}
+        />
+      );
+
+      expect.assertions(2);
+
+      await onLoadSuccessPromise;
+
+      // Since the page loads automatically, we need to simulate its loading state
+      component.setState({ page: null });
+
+      const loading = component.find('Message');
+
+      expect(loading).toHaveLength(1);
+      expect(loading.prop('children')).toBe('Loading');
+    });
+
+    it('ignores pageIndex when given pageIndex and pageNumber', async () => {
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
       const component = shallow(
@@ -398,12 +401,13 @@ describe('Page', () => {
       );
 
       expect.assertions(1);
-      return onLoadSuccessPromise.then(() => {
-        expect(component.state().page).toMatchObject(desiredLoadedPage);
-      });
+
+      await onLoadSuccessPromise;
+
+      expect(component.state().page).toMatchObject(desiredLoadedPage);
     });
 
-    it('orders page to be rendered with default rotation when given nothing', () => {
+    it('orders page to be rendered with default rotation when given nothing', async () => {
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
       const component = shallow(
@@ -415,12 +419,13 @@ describe('Page', () => {
       );
 
       expect.assertions(1);
-      return onLoadSuccessPromise.then(() => {
-        expect(component.instance().rotate).toBe(0);
-      });
+
+      await onLoadSuccessPromise;
+
+      expect(component.instance().rotate).toBe(0);
     });
 
-    it('requests page to be rendered with default rotation when given rotate prop', () => {
+    it('requests page to be rendered with default rotation when given rotate prop', async () => {
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
       const component = shallow(
@@ -433,12 +438,13 @@ describe('Page', () => {
       );
 
       expect.assertions(1);
-      return onLoadSuccessPromise.then(() => {
-        expect(component.instance().rotate).toBe(90);
-      });
+
+      await onLoadSuccessPromise;
+
+      expect(component.instance().rotate).toBe(90);
     });
 
-    it('requests page to be rendered in canvas mode by default', () => {
+    it('requests page to be rendered in canvas mode by default', async () => {
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
       const component = shallow(
@@ -450,11 +456,13 @@ describe('Page', () => {
       );
 
       expect.assertions(1);
-      return onLoadSuccessPromise.then(() => {
-        component.update();
-        const pageCanvas = component.find('PageCanvas');
-        expect(pageCanvas).toHaveLength(1);
-      });
+
+      await onLoadSuccessPromise;
+
+      component.update();
+
+      const pageCanvas = component.find('PageCanvas');
+      expect(pageCanvas).toHaveLength(1);
     });
 
     it('requests page not to be rendered when given renderMode = "none"', () => {
@@ -479,7 +487,7 @@ describe('Page', () => {
       });
     });
 
-    it('requests page to be rendered in canvas mode when given renderMode = "canvas"', () => {
+    it('requests page to be rendered in canvas mode when given renderMode = "canvas"', async () => {
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
       const component = shallow(
@@ -492,14 +500,16 @@ describe('Page', () => {
       );
 
       expect.assertions(1);
-      return onLoadSuccessPromise.then(() => {
-        component.update();
-        const pageCanvas = component.find('PageCanvas');
-        expect(pageCanvas).toHaveLength(1);
-      });
+
+      await onLoadSuccessPromise;
+
+      component.update();
+
+      const pageCanvas = component.find('PageCanvas');
+      expect(pageCanvas).toHaveLength(1);
     });
 
-    it('requests page to be rendered in SVG mode when given renderMode = "svg"', () => {
+    it('requests page to be rendered in SVG mode when given renderMode = "svg"', async () => {
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
       const component = shallow(
@@ -512,14 +522,16 @@ describe('Page', () => {
       );
 
       expect.assertions(1);
-      return onLoadSuccessPromise.then(() => {
-        component.update();
-        const pageSVG = component.find('PageSVG');
-        expect(pageSVG).toHaveLength(1);
-      });
+
+      await onLoadSuccessPromise;
+
+      component.update();
+
+      const pageSVG = component.find('PageSVG');
+      expect(pageSVG).toHaveLength(1);
     });
 
-    it('requests text content to be rendered by default', () => {
+    it('requests text content to be rendered by default', async () => {
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
       const component = shallow(
@@ -531,14 +543,16 @@ describe('Page', () => {
       );
 
       expect.assertions(1);
-      return onLoadSuccessPromise.then(() => {
-        component.update();
-        const textLayer = component.find('TextLayer');
-        expect(textLayer).toHaveLength(1);
-      });
+
+      await onLoadSuccessPromise;
+
+      component.update();
+
+      const textLayer = component.find('TextLayer');
+      expect(textLayer).toHaveLength(1);
     });
 
-    it('requests text content to be rendered when given renderTextLayer = true', () => {
+    it('requests text content to be rendered when given renderTextLayer = true', async () => {
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
       const component = shallow(
@@ -551,14 +565,16 @@ describe('Page', () => {
       );
 
       expect.assertions(1);
-      return onLoadSuccessPromise.then(() => {
-        component.update();
-        const textLayer = component.find('TextLayer');
-        expect(textLayer).toHaveLength(1);
-      });
+
+      await onLoadSuccessPromise;
+
+      component.update();
+
+      const textLayer = component.find('TextLayer');
+      expect(textLayer).toHaveLength(1);
     });
 
-    it('does not request text content to be rendered when given renderTextLayer = false', () => {
+    it('does not request text content to be rendered when given renderTextLayer = false', async () => {
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
       const component = shallow(
@@ -571,14 +587,16 @@ describe('Page', () => {
       );
 
       expect.assertions(1);
-      return onLoadSuccessPromise.then(() => {
-        component.update();
-        const textLayer = component.find('TextLayer');
-        expect(textLayer).toHaveLength(0);
-      });
+
+      await onLoadSuccessPromise;
+
+      component.update();
+
+      const textLayer = component.find('TextLayer');
+      expect(textLayer).toHaveLength(0);
     });
 
-    it('renders TextLayer when given renderMode = "canvas"', () => {
+    it('renders TextLayer when given renderMode = "canvas"', async () => {
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
       const component = shallow(
@@ -592,14 +610,16 @@ describe('Page', () => {
       );
 
       expect.assertions(1);
-      return onLoadSuccessPromise.then(() => {
-        component.update();
-        const textLayer = component.find('TextLayer');
-        expect(textLayer).toHaveLength(1);
-      });
+
+      await onLoadSuccessPromise;
+
+      component.update();
+
+      const textLayer = component.find('TextLayer');
+      expect(textLayer).toHaveLength(1);
     });
 
-    it('renders TextLayer when given renderMode = "svg"', () => {
+    it('renders TextLayer when given renderMode = "svg"', async () => {
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
       const component = shallow(
@@ -613,14 +633,15 @@ describe('Page', () => {
       );
 
       expect.assertions(1);
-      return onLoadSuccessPromise.then(() => {
-        component.update();
-        const textLayer = component.find('TextLayer');
-        expect(textLayer).toHaveLength(1);
-      });
+
+      await onLoadSuccessPromise;
+
+      component.update();
+      const textLayer = component.find('TextLayer');
+      expect(textLayer).toHaveLength(1);
     });
 
-    it('requests annotations to be rendered by default', () => {
+    it('requests annotations to be rendered by default', async () => {
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
       const component = shallow(
@@ -632,14 +653,16 @@ describe('Page', () => {
       );
 
       expect.assertions(1);
-      return onLoadSuccessPromise.then(() => {
-        component.update();
-        const annotationLayer = component.find('AnnotationLayer');
-        expect(annotationLayer).toHaveLength(1);
-      });
+
+      await onLoadSuccessPromise;
+
+      component.update();
+
+      const annotationLayer = component.find('AnnotationLayer');
+      expect(annotationLayer).toHaveLength(1);
     });
 
-    it('requests annotations to be rendered when given renderAnnotationLayer = true', () => {
+    it('requests annotations to be rendered when given renderAnnotationLayer = true', async () => {
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
       const component = shallow(
@@ -652,14 +675,16 @@ describe('Page', () => {
       );
 
       expect.assertions(1);
-      return onLoadSuccessPromise.then(() => {
-        component.update();
-        const annotationLayer = component.find('AnnotationLayer');
-        expect(annotationLayer).toHaveLength(1);
-      });
+
+      await onLoadSuccessPromise;
+
+      component.update();
+
+      const annotationLayer = component.find('AnnotationLayer');
+      expect(annotationLayer).toHaveLength(1);
     });
 
-    it('does not request annotations to be rendered when given renderAnnotationLayer = false', () => {
+    it('does not request annotations to be rendered when given renderAnnotationLayer = false', async () => {
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
       const component = shallow(
@@ -672,11 +697,13 @@ describe('Page', () => {
       );
 
       expect.assertions(1);
-      return onLoadSuccessPromise.then(() => {
-        component.update();
-        const annotationLayer = component.find('AnnotationLayer');
-        expect(annotationLayer).toHaveLength(0);
-      });
+
+      await onLoadSuccessPromise;
+
+      component.update();
+
+      const annotationLayer = component.find('AnnotationLayer');
+      expect(annotationLayer).toHaveLength(0);
     });
   });
 
@@ -692,8 +719,10 @@ describe('Page', () => {
     );
 
     expect.assertions(1);
+
     return onLoadSuccessPromise.then((page) => {
       component.update();
+
       expect(page.width).toEqual(page.originalWidth);
     });
   });
@@ -712,8 +741,10 @@ describe('Page', () => {
     );
 
     expect.assertions(1);
+
     return onLoadSuccessPromise.then((page) => {
       component.update();
+
       expect(page.width).toEqual(page.originalWidth * scale);
     });
   });
@@ -732,8 +763,10 @@ describe('Page', () => {
     );
 
     expect.assertions(1);
+
     return onLoadSuccessPromise.then((page) => {
       component.update();
+
       expect(page.width).toEqual(width);
     });
   });
@@ -754,8 +787,10 @@ describe('Page', () => {
     );
 
     expect.assertions(1);
+
     return onLoadSuccessPromise.then((page) => {
       component.update();
+
       expect(page.width).toBeCloseTo(width * scale);
     });
   });
@@ -774,8 +809,10 @@ describe('Page', () => {
     );
 
     expect.assertions(1);
+
     return onLoadSuccessPromise.then((page) => {
       component.update();
+
       expect(page.height).toEqual(height);
     });
   });
@@ -796,8 +833,10 @@ describe('Page', () => {
     );
 
     expect.assertions(1);
+
     return onLoadSuccessPromise.then((page) => {
       component.update();
+
       expect(page.height).toBeCloseTo(height * scale);
     });
   });
@@ -818,8 +857,10 @@ describe('Page', () => {
     );
 
     expect.assertions(2);
+
     return onLoadSuccessPromise.then((page) => {
       component.update();
+
       expect(page.width).toEqual(width);
       // Expect proportions to be correct even though invalid height was provided
       expect(page.height).toEqual(page.originalHeight * (page.width / page.originalWidth));
@@ -844,8 +885,10 @@ describe('Page', () => {
     );
 
     expect.assertions(2);
+
     return onLoadSuccessPromise.then((page) => {
       component.update();
+
       expect(page.width).toBeCloseTo(width * scale);
       // Expect proportions to be correct even though invalid height was provided
       expect(page.height).toEqual(page.originalHeight * (page.width / page.originalWidth));

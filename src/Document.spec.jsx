@@ -130,6 +130,7 @@ describe('Document', () => {
       );
 
       expect.assertions(1);
+
       return onSourceErrorPromise.then((error) => {
         expect(error).toMatchObject(expect.any(Error));
 
@@ -150,6 +151,7 @@ describe('Document', () => {
       );
 
       expect.assertions(4);
+
       await expect(onSourceSuccessPromise).resolves.toBe(OK);
       await expect(onLoadSuccessPromise).resolves.toMatchObject(desiredLoadedPdf);
 
@@ -224,7 +226,7 @@ describe('Document', () => {
       expect(noData.prop('children')).toBe('Nothing here');
     });
 
-    it('renders "Loading PDF…" when loading a file', () => {
+    it('renders "Loading PDF…" when loading a file', async () => {
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
       const component = shallow(
@@ -235,18 +237,19 @@ describe('Document', () => {
       );
 
       expect.assertions(2);
-      return onLoadSuccessPromise.then(() => {
-        // Since the pdf loads automatically, we need to simulate its loading state
-        component.setState({ pdf: null });
 
-        const loading = component.find('Message');
+      await onLoadSuccessPromise;
 
-        expect(loading).toHaveLength(1);
-        expect(loading.prop('children')).toBe('Loading PDF…');
-      });
+      // Since the pdf loads automatically, we need to simulate its loading state
+      component.setState({ pdf: null });
+
+      const loading = component.find('Message');
+
+      expect(loading).toHaveLength(1);
+      expect(loading.prop('children')).toBe('Loading PDF…');
     });
 
-    it('renders custom loading message when loading a file and loading prop is given', () => {
+    it('renders custom loading message when loading a file and loading prop is given', async () => {
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
       const component = shallow(
@@ -258,18 +261,19 @@ describe('Document', () => {
       );
 
       expect.assertions(2);
-      return onLoadSuccessPromise.then(() => {
-        // Since the pdf loads automatically, we need to simulate its loading state
-        component.setState({ pdf: null });
 
-        const loading = component.find('Message');
+      await onLoadSuccessPromise;
 
-        expect(loading).toHaveLength(1);
-        expect(loading.prop('children')).toBe('Loading');
-      });
+      // Since the pdf loads automatically, we need to simulate its loading state
+      component.setState({ pdf: null });
+
+      const loading = component.find('Message');
+
+      expect(loading).toHaveLength(1);
+      expect(loading.prop('children')).toBe('Loading');
     });
 
-    it('renders custom loading message when loading a file and loading prop is given as a function', () => {
+    it('renders custom loading message when loading a file and loading prop is given as a function', async () => {
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
       const component = shallow(
@@ -281,18 +285,19 @@ describe('Document', () => {
       );
 
       expect.assertions(2);
-      return onLoadSuccessPromise.then(() => {
-        // Since the pdf loads automatically, we need to simulate its loading state
-        component.setState({ pdf: null });
 
-        const loading = component.find('Message');
+      await onLoadSuccessPromise;
 
-        expect(loading).toHaveLength(1);
-        expect(loading.prop('children')).toBe('Loading');
-      });
+      // Since the pdf loads automatically, we need to simulate its loading state
+      component.setState({ pdf: null });
+
+      const loading = component.find('Message');
+
+      expect(loading).toHaveLength(1);
+      expect(loading.prop('children')).toBe('Loading');
     });
 
-    it('renders "Failed to load PDF file." when failed to load a document', () => {
+    it('renders "Failed to load PDF file." when failed to load a document', async () => {
       const { func: onLoadError, promise: onLoadErrorPromise } = makeAsyncCallback();
       const failingPdf = 'data:application/pdf;base64,abcdef';
 
@@ -306,18 +311,19 @@ describe('Document', () => {
       );
 
       expect.assertions(2);
-      return onLoadErrorPromise.then(() => {
-        component.update();
-        const error = component.find('Message');
 
-        expect(error).toHaveLength(1);
-        expect(error.prop('children')).toBe('Failed to load PDF file.');
+      await onLoadErrorPromise;
 
-        restoreConsole();
-      });
+      component.update();
+      const error = component.find('Message');
+
+      expect(error).toHaveLength(1);
+      expect(error.prop('children')).toBe('Failed to load PDF file.');
+
+      restoreConsole();
     });
 
-    it('renders custom error message when failed to load a document', () => {
+    it('renders custom error message when failed to load a document', async () => {
       const { func: onLoadError, promise: onLoadErrorPromise } = makeAsyncCallback();
       const failingPdf = 'data:application/pdf;base64,abcdef';
 
@@ -332,18 +338,20 @@ describe('Document', () => {
       );
 
       expect.assertions(2);
-      return onLoadErrorPromise.then(() => {
-        component.update();
-        const error = component.find('Message');
 
-        expect(error).toHaveLength(1);
-        expect(error.prop('children')).toBe('Error');
+      await onLoadErrorPromise;
 
-        restoreConsole();
-      });
+      component.update();
+
+      const error = component.find('Message');
+
+      expect(error).toHaveLength(1);
+      expect(error.prop('children')).toBe('Error');
+
+      restoreConsole();
     });
 
-    it('passes renderMode prop to its children', () => {
+    it('passes renderMode prop to its children', async () => {
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
       const component = shallow(
@@ -358,13 +366,15 @@ describe('Document', () => {
       );
 
       expect.assertions(1);
-      return onLoadSuccessPromise.then(() => {
-        component.update();
-        expect(component.instance().childContext.renderMode).toBe('svg');
-      });
+
+      await onLoadSuccessPromise;
+
+      component.update();
+
+      expect(component.instance().childContext.renderMode).toBe('svg');
     });
 
-    it('passes rotate prop to its children', () => {
+    it('passes rotate prop to its children', async () => {
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
       const component = shallow(
@@ -379,13 +389,15 @@ describe('Document', () => {
       );
 
       expect.assertions(1);
-      return onLoadSuccessPromise.then(() => {
-        component.update();
-        expect(component.instance().childContext.rotate).toBe(90);
-      });
+
+      await onLoadSuccessPromise;
+
+      component.update();
+
+      expect(component.instance().childContext.rotate).toBe(90);
     });
 
-    it('does not overwrite renderMode prop in its children when given renderMode prop to both Document and its children', () => {
+    it('does not overwrite renderMode prop in its children when given renderMode prop to both Document and its children', async () => {
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
       const component = shallow(
@@ -400,14 +412,16 @@ describe('Document', () => {
       );
 
       expect.assertions(1);
-      return onLoadSuccessPromise.then(() => {
-        component.update();
-        const child = component.find('Child');
-        expect(child.prop('renderMode')).toBe('canvas');
-      });
+
+      await onLoadSuccessPromise;
+
+      component.update();
+
+      const child = component.find('Child');
+      expect(child.prop('renderMode')).toBe('canvas');
     });
 
-    it('does not overwrite rotate prop in its children when given rotate prop to both Document and its children', () => {
+    it('does not overwrite rotate prop in its children when given rotate prop to both Document and its children', async () => {
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
       const component = shallow(
@@ -422,16 +436,18 @@ describe('Document', () => {
       );
 
       expect.assertions(1);
-      return onLoadSuccessPromise.then(() => {
-        component.update();
-        const child = component.find('Child');
-        expect(child.prop('rotate')).toBe(180);
-      });
+
+      await onLoadSuccessPromise;
+
+      component.update();
+
+      const child = component.find('Child');
+      expect(child.prop('rotate')).toBe(180);
     });
   });
 
   describe('viewer', () => {
-    it('calls onItemClick if defined', () => {
+    it('calls onItemClick if defined', async () => {
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
       const onItemClick = jest.fn();
@@ -445,18 +461,19 @@ describe('Document', () => {
       );
 
       expect.assertions(2);
-      return onLoadSuccessPromise.then(() => {
-        const pageNumber = 6;
 
-        // Simulate clicking on an outline item
-        component.instance().viewer.scrollPageIntoView({ pageNumber });
+      await onLoadSuccessPromise;
 
-        expect(onItemClick).toHaveBeenCalledTimes(1);
-        expect(onItemClick).toHaveBeenCalledWith({ pageNumber });
-      });
+      const pageNumber = 6;
+
+      // Simulate clicking on an outline item
+      component.instance().viewer.scrollPageIntoView({ pageNumber });
+
+      expect(onItemClick).toHaveBeenCalledTimes(1);
+      expect(onItemClick).toHaveBeenCalledWith({ pageNumber });
     });
 
-    it('attempts to find a page and scroll it into view if onItemClick is not given', () => {
+    it('attempts to find a page and scroll it into view if onItemClick is not given', async () => {
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
       const component = shallow(
@@ -467,18 +484,19 @@ describe('Document', () => {
       );
 
       expect.assertions(1);
-      return onLoadSuccessPromise.then(() => {
-        const scrollIntoView = jest.fn();
-        const pageNumber = 6;
 
-        // Register fake page in Document viewer
-        component.instance().pages[pageNumber - 1] = { scrollIntoView };
+      await onLoadSuccessPromise;
 
-        // Simulate clicking on an outline item
-        component.instance().viewer.scrollPageIntoView({ pageNumber });
+      const scrollIntoView = jest.fn();
+      const pageNumber = 6;
 
-        expect(scrollIntoView).toHaveBeenCalledTimes(1);
-      });
+      // Register fake page in Document viewer
+      component.instance().pages[pageNumber - 1] = { scrollIntoView };
+
+      // Simulate clicking on an outline item
+      component.instance().viewer.scrollPageIntoView({ pageNumber });
+
+      expect(scrollIntoView).toHaveBeenCalledTimes(1);
     });
   });
 
@@ -492,7 +510,7 @@ describe('Document', () => {
       ${'_parent'}       | ${3}
       ${'_top'}          | ${4}
     `('returns externalLinkTarget = $linkServiceTarget given externalLinkTarget prop = $externalLinkTarget',
-    ({ externalLinkTarget, linkServiceTarget }) => {
+    async ({ externalLinkTarget, linkServiceTarget }) => {
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
       const component = shallow(
@@ -504,9 +522,10 @@ describe('Document', () => {
       );
 
       expect.assertions(1);
-      return onLoadSuccessPromise.then(() => {
-        expect(component.instance().linkService.externalLinkTarget).toBe(linkServiceTarget);
-      });
+
+      await onLoadSuccessPromise;
+
+      expect(component.instance().linkService.externalLinkTarget).toBe(linkServiceTarget);
     });
     /* eslint-enable indent */
   });
