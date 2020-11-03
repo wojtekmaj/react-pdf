@@ -4,6 +4,13 @@
 
 Display PDFs in your React app as easily as if they were images.
 
+## Brokermint version
+
+* This versions expects pdf.js lib and worker to be sourced from CDN (excluded from build).
+* pdf.js script must be included before loading this library.
+* pdf.worker.js must be set according to "Standard (Browserify and others)" variant below.
+* pdfjs-dist updated to v2.6.347
+
 ## tl;dr
 * Install by executing `npm install react-pdf` or `yarn add react-pdf`.
 * Import by adding `import { Document } from 'react-pdf'`.

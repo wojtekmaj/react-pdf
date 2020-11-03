@@ -1,7 +1,7 @@
 {
-  "name": "react-pdf",
-  "version": "5.0.0",
-  "description": "Display PDFs in your React app as easily as if they were images.",
+  "name": "@brokermint/react-pdf",
+  "version": "1.0.0",
+  "description": "Build on react-pdf@5.0.0. Display PDFs in your React app as easily as if they were images.",
   "main": "dist/umd/entry.js",
   "module": "dist/esm/entry.js",
   "source": "src/entry.js",
@@ -129,7 +129,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/wojtekmaj/react-pdf.git"
+    "url": "https://github.com/iSunRise/react-pdf.git"
   },
   "funding": "https://github.com/wojtekmaj/react-pdf?sponsor=1"
 }
