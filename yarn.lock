@@ -6756,10 +6756,10 @@ fsevents@^2.1.2:
   languageName: node
   linkType: hard
 
-"pdfjs-dist@npm:2.4.456":
-  version: 2.4.456
-  resolution: "pdfjs-dist@npm:2.4.456"
-  checksum: 3d90379d6503127d5b969d16a23cb1928cd58e01752efa065c1b530fd9981f4ec9a4239e37fff7690315ff8d4335994f3e292206ac1d537cdf3e5b0f6ddcd27d
+"pdfjs-dist@npm:2.6.347":
+  version: 2.6.347
+  resolution: "pdfjs-dist@npm:2.6.347"
+  checksum: 64007e9fce35be3d9e8a2d106bdcd350cd71df4f4fe99a94adbdb4ee662ce1e84abfe0feff38d6cfa94fa79a291cfe96f1efd874e8417c52d7ab753d2046bf26
   languageName: node
   linkType: hard
 
@@ -7038,7 +7038,7 @@ fsevents@^2.1.2:
     make-event-props: ^1.1.0
     merge-class-names: ^1.1.1
     merge-refs: ^1.0.0
-    pdfjs-dist: 2.4.456
+    pdfjs-dist: 2.6.347
     prop-types: ^15.6.2
     react: ^16.7.0
     react-dom: ^16.7.0
