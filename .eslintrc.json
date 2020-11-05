@@ -26,7 +26,8 @@
       "files": [
         "**/*.spec.js",
         "**/*.spec.jsx",
-        "**/__tests__/*"
+        "**/__tests__/*",
+        "test-utils.js"
       ],
       "env": {
         "jest": true
