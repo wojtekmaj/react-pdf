@@ -35,7 +35,7 @@ export default function LoadingOptions({
       return;
     }
 
-    fetch(url).then(response => response.blob()).then(setFile);
+    fetch(url).then((response) => response.blob()).then(setFile);
   }
 
   function onUseImported() {

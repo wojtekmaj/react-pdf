@@ -27,7 +27,7 @@ const options = {
   cMapPacked: true,
 };
 
-export const readAsDataURL = file => new Promise((resolve, reject) => {
+export const readAsDataURL = (file) => new Promise((resolve, reject) => {
   const reader = new FileReader();
 
   reader.onload = () => resolve(reader.result);
@@ -84,13 +84,13 @@ export default class Test extends PureComponent {
     });
   };
 
-  onPageRenderSuccess = page => console.log('Rendered a page', page);
+  onPageRenderSuccess = (page) => console.log('Rendered a page', page);
 
   onItemClick = ({ pageNumber }) => this.setState({ pageNumber });
 
-  setFile = file => this.setState({ file }, this.setFileForProps);
+  setFile = (file) => this.setState({ file }, this.setFileForProps);
 
-  setPassMethod = passMethod => this.setState({ passMethod }, this.setFileForProps);
+  setPassMethod = (passMethod) => this.setState({ passMethod }, this.setFileForProps);
 
   setFileForProps = async () => {
     const fileForProps = await (async () => {
@@ -161,7 +161,7 @@ export default class Test extends PureComponent {
 
   nextPage = () => this.changePage(1);
 
-  changePage = offset => this.setState(prevState => ({
+  changePage = (offset) => this.setState((prevState) => ({
     pageNumber: (prevState.pageNumber || 1) + offset,
   }));
 
@@ -187,7 +187,7 @@ export default class Test extends PureComponent {
       renderTextLayer,
       scale: pageScale,
       width: pageWidth,
-      customTextRenderer: textItem => (
+      customTextRenderer: (textItem) => (
         textItem.str
           .split('ipsum')
           .reduce((strArray, currentValue, currentIndex) => (
@@ -225,7 +225,7 @@ export default class Test extends PureComponent {
     } = this.state;
     const { pageProps } = this;
 
-    const setState = state => this.setState(state);
+    const setState = (state) => this.setState(state);
 
     const documentProps = {
       externalLinkTarget,
@@ -303,7 +303,7 @@ export default class Test extends PureComponent {
                           key={`page_${index + 1}`}
                           inputRef={
                             (pageNumber === index + 1)
-                              ? (ref => ref && ref.scrollIntoView())
+                              ? ((ref) => ref && ref.scrollIntoView())
                               : null
                           }
                           pageNumber={index + 1}

@@ -127,11 +127,11 @@ OutlineItemInternal.propTypes = {
   pdf: isPdf.isRequired,
 };
 
-const OutlineItem = props => (
+const OutlineItem = (props) => (
   <DocumentContext.Consumer>
-    {documentContext => (
+    {(documentContext) => (
       <OutlineContext.Consumer>
-        {outlineContext => (
+        {(outlineContext) => (
           <OutlineItemInternal {...documentContext} {...outlineContext} {...props} />
         )}
       </OutlineContext.Consumer>

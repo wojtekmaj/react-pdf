@@ -149,11 +149,11 @@ AnnotationLayerInternal.propTypes = {
   scale: PropTypes.number,
 };
 
-const AnnotationLayer = props => (
+const AnnotationLayer = (props) => (
   <DocumentContext.Consumer>
-    {documentContext => (
+    {(documentContext) => (
       <PageContext.Consumer>
-        {pageContext => (
+        {(pageContext) => (
           <AnnotationLayerInternal {...documentContext} {...pageContext} {...props} />
         )}
       </PageContext.Consumer>

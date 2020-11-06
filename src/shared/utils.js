@@ -18,28 +18,28 @@ export const isProduction = process.env.NODE_ENV === 'production';
  *
  * @param {*} variable Variable to check
  */
-export const isDefined = variable => typeof variable !== 'undefined';
+export const isDefined = (variable) => typeof variable !== 'undefined';
 
 /**
  * Checks whether a variable is defined and not null.
  *
  * @param {*} variable Variable to check
  */
-export const isProvided = variable => isDefined(variable) && variable !== null;
+export const isProvided = (variable) => isDefined(variable) && variable !== null;
 
 /**
  * Checkes whether a variable provided is a string.
  *
  * @param {*} variable Variable to check
  */
-export const isString = variable => typeof variable === 'string';
+export const isString = (variable) => typeof variable === 'string';
 
 /**
  * Checks whether a variable provided is an ArrayBuffer.
  *
  * @param {*} variable Variable to check
  */
-export const isArrayBuffer = variable => variable instanceof ArrayBuffer;
+export const isArrayBuffer = (variable) => variable instanceof ArrayBuffer;
 
 /**
  * Checkes whether a variable provided is a Blob.
@@ -72,7 +72,7 @@ export const isFile = (variable) => {
  *
  * @param {String} str String to check
  */
-export const isDataURI = str => isString(str) && /^data:/.test(str);
+export const isDataURI = (str) => isString(str) && /^data:/.test(str);
 
 export const dataURItoUint8Array = (dataURI) => {
   if (!isDataURI(dataURI)) {
@@ -125,9 +125,9 @@ export const makePageCallback = (page, scale) => {
   return page;
 };
 
-export const isCancelException = error => error.name === 'RenderingCancelledException';
+export const isCancelException = (error) => error.name === 'RenderingCancelledException';
 
-export const loadFromFile = file => new Promise((resolve, reject) => {
+export const loadFromFile = (file) => new Promise((resolve, reject) => {
   const reader = new FileReader();
 
   reader.onload = () => resolve(new Uint8Array(reader.result));

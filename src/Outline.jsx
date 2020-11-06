@@ -171,7 +171,7 @@ OutlineInternal.propTypes = {
 function Outline(props, ref) {
   return (
     <DocumentContext.Consumer>
-      {context => <OutlineInternal ref={ref} {...context} {...props} />}
+      {(context) => <OutlineInternal ref={ref} {...context} {...props} />}
     </DocumentContext.Consumer>
   );
 }

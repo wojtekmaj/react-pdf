@@ -38,7 +38,7 @@ describe('PageCanvas', () => {
           height: 0,
         }),
         render: () => ({
-          promise: new Promise(resolve => resolve()),
+          promise: new Promise((resolve) => resolve()),
         }),
       };
 

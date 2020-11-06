@@ -137,7 +137,7 @@ TextLayerInternal.propTypes = {
 export default function TextLayer(props) {
   return (
     <PageContext.Consumer>
-      {context => <TextLayerInternal {...context} {...props} />}
+      {(context) => <TextLayerInternal {...context} {...props} />}
     </PageContext.Consumer>
   );
 }

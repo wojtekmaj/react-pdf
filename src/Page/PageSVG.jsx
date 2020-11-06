@@ -94,7 +94,7 @@ export class PageSVGInternal extends PureComponent {
       <div
         className="react-pdf__Page__svg"
         // Note: This cannot be shortened, as we need this function to be called with each render.
-        ref={ref => this.drawPageOnContainer(ref)}
+        ref={(ref) => this.drawPageOnContainer(ref)}
         style={{
           display: 'block',
           backgroundColor: 'white',
@@ -119,7 +119,7 @@ PageSVGInternal.propTypes = {
 export default function PageSVG(props) {
   return (
     <PageContext.Consumer>
-      {context => <PageSVGInternal {...context} {...props} />}
+      {(context) => <PageSVGInternal {...context} {...props} />}
     </PageContext.Consumer>
   );
 }

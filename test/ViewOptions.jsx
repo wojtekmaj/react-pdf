@@ -64,7 +64,7 @@ export default function ViewOptions({
   }
 
   function changeRotation(by) {
-    setState(prevState => ({ rotate: (prevState.rotate + by + 360) % 360 }));
+    setState((prevState) => ({ rotate: (prevState.rotate + by + 360) % 360 }));
   }
 
   function rotateLeft() {

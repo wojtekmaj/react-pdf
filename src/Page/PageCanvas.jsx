@@ -149,7 +149,7 @@ PageCanvasInternal.propTypes = {
 export default function PageCanvas(props) {
   return (
     <PageContext.Consumer>
-      {context => <PageCanvasInternal {...context} {...props} />}
+      {(context) => <PageCanvasInternal {...context} {...props} />}
     </PageContext.Consumer>
   );
 }

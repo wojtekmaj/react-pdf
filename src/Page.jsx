@@ -427,7 +427,7 @@ PageInternal.propTypes = {
 function Page(props, ref) {
   return (
     <DocumentContext.Consumer>
-      {context => (
+      {(context) => (
         <PageInternal
           ref={ref}
           {...context}
