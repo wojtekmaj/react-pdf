@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 
-/* eslint-disable import/prefer-default-export */
+/* eslint-disable react/forbid-prop-types */
 
 const fileTypes = [
   PropTypes.string,

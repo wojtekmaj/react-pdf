@@ -1,35 +1,11 @@
 {
-  "extends": "airbnb",
-  "env": {
-    "browser": true,
-    "es6": true
-  },
+  "extends": "wojtekmaj/react",
   "parser": "babel-eslint",
   "rules": {
-    "jsx-a11y/label-has-associated-control": ["error", { "required": { "some": ["id", "nesting"] }}],
-    "no-param-reassign": ["error", { "props": true, "ignorePropertyModificationsFor": ["canvas", "element", "svg"] }],
     "no-underscore-dangle": ["error", { "allow": ["_pdfInfo", "_pageIndex", "_pageInfo"] }],
-    "react/jsx-props-no-spreading": "off",
-    "react/jsx-sort-props": ["error", {
-      "reservedFirst": ["key"]
-    }],
-    "react/require-default-props": "off",
-    "react/sort-comp": "off",
-    "react/sort-prop-types": "error",
-    "react/state-in-constructor": ["error", "never"]
+    "react/sort-comp": "off"
   },
   "overrides": [
-    {
-      "files": [
-        "**/*.spec.js",
-        "**/*.spec.jsx",
-        "**/__tests__/*",
-        "test-utils.js"
-      ],
-      "env": {
-        "jest": true
-      }
-    },
     {
       "files": [
         "sample/**",

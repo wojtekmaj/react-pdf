@@ -15,6 +15,8 @@ export const eventProps = (() => {
   return result;
 })();
 
+/* eslint-disable react/forbid-prop-types */
+
 const fileTypes = [
   PropTypes.string,
   PropTypes.instanceOf(ArrayBuffer),
