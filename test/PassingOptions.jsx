@@ -99,24 +99,6 @@ export default function PassingOptions({
   );
 }
 
-const fileTypes = [
-  PropTypes.string,
-  PropTypes.instanceOf(ArrayBuffer),
-  PropTypes.shape({
-    data: PropTypes.object,
-    httpHeaders: PropTypes.object,
-    range: PropTypes.object,
-    url: PropTypes.string,
-    withCredentials: PropTypes.bool,
-  }),
-];
-if (typeof File !== 'undefined') {
-  fileTypes.push(PropTypes.instanceOf(File));
-}
-if (typeof Blob !== 'undefined') {
-  fileTypes.push(PropTypes.instanceOf(Blob));
-}
-
 PassingOptions.propTypes = {
   file: isFile,
   passMethod: PropTypes.oneOf(['blob', 'normal', 'object', 'string']),
