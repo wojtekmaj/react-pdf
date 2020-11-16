@@ -1,0 +1,4 @@
+tasks:
+  - name: Test
+    init: yarn install && yarn build
+    command: yarn test
