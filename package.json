@@ -15,7 +15,7 @@
     "jest": "jest",
     "jest-coverage": "jest --coverage",
     "lint": "eslint sample/ src/ test/ --ext .jsx,.js",
-    "prepublishOnly": "yarn clean && yarn build",
+    "prepack": "yarn clean && yarn build",
     "test": "yarn lint && yarn jest"
   },
   "jest": {
