@@ -113,7 +113,7 @@ describe('TextLayer', () => {
       expect.assertions(1);
       return onGetTextSuccessPromise.then(() => {
         component.update();
-        const textItems = component.children();
+        const textItems = component.children().children('TextLayerItem');
 
         expect(textItems).toHaveLength(desiredTextItems.length);
       });

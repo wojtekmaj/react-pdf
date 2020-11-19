@@ -81,7 +81,7 @@ export class TextLayerItemInternal extends PureComponent {
 
     element.style.transform = '';
 
-    const { fontName, scale, width } = this.props;
+    const { fontName } = this.props;
 
     element.style.fontFamily = `${fontName}, sans-serif`;
 
@@ -89,25 +89,7 @@ export class TextLayerItemInternal extends PureComponent {
 
     const fallbackFontName = fontData ? fontData.fallbackName : 'sans-serif';
     element.style.fontFamily = `${fontName}, ${fallbackFontName}`;
-
-    const targetWidth = width * scale;
-    const actualWidth = this.getElementWidth(element);
-
-    let transform = `scaleX(${targetWidth / actualWidth})`;
-
-    const ascent = fontData ? fontData.ascent : 0;
-    if (ascent) {
-      transform += ` translateY(${(1 - ascent) * 100}%)`;
-    }
-
-    element.style.transform = transform;
-    element.style.WebkitTransform = transform;
   }
-
-  getElementWidth = (element) => {
-    const { sideways } = this;
-    return element.getBoundingClientRect()[sideways ? 'height' : 'width'];
-  };
 
   render() {
     const { fontSize, top, left } = this;
@@ -123,7 +105,7 @@ export class TextLayerItemInternal extends PureComponent {
           position: 'absolute',
           top: `${top * scale}px`,
           left: `${left * scale}px`,
-          transformOrigin: 'left bottom',
+          transformOrigin: '0 0',
           whiteSpace: 'pre',
           pointerEvents: 'all',
         }}
@@ -147,7 +129,6 @@ TextLayerItemInternal.propTypes = {
   scale: PropTypes.number,
   str: PropTypes.string.isRequired,
   transform: PropTypes.arrayOf(PropTypes.number).isRequired,
-  width: PropTypes.number.isRequired,
 };
 
 export default function TextLayerItem(props) {
