@@ -78,7 +78,8 @@ export default class Document extends PureComponent {
   }
 
   componentWillUnmount() {
-    if (this.loadingTask) this.loadingTask.destroy();
+    // FS: Uncommented this
+    //if (this.loadingTask) this.loadingTask.destroy();
     cancelRunningTask(this.runningTask);
   }
 
