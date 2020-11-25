@@ -137,15 +137,15 @@ describe('AnnotationLayer', () => {
       });
     });
 
-    /* eslint-disable indent */
     it.each`
       linkServiceTarget | target
       ${1}              | ${'_self'}
       ${2}              | ${'_blank'}
       ${3}              | ${'_parent'}
       ${4}              | ${'_top'}
-    `('renders all links with target $target given externalLinkTarget = $target',
-    ({ linkServiceTarget, target }) => {
+    `('renders all links with target $target given externalLinkTarget = $target', ({
+      linkServiceTarget, target
+    }) => {
       const {
         func: onRenderAnnotationLayerSuccess, promise: onRenderAnnotationLayerSuccessPromise,
       } = makeAsyncCallback();
@@ -173,7 +173,6 @@ describe('AnnotationLayer', () => {
         annotationLinkItems.forEach((link) => expect(link.getAttribute('target')).toBe(target));
       });
     });
-    /* eslint-enable indent */
 
     it('renders annotations at a given rotation', async () => {
       const {

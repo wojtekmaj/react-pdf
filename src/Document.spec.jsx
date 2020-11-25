@@ -501,7 +501,6 @@ describe('Document', () => {
   });
 
   describe('linkService', () => {
-    /* eslint-disable indent */
     it.each`
       externalLinkTarget | linkServiceTarget
       ${null}            | ${0}
@@ -509,8 +508,9 @@ describe('Document', () => {
       ${'_blank'}        | ${2}
       ${'_parent'}       | ${3}
       ${'_top'}          | ${4}
-    `('returns externalLinkTarget = $linkServiceTarget given externalLinkTarget prop = $externalLinkTarget',
-    async ({ externalLinkTarget, linkServiceTarget }) => {
+    `('returns externalLinkTarget = $linkServiceTarget given externalLinkTarget prop = $externalLinkTarget', async ({
+      externalLinkTarget, linkServiceTarget
+    }) => {
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
       const component = shallow(
@@ -527,7 +527,6 @@ describe('Document', () => {
 
       expect(component.instance().linkService.externalLinkTarget).toBe(linkServiceTarget);
     });
-    /* eslint-enable indent */
   });
 
   it('calls onClick callback when clicked a page (sample of mouse events family)', () => {
