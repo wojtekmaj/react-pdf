@@ -1,6 +1,6 @@
 {
   "name": "react-pdf",
-  "version": "5.0.0",
+  "version": "5.1.0-beta",
   "description": "Display PDFs in your React app as easily as if they were images.",
   "main": "dist/umd/entry.js",
   "module": "dist/esm/entry.js",
@@ -89,7 +89,7 @@
     "make-event-props": "^1.1.0",
     "merge-class-names": "^1.1.1",
     "merge-refs": "^1.0.0",
-    "pdfjs-dist": "2.4.456",
+    "pdfjs-dist": "2.5.207",
     "prop-types": "^15.6.2",
     "worker-loader": "^3.0.0"
   },
