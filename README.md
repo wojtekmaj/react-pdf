@@ -37,10 +37,8 @@ If you use an older version of React, please refer to the table below to a find 
 
 | React version | Newest compatible React-PDF version |
 |-------|--------|
-| ≥16.3 | 5.x    |
-| ≥15.5 | 3.x    |
-| ≥0.13 | 0.0.10 |
-| ≥0.11 | 0.0.4  |
+| ≥16.3 | latest |
+| ≥15.5 | 4.x    |
 
 #### Internet Explorer
 
