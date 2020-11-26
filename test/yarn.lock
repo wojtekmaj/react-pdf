@@ -2093,6 +2093,27 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@wojtekmaj/enzyme-adapter-react-17@npm:^0.3.1":
+  version: 0.3.2
+  resolution: "@wojtekmaj/enzyme-adapter-react-17@npm:0.3.2"
+  dependencies:
+    enzyme-adapter-utils: ^1.13.1
+    enzyme-shallow-equal: ^1.0.4
+    has: ^1.0.3
+    object.assign: ^4.1.0
+    object.values: ^1.1.1
+    prop-types: ^15.7.2
+    react-is: ^16.13.1
+    react-test-renderer: ^17.0.0-0
+    semver: ^5.7.0
+  peerDependencies:
+    enzyme: ^3.0.0
+    react: ^17.0.0-0
+    react-dom: ^17.0.0-0
+  checksum: 859a1237a0b878100fd9f41c6e0a33780aa4c494fea797b073e8e81b82a14747ee7744d99b8abafeef45654409f210da26b2fd1cd1faa3dd72fbbefe4e86db6b
+  languageName: node
+  linkType: hard
+
 "@xtuc/ieee754@npm:^1.2.0":
   version: 1.2.0
   resolution: "@xtuc/ieee754@npm:1.2.0"
@@ -4015,27 +4036,6 @@ __metadata:
   bin:
     envinfo: dist/cli.js
   checksum: 1372214a3f7ab4d5f3cbe112f5bf590c9c5ce8b672ab84a1f15eb09c1df273980e18679eefc96f9e442a5dd7e51ac5f4d8727b36f4db9f4ce00b7ad77c3628ad
-  languageName: node
-  linkType: hard
-
-"enzyme-adapter-react-16@npm:^1.14.0":
-  version: 1.15.4
-  resolution: "enzyme-adapter-react-16@npm:1.15.4"
-  dependencies:
-    enzyme-adapter-utils: ^1.13.1
-    enzyme-shallow-equal: ^1.0.4
-    has: ^1.0.3
-    object.assign: ^4.1.0
-    object.values: ^1.1.1
-    prop-types: ^15.7.2
-    react-is: ^16.13.1
-    react-test-renderer: ^16.0.0-0
-    semver: ^5.7.0
-  peerDependencies:
-    enzyme: ^3.0.0
-    react: ^16.0.0-0
-    react-dom: ^16.0.0-0
-  checksum: 3f8532caee5b366b58623c2ad89868eaa6450fe9895deb168d33cd744bbc7a1ca004cf168011f67bf50191ea9705fca30b21c65165e2eceff08e4669e245ef84
   languageName: node
   linkType: hard
 
@@ -8644,20 +8644,6 @@ fsevents@^2.1.2:
   languageName: node
   linkType: hard
 
-"react-dom@npm:^16.7.0":
-  version: 16.14.0
-  resolution: "react-dom@npm:16.14.0"
-  dependencies:
-    loose-envify: ^1.1.0
-    object-assign: ^4.1.1
-    prop-types: ^15.6.2
-    scheduler: ^0.19.1
-  peerDependencies:
-    react: ^16.14.0
-  checksum: a13558f0e7c6d1a98684214460bcd4b9005500015b5048fb1b0d2856786b8764dbc713e6b078a5b1a56e17866400e1d862183c7a0a513ae8351de11f6f6749d2
-  languageName: node
-  linkType: hard
-
 "react-dom@npm:^17.0.0":
   version: 17.0.1
   resolution: "react-dom@npm:17.0.1"
@@ -8668,6 +8654,13 @@ fsevents@^2.1.2:
   peerDependencies:
     react: 17.0.1
   checksum: 6a70028fbe3c95e0056c5e8ce065b4a9b8d4ff3bffde9b016454072bde5e4b012af7668ca45b7235ace428267d5be5237b68ea87ce8c296e54e81a8d678a4355
+  languageName: node
+  linkType: hard
+
+"react-is@npm:^16.12.0 || ^17.0.0, react-is@npm:^17.0.1":
+  version: 17.0.1
+  resolution: "react-is@npm:17.0.1"
+  checksum: 5a83dfc78e7adcb93d632bf367b0733db650e3abd2e9c57c33b87e50d201212c1884b0d7bcf13e692f1556189fa1b87f9f3e0ba10fe858fd6aebe83ed4fcd1ea
   languageName: node
   linkType: hard
 
@@ -8721,9 +8714,9 @@ fsevents@^2.1.2:
     "@babel/preset-env": ^7.9.0
     "@babel/preset-react": ^7.9.0
     "@babel/runtime": ^7.0.0
+    "@wojtekmaj/enzyme-adapter-react-17": ^0.3.1
     babel-eslint: ^10.0.0
     enzyme: ^3.10.0
-    enzyme-adapter-react-16: ^1.14.0
     eslint: ^7.12.0
     eslint-config-wojtekmaj: ^0.5.0
     jest: ^26.0.0
@@ -8733,8 +8726,8 @@ fsevents@^2.1.2:
     merge-refs: ^1.0.0
     pdfjs-dist: 2.5.207
     prop-types: ^15.6.2
-    react: ^16.7.0
-    react-dom: ^16.7.0
+    react: ^17.0.0
+    react-dom: ^17.0.0
     react-test-renderer: ^16.7.0
     rimraf: ^3.0.0
     webpack: ^5.0.0-0
@@ -8752,7 +8745,19 @@ fsevents@^2.1.2:
   languageName: node
   linkType: hard
 
-"react-test-renderer@npm:^16.0.0-0, react-test-renderer@npm:^16.7.0":
+"react-shallow-renderer@npm:^16.13.1":
+  version: 16.14.1
+  resolution: "react-shallow-renderer@npm:16.14.1"
+  dependencies:
+    object-assign: ^4.1.1
+    react-is: ^16.12.0 || ^17.0.0
+  peerDependencies:
+    react: ^16.0.0 || ^17.0.0
+  checksum: d52cb869e25605b00d4a67ff16598dbbf2826b0f09535de499b2f21a339cabf8b954d4b8855e0e6bdaf0a95603a2b6702e2b47eca8797a7d6bf7e6170ab8b2f3
+  languageName: node
+  linkType: hard
+
+"react-test-renderer@npm:^16.7.0":
   version: 16.13.1
   resolution: "react-test-renderer@npm:16.13.1"
   dependencies:
@@ -8766,14 +8771,17 @@ fsevents@^2.1.2:
   languageName: node
   linkType: hard
 
-"react@npm:^16.7.0":
-  version: 16.14.0
-  resolution: "react@npm:16.14.0"
+"react-test-renderer@npm:^17.0.0-0":
+  version: 17.0.1
+  resolution: "react-test-renderer@npm:17.0.1"
   dependencies:
-    loose-envify: ^1.1.0
     object-assign: ^4.1.1
-    prop-types: ^15.6.2
-  checksum: 2769580b22952a52de3b5b2ea0f09cb904030b762d759739f49ab4da0b1f550e5c087ce3728c4be90f423d09481e0c075483c0c30b1ea9c549445c8b12020fd3
+    react-is: ^17.0.1
+    react-shallow-renderer: ^16.13.1
+    scheduler: ^0.20.1
+  peerDependencies:
+    react: 17.0.1
+  checksum: 6ec269430beea4356180d90868a9959399781a03ae8de6a29f2edc29d6ca41432653d4103991467ebcc47be5bd2d9197789411e913da66369c2aa2f13311105f
   languageName: node
   linkType: hard
 
