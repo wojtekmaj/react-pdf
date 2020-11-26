@@ -13,17 +13,15 @@
   },
   "license": "MIT",
   "dependencies": {
-    "react": "^16.5.0",
-    "react-dom": "^16.5.0",
+    "react": "^17.0.0",
+    "react-dom": "^17.0.0",
     "react-pdf": "latest"
   },
   "devDependencies": {
-    "@babel/core": "^7.5.5",
-    "@babel/plugin-proposal-class-properties": "^7.5.5",
-    "@babel/plugin-transform-runtime": "^7.5.5",
-    "@babel/preset-env": "^7.5.5",
-    "@babel/preset-react": "^7.0.0",
-    "less": "^3.8.1",
+    "@babel/core": "^7.12.0",
+    "@babel/preset-env": "^7.12.0",
+    "@babel/preset-react": "^7.12.0",
+    "less": "^3.12.0",
     "parcel-bundler": "^1.12.4"
   }
 }

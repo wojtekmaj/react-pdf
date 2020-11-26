@@ -1,15 +1,8 @@
 {
   "presets": [
-    [
-      "@babel/env",
-      {
-        "modules": false
-      }
-    ],
+    ["@babel/preset-env", {
+      "modules": false
+    }],
     "@babel/react"
-  ],
-  "plugins": [
-    "@babel/transform-runtime",
-    "@babel/proposal-class-properties"
   ]
 }
