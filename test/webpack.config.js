@@ -89,7 +89,7 @@ module.exports = {
   devServer: {
     compress: true,
     historyApiFallback: true, // respond to 404s with index.html
-    host: 'localhost',
+    host: '0.0.0.0',
     hot: true, // enable HMR on the server
     port: 3000,
   },
