@@ -13,8 +13,6 @@ import {
 
 const pdfFile = loadPDF('./__mocks__/_pdf.pdf');
 
-/* eslint-disable comma-dangle */
-
 describe('TextLayer', () => {
   // Loaded page
   let page;
@@ -44,7 +42,7 @@ describe('TextLayer', () => {
         <TextLayer
           onGetTextSuccess={onGetTextSuccess}
           page={page}
-        />
+        />,
       );
 
       expect.assertions(1);
@@ -60,7 +58,7 @@ describe('TextLayer', () => {
         <TextLayer
           onGetTextError={onGetTextError}
           page={failingPage}
-        />
+        />,
       );
 
       expect.assertions(1);
@@ -76,7 +74,7 @@ describe('TextLayer', () => {
         <TextLayer
           onGetTextSuccess={onGetTextSuccess}
           page={page}
-        />
+        />,
       );
 
       expect.assertions(2);
@@ -107,7 +105,7 @@ describe('TextLayer', () => {
         <TextLayer
           onGetTextSuccess={onGetTextSuccess}
           page={page}
-        />
+        />,
       );
 
       expect.assertions(1);
@@ -128,7 +126,7 @@ describe('TextLayer', () => {
           onGetTextSuccess={onGetTextSuccess}
           page={page}
           rotate={rotate}
-        />
+        />,
       );
 
       expect.assertions(1);
@@ -149,7 +147,7 @@ describe('TextLayer', () => {
           onGetTextSuccess={onGetTextSuccess}
           page={page}
           scale={scale}
-        />
+        />,
       );
 
       expect.assertions(1);
