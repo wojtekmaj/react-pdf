@@ -13,8 +13,6 @@ import {
 
 const pdfFile = loadPDF('./__mocks__/_pdf.pdf');
 
-/* eslint-disable comma-dangle */
-
 describe('PageCanvas', () => {
   // Loaded page
   let page;
@@ -47,7 +45,7 @@ describe('PageCanvas', () => {
         <PageCanvas
           onRenderSuccess={onRenderSuccess}
           page={pageWithRendererMocked}
-        />
+        />,
       );
 
       expect.assertions(1);
@@ -57,7 +55,7 @@ describe('PageCanvas', () => {
 
     it('calls onRenderError when failed to render canvas', async () => {
       const {
-        func: onRenderError, promise: onRenderErrorPromise
+        func: onRenderError, promise: onRenderErrorPromise,
       } = makeAsyncCallback();
 
       muteConsole();
@@ -66,7 +64,7 @@ describe('PageCanvas', () => {
         <PageCanvas
           onRenderError={onRenderError}
           page={failingPage}
-        />
+        />,
       );
 
       expect.assertions(1);
@@ -85,7 +83,7 @@ describe('PageCanvas', () => {
         <PageCanvas
           canvasRef={canvasRef}
           page={pageWithRendererMocked}
-        />
+        />,
       );
 
       expect(canvasRef).toHaveBeenCalled();

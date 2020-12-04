@@ -8,8 +8,6 @@ import { loadPDF, makeAsyncCallback } from '../test-utils';
 
 const pdfFile = loadPDF('./__mocks__/_pdf.pdf');
 
-/* eslint-disable comma-dangle */
-
 describe('OutlineItem', () => {
   // Loaded PDF file
   let pdf;
@@ -30,7 +28,7 @@ describe('OutlineItem', () => {
         <OutlineItem
           item={outlineItem}
           pdf={pdf}
-        />
+        />,
       );
 
       const title = component.find('a').first();
@@ -43,7 +41,7 @@ describe('OutlineItem', () => {
         <OutlineItem
           item={outlineItem}
           pdf={pdf}
-        />
+        />,
       );
 
       const subitems = component.children().find('OutlineItemInternal');
@@ -59,7 +57,7 @@ describe('OutlineItem', () => {
           item={outlineItem}
           onClick={onClick}
           pdf={pdf}
-        />
+        />,
       );
 
       const title = component.find('a').first();

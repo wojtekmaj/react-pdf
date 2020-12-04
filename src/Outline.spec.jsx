@@ -13,8 +13,6 @@ import {
 const pdfFile = loadPDF('./__mocks__/_pdf.pdf');
 const pdfFile2 = loadPDF('./__mocks__/_pdf2.pdf');
 
-/* eslint-disable comma-dangle */
-
 describe('Outline', () => {
   // Loaded PDF file
   let pdf;
@@ -40,7 +38,7 @@ describe('Outline', () => {
         <Outline
           onLoadSuccess={onLoadSuccess}
           pdf={pdf}
-        />
+        />,
       );
 
       expect.assertions(1);
@@ -56,7 +54,7 @@ describe('Outline', () => {
         <Outline
           onLoadError={onLoadError}
           pdf={failingPdf}
-        />
+        />,
       );
 
       expect.assertions(1);
@@ -72,7 +70,7 @@ describe('Outline', () => {
         <Outline
           onLoadSuccess={onLoadSuccess}
           pdf={pdf}
-        />
+        />,
       );
 
       expect.assertions(2);
@@ -105,7 +103,7 @@ describe('Outline', () => {
           className={className}
           onLoadSuccess={onLoadSuccess}
           pdf={pdf}
-        />
+        />,
       );
 
       expect.assertions(1);
@@ -126,7 +124,7 @@ describe('Outline', () => {
           inputRef={inputRef}
           onLoadSuccess={onLoadSuccess}
           pdf={pdf}
-        />
+        />,
       );
 
       expect.assertions(2);
@@ -143,7 +141,7 @@ describe('Outline', () => {
         <Outline
           onLoadSuccess={onLoadSuccess}
           pdf={pdf}
-        />
+        />,
       );
 
       expect.assertions(1);

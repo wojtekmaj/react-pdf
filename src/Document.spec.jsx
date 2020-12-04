@@ -14,8 +14,6 @@ const pdfFile2 = loadPDF('./__mocks__/_pdf2.pdf');
 
 const OK = Symbol('OK');
 
-/* eslint-disable comma-dangle */
-
 const Child = () => <div className="Child" />;
 
 describe('Document', () => {
@@ -41,7 +39,7 @@ describe('Document', () => {
           file={pdfFile.dataURI}
           onLoadSuccess={onLoadSuccess}
           onSourceSuccess={onSourceSuccess}
-        />
+        />,
       );
 
       expect.assertions(2);
@@ -58,7 +56,7 @@ describe('Document', () => {
           file={{ url: pdfFile.dataURI }}
           onLoadSuccess={onLoadSuccess}
           onSourceSuccess={onSourceSuccess}
-        />
+        />,
       );
 
       expect.assertions(2);
@@ -75,7 +73,7 @@ describe('Document', () => {
           file={pdfFile.arrayBuffer}
           onLoadSuccess={onLoadSuccess}
           onSourceSuccess={onSourceSuccess}
-        />
+        />,
       );
 
       expect.assertions(2);
@@ -92,7 +90,7 @@ describe('Document', () => {
           file={pdfFile.blob}
           onLoadSuccess={onLoadSuccess}
           onSourceSuccess={onSourceSuccess}
-        />
+        />,
       );
 
       expect.assertions(2);
@@ -109,7 +107,7 @@ describe('Document', () => {
           file={pdfFile.file}
           onLoadSuccess={onLoadSuccess}
           onSourceSuccess={onSourceSuccess}
-        />
+        />,
       );
 
       expect.assertions(2);
@@ -126,7 +124,7 @@ describe('Document', () => {
         <Document
           file={() => null}
           onSourceError={onSourceError}
-        />
+        />,
       );
 
       expect.assertions(1);
@@ -147,7 +145,7 @@ describe('Document', () => {
           file={pdfFile.file}
           onLoadSuccess={onLoadSuccess}
           onSourceSuccess={onSourceSuccess}
-        />
+        />,
       );
 
       expect.assertions(4);
@@ -174,7 +172,7 @@ describe('Document', () => {
       const className = 'testClassName';
 
       const component = shallow(
-        <Document className={className} />
+        <Document className={className} />,
       );
 
       const wrapperClassName = component.find('.react-pdf__Document').prop('className');
@@ -186,7 +184,7 @@ describe('Document', () => {
       const inputRef = jest.fn();
 
       mount(
-        <Document inputRef={inputRef} />
+        <Document inputRef={inputRef} />,
       );
 
       expect(inputRef).toHaveBeenCalled();
@@ -195,7 +193,7 @@ describe('Document', () => {
 
     it('renders "No PDF file specified." when given nothing', () => {
       const component = shallow(
-        <Document />
+        <Document />,
       );
 
       const noData = component.find('Message');
@@ -206,7 +204,7 @@ describe('Document', () => {
 
     it('renders custom no data message when given nothing and noData prop is given', () => {
       const component = shallow(
-        <Document noData="Nothing here" />
+        <Document noData="Nothing here" />,
       );
 
       const noData = component.find('Message');
@@ -217,7 +215,7 @@ describe('Document', () => {
 
     it('renders custom no data message when given nothing and noData prop is given as a function', () => {
       const component = shallow(
-        <Document noData={() => 'Nothing here'} />
+        <Document noData={() => 'Nothing here'} />,
       );
 
       const noData = component.find('Message');
@@ -233,7 +231,7 @@ describe('Document', () => {
         <Document
           file={pdfFile.file}
           onLoadSuccess={onLoadSuccess}
-        />
+        />,
       );
 
       expect.assertions(2);
@@ -257,7 +255,7 @@ describe('Document', () => {
           file={pdfFile.file}
           loading="Loading"
           onLoadSuccess={onLoadSuccess}
-        />
+        />,
       );
 
       expect.assertions(2);
@@ -281,7 +279,7 @@ describe('Document', () => {
           file={pdfFile.file}
           loading={() => 'Loading'}
           onLoadSuccess={onLoadSuccess}
-        />
+        />,
       );
 
       expect.assertions(2);
@@ -307,7 +305,7 @@ describe('Document', () => {
         <Document
           file={failingPdf}
           onLoadError={onLoadError}
-        />
+        />,
       );
 
       expect.assertions(2);
@@ -334,7 +332,7 @@ describe('Document', () => {
           error="Error"
           file={failingPdf}
           onLoadError={onLoadError}
-        />
+        />,
       );
 
       expect.assertions(2);
@@ -362,7 +360,7 @@ describe('Document', () => {
           renderMode="svg"
         >
           <Child />
-        </Document>
+        </Document>,
       );
 
       expect.assertions(1);
@@ -385,7 +383,7 @@ describe('Document', () => {
           rotate={90}
         >
           <Child />
-        </Document>
+        </Document>,
       );
 
       expect.assertions(1);
@@ -408,7 +406,7 @@ describe('Document', () => {
           renderMode="svg"
         >
           <Child renderMode="canvas" />
-        </Document>
+        </Document>,
       );
 
       expect.assertions(1);
@@ -432,7 +430,7 @@ describe('Document', () => {
           rotate={90}
         >
           <Child rotate={180} />
-        </Document>
+        </Document>,
       );
 
       expect.assertions(1);
@@ -457,7 +455,7 @@ describe('Document', () => {
           file={pdfFile.file}
           onItemClick={onItemClick}
           onLoadSuccess={onLoadSuccess}
-        />
+        />,
       );
 
       expect.assertions(2);
@@ -480,7 +478,7 @@ describe('Document', () => {
         <Document
           file={pdfFile.file}
           onLoadSuccess={onLoadSuccess}
-        />
+        />,
       );
 
       expect.assertions(1);
@@ -509,7 +507,7 @@ describe('Document', () => {
       ${'_parent'}       | ${3}
       ${'_top'}          | ${4}
     `('returns externalLinkTarget = $linkServiceTarget given externalLinkTarget prop = $externalLinkTarget', async ({
-      externalLinkTarget, linkServiceTarget
+      externalLinkTarget, linkServiceTarget,
     }) => {
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
@@ -518,7 +516,7 @@ describe('Document', () => {
           externalLinkTarget={externalLinkTarget}
           file={pdfFile.file}
           onLoadSuccess={onLoadSuccess}
-        />
+        />,
       );
 
       expect.assertions(1);
@@ -533,7 +531,7 @@ describe('Document', () => {
     const onClick = jest.fn();
 
     const component = mount(
-      <Document onClick={onClick} />
+      <Document onClick={onClick} />,
     );
 
     const document = component.find('.react-pdf__Document');
@@ -546,7 +544,7 @@ describe('Document', () => {
     const onTouchStart = jest.fn();
 
     const component = mount(
-      <Document onTouchStart={onTouchStart} />
+      <Document onTouchStart={onTouchStart} />,
     );
 
     const document = component.find('.react-pdf__Document');

@@ -14,8 +14,6 @@ import {
 const pdfFile = loadPDF('./__mocks__/_pdf.pdf');
 const pdfFile2 = loadPDF('./__mocks__/_pdf2.pdf');
 
-/* eslint-disable comma-dangle */
-
 describe('Page', () => {
   // Loaded PDF file
   let pdf;
@@ -63,7 +61,7 @@ describe('Page', () => {
           onLoadSuccess={onLoadSuccess}
           pageIndex={0}
           pdf={pdf}
-        />
+        />,
       );
 
       expect.assertions(1);
@@ -78,7 +76,7 @@ describe('Page', () => {
           onLoadSuccess={onLoadSuccess}
           pageIndex={0}
           pdf={pdf}
-        />
+        />,
       );
 
       expect.assertions(5);
@@ -103,7 +101,7 @@ describe('Page', () => {
           onLoadError={onLoadError}
           pageIndex={0}
           pdf={failingPdf}
-        />
+        />,
       );
 
       expect.assertions(1);
@@ -120,7 +118,7 @@ describe('Page', () => {
           onLoadSuccess={onLoadSuccess}
           pageIndex={0}
           pdf={pdf}
-        />
+        />,
       );
 
       expect.assertions(1);
@@ -137,7 +135,7 @@ describe('Page', () => {
           onLoadSuccess={onLoadSuccess}
           pageNumber={1}
           pdf={pdf}
-        />
+        />,
       );
 
       expect.assertions(1);
@@ -154,7 +152,7 @@ describe('Page', () => {
           pageIndex={0}
           pdf={pdf}
           registerPage={registerPage}
-        />
+        />,
       );
 
       expect.assertions(1);
@@ -169,7 +167,7 @@ describe('Page', () => {
           pageIndex={0}
           pdf={pdf}
           unregisterPage={unregisterPage}
-        />
+        />,
       );
 
       component.unmount();
@@ -186,7 +184,7 @@ describe('Page', () => {
           onLoadSuccess={onLoadSuccess}
           pageIndex={0}
           pdf={pdf}
-        />
+        />,
       );
 
       expect.assertions(2);
@@ -210,7 +208,7 @@ describe('Page', () => {
           onLoadSuccess={onLoadSuccess}
           pageIndex={0}
           pdf={pdf}
-        />
+        />,
       );
 
       expect.assertions(2);
@@ -240,7 +238,7 @@ describe('Page', () => {
           className={className}
           pageIndex={0}
           pdf={pdf}
-        />
+        />,
       );
 
       const wrapperClassName = component.find('.react-pdf__Page').prop('className');
@@ -256,7 +254,7 @@ describe('Page', () => {
           inputRef={inputRef}
           pageIndex={1}
           pdf={silentlyFailingPdf}
-        />
+        />,
       );
 
       expect(inputRef).toHaveBeenCalled();
@@ -274,7 +272,7 @@ describe('Page', () => {
           onLoadSuccess={onLoadSuccess}
           pageIndex={0}
           pdf={pdf}
-        />
+        />,
       );
 
       expect.assertions(1);
@@ -290,7 +288,7 @@ describe('Page', () => {
       muteConsole();
 
       const component = shallow(
-        <Page pdf={pdf} />
+        <Page pdf={pdf} />,
       );
 
       const noData = component.find('Message');
@@ -308,7 +306,7 @@ describe('Page', () => {
         <Page
           noData="Nothing here"
           pdf={pdf}
-        />
+        />,
       );
 
       const noData = component.find('Message');
@@ -326,7 +324,7 @@ describe('Page', () => {
         <Page
           noData={() => 'Nothing here'}
           pdf={pdf}
-        />
+        />,
       );
 
       const noData = component.find('Message');
@@ -345,7 +343,7 @@ describe('Page', () => {
           onLoadSuccess={onLoadSuccess}
           pageIndex={0}
           pdf={pdf}
-        />
+        />,
       );
 
       expect.assertions(2);
@@ -370,7 +368,7 @@ describe('Page', () => {
           onLoadSuccess={onLoadSuccess}
           pageIndex={0}
           pdf={pdf}
-        />
+        />,
       );
 
       expect.assertions(2);
@@ -395,7 +393,7 @@ describe('Page', () => {
           onLoadSuccess={onLoadSuccess}
           pageIndex={0}
           pdf={pdf}
-        />
+        />,
       );
 
       expect.assertions(2);
@@ -420,7 +418,7 @@ describe('Page', () => {
           pageIndex={1}
           pageNumber={1}
           pdf={pdf}
-        />
+        />,
       );
 
       expect.assertions(1);
@@ -438,7 +436,7 @@ describe('Page', () => {
           onLoadSuccess={onLoadSuccess}
           pageIndex={0}
           pdf={pdf}
-        />
+        />,
       );
 
       expect.assertions(1);
@@ -457,7 +455,7 @@ describe('Page', () => {
           pageIndex={0}
           pdf={pdf}
           rotate={90}
-        />
+        />,
       );
 
       expect.assertions(1);
@@ -475,7 +473,7 @@ describe('Page', () => {
           onLoadSuccess={onLoadSuccess}
           pageIndex={0}
           pdf={pdf}
-        />
+        />,
       );
 
       expect.assertions(1);
@@ -497,7 +495,7 @@ describe('Page', () => {
           pageIndex={0}
           pdf={pdf}
           renderMode="none"
-        />
+        />,
       );
 
       expect.assertions(2);
@@ -519,7 +517,7 @@ describe('Page', () => {
           pageIndex={0}
           pdf={pdf}
           renderMode="canvas"
-        />
+        />,
       );
 
       expect.assertions(1);
@@ -541,7 +539,7 @@ describe('Page', () => {
           pageIndex={0}
           pdf={pdf}
           renderMode="svg"
-        />
+        />,
       );
 
       expect.assertions(1);
@@ -562,7 +560,7 @@ describe('Page', () => {
           onLoadSuccess={onLoadSuccess}
           pageIndex={0}
           pdf={pdf}
-        />
+        />,
       );
 
       expect.assertions(1);
@@ -584,7 +582,7 @@ describe('Page', () => {
           pageIndex={0}
           pdf={pdf}
           renderTextLayer
-        />
+        />,
       );
 
       expect.assertions(1);
@@ -606,7 +604,7 @@ describe('Page', () => {
           pageIndex={0}
           pdf={pdf}
           renderTextLayer={false}
-        />
+        />,
       );
 
       expect.assertions(1);
@@ -629,7 +627,7 @@ describe('Page', () => {
           pdf={pdf}
           renderMode="canvas"
           renderTextLayer
-        />
+        />,
       );
 
       expect.assertions(1);
@@ -652,7 +650,7 @@ describe('Page', () => {
           pdf={pdf}
           renderMode="svg"
           renderTextLayer
-        />
+        />,
       );
 
       expect.assertions(1);
@@ -672,7 +670,7 @@ describe('Page', () => {
           onLoadSuccess={onLoadSuccess}
           pageIndex={0}
           pdf={pdf}
-        />
+        />,
       );
 
       expect.assertions(1);
@@ -694,7 +692,7 @@ describe('Page', () => {
           pageIndex={0}
           pdf={pdf}
           renderAnnotationLayer
-        />
+        />,
       );
 
       expect.assertions(1);
@@ -716,7 +714,7 @@ describe('Page', () => {
           pageIndex={0}
           pdf={pdf}
           renderAnnotationLayer={false}
-        />
+        />,
       );
 
       expect.assertions(1);
@@ -738,7 +736,7 @@ describe('Page', () => {
         onLoadSuccess={onLoadSuccess}
         pageIndex={0}
         pdf={pdf}
-      />
+      />,
     );
 
     expect.assertions(1);
@@ -760,7 +758,7 @@ describe('Page', () => {
         pageIndex={0}
         pdf={pdf}
         scale={scale}
-      />
+      />,
     );
 
     expect.assertions(1);
@@ -782,7 +780,7 @@ describe('Page', () => {
         pageIndex={0}
         pdf={pdf}
         width={width}
-      />
+      />,
     );
 
     expect.assertions(1);
@@ -806,7 +804,7 @@ describe('Page', () => {
         pdf={pdf}
         scale={scale}
         width={width}
-      />
+      />,
     );
 
     expect.assertions(1);
@@ -828,7 +826,7 @@ describe('Page', () => {
         onLoadSuccess={onLoadSuccess}
         pageIndex={0}
         pdf={pdf}
-      />
+      />,
     );
 
     expect.assertions(1);
@@ -852,7 +850,7 @@ describe('Page', () => {
         pageIndex={0}
         pdf={pdf}
         scale={scale}
-      />
+      />,
     );
 
     expect.assertions(1);
@@ -876,7 +874,7 @@ describe('Page', () => {
         pageIndex={0}
         pdf={pdf}
         width={width}
-      />
+      />,
     );
 
     expect.assertions(2);
@@ -904,7 +902,7 @@ describe('Page', () => {
         pdf={pdf}
         scale={scale}
         width={width}
-      />
+      />,
     );
 
     expect.assertions(2);
@@ -925,7 +923,7 @@ describe('Page', () => {
       <Page
         onClick={onClick}
         pdf={pdf}
-      />
+      />,
     );
 
     const page = component.find('.react-pdf__Page');
@@ -941,7 +939,7 @@ describe('Page', () => {
       <Page
         onTouchStart={onTouchStart}
         pdf={pdf}
-      />
+      />,
     );
 
     const page = component.find('.react-pdf__Page');

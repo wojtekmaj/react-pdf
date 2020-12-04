@@ -9,8 +9,6 @@ import { loadPDF } from '../../test-utils';
 
 const pdfFile = loadPDF('./__mocks__/_pdf.pdf');
 
-/* eslint-disable comma-dangle */
-
 describe('TextLayerItem', () => {
   // Loaded page
   let page;
@@ -38,7 +36,7 @@ describe('TextLayerItem', () => {
           {...defaultProps}
           page={page}
           str={str}
-        />
+        />,
       );
 
       const textItem = component.text();
@@ -57,7 +55,7 @@ describe('TextLayerItem', () => {
           itemIndex={itemIndex}
           page={page}
           str={str}
-        />
+        />,
       );
 
       expect(customTextRenderer).toHaveBeenCalledWith(
@@ -76,7 +74,7 @@ describe('TextLayerItem', () => {
           {...defaultProps}
           customTextRenderer={customTextRenderer}
           page={page}
-        />
+        />,
       );
 
       const textItem = component.text();

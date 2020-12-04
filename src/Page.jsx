@@ -424,9 +424,6 @@ PageInternal.propTypes = {
   width: PropTypes.number,
 };
 
-// forwardRef render functions do not support propTypes
-/* eslint-disable react/prop-types */
-
 function Page(props, ref) {
   return (
     <DocumentContext.Consumer>
