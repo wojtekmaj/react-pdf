@@ -8730,7 +8730,7 @@ fsevents@^2.1.2:
     react-dom: ^17.0.0
     react-test-renderer: ^16.7.0
     rimraf: ^3.0.0
-    webpack: ^5.0.0-0
+    webpack: ^5.4.0
     worker-loader: ^3.0.0
   peerDependencies:
     react: ^16.3.0 || ^17.0.0-0
@@ -10919,7 +10919,7 @@ fsevents@^2.1.2:
   languageName: node
   linkType: hard
 
-"webpack@npm:^5.0.0-0, webpack@npm:^5.4.0":
+"webpack@npm:^5.4.0":
   version: 5.7.0
   resolution: "webpack@npm:5.7.0"
   dependencies:
