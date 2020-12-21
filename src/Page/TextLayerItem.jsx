@@ -97,7 +97,8 @@ export class TextLayerItemInternal extends PureComponent {
 
     const ascent = fontData ? fontData.ascent : 0;
     if (ascent) {
-      transform += ` translateY(${(1 - ascent) * 100}%)`;
+      // only transform half the difference in ascent
+      transform += ` translateY(${(1 - ascent) * 50}%)`;
     }
 
     element.style.transform = transform;
