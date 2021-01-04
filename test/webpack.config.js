@@ -66,10 +66,12 @@ module.exports = {
     ].filter(Boolean),
   },
   plugins: [
-    new CopyWebpackPlugin([
-      'test.pdf',
-      { from: '../node_modules/pdfjs-dist/cmaps/', to: 'cmaps/' },
-    ]),
+    new CopyWebpackPlugin({
+      patterns: [
+        'test.pdf',
+        { from: '../node_modules/pdfjs-dist/cmaps/', to: 'cmaps/' },
+      ],
+    }),
     new HtmlWebpackPlugin({
       template: 'index.html',
     }),
