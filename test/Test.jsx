@@ -104,10 +104,15 @@ export default class Test extends PureComponent {
 
       switch (passMethod) {
         case 'blob': {
+          if (typeof file === 'string') {
+            return dataURItoBlob(file);
+          }
+
           if (file instanceof File || file instanceof Blob) {
             return file;
           }
-          return dataURItoBlob(file);
+
+          return file;
         }
 
         case 'string': {

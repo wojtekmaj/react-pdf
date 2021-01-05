@@ -1,12 +1,24 @@
-import { dataURItoUint8Array } from 'react-pdf/src/shared/utils';
+import { dataURItoByteString } from 'react-pdf/src/shared/utils';
+
+function dataURItoUint8Array(dataURI) {
+  const byteString = dataURItoByteString(dataURI);
+
+  const ia = new Uint8Array(byteString.length);
+  for (let i = 0; i < byteString.length; i += 1) {
+    ia[i] = byteString.charCodeAt(i);
+  }
+
+  return ia;
+}
 
 /**
  * Parses data URI to Blob.
  *
  * @param {String} dataURI
  */
-export const dataURItoBlob = (dataURI) => {
+export function dataURItoBlob(dataURI) {
   const ia = dataURItoUint8Array(dataURI);
-  const [mimeString] = dataURI.split(',')[0].split(':')[1].split(';');
+  const [header] = dataURI.split(';');
+  const mimeString = header.split(':')[1];
   return new Blob([ia], { type: mimeString });
-};
+}

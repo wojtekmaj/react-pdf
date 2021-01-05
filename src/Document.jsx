@@ -18,7 +18,7 @@ import eventBus from './eventBus';
 
 import {
   cancelRunningTask,
-  dataURItoUint8Array,
+  dataURItoByteString,
   displayCORSWarning,
   errorOnDev,
   isArrayBuffer,
@@ -226,8 +226,8 @@ export default class Document extends PureComponent {
     // File is a string
     if (typeof file === 'string') {
       if (isDataURI(file)) {
-        const fileUint8Array = dataURItoUint8Array(file);
-        return { data: fileUint8Array };
+        const fileByteString = dataURItoByteString(file);
+        return { data: fileByteString };
       }
 
       displayCORSWarning();
@@ -268,8 +268,8 @@ export default class Document extends PureComponent {
     if (typeof file.url === 'string') {
       if (isDataURI(file.url)) {
         const { url, ...otherParams } = file;
-        const fileUint8Array = dataURItoUint8Array(url);
-        return { data: fileUint8Array, ...otherParams };
+        const fileByteString = dataURItoByteString(url);
+        return { data: fileByteString, ...otherParams };
       }
 
       displayCORSWarning();
