@@ -1,7 +1,5 @@
 import { dataURItoUint8Array } from 'react-pdf/src/shared/utils';
 
-/* eslint-disable import/prefer-default-export */
-
 /**
  * Parses data URI to Blob.
  *
