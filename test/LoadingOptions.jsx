@@ -8,7 +8,7 @@ import { isFile } from './shared/propTypes';
 export default function LoadingOptions({
   file,
   setFile,
-  setState,
+  setRender,
 }) {
   function onFileChange(event) {
     setFile(event.target.files[0]);
@@ -45,13 +45,9 @@ export default function LoadingOptions({
   function onImportAndUnmount() {
     setFile(samplePDF);
 
-    setTimeout(() => setState({
-      render: false,
-    }), 20);
+    setTimeout(() => setRender(false), 20);
 
-    setTimeout(() => setState({
-      render: true,
-    }), 1000);
+    setTimeout(() => setRender(true), 1000);
   }
 
   function unloadFile() {
@@ -133,5 +129,5 @@ export default function LoadingOptions({
 LoadingOptions.propTypes = {
   file: isFile,
   setFile: PropTypes.func.isRequired,
-  setState: PropTypes.func.isRequired,
+  setRender: PropTypes.func.isRequired,
 };

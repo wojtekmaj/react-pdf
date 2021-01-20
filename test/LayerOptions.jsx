@@ -5,18 +5,20 @@ export default function LayerOptions({
   renderAnnotationLayer,
   renderInteractiveForms,
   renderTextLayer,
-  setState,
+  setRenderAnnotationLayer,
+  setRenderInteractiveForms,
+  setRenderTextLayer,
 }) {
   function onRenderAnnotationLayerChange(event) {
-    setState({ renderAnnotationLayer: event.target.checked });
+    setRenderAnnotationLayer(event.target.checked);
   }
 
   function onRenderInteractiveFormsChange(event) {
-    setState({ renderInteractiveForms: event.target.checked });
+    setRenderInteractiveForms(event.target.checked);
   }
 
   function onRenderTextLayersChange(event) {
-    setState({ renderTextLayer: event.target.checked });
+    setRenderTextLayer(event.target.checked);
   }
 
   return (
@@ -69,5 +71,7 @@ LayerOptions.propTypes = {
   renderAnnotationLayer: PropTypes.bool,
   renderInteractiveForms: PropTypes.bool,
   renderTextLayer: PropTypes.bool,
-  setState: PropTypes.func.isRequired,
+  setRenderAnnotationLayer: PropTypes.func.isRequired,
+  setRenderInteractiveForms: PropTypes.func.isRequired,
+  setRenderTextLayer: PropTypes.func.isRequired,
 };

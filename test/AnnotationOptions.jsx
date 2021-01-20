@@ -3,12 +3,12 @@ import PropTypes from 'prop-types';
 
 export default function AnnotationOptions({
   externalLinkTarget,
-  setState,
+  setExternalLinkTarget,
 }) {
   function onExternalLinkTargetChange(event) {
     const { value } = event.target;
 
-    setState({ externalLinkTarget: value !== 'unset' ? value : null });
+    setExternalLinkTarget(value !== 'unset' ? value : null);
   }
 
   return (
@@ -65,5 +65,5 @@ export default function AnnotationOptions({
 
 AnnotationOptions.propTypes = {
   externalLinkTarget: PropTypes.oneOf(['_blank', '_self']),
-  setState: PropTypes.func.isRequired,
+  setExternalLinkTarget: PropTypes.func.isRequired,
 };

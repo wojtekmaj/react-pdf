@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { PDFDataRangeTransport } from 'pdfjs-dist';
 import { Document, Outline, Page } from 'react-pdf/src/entry.webpack';
@@ -52,140 +52,129 @@ export const readAsDataURL = (file) => new Promise((resolve, reject) => {
 
 /* eslint-disable no-console */
 
-export default class Test extends PureComponent {
-  state = {
-    displayAll: false,
-    externalLinkTarget: null,
-    file: null,
-    numPages: null,
-    pageHeight: null,
-    pageNumber: null,
-    pageScale: null,
-    pageWidth: null,
-    passMethod: null,
-    render: true,
-    renderAnnotationLayer: true,
-    renderInteractiveForms: true,
-    renderMode: 'canvas',
-    renderTextLayer: true,
-    rotate: null,
-  };
+export default function Test() {
+  const [displayAll, setDisplayAll] = useState(false);
+  const [externalLinkTarget, setExternalLinkTarget] = useState(null);
+  const [file, setFile] = useState(null);
+  const [fileForProps, setFileForProps] = useState(null);
+  const [numPages, setNumPages] = useState(null);
+  const [pageHeight, setPageHeight] = useState(null);
+  const [pageNumber, setPageNumber] = useState(null);
+  const [pageScale, setPageScale] = useState(null);
+  const [pageWidth, setPageWidth] = useState(null);
+  const [passMethod, setPassMethod] = useState(null);
+  const [render, setRender] = useState(true);
+  const [renderAnnotationLayer, setRenderAnnotationLayer] = useState(true);
+  const [renderInteractiveForms, setRenderInteractiveForms] = useState(true);
+  const [renderMode, setRenderMode] = useState('canvas');
+  const [renderTextLayer, setRenderTextLayer] = useState(true);
+  const [rotate, setRotate] = useState(null);
 
-  onDocumentLoadProgress = (progressData) => {
+  const onDocumentLoadProgress = useCallback((progressData) => {
     console.log('Loading a document', progressData.total ? progressData.loaded / progressData.total : '(unknown progress)');
-  };
+  }, []);
 
-  onDocumentLoadSuccess = (document) => {
+  const onDocumentLoadSuccess = useCallback((document) => {
     console.log('Loaded a document', document);
-    const { numPages } = document;
-    this.setState({
-      numPages,
-      pageNumber: 1,
-    });
-  };
+    const { numPages: nextNumPages } = document;
+    setNumPages(nextNumPages);
+    setPageNumber(1);
+  }, []);
 
-  onPageRenderSuccess = (page) => console.log('Rendered a page', page);
+  const onDocumentLoadError = useCallback((error) => {
+    console.error(error);
+  }, []);
 
-  onItemClick = ({ pageNumber }) => this.setState({ pageNumber });
+  const onPageRenderSuccess = useCallback((page) => console.log('Rendered a page', page), []);
 
-  setFile = (file) => this.setState({ file }, this.setFileForProps);
+  const onItemClick = useCallback(
+    ({ pageNumber: nextPageNumber }) => setPageNumber(nextPageNumber),
+    [],
+  );
 
-  setPassMethod = (passMethod) => this.setState({ passMethod }, this.setFileForProps);
-
-  setFileForProps = async () => {
-    const fileForProps = await (async () => {
-      const { file } = this.state;
-
-      if (!file) {
-        return null;
-      }
-
-      const { passMethod } = this.state;
-
-      switch (passMethod) {
-        case 'blob': {
-          if (typeof file === 'string') {
-            return dataURItoBlob(file);
-          }
-
-          if (file instanceof File || file instanceof Blob) {
-            return file;
-          }
-
-          return file;
+  useEffect(() => {
+    (async () => {
+      const nextFileForProps = await (async () => {
+        if (!file) {
+          return null;
         }
 
-        case 'string': {
-          if (typeof file === 'string') {
-            return file;
-          }
-
-          if (file instanceof File || file instanceof Blob) {
-            return readAsDataURL(file);
-          }
-
-          return file;
-        }
-        case 'object': {
-          // File is a string
-          if (typeof file === 'string') {
-            return { url: file };
-          }
-
-          // File is PDFDataRangeTransport
-          if (file instanceof PDFDataRangeTransport) {
-            return { range: file };
-          }
-
-          // File is an ArrayBuffer
-          if (isArrayBuffer(file)) {
-            return { data: file };
-          }
-
-          /**
-           * The cases below are browser-only.
-           * If you're running on a non-browser environment, these cases will be of no use.
-           */
-          if (isBrowser) {
-            // File is a Blob
-            if (isBlob(file) || isFile(file)) {
-              return { data: await loadFromFile(file) };
+        switch (passMethod) {
+          case 'blob': {
+            if (typeof file === 'string') {
+              return dataURItoBlob(file);
             }
+
+            if (file instanceof File || file instanceof Blob) {
+              return file;
+            }
+
+            return file;
           }
-          return file;
+
+          case 'string': {
+            if (typeof file === 'string') {
+              return file;
+            }
+
+            if (file instanceof File || file instanceof Blob) {
+              return readAsDataURL(file);
+            }
+
+            return file;
+          }
+          case 'object': {
+            // File is a string
+            if (typeof file === 'string') {
+              return { url: file };
+            }
+
+            // File is PDFDataRangeTransport
+            if (file instanceof PDFDataRangeTransport) {
+              return { range: file };
+            }
+
+            // File is an ArrayBuffer
+            if (isArrayBuffer(file)) {
+              return { data: file };
+            }
+
+            /**
+             * The cases below are browser-only.
+             * If you're running on a non-browser environment, these cases will be of no use.
+             */
+            if (isBrowser) {
+              // File is a Blob
+              if (isBlob(file) || isFile(file)) {
+                return { data: await loadFromFile(file) };
+              }
+            }
+            return file;
+          }
+          default:
+            return file;
         }
-        default:
-          return file;
-      }
+      })();
+
+      setFileForProps(nextFileForProps);
     })();
+  }, [file, passMethod]);
 
-    this.setState({ fileForProps });
-  }
+  const changePage = useCallback(
+    (offset) => setPageNumber((prevPageNumber) => (prevPageNumber || 1) + offset),
+    [],
+  );
 
-  previousPage = () => this.changePage(-1);
+  const previousPage = useCallback(() => changePage(-1), [changePage]);
 
-  nextPage = () => this.changePage(1);
+  const nextPage = useCallback(() => changePage(1), [changePage]);
 
-  changePage = (offset) => this.setState((prevState) => ({
-    pageNumber: (prevState.pageNumber || 1) + offset,
-  }));
-
-  get pageProps() {
-    const {
-      pageHeight,
-      pageScale,
-      pageWidth,
-      renderAnnotationLayer,
-      renderInteractiveForms,
-      renderMode,
-      renderTextLayer,
-    } = this.state;
-
+  function getPageProps() {
     return {
       className: 'custom-classname-page',
       height: pageHeight,
       onClick: (event, page) => console.log('Clicked a page', { event, page }),
-      onRenderSuccess: this.onPageRenderSuccess,
+      onRenderSuccess: onPageRenderSuccess,
       renderAnnotationLayer,
       renderInteractiveForms,
       renderMode,
@@ -209,145 +198,130 @@ export default class Test extends PureComponent {
     };
   }
 
-  render() {
-    const {
-      displayAll,
-      externalLinkTarget,
-      file,
-      fileForProps,
-      numPages,
-      pageHeight,
-      pageNumber,
-      pageScale,
-      pageWidth,
-      passMethod,
-      render,
-      renderAnnotationLayer,
-      renderInteractiveForms,
-      renderMode,
-      renderTextLayer,
-      rotate,
-    } = this.state;
-    const { pageProps } = this;
+  const pageProps = getPageProps();
 
-    const setState = (state) => this.setState(state);
+  const documentProps = {
+    externalLinkTarget,
+    file: fileForProps,
+    options,
+    rotate,
+  };
 
-    const documentProps = {
-      externalLinkTarget,
-      file: fileForProps,
-      options,
-      rotate,
-    };
-
-    return (
-      <div className="Test">
-        <header>
-          <h1>
-            react-pdf test page
-          </h1>
-        </header>
-        <div className="Test__container">
-          <aside className="Test__container__options">
-            <LoadingOptions
-              file={file}
-              setFile={this.setFile}
-              setState={setState}
-            />
-            <PassingOptions
-              file={file}
-              passMethod={passMethod}
-              setPassMethod={this.setPassMethod}
-            />
-            <LayerOptions
-              renderAnnotationLayer={renderAnnotationLayer}
-              renderInteractiveForms={renderInteractiveForms}
-              renderTextLayer={renderTextLayer}
-              setState={setState}
-            />
-            <ViewOptions
-              displayAll={displayAll}
-              pageHeight={pageHeight}
-              pageScale={pageScale}
-              pageWidth={pageWidth}
-              renderMode={renderMode}
-              rotate={rotate}
-              setState={setState}
-            />
-            <AnnotationOptions
-              externalLinkTarget={externalLinkTarget}
-              setState={setState}
-            />
-          </aside>
-          <main className="Test__container__content">
-            <Document
-              {...documentProps}
-              className="custom-classname-document"
-              onClick={(event, pdf) => console.log('Clicked a document', { event, pdf })}
-              onItemClick={this.onItemClick}
-              onLoadError={this.onDocumentLoadError}
-              onLoadProgress={this.onDocumentLoadProgress}
-              onLoadSuccess={this.onDocumentLoadSuccess}
-              onSourceError={this.onDocumentLoadError}
-            >
-              <div className="Test__container__content__toc">
-                {render && (
-                  <Outline
-                    className="custom-classname-outline"
-                    onItemClick={this.onItemClick}
-                  />
-                )}
-              </div>
-              <div className="Test__container__content__document">
-                {render && (
-                  displayAll
-                    ? Array.from(
-                      new Array(numPages),
-                      (el, index) => (
-                        <Page
-                          {...pageProps}
-                          key={`page_${index + 1}`}
-                          inputRef={
-                            (pageNumber === index + 1)
-                              ? ((ref) => ref && ref.scrollIntoView())
-                              : null
-                          }
-                          pageNumber={index + 1}
-                        />
-                      ),
-                    )
-                    : (
+  return (
+    <div className="Test">
+      <header>
+        <h1>
+          react-pdf test page
+        </h1>
+      </header>
+      <div className="Test__container">
+        <aside className="Test__container__options">
+          <LoadingOptions
+            file={file}
+            setFile={setFile}
+            setRender={setRender}
+          />
+          <PassingOptions
+            file={file}
+            passMethod={passMethod}
+            setPassMethod={setPassMethod}
+          />
+          <LayerOptions
+            renderAnnotationLayer={renderAnnotationLayer}
+            renderInteractiveForms={renderInteractiveForms}
+            renderTextLayer={renderTextLayer}
+            setRenderAnnotationLayer={setRenderAnnotationLayer}
+            setRenderInteractiveForms={setRenderInteractiveForms}
+            setRenderTextLayer={setRenderTextLayer}
+          />
+          <ViewOptions
+            displayAll={displayAll}
+            pageHeight={pageHeight}
+            pageScale={pageScale}
+            pageWidth={pageWidth}
+            renderMode={renderMode}
+            rotate={rotate}
+            setDisplayAll={setDisplayAll}
+            setPageHeight={setPageHeight}
+            setPageScale={setPageScale}
+            setPageWidth={setPageWidth}
+            setRenderMode={setRenderMode}
+            setRotate={setRotate}
+          />
+          <AnnotationOptions
+            externalLinkTarget={externalLinkTarget}
+            setExternalLinkTarget={setExternalLinkTarget}
+          />
+        </aside>
+        <main className="Test__container__content">
+          <Document
+            {...documentProps}
+            className="custom-classname-document"
+            onClick={(event, pdf) => console.log('Clicked a document', { event, pdf })}
+            onItemClick={onItemClick}
+            onLoadError={onDocumentLoadError}
+            onLoadProgress={onDocumentLoadProgress}
+            onLoadSuccess={onDocumentLoadSuccess}
+            onSourceError={onDocumentLoadError}
+          >
+            <div className="Test__container__content__toc">
+              {render && (
+                <Outline
+                  className="custom-classname-outline"
+                  onItemClick={onItemClick}
+                />
+              )}
+            </div>
+            <div className="Test__container__content__document">
+              {render && (
+                displayAll
+                  ? Array.from(
+                    new Array(numPages),
+                    (el, index) => (
                       <Page
                         {...pageProps}
-                        pageNumber={pageNumber || 1}
+                        key={`page_${index + 1}`}
+                        inputRef={
+                          (pageNumber === index + 1)
+                            ? ((ref) => ref && ref.scrollIntoView())
+                            : null
+                        }
+                        pageNumber={index + 1}
                       />
-                    )
-                )}
-              </div>
-              {displayAll || (
-                <div className="Test__container__content__controls">
-                  <button
-                    disabled={pageNumber <= 1}
-                    onClick={this.previousPage}
-                    type="button"
-                  >
-                    Previous
-                  </button>
-                  <span>
-                    {`Page ${pageNumber || (numPages ? 1 : '--')} of ${numPages || '--'}`}
-                  </span>
-                  <button
-                    disabled={pageNumber >= numPages}
-                    onClick={this.nextPage}
-                    type="button"
-                  >
-                    Next
-                  </button>
-                </div>
+                    ),
+                  )
+                  : (
+                    <Page
+                      {...pageProps}
+                      pageNumber={pageNumber || 1}
+                    />
+                  )
               )}
-            </Document>
-          </main>
-        </div>
+            </div>
+            {displayAll || (
+              <div className="Test__container__content__controls">
+                <button
+                  disabled={pageNumber <= 1}
+                  onClick={previousPage}
+                  type="button"
+                >
+                  Previous
+                </button>
+                <span>
+                  {`Page ${pageNumber || (numPages ? 1 : '--')} of ${numPages || '--'}`}
+                </span>
+                <button
+                  disabled={pageNumber >= numPages}
+                  onClick={nextPage}
+                  type="button"
+                >
+                  Next
+                </button>
+              </div>
+            )}
+          </Document>
+        </main>
       </div>
-    );
-  }
+    </div>
+  );
 }

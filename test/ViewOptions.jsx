@@ -8,14 +8,19 @@ export default function ViewOptions({
   pageWidth,
   renderMode,
   rotate,
-  setState,
+  setDisplayAll,
+  setPageHeight,
+  setPageScale,
+  setPageWidth,
+  setRenderMode,
+  setRotate,
 }) {
   function onRenderModeChange(event) {
-    setState({ renderMode: event.target.value });
+    setRenderMode(event.target.value);
   }
 
   function onDisplayAllChange(event) {
-    setState({ displayAll: event.target.checked });
+    setDisplayAll(event.target.checked);
   }
 
   function onPageHeightChange(event) {
@@ -28,9 +33,7 @@ export default function ViewOptions({
       return;
     }
 
-    setState({
-      pageHeight: parseInt(height, 10),
-    });
+    setPageHeight(parseInt(height, 10));
   }
 
   function onPageScaleChange(event) {
@@ -43,9 +46,7 @@ export default function ViewOptions({
       return;
     }
 
-    setState({
-      pageScale: parseFloat(scale),
-    });
+    setPageScale(parseFloat(scale));
   }
 
   function onPageWidthChange(event) {
@@ -58,13 +59,11 @@ export default function ViewOptions({
       return;
     }
 
-    setState({
-      pageWidth: parseInt(width, 10),
-    });
+    setPageWidth(parseInt(width, 10));
   }
 
   function changeRotation(by) {
-    setState((prevState) => ({ rotate: (prevState.rotate + by + 360) % 360 }));
+    setRotate((prevRotate) => (prevRotate + by + 360) % 360);
   }
 
   function rotateLeft() {
@@ -81,19 +80,19 @@ export default function ViewOptions({
   }
 
   function resetRotation() {
-    setState({ rotate: null });
+    setRotate(null);
   }
 
   function resetHeight() {
-    setState({ pageHeight: null });
+    setPageHeight(null);
   }
 
   function resetScale() {
-    setState({ pageScale: null });
+    setPageScale(null);
   }
 
   function resetWidth() {
-    setState({ pageWidth: null });
+    setPageWidth(null);
   }
 
   return (
@@ -287,5 +286,10 @@ ViewOptions.propTypes = {
   pageWidth: PropTypes.number,
   renderMode: PropTypes.oneOf(['canvas', 'none', 'svg']),
   rotate: PropTypes.number,
-  setState: PropTypes.func.isRequired,
+  setDisplayAll: PropTypes.func.isRequired,
+  setPageHeight: PropTypes.func.isRequired,
+  setPageScale: PropTypes.func.isRequired,
+  setPageWidth: PropTypes.func.isRequired,
+  setRenderMode: PropTypes.func.isRequired,
+  setRotate: PropTypes.func.isRequired,
 };
