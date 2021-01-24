@@ -4738,18 +4738,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"file-loader@npm:^6.1.0":
-  version: 6.1.0
-  resolution: "file-loader@npm:6.1.0"
-  dependencies:
-    loader-utils: ^2.0.0
-    schema-utils: ^2.7.1
-  peerDependencies:
-    webpack: ^4.0.0 || ^5.0.0
-  checksum: ad930c9e7fa8c85cc048afa44c370c86f6a9ba89149b2b24e362f0b279595a05d039211263bf65117e4850f337f9bff251288ddff426dda997468a00e1268ffc
-  languageName: node
-  linkType: hard
-
 "file-uri-to-path@npm:1.0.0":
   version: 1.0.0
   resolution: "file-uri-to-path@npm:1.0.0"
@@ -8530,7 +8518,6 @@ fsevents@^2.1.2:
     babel-loader: ^8.0.0
     copy-webpack-plugin: ^7.0.0
     css-loader: ^4.3.0
-    file-loader: ^6.1.0
     html-webpack-plugin: ^4.4.0
     less: ^3.12.0
     less-loader: ^7.0.0
