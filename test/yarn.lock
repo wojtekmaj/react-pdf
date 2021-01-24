@@ -7148,7 +7148,7 @@ fsevents@^2.1.2:
   languageName: node
   linkType: hard
 
-"mime-types@npm:^2.1.12, mime-types@npm:^2.1.26, mime-types@npm:^2.1.27, mime-types@npm:~2.1.17, mime-types@npm:~2.1.19, mime-types@npm:~2.1.24":
+"mime-types@npm:^2.1.12, mime-types@npm:^2.1.27, mime-types@npm:~2.1.17, mime-types@npm:~2.1.19, mime-types@npm:~2.1.24":
   version: 2.1.27
   resolution: "mime-types@npm:2.1.27"
   dependencies:
@@ -8528,7 +8528,6 @@ fsevents@^2.1.2:
     react-pdf: "portal:../"
     react-refresh: ^0.8.3
     style-loader: ^1.2.0
-    url-loader: ^4.1.0
     webpack: ^5.4.0
     webpack-cli: ^4.2.0
     webpack-dev-server: ^3.11.0
@@ -10315,23 +10314,6 @@ fsevents@^2.1.2:
   version: 0.1.0
   resolution: "urix@npm:0.1.0"
   checksum: 6bdfca4e7fb7d035537068a47a04ace1bacfa32e6b1aaf54c5a0340c83125a186d59109a19b9a3a1c1f986d3eb718b82faf9ad03d53cb99cf868068580b15b3b
-  languageName: node
-  linkType: hard
-
-"url-loader@npm:^4.1.0":
-  version: 4.1.0
-  resolution: "url-loader@npm:4.1.0"
-  dependencies:
-    loader-utils: ^2.0.0
-    mime-types: ^2.1.26
-    schema-utils: ^2.6.5
-  peerDependencies:
-    file-loader: "*"
-    webpack: ^4.0.0 || ^5.0.0
-  peerDependenciesMeta:
-    file-loader:
-      optional: true
-  checksum: 5870b969687458608c7cb7fc4e7f46a15478f506724828af3ddbe957318485b428f0fd9f08f01c413e8b556b08d7eb9520d5863e871b0bc279762a47d300a0b5
   languageName: node
   linkType: hard
 

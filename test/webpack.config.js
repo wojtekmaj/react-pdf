@@ -61,7 +61,7 @@ module.exports = {
       },
       {
         test: /\.pdf$/,
-        use: 'url-loader',
+        type: 'asset/inline',
       },
     ].filter(Boolean),
   },
