@@ -4,6 +4,10 @@
 
 Display PDFs in your React app as easily as if they were images.
 
+## Lost?
+
+This package is used to _display_ existing PDFs. If you wish to _create_ PDFs using React, you may be looking for [@react-pdf/renderer](https://github.com/diegomura/react-pdf).
+
 ## tl;dr
 * Install by executing `npm install react-pdf` or `yarn add react-pdf`.
 * Import by adding `import { Document } from 'react-pdf'`.
