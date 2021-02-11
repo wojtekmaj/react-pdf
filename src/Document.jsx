@@ -149,10 +149,11 @@ export default class Document extends PureComponent {
 
   get childContext() {
     const { linkService, registerPage, unregisterPage } = this;
-    const { renderMode, rotate } = this.props;
+    const { imageResourcesPath, renderMode, rotate } = this.props;
     const { pdf } = this.state;
 
     return {
+      imageResourcesPath,
       linkService,
       pdf,
       registerPage,
@@ -382,6 +383,7 @@ Document.propTypes = {
   className: isClassName,
   error: isFunctionOrNode,
   file: isFile,
+  imageResourcesPath: PropTypes.string,
   inputRef: isRef,
   loading: isFunctionOrNode,
   noData: isFunctionOrNode,

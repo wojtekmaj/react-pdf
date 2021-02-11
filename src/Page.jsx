@@ -401,6 +401,7 @@ PageInternal.propTypes = {
   customTextRenderer: PropTypes.func,
   error: isFunctionOrNode,
   height: PropTypes.number,
+  imageResourcesPath: PropTypes.string,
   inputRef: isRef,
   loading: isFunctionOrNode,
   noData: isFunctionOrNode,

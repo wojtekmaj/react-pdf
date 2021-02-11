@@ -109,6 +109,7 @@ export class AnnotationLayerInternal extends PureComponent {
     const parameters = {
       annotations,
       div: this.annotationLayer,
+      imageResourcesPath,
       linkService,
       page,
       renderInteractiveForms,

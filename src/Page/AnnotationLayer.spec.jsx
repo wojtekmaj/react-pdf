@@ -219,5 +219,33 @@ describe('AnnotationLayer', () => {
         expect(viewport.scale).toEqual(scale);
       });
     });
+
+    it('renders annotations with the correct imageResourcesPath', async () => {
+      const {
+        func: onRenderAnnotationLayerSuccess, promise: onRenderAnnotationLayerSuccessPromise,
+      } = makeAsyncCallback();
+      const imageResourcesPath = '/public/images/';
+
+      const component = mount(
+        <AnnotationLayer
+          imageResourcesPath={imageResourcesPath}
+          linkService={linkService}
+          onRenderAnnotationLayerSuccess={onRenderAnnotationLayerSuccess}
+          page={page}
+        />,
+      );
+
+      expect.assertions(1);
+      return onRenderAnnotationLayerSuccessPromise.then(() => {
+        component.update();
+        const renderedLayer = component.getDOMNode();
+        const annotationItems = [...renderedLayer.children];
+        const annotationLinkItems = annotationItems
+          .map((item) => item.firstChild)
+          .filter((item) => item.tagName === 'A');
+
+        annotationLinkItems.forEach((link) => expect(link.getAttribute('target')).toMatch(new RegExp(`^${imageResourcesPath}`)));
+      });
+    });
   });
 });
