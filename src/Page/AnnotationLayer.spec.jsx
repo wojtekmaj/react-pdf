@@ -14,6 +14,7 @@ import {
 } from '../../test-utils';
 
 const pdfFile = loadPDF('./__mocks__/_pdf.pdf');
+const annotatedPdfFile = loadPDF('./__mocks__/_pdf3.pdf');
 
 describe('AnnotationLayer', () => {
   const linkService = new LinkService({ eventBus });
@@ -220,31 +221,55 @@ describe('AnnotationLayer', () => {
       });
     });
 
-    it('renders annotations with the correct imageResourcesPath', async () => {
+    it('renders annotations with the default imageResourcesPath', async () => {
+      const pdf = await pdfjs.getDocument({ data: annotatedPdfFile.arrayBuffer }).promise;
+      const annotatedPage = await pdf.getPage(1);
+
       const {
         func: onRenderAnnotationLayerSuccess, promise: onRenderAnnotationLayerSuccessPromise,
       } = makeAsyncCallback();
-      const imageResourcesPath = '/public/images/';
+      const desiredImageTagRegExp = new RegExp('<img[^>]+src="annotation-note.svg"');
 
       const component = mount(
         <AnnotationLayer
-          imageResourcesPath={imageResourcesPath}
           linkService={linkService}
           onRenderAnnotationLayerSuccess={onRenderAnnotationLayerSuccess}
-          page={page}
+          page={annotatedPage}
         />,
       );
 
       expect.assertions(1);
       return onRenderAnnotationLayerSuccessPromise.then(() => {
         component.update();
-        const renderedLayer = component.getDOMNode();
-        const annotationItems = [...renderedLayer.children];
-        const annotationLinkItems = annotationItems
-          .map((item) => item.firstChild)
-          .filter((item) => item.tagName === 'A');
+        const stringifiedAnnotationLayerNode = component.html();
+        expect(stringifiedAnnotationLayerNode).toMatch(desiredImageTagRegExp);
+      });
+    });
 
-        annotationLinkItems.forEach((link) => expect(link.getAttribute('target')).toMatch(new RegExp(`^${imageResourcesPath}`)));
+    it('renders annotations with the specified imageResourcesPath', async () => {
+      const pdf = await pdfjs.getDocument({ data: annotatedPdfFile.arrayBuffer }).promise;
+      const annotatedPage = await pdf.getPage(1);
+
+      const {
+        func: onRenderAnnotationLayerSuccess, promise: onRenderAnnotationLayerSuccessPromise,
+      } = makeAsyncCallback();
+      const imageResourcesPath = '/public/images/';
+      const desiredImageTagRegExp = new RegExp(`<img[^>]+src="${imageResourcesPath}annotation-note.svg"`);
+
+      const component = mount(
+        <AnnotationLayer
+          imageResourcesPath={imageResourcesPath}
+          linkService={linkService}
+          onRenderAnnotationLayerSuccess={onRenderAnnotationLayerSuccess}
+          page={annotatedPage}
+        />,
+      );
+
+      expect.assertions(1);
+      return onRenderAnnotationLayerSuccessPromise.then(() => {
+        component.update();
+        const stringifiedAnnotationLayerNode = component.html();
+        expect(stringifiedAnnotationLayerNode).toMatch(desiredImageTagRegExp);
       });
     });
   });
