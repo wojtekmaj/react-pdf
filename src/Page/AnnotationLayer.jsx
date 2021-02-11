@@ -103,7 +103,9 @@ export class AnnotationLayerInternal extends PureComponent {
       return;
     }
 
-    const { imageResourcesPath, linkService, page, renderInteractiveForms } = this.props;
+    const {
+      imageResourcesPath, linkService, page, renderInteractiveForms
+    } = this.props;
     const viewport = this.viewport.clone({ dontFlip: true });
 
     const parameters = {
@@ -139,6 +141,7 @@ export class AnnotationLayerInternal extends PureComponent {
 }
 
 AnnotationLayerInternal.propTypes = {
+  imageResourcesPath: PropTypes.string,
   linkService: isLinkService.isRequired,
   onGetAnnotationsError: PropTypes.func,
   onGetAnnotationsSuccess: PropTypes.func,
