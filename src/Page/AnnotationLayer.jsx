@@ -104,7 +104,7 @@ export class AnnotationLayerInternal extends PureComponent {
     }
 
     const {
-      imageResourcesPath, linkService, page, renderInteractiveForms
+      imageResourcesPath, linkService, page, renderInteractiveForms,
     } = this.props;
     const viewport = this.viewport.clone({ dontFlip: true });
 
