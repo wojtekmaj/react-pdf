@@ -14,6 +14,7 @@ import {
 } from '../../test-utils';
 
 const pdfFile = loadPDF('./__mocks__/_pdf.pdf');
+const annotatedPdfFile = loadPDF('./__mocks__/_pdf3.pdf');
 
 describe('AnnotationLayer', () => {
   const linkService = new LinkService({ eventBus });
@@ -217,6 +218,59 @@ describe('AnnotationLayer', () => {
         const { viewport } = component.instance();
 
         expect(viewport.scale).toEqual(scale);
+      });
+    });
+
+    it('renders annotations with the default imageResourcesPath given no imageResourcesPath', async () => {
+      const pdf = await pdfjs.getDocument({ data: annotatedPdfFile.arrayBuffer }).promise;
+      const annotatedPage = await pdf.getPage(1);
+
+      const {
+        func: onRenderAnnotationLayerSuccess, promise: onRenderAnnotationLayerSuccessPromise,
+      } = makeAsyncCallback();
+      const imageResourcesPath = '';
+      const desiredImageTagRegExp = new RegExp(`<img[^>]+src="${imageResourcesPath}annotation-note.svg"`);
+
+      const component = mount(
+        <AnnotationLayer
+          linkService={linkService}
+          onRenderAnnotationLayerSuccess={onRenderAnnotationLayerSuccess}
+          page={annotatedPage}
+        />,
+      );
+
+      expect.assertions(1);
+      return onRenderAnnotationLayerSuccessPromise.then(() => {
+        component.update();
+        const stringifiedAnnotationLayerNode = component.html();
+        expect(stringifiedAnnotationLayerNode).toMatch(desiredImageTagRegExp);
+      });
+    });
+
+    it('renders annotations with the specified imageResourcesPath given imageResourcesPath', async () => {
+      const pdf = await pdfjs.getDocument({ data: annotatedPdfFile.arrayBuffer }).promise;
+      const annotatedPage = await pdf.getPage(1);
+
+      const {
+        func: onRenderAnnotationLayerSuccess, promise: onRenderAnnotationLayerSuccessPromise,
+      } = makeAsyncCallback();
+      const imageResourcesPath = '/public/images/';
+      const desiredImageTagRegExp = new RegExp(`<img[^>]+src="${imageResourcesPath}annotation-note.svg"`);
+
+      const component = mount(
+        <AnnotationLayer
+          imageResourcesPath={imageResourcesPath}
+          linkService={linkService}
+          onRenderAnnotationLayerSuccess={onRenderAnnotationLayerSuccess}
+          page={annotatedPage}
+        />,
+      );
+
+      expect.assertions(1);
+      return onRenderAnnotationLayerSuccessPromise.then(() => {
+        component.update();
+        const stringifiedAnnotationLayerNode = component.html();
+        expect(stringifiedAnnotationLayerNode).toMatch(desiredImageTagRegExp);
       });
     });
   });
