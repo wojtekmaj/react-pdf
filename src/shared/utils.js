@@ -70,7 +70,7 @@ export const isFile = (variable) => {
 /**
  * Checks whether a string provided is a data URI.
  *
- * @param {String} str String to check
+ * @param {string} str String to check
  */
 export const isDataURI = (str) => isString(str) && /^data:/.test(str);
 

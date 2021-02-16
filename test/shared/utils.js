@@ -14,7 +14,7 @@ function dataURItoUint8Array(dataURI) {
 /**
  * Parses data URI to Blob.
  *
- * @param {String} dataURI
+ * @param {string} dataURI
  */
 export function dataURItoBlob(dataURI) {
   const ia = dataURItoUint8Array(dataURI);
