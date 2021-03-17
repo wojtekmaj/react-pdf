@@ -4429,17 +4429,15 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"less-loader@npm:^7.0.0":
-  version: 7.1.0
-  resolution: "less-loader@npm:7.1.0"
+"less-loader@npm:^8.0.0":
+  version: 8.0.0
+  resolution: "less-loader@npm:8.0.0"
   dependencies:
     klona: ^2.0.4
-    loader-utils: ^2.0.0
-    schema-utils: ^3.0.0
   peerDependencies:
-    less: ^3.5.0
-    webpack: ^4.0.0 || ^5.0.0
-  checksum: 8b6545b280eca5b92dc5549e7644c213d09c245d0c06f24f35322cc96399e9e33cbadee31fba95afd93d34ebb3f785c3e80545c06d068fca52cb9661102012b9
+    less: ^3.5.0 || ^4.0.0
+    webpack: ^5.0.0
+  checksum: 3f1bdb06cbbfc2bb41a00758e3a73e882a851bbc672fb5fc5ca1cb4099233c6ebd82a366da351dac126f1e27e7109179b250d133441167668df1e4e5e3ac9ca8
   languageName: node
   linkType: hard
 
@@ -5765,7 +5763,7 @@ fsevents@^1.2.7:
     css-loader: ^4.3.0
     html-webpack-plugin: ^5.1.0
     less: ^4.0.0
-    less-loader: ^7.0.0
+    less-loader: ^8.0.0
     react: ^17.0.0
     react-dom: ^17.0.0
     react-pdf: latest

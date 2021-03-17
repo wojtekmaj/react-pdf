@@ -6683,10 +6683,10 @@ fsevents@^2.1.2:
   languageName: node
   linkType: hard
 
-"klona@npm:^2.0.3":
-  version: 2.0.3
-  resolution: "klona@npm:2.0.3"
-  checksum: 69df085420a280e8d2e8c6564e23ba2bee2a03e8ca5f51e9409276bb54c6178a74adee0f94c2fc62caa584e1d2109e679abd8cc4f1114fbcd9e2886b909e8e62
+"klona@npm:^2.0.4":
+  version: 2.0.4
+  resolution: "klona@npm:2.0.4"
+  checksum: be4a0c784135b6a75ac2c5ac9564894807aa050de041ac775a20d3ee46969ac5c3d37503d12c215c7decb592196e59e22852fd0cf28ac0cc29fe3a6df9168624
   languageName: node
   linkType: hard
 
@@ -6706,17 +6706,15 @@ fsevents@^2.1.2:
   languageName: node
   linkType: hard
 
-"less-loader@npm:^7.0.0":
-  version: 7.0.1
-  resolution: "less-loader@npm:7.0.1"
+"less-loader@npm:^8.0.0":
+  version: 8.0.0
+  resolution: "less-loader@npm:8.0.0"
   dependencies:
-    klona: ^2.0.3
-    loader-utils: ^2.0.0
-    schema-utils: ^2.7.1
+    klona: ^2.0.4
   peerDependencies:
-    less: ^3.5.0
-    webpack: ^4.0.0 || ^5.0.0
-  checksum: 4c07c2c0be79ed79dcb6a1b0ef291048d48e1ad76a21f7c82fff89d33da7004526c918e7c631a5b91987d017ed941657cb3c3305129648a6a4b88efd04078942
+    less: ^3.5.0 || ^4.0.0
+    webpack: ^5.0.0
+  checksum: 3f1bdb06cbbfc2bb41a00758e3a73e882a851bbc672fb5fc5ca1cb4099233c6ebd82a366da351dac126f1e27e7109179b250d133441167668df1e4e5e3ac9ca8
   languageName: node
   linkType: hard
 
@@ -8460,7 +8458,7 @@ fsevents@^2.1.2:
     css-loader: ^4.3.0
     html-webpack-plugin: ^5.1.0
     less: ^4.0.0
-    less-loader: ^7.0.0
+    less-loader: ^8.0.0
     mini-css-extract-plugin: ^0.11.0
     prop-types: ^15.6.2
     react: ^17.0.0
