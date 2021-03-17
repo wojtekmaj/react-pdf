@@ -115,6 +115,10 @@
     "react": "^16.3.0 || ^17.0.0-0",
     "react-dom": "^16.3.0 || ^17.0.0-0"
   },
+  "resolutions": {
+    "rimraf@2.6.3": "^2.6.3",
+    "semver@7.0.0": "^7.0.0"
+  },
   "files": [
     "LICENSE",
     "README.md",

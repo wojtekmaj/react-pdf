@@ -38,5 +38,9 @@
     "webpack-cli": "^4.2.0",
     "webpack-dev-server": "^3.11.0",
     "worker-loader": "^3.0.0"
+  },
+  "resolutions": {
+    "rimraf@2.6.3": "^2.6.3",
+    "semver@7.0.0": "^7.0.0"
   }
 }
