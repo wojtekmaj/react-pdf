@@ -89,7 +89,7 @@
     "make-event-props": "^1.1.0",
     "merge-class-names": "^1.1.1",
     "merge-refs": "^1.0.0",
-    "pdfjs-dist": "2.5.207",
+    "pdfjs-dist": "2.6.347",
     "prop-types": "^15.6.2",
     "worker-loader": "^3.0.0"
   },
