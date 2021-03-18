@@ -43,17 +43,19 @@ export class AnnotationLayerInternal extends PureComponent {
     cancelRunningTask(this.runningTask);
   }
 
-  loadAnnotations = async () => {
+  loadAnnotations = () => {
     const { page } = this.props;
 
-    try {
-      const cancellable = makeCancellable(page.getAnnotations());
-      this.runningTask = cancellable;
-      const annotations = await cancellable.promise;
-      this.setState({ annotations }, this.onLoadSuccess);
-    } catch (error) {
-      this.onLoadError(error);
-    }
+    const cancellable = makeCancellable(page.getAnnotations());
+    this.runningTask = cancellable;
+
+    cancellable.promise
+      .then((annotations) => {
+        this.setState({ annotations }, this.onLoadSuccess);
+      })
+      .catch((error) => {
+        this.onLoadError(error);
+      });
   }
 
   onLoadSuccess = () => {

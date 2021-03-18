@@ -40,17 +40,19 @@ export class TextLayerInternal extends PureComponent {
     cancelRunningTask(this.runningTask);
   }
 
-  loadTextItems = async () => {
+  loadTextItems = () => {
     const { page } = this.props;
 
-    try {
-      const cancellable = makeCancellable(page.getTextContent());
-      this.runningTask = cancellable;
-      const { items: textItems } = await cancellable.promise;
-      this.setState({ textItems }, this.onLoadSuccess);
-    } catch (error) {
-      this.onLoadError(error);
-    }
+    const cancellable = makeCancellable(page.getTextContent());
+    this.runningTask = cancellable;
+
+    cancellable.promise
+      .then(({ items: textItems }) => {
+        this.setState({ textItems }, this.onLoadSuccess);
+      })
+      .catch((error) => {
+        this.onLoadError(error);
+      });
   }
 
   onLoadSuccess = () => {
