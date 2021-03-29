@@ -30,7 +30,12 @@ import {
   warnOnDev,
 } from './shared/utils';
 
-import { eventProps, isClassName, isRef } from './shared/propTypes';
+import {
+  eventProps,
+  isClassName,
+  isFile as isFileProp,
+  isRef,
+} from './shared/propTypes';
 
 const { PDFDataRangeTransport } = pdfjs;
 
@@ -382,7 +387,7 @@ Document.propTypes = {
   children: PropTypes.node,
   className: isClassName,
   error: isFunctionOrNode,
-  file: isFile,
+  file: isFileProp,
   imageResourcesPath: PropTypes.string,
   inputRef: isRef,
   loading: isFunctionOrNode,
