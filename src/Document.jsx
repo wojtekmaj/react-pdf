@@ -111,8 +111,11 @@ export default class Document extends PureComponent {
     const { options, onLoadProgress, onPassword } = this.props;
 
     try {
-      // If another loading is in progress, let's cancel it
+      // If another rendering is in progress, let's cancel it
       cancelRunningTask(this.runningTask);
+
+      // If another loading is in progress, let's destroy it
+      if (this.loadingTask) this.loadingTask.destroy();
 
       this.loadingTask = pdfjs.getDocument({ ...source, ...options });
       this.loadingTask.onPassword = onPassword;
