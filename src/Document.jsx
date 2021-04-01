@@ -83,8 +83,11 @@ export default class Document extends PureComponent {
   }
 
   componentWillUnmount() {
-    if (this.loadingTask) this.loadingTask.destroy();
+    // If rendering is in progress, let's cancel it
     cancelRunningTask(this.runningTask);
+
+    // If loading is in progress, let's destroy it
+    if (this.loadingTask) this.loadingTask.destroy();
   }
 
   loadDocument = async () => {
