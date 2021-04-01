@@ -28,6 +28,7 @@
     "babel-loader": "^8.0.0",
     "copy-webpack-plugin": "^8.0.0",
     "css-loader": "^4.3.0",
+    "file-loader": "^6.0.0",
     "html-webpack-plugin": "^5.1.0",
     "less": "^4.0.0",
     "less-loader": "^8.0.0",
@@ -36,8 +37,7 @@
     "style-loader": "^1.2.0",
     "webpack": "^5.20.0",
     "webpack-cli": "^4.2.0",
-    "webpack-dev-server": "^3.11.0",
-    "worker-loader": "^3.0.0"
+    "webpack-dev-server": "^3.11.0"
   },
   "resolutions": {
     "rimraf@2.6.3": "^2.6.3",

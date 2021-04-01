@@ -4671,6 +4671,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"file-loader@npm:^6.0.0":
+  version: 6.2.0
+  resolution: "file-loader@npm:6.2.0"
+  dependencies:
+    loader-utils: ^2.0.0
+    schema-utils: ^3.0.0
+  peerDependencies:
+    webpack: ^4.0.0 || ^5.0.0
+  checksum: 0f103418c072ec66c081a9908cd7824ee19905e18be16889cb050f5f373998afaf7ca4c2fd2df4cabf703a2cd526aefe59105930e3f8d266a5b35e6d5f5b3cf4
+  languageName: node
+  linkType: hard
+
 "file-uri-to-path@npm:1.0.0":
   version: 1.0.0
   resolution: "file-uri-to-path@npm:1.0.0"
@@ -8590,6 +8602,7 @@ fsevents@^2.1.2:
     babel-loader: ^8.0.0
     copy-webpack-plugin: ^8.0.0
     css-loader: ^4.3.0
+    file-loader: ^6.0.0
     html-webpack-plugin: ^5.1.0
     less: ^4.0.0
     less-loader: ^8.0.0
@@ -8603,7 +8616,6 @@ fsevents@^2.1.2:
     webpack: ^5.20.0
     webpack-cli: ^4.2.0
     webpack-dev-server: ^3.11.0
-    worker-loader: ^3.0.0
   languageName: unknown
   linkType: soft
 
@@ -8623,6 +8635,7 @@ fsevents@^2.1.2:
     enzyme: ^3.10.0
     eslint: ^7.12.0
     eslint-config-wojtekmaj: ^0.5.0
+    file-loader: ^6.0.0
     jest: ^26.6.0
     make-cancellable-promise: ^1.0.0
     make-event-props: ^1.1.0
@@ -8634,7 +8647,6 @@ fsevents@^2.1.2:
     react-dom: ^17.0.0
     rimraf: ^3.0.0
     webpack: ^5.20.0
-    worker-loader: ^3.0.0
   peerDependencies:
     react: ^16.3.0 || ^17.0.0-0
     react-dom: ^16.3.0 || ^17.0.0-0
@@ -9215,7 +9227,7 @@ fsevents@^2.1.2:
   languageName: node
   linkType: hard
 
-"schema-utils@npm:^2.6.5, schema-utils@npm:^2.6.6, schema-utils@npm:^2.7.0, schema-utils@npm:^2.7.1":
+"schema-utils@npm:^2.6.5, schema-utils@npm:^2.6.6, schema-utils@npm:^2.7.1":
   version: 2.7.1
   resolution: "schema-utils@npm:2.7.1"
   dependencies:
@@ -10862,18 +10874,6 @@ fsevents@^2.1.2:
     reduce-flatten: ^2.0.0
     typical: ^5.0.0
   checksum: 022dc1d1a3a2b15490288840822f4f5db31d653edc31117e492e402e77ea02509f44ac7fe163b0aa39d1cc8e2df4d7ef2a28ad8bf3795e7f2a8ee1da8b8bef54
-  languageName: node
-  linkType: hard
-
-"worker-loader@npm:^3.0.0":
-  version: 3.0.2
-  resolution: "worker-loader@npm:3.0.2"
-  dependencies:
-    loader-utils: ^2.0.0
-    schema-utils: ^2.7.0
-  peerDependencies:
-    webpack: ^4.0.0 || ^5.0.0
-  checksum: 3e4a8f31f42435e6bfd15d5bc61fab32461328b67391d8f83f0332b7b338e001c9f52d23f095a01299c20f6d00c4ae9a6319edbf993964415e2cdc5813148dfd
   languageName: node
   linkType: hard
 
