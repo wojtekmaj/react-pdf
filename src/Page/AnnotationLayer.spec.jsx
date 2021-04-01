@@ -5,7 +5,6 @@ import { pdfjs } from '../entry.jest';
 
 import { AnnotationLayerInternal as AnnotationLayer } from './AnnotationLayer';
 import LinkService from '../LinkService';
-import eventBus from '../eventBus';
 
 import failingPage from '../../__mocks__/_failing_page';
 
@@ -17,7 +16,7 @@ const pdfFile = loadPDF('./__mocks__/_pdf.pdf');
 const annotatedPdfFile = loadPDF('./__mocks__/_pdf3.pdf');
 
 describe('AnnotationLayer', () => {
-  const linkService = new LinkService({ eventBus });
+  const linkService = new LinkService();
 
   // Loaded page
   let page;

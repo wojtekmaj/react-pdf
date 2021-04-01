@@ -14,7 +14,6 @@ import Message from './Message';
 
 import LinkService from './LinkService';
 import PasswordResponses from './PasswordResponses';
-import eventBus from './eventBus';
 
 import {
   cancelRunningTask,
@@ -68,7 +67,7 @@ export default class Document extends PureComponent {
     },
   };
 
-  linkService = new LinkService({ eventBus });
+  linkService = new LinkService();
 
   componentDidMount() {
     this.loadDocument();
