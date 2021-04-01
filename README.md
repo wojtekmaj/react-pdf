@@ -122,6 +122,13 @@ Create React App uses Webpack under the hood, so you can follow [Webpack instruc
 
 If you use Browserify or other bundling tools, you will have to make sure on your own that `pdf.worker.js` file from `pdfjs-dist/build` is copied to your project's output folder.
 
+If you don't need to debug `pdf.worker.js`, you can use `pdf.worker.min.js` file instead, which is roughly half the size. For this to work, however, you will need to specify `workerSrc` manually like so:
+
+```js
+import { pdfjs } from 'react-pdf';
+pdfjs.GlobalWorkerOptions.workerSrc = 'pdf.worker.min.js';
+```
+
 Alternatively, you could use the minified `pdf.worker.min.js` from an external CDN:
 
 ```js
