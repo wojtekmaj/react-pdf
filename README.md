@@ -304,7 +304,7 @@ The MIT License.
     <td>
       Wojciech Maj<br />
       <a href="mailto:kontakt@wojtekmaj.pl">kontakt@wojtekmaj.pl</a><br />
-      <a href="http://wojtekmaj.pl">http://wojtekmaj.pl</a>
+      <a href="https://wojtekmaj.pl">https://wojtekmaj.pl</a>
     </td>
   </tr>
 </table>
