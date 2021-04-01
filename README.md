@@ -114,7 +114,7 @@ import { Document } from 'react-pdf/dist/umd/entry.parcel';
 
 #### Create React App
 
-Create React App uses Webpack under the hood, you can follow [Webpack instructions](#webpack). 
+Create React App uses Webpack under the hood, so you can follow [Webpack instructions](#webpack). 
 
 [Standard instructions](#standard-browserify-and-others) will also work. In Create React App, you can copy `pdf.worker.js` file from `pdfjs-dist/build` to `public` directory in order for it to be copied to your project's output folder at build time.
 
