@@ -26,7 +26,7 @@ module.exports = {
   },
   resolveLoader: {
     alias: {
-      'worker-loader': require.resolve('worker-loader'),
+      'file-loader': require.resolve('file-loader'),
     },
   },
   module: {
