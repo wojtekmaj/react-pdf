@@ -42,11 +42,10 @@ export class PageCanvasInternal extends PureComponent {
   }
 
   cancelRenderingTask() {
-    /* eslint-disable no-underscore-dangle */
-    if (this.renderer && this.renderer._internalRenderTask.running) {
-      this.renderer._internalRenderTask.cancel();
+    if (this.renderer) {
+      this.renderer.cancel();
+      this.renderer = null;
     }
-    /* eslint-enable no-underscore-dangle */
   }
 
   /**
