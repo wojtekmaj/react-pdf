@@ -1715,7 +1715,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/json-schema@npm:*, @types/json-schema@npm:^7.0.5, @types/json-schema@npm:^7.0.6":
+"@types/json-schema@npm:*, @types/json-schema@npm:^7.0.6":
   version: 7.0.6
   resolution: "@types/json-schema@npm:7.0.6"
   checksum: 820cabe35ac915b93e38b0c01957e5c49d7d9f69251dddfbf39af0ff4fe24f6e08b39e55603e0d212dea7bcaa383b1218b58a738d1c02013dc22df06547ff238
@@ -3951,6 +3951,18 @@ __metadata:
   dependencies:
     flat-cache: ^2.0.1
   checksum: 7140588becf15f05ee956cfb359b5f23e0c73acbbd38ad14c7a76a0097342e6bfc0a8151cd2e481ea3cbb735190ba9a0df4b69055ebb5b0389c62339b1a2f86b
+  languageName: node
+  linkType: hard
+
+"file-loader@npm:^6.0.0":
+  version: 6.2.0
+  resolution: "file-loader@npm:6.2.0"
+  dependencies:
+    loader-utils: ^2.0.0
+    schema-utils: ^3.0.0
+  peerDependencies:
+    webpack: ^4.0.0 || ^5.0.0
+  checksum: 0f103418c072ec66c081a9908cd7824ee19905e18be16889cb050f5f373998afaf7ca4c2fd2df4cabf703a2cd526aefe59105930e3f8d266a5b35e6d5f5b3cf4
   languageName: node
   linkType: hard
 
@@ -6941,6 +6953,7 @@ fsevents@^2.1.2:
     enzyme: ^3.10.0
     eslint: ^7.12.0
     eslint-config-wojtekmaj: ^0.5.0
+    file-loader: ^6.0.0
     jest: ^26.6.0
     make-cancellable-promise: ^1.0.0
     make-event-props: ^1.1.0
@@ -6952,7 +6965,6 @@ fsevents@^2.1.2:
     react-dom: ^17.0.0
     rimraf: ^3.0.0
     webpack: ^5.20.0
-    worker-loader: ^3.0.0
   peerDependencies:
     react: ^16.3.0 || ^17.0.0-0
     react-dom: ^16.3.0 || ^17.0.0-0
@@ -7423,17 +7435,6 @@ fsevents@^2.1.2:
     loose-envify: ^1.1.0
     object-assign: ^4.1.1
   checksum: 2ba121e53e8a438394598612ec9a8f465b39157042f912d2dd5956af643e0d45ec6937ae4eeb0a807d1945b209515263aed12fc3bca95c7a027ec2a54e76b399
-  languageName: node
-  linkType: hard
-
-"schema-utils@npm:^2.7.0":
-  version: 2.7.1
-  resolution: "schema-utils@npm:2.7.1"
-  dependencies:
-    "@types/json-schema": ^7.0.5
-    ajv: ^6.12.4
-    ajv-keywords: ^3.5.2
-  checksum: 3851bcc7e44a3f35d3ca96e460c598aa24cec9fe395b196395316a043dc111d25735a9a49b1a115e4b52d5ed0d8bbcfb9fe1bfd077610f192b613e020d3f3ef2
   languageName: node
   linkType: hard
 
@@ -8618,18 +8619,6 @@ fsevents@^2.1.2:
   version: 1.2.3
   resolution: "word-wrap@npm:1.2.3"
   checksum: 6526abd75d4409c76d1989cf2fbf6080b903db29824be3d17d0a0b8f6221486c76a021174eda2616cf311199787983c34bae3c5e7b51d2ad7476f2066cddb75a
-  languageName: node
-  linkType: hard
-
-"worker-loader@npm:^3.0.0":
-  version: 3.0.1
-  resolution: "worker-loader@npm:3.0.1"
-  dependencies:
-    loader-utils: ^2.0.0
-    schema-utils: ^2.7.0
-  peerDependencies:
-    webpack: ^4.0.0 || ^5.0.0
-  checksum: 4b8f557744da545cdc0d510ccab90ee68ba98516dd402b1e547e01011489d35b45909c35c686c9d7be8002ccd873abfc88a50ab2336cf94eca672a7daeba0bc1
   languageName: node
   linkType: hard
 
