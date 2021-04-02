@@ -7417,9 +7417,9 @@ fsevents@^1.2.7:
   linkType: hard
 
 "y18n@npm:^4.0.0":
-  version: 4.0.0
-  resolution: "y18n@npm:4.0.0"
-  checksum: 5b7434c95d31ffa2b9b97df98e2d786446a0ff21c30e0265088caa4818a3335559a425763e55b6d9370d9fcecb75a36ae5bb901184676bd255f96ee3c743f667
+  version: 4.0.1
+  resolution: "y18n@npm:4.0.1"
+  checksum: e589620d8d668d696e74730a83731a36a8d782c50379386b142e5b8287388a6ebaf28528e84201c68c206629faed71362c79b201b398eb0c69aa1737635678dd
   languageName: node
   linkType: hard
 
