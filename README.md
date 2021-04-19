@@ -16,7 +16,7 @@ This package is used to _display_ existing PDFs. If you wish to _create_ PDFs us
 
 ## Demo
 
-A minimal demo page can be found in `sample` directory.
+A minimal demo-page can be found in `sample` directory.
 
 [Online demo](http://projects.wojtekmaj.pl/react-pdf/) is also available!
 
