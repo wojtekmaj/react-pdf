@@ -90,26 +90,26 @@ It is crucial for performance to use PDF.js worker whenever possible. This ensur
 
 #### Webpack
 
-Instead of directly importing/requiring `'react-pdf'`, import it like so:
+Instead of directly importing modules you need from `'react-pdf'`, import them like so:
 
 ```js
 // using ES6 modules
-import { Document } from 'react-pdf/dist/esm/entry.webpack';
+import { Document, Page } from 'react-pdf/dist/esm/entry.webpack';
 
 // using CommonJS modules
-import { Document } from 'react-pdf/dist/umd/entry.webpack';
+import { Document, Page } from 'react-pdf/dist/umd/entry.webpack';
 ```
 
 #### Parcel
 
-Instead of directly importing/requiring `'react-pdf'`, import it like so:
+Instead of directly importing modules you need from `'react-pdf'`, import them like so:
 
 ```js
 // using ES6 modules
-import { Document } from 'react-pdf/dist/esm/entry.parcel';
+import { Document, Page } from 'react-pdf/dist/esm/entry.parcel';
 
 // using CommonJS modules
-import { Document } from 'react-pdf/dist/umd/entry.parcel';
+import { Document, Page } from 'react-pdf/dist/umd/entry.parcel';
 ```
 
 #### Create React App
