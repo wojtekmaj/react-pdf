@@ -425,7 +425,7 @@ PageInternal.propTypes = {
   width: PropTypes.number,
 };
 
-function Page(props, ref) {
+const Page = (props, ref) => {
   return (
     <DocumentContext.Consumer>
       {(context) => (
