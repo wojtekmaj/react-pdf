@@ -114,7 +114,7 @@ import { Document, Page } from 'react-pdf/dist/umd/entry.parcel';
 
 #### Create React App
 
-Create React App uses Webpack under the hood, so you can follow [Webpack instructions](#webpack). 
+Create React App uses Webpack under the hood, so you can follow [Webpack instructions](#webpack).
 
 [Standard instructions](#standard-browserify-and-others) will also work. In Create React App, you can copy `pdf.worker.js` file from `pdfjs-dist/build` to `public` directory in order for it to be copied to your project's output folder at build time.
 
@@ -237,6 +237,7 @@ Loads a document passed using `file` prop.
 |noData|What the component should display in case of no data.|`"No PDF file specified."`|<ul><li>String:<br />`"Please select a file."`</li><li>React element:<br />`<div>Please select a file.</div>`</li><li>Function:<br />`this.renderNoData`</li></ul>|
 |onItemClick|Function called when an outline item has been clicked. Usually, you would like to use this callback to move the user wherever they requested to.|n/a|`({ pageNumber }) => alert('Clicked an item from page ' + pageNumber + '!')`|
 |onLoadError|Function called in case of an error while loading a document.|n/a|`(error) => alert('Error while loading document! ' + error.message)`|
+|onLoadProgress|Function called, potentially multiple times, as the loading progresses.|n/a|`({ loaded, total }) => alert('Loading a document: ' + (loaded / total) * 100 + '%');`|
 |onLoadSuccess|Function called when the document is successfully loaded.|n/a|`(pdf) => alert('Loaded a file with ' + pdf.numPages + ' pages!')`|
 |onPassword|Function called when a password-protected PDF is loaded.|A function that prompts the user for password|`(callback) => callback('s3cr3t_p4ssw0rd')`|
 |onSourceError|Function called in case of an error while retrieving document source from `file` prop.|n/a|`(error) => alert('Error while retrieving document source! ' + error.message)`|
@@ -263,7 +264,6 @@ Displays a page. Should be placed inside `<Document />`. Alternatively, it can h
 |loading|What the component should display while loading.|`"Loading page…"`|<ul><li>String:<br />`"Please wait!"`</li><li>React element:<br />`<div>Please wait!</div>`</li><li>Function:<br />`this.renderLoader`</li></ul>|
 |noData|What the component should display in case of no data.|`"No page specified."`|<ul><li>String:<br />`"Please select a page."`</li><li>React element:<br />`<div>Please select a page.</div>`</li><li>Function:<br />`this.renderNoData`</li></ul>|
 |onLoadError|Function called in case of an error while loading the page.|n/a|`(error) => alert('Error while loading page! ' + error.message)`|
-|onLoadProgress|Function called, potentially multiple times, as the loading progresses.|n/a|`({ loaded, total }) => alert('Loading a document: ' + (loaded / total) * 100 + '%');`|
 |onLoadSuccess|Function called when the page is successfully loaded.|n/a|`(page) => alert('Now displaying a page number ' + page.pageNumber + '!')`|
 |onRenderError|Function called in case of an error while rendering the page.|n/a|`(error) => alert('Error while loading page! ' + error.message)`|
 |onRenderSuccess|Function called when the page is successfully rendered on the screen.|n/a|`() => alert('Rendered the page!')`|
