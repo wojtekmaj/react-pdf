@@ -18,63 +18,73 @@ export const isProduction = process.env.NODE_ENV === 'production';
  *
  * @param {*} variable Variable to check
  */
-export const isDefined = (variable) => typeof variable !== 'undefined';
+export function isDefined(variable) {
+  return typeof variable !== 'undefined';
+}
 
 /**
  * Checks whether a variable is defined and not null.
  *
  * @param {*} variable Variable to check
  */
-export const isProvided = (variable) => isDefined(variable) && variable !== null;
+export function isProvided(variable) {
+  return isDefined(variable) && variable !== null;
+}
 
 /**
  * Checkes whether a variable provided is a string.
  *
  * @param {*} variable Variable to check
  */
-export const isString = (variable) => typeof variable === 'string';
+export function isString(variable) {
+  return typeof variable === 'string';
+}
 
 /**
  * Checks whether a variable provided is an ArrayBuffer.
  *
  * @param {*} variable Variable to check
  */
-export const isArrayBuffer = (variable) => variable instanceof ArrayBuffer;
+export function isArrayBuffer(variable) {
+  return variable instanceof ArrayBuffer;
+}
 
 /**
  * Checkes whether a variable provided is a Blob.
  *
  * @param {*} variable Variable to check
  */
-export const isBlob = (variable) => {
+export function isBlob(variable) {
   if (!isBrowser) {
     throw new Error('Attempted to check if a variable is a Blob on a non-browser environment.');
   }
 
   return variable instanceof Blob;
-};
+}
 
 /**
  * Checkes whether a variable provided is a File.
  *
  * @param {*} variable Variable to check
  */
-export const isFile = (variable) => {
+export function isFile(variable) {
   if (!isBrowser) {
     throw new Error('Attempted to check if a variable is a File on a non-browser environment.');
   }
 
   return variable instanceof File;
-};
+}
 
 /**
  * Checks whether a string provided is a data URI.
  *
  * @param {string} str String to check
  */
-export const isDataURI = (str) => isString(str) && /^data:/.test(str);
+export function isDataURI(str) {
+  return isString(str) && /^data:/.test(str);
+}
 
-export const dataURItoByteString = (dataURI) => {
+export function dataURItoByteString(dataURI) {
   if (!isDataURI(dataURI)) {
     throw new Error('Invalid data URI.');
   }
@@ -87,60 +97,70 @@ export const dataURItoByteString = (dataURI) => {
   }
 
   return unescape(dataString);
-};
+}
 
-export const getPixelRatio = () => (isBrowser && window.devicePixelRatio) || 1;
+export function getPixelRatio() {
+  return (isBrowser && window.devicePixelRatio) || 1;
+}
 
-const consoleOnDev = (method, ...message) => {
+function consoleOnDev(method, ...message) {
   if (!isProduction) {
     // eslint-disable-next-line no-console
     console[method](...message);
   }
-};
+}
 
-export const warnOnDev = (...message) => consoleOnDev('warn', ...message);
+export function warnOnDev(...message) {
+  consoleOnDev('warn', ...message);
+}
 
-export const errorOnDev = (...message) => consoleOnDev('error', ...message);
+export function errorOnDev(...message) {
+  consoleOnDev('error', ...message);
+}
 
-export const displayCORSWarning = () => {
+export function displayCORSWarning() {
   if (isLocalFileSystem) {
     warnOnDev('Loading PDF as base64 strings/URLs might not work on protocols other than HTTP/HTTPS. On Google Chrome, you can use --allow-file-access-from-files flag for debugging purposes.');
   }
-};
+}
 
-export const cancelRunningTask = (runningTask) => {
+export function cancelRunningTask(runningTask) {
   if (runningTask && runningTask.cancel) runningTask.cancel();
-};
+}
 
-export const makePageCallback = (page, scale) => {
+export function makePageCallback(page, scale) {
   Object.defineProperty(page, 'width', { get() { return this.view[2] * scale; }, configurable: true });
   Object.defineProperty(page, 'height', { get() { return this.view[3] * scale; }, configurable: true });
   Object.defineProperty(page, 'originalWidth', { get() { return this.view[2]; }, configurable: true });
   Object.defineProperty(page, 'originalHeight', { get() { return this.view[3]; }, configurable: true });
   return page;
-};
+}
 
-export const isCancelException = (error) => error.name === 'RenderingCancelledException';
+export function isCancelException(error) {
+  return error.name === 'RenderingCancelledException';
+}
 
-export const loadFromFile = (file) => new Promise((resolve, reject) => {
-  const reader = new FileReader();
+export function loadFromFile(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
 
-  reader.onload = () => resolve(new Uint8Array(reader.result));
-  reader.onerror = (event) => {
-    switch (event.target.error.code) {
-      case event.target.error.NOT_FOUND_ERR:
-        return reject(new Error('Error while reading a file: File not found.'));
-      case event.target.error.NOT_READABLE_ERR:
-        return reject(new Error('Error while reading a file: File not readable.'));
-      case event.target.error.SECURITY_ERR:
-        return reject(new Error('Error while reading a file: Security error.'));
-      case event.target.error.ABORT_ERR:
-        return reject(new Error('Error while reading a file: Aborted.'));
-      default:
-        return reject(new Error('Error while reading a file.'));
-    }
-  };
-  reader.readAsArrayBuffer(file);
+    reader.onload = () => resolve(new Uint8Array(reader.result));
+    reader.onerror = (event) => {
+      switch (event.target.error.code) {
+        case event.target.error.NOT_FOUND_ERR:
+          return reject(new Error('Error while reading a file: File not found.'));
+        case event.target.error.NOT_READABLE_ERR:
+          return reject(new Error('Error while reading a file: File not readable.'));
+        case event.target.error.SECURITY_ERR:
+          return reject(new Error('Error while reading a file: Security error.'));
+        case event.target.error.ABORT_ERR:
+          return reject(new Error('Error while reading a file: Aborted.'));
+        default:
+          return reject(new Error('Error while reading a file.'));
+      }
+    };
+    reader.readAsArrayBuffer(file);
 
-  return null;
-});
+    return null;
+  });
+}
