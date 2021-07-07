@@ -79,10 +79,11 @@ export const dataURItoByteString = (dataURI) => {
     throw new Error('Invalid data URI.');
   }
 
-  const [/* header */, dataString] = dataURI.split(';');
+  const [headersString, dataString] = dataURI.split(',');
+  const headers = headersString.split(';');
 
-  if (dataString.indexOf('base64') === 0) {
-    return atob(dataString.slice(7));
+  if (headers.indexOf('base64') !== -1) {
+    return atob(dataString);
   }
 
   return unescape(dataString);
