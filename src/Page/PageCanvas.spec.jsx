@@ -34,6 +34,8 @@ describe('PageCanvas', () => {
     it('renders a page and calls onRenderSuccess callback properly', async () => {
       const { func: onRenderSuccess, promise: onRenderSuccessPromise } = makeAsyncCallback();
 
+      muteConsole();
+
       mount(
         <PageCanvas
           onRenderSuccess={onRenderSuccess}
@@ -45,6 +47,8 @@ describe('PageCanvas', () => {
       expect.assertions(1);
 
       await expect(onRenderSuccessPromise).resolves.toMatchObject({});
+
+      restoreConsole();
     });
 
     it('calls onRenderError when failed to render canvas', async () => {

@@ -27,6 +27,8 @@ describe('PageSVG', () => {
     it('renders a page and calls onRenderSuccess callback properly', async () => {
       const { func: onRenderSuccess, promise: onRenderSuccessPromise } = makeAsyncCallback();
 
+      muteConsole();
+
       mount(
         <PageSVG
           onRenderSuccess={onRenderSuccess}
@@ -38,6 +40,8 @@ describe('PageSVG', () => {
       expect.assertions(1);
 
       await expect(onRenderSuccessPromise).resolves.toMatchObject({});
+
+      restoreConsole();
     });
 
     it('calls onRenderError when failed to render canvas', async () => {
