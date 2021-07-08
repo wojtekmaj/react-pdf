@@ -9,6 +9,8 @@ import { makeAsyncCallback, muteConsole, restoreConsole } from '../../test-utils
 
 describe('PageSVG', () => {
   describe('loading', () => {
+    it.todo('renders a page and calls onRenderSuccess callback properly');
+
     it('calls onRenderError when failed to render canvas', async () => {
       const {
         func: onRenderError, promise: onRenderErrorPromise,
@@ -24,6 +26,7 @@ describe('PageSVG', () => {
       );
 
       expect.assertions(1);
+
       await expect(onRenderErrorPromise).resolves.toBeInstanceOf(Error);
 
       restoreConsole();
