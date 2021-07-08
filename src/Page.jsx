@@ -32,7 +32,7 @@ import {
   isRotate,
 } from './shared/propTypes';
 
-const defaultScale = 1.0;
+const defaultScale = 1;
 
 export class PageInternal extends PureComponent {
   state = {

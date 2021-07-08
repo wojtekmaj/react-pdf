@@ -23,34 +23,32 @@ describe('PageCanvas', () => {
 
     page = await pdf.getPage(1);
 
-    pageWithRendererMocked = {
-      ...page,
-      getAnnotations: () => {},
-      getTextContent: () => {},
-      getViewport: () => ({
-        width: 0,
-        height: 0,
-      }),
+    pageWithRendererMocked = Object.assign(page, {
       render: () => ({
         promise: new Promise((resolve) => resolve()),
       }),
-    };
+    });
   });
 
   describe('loading', () => {
     it('renders a page and calls onRenderSuccess callback properly', async () => {
       const { func: onRenderSuccess, promise: onRenderSuccessPromise } = makeAsyncCallback();
 
+      muteConsole();
+
       mount(
         <PageCanvas
           onRenderSuccess={onRenderSuccess}
           page={pageWithRendererMocked}
+          scale={1}
         />,
       );
 
       expect.assertions(1);
 
       await expect(onRenderSuccessPromise).resolves.toMatchObject({});
+
+      restoreConsole();
     });
 
     it('calls onRenderError when failed to render canvas', async () => {
@@ -64,6 +62,7 @@ describe('PageCanvas', () => {
         <PageCanvas
           onRenderError={onRenderError}
           page={failingPage}
+          scale={1}
         />,
       );
 
@@ -82,7 +81,8 @@ describe('PageCanvas', () => {
       mount(
         <PageCanvas
           canvasRef={canvasRef}
-          page={pageWithRendererMocked}
+          page={page}
+          scale={1}
         />,
       );
 
