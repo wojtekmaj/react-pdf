@@ -146,7 +146,7 @@ PageCanvasInternal.propTypes = {
   page: isPage.isRequired,
   renderInteractiveForms: PropTypes.bool,
   rotate: isRotate,
-  scale: PropTypes.number,
+  scale: PropTypes.number.isRequired,
 };
 
 export default function PageCanvas(props) {
