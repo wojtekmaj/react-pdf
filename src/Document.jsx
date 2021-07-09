@@ -35,8 +35,14 @@ import {
   isFile as isFileProp,
   isRef,
 } from './shared/propTypes';
+import Singleton from './Singleton';
 
 const { PDFDataRangeTransport } = pdfjs;
+
+const workerProvider = new Singleton(
+  () => new pdfjs.PDFWorker({ name: 'react-pdf-worker' }),
+  (pdfjsWorker) => pdfjsWorker.destroy(),
+);
 
 export default class Document extends PureComponent {
   state = {
@@ -70,6 +76,11 @@ export default class Document extends PureComponent {
   linkService = new LinkService();
 
   componentDidMount() {
+    const { options } = this.props;
+    if (options && !options.worker) {
+      this.worker = workerProvider.acquire();
+    }
+
     this.loadDocument();
     this.setupLinkService();
   }
@@ -87,6 +98,7 @@ export default class Document extends PureComponent {
 
     // If loading is in progress, let's destroy it
     if (this.loadingTask) this.loadingTask.destroy();
+    if (this.worker) workerProvider.release();
   }
 
   loadDocument = async () => {
@@ -111,6 +123,10 @@ export default class Document extends PureComponent {
     });
 
     const { options, onLoadProgress, onPassword } = this.props;
+
+    if (this.worker) {
+      options.worker = this.worker;
+    }
 
     try {
       // If another rendering is in progress, let's cancel it
