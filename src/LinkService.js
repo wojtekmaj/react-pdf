@@ -50,30 +50,33 @@ export default class SimpleLinkService {
 
   set rotation(value) {}
 
-  async goToDestination(dest) {
+  goToDestination(dest) {
     const destRef = dest[0];
-    let pageNumber;
 
-    if (destRef instanceof Object) {
-      try {
-        const pageIndex = await this.pdfDocument.getPageIndex(destRef);
-        pageNumber = pageIndex + 1;
-      } catch (error) {
+    new Promise((resolve) => {
+      if (destRef instanceof Object) {
+        this.pdfDocument.getPageIndex(destRef)
+          .then((pageIndex) => {
+            resolve(pageIndex + 1);
+          })
+          .catch(() => {
+            throw new Error(`"${destRef}" is not a valid destination reference.`);
+          });
+      } else if (typeof destRef === 'number') {
+        resolve(destRef + 1);
+      } else {
         throw new Error(`"${destRef}" is not a valid destination reference.`);
       }
-    } else if (typeof destRef === 'number') {
-      pageNumber = destRef + 1;
-    } else {
-      throw new Error(`"${destRef}" is not a valid destination reference.`);
-    }
+    })
+      .then((pageNumber) => {
+        if (!pageNumber || pageNumber < 1 || pageNumber > this.pagesCount) {
+          throw new Error(`"${pageNumber}" is not a valid page number.`);
+        }
 
-    if (!pageNumber || pageNumber < 1 || pageNumber > this.pagesCount) {
-      throw new Error(`"${pageNumber}" is not a valid page number.`);
-    }
-
-    this.pdfViewer.scrollPageIntoView({
-      pageNumber,
-    });
+        this.pdfViewer.scrollPageIntoView({
+          pageNumber,
+        });
+      });
   }
 
   navigateTo(dest) {

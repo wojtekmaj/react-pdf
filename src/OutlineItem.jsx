@@ -11,56 +11,81 @@ import { isDefined } from './shared/utils';
 import { isPdf } from './shared/propTypes';
 
 export class OutlineItemInternal extends PureComponent {
-  getDestination = async () => {
+  getDestination = () => new Promise((resolve, reject) => {
     const { item, pdf } = this.props;
 
     if (!isDefined(this.destination)) {
       if (typeof item.dest === 'string') {
-        this.destination = await pdf.getDestination(item.dest);
+        pdf.getDestination(item.dest)
+          .then(resolve)
+          .catch(reject);
       } else {
-        this.destination = item.dest;
+        resolve(item.dest);
       }
     }
 
     return this.destination;
-  }
+  })
+    .then((destination) => {
+      this.destination = destination;
+      return destination;
+    })
 
-  getPageIndex = async () => {
+  getPageIndex = () => new Promise((resolve, reject) => {
     const { pdf } = this.props;
+    if (isDefined(this.pageIndex)) {
+      resolve(this.pageIndex);
+    }
 
-    if (!isDefined(this.pageIndex)) {
-      const destination = await this.getDestination();
-      if (destination) {
+    this.getDestination()
+      .then((destination) => {
+        if (!destination) {
+          return;
+        }
+
         const [ref] = destination;
-        this.pageIndex = await pdf.getPageIndex(new Ref(ref));
-      }
+        pdf.getPageIndex(new Ref(ref))
+          .then(resolve)
+          .catch(reject);
+      });
+  })
+    .then((pageIndex) => {
+      this.pageIndex = pageIndex;
+      return this.pageIndex;
+    })
+
+  getPageNumber = () => new Promise((resolve, reject) => {
+    if (isDefined(this.pageNumber)) {
+      resolve(this.pageNumber);
     }
 
-    return this.pageIndex;
-  }
+    this.getPageIndex()
+      .then((pageIndex) => {
+        resolve(pageIndex + 1);
+      })
+      .catch(reject);
+  })
+    .then((pageNumber) => {
+      this.pageNumber = pageNumber;
+      return pageNumber;
+    })
 
-  getPageNumber = async () => {
-    if (!isDefined(this.pageNumber)) {
-      this.pageNumber = await this.getPageIndex() + 1;
-    }
-
-    return this.pageNumber;
-  }
-
-  onClick = async (event) => {
+  onClick = (event) => {
     const { onClick } = this.props;
 
     event.preventDefault();
 
-    const pageIndex = await this.getPageIndex();
-    const pageNumber = await this.getPageNumber();
-
-    if (onClick) {
-      onClick({
-        pageIndex,
-        pageNumber,
-      });
+    if (!onClick) {
+      return false;
     }
+
+    return Promise.all([this.getPageIndex(), this.getPageNumber()])
+      .then(([pageIndex, pageNumber]) => {
+        onClick({
+          pageIndex,
+          pageNumber,
+        });
+      });
   }
 
   renderSubitems() {

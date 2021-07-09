@@ -62,17 +62,15 @@ export class TextLayerItemInternal extends PureComponent {
     return defaultSideways ? y - xMin : x - xMin;
   }
 
-  async getFontData(fontName) {
+  getFontData(fontName) {
     const { page } = this.props;
 
-    const font = await new Promise((resolve) => {
+    return new Promise((resolve) => {
       page.commonObjs.get(fontName, resolve);
     });
-
-    return font;
   }
 
-  async alignTextItem() {
+  alignTextItem() {
     const element = this.item;
 
     if (!element) {
@@ -85,23 +83,24 @@ export class TextLayerItemInternal extends PureComponent {
 
     element.style.fontFamily = `${fontName}, sans-serif`;
 
-    const fontData = await this.getFontData(fontName);
+    this.getFontData(fontName)
+      .then((fontData) => {
+        const fallbackFontName = fontData ? fontData.fallbackName : 'sans-serif';
+        element.style.fontFamily = `${fontName}, ${fallbackFontName}`;
 
-    const fallbackFontName = fontData ? fontData.fallbackName : 'sans-serif';
-    element.style.fontFamily = `${fontName}, ${fallbackFontName}`;
+        const targetWidth = width * scale;
+        const actualWidth = this.getElementWidth(element);
 
-    const targetWidth = width * scale;
-    const actualWidth = this.getElementWidth(element);
+        let transform = `scaleX(${targetWidth / actualWidth})`;
 
-    let transform = `scaleX(${targetWidth / actualWidth})`;
+        const ascent = fontData ? fontData.ascent : 0;
+        if (ascent) {
+          transform += ` translateY(${(1 - ascent) * 100}%)`;
+        }
 
-    const ascent = fontData ? fontData.ascent : 0;
-    if (ascent) {
-      transform += ` translateY(${(1 - ascent) * 100}%)`;
-    }
-
-    element.style.transform = transform;
-    element.style.WebkitTransform = transform;
+        element.style.transform = transform;
+        element.style.WebkitTransform = transform;
+      });
   }
 
   getElementWidth = (element) => {

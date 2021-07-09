@@ -48,7 +48,7 @@ export class OutlineInternal extends PureComponent {
     cancelRunningTask(this.runningTask);
   }
 
-  loadOutline = async () => {
+  loadOutline = () => {
     const { pdf } = this.props;
 
     this.setState((prevState) => {
@@ -58,14 +58,16 @@ export class OutlineInternal extends PureComponent {
       return { outline: null };
     });
 
-    try {
-      const cancellable = makeCancellable(pdf.getOutline());
-      this.runningTask = cancellable;
-      const outline = await cancellable.promise;
-      this.setState({ outline }, this.onLoadSuccess);
-    } catch (error) {
-      this.onLoadError(error);
-    }
+    const cancellable = makeCancellable(pdf.getOutline());
+    this.runningTask = cancellable;
+
+    cancellable.promise
+      .then((outline) => {
+        this.setState({ outline }, this.onLoadSuccess);
+      })
+      .catch((error) => {
+        this.onLoadError(error);
+      });
   }
 
   get childContext() {

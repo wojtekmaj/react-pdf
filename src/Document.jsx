@@ -89,55 +89,56 @@ export default class Document extends PureComponent {
     if (this.loadingTask) this.loadingTask.destroy();
   }
 
-  loadDocument = async () => {
-    let source = null;
-    try {
-      source = await this.findDocumentSource();
-      this.onSourceSuccess();
-    } catch (error) {
-      this.onSourceError(error);
-    }
+  loadDocument = () => {
+    this.findDocumentSource()
+      .then((source) => {
+        this.onSourceSuccess();
 
-    if (!source) {
-      return;
-    }
-
-    this.setState((prevState) => {
-      if (!prevState.pdf) {
-        return null;
-      }
-
-      return { pdf: null };
-    });
-
-    const { options, onLoadProgress, onPassword } = this.props;
-
-    try {
-      // If another rendering is in progress, let's cancel it
-      cancelRunningTask(this.runningTask);
-
-      // If another loading is in progress, let's destroy it
-      if (this.loadingTask) this.loadingTask.destroy();
-
-      this.loadingTask = pdfjs.getDocument({ ...source, ...options });
-      this.loadingTask.onPassword = onPassword;
-      if (onLoadProgress) {
-        this.loadingTask.onProgress = onLoadProgress;
-      }
-      const cancellable = makeCancellable(this.loadingTask.promise);
-      this.runningTask = cancellable;
-      const pdf = await cancellable.promise;
-
-      this.setState((prevState) => {
-        if (prevState.pdf && prevState.pdf.fingerprint === pdf.fingerprint) {
-          return null;
+        if (!source) {
+          return;
         }
 
-        return { pdf };
-      }, this.onLoadSuccess);
-    } catch (error) {
-      this.onLoadError(error);
-    }
+        this.setState((prevState) => {
+          if (!prevState.pdf) {
+            return null;
+          }
+
+          return { pdf: null };
+        });
+
+        const { options, onLoadProgress, onPassword } = this.props;
+
+        // If another rendering is in progress, let's cancel it
+        cancelRunningTask(this.runningTask);
+
+        // If another loading is in progress, let's destroy it
+        if (this.loadingTask) this.loadingTask.destroy();
+
+        this.loadingTask = pdfjs.getDocument({ ...source, ...options });
+        this.loadingTask.onPassword = onPassword;
+        if (onLoadProgress) {
+          this.loadingTask.onProgress = onLoadProgress;
+        }
+        const cancellable = makeCancellable(this.loadingTask.promise);
+        this.runningTask = cancellable;
+
+        cancellable.promise
+          .then((pdf) => {
+            this.setState((prevState) => {
+              if (prevState.pdf && prevState.pdf.fingerprint === pdf.fingerprint) {
+                return null;
+              }
+
+              return { pdf };
+            }, this.onLoadSuccess);
+          })
+          .catch((error) => {
+            this.onLoadError(error);
+          });
+      })
+      .catch((error) => {
+        this.onSourceError(error);
+      });
   }
 
   setupLinkService = () => {
@@ -227,32 +228,32 @@ export default class Document extends PureComponent {
   /**
    * Finds a document source based on props.
    */
-  findDocumentSource = async () => {
+  findDocumentSource = () => new Promise((resolve) => {
     const { file } = this.props;
 
     if (!file) {
-      return null;
+      resolve(null);
     }
 
     // File is a string
     if (typeof file === 'string') {
       if (isDataURI(file)) {
         const fileByteString = dataURItoByteString(file);
-        return { data: fileByteString };
+        resolve({ data: fileByteString });
       }
 
       displayCORSWarning();
-      return { url: file };
+      resolve({ url: file });
     }
 
     // File is PDFDataRangeTransport
     if (file instanceof PDFDataRangeTransport) {
-      return { range: file };
+      resolve({ range: file });
     }
 
     // File is an ArrayBuffer
     if (isArrayBuffer(file)) {
-      return { data: file };
+      resolve({ data: file });
     }
 
     /**
@@ -262,7 +263,10 @@ export default class Document extends PureComponent {
     if (isBrowser) {
       // File is a Blob
       if (isBlob(file) || isFile(file)) {
-        return { data: await loadFromFile(file) };
+        loadFromFile(file).then((data) => {
+          resolve({ data });
+        });
+        return;
       }
     }
 
@@ -280,14 +284,14 @@ export default class Document extends PureComponent {
       if (isDataURI(file.url)) {
         const { url, ...otherParams } = file;
         const fileByteString = dataURItoByteString(url);
-        return { data: fileByteString, ...otherParams };
+        resolve({ data: fileByteString, ...otherParams });
       }
 
       displayCORSWarning();
     }
 
-    return file;
-  };
+    resolve(file);
+  });
 
   registerPage = (pageIndex, ref) => {
     this.pages[pageIndex] = ref;

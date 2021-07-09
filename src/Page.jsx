@@ -230,7 +230,7 @@ export class PageInternal extends PureComponent {
     return `${page.pageIndex}/${this.rotate}`;
   }
 
-  loadPage = async () => {
+  loadPage = () => {
     const { pdf } = this.props;
 
     const pageNumber = this.getPageNumber();
@@ -246,15 +246,17 @@ export class PageInternal extends PureComponent {
       return { page: null };
     });
 
-    try {
-      const cancellable = makeCancellable(pdf.getPage(pageNumber));
-      this.runningTask = cancellable;
-      const page = await cancellable.promise;
-      this.setState({ page }, this.onLoadSuccess);
-    } catch (error) {
-      this.setState({ page: false });
-      this.onLoadError(error);
-    }
+    const cancellable = makeCancellable(pdf.getPage(pageNumber));
+    this.runningTask = cancellable;
+
+    cancellable.promise
+      .then((page) => {
+        this.setState({ page }, this.onLoadSuccess);
+      })
+      .catch((error) => {
+        this.setState({ page: false });
+        this.onLoadError(error);
+      });
   }
 
   renderMainLayer() {
