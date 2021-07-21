@@ -59,6 +59,7 @@ export class OutlineItemInternal extends PureComponent {
       onClick({
         pageIndex,
         pageNumber,
+        destination: this.destination,
       });
     }
   }

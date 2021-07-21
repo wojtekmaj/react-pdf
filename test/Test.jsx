@@ -88,7 +88,10 @@ export default function Test() {
   const onPageRenderSuccess = useCallback((page) => console.log('Rendered a page', page), []);
 
   const onItemClick = useCallback(
-    ({ pageNumber: nextPageNumber }) => setPageNumber(nextPageNumber),
+    (item) => {
+      console.log('Clicked an item', item);
+      setPageNumber(item.pageNumber);
+    },
     [],
   );
 

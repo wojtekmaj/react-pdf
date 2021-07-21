@@ -73,6 +73,7 @@ export default class SimpleLinkService {
 
     this.pdfViewer.scrollPageIntoView({
       pageNumber,
+      destination: dest,
     });
   }
 

@@ -102,13 +102,14 @@ export class OutlineInternal extends PureComponent {
     if (onLoadError) onLoadError(error);
   }
 
-  onItemClick = ({ pageIndex, pageNumber }) => {
+  onItemClick = ({ pageIndex, pageNumber, destination }) => {
     const { onItemClick } = this.props;
 
     if (onItemClick) {
       onItemClick({
         pageIndex,
         pageNumber,
+        destination,
       });
     }
   }
