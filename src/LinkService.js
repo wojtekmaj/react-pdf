@@ -51,31 +51,44 @@ export default class SimpleLinkService {
   set rotation(value) {}
 
   goToDestination(dest) {
-    const destRef = dest[0];
-
     new Promise((resolve) => {
-      if (destRef instanceof Object) {
-        this.pdfDocument.getPageIndex(destRef)
-          .then((pageIndex) => {
-            resolve(pageIndex + 1);
-          })
-          .catch(() => {
-            throw new Error(`"${destRef}" is not a valid page reference.`);
-          });
-      } else if (typeof destRef === 'number') {
-        resolve(destRef + 1);
+      if (typeof dest === 'string') {
+        this.pdfDocument.getDestination(dest).then(resolve);
       } else {
-        throw new Error(`"${destRef}" is not a valid destination reference.`);
+        dest.then(resolve);
       }
     })
-      .then((pageNumber) => {
-        if (!pageNumber || pageNumber < 1 || pageNumber > this.pagesCount) {
-          throw new Error(`"${pageNumber}" is not a valid page number.`);
+      .then((explicitDest) => {
+        if (!Array.isArray(explicitDest)) {
+          throw new Error(`"${explicitDest}" is not a valid destination array.`);
         }
 
-        this.pdfViewer.scrollPageIntoView({
-          pageNumber,
-        });
+        const destRef = explicitDest[0];
+
+        new Promise((resolve) => {
+          if (destRef instanceof Object) {
+            this.pdfDocument.getPageIndex(destRef)
+              .then((pageIndex) => {
+                resolve(pageIndex + 1);
+              })
+              .catch(() => {
+                throw new Error(`"${destRef}" is not a valid page reference.`);
+              });
+          } else if (typeof destRef === 'number') {
+            resolve(destRef + 1);
+          } else {
+            throw new Error(`"${destRef}" is not a valid destination reference.`);
+          }
+        })
+          .then((pageNumber) => {
+            if (!pageNumber || pageNumber < 1 || pageNumber > this.pagesCount) {
+              throw new Error(`"${pageNumber}" is not a valid page number.`);
+            }
+
+            this.pdfViewer.scrollPageIntoView({
+              pageNumber,
+            });
+          });
       });
   }
 
