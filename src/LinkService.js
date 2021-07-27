@@ -15,7 +15,7 @@
 
 /* eslint-disable class-methods-use-this, no-empty-function */
 
-export default class SimpleLinkService {
+export default class LinkService {
   constructor() {
     this.externalLinkTarget = null;
     this.externalLinkRel = null;
