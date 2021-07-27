@@ -60,7 +60,7 @@ export default class SimpleLinkService {
             resolve(pageIndex + 1);
           })
           .catch(() => {
-            throw new Error(`"${destRef}" is not a valid destination reference.`);
+            throw new Error(`"${destRef}" is not a valid page reference.`);
           });
       } else if (typeof destRef === 'number') {
         resolve(destRef + 1);
