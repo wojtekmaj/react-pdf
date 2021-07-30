@@ -1588,6 +1588,39 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@orbiseed/react-pdf@workspace:.":
+  version: 0.0.0-use.local
+  resolution: "@orbiseed/react-pdf@workspace:."
+  dependencies:
+    "@babel/cli": ^7.8.0
+    "@babel/core": ^7.9.0
+    "@babel/plugin-proposal-class-properties": ^7.8.0
+    "@babel/plugin-transform-runtime": ^7.9.0
+    "@babel/preset-env": ^7.9.0
+    "@babel/preset-react": ^7.9.0
+    "@babel/runtime": ^7.0.0
+    "@wojtekmaj/enzyme-adapter-react-17": ^0.6.0
+    babel-eslint: ^10.0.0
+    enzyme: ^3.10.0
+    eslint: ~7.19.0
+    eslint-config-wojtekmaj: ^0.5.0
+    file-loader: ^6.0.0
+    jest: ^26.6.0
+    make-cancellable-promise: ^1.0.0
+    make-event-props: ^1.1.0
+    merge-class-names: ^1.1.1
+    merge-refs: ^1.0.0
+    prop-types: ^15.6.2
+    react: ^17.0.0
+    react-dom: ^17.0.0
+    rimraf: ^3.0.0
+    webpack: ^5.20.0
+  peerDependencies:
+    react: ^16.3.0 || ^17.0.0-0
+    react-dom: ^16.3.0 || ^17.0.0-0
+  languageName: unknown
+  linkType: soft
+
 "@sinonjs/commons@npm:^1.7.0":
   version: 1.7.1
   resolution: "@sinonjs/commons@npm:1.7.1"
@@ -6704,15 +6737,6 @@ fsevents@^2.1.2:
   languageName: node
   linkType: hard
 
-"pdfjs-dist@npm:2.9.359":
-  version: 2.9.359
-  resolution: "pdfjs-dist@npm:2.9.359"
-  peerDependencies:
-    worker-loader: ^3.0.7
-  checksum: 4f11955df7949068619e51f52a71f5092e85fda4a56231718612ac802d10afa1587c070a8b4c11808669df2cc793b114a290b75f4b36663667a8d2f71b6ccd1a
-  languageName: node
-  linkType: hard
-
 "performance-now@npm:^2.1.0":
   version: 2.1.0
   resolution: "performance-now@npm:2.1.0"
@@ -6949,40 +6973,6 @@ fsevents@^2.1.2:
   checksum: f7a19ac3496de32ca9ae12aa030f00f14a3d45374f1ceca0af707c831b2a6098ef0d6bdae51bd437b0a306d7f01d4677fcc8de7c0d331eb47ad0f46130e53c5f
   languageName: node
   linkType: hard
-
-"react-pdf@workspace:.":
-  version: 0.0.0-use.local
-  resolution: "react-pdf@workspace:."
-  dependencies:
-    "@babel/cli": ^7.8.0
-    "@babel/core": ^7.9.0
-    "@babel/plugin-proposal-class-properties": ^7.8.0
-    "@babel/plugin-transform-runtime": ^7.9.0
-    "@babel/preset-env": ^7.9.0
-    "@babel/preset-react": ^7.9.0
-    "@babel/runtime": ^7.0.0
-    "@wojtekmaj/enzyme-adapter-react-17": ^0.6.0
-    babel-eslint: ^10.0.0
-    enzyme: ^3.10.0
-    eslint: ~7.19.0
-    eslint-config-wojtekmaj: ^0.5.0
-    file-loader: ^6.0.0
-    jest: ^26.6.0
-    make-cancellable-promise: ^1.0.0
-    make-event-props: ^1.1.0
-    merge-class-names: ^1.1.1
-    merge-refs: ^1.0.0
-    pdfjs-dist: 2.9.359
-    prop-types: ^15.6.2
-    react: ^17.0.0
-    react-dom: ^17.0.0
-    rimraf: ^3.0.0
-    webpack: ^5.20.0
-  peerDependencies:
-    react: ^16.3.0 || ^17.0.0-0
-    react-dom: ^16.3.0 || ^17.0.0-0
-  languageName: unknown
-  linkType: soft
 
 "react-shallow-renderer@npm:^16.13.1":
   version: 16.14.1
