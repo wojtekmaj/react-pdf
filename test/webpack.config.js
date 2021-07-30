@@ -1,32 +1,32 @@
-const path = require('path');
+const path = require("path");
 
-const CopyWebpackPlugin = require('copy-webpack-plugin');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
+const CopyWebpackPlugin = require("copy-webpack-plugin");
+const HtmlWebpackPlugin = require("html-webpack-plugin");
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const ReactRefreshWebpackPlugin = require("@pmmmwh/react-refresh-webpack-plugin");
 
-const isProduction = process.env.NODE_ENV === 'production';
+const isProduction = process.env.NODE_ENV === "production";
 const isDevelopment = !isProduction;
 
 module.exports = {
-  mode: isProduction ? 'production' : 'development',
+  mode: isProduction ? "production" : "development",
   bail: isProduction,
   context: path.join(__dirname),
   entry: {
-    src: './index.jsx',
+    src: "./index.jsx",
   },
   output: {
-    path: path.resolve(__dirname, 'dist'),
-    publicPath: '/',
-    filename: '[name].[chunkhash:8].js',
+    path: path.resolve(__dirname, "dist"),
+    publicPath: "/",
+    filename: "[name].[chunkhash:8].js",
   },
   resolve: {
-    extensions: ['.js', '.jsx'],
+    extensions: [".js", ".jsx"],
     symlinks: false,
   },
   resolveLoader: {
     alias: {
-      'file-loader': require.resolve('file-loader'),
+      "file-loader": require.resolve("file-loader"),
     },
   },
   module: {
@@ -36,10 +36,10 @@ module.exports = {
         exclude: /node_modules(?!\/react-pdf)/,
         use: [
           {
-            loader: 'babel-loader',
+            loader: "babel-loader",
             options: {
-              babelrcRoots: ['.', '../'],
-              plugins: [isDevelopment && 'react-refresh/babel'].filter(Boolean),
+              babelrcRoots: [".", "../"],
+              plugins: [isDevelopment && "react-refresh/babel"].filter(Boolean),
             },
           },
         ],
@@ -47,45 +47,46 @@ module.exports = {
       {
         test: /\.less$/,
         use: [
-          isProduction ? MiniCssExtractPlugin.loader : 'style-loader',
-          'css-loader',
-          'less-loader',
+          isProduction ? MiniCssExtractPlugin.loader : "style-loader",
+          "css-loader",
+          "less-loader",
         ],
       },
       {
         test: /\.css$/,
         use: [
-          isProduction ? MiniCssExtractPlugin.loader : 'style-loader',
-          'css-loader',
+          isProduction ? MiniCssExtractPlugin.loader : "style-loader",
+          "css-loader",
         ],
       },
       {
         test: /\.pdf$/,
-        type: 'asset/inline',
+        type: "asset/inline",
       },
     ].filter(Boolean),
   },
   plugins: [
     new CopyWebpackPlugin({
       patterns: [
-        'test.pdf',
-        { from: '../node_modules/pdfjs-dist/cmaps/', to: 'cmaps/' },
+        "test.pdf",
+        { from: "../node_modules/@orbiseed/pdfjs-dist/cmaps/", to: "cmaps/" },
       ],
     }),
     new HtmlWebpackPlugin({
-      template: 'index.html',
+      template: "index.html",
     }),
-    isProduction && new MiniCssExtractPlugin({
-      filename: '[name].[chunkhash:8].css',
-      chunkFilename: '[name].[chunkhash:8].css',
-    }),
+    isProduction &&
+      new MiniCssExtractPlugin({
+        filename: "[name].[chunkhash:8].css",
+        chunkFilename: "[name].[chunkhash:8].css",
+      }),
     isDevelopment && new ReactRefreshWebpackPlugin(),
   ].filter(Boolean),
   optimization: {
-    moduleIds: 'named',
+    moduleIds: "named",
   },
   stats: {
-    assetsSort: '!size',
+    assetsSort: "!size",
     entrypoints: false,
   },
   devServer: {
