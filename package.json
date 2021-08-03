@@ -1,6 +1,6 @@
 {
   "name": "@orbiseed/react-pdf",
-  "version": "5.9.0",
+  "version": "5.10.0",
   "description": "Display PDFs in your React app as easily as if they were images.",
   "main": "dist/umd/entry.js",
   "module": "dist/esm/entry.js",
@@ -89,7 +89,7 @@
   "license": "MIT",
   "dependencies": {
     "@babel/runtime": "^7.0.0",
-    "@orbiseed/pdfjs-dist": "^2.12.1",
+    "@orbiseed/pdfjs-dist": "^2.9.360",
     "file-loader": "^6.0.0",
     "make-cancellable-promise": "^1.0.0",
     "make-event-props": "^1.1.0",
