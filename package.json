@@ -1,6 +1,6 @@
 {
   "name": "@orbiseed/react-pdf",
-  "version": "5.8.0",
+  "version": "5.9.0",
   "description": "Display PDFs in your React app as easily as if they were images.",
   "main": "dist/umd/entry.js",
   "module": "dist/esm/entry.js",
