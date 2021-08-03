@@ -1,10 +1,10 @@
-import * as pdfjs from "@orbiseed/pdfjs-dist";
+import * as pdfjs from '@orbiseed/pdfjs-dist';
 
-import Document from "./Document";
-import Outline from "./Outline";
-import Page from "./Page";
+import Document from './Document';
+import Outline from './Outline';
+import Page from './Page';
 
-import { isLocalFileSystem, warnOnDev } from "./shared/utils";
+import { isLocalFileSystem, warnOnDev } from './shared/utils';
 
 if (isLocalFileSystem) {
   warnOnDev(
@@ -12,6 +12,6 @@ if (isLocalFileSystem) {
   );
 }
 
-pdfjs.GlobalWorkerOptions.workerSrc = "pdf.worker.js";
+pdfjs.GlobalWorkerOptions.workerSrc = 'pdf.worker.js';
 
 export { pdfjs, Document, Outline, Page };

@@ -1,12 +1,12 @@
-import * as pdfjs from "@orbiseed/pdfjs-dist";
+import * as pdfjs from '@orbiseed/pdfjs-dist';
 // eslint-disable-next-line
-import pdfjsWorker from "file-loader!@orbiseed/pdfjs-dist/build/pdf.worker";
+import pdfjsWorker from 'file-loader!@orbiseed/pdfjs-dist/build/pdf.worker';
 
-import Document from "./Document";
-import Outline from "./Outline";
-import Page from "./Page";
+import Document from './Document';
+import Outline from './Outline';
+import Page from './Page';
 
-import { isLocalFileSystem, warnOnDev } from "./shared/utils";
+import { isLocalFileSystem, warnOnDev } from './shared/utils';
 
 if (isLocalFileSystem) {
   warnOnDev(

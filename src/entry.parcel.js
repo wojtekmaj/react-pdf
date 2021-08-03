@@ -1,10 +1,10 @@
-import * as pdfjs from "@orbiseed/pdfjs-dist";
+import * as pdfjs from '@orbiseed/pdfjs-dist';
 
-import Document from "./Document";
-import Outline from "./Outline";
-import Page from "./Page";
+import Document from './Document';
+import Outline from './Outline';
+import Page from './Page';
 
-import { isLocalFileSystem, warnOnDev } from "./shared/utils";
+import { isLocalFileSystem, warnOnDev } from './shared/utils';
 
 if (isLocalFileSystem) {
   // eslint-disable-next-line no-console
@@ -13,8 +13,8 @@ if (isLocalFileSystem) {
   );
 }
 
-if (typeof window !== "undefined" && "Worker" in window) {
-  pdfjs.GlobalWorkerOptions.workerPort = new Worker("./pdf.worker.entry.js");
+if (typeof window !== 'undefined' && 'Worker' in window) {
+  pdfjs.GlobalWorkerOptions.workerPort = new Worker('./pdf.worker.entry.js');
 }
 
 export { pdfjs, Document, Outline, Page };

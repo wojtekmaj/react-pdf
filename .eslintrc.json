@@ -1,18 +1,23 @@
 {
-  "extends": "wojtekmaj/react",
+  "extends": [
+    "wojtekmaj/react",
+    "plugin:prettier/recommended",
+    "plugin:json/recommended"
+  ],
   "parser": "babel-eslint",
   "rules": {
-    "no-underscore-dangle": ["error", { "allow": ["_pdfInfo", "_pageIndex", "_pageInfo"] }],
+    "no-underscore-dangle": [
+      "error",
+      { "allow": ["_pdfInfo", "_pageIndex", "_pageInfo"] }
+    ],
     "react/sort-comp": "off"
   },
   "overrides": [
     {
-      "files": [
-        "sample/**",
-        "test/**"
-      ],
+      "files": ["sample/**", "test/**"],
       "rules": {
-        "import/no-unresolved": "off"
+        "import/no-unresolved": "off",
+        "object-curly-newline": ["error", { "multiline": true }]
       }
     }
   ]

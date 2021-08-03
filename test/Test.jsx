@@ -1,8 +1,8 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from 'react';
 // eslint-disable-next-line import/no-extraneous-dependencies
-import { PDFDataRangeTransport } from "@orbiseed/pdfjs-dist";
-import { Document, Outline, Page } from "react-pdf/src/entry.webpack";
-import "react-pdf/src/Page/AnnotationLayer.css";
+import { PDFDataRangeTransport } from '@orbiseed/pdfjs-dist';
+import { Document, Outline, Page } from 'react-pdf/src/entry.webpack';
+import 'react-pdf/src/Page/AnnotationLayer.css';
 
 import {
   isArrayBuffer,
@@ -10,20 +10,20 @@ import {
   isBrowser,
   isFile,
   loadFromFile,
-} from "react-pdf/src/shared/utils";
+} from 'react-pdf/src/shared/utils';
 
-import "./Test.less";
+import './Test.less';
 
-import AnnotationOptions from "./AnnotationOptions";
-import LayerOptions from "./LayerOptions";
-import LoadingOptions from "./LoadingOptions";
-import PassingOptions from "./PassingOptions";
-import ViewOptions from "./ViewOptions";
+import AnnotationOptions from './AnnotationOptions';
+import LayerOptions from './LayerOptions';
+import LoadingOptions from './LoadingOptions';
+import PassingOptions from './PassingOptions';
+import ViewOptions from './ViewOptions';
 
-import { dataURItoBlob } from "./shared/utils";
+import { dataURItoBlob } from './shared/utils';
 
 const options = {
-  cMapUrl: "cmaps/",
+  cMapUrl: 'cmaps/',
   cMapPacked: true,
 };
 
@@ -36,20 +36,20 @@ export const readAsDataURL = (file) =>
       switch (event.target.error.code) {
         case event.target.error.NOT_FOUND_ERR:
           return reject(
-            new Error("Error while reading a file: File not found.")
+            new Error('Error while reading a file: File not found.')
           );
         case event.target.error.NOT_READABLE_ERR:
           return reject(
-            new Error("Error while reading a file: File not readable.")
+            new Error('Error while reading a file: File not readable.')
           );
         case event.target.error.SECURITY_ERR:
           return reject(
-            new Error("Error while reading a file: Security error.")
+            new Error('Error while reading a file: Security error.')
           );
         case event.target.error.ABORT_ERR:
-          return reject(new Error("Error while reading a file: Aborted."));
+          return reject(new Error('Error while reading a file: Aborted.'));
         default:
-          return reject(new Error("Error while reading a file."));
+          return reject(new Error('Error while reading a file.'));
       }
     };
     reader.readAsDataURL(file);
@@ -73,21 +73,21 @@ export default function Test() {
   const [render, setRender] = useState(true);
   const [renderAnnotationLayer, setRenderAnnotationLayer] = useState(true);
   const [renderInteractiveForms, setRenderInteractiveForms] = useState(true);
-  const [renderMode, setRenderMode] = useState("canvas");
+  const [renderMode, setRenderMode] = useState('canvas');
   const [renderTextLayer, setRenderTextLayer] = useState(true);
   const [rotate, setRotate] = useState(null);
 
   const onDocumentLoadProgress = useCallback((progressData) => {
     console.log(
-      "Loading a document",
+      'Loading a document',
       progressData.total
         ? progressData.loaded / progressData.total
-        : "(unknown progress)"
+        : '(unknown progress)'
     );
   }, []);
 
   const onDocumentLoadSuccess = useCallback((document) => {
-    console.log("Loaded a document", document);
+    console.log('Loaded a document', document);
     const { numPages: nextNumPages } = document;
     setNumPages(nextNumPages);
     setPageNumber(1);
@@ -98,7 +98,7 @@ export default function Test() {
   }, []);
 
   const onPageRenderSuccess = useCallback(
-    (page) => console.log("Rendered a page", page),
+    (page) => console.log('Rendered a page', page),
     []
   );
 
@@ -115,8 +115,8 @@ export default function Test() {
         }
 
         switch (passMethod) {
-          case "blob": {
-            if (typeof file === "string") {
+          case 'blob': {
+            if (typeof file === 'string') {
               return dataURItoBlob(file);
             }
 
@@ -127,8 +127,8 @@ export default function Test() {
             return file;
           }
 
-          case "string": {
-            if (typeof file === "string") {
+          case 'string': {
+            if (typeof file === 'string') {
               return file;
             }
 
@@ -138,9 +138,9 @@ export default function Test() {
 
             return file;
           }
-          case "object": {
+          case 'object': {
             // File is a string
-            if (typeof file === "string") {
+            if (typeof file === 'string') {
               return { url: file };
             }
 
@@ -187,9 +187,9 @@ export default function Test() {
 
   function getPageProps() {
     return {
-      className: "custom-classname-page",
+      className: 'custom-classname-page',
       height: pageHeight,
-      onClick: (event, page) => console.log("Clicked a page", { event, page }),
+      onClick: (event, page) => console.log('Clicked a page', { event, page }),
       onRenderSuccess: onPageRenderSuccess,
       renderAnnotationLayer,
       renderInteractiveForms,
@@ -198,7 +198,7 @@ export default function Test() {
       scale: pageScale,
       width: pageWidth,
       customTextRenderer: (textItem) =>
-        textItem.str.split("ipsum").reduce(
+        textItem.str.split('ipsum').reduce(
           (strArray, currentValue, currentIndex) =>
             currentIndex === 0
               ? [...strArray, currentValue]
@@ -267,7 +267,7 @@ export default function Test() {
             {...documentProps}
             className="custom-classname-document"
             onClick={(event, pdf) =>
-              console.log("Clicked a document", { event, pdf })
+              console.log('Clicked a document', { event, pdf })
             }
             onItemClick={onItemClick}
             onLoadError={onDocumentLoadError}
@@ -312,8 +312,8 @@ export default function Test() {
                   Previous
                 </button>
                 <span>
-                  {`Page ${pageNumber || (numPages ? 1 : "--")} of ${
-                    numPages || "--"
+                  {`Page ${pageNumber || (numPages ? 1 : '--')} of ${
+                    numPages || '--'
                   }`}
                 </span>
                 <button
