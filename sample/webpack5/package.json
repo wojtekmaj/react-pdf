@@ -1,0 +1,38 @@
+{
+  "name": "react-pdf-sample-page-webpack5",
+  "version": "4.0.0",
+  "description": "A sample page for React-PDF.",
+  "private": true,
+  "scripts": {
+    "build": "NODE_ENV=production webpack",
+    "start": "NODE_ENV=development webpack serve"
+  },
+  "author": {
+    "name": "Wojciech Maj",
+    "email": "kontakt@wojtekmaj.pl"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "react": "^17.0.0",
+    "react-dom": "^17.0.0",
+    "react-pdf": "latest"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.12.0",
+    "@babel/preset-env": "^7.12.0",
+    "@babel/preset-react": "^7.12.0",
+    "babel-loader": "^8.0.0",
+    "copy-webpack-plugin": "^8.0.0",
+    "css-loader": "^4.3.0",
+    "html-webpack-plugin": "^5.1.0",
+    "less": "^4.0.0",
+    "less-loader": "^8.0.0",
+    "style-loader": "^1.2.0",
+    "webpack": "^5.20.0",
+    "webpack-cli": "^4.2.0",
+    "webpack-dev-server": "^3.11.0"
+  },
+  "resolutions": {
+    "semver@7.0.0": "^7.0.0"
+  }
+}

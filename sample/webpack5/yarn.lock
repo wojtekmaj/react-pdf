@@ -5778,9 +5778,9 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"react-pdf-sample-page-webpack@workspace:.":
+"react-pdf-sample-page-webpack5@workspace:.":
   version: 0.0.0-use.local
-  resolution: "react-pdf-sample-page-webpack@workspace:."
+  resolution: "react-pdf-sample-page-webpack5@workspace:."
   dependencies:
     "@babel/core": ^7.12.0
     "@babel/preset-env": ^7.12.0
