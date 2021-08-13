@@ -3224,6 +3224,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"file-loader@npm:^6.0.0":
+  version: 6.2.0
+  resolution: "file-loader@npm:6.2.0"
+  dependencies:
+    loader-utils: ^2.0.0
+    schema-utils: ^3.0.0
+  peerDependencies:
+    webpack: ^4.0.0 || ^5.0.0
+  checksum: faf43eecf233f4897b0150aaa874eeeac214e4f9de49738a9e0ef734a30b5260059e85b7edadf852b98e415f875bd5f12587768a93fd52aaf2e479ecf95fab20
+  languageName: node
+  linkType: hard
+
 "fill-range@npm:^4.0.0":
   version: 4.0.0
   resolution: "fill-range@npm:4.0.0"
@@ -4644,6 +4656,13 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
+"merge-refs@npm:^1.0.0":
+  version: 1.0.0
+  resolution: "merge-refs@npm:1.0.0"
+  checksum: 3b4ea1a178c52349a0e725281aa34b130fb6819d22f8e616ae30da6f4da223d9c3a53f6e1a427c5ba56bf6b162c98de95a53f76e01a343e10162823fee33f64a
+  languageName: node
+  linkType: hard
+
 "merge-stream@npm:^2.0.0":
   version: 2.0.0
   resolution: "merge-stream@npm:2.0.0"
@@ -5435,10 +5454,10 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"pdfjs-dist@npm:2.4.456":
-  version: 2.4.456
-  resolution: "pdfjs-dist@npm:2.4.456"
-  checksum: 0366938ddaddb540ca49f63c1ce38d5a77225d93c54c8a98181f3660d1367b0ba26f31434a54f75bb6cfebcc30c9ff1ce4a4bb0e8f5ac6e0487dcd84a02200b1
+"pdfjs-dist@npm:2.6.347":
+  version: 2.6.347
+  resolution: "pdfjs-dist@npm:2.6.347"
+  checksum: 34a3ee1d63fe522000edcbc4c6be0cdbbdbe92544a2d97b1b003fc0e63d2fcfddaa882a418efb20aea22a2e67ff2cdd54be5543b15301971ed7f7a75ef9289cb
   languageName: node
   linkType: hard
 
@@ -5783,20 +5802,21 @@ fsevents@^1.2.7:
   linkType: soft
 
 "react-pdf@npm:latest":
-  version: 5.0.0
-  resolution: "react-pdf@npm:5.0.0"
+  version: 5.3.2
+  resolution: "react-pdf@npm:5.3.2"
   dependencies:
     "@babel/runtime": ^7.0.0
+    file-loader: ^6.0.0
     make-cancellable-promise: ^1.0.0
     make-event-props: ^1.1.0
     merge-class-names: ^1.1.1
-    pdfjs-dist: 2.4.456
+    merge-refs: ^1.0.0
+    pdfjs-dist: 2.6.347
     prop-types: ^15.6.2
-    worker-loader: ^3.0.0
   peerDependencies:
-    react: ^16.3.0
-    react-dom: ^16.3.0
-  checksum: 5a6b7edae4c7a0042b0b58cd8468e3dae8d880a295154c3bd974a1953e629ca399f663d0eff3114b36f0cd0b62a48110fe948ba10c8c2da8c86f6461cd512791
+    react: ^16.3.0 || ^17.0.0-0
+    react-dom: ^16.3.0 || ^17.0.0-0
+  checksum: 8bb724957257be7303fb45c84ce89ef2c6058263a1b98fd4e5587d6c248036a66d1dea3e6579a43864f24eb5313d40e0126ac04be6765cfb0f24ae2bae26a950
   languageName: node
   linkType: hard
 
@@ -7374,18 +7394,6 @@ fsevents@^1.2.7:
     reduce-flatten: ^2.0.0
     typical: ^5.0.0
   checksum: f32b644535784ef2a12932a753308bdd25d944e6681eb696792580531769cf22f1ff2a4b9c8c9cc20312467da45fce9b12ecb100e13fa53c2dbc6193a4f6ce4a
-  languageName: node
-  linkType: hard
-
-"worker-loader@npm:^3.0.0":
-  version: 3.0.5
-  resolution: "worker-loader@npm:3.0.5"
-  dependencies:
-    loader-utils: ^2.0.0
-    schema-utils: ^3.0.0
-  peerDependencies:
-    webpack: ^4.0.0 || ^5.0.0
-  checksum: e382a28cb4c8d58d21138ab2fe9eb3fe4af0ecd1a94ccdf49cff10e0f56c3d7b136d70f86372b68f2416754be89135200c67c49fc18280ac4550829eec739267
   languageName: node
   linkType: hard
 
