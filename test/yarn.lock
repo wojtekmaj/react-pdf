@@ -1332,23 +1332,24 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@pmmmwh/react-refresh-webpack-plugin@npm:^0.4.3":
-  version: 0.4.3
-  resolution: "@pmmmwh/react-refresh-webpack-plugin@npm:0.4.3"
+"@pmmmwh/react-refresh-webpack-plugin@npm:^0.5.0-0":
+  version: 0.5.0-rc.4
+  resolution: "@pmmmwh/react-refresh-webpack-plugin@npm:0.5.0-rc.4"
   dependencies:
     ansi-html: ^0.0.7
+    core-js-pure: ^3.8.1
     error-stack-parser: ^2.0.6
-    html-entities: ^1.2.1
-    native-url: ^0.2.6
-    schema-utils: ^2.6.5
+    html-entities: ^2.1.0
+    loader-utils: ^2.0.0
+    schema-utils: ^3.0.0
     source-map: ^0.7.3
   peerDependencies:
-    "@types/webpack": 4.x
-    react-refresh: ">=0.8.3 <0.10.0"
+    "@types/webpack": 4.x || 5.x
+    react-refresh: ^0.10.0
     sockjs-client: ^1.4.0
-    type-fest: ^0.13.1
+    type-fest: 1.x
     webpack: ">=4.43.0 <6.0.0"
-    webpack-dev-server: 3.x
+    webpack-dev-server: 3.x || >=4.0.0-beta.0
     webpack-hot-middleware: 2.x
     webpack-plugin-serve: 0.x || 1.x
   peerDependenciesMeta:
@@ -1364,7 +1365,7 @@ __metadata:
       optional: true
     webpack-plugin-serve:
       optional: true
-  checksum: 36a7b0c63f0aabde856a2b43f3f3bfa7919920afa67b4fbcf7d4980b286c7c11e34ada13654d81bf30c3d3e2c12a5b9eef6c15e21a200003b8030809d3ddd6c6
+  checksum: 2cfdbb713f15ba5fc7d9596661884ea7564d69e3435cd05c88e20716373b2f5ad57c2f1ec3a9fb6e6986b0ac7b70b3288f86e5c82dcb5c548d276bb0b61b927a
   languageName: node
   linkType: hard
 
@@ -2377,6 +2378,13 @@ __metadata:
     browserslist: ^4.8.5
     semver: 7.0.0
   checksum: 16481135a61490d38731048ba41f966795d8f3929cc895a9a198678a42365967c0024b41670c0a84aff32a140b443ddd4adcdfc9f298777fc62a009750eda51f
+  languageName: node
+  linkType: hard
+
+"core-js-pure@npm:^3.8.1":
+  version: 3.16.2
+  resolution: "core-js-pure@npm:3.16.2"
+  checksum: e44acd945b78f6faf96f38059a5347eb236eaae9b2fa897e58f52b12b64e5233c2b1243e953b828ddec62c215c5f911ac2d3c9276974ded1c04331961d877869
   languageName: node
   linkType: hard
 
@@ -3550,14 +3558,7 @@ fsevents@~2.3.2:
   languageName: node
   linkType: hard
 
-"html-entities@npm:^1.2.1":
-  version: 1.3.1
-  resolution: "html-entities@npm:1.3.1"
-  checksum: 423e3138822a298df37aa40503c6010a4d0cfa452f01b5730cf144c41c31fb0026ee76dd5ff0d78b987a16d145f0c50f4c112a5095740718af169786b8cbdd0a
-  languageName: node
-  linkType: hard
-
-"html-entities@npm:^2.3.2":
+"html-entities@npm:^2.1.0, html-entities@npm:^2.3.2":
   version: 2.3.2
   resolution: "html-entities@npm:2.3.2"
   checksum: 522d8d202df301ff51b517a379e642023ed5c81ea9fb5674ffad88cff386165733d00b6089d5c2fcc644e44777d6072017b6216d8fa40f271d3610420d00a886
@@ -4690,15 +4691,6 @@ fsevents@~2.3.2:
   languageName: node
   linkType: hard
 
-"native-url@npm:^0.2.6":
-  version: 0.2.6
-  resolution: "native-url@npm:0.2.6"
-  dependencies:
-    querystring: ^0.2.0
-  checksum: d56a67b32e635c4944985f551a9976dfe609a3947810791c50f5c37cff1d9dd5fe040184989d104be8752582b79dc4e726f2a9c075d691ecce86b31ae9387f1b
-  languageName: node
-  linkType: hard
-
 "natural-compare@npm:^1.4.0":
   version: 1.4.0
   resolution: "natural-compare@npm:1.4.0"
@@ -5384,7 +5376,7 @@ fsevents@~2.3.2:
   languageName: node
   linkType: hard
 
-"querystring@npm:0.2.0, querystring@npm:^0.2.0":
+"querystring@npm:0.2.0":
   version: 0.2.0
   resolution: "querystring@npm:0.2.0"
   checksum: 8258d6734f19be27e93f601758858c299bdebe71147909e367101ba459b95446fbe5b975bf9beb76390156a592b6f4ac3a68b6087cea165c259705b8b4e56a69
@@ -5448,7 +5440,7 @@ fsevents@~2.3.2:
     "@babel/plugin-transform-runtime": ^7.5.5
     "@babel/preset-env": ^7.5.5
     "@babel/preset-react": ^7.0.0
-    "@pmmmwh/react-refresh-webpack-plugin": ^0.4.3
+    "@pmmmwh/react-refresh-webpack-plugin": ^0.5.0-0
     babel-loader: ^8.0.0
     copy-webpack-plugin: ^9.0.0
     css-loader: ^6.0.0
@@ -5462,7 +5454,7 @@ fsevents@~2.3.2:
     react: ^17.0.0
     react-dom: ^17.0.0
     react-pdf: "portal:../"
-    react-refresh: ^0.9.0
+    react-refresh: ^0.10.0
     style-loader: ^3.0.0
     webpack: ^5.20.0
     webpack-cli: ^4.7.0
@@ -5488,10 +5480,10 @@ fsevents@~2.3.2:
   languageName: node
   linkType: soft
 
-"react-refresh@npm:^0.9.0":
-  version: 0.9.0
-  resolution: "react-refresh@npm:0.9.0"
-  checksum: 6440146176f19402ffb7d66f317e40b1c42c88579b4d439b49021e38be6307c642da3e8732a72e6997b6bb1127db0da92f4aa433da4313ce8ebad0c1efa2ed4a
+"react-refresh@npm:^0.10.0":
+  version: 0.10.0
+  resolution: "react-refresh@npm:0.10.0"
+  checksum: 089b8ea9ad8038046c0467a2476595eedab9e30620f50daa50e844c81d626de43a44a6a628256ae58e68885d5fe1d7e05074ddfd99ece3808b013d043f0c6030
   languageName: node
   linkType: hard
 
