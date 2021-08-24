@@ -4255,11 +4255,11 @@ fsevents@^2.1.2:
   linkType: hard
 
 "glob-parent@npm:^5.0.0":
-  version: 5.1.0
-  resolution: "glob-parent@npm:5.1.0"
+  version: 5.1.2
+  resolution: "glob-parent@npm:5.1.2"
   dependencies:
     is-glob: ^4.0.1
-  checksum: 6d20a098676e6558b32fdad8f82f6f77290d843ee302420d99b7926314b04358f0913c0d2239a269a8ed34d33c2761cd5a7a869b8db1eb47d9541e928692b1d7
+  checksum: f4f2bfe2425296e8a47e36864e4f42be38a996db40420fe434565e4480e3322f18eb37589617a98640c5dc8fdec1a387007ee18dbb1f3f5553409c34d17f425e
   languageName: node
   linkType: hard
 
