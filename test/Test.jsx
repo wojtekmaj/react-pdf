@@ -149,7 +149,7 @@ export default function Test() {
             if (isBrowser) {
               // File is a Blob
               if (isBlob(file) || isFile(file)) {
-                return { data: await loadFromFile(file) };
+                return { data: await loadFromFile(file).promise };
               }
             }
             return file;
