@@ -12,6 +12,8 @@ import {
   loadFromFile,
 } from 'react-pdf/src/shared/utils';
 
+import { isFile as propTypeIsFile } from './shared/propTypes';
+
 import './Test.less';
 
 import AnnotationOptions from './AnnotationOptions';
@@ -54,6 +56,7 @@ export const readAsDataURL = (file) => new Promise((resolve, reject) => {
 
 export default function Test() {
   const [displayAll, setDisplayAll] = useState(false);
+  const [useExternPage, setUseExternPage] = useState(false);
   const [externalLinkTarget, setExternalLinkTarget] = useState(null);
   const [file, setFile] = useState(null);
   const [fileForProps, setFileForProps] = useState(null);
@@ -219,6 +222,8 @@ export default function Test() {
           <LoadingOptions
             file={file}
             setFile={setFile}
+            useExternPage={useExternPage}
+            setUseExternPage={setUseExternPage}
             setRender={setRender}
           />
           <PassingOptions
@@ -254,7 +259,8 @@ export default function Test() {
           />
         </aside>
         <main className="Test__container__content">
-          <Document
+          {/* eslint-disable-next-line */}
+          { !useExternPage ? <Document
             {...documentProps}
             className="custom-classname-document"
             onClick={(event, pdf) => console.log('Clicked a document', { event, pdf })}
@@ -319,9 +325,107 @@ export default function Test() {
                 </button>
               </div>
             )}
+            {/* eslint-disable-next-line */}
           </Document>
+          // eslint-disable-next-line indent
+          : <TestSeparateDocumentAndPage file={fileForProps} /> }
         </main>
       </div>
     </div>
   );
 }
+
+// test <Page> element outside of <Document> element
+const TestSeparateDocumentAndPage = function (props) {
+  const { file } = props;
+  const [display, setDisplay] = useState(true);
+  const [displayPage, setDisplayPage] = useState(true);
+  const [document, setDocument] = useState(null);
+  const [numPages, setNumPages] = useState(0);
+  const [pageNumber, setPageNumber] = useState(1);
+  const [unountOnFile, setUnountOnFile] = useState(false);
+
+  // unmount Document as soon as file starts loading
+  useEffect(() => {
+    if (file && unountOnFile) {
+      setDisplay(false);
+    }
+  }, [file]);
+
+  const onDocumentLoadSuccess = (pdf) => {
+    console.log('Loaded a document', pdf);
+    if (pdf && pdf.numPages) {
+      setNumPages(pdf.numPages);
+    }
+    setDocument(pdf);
+  };
+
+  const onPageLoadSuccess = (page) => {
+    console.log('Loaded a page', page);
+  };
+
+  const onPageLoadError = (error) => {
+    console.log('error loading a page:', error);
+  };
+
+  const toggleDocument = () => {
+    setDisplay(!display);
+  };
+
+  const pageNumberDec = () => {
+    if (pageNumber > 1) {
+      setPageNumber(pageNumber - 1);
+    }
+  };
+
+  const pageNumberInc = () => {
+    if (pageNumber < numPages) {
+      setPageNumber(pageNumber + 1);
+    }
+  };
+
+  const togglePage = () => {
+    setDisplayPage(!displayPage);
+  };
+
+  return (
+    <div style={{ border: 'solid 1px' }}>
+      <button type="button" onClick={toggleDocument}>{ display ? 'remove Document' : 're-mount Document' }</button>
+      <button type="button" onClick={togglePage}>{ displayPage ? 'remove Page' : 're-mount Page' }</button>
+      <button type="button" onClick={pageNumberDec}>prev</button>
+      <button type="button" onClick={pageNumberInc}>next</button>
+      <input
+        id="unmountOnFileLoad"
+        type="checkbox"
+        checked={unountOnFile}
+        onChange={(event) => { setUnountOnFile(event.target.checked); }}
+      />
+      <label htmlFor="unmountOnFileLoad">
+        unmount Document on file load
+      </label>
+
+      <span style={{ marginLeft: '1em' }}>
+        Page:
+        { pageNumber }
+      </span>
+
+      <div style={{ border: 'solid 1px' }}>
+        { !display ? null : <Document file={file} onLoadSuccess={onDocumentLoadSuccess} /> }
+        { !displayPage || !document
+          ? null
+          : (
+            <Page
+              pdf={document}
+              pageNumber={pageNumber}
+              onLoadSuccess={onPageLoadSuccess}
+              onLoadError={onPageLoadError}
+            />
+          ) }
+      </div>
+    </div>
+  );
+};
+
+TestSeparateDocumentAndPage.propTypes = {
+  file: propTypeIsFile,
+};
