@@ -246,6 +246,13 @@ export class PageInternal extends PureComponent {
       return { page: null };
     });
 
+    // eslint-disable-next-line no-underscore-dangle
+    if (pdf && pdf._transport && pdf._transport.destroyed) {
+      this.setState({ page: false });
+      this.onLoadError('Attempted to load a page, but the document was destroyed');
+      return;
+    }
+
     const cancellable = makeCancellable(pdf.getPage(pageNumber));
     this.runningTask = cancellable;
 
