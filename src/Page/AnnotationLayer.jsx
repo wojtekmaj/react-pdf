@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import * as pdfjs from 'pdfjs-dist/es5/build/pdf';
+import * as pdfjs from 'pdfjs-dist/legacy/build/pdf';
 import makeCancellable from 'make-cancellable-promise';
 
 import DocumentContext from '../DocumentContext';
