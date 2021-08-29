@@ -104,6 +104,7 @@
     "@babel/plugin-transform-runtime": "^7.9.0",
     "@babel/preset-env": "^7.9.0",
     "@babel/preset-react": "^7.9.0",
+    "@types/react-pdf": "^5.0.5",
     "@wojtekmaj/enzyme-adapter-react-17": "^0.6.0",
     "babel-eslint": "^10.0.0",
     "enzyme": "^3.10.0",
