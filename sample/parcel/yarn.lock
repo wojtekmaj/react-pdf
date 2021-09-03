@@ -6834,8 +6834,8 @@ fsevents@^1.2.7:
   linkType: hard
 
 "tar@npm:^6.0.2":
-  version: 6.1.2
-  resolution: "tar@npm:6.1.2"
+  version: 6.1.10
+  resolution: "tar@npm:6.1.10"
   dependencies:
     chownr: ^2.0.0
     fs-minipass: ^2.0.0
@@ -6843,7 +6843,7 @@ fsevents@^1.2.7:
     minizlib: ^2.1.1
     mkdirp: ^1.0.3
     yallist: ^4.0.0
-  checksum: 13c9b26b22b26b321e842f024fd56831e26fd455cceface3827f2034d1027ad1e9c59b75a98e30a19171b1b5047526d517ec6bf38d2d7bb6bb8d496d7ff239af
+  checksum: 9e7ba4abc81a3095a5fc7a3e97a9f753103f5ce884c52431613f281954ec83d690e58f1ccad3cdd9eacdea901431f96f5f879dddc421f6b231994f6e7de07e1f
   languageName: node
   linkType: hard
 
