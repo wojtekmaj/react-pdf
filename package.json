@@ -94,7 +94,7 @@
     "make-event-props": "^1.1.0",
     "merge-class-names": "^1.1.1",
     "merge-refs": "^1.0.0",
-    "pdfjs-dist": "2.9.359",
+    "pdfjs-dist": "2.10.377",
     "prop-types": "^15.6.2"
   },
   "devDependencies": {

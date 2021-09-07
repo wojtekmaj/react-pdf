@@ -6704,12 +6704,12 @@ fsevents@^2.1.2:
   languageName: node
   linkType: hard
 
-"pdfjs-dist@npm:2.9.359":
-  version: 2.9.359
-  resolution: "pdfjs-dist@npm:2.9.359"
+"pdfjs-dist@npm:2.10.377":
+  version: 2.10.377
+  resolution: "pdfjs-dist@npm:2.10.377"
   peerDependencies:
     worker-loader: ^3.0.7
-  checksum: 4f11955df7949068619e51f52a71f5092e85fda4a56231718612ac802d10afa1587c070a8b4c11808669df2cc793b114a290b75f4b36663667a8d2f71b6ccd1a
+  checksum: 5a4c14777676e15aeca9a627cc1f368821071ae040154983edf21f1040cb89acd9b0168b43b64ac10d66f86094dcb48b33513b9810b6d422446c599fb172d5a4
   languageName: node
   linkType: hard
 
@@ -6972,7 +6972,7 @@ fsevents@^2.1.2:
     make-event-props: ^1.1.0
     merge-class-names: ^1.1.1
     merge-refs: ^1.0.0
-    pdfjs-dist: 2.9.359
+    pdfjs-dist: 2.10.377
     prop-types: ^15.6.2
     react: ^17.0.0
     react-dom: ^17.0.0
