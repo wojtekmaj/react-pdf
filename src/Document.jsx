@@ -89,7 +89,7 @@ export default class Document extends PureComponent {
     if (this.loadingTask) this.loadingTask.destroy();
 
     // If FileReader loading is in progress, let's abort it
-    if (this.loadFromFileTask) this.loadFromFileTask.abort();
+    if (this.loadFromFileTask) this.loadFromFileTask.cancel();
   }
 
   loadDocument = () => {
@@ -268,7 +268,7 @@ export default class Document extends PureComponent {
       if (isBlob(file) || isFile(file)) {
         // abort previous FileReader, if there is one
         if (this.loadFromFileTask) {
-          this.loadFromFileTask.abort();
+          this.loadFromFileTask.cancel();
         }
 
         this.loadFromFileTask = loadFromFile(file);

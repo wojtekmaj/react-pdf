@@ -165,7 +165,7 @@ export function loadFromFile(file) {
 
   return {
     promise,
-    abort: () => {
+    cancel: () => {
       reader.abort();
     },
   };
