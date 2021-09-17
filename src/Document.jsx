@@ -89,9 +89,7 @@ export default class Document extends PureComponent {
     if (this.loadingTask) this.loadingTask.destroy();
 
     // If FileReader loading is in progress, let's abort it
-    if (this.loadFromFileTask) {
-      this.loadFromFileTask.abort();
-    }
+    if (this.loadFromFileTask) this.loadFromFileTask.abort();
   }
 
   loadDocument = () => {

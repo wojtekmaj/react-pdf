@@ -249,7 +249,7 @@ export class PageInternal extends PureComponent {
     // eslint-disable-next-line no-underscore-dangle
     if (pdf && pdf._transport && pdf._transport.destroyed) {
       this.setState({ page: false });
-      this.onLoadError('Attempted to load a page, but the document was destroyed');
+      this.onLoadError(new Error('Attempted to load a page, but the document was destroyed'));
       return;
     }
 
