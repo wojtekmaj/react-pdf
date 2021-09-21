@@ -18,23 +18,6 @@
     "prepack": "yarn clean && yarn build",
     "test": "yarn lint && yarn jest"
   },
-  "jest": {
-    "setupFiles": [
-      "<rootDir>/jest.setup.js"
-    ],
-    "collectCoverageFrom": [
-      "**/src/**.{js,jsx}",
-      "!**/src/entry.js",
-      "!**/src/entry.*.js",
-      "!**/src/pdf.worker.entry.js"
-    ],
-    "moduleNameMapper": {
-      "\\.(css|less)$": "<rootDir>/__mocks__/styleMock.js"
-    },
-    "testPathIgnorePatterns": [
-      "utils.js"
-    ]
-  },
   "keywords": [
     "pdf",
     "pdf-viewer",
@@ -108,7 +91,7 @@
     "enzyme": "^3.10.0",
     "eslint": "~7.19.0",
     "eslint-config-wojtekmaj": "^0.5.0",
-    "jest": "^26.6.0",
+    "jest": "^27.0.0",
     "react": "^17.0.0",
     "react-dom": "^17.0.0",
     "rimraf": "^3.0.0",
