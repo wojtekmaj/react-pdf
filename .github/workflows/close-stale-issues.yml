@@ -1,0 +1,24 @@
+name: Close stale issues
+
+on:
+  schedule:
+    - cron: '0 0 * * 1' # Every Monday
+  workflow_dispatch:
+
+jobs:
+  close-issues:
+    name: Close stale issues
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Close stale issues
+        uses: actions/stale@v4
+        with:
+          days-before-issue-stale: 90
+          days-before-issue-close: 14
+          stale-issue-label: 'stale'
+          stale-issue-message: 'This issue is stale because it has been open 90 days with no activity. Remove stale label or comment or this issue will be closed in 14 days.'
+          close-issue-message: 'This issue was closed because it has been stalled for 14 days with no activity.'
+          exempt-issue-labels: 'fresh'
+          days-before-pr-stale: -1
+          days-before-pr-close: -1

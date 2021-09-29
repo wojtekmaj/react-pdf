@@ -1,6 +1,6 @@
 {
   "name": "react-pdf",
-  "version": "5.3.2",
+  "version": "5.4.0",
   "description": "Display PDFs in your React app as easily as if they were images.",
   "main": "dist/umd/entry.js",
   "module": "dist/esm/entry.js",
@@ -17,23 +17,6 @@
     "lint": "eslint sample/ src/ test/ --ext .jsx,.js",
     "prepack": "yarn clean && yarn build",
     "test": "yarn lint && yarn jest"
-  },
-  "jest": {
-    "setupFiles": [
-      "<rootDir>/jest.setup.js"
-    ],
-    "collectCoverageFrom": [
-      "**/src/**.{js,jsx}",
-      "!**/src/entry.js",
-      "!**/src/entry.*.js",
-      "!**/src/pdf.worker.entry.js"
-    ],
-    "moduleNameMapper": {
-      "\\.(css|less)$": "<rootDir>/__mocks__/styleMock.js"
-    },
-    "testPathIgnorePatterns": [
-      "utils.js"
-    ]
   },
   "keywords": [
     "pdf",
@@ -94,22 +77,21 @@
     "make-event-props": "^1.1.0",
     "merge-class-names": "^1.1.1",
     "merge-refs": "^1.0.0",
-    "pdfjs-dist": "2.6.347",
+    "pdfjs-dist": "2.9.359",
     "prop-types": "^15.6.2"
   },
   "devDependencies": {
-    "@babel/cli": "^7.8.0",
-    "@babel/core": "^7.9.0",
-    "@babel/plugin-proposal-class-properties": "^7.8.0",
-    "@babel/plugin-transform-runtime": "^7.9.0",
-    "@babel/preset-env": "^7.9.0",
-    "@babel/preset-react": "^7.9.0",
+    "@babel/cli": "^7.15.0",
+    "@babel/core": "^7.15.0",
+    "@babel/plugin-transform-runtime": "^7.15.0",
+    "@babel/preset-env": "^7.15.0",
+    "@babel/preset-react": "^7.14.0",
     "@wojtekmaj/enzyme-adapter-react-17": "^0.6.0",
     "babel-eslint": "^10.0.0",
     "enzyme": "^3.10.0",
     "eslint": "~7.19.0",
     "eslint-config-wojtekmaj": "^0.5.0",
-    "jest": "^26.6.0",
+    "jest": "^27.0.0",
     "react": "^17.0.0",
     "react-dom": "^17.0.0",
     "rimraf": "^3.0.0",

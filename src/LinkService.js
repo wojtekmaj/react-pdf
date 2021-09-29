@@ -15,7 +15,7 @@
 
 /* eslint-disable class-methods-use-this, no-empty-function */
 
-export default class SimpleLinkService {
+export default class LinkService {
   constructor() {
     this.externalLinkTarget = null;
     this.externalLinkRel = null;
@@ -50,31 +50,47 @@ export default class SimpleLinkService {
 
   set rotation(value) {}
 
-  async goToDestination(dest) {
-    const destRef = dest[0];
-    let pageNumber;
-
-    if (destRef instanceof Object) {
-      try {
-        const pageIndex = await this.pdfDocument.getPageIndex(destRef);
-        pageNumber = pageIndex + 1;
-      } catch (error) {
-        throw new Error(`"${destRef}" is not a valid destination reference.`);
+  goToDestination(dest) {
+    new Promise((resolve) => {
+      if (typeof dest === 'string') {
+        this.pdfDocument.getDestination(dest).then(resolve);
+      } else {
+        dest.then(resolve);
       }
-    } else if (typeof destRef === 'number') {
-      pageNumber = destRef + 1;
-    } else {
-      throw new Error(`"${destRef}" is not a valid destination reference.`);
-    }
+    })
+      .then((explicitDest) => {
+        if (!Array.isArray(explicitDest)) {
+          throw new Error(`"${explicitDest}" is not a valid destination array.`);
+        }
 
-    if (!pageNumber || pageNumber < 1 || pageNumber > this.pagesCount) {
-      throw new Error(`"${pageNumber}" is not a valid page number.`);
-    }
+        const destRef = explicitDest[0];
 
-    this.pdfViewer.scrollPageIntoView({
-      pageNumber,
-      destination: dest,
-    });
+        new Promise((resolve) => {
+          if (destRef instanceof Object) {
+            this.pdfDocument.getPageIndex(destRef)
+              .then((pageIndex) => {
+                resolve(pageIndex + 1);
+              })
+              .catch(() => {
+                throw new Error(`"${destRef}" is not a valid page reference.`);
+              });
+          } else if (typeof destRef === 'number') {
+            resolve(destRef + 1);
+          } else {
+            throw new Error(`"${destRef}" is not a valid destination reference.`);
+          }
+        })
+          .then((pageNumber) => {
+            if (!pageNumber || pageNumber < 1 || pageNumber > this.pagesCount) {
+              throw new Error(`"${pageNumber}" is not a valid page number.`);
+            }
+
+            this.pdfViewer.scrollPageIntoView({
+              pageNumber,
+              destination: dest,
+            });
+          });
+      });
   }
 
   navigateTo(dest) {

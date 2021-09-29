@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import * as pdfjs from 'pdfjs-dist';
+import * as pdfjs from 'pdfjs-dist/legacy/build/pdf';
 import makeCancellable from 'make-cancellable-promise';
 
 import DocumentContext from '../DocumentContext';
@@ -43,17 +43,19 @@ export class AnnotationLayerInternal extends PureComponent {
     cancelRunningTask(this.runningTask);
   }
 
-  loadAnnotations = async () => {
+  loadAnnotations = () => {
     const { page } = this.props;
 
-    try {
-      const cancellable = makeCancellable(page.getAnnotations());
-      this.runningTask = cancellable;
-      const annotations = await cancellable.promise;
-      this.setState({ annotations }, this.onLoadSuccess);
-    } catch (error) {
-      this.onLoadError(error);
-    }
+    const cancellable = makeCancellable(page.getAnnotations());
+    this.runningTask = cancellable;
+
+    cancellable.promise
+      .then((annotations) => {
+        this.setState({ annotations }, this.onLoadSuccess);
+      })
+      .catch((error) => {
+        this.onLoadError(error);
+      });
   }
 
   onLoadSuccess = () => {

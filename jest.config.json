@@ -1,0 +1,15 @@
+{
+  "collectCoverageFrom": [
+    "**/src/**.{js,jsx}",
+    "!**/src/entry.js",
+    "!**/src/entry.*.js",
+    "!**/src/pdf.worker.entry.js"
+  ],
+  "moduleNameMapper": {
+    "\\.(css|less)$": "<rootDir>/__mocks__/styleMock.js"
+  },
+  "setupFiles": [
+    "<rootDir>/jest.setup.js"
+  ],
+  "testEnvironment": "<rootDir>/jest.env.js"
+}

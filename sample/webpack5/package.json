@@ -1,7 +1,7 @@
 {
-  "name": "react-pdf-test-page",
+  "name": "react-pdf-sample-page-webpack5",
   "version": "4.0.0",
-  "description": "A test page for React-PDF.",
+  "description": "A sample page for React-PDF.",
   "private": true,
   "scripts": {
     "build": "NODE_ENV=production webpack",
@@ -13,27 +13,20 @@
   },
   "license": "MIT",
   "dependencies": {
-    "prop-types": "^15.6.2",
     "react": "^17.0.0",
     "react-dom": "^17.0.0",
-    "react-pdf": "portal:../"
+    "react-pdf": "latest"
   },
   "devDependencies": {
     "@babel/core": "^7.15.0",
-    "@babel/plugin-transform-runtime": "^7.15.0",
     "@babel/preset-env": "^7.15.0",
     "@babel/preset-react": "^7.14.0",
-    "@pmmmwh/react-refresh-webpack-plugin": "^0.5.0-0",
     "babel-loader": "^8.0.0",
     "copy-webpack-plugin": "^9.0.0",
     "css-loader": "^6.0.0",
-    "eslint": "~7.19.0",
-    "file-loader": "^6.0.0",
     "html-webpack-plugin": "^5.1.0",
     "less": "^4.0.0",
     "less-loader": "^10.0.0",
-    "mini-css-extract-plugin": "^2.0.0",
-    "react-refresh": "^0.10.0",
     "style-loader": "^3.0.0",
     "webpack": "^5.20.0",
     "webpack-cli": "^4.7.0",
