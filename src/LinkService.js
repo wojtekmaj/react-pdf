@@ -54,6 +54,8 @@ export default class LinkService {
     new Promise((resolve) => {
       if (typeof dest === 'string') {
         this.pdfDocument.getDestination(dest).then(resolve);
+      } else if (Array.isArray(dest)) {
+        resolve(dest);
       } else {
         dest.then(resolve);
       }
