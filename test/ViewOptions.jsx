@@ -2,12 +2,14 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 export default function ViewOptions({
+  canvasBackground,
   displayAll,
   pageHeight,
   pageScale,
   pageWidth,
   renderMode,
   rotate,
+  setCanvasBackground,
   setDisplayAll,
   setPageHeight,
   setPageScale,
@@ -15,8 +17,8 @@ export default function ViewOptions({
   setRenderMode,
   setRotate,
 }) {
-  function onRenderModeChange(event) {
-    setRenderMode(event.target.value);
+  function onCanvasBackgroundChange(event) {
+    setCanvasBackground(event.target.value);
   }
 
   function onDisplayAllChange(event) {
@@ -62,6 +64,10 @@ export default function ViewOptions({
     setPageWidth(parseInt(width, 10));
   }
 
+  function onRenderModeChange(event) {
+    setRenderMode(event.target.value);
+  }
+
   function changeRotation(by) {
     setRotate((prevRotate) => (prevRotate + by + 360) % 360);
   }
@@ -100,6 +106,16 @@ export default function ViewOptions({
       <legend htmlFor="viewoptions">
         View options
       </legend>
+
+      <label htmlFor="canvasBackground">
+        Canvas background:
+      </label>
+      <input
+        defaultValue={canvasBackground || '#ffffff'}
+        id="canvasBackground"
+        onChange={onCanvasBackgroundChange}
+        type="color"
+      />
 
       <form onSubmit={onPageWidthChange}>
         <label htmlFor="pageWidth">
@@ -280,12 +296,14 @@ export default function ViewOptions({
 }
 
 ViewOptions.propTypes = {
+  canvasBackground: PropTypes.string,
   displayAll: PropTypes.bool,
   pageHeight: PropTypes.number,
   pageScale: PropTypes.number,
   pageWidth: PropTypes.number,
   renderMode: PropTypes.oneOf(['canvas', 'none', 'svg']),
   rotate: PropTypes.number,
+  setCanvasBackground: PropTypes.func.isRequired,
   setDisplayAll: PropTypes.func.isRequired,
   setPageHeight: PropTypes.func.isRequired,
   setPageScale: PropTypes.func.isRequired,

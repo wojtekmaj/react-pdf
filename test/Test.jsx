@@ -53,6 +53,7 @@ export const readAsDataURL = (file) => new Promise((resolve, reject) => {
 /* eslint-disable no-console */
 
 export default function Test() {
+  const [canvasBackground, setCanvasBackground] = useState(null);
   const [displayAll, setDisplayAll] = useState(false);
   const [externalLinkTarget, setExternalLinkTarget] = useState(null);
   const [file, setFile] = useState(null);
@@ -171,6 +172,7 @@ export default function Test() {
 
   function getPageProps() {
     return {
+      canvasBackground,
       className: 'custom-classname-page',
       height: pageHeight,
       onClick: (event, page) => console.log('Clicked a page', { event, page }),
@@ -235,12 +237,14 @@ export default function Test() {
             setRenderTextLayer={setRenderTextLayer}
           />
           <ViewOptions
+            canvasBackground={canvasBackground}
             displayAll={displayAll}
             pageHeight={pageHeight}
             pageScale={pageScale}
             pageWidth={pageWidth}
             renderMode={renderMode}
             rotate={rotate}
+            setCanvasBackground={setCanvasBackground}
             setDisplayAll={setDisplayAll}
             setPageHeight={setPageHeight}
             setPageScale={setPageScale}
