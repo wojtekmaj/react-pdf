@@ -254,6 +254,7 @@ Displays a page. Should be placed inside `<Document />`. Alternatively, it can h
 
 |Prop name|Description|Default value|Example values|
 |----|----|----|----|
+|canvasBackground|Canvas background color. Any valid `canvas.fillStyle` can be used. If you set `renderMode` to `"svg"` this prop will be ignored.|n/a|`"transparent"`|
 |canvasRef|A prop that behaves like [ref](https://reactjs.org/docs/refs-and-the-dom.html), but it's passed to `<canvas>` rendered by `<PageCanvas>` component. If you set `renderMode` to `"svg"` this prop will be ignored.|n/a|<ul><li>Function:<br />`(ref) => { this.myPage = ref; }`</li><li>Ref created using `React.createRef`:<br />`this.ref = React.createRef();`<br />…<br />`inputRef={this.ref}`</li><li>Ref created using `React.useRef`:<br />`const ref = React.useRef();`<br />…<br />`inputRef={ref}`</li></ul>|
 |className|Class name(s) that will be added to rendered element along with the default `react-pdf__Page`.|n/a|<ul><li>String:<br />`"custom-class-name-1 custom-class-name-2"`</li><li>Array of strings:<br />`["custom-class-name-1", "custom-class-name-2"]`</li></ul>|
 |customTextRenderer|A function that customizes how a text layer is rendered. Passes itext item and index for item.|n/a|`({ str, itemIndex }) => { return (<mark>{str}</mark>) }`|

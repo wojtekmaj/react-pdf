@@ -80,6 +80,7 @@ export class PageInternal extends PureComponent {
     }
 
     const {
+      canvasBackground,
       customTextRenderer,
       onGetAnnotationsError,
       onGetAnnotationsSuccess,
@@ -93,6 +94,7 @@ export class PageInternal extends PureComponent {
     } = this.props;
 
     return {
+      canvasBackground,
       customTextRenderer,
       onGetAnnotationsError,
       onGetAnnotationsSuccess,
@@ -398,6 +400,7 @@ const isFunctionOrNode = PropTypes.oneOfType([
 
 PageInternal.propTypes = {
   ...eventProps,
+  canvasBackground: PropTypes.string,
   children: PropTypes.node,
   className: isClassName,
   customTextRenderer: PropTypes.func,
