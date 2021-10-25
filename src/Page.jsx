@@ -80,6 +80,7 @@ export class PageInternal extends PureComponent {
     }
 
     const {
+      canvasBackground,
       customTextRenderer,
       onGetAnnotationsError,
       onGetAnnotationsSuccess,
@@ -89,11 +90,11 @@ export class PageInternal extends PureComponent {
       onRenderAnnotationLayerSuccess,
       onRenderError,
       onRenderSuccess,
-      canvasBackground,
       renderInteractiveForms,
     } = this.props;
 
     return {
+      canvasBackground,
       customTextRenderer,
       onGetAnnotationsError,
       onGetAnnotationsSuccess,
@@ -104,7 +105,6 @@ export class PageInternal extends PureComponent {
       onRenderError,
       onRenderSuccess,
       page,
-      canvasBackground,
       renderInteractiveForms,
       rotate: this.rotate,
       scale: this.scale,
@@ -387,7 +387,6 @@ PageInternal.defaultProps = {
   loading: 'Loading page…',
   noData: 'No page specified.',
   renderAnnotationLayer: true,
-  canvasBackground: undefined,
   renderInteractiveForms: false,
   renderMode: 'canvas',
   renderTextLayer: true,
