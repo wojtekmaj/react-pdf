@@ -5,6 +5,7 @@
   "main": "dist/umd/entry.js",
   "module": "dist/esm/entry.js",
   "source": "src/entry.js",
+  "type": "module",
   "scripts": {
     "build": "yarn build-js-all && yarn copy-styles",
     "build-js-all": "yarn build-js-esm && yarn build-js-umd",
