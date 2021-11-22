@@ -1,0 +1,38 @@
+name: 🚀 Feature request
+description: I have a great idea for this project
+labels:
+  - enhancement
+body:
+  - type: checkboxes
+    attributes:
+      label: Before you start - checklist
+      options:
+        - label: I understand that React-PDF does not aim to be a fully-fledged PDF viewer and is only a tool to make one
+          required: true
+        - label: I have checked if this feature request is not already reported
+          required: true
+  - type: textarea
+    attributes:
+      label: Description
+      description: |
+        Describe what the problem is.
+
+        Example: _I'd like to add a feature that […]_
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Proposed solution
+      description: |
+        Describe the solution you'd like.
+
+        Example:
+          - Add a `foo` flag that, when toggled, enables the feature.
+  - type: textarea
+    attributes:
+      label: Alternatives
+      description: Describe alternative solutions or features you've considered, if any.
+  - type: textarea
+    attributes:
+      label: Additional information
+      description: If applicable, add screenshots (preferably with browser console open) and files you have an issue with to help explain your problem.
