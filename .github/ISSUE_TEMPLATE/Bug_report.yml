@@ -63,4 +63,3 @@ body:
           - **React-PDF version**:
           - **React version**:
           - **Webpack version (if applicable)**:
-      render: markdown
