@@ -194,6 +194,27 @@ new CopyWebpackPlugin({
 
 If you use Parcel, Browserify or other bundling tools, you will have to make sure on your own that cMaps are copied to your project's output folder.
 
+For example, you could use a custom script like:
+
+```js
+import path from 'path';
+import fs from 'fs';
+
+const cMapsDir = path.join(path.dirname(require.resolve('pdfjs-dist/package.json')), 'cmaps');
+
+function copyDir(from, to) {
+  const files = fs.readdirSync(from);
+  fs.mkdirSync(to);
+  files.forEach((file) => {
+    const fromFile = path.join(from, file);
+    const toFile = path.join(to, file);
+    fs.copyFileSync(fromFile, toFile);
+  });
+}
+
+copyDir(cMapsDir, 'dist/cmaps/');
+```
+
 #### Setting up React-PDF
 
 Now that you have cMaps in your build, pass required options to Document component by using `options` prop, like so:
