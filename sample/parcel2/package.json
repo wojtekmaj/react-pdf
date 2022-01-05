@@ -1,0 +1,24 @@
+{
+  "name": "react-pdf-sample-page-parcel2",
+  "version": "4.0.0",
+  "description": "A sample page for React-PDF.",
+  "private": true,
+  "scripts": {
+    "build": "parcel build index.html --public-url ./",
+    "start": "parcel index.html"
+  },
+  "author": {
+    "name": "Wojciech Maj",
+    "email": "kontakt@wojtekmaj.pl"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "react": "^17.0.0",
+    "react-dom": "^17.0.0",
+    "react-pdf": "latest"
+  },
+  "devDependencies": {
+    "@parcel/transformer-less": "^2.0.1",
+    "parcel": "^2.0.0"
+  }
+}
