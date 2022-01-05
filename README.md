@@ -180,12 +180,14 @@ import CopyWebpackPlugin from 'copy-webpack-plugin';
 and in `plugins` section of your config, add the following:
 
 ```js
-new CopyWebpackPlugin([
-  {
-    from: path.join(path.dirname(require.resolve('pdfjs-dist/package.json')), 'cmaps'),
-    to: 'cmaps/'
-  },
-]),
+new CopyWebpackPlugin({
+  patterns: [
+    {
+      from: path.join(path.dirname(require.resolve('pdfjs-dist/package.json')), 'cmaps'),
+      to: 'cmaps/'
+    },
+  ],
+}),
 ```
 
 ##### Parcel, Browserify and others
