@@ -173,6 +173,7 @@ npm install copy-webpack-plugin --save-dev
 Now, in your Webpack config, import the plugin:
 
 ```js
+import path from 'path';
 import CopyWebpackPlugin from 'copy-webpack-plugin';
 ```
 
@@ -181,7 +182,7 @@ and in `plugins` section of your config, add the following:
 ```js
 new CopyWebpackPlugin([
   {
-    from: 'node_modules/pdfjs-dist/cmaps/',
+    from: path.join(path.dirname(require.resolve('pdfjs-dist/package.json')), 'cmaps'),
     to: 'cmaps/'
   },
 ]),

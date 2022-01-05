@@ -8,6 +8,8 @@ const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin'
 const isProduction = process.env.NODE_ENV === 'production';
 const isDevelopment = !isProduction;
 
+const cMapsDir = path.join(path.dirname(require.resolve('pdfjs-dist/package.json')), 'cmaps');
+
 module.exports = {
   mode: isProduction ? 'production' : 'development',
   bail: isProduction,
@@ -67,7 +69,7 @@ module.exports = {
     new CopyWebpackPlugin({
       patterns: [
         'test.pdf',
-        { from: '../node_modules/pdfjs-dist/cmaps/', to: 'cmaps/' },
+        { from: cMapsDir, to: 'cmaps/' },
       ],
     }),
     new HtmlWebpackPlugin({

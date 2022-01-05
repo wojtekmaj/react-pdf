@@ -6,6 +6,8 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 const isProduction = process.env.NODE_ENV === 'production';
 
+const cMapsDir = path.join(path.dirname(require.resolve('pdfjs-dist/package.json')), 'cmaps');
+
 module.exports = {
   mode: isProduction ? 'production' : 'development',
   bail: isProduction,
@@ -56,7 +58,7 @@ module.exports = {
     new CopyWebpackPlugin({
       patterns: [
         { from: './sample.pdf' },
-        { from: 'node_modules/pdfjs-dist/cmaps/', to: 'cmaps/' },
+        { from: cMapsDir, to: 'cmaps/' },
       ],
     }),
   ],
