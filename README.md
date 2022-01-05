@@ -93,11 +93,7 @@ It is crucial for performance to use PDF.js worker whenever possible. This ensur
 Instead of directly importing modules you need from `'react-pdf'`, import them like so:
 
 ```js
-// using ES6 modules
 import { Document, Page } from 'react-pdf/dist/esm/entry.webpack';
-
-// using CommonJS modules
-import { Document, Page } from 'react-pdf/dist/umd/entry.webpack';
 ```
 
 #### Parcel 1
@@ -105,11 +101,7 @@ import { Document, Page } from 'react-pdf/dist/umd/entry.webpack';
 Instead of directly importing modules you need from `'react-pdf'`, import them like so:
 
 ```js
-// using ES6 modules
 import { Document, Page } from 'react-pdf/dist/esm/entry.parcel';
-
-// using CommonJS modules
-import { Document, Page } from 'react-pdf/dist/umd/entry.parcel';
 ```
 
 #### Parcel 2
@@ -162,11 +154,7 @@ pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/$
 If you want to use annotations (e.g. links) in PDFs rendered by React-PDF, then you would need to include stylesheet necessary for annotations to be correctly displayed like so:
 
 ```js
-// using ES6 modules
 import 'react-pdf/dist/esm/Page/AnnotationLayer.css';
-
-// using CommonJS modules
-import 'react-pdf/dist/umd/Page/AnnotationLayer.css';
 ```
 
 ### Support for non-latin characters
