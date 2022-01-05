@@ -100,7 +100,7 @@ import { Document, Page } from 'react-pdf/dist/esm/entry.webpack';
 import { Document, Page } from 'react-pdf/dist/umd/entry.webpack';
 ```
 
-#### Parcel
+#### Parcel 1
 
 Instead of directly importing modules you need from `'react-pdf'`, import them like so:
 
@@ -110,6 +110,16 @@ import { Document, Page } from 'react-pdf/dist/esm/entry.parcel';
 
 // using CommonJS modules
 import { Document, Page } from 'react-pdf/dist/umd/entry.parcel';
+```
+
+#### Parcel 2
+
+Configure React-PDF by providing worker URL like so:
+
+```js
+import { pdfjs } from 'react-pdf';
+
+pdfjs.GlobalWorkerOptions.workerSrc = new URL('npm:react-pdf/dist/esm/pdf.worker.entry.js', import.meta.url);
 ```
 
 #### Create React App
