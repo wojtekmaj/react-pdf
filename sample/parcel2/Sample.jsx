@@ -1,12 +1,10 @@
 import React, { useState } from 'react';
-import { Document, Page, pdfjs } from 'react-pdf';
+import { Document, Page } from 'react-pdf/dist/esm/entry.parcel2';
 import 'react-pdf/dist/esm/Page/AnnotationLayer.css';
 
 import './Sample.less';
 
 const pdfFile = new URL('./sample.pdf', import.meta.url).toString();
-
-pdfjs.GlobalWorkerOptions.workerSrc = new URL('npm:react-pdf/dist/esm/pdf.worker.entry.js', import.meta.url);
 
 const options = {
   cMapUrl: 'cmaps/',
