@@ -1,15 +1,14 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import makeCancellable from 'make-cancellable-promise';
+import invariant from 'tiny-invariant';
+import warning from 'tiny-warning';
 
 import PageContext from '../PageContext';
 
 import TextLayerItem from './TextLayerItem';
 
-import {
-  cancelRunningTask,
-  errorOnDev,
-} from '../shared/utils';
+import { cancelRunningTask } from '../shared/utils';
 
 import { isPage, isRotate } from '../shared/propTypes';
 
@@ -21,9 +20,7 @@ export class TextLayerInternal extends PureComponent {
   componentDidMount() {
     const { page } = this.props;
 
-    if (!page) {
-      throw new Error('Attempted to load page text content, but no page was specified.');
-    }
+    invariant(page, 'Attempted to load page text content, but no page was specified.');
 
     this.loadTextItems();
   }
@@ -65,7 +62,7 @@ export class TextLayerInternal extends PureComponent {
   onLoadError = (error) => {
     this.setState({ textItems: false });
 
-    errorOnDev(error);
+    warning(error);
 
     const { onGetTextError } = this.props;
 

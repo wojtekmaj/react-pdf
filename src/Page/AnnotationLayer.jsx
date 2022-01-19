@@ -1,15 +1,14 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import * as pdfjs from 'pdfjs-dist/legacy/build/pdf';
 import makeCancellable from 'make-cancellable-promise';
+import invariant from 'tiny-invariant';
+import warning from 'tiny-warning';
+import * as pdfjs from 'pdfjs-dist/legacy/build/pdf';
 
 import DocumentContext from '../DocumentContext';
 import PageContext from '../PageContext';
 
-import {
-  cancelRunningTask,
-  errorOnDev,
-} from '../shared/utils';
+import { cancelRunningTask } from '../shared/utils';
 
 import { isLinkService, isPage, isRotate } from '../shared/propTypes';
 
@@ -21,9 +20,7 @@ export class AnnotationLayerInternal extends PureComponent {
   componentDidMount() {
     const { page } = this.props;
 
-    if (!page) {
-      throw new Error('Attempted to load page annotations, but no page was specified.');
-    }
+    invariant(page, 'Attempted to load page annotations, but no page was specified.');
 
     this.loadAnnotations();
   }
@@ -68,7 +65,7 @@ export class AnnotationLayerInternal extends PureComponent {
   onLoadError = (error) => {
     this.setState({ annotations: false });
 
-    errorOnDev(error);
+    warning(error);
 
     const { onGetAnnotationsError } = this.props;
 
@@ -85,7 +82,7 @@ export class AnnotationLayerInternal extends PureComponent {
    * Called when a annotations fails to render.
    */
   onRenderError = (error) => {
-    errorOnDev(error);
+    warning(error);
 
     const { onRenderAnnotationLayerError } = this.props;
 

@@ -4,6 +4,8 @@ import makeCancellable from 'make-cancellable-promise';
 import makeEventProps from 'make-event-props';
 import mergeClassNames from 'merge-class-names';
 import mergeRefs from 'merge-refs';
+import invariant from 'tiny-invariant';
+import warning from 'tiny-warning';
 
 import DocumentContext from './DocumentContext';
 import PageContext from './PageContext';
@@ -16,7 +18,6 @@ import AnnotationLayer from './Page/AnnotationLayer';
 
 import {
   cancelRunningTask,
-  errorOnDev,
   isProvided,
   makePageCallback,
 } from './shared/utils';
@@ -42,9 +43,7 @@ export class PageInternal extends PureComponent {
   componentDidMount() {
     const { pdf } = this.props;
 
-    if (!pdf) {
-      throw new Error('Attempted to load a page, but no document was specified.');
-    }
+    invariant(pdf, 'Attempted to load a page, but no document was specified.');
 
     this.loadPage();
   }
@@ -127,7 +126,9 @@ export class PageInternal extends PureComponent {
    * Called when a page failed to load
    */
   onLoadError = (error) => {
-    errorOnDev(error);
+    this.setState({ page: false });
+
+    warning(error);
 
     const { onLoadError } = this.props;
 
@@ -256,7 +257,6 @@ export class PageInternal extends PureComponent {
         this.setState({ page }, this.onLoadSuccess);
       })
       .catch((error) => {
-        this.setState({ page: false });
         this.onLoadError(error);
       });
   }

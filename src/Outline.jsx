@@ -3,16 +3,15 @@ import PropTypes from 'prop-types';
 import makeCancellable from 'make-cancellable-promise';
 import makeEventProps from 'make-event-props';
 import mergeClassNames from 'merge-class-names';
+import invariant from 'tiny-invariant';
+import warning from 'tiny-warning';
 
 import DocumentContext from './DocumentContext';
 import OutlineContext from './OutlineContext';
 
 import OutlineItem from './OutlineItem';
 
-import {
-  cancelRunningTask,
-  errorOnDev,
-} from './shared/utils';
+import { cancelRunningTask } from './shared/utils';
 
 import {
   eventProps,
@@ -29,9 +28,7 @@ export class OutlineInternal extends PureComponent {
   componentDidMount() {
     const { pdf } = this.props;
 
-    if (!pdf) {
-      throw new Error('Attempted to load an outline, but no document was specified.');
-    }
+    invariant(pdf, 'Attempted to load an outline, but no document was specified.');
 
     this.loadOutline();
   }
@@ -97,7 +94,7 @@ export class OutlineInternal extends PureComponent {
   onLoadError = (error) => {
     this.setState({ outline: false });
 
-    errorOnDev(error);
+    warning(error);
 
     const { onLoadError } = this.props;
 
