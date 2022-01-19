@@ -44,18 +44,18 @@ export default class Document extends PureComponent {
   }
 
   viewer = {
-    scrollPageIntoView: ({ pageNumber }) => {
+    scrollPageIntoView: ({ dest, pageIndex, pageNumber }) => {
       // Handling jumping to internal links target
       const { onItemClick } = this.props;
 
       // First, check if custom handling of onItemClick was provided
       if (onItemClick) {
-        onItemClick({ pageNumber });
+        onItemClick({ dest, pageIndex, pageNumber });
         return;
       }
 
       // If not, try to look for target page within the <Document>.
-      const page = this.pages[pageNumber - 1];
+      const page = this.pages[pageIndex];
 
       if (page) {
         // Scroll to the page automatically

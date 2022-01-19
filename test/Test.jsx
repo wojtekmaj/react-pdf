@@ -88,10 +88,11 @@ export default function Test() {
 
   const onPageRenderSuccess = useCallback((page) => console.log('Rendered a page', page), []);
 
-  const onItemClick = useCallback(
-    ({ pageNumber: nextPageNumber }) => setPageNumber(nextPageNumber),
-    [],
-  );
+  const onItemClick = useCallback((args) => {
+    console.log('Clicked an item', args);
+    const { pageNumber: nextPageNumber } = args;
+    setPageNumber(nextPageNumber);
+  }, []);
 
   useEffect(() => {
     (async () => {

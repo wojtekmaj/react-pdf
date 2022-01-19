@@ -462,13 +462,15 @@ describe('Document', () => {
 
       await onLoadSuccessPromise;
 
+      const dest = [];
+      const pageIndex = 5;
       const pageNumber = 6;
 
       // Simulate clicking on an outline item
-      component.instance().viewer.scrollPageIntoView({ pageNumber });
+      component.instance().viewer.scrollPageIntoView({ dest, pageIndex, pageNumber });
 
       expect(onItemClick).toHaveBeenCalledTimes(1);
-      expect(onItemClick).toHaveBeenCalledWith({ pageNumber });
+      expect(onItemClick).toHaveBeenCalledWith({ dest, pageIndex, pageNumber });
     });
 
     it('attempts to find a page and scroll it into view if onItemClick is not given', async () => {
@@ -486,13 +488,16 @@ describe('Document', () => {
       await onLoadSuccessPromise;
 
       const scrollIntoView = jest.fn();
+
+      const dest = [];
+      const pageIndex = 5;
       const pageNumber = 6;
 
       // Register fake page in Document viewer
-      component.instance().pages[pageNumber - 1] = { scrollIntoView };
+      component.instance().pages[pageIndex] = { scrollIntoView };
 
       // Simulate clicking on an outline item
-      component.instance().viewer.scrollPageIntoView({ pageNumber });
+      component.instance().viewer.scrollPageIntoView({ dest, pageIndex, pageNumber });
 
       expect(scrollIntoView).toHaveBeenCalledTimes(1);
     });
