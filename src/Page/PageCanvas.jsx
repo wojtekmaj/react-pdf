@@ -1,11 +1,11 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import mergeRefs from 'merge-refs';
+import warning from 'tiny-warning';
 
 import PageContext from '../PageContext';
 
 import {
-  errorOnDev,
   getPixelRatio,
   isCancelException,
   makePageCallback,
@@ -70,7 +70,7 @@ export class PageCanvasInternal extends PureComponent {
       return;
     }
 
-    errorOnDev(error);
+    warning(error);
 
     const { onRenderError } = this.props;
 

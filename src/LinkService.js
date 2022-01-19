@@ -12,6 +12,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import invariant from 'tiny-invariant';
 
 /* eslint-disable class-methods-use-this, no-empty-function */
 
@@ -61,9 +62,7 @@ export default class LinkService {
       }
     })
       .then((explicitDest) => {
-        if (!Array.isArray(explicitDest)) {
-          throw new Error(`"${explicitDest}" is not a valid destination array.`);
-        }
+        invariant(Array.isArray(explicitDest), `"${explicitDest}" is not a valid destination array.`);
 
         const destRef = explicitDest[0];
 
@@ -74,20 +73,21 @@ export default class LinkService {
                 resolve(pageIndex);
               })
               .catch(() => {
-                throw new Error(`"${destRef}" is not a valid page reference.`);
+                invariant(false, `"${destRef}" is not a valid page reference.`);
               });
           } else if (typeof destRef === 'number') {
             resolve(destRef);
           } else {
-            throw new Error(`"${destRef}" is not a valid destination reference.`);
+            invariant(false, `"${destRef}" is not a valid destination reference.`);
           }
         })
           .then((pageIndex) => {
             const pageNumber = pageIndex + 1;
 
-            if (!pageNumber || pageNumber < 1 || pageNumber > this.pagesCount) {
-              throw new Error(`"${pageNumber}" is not a valid page number.`);
-            }
+            invariant(
+              pageNumber >= 1 && pageNumber <= this.pagesCount,
+              `"${pageNumber}" is not a valid page number.`,
+            );
 
             this.pdfViewer.scrollPageIntoView({
               dest,

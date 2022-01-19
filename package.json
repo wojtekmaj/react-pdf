@@ -77,7 +77,9 @@
     "merge-class-names": "^1.1.1",
     "merge-refs": "^1.0.0",
     "pdfjs-dist": "2.10.377",
-    "prop-types": "^15.6.2"
+    "prop-types": "^15.6.2",
+    "tiny-invariant": "^1.0.0",
+    "tiny-warning": "^1.0.0"
   },
   "devDependencies": {
     "@babel/cli": "^7.15.0",

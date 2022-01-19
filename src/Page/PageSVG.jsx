@@ -1,11 +1,11 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
+import warning from 'tiny-warning';
 import * as pdfjs from 'pdfjs-dist/legacy/build/pdf';
 
 import PageContext from '../PageContext';
 
 import {
-  errorOnDev,
   isCancelException,
   makePageCallback,
 } from '../shared/utils';
@@ -40,7 +40,7 @@ export class PageSVGInternal extends PureComponent {
       return;
     }
 
-    errorOnDev(error);
+    warning(error);
 
     const { onRenderError } = this.props;
 

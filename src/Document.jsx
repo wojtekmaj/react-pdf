@@ -6,6 +6,8 @@ import PropTypes from 'prop-types';
 import makeEventProps from 'make-event-props';
 import makeCancellable from 'make-cancellable-promise';
 import mergeClassNames from 'merge-class-names';
+import invariant from 'tiny-invariant';
+import warning from 'tiny-warning';
 import * as pdfjs from 'pdfjs-dist/legacy/build/pdf';
 
 import DocumentContext from './DocumentContext';
@@ -19,14 +21,12 @@ import {
   cancelRunningTask,
   dataURItoByteString,
   displayCORSWarning,
-  errorOnDev,
   isArrayBuffer,
   isBlob,
   isBrowser,
   isDataURI,
   isFile,
   loadFromFile,
-  warnOnDev,
 } from './shared/utils';
 
 import {
@@ -63,7 +63,10 @@ export default class Document extends PureComponent {
         return;
       }
 
-      warnOnDev(`Warning: An internal link leading to page ${pageNumber} was clicked, but neither <Document> was provided with onItemClick nor it was able to find the page within itself. Either provide onItemClick to <Document> and handle navigating by yourself or ensure that all pages are rendered within <Document>.`);
+      warning(
+        false,
+        `An internal link leading to page ${pageNumber} was clicked, but neither <Document> was provided with onItemClick nor it was able to find the page within itself. Either provide onItemClick to <Document> and handle navigating by yourself or ensure that all pages are rendered within <Document>.`,
+      );
     },
   };
 
@@ -192,7 +195,7 @@ export default class Document extends PureComponent {
    * Called when a document source failed to be resolved correctly
    */
   onSourceError = (error) => {
-    errorOnDev(error);
+    warning(error);
 
     const { onSourceError } = this.props;
 
@@ -218,7 +221,7 @@ export default class Document extends PureComponent {
   onLoadError = (error) => {
     this.setState({ pdf: false });
 
-    errorOnDev(error);
+    warning(error);
 
     const { onLoadError } = this.props;
 
@@ -271,13 +274,15 @@ export default class Document extends PureComponent {
     }
 
     // At this point, file must be an object
-    if (typeof file !== 'object') {
-      throw new Error('Invalid parameter in file, need either Uint8Array, string or a parameter object');
-    }
+    invariant(
+      typeof file === 'object',
+      'Invalid parameter in file, need either Uint8Array, string or a parameter object',
+    );
 
-    if (!file.url && !file.data && !file.range) {
-      throw new Error('Invalid parameter object: need either .data, .range or .url');
-    }
+    invariant(
+      file.url || file.data || file.range,
+      'Invalid parameter object: need either .data, .range or .url',
+    );
 
     // File .url is a string
     if (typeof file.url === 'string') {
