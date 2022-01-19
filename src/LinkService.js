@@ -71,23 +71,27 @@ export default class LinkService {
           if (destRef instanceof Object) {
             this.pdfDocument.getPageIndex(destRef)
               .then((pageIndex) => {
-                resolve(pageIndex + 1);
+                resolve(pageIndex);
               })
               .catch(() => {
                 throw new Error(`"${destRef}" is not a valid page reference.`);
               });
           } else if (typeof destRef === 'number') {
-            resolve(destRef + 1);
+            resolve(destRef);
           } else {
             throw new Error(`"${destRef}" is not a valid destination reference.`);
           }
         })
-          .then((pageNumber) => {
+          .then((pageIndex) => {
+            const pageNumber = pageIndex + 1;
+
             if (!pageNumber || pageNumber < 1 || pageNumber > this.pagesCount) {
               throw new Error(`"${pageNumber}" is not a valid page number.`);
             }
 
             this.pdfViewer.scrollPageIntoView({
+              dest,
+              pageIndex,
               pageNumber,
             });
           });

@@ -79,9 +79,10 @@ export class OutlineItemInternal extends PureComponent {
       return false;
     }
 
-    return Promise.all([this.getPageIndex(), this.getPageNumber()])
-      .then(([pageIndex, pageNumber]) => {
+    return Promise.all([this.getDestination(), this.getPageIndex(), this.getPageNumber()])
+      .then(([dest, pageIndex, pageNumber]) => {
         onClick({
+          dest,
           pageIndex,
           pageNumber,
         });
