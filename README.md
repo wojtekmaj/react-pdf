@@ -84,51 +84,42 @@ function MyApp() {
 
 Check the [sample directory](https://github.com/wojtekmaj/react-pdf/tree/main/sample) in this repository for a full working example. For more examples and more advanced use cases, check [Recipes](https://github.com/wojtekmaj/react-pdf/wiki/Recipes) in [React-PDF Wiki](https://github.com/wojtekmaj/react-pdf/wiki/).
 
-### Enable PDF.js worker
+### Configure PDF.js worker
 
-It is crucial for performance to use PDF.js worker whenever possible. This ensures that PDF files will be rendered in a separate thread without affecting page performance. To make things a little easier, we've prepared several entry points you can use.
+For React-PDF to work, PDF.js worker needs to be provided.
 
-#### Webpack ≤4
+To make it easier, special entry files were prepared for most popular bundlers. You can find them in the table below.
 
-Instead of directly importing modules you need from `'react-pdf'`, import them like so:
+For example, if you want to use React-PDF with Webpack 5, instead of writing:
+
+```js
+import { Document, Page } from 'react-pdf';
+```
+
+write:
 
 ```js
 import { Document, Page } from 'react-pdf/dist/esm/entry.webpack';
 ```
 
-#### Webpack 5
-
-Instead of directly importing modules you need from `'react-pdf'`, import them like so:
-
-```js
-import { Document, Page } from 'react-pdf/dist/esm/entry.webpack5';
-```
-
-#### Parcel 1
-
-Instead of directly importing modules you need from `'react-pdf'`, import them like so:
-
-```js
-import { Document, Page } from 'react-pdf/dist/esm/entry.parcel';
-```
-
-#### Parcel 2
-
-Instead of directly importing modules you need from `'react-pdf'`, import them like so:
-
-```js
-import { Document, Page } from 'react-pdf/dist/esm/entry.parcel2';
-```
+| Bundler   | Entry file |
+| --------- | ---------- |
+| Parcel 1  | `react-pdf/dist/esm/entry.parcel`
+| Parcel 2  | `react-pdf/dist/esm/entry.parcel2`
+| Webpack 4 | `react-pdf/dist/esm/entry.webpack`
+| Webpack 5 | `react-pdf/dist/esm/entry.webpack5`
 
 #### Create React App
 
-Create React App uses Webpack under the hood, so you can follow [Webpack ≤4 instructions](#webpack--4).
+Create React App 4 (`react-scripts@4.0.0`) uses Webpack 4 under the hood, so you can use the entry file built for Webpack 4.
 
-[Standard instructions](#standard-browserify-and-others) will also work. In Create React App, you can copy `pdf.worker.js` file from `pdfjs-dist/build` to `public` directory in order for it to be copied to your project's output folder at build time.
+Create React App 5 (`react-scripts@5.0.0`) uses Webpack 5 under the hood, so the aim is to use the entry file built for Webpack 5. However, the way Webpack is configured in CRA 5 causes it to crash at build time on most machines with _JavaScript heap out of memory_ error.
 
-#### Standard (Browserify and others)
+[Standard instructions](#standard-browserify-esbuild-and-others) will also work with Create React App. Please note that in CRA, you can copy `pdf.worker.js` file from `pdfjs-dist/legacy/build` to `public` directory in order for it to be copied to your project's output folder at build time.
 
-If you use Browserify or other bundling tools, you will have to make sure on your own that `pdf.worker.js` file from `pdfjs-dist/build` is copied to your project's output folder.
+#### Standard (Browserify, esbuild and others)
+
+If you use Browserify, esbuild, or other bundlers, you will have to make sure on your own that `pdf.worker.js` file from `pdfjs-dist/legacy/build` is copied to your project's output folder.
 
 For example, you could use a custom script like:
 
@@ -136,7 +127,8 @@ For example, you could use a custom script like:
 import path from 'path';
 import fs from 'fs';
 
-const pdfWorkerPath = path.join(path.dirname(require.resolve('pdfjs-dist/package.json')), 'build', 'pdf.worker.js');
+const pdfjsDistPath = path.dirname(require.resolve('pdfjs-dist/package.json'));
+const pdfWorkerPath = path.join(pdfjsDistPath, 'legacy', 'build', 'pdf.worker.js');
 
 fs.copyFileSync(pdfWorkerPath, './dist/pdf.worker.js');
 ```
@@ -218,12 +210,12 @@ import fs from 'fs';
 const cMapsDir = path.join(path.dirname(require.resolve('pdfjs-dist/package.json')), 'cmaps');
 
 function copyDir(from, to) {
+  // Ensure target directory exists
+  fs.mkdirSync(to, { recursive: true });
+
   const files = fs.readdirSync(from);
-  fs.mkdirSync(to);
   files.forEach((file) => {
-    const fromFile = path.join(from, file);
-    const toFile = path.join(to, file);
-    fs.copyFileSync(fromFile, toFile);
+    fs.copyFileSync(path.join(from, file), path.join(to, file));
   });
 }
 

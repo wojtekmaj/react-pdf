@@ -107,7 +107,7 @@ export function displayCORSWarning() {
 export function displayWorkerWarning() {
   warning(
     !isLocalFileSystem,
-    `Loading PDF.js Worker may not work on protocols other than HTTP/HTTPS. ${allowFileAccessFromFilesTip}`,
+    `Loading PDF.js worker may not work on protocols other than HTTP/HTTPS. ${allowFileAccessFromFilesTip}`,
   );
 }
 
