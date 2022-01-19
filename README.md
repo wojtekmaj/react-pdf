@@ -88,12 +88,20 @@ Check the [sample directory](https://github.com/wojtekmaj/react-pdf/tree/main/sa
 
 It is crucial for performance to use PDF.js worker whenever possible. This ensures that PDF files will be rendered in a separate thread without affecting page performance. To make things a little easier, we've prepared several entry points you can use.
 
-#### Webpack
+#### Webpack ≤4
 
 Instead of directly importing modules you need from `'react-pdf'`, import them like so:
 
 ```js
 import { Document, Page } from 'react-pdf/dist/esm/entry.webpack';
+```
+
+#### Webpack 5
+
+Instead of directly importing modules you need from `'react-pdf'`, import them like so:
+
+```js
+import { Document, Page } from 'react-pdf/dist/esm/entry.webpack5';
 ```
 
 #### Parcel 1
@@ -114,7 +122,7 @@ import { Document, Page } from 'react-pdf/dist/esm/entry.parcel2';
 
 #### Create React App
 
-Create React App uses Webpack under the hood, so you can follow [Webpack instructions](#webpack).
+Create React App uses Webpack under the hood, so you can follow [Webpack ≤4 instructions](#webpack--4).
 
 [Standard instructions](#standard-browserify-and-others) will also work. In Create React App, you can copy `pdf.worker.js` file from `pdfjs-dist/build` to `public` directory in order for it to be copied to your project's output folder at build time.
 
