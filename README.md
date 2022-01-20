@@ -144,7 +144,7 @@ Alternatively, you could use the minified `pdf.worker.min.js` from an external C
 
 ```js
 import { pdfjs } from 'react-pdf';
-pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
+pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/legacy/build/pdf.worker.min.js`;
 ```
 
 ### Support for annotations
@@ -242,7 +242,7 @@ import { pdfjs } from 'react-pdf';
 
 <Document
   options={{
-    cMapUrl: `//cdn.jsdelivr.net/npm/pdfjs-dist@${pdfjs.version}/cmaps/`,
+    cMapUrl: `//unpkg.com/pdfjs-dist@${pdfjs.version}/cmaps`,
     cMapPacked: true,
   }}
 />
