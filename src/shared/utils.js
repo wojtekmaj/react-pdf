@@ -128,9 +128,8 @@ export function isCancelException(error) {
 }
 
 export function loadFromFile(file) {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-
+  const reader = new FileReader();
+  const promise = new Promise((resolve, reject) => {
     reader.onload = () => resolve(new Uint8Array(reader.result));
     reader.onerror = (event) => {
       switch (event.target.error.code) {
@@ -150,4 +149,11 @@ export function loadFromFile(file) {
 
     return null;
   });
+
+  return {
+    promise,
+    cancel: () => {
+      reader.abort();
+    },
+  };
 }

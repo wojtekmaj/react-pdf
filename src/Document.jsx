@@ -88,8 +88,11 @@ export default class Document extends PureComponent {
     // If rendering is in progress, let's cancel it
     cancelRunningTask(this.runningTask);
 
-    // If loading is in progress, let's destroy it
+    // If pdfjs loading is in progress, let's destroy it
     if (this.loadingTask) this.loadingTask.destroy();
+
+    // If FileReader loading is in progress, let's abort it
+    if (this.loadFromFileTask) this.loadFromFileTask.cancel();
   }
 
   loadDocument = () => {
@@ -266,7 +269,14 @@ export default class Document extends PureComponent {
     if (isBrowser) {
       // File is a Blob
       if (isBlob(file) || isFile(file)) {
-        loadFromFile(file).then((data) => {
+        // abort previous FileReader, if there is one
+        if (this.loadFromFileTask) {
+          this.loadFromFileTask.cancel();
+        }
+
+        this.loadFromFileTask = loadFromFile(file);
+        this.loadFromFileTask.promise.then((data) => {
+          this.loadFromFileTask = null;
           resolve({ data });
         });
         return;

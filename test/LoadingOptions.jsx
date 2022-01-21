@@ -8,6 +8,8 @@ import { isFile } from './shared/propTypes';
 export default function LoadingOptions({
   file,
   setFile,
+  useExternPage,
+  setUseExternPage,
   setRender,
 }) {
   function onFileChange(event) {
@@ -122,6 +124,18 @@ export default function LoadingOptions({
           Unload file
         </button>
       </div>
+
+      <div>
+        <input
+          id="pageOutsideOfDocument"
+          type="checkbox"
+          checked={useExternPage}
+          onChange={(event) => { setUseExternPage(event.target.checked); }}
+        />
+        <label htmlFor="pageOutsideOfDocument">
+          Page outside of Document
+        </label>
+      </div>
     </fieldset>
   );
 }
@@ -130,4 +144,6 @@ LoadingOptions.propTypes = {
   file: isFile,
   setFile: PropTypes.func.isRequired,
   setRender: PropTypes.func.isRequired,
+  setUseExternPage: PropTypes.func.isRequired,
+  useExternPage: PropTypes.bool.isRequired,
 };
