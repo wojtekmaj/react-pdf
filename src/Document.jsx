@@ -145,9 +145,10 @@ export default class Document extends PureComponent {
   }
 
   setupLinkService = () => {
-    const { externalLinkTarget } = this.props;
+    const { externalLinkRel, externalLinkTarget } = this.props;
 
     this.linkService.setViewer(this.viewer);
+    this.linkService.setExternalLinkRel(externalLinkRel);
     this.linkService.setExternalLinkTarget(externalLinkTarget);
   }
 
@@ -391,6 +392,8 @@ Document.propTypes = {
   children: PropTypes.node,
   className: isClassName,
   error: isFunctionOrNode,
+  externalLinkRel: PropTypes.string,
+  externalLinkTarget: PropTypes.string,
   file: isFileProp,
   imageResourcesPath: PropTypes.string,
   inputRef: isRef,

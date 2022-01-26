@@ -16,11 +16,12 @@ import invariant from 'tiny-invariant';
 
 /* eslint-disable class-methods-use-this, no-empty-function, no-param-reassign */
 
+const DEFAULT_LINK_REL = 'noopener noreferrer nofollow';
+
 export default class LinkService {
   constructor() {
     this.externalLinkTarget = null;
     this.externalLinkRel = null;
-    this.externalLinkEnabled = true;
   }
 
   setDocument(pdfDocument) {
@@ -29,6 +30,10 @@ export default class LinkService {
 
   setViewer(pdfViewer) {
     this.pdfViewer = pdfViewer;
+  }
+
+  setExternalLinkRel(externalLinkRel) {
+    this.externalLinkRel = externalLinkRel;
   }
 
   setExternalLinkTarget(externalLinkTarget) {
@@ -110,6 +115,7 @@ export default class LinkService {
 
   addLinkAttributes(link, url, newWindow) {
     link.href = url;
+    link.rel = this.externalLinkRel || DEFAULT_LINK_REL;
     link.target = newWindow ? '_blank' : this.externalLinkTarget || '';
   }
 

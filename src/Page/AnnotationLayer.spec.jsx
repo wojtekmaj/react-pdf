@@ -175,6 +175,43 @@ describe('AnnotationLayer', () => {
       });
     });
 
+    it.each`
+      externalLinkRel | rel
+      ${null}         | ${'noopener noreferrer nofollow'}
+      ${'noopener'}   | ${'noopener'}
+    `('renders all links with rel $rel given externalLinkRel = $externalLinkRel', ({
+      externalLinkRel, rel,
+    }) => {
+      const {
+        func: onRenderAnnotationLayerSuccess, promise: onRenderAnnotationLayerSuccessPromise,
+      } = makeAsyncCallback();
+      const customLinkService = new LinkService();
+      if (externalLinkRel) {
+        customLinkService.setExternalLinkRel(externalLinkRel);
+      }
+
+      const component = mount(
+        <AnnotationLayer
+          linkService={customLinkService}
+          onRenderAnnotationLayerSuccess={onRenderAnnotationLayerSuccess}
+          page={page}
+        />,
+      );
+
+      expect.assertions(desiredAnnotations.length);
+
+      return onRenderAnnotationLayerSuccessPromise.then(() => {
+        component.update();
+        const renderedLayer = component.getDOMNode();
+        const annotationItems = [...renderedLayer.children];
+        const annotationLinkItems = annotationItems
+          .map((item) => item.firstChild)
+          .filter((item) => item.tagName === 'A');
+
+        annotationLinkItems.forEach((link) => expect(link.getAttribute('rel')).toBe(rel));
+      });
+    });
+
     it('renders annotations at a given rotation', async () => {
       const {
         func: onRenderAnnotationLayerSuccess, promise: onRenderAnnotationLayerSuccessPromise,

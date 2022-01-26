@@ -532,6 +532,33 @@ describe('Document', () => {
     });
   });
 
+  it.each`
+    externalLinkRel | rel
+    ${null}         | ${null}
+    ${'_self'}      | ${'_self'}
+    ${'_blank'}     | ${'_blank'}
+    ${'_parent'}    | ${'_parent'}
+    ${'_top'}       | ${'_top'}
+  `('returns externalLinkRel = $rel given externalLinkRel prop = $externalLinkRel', async ({
+    externalLinkRel, rel,
+  }) => {
+    const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
+
+    const component = shallow(
+      <Document
+        externalLinkRel={externalLinkRel}
+        file={pdfFile.file}
+        onLoadSuccess={onLoadSuccess}
+      />,
+    );
+
+    expect.assertions(1);
+
+    await onLoadSuccessPromise;
+
+    expect(component.instance().linkService.externalLinkRel).toBe(rel);
+  });
+
   it('calls onClick callback when clicked a page (sample of mouse events family)', () => {
     const onClick = jest.fn();
 
