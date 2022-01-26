@@ -1,2 +1,5 @@
+**/build/*
 **/dist/*
-**/node_modules/*
+**/node_modules/
+**/public/cmaps/*
+**/public/pdf.worker.js
