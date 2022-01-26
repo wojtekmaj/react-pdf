@@ -136,19 +136,22 @@ describe('AnnotationLayer', () => {
     });
 
     it.each`
-      linkServiceTarget | target
-      ${1}              | ${'_self'}
-      ${2}              | ${'_blank'}
-      ${3}              | ${'_parent'}
-      ${4}              | ${'_top'}
-    `('renders all links with target $target given externalLinkTarget = $target', ({
-      linkServiceTarget, target,
+      externalLinkTarget | target
+      ${null}            | ${''}
+      ${'_self'}         | ${'_self'}
+      ${'_blank'}        | ${'_blank'}
+      ${'_parent'}       | ${'_parent'}
+      ${'_top'}          | ${'_top'}
+    `('renders all links with target $target given externalLinkTarget = $externalLinkTarget', ({
+      externalLinkTarget, target,
     }) => {
       const {
         func: onRenderAnnotationLayerSuccess, promise: onRenderAnnotationLayerSuccessPromise,
       } = makeAsyncCallback();
       const customLinkService = new LinkService();
-      customLinkService.externalLinkTarget = linkServiceTarget;
+      if (externalLinkTarget) {
+        customLinkService.setExternalLinkTarget(externalLinkTarget);
+      }
 
       const component = mount(
         <AnnotationLayer

@@ -14,7 +14,7 @@
  */
 import invariant from 'tiny-invariant';
 
-/* eslint-disable class-methods-use-this, no-empty-function */
+/* eslint-disable class-methods-use-this, no-empty-function, no-param-reassign */
 
 export default class LinkService {
   constructor() {
@@ -29,6 +29,10 @@ export default class LinkService {
 
   setViewer(pdfViewer) {
     this.pdfViewer = pdfViewer;
+  }
+
+  setExternalLinkTarget(externalLinkTarget) {
+    this.externalLinkTarget = externalLinkTarget;
   }
 
   setHistory() {}
@@ -103,6 +107,11 @@ export default class LinkService {
   }
 
   goToPage() {}
+
+  addLinkAttributes(link, url, newWindow) {
+    link.href = url;
+    link.target = newWindow ? '_blank' : this.externalLinkTarget || '';
+  }
 
   getDestinationHash() {
     return '#';

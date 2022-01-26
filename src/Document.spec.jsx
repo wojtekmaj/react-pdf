@@ -505,14 +505,14 @@ describe('Document', () => {
 
   describe('linkService', () => {
     it.each`
-      externalLinkTarget | linkServiceTarget
-      ${null}            | ${0}
-      ${'_self'}         | ${1}
-      ${'_blank'}        | ${2}
-      ${'_parent'}       | ${3}
-      ${'_top'}          | ${4}
-    `('returns externalLinkTarget = $linkServiceTarget given externalLinkTarget prop = $externalLinkTarget', async ({
-      externalLinkTarget, linkServiceTarget,
+      externalLinkTarget | target
+      ${null}            | ${null}
+      ${'_self'}         | ${'_self'}
+      ${'_blank'}        | ${'_blank'}
+      ${'_parent'}       | ${'_parent'}
+      ${'_top'}          | ${'_top'}
+    `('returns externalLinkTarget = $target given externalLinkTarget prop = $externalLinkTarget', async ({
+      externalLinkTarget, target,
     }) => {
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
@@ -528,7 +528,7 @@ describe('Document', () => {
 
       await onLoadSuccessPromise;
 
-      expect(component.instance().linkService.externalLinkTarget).toBe(linkServiceTarget);
+      expect(component.instance().linkService.externalLinkTarget).toBe(target);
     });
   });
 

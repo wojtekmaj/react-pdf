@@ -145,20 +145,10 @@ export default class Document extends PureComponent {
   }
 
   setupLinkService = () => {
+    const { externalLinkTarget } = this.props;
+
     this.linkService.setViewer(this.viewer);
-    const documentInstance = this;
-    Object.defineProperty(this.linkService, 'externalLinkTarget', {
-      get() {
-        const { externalLinkTarget } = documentInstance.props;
-        switch (externalLinkTarget) {
-          case '_self': return 1;
-          case '_blank': return 2;
-          case '_parent': return 3;
-          case '_top': return 4;
-          default: return 0;
-        }
-      },
-    });
+    this.linkService.setExternalLinkTarget(externalLinkTarget);
   }
 
   get childContext() {
