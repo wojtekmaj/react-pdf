@@ -1,7 +1,6 @@
 # Cache and IDE-related files
 .cache
 .idea
-.vscode
 
 # Yarn-related files
 **/.yarn/*

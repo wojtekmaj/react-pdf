@@ -1,0 +1,9 @@
+{
+  "recommendations": [
+    "dbaeumer.vscode-eslint",
+    "eamodio.gitlens"
+  ],
+  "unwantedRecommendations": [
+    "dbaeumer.jshint"
+  ]
+}
