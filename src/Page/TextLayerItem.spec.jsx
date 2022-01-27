@@ -31,13 +31,7 @@ describe('TextLayerItem', () => {
     it('renders text content properly', () => {
       const str = 'Test string';
 
-      const component = shallow(
-        <TextLayerItem
-          {...defaultProps}
-          page={page}
-          str={str}
-        />,
-      );
+      const component = shallow(<TextLayerItem {...defaultProps} page={page} str={str} />);
 
       const textItem = component.text();
       expect(textItem).toEqual(str);
@@ -70,11 +64,7 @@ describe('TextLayerItem', () => {
       const customTextRenderer = () => 'Test value';
 
       const component = shallow(
-        <TextLayerItem
-          {...defaultProps}
-          customTextRenderer={customTextRenderer}
-          page={page}
-        />,
+        <TextLayerItem {...defaultProps} customTextRenderer={customTextRenderer} page={page} />,
       );
 
       const textItem = component.text();

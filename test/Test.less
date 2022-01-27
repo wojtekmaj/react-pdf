@@ -1,4 +1,3 @@
-
 body {
   margin: 0;
   font-family: Segoe UI, Tahoma, sans-serif;
@@ -7,7 +6,7 @@ body {
 .Test {
   header {
     background-color: rgb(50, 54, 57);
-    box-shadow: 0 0 8px rgba(0, 0, 0, .5);
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
     padding: 20px;
     color: white;
 
@@ -38,7 +37,8 @@ body {
       flex-wrap: wrap;
       margin: 0;
 
-      input, button {
+      input,
+      button {
         font: inherit;
       }
 
@@ -65,14 +65,15 @@ body {
           }
         }
 
-        input[type="checkbox"] + label,
-        input[type="radio"] + label {
+        input[type='checkbox'] + label,
+        input[type='radio'] + label {
           font-weight: normal;
           display: inline-block;
           margin: 0;
         }
 
-        form, div {
+        form,
+        div {
           &:not(:first-child) {
             margin-top: 1em;
           }
@@ -118,8 +119,8 @@ body {
 
         .react-pdf {
           &__Page {
-            max-width: calc(~"100% - 2em");
-            box-shadow: 0 0 8px rgba(0, 0, 0, .5);
+            max-width: calc(~'100% - 2em');
+            box-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
             margin: 1em;
 
             &__textContent {

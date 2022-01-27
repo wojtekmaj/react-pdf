@@ -6,9 +6,7 @@ import { pdfjs } from './entry.jest';
 import { OutlineInternal as Outline } from './Outline';
 
 import failingPdf from '../__mocks__/_failing_pdf';
-import {
-  loadPDF, makeAsyncCallback, muteConsole, restoreConsole,
-} from '../test-utils';
+import { loadPDF, makeAsyncCallback, muteConsole, restoreConsole } from '../test-utils';
 
 const pdfFile = loadPDF('./__mocks__/_pdf.pdf');
 const pdfFile2 = loadPDF('./__mocks__/_pdf2.pdf');
@@ -34,12 +32,7 @@ describe('Outline', () => {
     it('loads an outline and calls onLoadSuccess callback properly', async () => {
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
-      shallow(
-        <Outline
-          onLoadSuccess={onLoadSuccess}
-          pdf={pdf}
-        />,
-      );
+      shallow(<Outline onLoadSuccess={onLoadSuccess} pdf={pdf} />);
 
       expect.assertions(1);
       await expect(onLoadSuccessPromise).resolves.toMatchObject(desiredLoadedOutline);
@@ -50,12 +43,7 @@ describe('Outline', () => {
 
       muteConsole();
 
-      shallow(
-        <Outline
-          onLoadError={onLoadError}
-          pdf={failingPdf}
-        />,
-      );
+      shallow(<Outline onLoadError={onLoadError} pdf={failingPdf} />);
 
       expect.assertions(1);
       await expect(onLoadErrorPromise).resolves.toBeInstanceOf(Error);
@@ -66,12 +54,7 @@ describe('Outline', () => {
     it('replaces an outline properly when pdf is changed', async () => {
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
-      const mountedComponent = shallow(
-        <Outline
-          onLoadSuccess={onLoadSuccess}
-          pdf={pdf}
-        />,
-      );
+      const mountedComponent = shallow(<Outline onLoadSuccess={onLoadSuccess} pdf={pdf} />);
 
       expect.assertions(2);
       await expect(onLoadSuccessPromise).resolves.toMatchObject(desiredLoadedOutline);
@@ -99,11 +82,7 @@ describe('Outline', () => {
       const className = 'testClassName';
 
       const component = shallow(
-        <Outline
-          className={className}
-          onLoadSuccess={onLoadSuccess}
-          pdf={pdf}
-        />,
+        <Outline className={className} onLoadSuccess={onLoadSuccess} pdf={pdf} />,
       );
 
       expect.assertions(1);
@@ -119,13 +98,7 @@ describe('Outline', () => {
 
       const inputRef = jest.fn();
 
-      mount(
-        <Outline
-          inputRef={inputRef}
-          onLoadSuccess={onLoadSuccess}
-          pdf={pdf}
-        />,
-      );
+      mount(<Outline inputRef={inputRef} onLoadSuccess={onLoadSuccess} pdf={pdf} />);
 
       expect.assertions(2);
       await onLoadSuccessPromise;
@@ -137,12 +110,7 @@ describe('Outline', () => {
     it('renders OutlineItem components properly', async () => {
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
-      const component = shallow(
-        <Outline
-          onLoadSuccess={onLoadSuccess}
-          pdf={pdf}
-        />,
-      );
+      const component = shallow(<Outline onLoadSuccess={onLoadSuccess} pdf={pdf} />);
 
       expect.assertions(1);
       await onLoadSuccessPromise;

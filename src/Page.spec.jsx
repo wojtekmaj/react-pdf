@@ -7,9 +7,7 @@ import { PageInternal as Page } from './Page';
 
 import failingPdf from '../__mocks__/_failing_pdf';
 import silentlyFailingPdf from '../__mocks__/_silently_failing_pdf';
-import {
-  loadPDF, makeAsyncCallback, muteConsole, restoreConsole,
-} from '../test-utils';
+import { loadPDF, makeAsyncCallback, muteConsole, restoreConsole } from '../test-utils';
 
 const pdfFile = loadPDF('./__mocks__/_pdf.pdf');
 const pdfFile2 = loadPDF('./__mocks__/_pdf2.pdf');
@@ -56,13 +54,7 @@ describe('Page', () => {
     it('loads a page and calls onLoadSuccess callback properly', async () => {
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
-      shallow(
-        <Page
-          onLoadSuccess={onLoadSuccess}
-          pageIndex={0}
-          pdf={pdf}
-        />,
-      );
+      shallow(<Page onLoadSuccess={onLoadSuccess} pageIndex={0} pdf={pdf} />);
 
       expect.assertions(1);
       await expect(onLoadSuccessPromise).resolves.toMatchObject(desiredLoadedPage);
@@ -71,13 +63,7 @@ describe('Page', () => {
     it('returns all desired parameters in onLoadSuccess callback', () => {
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
-      const component = shallow(
-        <Page
-          onLoadSuccess={onLoadSuccess}
-          pageIndex={0}
-          pdf={pdf}
-        />,
-      );
+      const component = shallow(<Page onLoadSuccess={onLoadSuccess} pageIndex={0} pdf={pdf} />);
 
       expect.assertions(5);
       return onLoadSuccessPromise.then((page) => {
@@ -96,13 +82,7 @@ describe('Page', () => {
 
       muteConsole();
 
-      shallow(
-        <Page
-          onLoadError={onLoadError}
-          pageIndex={0}
-          pdf={failingPdf}
-        />,
-      );
+      shallow(<Page onLoadError={onLoadError} pageIndex={0} pdf={failingPdf} />);
 
       expect.assertions(1);
       await expect(onLoadErrorPromise).resolves.toBeInstanceOf(Error);
@@ -113,13 +93,7 @@ describe('Page', () => {
     it('loads page when given pageIndex', () => {
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
-      const component = shallow(
-        <Page
-          onLoadSuccess={onLoadSuccess}
-          pageIndex={0}
-          pdf={pdf}
-        />,
-      );
+      const component = shallow(<Page onLoadSuccess={onLoadSuccess} pageIndex={0} pdf={pdf} />);
 
       expect.assertions(1);
       return onLoadSuccessPromise.then(() => {
@@ -130,13 +104,7 @@ describe('Page', () => {
     it('loads page when given pageNumber', () => {
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
-      const component = shallow(
-        <Page
-          onLoadSuccess={onLoadSuccess}
-          pageNumber={1}
-          pdf={pdf}
-        />,
-      );
+      const component = shallow(<Page onLoadSuccess={onLoadSuccess} pageNumber={1} pdf={pdf} />);
 
       expect.assertions(1);
       return onLoadSuccessPromise.then(() => {
@@ -147,13 +115,7 @@ describe('Page', () => {
     it('calls registerPage when loaded a page', async () => {
       const { func: registerPage, promise: registerPagePromise } = makeAsyncCallback();
 
-      shallow(
-        <Page
-          pageIndex={0}
-          pdf={pdf}
-          registerPage={registerPage}
-        />,
-      );
+      shallow(<Page pageIndex={0} pdf={pdf} registerPage={registerPage} />);
 
       expect.assertions(1);
       await expect(registerPagePromise).resolves.toMatchObject(registerPageArguments);
@@ -162,13 +124,7 @@ describe('Page', () => {
     it('calls unregisterPage on unmount', async () => {
       const { func: unregisterPage, promise: nuregisterPagePromise } = makeAsyncCallback();
 
-      const component = shallow(
-        <Page
-          pageIndex={0}
-          pdf={pdf}
-          unregisterPage={unregisterPage}
-        />,
-      );
+      const component = shallow(<Page pageIndex={0} pdf={pdf} unregisterPage={unregisterPage} />);
 
       component.unmount();
 
@@ -180,11 +136,7 @@ describe('Page', () => {
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
       const mountedComponent = shallow(
-        <Page
-          onLoadSuccess={onLoadSuccess}
-          pageIndex={0}
-          pdf={pdf}
-        />,
+        <Page onLoadSuccess={onLoadSuccess} pageIndex={0} pdf={pdf} />,
       );
 
       expect.assertions(2);
@@ -204,11 +156,7 @@ describe('Page', () => {
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
       const mountedComponent = shallow(
-        <Page
-          onLoadSuccess={onLoadSuccess}
-          pageIndex={0}
-          pdf={pdf}
-        />,
+        <Page onLoadSuccess={onLoadSuccess} pageIndex={0} pdf={pdf} />,
       );
 
       expect.assertions(2);
@@ -233,13 +181,7 @@ describe('Page', () => {
     it('applies className to its wrapper when given a string', () => {
       const className = 'testClassName';
 
-      const component = shallow(
-        <Page
-          className={className}
-          pageIndex={0}
-          pdf={pdf}
-        />,
-      );
+      const component = shallow(<Page className={className} pageIndex={0} pdf={pdf} />);
 
       const wrapperClassName = component.find('.react-pdf__Page').prop('className');
 
@@ -249,13 +191,7 @@ describe('Page', () => {
     it('passes container element to inputRef properly', () => {
       const inputRef = jest.fn();
 
-      mount(
-        <Page
-          inputRef={inputRef}
-          pageIndex={1}
-          pdf={silentlyFailingPdf}
-        />,
-      );
+      mount(<Page inputRef={inputRef} pageIndex={1} pdf={silentlyFailingPdf} />);
 
       expect(inputRef).toHaveBeenCalled();
       expect(inputRef.mock.calls[0][0]).toBeInstanceOf(HTMLElement);
@@ -267,12 +203,7 @@ describe('Page', () => {
       const canvasRef = jest.fn();
 
       const component = shallow(
-        <Page
-          canvasRef={canvasRef}
-          onLoadSuccess={onLoadSuccess}
-          pageIndex={0}
-          pdf={pdf}
-        />,
+        <Page canvasRef={canvasRef} onLoadSuccess={onLoadSuccess} pageIndex={0} pdf={pdf} />,
       );
 
       expect.assertions(1);
@@ -287,9 +218,7 @@ describe('Page', () => {
     it('renders "No page specified." when given neither pageIndex nor pageNumber', () => {
       muteConsole();
 
-      const component = shallow(
-        <Page pdf={pdf} />,
-      );
+      const component = shallow(<Page pdf={pdf} />);
 
       const noData = component.find('Message');
 
@@ -302,12 +231,7 @@ describe('Page', () => {
     it('renders custom no data message when given nothing and noData is given', () => {
       muteConsole();
 
-      const component = shallow(
-        <Page
-          noData="Nothing here"
-          pdf={pdf}
-        />,
-      );
+      const component = shallow(<Page noData="Nothing here" pdf={pdf} />);
 
       const noData = component.find('Message');
 
@@ -320,12 +244,7 @@ describe('Page', () => {
     it('renders custom no data message when given nothing and noData is given as a function', () => {
       muteConsole();
 
-      const component = shallow(
-        <Page
-          noData={() => 'Nothing here'}
-          pdf={pdf}
-        />,
-      );
+      const component = shallow(<Page noData={() => 'Nothing here'} pdf={pdf} />);
 
       const noData = component.find('Message');
 
@@ -338,13 +257,7 @@ describe('Page', () => {
     it('renders "Loading page…" when loading a page', async () => {
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
-      const component = shallow(
-        <Page
-          onLoadSuccess={onLoadSuccess}
-          pageIndex={0}
-          pdf={pdf}
-        />,
-      );
+      const component = shallow(<Page onLoadSuccess={onLoadSuccess} pageIndex={0} pdf={pdf} />);
 
       expect.assertions(2);
 
@@ -363,12 +276,7 @@ describe('Page', () => {
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
       const component = shallow(
-        <Page
-          loading="Loading"
-          onLoadSuccess={onLoadSuccess}
-          pageIndex={0}
-          pdf={pdf}
-        />,
+        <Page loading="Loading" onLoadSuccess={onLoadSuccess} pageIndex={0} pdf={pdf} />,
       );
 
       expect.assertions(2);
@@ -388,12 +296,7 @@ describe('Page', () => {
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
       const component = shallow(
-        <Page
-          loading="Loading"
-          onLoadSuccess={onLoadSuccess}
-          pageIndex={0}
-          pdf={pdf}
-        />,
+        <Page loading="Loading" onLoadSuccess={onLoadSuccess} pageIndex={0} pdf={pdf} />,
       );
 
       expect.assertions(2);
@@ -413,12 +316,7 @@ describe('Page', () => {
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
       const component = shallow(
-        <Page
-          onLoadSuccess={onLoadSuccess}
-          pageIndex={1}
-          pageNumber={1}
-          pdf={pdf}
-        />,
+        <Page onLoadSuccess={onLoadSuccess} pageIndex={1} pageNumber={1} pdf={pdf} />,
       );
 
       expect.assertions(1);
@@ -431,13 +329,7 @@ describe('Page', () => {
     it('orders page to be rendered with default rotation when given nothing', async () => {
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
-      const component = shallow(
-        <Page
-          onLoadSuccess={onLoadSuccess}
-          pageIndex={0}
-          pdf={pdf}
-        />,
-      );
+      const component = shallow(<Page onLoadSuccess={onLoadSuccess} pageIndex={0} pdf={pdf} />);
 
       expect.assertions(1);
 
@@ -450,12 +342,7 @@ describe('Page', () => {
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
       const component = shallow(
-        <Page
-          onLoadSuccess={onLoadSuccess}
-          pageIndex={0}
-          pdf={pdf}
-          rotate={90}
-        />,
+        <Page onLoadSuccess={onLoadSuccess} pageIndex={0} pdf={pdf} rotate={90} />,
       );
 
       expect.assertions(1);
@@ -468,13 +355,7 @@ describe('Page', () => {
     it('requests page to be rendered in canvas mode by default', async () => {
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
-      const component = shallow(
-        <Page
-          onLoadSuccess={onLoadSuccess}
-          pageIndex={0}
-          pdf={pdf}
-        />,
-      );
+      const component = shallow(<Page onLoadSuccess={onLoadSuccess} pageIndex={0} pdf={pdf} />);
 
       expect.assertions(1);
 
@@ -490,12 +371,7 @@ describe('Page', () => {
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
       const component = shallow(
-        <Page
-          onLoadSuccess={onLoadSuccess}
-          pageIndex={0}
-          pdf={pdf}
-          renderMode="none"
-        />,
+        <Page onLoadSuccess={onLoadSuccess} pageIndex={0} pdf={pdf} renderMode="none" />,
       );
 
       expect.assertions(2);
@@ -512,12 +388,7 @@ describe('Page', () => {
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
       const component = shallow(
-        <Page
-          onLoadSuccess={onLoadSuccess}
-          pageIndex={0}
-          pdf={pdf}
-          renderMode="canvas"
-        />,
+        <Page onLoadSuccess={onLoadSuccess} pageIndex={0} pdf={pdf} renderMode="canvas" />,
       );
 
       expect.assertions(1);
@@ -534,12 +405,7 @@ describe('Page', () => {
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
       const component = shallow(
-        <Page
-          onLoadSuccess={onLoadSuccess}
-          pageIndex={0}
-          pdf={pdf}
-          renderMode="svg"
-        />,
+        <Page onLoadSuccess={onLoadSuccess} pageIndex={0} pdf={pdf} renderMode="svg" />,
       );
 
       expect.assertions(1);
@@ -555,13 +421,7 @@ describe('Page', () => {
     it('requests text content to be rendered by default', async () => {
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
-      const component = shallow(
-        <Page
-          onLoadSuccess={onLoadSuccess}
-          pageIndex={0}
-          pdf={pdf}
-        />,
-      );
+      const component = shallow(<Page onLoadSuccess={onLoadSuccess} pageIndex={0} pdf={pdf} />);
 
       expect.assertions(1);
 
@@ -577,12 +437,7 @@ describe('Page', () => {
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
       const component = shallow(
-        <Page
-          onLoadSuccess={onLoadSuccess}
-          pageIndex={0}
-          pdf={pdf}
-          renderTextLayer
-        />,
+        <Page onLoadSuccess={onLoadSuccess} pageIndex={0} pdf={pdf} renderTextLayer />,
       );
 
       expect.assertions(1);
@@ -599,12 +454,7 @@ describe('Page', () => {
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
       const component = shallow(
-        <Page
-          onLoadSuccess={onLoadSuccess}
-          pageIndex={0}
-          pdf={pdf}
-          renderTextLayer={false}
-        />,
+        <Page onLoadSuccess={onLoadSuccess} pageIndex={0} pdf={pdf} renderTextLayer={false} />,
       );
 
       expect.assertions(1);
@@ -665,13 +515,7 @@ describe('Page', () => {
     it('requests annotations to be rendered by default', async () => {
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
-      const component = shallow(
-        <Page
-          onLoadSuccess={onLoadSuccess}
-          pageIndex={0}
-          pdf={pdf}
-        />,
-      );
+      const component = shallow(<Page onLoadSuccess={onLoadSuccess} pageIndex={0} pdf={pdf} />);
 
       expect.assertions(1);
 
@@ -687,12 +531,7 @@ describe('Page', () => {
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
       const component = shallow(
-        <Page
-          onLoadSuccess={onLoadSuccess}
-          pageIndex={0}
-          pdf={pdf}
-          renderAnnotationLayer
-        />,
+        <Page onLoadSuccess={onLoadSuccess} pageIndex={0} pdf={pdf} renderAnnotationLayer />,
       );
 
       expect.assertions(1);
@@ -731,13 +570,7 @@ describe('Page', () => {
   it('requests page to be rendered at its original size given nothing', () => {
     const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
-    const component = shallow(
-      <Page
-        onLoadSuccess={onLoadSuccess}
-        pageIndex={0}
-        pdf={pdf}
-      />,
-    );
+    const component = shallow(<Page onLoadSuccess={onLoadSuccess} pageIndex={0} pdf={pdf} />);
 
     expect.assertions(1);
 
@@ -753,12 +586,7 @@ describe('Page', () => {
     const scale = 1.5;
 
     const component = shallow(
-      <Page
-        onLoadSuccess={onLoadSuccess}
-        pageIndex={0}
-        pdf={pdf}
-        scale={scale}
-      />,
+      <Page onLoadSuccess={onLoadSuccess} pageIndex={0} pdf={pdf} scale={scale} />,
     );
 
     expect.assertions(1);
@@ -775,12 +603,7 @@ describe('Page', () => {
     const width = 600;
 
     const component = shallow(
-      <Page
-        onLoadSuccess={onLoadSuccess}
-        pageIndex={0}
-        pdf={pdf}
-        width={width}
-      />,
+      <Page onLoadSuccess={onLoadSuccess} pageIndex={0} pdf={pdf} width={width} />,
     );
 
     expect.assertions(1);
@@ -798,13 +621,7 @@ describe('Page', () => {
     const scale = 1.5;
 
     const component = shallow(
-      <Page
-        onLoadSuccess={onLoadSuccess}
-        pageIndex={0}
-        pdf={pdf}
-        scale={scale}
-        width={width}
-      />,
+      <Page onLoadSuccess={onLoadSuccess} pageIndex={0} pdf={pdf} scale={scale} width={width} />,
     );
 
     expect.assertions(1);
@@ -821,12 +638,7 @@ describe('Page', () => {
     const height = 850;
 
     const component = shallow(
-      <Page
-        height={height}
-        onLoadSuccess={onLoadSuccess}
-        pageIndex={0}
-        pdf={pdf}
-      />,
+      <Page height={height} onLoadSuccess={onLoadSuccess} pageIndex={0} pdf={pdf} />,
     );
 
     expect.assertions(1);
@@ -844,13 +656,7 @@ describe('Page', () => {
     const scale = 1.5;
 
     const component = shallow(
-      <Page
-        height={height}
-        onLoadSuccess={onLoadSuccess}
-        pageIndex={0}
-        pdf={pdf}
-        scale={scale}
-      />,
+      <Page height={height} onLoadSuccess={onLoadSuccess} pageIndex={0} pdf={pdf} scale={scale} />,
     );
 
     expect.assertions(1);
@@ -868,13 +674,7 @@ describe('Page', () => {
     const height = 100;
 
     const component = shallow(
-      <Page
-        height={height}
-        onLoadSuccess={onLoadSuccess}
-        pageIndex={0}
-        pdf={pdf}
-        width={width}
-      />,
+      <Page height={height} onLoadSuccess={onLoadSuccess} pageIndex={0} pdf={pdf} width={width} />,
     );
 
     expect.assertions(2);
@@ -919,12 +719,7 @@ describe('Page', () => {
   it('calls onClick callback when clicked a page (sample of mouse events family)', () => {
     const onClick = jest.fn();
 
-    const component = mount(
-      <Page
-        onClick={onClick}
-        pdf={pdf}
-      />,
-    );
+    const component = mount(<Page onClick={onClick} pdf={pdf} />);
 
     const page = component.find('.react-pdf__Page');
     page.simulate('click');
@@ -935,12 +730,7 @@ describe('Page', () => {
   it('calls onTouchStart callback when touched a page (sample of touch events family)', () => {
     const onTouchStart = jest.fn();
 
-    const component = mount(
-      <Page
-        onTouchStart={onTouchStart}
-        pdf={pdf}
-      />,
-    );
+    const component = mount(<Page onTouchStart={onTouchStart} pdf={pdf} />);
 
     const page = component.find('.react-pdf__Page');
     page.simulate('touchstart');

@@ -5,11 +5,7 @@ import warning from 'tiny-warning';
 
 import PageContext from '../PageContext';
 
-import {
-  getPixelRatio,
-  isCancelException,
-  makePageCallback,
-} from '../shared/utils';
+import { getPixelRatio, isCancelException, makePageCallback } from '../shared/utils';
 
 import { isPage, isRef, isRotate } from '../shared/propTypes';
 
@@ -21,8 +17,8 @@ export class PageCanvasInternal extends PureComponent {
   componentDidUpdate(prevProps) {
     const { canvasBackground, page, renderInteractiveForms } = this.props;
     if (
-      canvasBackground !== prevProps.canvasBackground
-      || renderInteractiveForms !== prevProps.renderInteractiveForms
+      canvasBackground !== prevProps.canvasBackground ||
+      renderInteractiveForms !== prevProps.renderInteractiveForms
     ) {
       // Ensures the canvas will be re-rendered from scratch. Otherwise all form data will stay.
       page.cleanup();
@@ -60,7 +56,7 @@ export class PageCanvasInternal extends PureComponent {
     const { onRenderSuccess, page, scale } = this.props;
 
     if (onRenderSuccess) onRenderSuccess(makePageCallback(page, scale));
-  }
+  };
 
   /**
    * Called when a page fails to render.
@@ -75,7 +71,7 @@ export class PageCanvasInternal extends PureComponent {
     const { onRenderError } = this.props;
 
     if (onRenderError) onRenderError(error);
-  }
+  };
 
   get renderViewport() {
     const { page, rotate, scale } = this.props;
@@ -123,10 +119,8 @@ export class PageCanvasInternal extends PureComponent {
 
     this.renderer = page.render(renderContext);
 
-    return this.renderer.promise
-      .then(this.onRenderSuccess)
-      .catch(this.onRenderError);
-  }
+    return this.renderer.promise.then(this.onRenderSuccess).catch(this.onRenderError);
+  };
 
   render() {
     const { canvasRef } = this.props;
@@ -135,7 +129,9 @@ export class PageCanvasInternal extends PureComponent {
       <canvas
         className="react-pdf__Page__canvas"
         dir="ltr"
-        ref={mergeRefs(canvasRef, (ref) => { this.canvasLayer = ref; })}
+        ref={mergeRefs(canvasRef, (ref) => {
+          this.canvasLayer = ref;
+        })}
         style={{
           display: 'block',
           userSelect: 'none',

@@ -2,11 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 export default function Message({ children, type }) {
-  return (
-    <div className={`react-pdf__message react-pdf__message--${type}`}>
-      {children}
-    </div>
-  );
+  return <div className={`react-pdf__message react-pdf__message--${type}`}>{children}</div>;
 }
 
 Message.propTypes = {

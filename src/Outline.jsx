@@ -13,17 +13,12 @@ import OutlineItem from './OutlineItem';
 
 import { cancelRunningTask } from './shared/utils';
 
-import {
-  eventProps,
-  isClassName,
-  isPdf,
-  isRef,
-} from './shared/propTypes';
+import { eventProps, isClassName, isPdf, isRef } from './shared/propTypes';
 
 export class OutlineInternal extends PureComponent {
   state = {
     outline: null,
-  }
+  };
 
   componentDidMount() {
     const { pdf } = this.props;
@@ -36,7 +31,7 @@ export class OutlineInternal extends PureComponent {
   componentDidUpdate(prevProps) {
     const { pdf } = this.props;
 
-    if (prevProps.pdf && (pdf !== prevProps.pdf)) {
+    if (prevProps.pdf && pdf !== prevProps.pdf) {
       this.loadOutline();
     }
   }
@@ -65,7 +60,7 @@ export class OutlineInternal extends PureComponent {
       .catch((error) => {
         this.onLoadError(error);
       });
-  }
+  };
 
   get childContext() {
     return {
@@ -74,7 +69,6 @@ export class OutlineInternal extends PureComponent {
   }
 
   get eventProps() {
-    // eslint-disable-next-line react/destructuring-assignment
     return makeEventProps(this.props, () => this.state.outline);
   }
 
@@ -86,7 +80,7 @@ export class OutlineInternal extends PureComponent {
     const { outline } = this.state;
 
     if (onLoadSuccess) onLoadSuccess(outline);
-  }
+  };
 
   /**
    * Called when an outline failed to read successfully
@@ -99,7 +93,7 @@ export class OutlineInternal extends PureComponent {
     const { onLoadError } = this.props;
 
     if (onLoadError) onLoadError(error);
-  }
+  };
 
   onItemClick = ({ dest, pageIndex, pageNumber }) => {
     const { onItemClick } = this.props;
@@ -111,25 +105,19 @@ export class OutlineInternal extends PureComponent {
         pageNumber,
       });
     }
-  }
+  };
 
   renderOutline() {
     const { outline } = this.state;
 
     return (
       <ul>
-        {
-          outline.map((item, itemIndex) => (
-            <OutlineItem
-              key={
-                typeof item.destination === 'string'
-                  ? item.destination
-                  : itemIndex
-              }
-              item={item}
-            />
-          ))
-        }
+        {outline.map((item, itemIndex) => (
+          <OutlineItem
+            key={typeof item.destination === 'string' ? item.destination : itemIndex}
+            item={item}
+          />
+        ))}
       </ul>
     );
   }

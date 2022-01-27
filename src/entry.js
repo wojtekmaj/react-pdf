@@ -10,9 +10,4 @@ displayWorkerWarning();
 
 pdfjs.GlobalWorkerOptions.workerSrc = 'pdf.worker.js';
 
-export {
-  pdfjs,
-  Document,
-  Outline,
-  Page,
-};
+export { pdfjs, Document, Outline, Page };

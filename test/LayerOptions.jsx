@@ -23,9 +23,7 @@ export default function LayerOptions({
 
   return (
     <fieldset id="layeroptions">
-      <legend htmlFor="layeroptions">
-        Layer options
-      </legend>
+      <legend htmlFor="layeroptions">Layer options</legend>
 
       <div>
         <input
@@ -34,9 +32,7 @@ export default function LayerOptions({
           onChange={onRenderTextLayersChange}
           type="checkbox"
         />
-        <label htmlFor="renderTextLayer">
-          Render text layer
-        </label>
+        <label htmlFor="renderTextLayer">Render text layer</label>
       </div>
 
       <div>
@@ -46,9 +42,7 @@ export default function LayerOptions({
           onChange={onRenderAnnotationLayerChange}
           type="checkbox"
         />
-        <label htmlFor="renderAnnotationLayer">
-          Render annotation layer
-        </label>
+        <label htmlFor="renderAnnotationLayer">Render annotation layer</label>
       </div>
 
       <div>
@@ -59,9 +53,7 @@ export default function LayerOptions({
           onChange={onRenderInteractiveFormsChange}
           type="checkbox"
         />
-        <label htmlFor="renderInteractiveForms">
-          Render interactive forms
-        </label>
+        <label htmlFor="renderInteractiveForms">Render interactive forms</label>
       </div>
     </fieldset>
   );

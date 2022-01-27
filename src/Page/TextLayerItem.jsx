@@ -49,15 +49,16 @@ export class TextLayerItemInternal extends PureComponent {
   get top() {
     const { transform } = this.props;
     const { unrotatedViewport: viewport, defaultSideways } = this;
-    const [/* fontHeightPx */, /* fontWidthPx */, offsetX, offsetY, x, y] = transform;
-    const [/* xMin */, yMin, /* xMax */, yMax] = viewport.viewBox;
+    const [, , /* fontHeightPx */ /* fontWidthPx */ offsetX, offsetY, x, y] = transform;
+    const [, /* xMin */ yMin /* xMax */, , yMax] = viewport.viewBox;
     return defaultSideways ? x + offsetX + yMin : yMax - (y + offsetY);
   }
 
   get left() {
     const { transform } = this.props;
     const { unrotatedViewport: viewport, defaultSideways } = this;
-    const [/* fontHeightPx */, /* fontWidthPx */, /* offsetX */, /* offsetY */, x, y] = transform;
+    const [, , , , /* fontHeightPx */ /* fontWidthPx */ /* offsetX */ /* offsetY */ x, y] =
+      transform;
     const [xMin] = viewport.viewBox;
     return defaultSideways ? y - xMin : x - xMin;
   }
@@ -83,24 +84,23 @@ export class TextLayerItemInternal extends PureComponent {
 
     element.style.fontFamily = `${fontName}, sans-serif`;
 
-    this.getFontData(fontName)
-      .then((fontData) => {
-        const fallbackFontName = fontData ? fontData.fallbackName : 'sans-serif';
-        element.style.fontFamily = `${fontName}, ${fallbackFontName}`;
+    this.getFontData(fontName).then((fontData) => {
+      const fallbackFontName = fontData ? fontData.fallbackName : 'sans-serif';
+      element.style.fontFamily = `${fontName}, ${fallbackFontName}`;
 
-        const targetWidth = width * scale;
-        const actualWidth = this.getElementWidth(element);
+      const targetWidth = width * scale;
+      const actualWidth = this.getElementWidth(element);
 
-        let transform = `scaleX(${targetWidth / actualWidth})`;
+      let transform = `scaleX(${targetWidth / actualWidth})`;
 
-        const ascent = fontData ? fontData.ascent : 0;
-        if (ascent) {
-          transform += ` translateY(${(1 - ascent) * 100}%)`;
-        }
+      const ascent = fontData ? fontData.ascent : 0;
+      if (ascent) {
+        transform += ` translateY(${(1 - ascent) * 100}%)`;
+      }
 
-        element.style.transform = transform;
-        element.style.WebkitTransform = transform;
-      });
+      element.style.transform = transform;
+      element.style.WebkitTransform = transform;
+    });
   }
 
   getElementWidth = (element) => {
@@ -114,7 +114,9 @@ export class TextLayerItemInternal extends PureComponent {
 
     return (
       <span
-        ref={(ref) => { this.item = ref; }}
+        ref={(ref) => {
+          this.item = ref;
+        }}
         style={{
           height: '1em',
           fontFamily: 'sans-serif',
@@ -127,11 +129,7 @@ export class TextLayerItemInternal extends PureComponent {
           pointerEvents: 'all',
         }}
       >
-        {
-          customTextRenderer
-            ? customTextRenderer(this.props)
-            : text
-        }
+        {customTextRenderer ? customTextRenderer(this.props) : text}
       </span>
     );
   }
@@ -140,7 +138,7 @@ export class TextLayerItemInternal extends PureComponent {
 TextLayerItemInternal.propTypes = {
   customTextRenderer: PropTypes.func,
   fontName: PropTypes.string.isRequired,
-  itemIndex: PropTypes.number.isRequired, // eslint-disable-line react/no-unused-prop-types
+  itemIndex: PropTypes.number.isRequired,
   page: isPage.isRequired,
   rotate: isRotate,
   scale: PropTypes.number,

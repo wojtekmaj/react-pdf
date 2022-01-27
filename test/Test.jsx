@@ -1,16 +1,9 @@
 import React, { useCallback, useEffect, useState } from 'react';
-// eslint-disable-next-line import/no-extraneous-dependencies
 import { PDFDataRangeTransport } from 'pdfjs-dist';
 import { Document, Outline, Page } from 'react-pdf/src/entry.webpack';
 import 'react-pdf/src/Page/AnnotationLayer.css';
 
-import {
-  isArrayBuffer,
-  isBlob,
-  isBrowser,
-  isFile,
-  loadFromFile,
-} from 'react-pdf/src/shared/utils';
+import { isArrayBuffer, isBlob, isBrowser, isFile, loadFromFile } from 'react-pdf/src/shared/utils';
 
 import './Test.less';
 
@@ -27,28 +20,29 @@ const options = {
   cMapPacked: true,
 };
 
-export const readAsDataURL = (file) => new Promise((resolve, reject) => {
-  const reader = new FileReader();
+export const readAsDataURL = (file) =>
+  new Promise((resolve, reject) => {
+    const reader = new FileReader();
 
-  reader.onload = () => resolve(reader.result);
-  reader.onerror = (event) => {
-    switch (event.target.error.code) {
-      case event.target.error.NOT_FOUND_ERR:
-        return reject(new Error('Error while reading a file: File not found.'));
-      case event.target.error.NOT_READABLE_ERR:
-        return reject(new Error('Error while reading a file: File not readable.'));
-      case event.target.error.SECURITY_ERR:
-        return reject(new Error('Error while reading a file: Security error.'));
-      case event.target.error.ABORT_ERR:
-        return reject(new Error('Error while reading a file: Aborted.'));
-      default:
-        return reject(new Error('Error while reading a file.'));
-    }
-  };
-  reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = (event) => {
+      switch (event.target.error.code) {
+        case event.target.error.NOT_FOUND_ERR:
+          return reject(new Error('Error while reading a file: File not found.'));
+        case event.target.error.NOT_READABLE_ERR:
+          return reject(new Error('Error while reading a file: File not readable.'));
+        case event.target.error.SECURITY_ERR:
+          return reject(new Error('Error while reading a file: Security error.'));
+        case event.target.error.ABORT_ERR:
+          return reject(new Error('Error while reading a file: Aborted.'));
+        default:
+          return reject(new Error('Error while reading a file.'));
+      }
+    };
+    reader.readAsDataURL(file);
 
-  return null;
-});
+    return null;
+  });
 
 /* eslint-disable no-console */
 
@@ -72,7 +66,10 @@ export default function Test() {
   const [rotate, setRotate] = useState(null);
 
   const onDocumentLoadProgress = useCallback((progressData) => {
-    console.log('Loading a document', progressData.total ? progressData.loaded / progressData.total : '(unknown progress)');
+    console.log(
+      'Loading a document',
+      progressData.total ? progressData.loaded / progressData.total : '(unknown progress)',
+    );
   }, []);
 
   const onDocumentLoadSuccess = useCallback((document) => {
@@ -184,20 +181,19 @@ export default function Test() {
       renderTextLayer,
       scale: pageScale,
       width: pageWidth,
-      customTextRenderer: (textItem) => (
-        textItem.str
-          .split('ipsum')
-          .reduce((strArray, currentValue, currentIndex) => (
+      customTextRenderer: (textItem) =>
+        textItem.str.split('ipsum').reduce(
+          (strArray, currentValue, currentIndex) =>
             currentIndex === 0
-              ? ([...strArray, currentValue])
-              : ([...strArray, (
-                // eslint-disable-next-line react/no-array-index-key
-                <mark key={currentIndex}>
-                  ipsum
-                </mark>
-              ), currentValue])
-          ), [])
-      ),
+              ? [...strArray, currentValue]
+              : [
+                  ...strArray,
+                  // eslint-disable-next-line react/no-array-index-key
+                  <mark key={currentIndex}>ipsum</mark>,
+                  currentValue,
+                ],
+          [],
+        ),
     };
   }
 
@@ -213,22 +209,12 @@ export default function Test() {
   return (
     <div className="Test">
       <header>
-        <h1>
-          react-pdf test page
-        </h1>
+        <h1>react-pdf test page</h1>
       </header>
       <div className="Test__container">
         <aside className="Test__container__options">
-          <LoadingOptions
-            file={file}
-            setFile={setFile}
-            setRender={setRender}
-          />
-          <PassingOptions
-            file={file}
-            passMethod={passMethod}
-            setPassMethod={setPassMethod}
-          />
+          <LoadingOptions file={file} setFile={setFile} setRender={setRender} />
+          <PassingOptions file={file} passMethod={passMethod} setPassMethod={setPassMethod} />
           <LayerOptions
             renderAnnotationLayer={renderAnnotationLayer}
             renderInteractiveForms={renderInteractiveForms}
@@ -270,56 +256,32 @@ export default function Test() {
             onSourceError={onDocumentLoadError}
           >
             <div className="Test__container__content__toc">
-              {render && (
-                <Outline
-                  className="custom-classname-outline"
-                  onItemClick={onItemClick}
-                />
-              )}
+              {render && <Outline className="custom-classname-outline" onItemClick={onItemClick} />}
             </div>
             <div className="Test__container__content__document">
-              {render && (
-                displayAll
-                  ? Array.from(
-                    new Array(numPages),
-                    (el, index) => (
-                      <Page
-                        {...pageProps}
-                        key={`page_${index + 1}`}
-                        inputRef={
-                          (pageNumber === index + 1)
-                            ? ((ref) => ref && ref.scrollIntoView())
-                            : null
-                        }
-                        pageNumber={index + 1}
-                      />
-                    ),
-                  )
-                  : (
+              {render &&
+                (displayAll ? (
+                  Array.from(new Array(numPages), (el, index) => (
                     <Page
                       {...pageProps}
-                      pageNumber={pageNumber || 1}
+                      key={`page_${index + 1}`}
+                      inputRef={
+                        pageNumber === index + 1 ? (ref) => ref && ref.scrollIntoView() : null
+                      }
+                      pageNumber={index + 1}
                     />
-                  )
-              )}
+                  ))
+                ) : (
+                  <Page {...pageProps} pageNumber={pageNumber || 1} />
+                ))}
             </div>
             {displayAll || (
               <div className="Test__container__content__controls">
-                <button
-                  disabled={pageNumber <= 1}
-                  onClick={previousPage}
-                  type="button"
-                >
+                <button disabled={pageNumber <= 1} onClick={previousPage} type="button">
                   Previous
                 </button>
-                <span>
-                  {`Page ${pageNumber || (numPages ? 1 : '--')} of ${numPages || '--'}`}
-                </span>
-                <button
-                  disabled={pageNumber >= numPages}
-                  onClick={nextPage}
-                  type="button"
-                >
+                <span>{`Page ${pageNumber || (numPages ? 1 : '--')} of ${numPages || '--'}`}</span>
+                <button disabled={pageNumber >= numPages} onClick={nextPage} type="button">
                   Next
                 </button>
               </div>

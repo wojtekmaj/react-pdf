@@ -12,9 +12,4 @@ if (typeof window !== 'undefined' && 'Worker' in window) {
   pdfjs.GlobalWorkerOptions.workerPort = new Worker('./pdf.worker.entry.js');
 }
 
-export {
-  pdfjs,
-  Document,
-  Outline,
-  Page,
-};
+export { pdfjs, Document, Outline, Page };

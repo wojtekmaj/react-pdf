@@ -54,10 +54,7 @@ module.exports = {
       },
       {
         test: /\.css$/,
-        use: [
-          isProduction ? MiniCssExtractPlugin.loader : 'style-loader',
-          'css-loader',
-        ],
+        use: [isProduction ? MiniCssExtractPlugin.loader : 'style-loader', 'css-loader'],
       },
       {
         test: /\.pdf$/,
@@ -67,18 +64,16 @@ module.exports = {
   },
   plugins: [
     new CopyWebpackPlugin({
-      patterns: [
-        'test.pdf',
-        { from: cMapsDir, to: 'cmaps/' },
-      ],
+      patterns: ['test.pdf', { from: cMapsDir, to: 'cmaps/' }],
     }),
     new HtmlWebpackPlugin({
       template: 'index.html',
     }),
-    isProduction && new MiniCssExtractPlugin({
-      filename: '[name].[chunkhash:8].css',
-      chunkFilename: '[name].[chunkhash:8].css',
-    }),
+    isProduction &&
+      new MiniCssExtractPlugin({
+        filename: '[name].[chunkhash:8].css',
+        chunkFilename: '[name].[chunkhash:8].css',
+      }),
     isDevelopment && new ReactRefreshWebpackPlugin(),
   ].filter(Boolean),
   optimization: {

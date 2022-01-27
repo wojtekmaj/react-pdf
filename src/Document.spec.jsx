@@ -5,9 +5,7 @@ import { pdfjs } from './entry.jest';
 
 import Document from './Document';
 
-import {
-  makeAsyncCallback, loadPDF, muteConsole, restoreConsole,
-} from '../test-utils';
+import { makeAsyncCallback, loadPDF, muteConsole, restoreConsole } from '../test-utils';
 
 const pdfFile = loadPDF('./__mocks__/_pdf.pdf');
 const pdfFile2 = loadPDF('./__mocks__/_pdf2.pdf');
@@ -120,12 +118,7 @@ describe('Document', () => {
 
       muteConsole();
 
-      shallow(
-        <Document
-          file={() => null}
-          onSourceError={onSourceError}
-        />,
-      );
+      shallow(<Document file={() => null} onSourceError={onSourceError} />);
 
       expect.assertions(1);
 
@@ -171,9 +164,7 @@ describe('Document', () => {
     it('applies className to its wrapper when given a string', () => {
       const className = 'testClassName';
 
-      const component = shallow(
-        <Document className={className} />,
-      );
+      const component = shallow(<Document className={className} />);
 
       const wrapperClassName = component.find('.react-pdf__Document').prop('className');
 
@@ -183,18 +174,14 @@ describe('Document', () => {
     it('passes container element to inputRef properly', () => {
       const inputRef = jest.fn();
 
-      mount(
-        <Document inputRef={inputRef} />,
-      );
+      mount(<Document inputRef={inputRef} />);
 
       expect(inputRef).toHaveBeenCalled();
       expect(inputRef.mock.calls[0][0]).toBeInstanceOf(HTMLElement);
     });
 
     it('renders "No PDF file specified." when given nothing', () => {
-      const component = shallow(
-        <Document />,
-      );
+      const component = shallow(<Document />);
 
       const noData = component.find('Message');
 
@@ -203,9 +190,7 @@ describe('Document', () => {
     });
 
     it('renders custom no data message when given nothing and noData prop is given', () => {
-      const component = shallow(
-        <Document noData="Nothing here" />,
-      );
+      const component = shallow(<Document noData="Nothing here" />);
 
       const noData = component.find('Message');
 
@@ -214,9 +199,7 @@ describe('Document', () => {
     });
 
     it('renders custom no data message when given nothing and noData prop is given as a function', () => {
-      const component = shallow(
-        <Document noData={() => 'Nothing here'} />,
-      );
+      const component = shallow(<Document noData={() => 'Nothing here'} />);
 
       const noData = component.find('Message');
 
@@ -227,12 +210,7 @@ describe('Document', () => {
     it('renders "Loading PDF…" when loading a file', async () => {
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
-      const component = shallow(
-        <Document
-          file={pdfFile.file}
-          onLoadSuccess={onLoadSuccess}
-        />,
-      );
+      const component = shallow(<Document file={pdfFile.file} onLoadSuccess={onLoadSuccess} />);
 
       expect.assertions(2);
 
@@ -251,11 +229,7 @@ describe('Document', () => {
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
       const component = shallow(
-        <Document
-          file={pdfFile.file}
-          loading="Loading"
-          onLoadSuccess={onLoadSuccess}
-        />,
+        <Document file={pdfFile.file} loading="Loading" onLoadSuccess={onLoadSuccess} />,
       );
 
       expect.assertions(2);
@@ -275,11 +249,7 @@ describe('Document', () => {
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
       const component = shallow(
-        <Document
-          file={pdfFile.file}
-          loading={() => 'Loading'}
-          onLoadSuccess={onLoadSuccess}
-        />,
+        <Document file={pdfFile.file} loading={() => 'Loading'} onLoadSuccess={onLoadSuccess} />,
       );
 
       expect.assertions(2);
@@ -301,12 +271,7 @@ describe('Document', () => {
 
       muteConsole();
 
-      const component = shallow(
-        <Document
-          file={failingPdf}
-          onLoadError={onLoadError}
-        />,
-      );
+      const component = shallow(<Document file={failingPdf} onLoadError={onLoadError} />);
 
       expect.assertions(2);
 
@@ -328,11 +293,7 @@ describe('Document', () => {
       muteConsole();
 
       const component = shallow(
-        <Document
-          error="Error"
-          file={failingPdf}
-          onLoadError={onLoadError}
-        />,
+        <Document error="Error" file={failingPdf} onLoadError={onLoadError} />,
       );
 
       expect.assertions(2);
@@ -376,12 +337,7 @@ describe('Document', () => {
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
       const component = shallow(
-        <Document
-          file={pdfFile.file}
-          loading="Loading"
-          onLoadSuccess={onLoadSuccess}
-          rotate={90}
-        >
+        <Document file={pdfFile.file} loading="Loading" onLoadSuccess={onLoadSuccess} rotate={90}>
           <Child />
         </Document>,
       );
@@ -423,12 +379,7 @@ describe('Document', () => {
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
       const component = shallow(
-        <Document
-          file={pdfFile.file}
-          loading="Loading"
-          onLoadSuccess={onLoadSuccess}
-          rotate={90}
-        >
+        <Document file={pdfFile.file} loading="Loading" onLoadSuccess={onLoadSuccess} rotate={90}>
           <Child rotate={180} />
         </Document>,
       );
@@ -451,11 +402,7 @@ describe('Document', () => {
       const onItemClick = jest.fn();
 
       const component = shallow(
-        <Document
-          file={pdfFile.file}
-          onItemClick={onItemClick}
-          onLoadSuccess={onLoadSuccess}
-        />,
+        <Document file={pdfFile.file} onItemClick={onItemClick} onLoadSuccess={onLoadSuccess} />,
       );
 
       expect.assertions(2);
@@ -476,12 +423,7 @@ describe('Document', () => {
     it('attempts to find a page and scroll it into view if onItemClick is not given', async () => {
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
-      const component = shallow(
-        <Document
-          file={pdfFile.file}
-          onLoadSuccess={onLoadSuccess}
-        />,
-      );
+      const component = shallow(<Document file={pdfFile.file} onLoadSuccess={onLoadSuccess} />);
 
       expect.assertions(1);
 
@@ -511,25 +453,26 @@ describe('Document', () => {
       ${'_blank'}        | ${'_blank'}
       ${'_parent'}       | ${'_parent'}
       ${'_top'}          | ${'_top'}
-    `('returns externalLinkTarget = $target given externalLinkTarget prop = $externalLinkTarget', async ({
-      externalLinkTarget, target,
-    }) => {
-      const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
+    `(
+      'returns externalLinkTarget = $target given externalLinkTarget prop = $externalLinkTarget',
+      async ({ externalLinkTarget, target }) => {
+        const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
-      const component = shallow(
-        <Document
-          externalLinkTarget={externalLinkTarget}
-          file={pdfFile.file}
-          onLoadSuccess={onLoadSuccess}
-        />,
-      );
+        const component = shallow(
+          <Document
+            externalLinkTarget={externalLinkTarget}
+            file={pdfFile.file}
+            onLoadSuccess={onLoadSuccess}
+          />,
+        );
 
-      expect.assertions(1);
+        expect.assertions(1);
 
-      await onLoadSuccessPromise;
+        await onLoadSuccessPromise;
 
-      expect(component.instance().linkService.externalLinkTarget).toBe(target);
-    });
+        expect(component.instance().linkService.externalLinkTarget).toBe(target);
+      },
+    );
   });
 
   it.each`
@@ -539,32 +482,31 @@ describe('Document', () => {
     ${'_blank'}     | ${'_blank'}
     ${'_parent'}    | ${'_parent'}
     ${'_top'}       | ${'_top'}
-  `('returns externalLinkRel = $rel given externalLinkRel prop = $externalLinkRel', async ({
-    externalLinkRel, rel,
-  }) => {
-    const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
+  `(
+    'returns externalLinkRel = $rel given externalLinkRel prop = $externalLinkRel',
+    async ({ externalLinkRel, rel }) => {
+      const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
-    const component = shallow(
-      <Document
-        externalLinkRel={externalLinkRel}
-        file={pdfFile.file}
-        onLoadSuccess={onLoadSuccess}
-      />,
-    );
+      const component = shallow(
+        <Document
+          externalLinkRel={externalLinkRel}
+          file={pdfFile.file}
+          onLoadSuccess={onLoadSuccess}
+        />,
+      );
 
-    expect.assertions(1);
+      expect.assertions(1);
 
-    await onLoadSuccessPromise;
+      await onLoadSuccessPromise;
 
-    expect(component.instance().linkService.externalLinkRel).toBe(rel);
-  });
+      expect(component.instance().linkService.externalLinkRel).toBe(rel);
+    },
+  );
 
   it('calls onClick callback when clicked a page (sample of mouse events family)', () => {
     const onClick = jest.fn();
 
-    const component = mount(
-      <Document onClick={onClick} />,
-    );
+    const component = mount(<Document onClick={onClick} />);
 
     const document = component.find('.react-pdf__Document');
     document.simulate('click');
@@ -575,9 +517,7 @@ describe('Document', () => {
   it('calls onTouchStart callback when touched a page (sample of touch events family)', () => {
     const onTouchStart = jest.fn();
 
-    const component = mount(
-      <Document onTouchStart={onTouchStart} />,
-    );
+    const component = mount(<Document onTouchStart={onTouchStart} />);
 
     const document = component.find('.react-pdf__Document');
     document.simulate('touchstart');

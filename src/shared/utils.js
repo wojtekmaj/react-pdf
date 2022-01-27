@@ -95,7 +95,8 @@ export function getPixelRatio() {
   return (isBrowser && window.devicePixelRatio) || 1;
 }
 
-const allowFileAccessFromFilesTip = 'On Chromium based browsers, you can use --allow-file-access-from-files flag for debugging purposes.';
+const allowFileAccessFromFilesTip =
+  'On Chromium based browsers, you can use --allow-file-access-from-files flag for debugging purposes.';
 
 export function displayCORSWarning() {
   warning(
@@ -116,10 +117,30 @@ export function cancelRunningTask(runningTask) {
 }
 
 export function makePageCallback(page, scale) {
-  Object.defineProperty(page, 'width', { get() { return this.view[2] * scale; }, configurable: true });
-  Object.defineProperty(page, 'height', { get() { return this.view[3] * scale; }, configurable: true });
-  Object.defineProperty(page, 'originalWidth', { get() { return this.view[2]; }, configurable: true });
-  Object.defineProperty(page, 'originalHeight', { get() { return this.view[3]; }, configurable: true });
+  Object.defineProperty(page, 'width', {
+    get() {
+      return this.view[2] * scale;
+    },
+    configurable: true,
+  });
+  Object.defineProperty(page, 'height', {
+    get() {
+      return this.view[3] * scale;
+    },
+    configurable: true,
+  });
+  Object.defineProperty(page, 'originalWidth', {
+    get() {
+      return this.view[2];
+    },
+    configurable: true,
+  });
+  Object.defineProperty(page, 'originalHeight', {
+    get() {
+      return this.view[3];
+    },
+    configurable: true,
+  });
   return page;
 }
 

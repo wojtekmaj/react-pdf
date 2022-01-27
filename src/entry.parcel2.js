@@ -8,11 +8,9 @@ import { displayWorkerWarning } from './shared/utils';
 
 displayWorkerWarning();
 
-pdfjs.GlobalWorkerOptions.workerSrc = new URL('npm:pdfjs-dist/legacy/build/pdf.worker', import.meta.url);
+pdfjs.GlobalWorkerOptions.workerSrc = new URL(
+  'npm:pdfjs-dist/legacy/build/pdf.worker',
+  import.meta.url,
+);
 
-export {
-  pdfjs,
-  Document,
-  Outline,
-  Page,
-};
+export { pdfjs, Document, Outline, Page };

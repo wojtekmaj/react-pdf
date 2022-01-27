@@ -6,9 +6,4 @@ import Page from './Page';
 
 import './pdf.worker.entry';
 
-export {
-  pdfjs,
-  Document,
-  Outline,
-  Page,
-};
+export { pdfjs, Document, Outline, Page };

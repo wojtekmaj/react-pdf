@@ -24,25 +24,15 @@ describe('OutlineItem', () => {
 
   describe('rendering', () => {
     it('renders an item properly', () => {
-      const component = shallow(
-        <OutlineItem
-          item={outlineItem}
-          pdf={pdf}
-        />,
-      );
+      const component = shallow(<OutlineItem item={outlineItem} pdf={pdf} />);
 
       const title = component.find('a').first();
 
       expect(title.text()).toBe(outlineItem.title);
     });
 
-    it('renders item\'s subitems properly', () => {
-      const component = mount(
-        <OutlineItem
-          item={outlineItem}
-          pdf={pdf}
-        />,
-      );
+    it("renders item's subitems properly", () => {
+      const component = mount(<OutlineItem item={outlineItem} pdf={pdf} />);
 
       const subitems = component.children().find('OutlineItemInternal');
 
@@ -52,13 +42,7 @@ describe('OutlineItem', () => {
     it('calls onClick with proper arguments when clicked a link', () => {
       const { func: onClick, promise: onClickPromise } = makeAsyncCallback();
 
-      const component = mount(
-        <OutlineItem
-          item={outlineItem}
-          onClick={onClick}
-          pdf={pdf}
-        />,
-      );
+      const component = mount(<OutlineItem item={outlineItem} onClick={onClick} pdf={pdf} />);
 
       const title = component.find('a').first();
       title.simulate('click');

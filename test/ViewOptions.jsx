@@ -103,13 +103,9 @@ export default function ViewOptions({
 
   return (
     <fieldset id="viewoptions">
-      <legend htmlFor="viewoptions">
-        View options
-      </legend>
+      <legend htmlFor="viewoptions">View options</legend>
 
-      <label htmlFor="canvasBackground">
-        Canvas background:
-      </label>
+      <label htmlFor="canvasBackground">Canvas background:</label>
       <input
         defaultValue={canvasBackground || '#ffffff'}
         id="canvasBackground"
@@ -118,65 +114,33 @@ export default function ViewOptions({
       />
 
       <form onSubmit={onPageWidthChange}>
-        <label htmlFor="pageWidth">
-          Page width:
-        </label>
+        <label htmlFor="pageWidth">Page width:</label>
         &nbsp;
-        <input
-          defaultValue={pageWidth}
-          id="pageWidth"
-          min={0}
-          name="pageWidth"
-          type="number"
-        />
+        <input defaultValue={pageWidth} id="pageWidth" min={0} name="pageWidth" type="number" />
         &nbsp;
-        <button
-          style={{ display: 'none' }}
-          type="submit"
-        >
+        <button style={{ display: 'none' }} type="submit">
           Set width
         </button>
-        <button
-          disabled={pageWidth === null}
-          onClick={resetWidth}
-          type="button"
-        >
+        <button disabled={pageWidth === null} onClick={resetWidth} type="button">
           Reset width
         </button>
       </form>
 
       <form onSubmit={onPageHeightChange}>
-        <label htmlFor="pageHeight">
-          Page height:
-        </label>
+        <label htmlFor="pageHeight">Page height:</label>
         &nbsp;
-        <input
-          defaultValue={pageHeight}
-          id="pageHeight"
-          min={0}
-          name="pageHeight"
-          type="number"
-        />
+        <input defaultValue={pageHeight} id="pageHeight" min={0} name="pageHeight" type="number" />
         &nbsp;
-        <button
-          style={{ display: 'none' }}
-          type="submit"
-        >
+        <button style={{ display: 'none' }} type="submit">
           Set height
         </button>
-        <button
-          disabled={pageHeight === null}
-          onClick={resetHeight}
-          type="button"
-        >
+        <button disabled={pageHeight === null} onClick={resetHeight} type="button">
           Reset height
         </button>
       </form>
 
       <form onSubmit={onPageScaleChange}>
-        <label htmlFor="pageScale">
-          Page scale:
-        </label>
+        <label htmlFor="pageScale">Page scale:</label>
         &nbsp;
         <input
           defaultValue={pageScale}
@@ -188,24 +152,15 @@ export default function ViewOptions({
           type="range"
         />
         &nbsp;
-        <button
-          style={{ display: 'none' }}
-          type="submit"
-        >
+        <button style={{ display: 'none' }} type="submit">
           Set scale
         </button>
-        <button
-          disabled={pageScale === null}
-          onClick={resetScale}
-          type="button"
-        >
+        <button disabled={pageScale === null} onClick={resetScale} type="button">
           Reset scale
         </button>
       </form>
 
-      <label htmlFor="renderMode">
-        Render mode:
-      </label>
+      <label htmlFor="renderMode">Render mode:</label>
       <div>
         <input
           checked={renderMode === 'none'}
@@ -215,22 +170,18 @@ export default function ViewOptions({
           type="radio"
           value="none"
         />
-        <label htmlFor="renderNone">
-          None
-        </label>
+        <label htmlFor="renderNone">None</label>
       </div>
       <div>
         <input
-          checked={!renderMode || (renderMode === 'canvas')}
+          checked={!renderMode || renderMode === 'canvas'}
           id="renderCanvas"
           name="renderMode"
           onChange={onRenderModeChange}
           type="radio"
           value="canvas"
         />
-        <label htmlFor="renderCanvas">
-          Canvas
-        </label>
+        <label htmlFor="renderCanvas">Canvas</label>
       </div>
       <div>
         <input
@@ -241,15 +192,11 @@ export default function ViewOptions({
           type="radio"
           value="svg"
         />
-        <label htmlFor="renderSVG">
-          SVG
-        </label>
+        <label htmlFor="renderSVG">SVG</label>
       </div>
 
       <div>
-        <label htmlFor="rotation">
-          Rotation:
-        </label>
+        <label htmlFor="rotation">Rotation:</label>
         <input
           id="rotation"
           onChange={onChangeRotate}
@@ -259,38 +206,21 @@ export default function ViewOptions({
           value={rotate !== null ? rotate : ''}
         />
         &nbsp;
-        <button
-          onClick={rotateLeft}
-          type="button"
-        >
+        <button onClick={rotateLeft} type="button">
           Rotate left
         </button>
         &nbsp;
-        <button
-          onClick={rotateRight}
-          type="button"
-        >
+        <button onClick={rotateRight} type="button">
           Rotate right
         </button>
         &nbsp;
-        <button
-          disabled={rotate === null}
-          onClick={resetRotation}
-          type="button"
-        >
+        <button disabled={rotate === null} onClick={resetRotation} type="button">
           Reset rotation
         </button>
       </div>
 
-      <input
-        checked={displayAll}
-        id="displayAll"
-        onChange={onDisplayAllChange}
-        type="checkbox"
-      />
-      <label htmlFor="displayAll">
-        View all pages
-      </label>
+      <input checked={displayAll} id="displayAll" onChange={onDisplayAllChange} type="checkbox" />
+      <label htmlFor="displayAll">View all pages</label>
     </fieldset>
   );
 }

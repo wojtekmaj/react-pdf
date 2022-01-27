@@ -29,19 +29,14 @@ import {
   loadFromFile,
 } from './shared/utils';
 
-import {
-  eventProps,
-  isClassName,
-  isFile as isFileProp,
-  isRef,
-} from './shared/propTypes';
+import { eventProps, isClassName, isFile as isFileProp, isRef } from './shared/propTypes';
 
 const { PDFDataRangeTransport } = pdfjs;
 
 export default class Document extends PureComponent {
   state = {
     pdf: null,
-  }
+  };
 
   viewer = {
     scrollPageIntoView: ({ dest, pageIndex, pageNumber }) => {
@@ -142,7 +137,7 @@ export default class Document extends PureComponent {
       .catch((error) => {
         this.onSourceError(error);
       });
-  }
+  };
 
   setupLinkService = () => {
     const { externalLinkRel, externalLinkTarget } = this.props;
@@ -150,7 +145,7 @@ export default class Document extends PureComponent {
     this.linkService.setViewer(this.viewer);
     this.linkService.setExternalLinkRel(externalLinkRel);
     this.linkService.setExternalLinkTarget(externalLinkTarget);
-  }
+  };
 
   get childContext() {
     const { linkService, registerPage, unregisterPage } = this;
@@ -169,7 +164,6 @@ export default class Document extends PureComponent {
   }
 
   get eventProps() {
-    // eslint-disable-next-line react/destructuring-assignment
     return makeEventProps(this.props, () => this.state.pdf);
   }
 
@@ -180,7 +174,7 @@ export default class Document extends PureComponent {
     const { onSourceSuccess } = this.props;
 
     if (onSourceSuccess) onSourceSuccess();
-  }
+  };
 
   /**
    * Called when a document source failed to be resolved correctly
@@ -191,7 +185,7 @@ export default class Document extends PureComponent {
     const { onSourceError } = this.props;
 
     if (onSourceError) onSourceError(error);
-  }
+  };
 
   /**
    * Called when a document is read successfully
@@ -204,7 +198,7 @@ export default class Document extends PureComponent {
 
     this.pages = new Array(pdf.numPages);
     this.linkService.setDocument(pdf);
-  }
+  };
 
   /**
    * Called when a document failed to read successfully
@@ -217,93 +211,92 @@ export default class Document extends PureComponent {
     const { onLoadError } = this.props;
 
     if (onLoadError) onLoadError(error);
-  }
+  };
 
   /**
    * Finds a document source based on props.
    */
-  findDocumentSource = () => new Promise((resolve) => {
-    const { file } = this.props;
+  findDocumentSource = () =>
+    new Promise((resolve) => {
+      const { file } = this.props;
 
-    if (!file) {
-      resolve(null);
-    }
-
-    // File is a string
-    if (typeof file === 'string') {
-      if (isDataURI(file)) {
-        const fileByteString = dataURItoByteString(file);
-        resolve({ data: fileByteString });
+      if (!file) {
+        resolve(null);
       }
 
-      displayCORSWarning();
-      resolve({ url: file });
-    }
+      // File is a string
+      if (typeof file === 'string') {
+        if (isDataURI(file)) {
+          const fileByteString = dataURItoByteString(file);
+          resolve({ data: fileByteString });
+        }
 
-    // File is PDFDataRangeTransport
-    if (file instanceof PDFDataRangeTransport) {
-      resolve({ range: file });
-    }
-
-    // File is an ArrayBuffer
-    if (isArrayBuffer(file)) {
-      resolve({ data: file });
-    }
-
-    /**
-     * The cases below are browser-only.
-     * If you're running on a non-browser environment, these cases will be of no use.
-     */
-    if (isBrowser) {
-      // File is a Blob
-      if (isBlob(file) || isFile(file)) {
-        loadFromFile(file).then((data) => {
-          resolve({ data });
-        });
-        return;
-      }
-    }
-
-    // At this point, file must be an object
-    invariant(
-      typeof file === 'object',
-      'Invalid parameter in file, need either Uint8Array, string or a parameter object',
-    );
-
-    invariant(
-      file.url || file.data || file.range,
-      'Invalid parameter object: need either .data, .range or .url',
-    );
-
-    // File .url is a string
-    if (typeof file.url === 'string') {
-      if (isDataURI(file.url)) {
-        const { url, ...otherParams } = file;
-        const fileByteString = dataURItoByteString(url);
-        resolve({ data: fileByteString, ...otherParams });
+        displayCORSWarning();
+        resolve({ url: file });
       }
 
-      displayCORSWarning();
-    }
+      // File is PDFDataRangeTransport
+      if (file instanceof PDFDataRangeTransport) {
+        resolve({ range: file });
+      }
 
-    resolve(file);
-  });
+      // File is an ArrayBuffer
+      if (isArrayBuffer(file)) {
+        resolve({ data: file });
+      }
+
+      /**
+       * The cases below are browser-only.
+       * If you're running on a non-browser environment, these cases will be of no use.
+       */
+      if (isBrowser) {
+        // File is a Blob
+        if (isBlob(file) || isFile(file)) {
+          loadFromFile(file).then((data) => {
+            resolve({ data });
+          });
+          return;
+        }
+      }
+
+      // At this point, file must be an object
+      invariant(
+        typeof file === 'object',
+        'Invalid parameter in file, need either Uint8Array, string or a parameter object',
+      );
+
+      invariant(
+        file.url || file.data || file.range,
+        'Invalid parameter object: need either .data, .range or .url',
+      );
+
+      // File .url is a string
+      if (typeof file.url === 'string') {
+        if (isDataURI(file.url)) {
+          const { url, ...otherParams } = file;
+          const fileByteString = dataURItoByteString(url);
+          resolve({ data: fileByteString, ...otherParams });
+        }
+
+        displayCORSWarning();
+      }
+
+      resolve(file);
+    });
 
   registerPage = (pageIndex, ref) => {
     this.pages[pageIndex] = ref;
-  }
+  };
 
   unregisterPage = (pageIndex) => {
     delete this.pages[pageIndex];
-  }
+  };
 
   renderChildren() {
     const { children } = this.props;
 
     return (
-      <DocumentContext.Provider value={this.childContext}>
-        {children}
-      </DocumentContext.Provider>
+      <DocumentContext.Provider value={this.childContext}>{children}</DocumentContext.Provider>
     );
   }
 
@@ -314,31 +307,21 @@ export default class Document extends PureComponent {
     if (!file) {
       const { noData } = this.props;
 
-      return (
-        <Message type="no-data">
-          {typeof noData === 'function' ? noData() : noData}
-        </Message>
-      );
+      return <Message type="no-data">{typeof noData === 'function' ? noData() : noData}</Message>;
     }
 
     if (pdf === null) {
       const { loading } = this.props;
 
       return (
-        <Message type="loading">
-          {typeof loading === 'function' ? loading() : loading}
-        </Message>
+        <Message type="loading">{typeof loading === 'function' ? loading() : loading}</Message>
       );
     }
 
     if (pdf === false) {
       const { error } = this.props;
 
-      return (
-        <Message type="error">
-          {typeof error === 'function' ? error() : error}
-        </Message>
-      );
+      return <Message type="error">{typeof error === 'function' ? error() : error}</Message>;
     }
 
     return this.renderChildren();
@@ -382,10 +365,7 @@ Document.defaultProps = {
   },
 };
 
-const isFunctionOrNode = PropTypes.oneOfType([
-  PropTypes.func,
-  PropTypes.node,
-]);
+const isFunctionOrNode = PropTypes.oneOfType([PropTypes.func, PropTypes.node]);
 
 Document.propTypes = {
   ...eventProps,

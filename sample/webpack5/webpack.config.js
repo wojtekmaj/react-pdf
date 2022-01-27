@@ -25,24 +25,15 @@ module.exports = {
     rules: [
       {
         test: /\.jsx?$/,
-        use: [
-          'babel-loader',
-        ],
+        use: ['babel-loader'],
       },
       {
         test: /\.less$/,
-        use: [
-          'style-loader',
-          'css-loader',
-          'less-loader',
-        ],
+        use: ['style-loader', 'css-loader', 'less-loader'],
       },
       {
         test: /\.css$/,
-        use: [
-          'style-loader',
-          'css-loader',
-        ],
+        use: ['style-loader', 'css-loader'],
       },
     ],
   },
@@ -56,10 +47,7 @@ module.exports = {
       template: 'index.html',
     }),
     new CopyWebpackPlugin({
-      patterns: [
-        { from: './sample.pdf' },
-        { from: cMapsDir, to: 'cmaps/' },
-      ],
+      patterns: [{ from: './sample.pdf' }, { from: cMapsDir, to: 'cmaps/' }],
     }),
   ],
   devServer: {

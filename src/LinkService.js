@@ -14,8 +14,6 @@
  */
 import invariant from 'tiny-invariant';
 
-/* eslint-disable class-methods-use-this, no-empty-function, no-param-reassign */
-
 const DEFAULT_LINK_REL = 'noopener noreferrer nofollow';
 
 export default class LinkService {
@@ -69,42 +67,41 @@ export default class LinkService {
       } else {
         dest.then(resolve);
       }
-    })
-      .then((explicitDest) => {
-        invariant(Array.isArray(explicitDest), `"${explicitDest}" is not a valid destination array.`);
+    }).then((explicitDest) => {
+      invariant(Array.isArray(explicitDest), `"${explicitDest}" is not a valid destination array.`);
 
-        const destRef = explicitDest[0];
+      const destRef = explicitDest[0];
 
-        new Promise((resolve) => {
-          if (destRef instanceof Object) {
-            this.pdfDocument.getPageIndex(destRef)
-              .then((pageIndex) => {
-                resolve(pageIndex);
-              })
-              .catch(() => {
-                invariant(false, `"${destRef}" is not a valid page reference.`);
-              });
-          } else if (typeof destRef === 'number') {
-            resolve(destRef);
-          } else {
-            invariant(false, `"${destRef}" is not a valid destination reference.`);
-          }
-        })
-          .then((pageIndex) => {
-            const pageNumber = pageIndex + 1;
-
-            invariant(
-              pageNumber >= 1 && pageNumber <= this.pagesCount,
-              `"${pageNumber}" is not a valid page number.`,
-            );
-
-            this.pdfViewer.scrollPageIntoView({
-              dest,
-              pageIndex,
-              pageNumber,
+      new Promise((resolve) => {
+        if (destRef instanceof Object) {
+          this.pdfDocument
+            .getPageIndex(destRef)
+            .then((pageIndex) => {
+              resolve(pageIndex);
+            })
+            .catch(() => {
+              invariant(false, `"${destRef}" is not a valid page reference.`);
             });
-          });
+        } else if (typeof destRef === 'number') {
+          resolve(destRef);
+        } else {
+          invariant(false, `"${destRef}" is not a valid destination reference.`);
+        }
+      }).then((pageIndex) => {
+        const pageNumber = pageIndex + 1;
+
+        invariant(
+          pageNumber >= 1 && pageNumber <= this.pagesCount,
+          `"${pageNumber}" is not a valid page number.`,
+        );
+
+        this.pdfViewer.scrollPageIntoView({
+          dest,
+          pageIndex,
+          pageNumber,
+        });
       });
+    });
   }
 
   navigateTo(dest) {

@@ -8,8 +8,6 @@
   "moduleNameMapper": {
     "\\.(css|less)$": "<rootDir>/__mocks__/styleMock.js"
   },
-  "setupFiles": [
-    "<rootDir>/jest.setup.js"
-  ],
+  "setupFiles": ["<rootDir>/jest.setup.js"],
   "testEnvironment": "<rootDir>/jest.env.js"
 }

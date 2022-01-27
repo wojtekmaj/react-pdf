@@ -15,7 +15,7 @@ import { isPage, isRotate } from '../shared/propTypes';
 export class TextLayerInternal extends PureComponent {
   state = {
     textItems: null,
-  }
+  };
 
   componentDidMount() {
     const { page } = this.props;
@@ -28,7 +28,7 @@ export class TextLayerInternal extends PureComponent {
   componentDidUpdate(prevProps) {
     const { page } = this.props;
 
-    if (prevProps.page && (page !== prevProps.page)) {
+    if (prevProps.page && page !== prevProps.page) {
       this.loadTextItems();
     }
   }
@@ -50,14 +50,14 @@ export class TextLayerInternal extends PureComponent {
       .catch((error) => {
         this.onLoadError(error);
       });
-  }
+  };
 
   onLoadSuccess = () => {
     const { onGetTextSuccess } = this.props;
     const { textItems } = this.state;
 
     if (onGetTextSuccess) onGetTextSuccess(textItems);
-  }
+  };
 
   onLoadError = (error) => {
     this.setState({ textItems: false });
@@ -67,7 +67,7 @@ export class TextLayerInternal extends PureComponent {
     const { onGetTextError } = this.props;
 
     if (onGetTextError) onGetTextError(error);
-  }
+  };
 
   get unrotatedViewport() {
     const { page, scale } = this.props;

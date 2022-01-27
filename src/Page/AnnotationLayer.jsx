@@ -15,7 +15,7 @@ import { isLinkService, isPage, isRotate } from '../shared/propTypes';
 export class AnnotationLayerInternal extends PureComponent {
   state = {
     annotations: null,
-  }
+  };
 
   componentDidMount() {
     const { page } = this.props;
@@ -29,8 +29,8 @@ export class AnnotationLayerInternal extends PureComponent {
     const { page, renderInteractiveForms } = this.props;
 
     if (
-      (prevProps.page && (page !== prevProps.page))
-      || renderInteractiveForms !== prevProps.renderInteractiveForms
+      (prevProps.page && page !== prevProps.page) ||
+      renderInteractiveForms !== prevProps.renderInteractiveForms
     ) {
       this.loadAnnotations();
     }
@@ -53,14 +53,14 @@ export class AnnotationLayerInternal extends PureComponent {
       .catch((error) => {
         this.onLoadError(error);
       });
-  }
+  };
 
   onLoadSuccess = () => {
     const { onGetAnnotationsSuccess } = this.props;
     const { annotations } = this.state;
 
     if (onGetAnnotationsSuccess) onGetAnnotationsSuccess(annotations);
-  }
+  };
 
   onLoadError = (error) => {
     this.setState({ annotations: false });
@@ -70,13 +70,13 @@ export class AnnotationLayerInternal extends PureComponent {
     const { onGetAnnotationsError } = this.props;
 
     if (onGetAnnotationsError) onGetAnnotationsError(error);
-  }
+  };
 
   onRenderSuccess = () => {
     const { onRenderAnnotationLayerSuccess } = this.props;
 
     if (onRenderAnnotationLayerSuccess) onRenderAnnotationLayerSuccess();
-  }
+  };
 
   /**
    * Called when a annotations fails to render.
@@ -87,7 +87,7 @@ export class AnnotationLayerInternal extends PureComponent {
     const { onRenderAnnotationLayerError } = this.props;
 
     if (onRenderAnnotationLayerError) onRenderAnnotationLayerError(error);
-  }
+  };
 
   get viewport() {
     const { page, rotate, scale } = this.props;
@@ -102,12 +102,7 @@ export class AnnotationLayerInternal extends PureComponent {
       return;
     }
 
-    const {
-      imageResourcesPath,
-      linkService,
-      page,
-      renderInteractiveForms,
-    } = this.props;
+    const { imageResourcesPath, linkService, page, renderInteractiveForms } = this.props;
 
     const viewport = this.viewport.clone({ dontFlip: true });
 
@@ -135,7 +130,9 @@ export class AnnotationLayerInternal extends PureComponent {
     return (
       <div
         className="react-pdf__Page__annotations annotationLayer"
-        ref={(ref) => { this.annotationLayer = ref; }}
+        ref={(ref) => {
+          this.annotationLayer = ref;
+        }}
       >
         {this.renderAnnotationLayer()}
       </div>

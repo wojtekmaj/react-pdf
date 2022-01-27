@@ -7,9 +7,7 @@ import { TextLayerInternal as TextLayer } from './TextLayer';
 
 import failingPage from '../../__mocks__/_failing_page';
 
-import {
-  loadPDF, makeAsyncCallback, muteConsole, restoreConsole,
-} from '../../test-utils';
+import { loadPDF, makeAsyncCallback, muteConsole, restoreConsole } from '../../test-utils';
 
 const pdfFile = loadPDF('./__mocks__/_pdf.pdf');
 
@@ -38,12 +36,7 @@ describe('TextLayer', () => {
     it('loads text content and calls onGetTextSuccess callback properly', async () => {
       const { func: onGetTextSuccess, promise: onGetTextSuccessPromise } = makeAsyncCallback();
 
-      shallow(
-        <TextLayer
-          onGetTextSuccess={onGetTextSuccess}
-          page={page}
-        />,
-      );
+      shallow(<TextLayer onGetTextSuccess={onGetTextSuccess} page={page} />);
 
       expect.assertions(1);
       await expect(onGetTextSuccessPromise).resolves.toMatchObject(desiredTextItems);
@@ -54,12 +47,7 @@ describe('TextLayer', () => {
 
       muteConsole();
 
-      shallow(
-        <TextLayer
-          onGetTextError={onGetTextError}
-          page={failingPage}
-        />,
-      );
+      shallow(<TextLayer onGetTextError={onGetTextError} page={failingPage} />);
 
       expect.assertions(1);
       await expect(onGetTextErrorPromise).resolves.toBeInstanceOf(Error);
@@ -71,10 +59,7 @@ describe('TextLayer', () => {
       const { func: onGetTextSuccess, promise: onGetTextSuccessPromise } = makeAsyncCallback();
 
       const mountedComponent = shallow(
-        <TextLayer
-          onGetTextSuccess={onGetTextSuccess}
-          page={page}
-        />,
+        <TextLayer onGetTextSuccess={onGetTextSuccess} page={page} />,
       );
 
       expect.assertions(2);
@@ -101,12 +86,7 @@ describe('TextLayer', () => {
     it('renders text content properly', async () => {
       const { func: onGetTextSuccess, promise: onGetTextSuccessPromise } = makeAsyncCallback();
 
-      const component = shallow(
-        <TextLayer
-          onGetTextSuccess={onGetTextSuccess}
-          page={page}
-        />,
-      );
+      const component = shallow(<TextLayer onGetTextSuccess={onGetTextSuccess} page={page} />);
 
       expect.assertions(1);
       return onGetTextSuccessPromise.then(() => {
@@ -122,11 +102,7 @@ describe('TextLayer', () => {
       const rotate = 90;
 
       const component = shallow(
-        <TextLayer
-          onGetTextSuccess={onGetTextSuccess}
-          page={page}
-          rotate={rotate}
-        />,
+        <TextLayer onGetTextSuccess={onGetTextSuccess} page={page} rotate={rotate} />,
       );
 
       expect.assertions(1);
@@ -143,11 +119,7 @@ describe('TextLayer', () => {
       const scale = 2;
 
       const component = shallow(
-        <TextLayer
-          onGetTextSuccess={onGetTextSuccess}
-          page={page}
-          scale={scale}
-        />,
+        <TextLayer onGetTextSuccess={onGetTextSuccess} page={page} scale={scale} />,
       );
 
       expect.assertions(1);
