@@ -13,4 +13,9 @@ pdfjs.GlobalWorkerOptions.workerSrc = new URL(
   import.meta.url,
 );
 
+pdfjs.GlobalWorkerOptions.workerPort = new Worker(
+  new URL('./pdf.worker.entry.js', import.meta.url),
+  { type: 'module' },
+);
+
 export { pdfjs, Document, Outline, Page };
