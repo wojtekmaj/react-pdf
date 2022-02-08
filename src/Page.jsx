@@ -85,6 +85,7 @@ export class PageInternal extends PureComponent {
       onRenderAnnotationLayerSuccess,
       onRenderError,
       onRenderSuccess,
+      renderForms,
       renderInteractiveForms,
     } = this.props;
 
@@ -100,7 +101,7 @@ export class PageInternal extends PureComponent {
       onRenderError,
       onRenderSuccess,
       page,
-      renderInteractiveForms,
+      renderForms: renderForms ?? renderInteractiveForms, // For backward compatibility
       rotate: this.rotate,
       scale: this.scale,
     };
@@ -358,7 +359,7 @@ PageInternal.defaultProps = {
   loading: 'Loading page…',
   noData: 'No page specified.',
   renderAnnotationLayer: true,
-  renderInteractiveForms: false,
+  renderForms: false,
   renderMode: 'canvas',
   renderTextLayer: true,
   scale: defaultScale,
@@ -389,7 +390,8 @@ PageInternal.propTypes = {
   pdf: isPdf,
   registerPage: PropTypes.func,
   renderAnnotationLayer: PropTypes.bool,
-  renderInteractiveForms: PropTypes.bool,
+  renderForms: PropTypes.bool,
+  renderInteractiveForms: PropTypes.bool, // For backward compatibility
   renderMode: isRenderMode,
   renderTextLayer: PropTypes.bool,
   rotate: isRotate,

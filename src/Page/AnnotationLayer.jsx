@@ -26,12 +26,9 @@ export class AnnotationLayerInternal extends PureComponent {
   }
 
   componentDidUpdate(prevProps) {
-    const { page, renderInteractiveForms } = this.props;
+    const { page, renderForms } = this.props;
 
-    if (
-      (prevProps.page && page !== prevProps.page) ||
-      renderInteractiveForms !== prevProps.renderInteractiveForms
-    ) {
+    if ((prevProps.page && page !== prevProps.page) || renderForms !== prevProps.renderForms) {
       this.loadAnnotations();
     }
   }
@@ -102,7 +99,7 @@ export class AnnotationLayerInternal extends PureComponent {
       return;
     }
 
-    const { imageResourcesPath, linkService, page, renderInteractiveForms } = this.props;
+    const { imageResourcesPath, linkService, page, renderForms } = this.props;
 
     const viewport = this.viewport.clone({ dontFlip: true });
 
@@ -112,7 +109,7 @@ export class AnnotationLayerInternal extends PureComponent {
       imageResourcesPath,
       linkService,
       page,
-      renderForms: renderInteractiveForms,
+      renderForms,
       viewport,
     };
 
@@ -148,7 +145,7 @@ AnnotationLayerInternal.propTypes = {
   onRenderAnnotationLayerError: PropTypes.func,
   onRenderAnnotationLayerSuccess: PropTypes.func,
   page: isPage,
-  renderInteractiveForms: PropTypes.bool,
+  renderForms: PropTypes.bool,
   rotate: isRotate,
   scale: PropTypes.number,
 };

@@ -60,7 +60,7 @@ export default function Test() {
   const [passMethod, setPassMethod] = useState(null);
   const [render, setRender] = useState(true);
   const [renderAnnotationLayer, setRenderAnnotationLayer] = useState(true);
-  const [renderInteractiveForms, setRenderInteractiveForms] = useState(true);
+  const [renderForms, setRenderForms] = useState(true);
   const [renderMode, setRenderMode] = useState('canvas');
   const [renderTextLayer, setRenderTextLayer] = useState(true);
   const [rotate, setRotate] = useState(null);
@@ -176,7 +176,7 @@ export default function Test() {
       onClick: (event, page) => console.log('Clicked a page', { event, page }),
       onRenderSuccess: onPageRenderSuccess,
       renderAnnotationLayer,
-      renderInteractiveForms,
+      renderForms,
       renderMode,
       renderTextLayer,
       scale: pageScale,
@@ -217,10 +217,10 @@ export default function Test() {
           <PassingOptions file={file} passMethod={passMethod} setPassMethod={setPassMethod} />
           <LayerOptions
             renderAnnotationLayer={renderAnnotationLayer}
-            renderInteractiveForms={renderInteractiveForms}
+            renderForms={renderForms}
             renderTextLayer={renderTextLayer}
             setRenderAnnotationLayer={setRenderAnnotationLayer}
-            setRenderInteractiveForms={setRenderInteractiveForms}
+            setRenderForms={setRenderForms}
             setRenderTextLayer={setRenderTextLayer}
           />
           <ViewOptions

@@ -15,11 +15,8 @@ export class PageCanvasInternal extends PureComponent {
   }
 
   componentDidUpdate(prevProps) {
-    const { canvasBackground, page, renderInteractiveForms } = this.props;
-    if (
-      canvasBackground !== prevProps.canvasBackground ||
-      renderInteractiveForms !== prevProps.renderInteractiveForms
-    ) {
+    const { canvasBackground, page, renderForms } = this.props;
+    if (canvasBackground !== prevProps.canvasBackground || renderForms !== prevProps.renderForms) {
       // Ensures the canvas will be re-rendered from scratch. Otherwise all form data will stay.
       page.cleanup();
       this.drawPageOnCanvas();
@@ -95,7 +92,7 @@ export class PageCanvasInternal extends PureComponent {
     }
 
     const { renderViewport, viewport } = this;
-    const { canvasBackground, page, renderInteractiveForms } = this.props;
+    const { canvasBackground, page, renderForms } = this.props;
 
     canvas.width = renderViewport.width;
     canvas.height = renderViewport.height;
@@ -108,7 +105,7 @@ export class PageCanvasInternal extends PureComponent {
         return canvas.getContext('2d');
       },
       viewport: renderViewport,
-      renderInteractiveForms,
+      renderInteractiveForms: renderForms,
     };
     if (canvasBackground) {
       renderContext.background = canvasBackground;
@@ -147,7 +144,7 @@ PageCanvasInternal.propTypes = {
   onRenderError: PropTypes.func,
   onRenderSuccess: PropTypes.func,
   page: isPage.isRequired,
-  renderInteractiveForms: PropTypes.bool,
+  renderForms: PropTypes.bool,
   rotate: isRotate,
   scale: PropTypes.number.isRequired,
 };
