@@ -112,7 +112,7 @@ export class AnnotationLayerInternal extends PureComponent {
       imageResourcesPath,
       linkService,
       page,
-      renderInteractiveForms,
+      renderForms: renderInteractiveForms,
       viewport,
     };
 
