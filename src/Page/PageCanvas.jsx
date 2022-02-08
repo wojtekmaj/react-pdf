@@ -2,12 +2,15 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import mergeRefs from 'merge-refs';
 import warning from 'tiny-warning';
+import * as pdfjs from 'pdfjs-dist/legacy/build/pdf';
 
 import PageContext from '../PageContext';
 
 import { getPixelRatio, isCancelException, makePageCallback } from '../shared/utils';
 
 import { isPage, isRef, isRotate } from '../shared/propTypes';
+
+const ANNOTATION_MODE = pdfjs.AnnotationMode;
 
 export class PageCanvasInternal extends PureComponent {
   componentDidMount() {
@@ -101,11 +104,11 @@ export class PageCanvasInternal extends PureComponent {
     canvas.style.height = `${Math.floor(viewport.height)}px`;
 
     const renderContext = {
+      annotationMode: renderForms ? ANNOTATION_MODE.ENABLE_FORMS : ANNOTATION_MODE.ENABLE,
       get canvasContext() {
         return canvas.getContext('2d');
       },
       viewport: renderViewport,
-      renderInteractiveForms: renderForms,
     };
     if (canvasBackground) {
       renderContext.background = canvasBackground;
