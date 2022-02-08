@@ -9,6 +9,13 @@ import { getPixelRatio, isCancelException, makePageCallback } from '../shared/ut
 
 import { isPage, isRef, isRotate } from '../shared/propTypes';
 
+const ANNOTATION_MODE = {
+  DISABLE: 0,
+  ENABLE: 1,
+  ENABLE_FORMS: 2,
+  ENABLE_STORAGE: 3,
+};
+
 export class PageCanvasInternal extends PureComponent {
   componentDidMount() {
     this.drawPageOnCanvas();
@@ -101,11 +108,11 @@ export class PageCanvasInternal extends PureComponent {
     canvas.style.height = `${Math.floor(viewport.height)}px`;
 
     const renderContext = {
+      annotationMode: renderForms ? ANNOTATION_MODE.ENABLE_FORMS : ANNOTATION_MODE.ENABLE,
       get canvasContext() {
         return canvas.getContext('2d');
       },
       viewport: renderViewport,
-      renderInteractiveForms: renderForms,
     };
     if (canvasBackground) {
       renderContext.background = canvasBackground;
