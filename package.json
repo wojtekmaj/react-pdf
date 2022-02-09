@@ -94,6 +94,7 @@
     "eslint-config-wojtekmaj": "^0.6.5",
     "husky": "^7.0.0",
     "jest": "^27.0.0",
+    "jest-canvas-mock": "^2.3.1",
     "prettier": "^2.5.0",
     "pretty-quick": "^3.1.0",
     "react": "^17.0.0",

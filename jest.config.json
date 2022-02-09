@@ -9,6 +9,6 @@
     "\\.(css|less)$": "<rootDir>/__mocks__/styleMock.js",
     "pdfjs-dist/(.*)": "pdfjs-dist/legacy/$1"
   },
-  "setupFiles": ["<rootDir>/jest.setup.js"],
+  "setupFiles": ["jest-canvas-mock", "<rootDir>/jest.setup.js"],
   "testEnvironment": "<rootDir>/jest.env.js"
 }
