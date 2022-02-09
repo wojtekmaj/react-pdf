@@ -1,4 +1,5 @@
 import React, { createRef, PureComponent } from 'react';
+import ReactDOMServer from 'react-dom/server';
 import PropTypes from 'prop-types';
 import makeCancellable from 'make-cancellable-promise';
 import invariant from 'tiny-invariant';
@@ -113,7 +114,7 @@ export class TextLayerInternal extends PureComponent {
     }
 
     const { viewport } = this;
-    const { enhanceTextSelection } = this.props;
+    const { customTextRenderer, enhanceTextSelection } = this.props;
 
     // If another rendering is in progress, let's cancel it
     cancelRunningTask(this.runningTask);
@@ -133,6 +134,15 @@ export class TextLayerInternal extends PureComponent {
 
     cancellable.promise
       .then(() => {
+        if (customTextRenderer) {
+          Array.from(this.layerElement.current.children).forEach((element, elementIndex) => {
+            const reactContent = customTextRenderer({
+              itemIndex: elementIndex,
+              ...textContent.items[elementIndex],
+            });
+            element.innerHTML = ReactDOMServer.renderToStaticMarkup(reactContent);
+          });
+        }
         this.onRenderSuccess();
       })
       .catch((error) => {
@@ -154,6 +164,7 @@ TextLayerInternal.defaultProps = {
 };
 
 TextLayerInternal.propTypes = {
+  customTextRenderer: PropTypes.func,
   enhanceTextSelection: PropTypes.bool,
   onGetTextError: PropTypes.func,
   onGetTextSuccess: PropTypes.func,
