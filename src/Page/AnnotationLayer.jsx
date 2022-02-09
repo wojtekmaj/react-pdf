@@ -75,9 +75,6 @@ export class AnnotationLayerInternal extends PureComponent {
     if (onRenderAnnotationLayerSuccess) onRenderAnnotationLayerSuccess();
   };
 
-  /**
-   * Called when a annotations fails to render.
-   */
   onRenderError = (error) => {
     warning(error);
 
