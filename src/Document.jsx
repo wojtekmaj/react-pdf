@@ -88,7 +88,16 @@ export default class Document extends PureComponent {
   }
 
   loadDocument = () => {
-    this.findDocumentSource()
+    // If another rendering is in progress, let's cancel it
+    cancelRunningTask(this.runningTask);
+
+    // If another loading is in progress, let's destroy it
+    if (this.loadingTask) this.loadingTask.destroy();
+
+    const cancellable = makeCancellable(this.findDocumentSource());
+    this.runningTask = cancellable;
+
+    cancellable.promise
       .then((source) => {
         this.onSourceSuccess();
 
@@ -105,12 +114,6 @@ export default class Document extends PureComponent {
         });
 
         const { options, onLoadProgress, onPassword } = this.props;
-
-        // If another rendering is in progress, let's cancel it
-        cancelRunningTask(this.runningTask);
-
-        // If another loading is in progress, let's destroy it
-        if (this.loadingTask) this.loadingTask.destroy();
 
         this.loadingTask = pdfjs.getDocument({ ...source, ...options });
         this.loadingTask.onPassword = onPassword;
