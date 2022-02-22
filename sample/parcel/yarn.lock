@@ -6542,6 +6542,9 @@ __metadata:
     react: ^17.0.0
     react-dom: ^17.0.0
     react-pdf: latest
+  dependenciesMeta:
+    parcel-bundler:
+      built: false
   languageName: unknown
   linkType: soft
 

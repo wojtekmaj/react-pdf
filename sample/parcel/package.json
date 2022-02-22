@@ -27,5 +27,10 @@
   },
   "resolutions": {
     "semver@7.0.0": "^7.0.0"
+  },
+  "dependenciesMeta": {
+    "parcel-bundler": {
+      "built": false
+    }
   }
 }
