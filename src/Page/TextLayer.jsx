@@ -66,7 +66,7 @@ export class TextLayerInternal extends PureComponent {
     for (const entry of entries) {
       width = entry.boundingClientRect[sideways ? 'height' : 'width'];
       if(width > 0){
-        this.refTextItems.current[entry.target.i].alignTextItem(width);
+        this.refTextItems.current[entry.target.i].updatedWidth(width).alignTextItem()
       }
     }
     this.observer.disconnect();
@@ -78,9 +78,11 @@ export class TextLayerInternal extends PureComponent {
 
     if(useObserverAlignText){
       for(let i = 0; i < this.refTextItems.current.length; i++){
-        let entry = this.refTextItems.current[i].item;
-        entry.i = i;
-        this.observer.observe(entry);
+        let entry = this.refTextItems.current[i]
+        if(entry.props.str.length > 0){
+          entry.item.i = i
+          this.observer.observe(entry.item)
+        }
       }
     }
     if (onGetTextSuccess) onGetTextSuccess(textItems);

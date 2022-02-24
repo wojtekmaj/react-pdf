@@ -78,7 +78,8 @@ export class TextLayerItemInternal extends PureComponent {
       this.props.onLoadSuccessAlignTextItem()
       return;
     }
-    if(!this.fontFamily){
+
+    if(!this.fontFamily && this.props.str.length > 0){
       this.fontFamily = element.style.fontFamily
       this.loadTextItem()
     } else {
@@ -114,13 +115,15 @@ export class TextLayerItemInternal extends PureComponent {
     return false
   }
 
-  alignTextItem = async(widthBounding) => {
-    const element = this.item;
+  updatedWidth = (width) => {
+    this.actualWidth = width
+    return this
+  }
 
+  alignTextItem = async() => {
+    const element = this.item;
     const { scale, width } = this.props;
-    if(typeof widthBounding !== 'undefined'){
-      this.actualWidth = widthBounding
-    }
+
     const targetWidth = width * scale;  
     let transform = `scaleX(${targetWidth / this.actualWidth})`;
 
