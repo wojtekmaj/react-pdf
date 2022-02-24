@@ -17,6 +17,13 @@ export class TextLayerInternal extends PureComponent {
     textItems: null,
   };
 
+  constructor(props) {
+    super(props)
+    
+    this.refTextItems = React.createRef()
+    this.countLoadedItem = 0
+  }
+
   componentDidMount() {
     const { page } = this.props;
 
@@ -52,12 +59,53 @@ export class TextLayerInternal extends PureComponent {
       });
   };
 
+  observer = new IntersectionObserver((entries) => {
+    const { sideways } = this;
+
+    let width = 0;
+    for (const entry of entries) {
+      width = entry.boundingClientRect[sideways ? 'height' : 'width'];
+      if(width > 0){
+        this.refTextItems.current[entry.target.i].alignTextItem(width);
+      }
+    }
+    this.observer.disconnect();
+  }); 
+
   onLoadSuccess = () => {
-    const { onGetTextSuccess } = this.props;
+    const { onGetTextSuccess, useObserverAlignText} = this.props;
     const { textItems } = this.state;
 
+    if(useObserverAlignText){
+      for(let i = 0; i < this.refTextItems.current.length; i++){
+        let entry = this.refTextItems.current[i].item;
+        entry.i = i;
+        this.observer.observe(entry);
+      }
+    }
     if (onGetTextSuccess) onGetTextSuccess(textItems);
   };
+
+  onLoadSuccessAlignTextItem = async() => {
+    if(this.countLoadedItem < this.refTextItems.current.length){
+      this.countLoadedItem++;
+    }
+    if(this.refTextItems.current.length === this.countLoadedItem){
+      let indexUpdate = [];
+      requestAnimationFrame(() => {
+        for(let i = 0; i < this.refTextItems.current.length; i++){
+          if(this.refTextItems.current[i].updateElementWidth()){
+            indexUpdate.push(i);
+          }
+        }
+        if(indexUpdate.length > 0){
+          for(let i = 0; i < indexUpdate.length; i++){
+            this.refTextItems.current[indexUpdate[i]].alignTextItem();
+          }
+        }
+      });
+    } 
+  }
 
   onLoadError = (error) => {
     this.setState({ textItems: false });
@@ -84,19 +132,30 @@ export class TextLayerInternal extends PureComponent {
     return rotate - page.rotate;
   }
 
+  get sideways() {
+    const { rotate } = this;
+    return rotate % 180 !== 0;
+  }
+
   renderTextItems() {
     const { textItems } = this.state;
 
     if (!textItems) {
+      this.refTextItems.current = []
       return null;
     }
 
+    let i = -1
+    this.countLoadedItem = 0
+    this.refTextItems.current = new Array(textItems.length)
     return textItems.map((textItem, itemIndex) => (
       <TextLayerItem
+        ref={(ref) => this.refTextItems.current[++i] = ref}
         // eslint-disable-next-line react/no-array-index-key
         key={itemIndex}
         itemIndex={itemIndex}
         {...textItem}
+        onLoadSuccessAlignTextItem={!this.props.useObserverAlignText ? this.onLoadSuccessAlignTextItem : function(){ return }}
       />
     ));
   }

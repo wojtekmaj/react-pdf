@@ -81,6 +81,7 @@ export class PageInternal extends PureComponent {
       onGetAnnotationsSuccess,
       onGetTextError,
       onGetTextSuccess,
+      useObserverAlignText,
       onRenderAnnotationLayerError,
       onRenderAnnotationLayerSuccess,
       onRenderError,
@@ -96,6 +97,7 @@ export class PageInternal extends PureComponent {
       onGetAnnotationsSuccess,
       onGetTextError,
       onGetTextSuccess,
+      useObserverAlignText,
       onRenderAnnotationLayerError,
       onRenderAnnotationLayerSuccess,
       onRenderError,
@@ -397,6 +399,7 @@ PageInternal.propTypes = {
   rotate: isRotate,
   scale: PropTypes.number,
   unregisterPage: PropTypes.func,
+  useObserverAlignText : PropTypes.bool,
   width: PropTypes.number,
 };
 
