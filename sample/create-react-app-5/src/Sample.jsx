@@ -7,6 +7,7 @@ import './Sample.css';
 const options = {
   cMapUrl: 'cmaps/',
   cMapPacked: true,
+  standardFontDataUrl: 'standard_fonts/',
 };
 
 export default function Sample() {

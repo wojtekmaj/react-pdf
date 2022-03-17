@@ -9,6 +9,10 @@ const isProduction = process.env.NODE_ENV === 'production';
 const isDevelopment = !isProduction;
 
 const cMapsDir = path.join(path.dirname(require.resolve('pdfjs-dist/package.json')), 'cmaps');
+const standardFontsDir = path.join(
+  path.dirname(require.resolve('pdfjs-dist/package.json')),
+  'standard_fonts',
+);
 
 module.exports = {
   mode: isProduction ? 'production' : 'development',
@@ -64,7 +68,11 @@ module.exports = {
   },
   plugins: [
     new CopyWebpackPlugin({
-      patterns: ['test.pdf', { from: cMapsDir, to: 'cmaps/' }],
+      patterns: [
+        'test.pdf',
+        { from: cMapsDir, to: 'cmaps/' },
+        { from: standardFontsDir, to: 'standard_fonts/' },
+      ],
     }),
     new HtmlWebpackPlugin({
       template: 'index.html',

@@ -7,6 +7,10 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const isProduction = process.env.NODE_ENV === 'production';
 
 const cMapsDir = path.join(path.dirname(require.resolve('pdfjs-dist/package.json')), 'cmaps');
+const standardFontsDir = path.join(
+  path.dirname(require.resolve('pdfjs-dist/package.json')),
+  'standard_fonts',
+);
 
 module.exports = {
   mode: isProduction ? 'production' : 'development',
@@ -47,7 +51,11 @@ module.exports = {
       template: 'index.html',
     }),
     new CopyWebpackPlugin({
-      patterns: [{ from: './sample.pdf' }, { from: cMapsDir, to: 'cmaps/' }],
+      patterns: [
+        { from: './sample.pdf' },
+        { from: cMapsDir, to: 'cmaps/' },
+        { from: standardFontsDir, to: 'standard_fonts/' },
+      ],
     }),
   ],
   devServer: {

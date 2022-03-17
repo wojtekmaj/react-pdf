@@ -248,6 +248,94 @@ import { pdfjs } from 'react-pdf';
 />;
 ```
 
+### Support for standard fonts
+
+If you want to support PDFs using standard fonts (deprecated in PDF 1.5, but still around), then you would also need to include standard fonts in your build and tell React-PDF where they are.
+
+#### Copying fonts
+
+First, you need to copy standard fonts from `pdfjs-dist` (React-PDF's dependency - it should be in your `node_modules` if you have React-PDF installed). Standard fonts are located in `pdfjs-dist/standard_fonts`.
+
+##### Webpack
+
+Add `copy-webpack-plugin` to your project if you haven't already:
+
+```
+npm install copy-webpack-plugin --save-dev
+```
+
+Now, in your Webpack config, import the plugin:
+
+```js
+import path from 'path';
+import CopyWebpackPlugin from 'copy-webpack-plugin';
+```
+
+and in `plugins` section of your config, add the following:
+
+```js
+new CopyWebpackPlugin({
+  patterns: [
+    {
+      from: path.join(path.dirname(require.resolve('pdfjs-dist/package.json')), 'standard_fonts'),
+      to: 'standard_fonts/'
+    },
+  ],
+}),
+```
+
+##### Parcel, Browserify and others
+
+If you use Parcel, Browserify or other bundling tools, you will have to make sure on your own that standard fonts are copied to your project's output folder.
+
+For example, you could use a custom script like:
+
+```js
+import path from 'path';
+import fs from 'fs';
+
+const standardFontsDir = path.join(
+  path.dirname(require.resolve('pdfjs-dist/package.json')),
+  'standard_fonts',
+);
+
+function copyDir(from, to) {
+  // Ensure target directory exists
+  fs.mkdirSync(to, { recursive: true });
+
+  const files = fs.readdirSync(from);
+  files.forEach((file) => {
+    fs.copyFileSync(path.join(from, file), path.join(to, file));
+  });
+}
+
+copyDir(standardFontsDir, 'dist/standard_fonts/');
+```
+
+#### Setting up React-PDF
+
+Now that you have standard fonts in your build, pass required options to Document component by using `options` prop, like so:
+
+```js
+<Document
+  options={{
+    standardFontDataUrl: 'standard_fonts/',
+  }}
+/>
+```
+
+Alternatively, you could use standard fonts from external CDN:
+
+```js
+import { pdfjs } from 'react-pdf';
+
+<Document
+  options={{
+    standardFontDataUrl: `https://unpkg.com/pdfjs-dist@${pdfjs.version}/standard_fonts`,
+  }}
+/>;
+```
+
 ## User guide
 
 ### Document
