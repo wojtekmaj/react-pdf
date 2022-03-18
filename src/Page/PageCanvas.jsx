@@ -18,8 +18,12 @@ export class PageCanvasInternal extends PureComponent {
   }
 
   componentDidUpdate(prevProps) {
-    const { canvasBackground, page, renderForms } = this.props;
-    if (canvasBackground !== prevProps.canvasBackground || renderForms !== prevProps.renderForms) {
+    const { annotationMode, canvasBackground, page, renderForms } = this.props;
+    if (
+      annotationMode !== prevProps.annotationMode ||
+      canvasBackground !== prevProps.canvasBackground ||
+      renderForms !== prevProps.renderForms
+    ) {
       // Ensures the canvas will be re-rendered from scratch. Otherwise all form data will stay.
       page.cleanup();
       this.drawPageOnCanvas();
@@ -95,7 +99,7 @@ export class PageCanvasInternal extends PureComponent {
     }
 
     const { renderViewport, viewport } = this;
-    const { canvasBackground, page, renderForms } = this.props;
+    const { annotationMode, canvasBackground, page, renderForms } = this.props;
 
     canvas.width = renderViewport.width;
     canvas.height = renderViewport.height;
@@ -104,7 +108,8 @@ export class PageCanvasInternal extends PureComponent {
     canvas.style.height = `${Math.floor(viewport.height)}px`;
 
     const renderContext = {
-      annotationMode: renderForms ? ANNOTATION_MODE.ENABLE_FORMS : ANNOTATION_MODE.ENABLE,
+      annotationMode:
+        annotationMode ?? (renderForms ? ANNOTATION_MODE.ENABLE_FORMS : ANNOTATION_MODE.ENABLE),
       get canvasContext() {
         return canvas.getContext('2d');
       },
@@ -142,6 +147,7 @@ export class PageCanvasInternal extends PureComponent {
 }
 
 PageCanvasInternal.propTypes = {
+  annotationMode: PropTypes.number,
   canvasBackground: PropTypes.string,
   canvasRef: isRef,
   onRenderError: PropTypes.func,
