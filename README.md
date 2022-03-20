@@ -441,7 +441,7 @@ The MIT License.
 
 ## Thank you
 
-This project wouldn't be possible without awesome work of Niklas Närhinen <niklas@narhinen.net> who created its initial version and without Mozilla, author of [pdf.js](http://mozilla.github.io/pdf.js). Thank you!
+This project wouldn't be possible without the awesome work of Niklas Närhinen <niklas@narhinen.net> who created its original version and without Mozilla, author of [pdf.js](http://mozilla.github.io/pdf.js). Thank you!
 
 ### Sponsors
 
