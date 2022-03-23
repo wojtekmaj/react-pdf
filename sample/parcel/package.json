@@ -27,6 +27,8 @@
     "parcel-bundler": "^1.12.4"
   },
   "resolutions": {
+    "postcss@6.0.1": "^6.0.1",
+    "postcss@7.0.32": "^7.0.32",
     "semver@7.0.0": "^7.0.0"
   },
   "dependenciesMeta": {
