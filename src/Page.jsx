@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React, { createRef, PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import makeCancellable from 'make-cancellable-promise';
 import makeEventProps from 'make-event-props';
@@ -35,6 +35,8 @@ export class PageInternal extends PureComponent {
   state = {
     page: null,
   };
+
+  pageElement = createRef();
 
   componentDidMount() {
     const { pdf } = this.props;
@@ -116,7 +118,7 @@ export class PageInternal extends PureComponent {
 
     if (onLoadSuccess) onLoadSuccess(makePageCallback(page, this.scale));
 
-    if (registerPage) registerPage(this.pageIndex, this.ref);
+    if (registerPage) registerPage(this.pageIndex, this.pageElement.current);
   };
 
   /**
@@ -344,7 +346,7 @@ export class PageInternal extends PureComponent {
       <div
         className={mergeClassNames('react-pdf__Page', className)}
         data-page-number={pageNumber}
-        ref={mergeRefs(inputRef, this.ref)}
+        ref={mergeRefs(inputRef, this.pageElement)}
         style={{ position: 'relative' }}
         {...this.eventProps}
       >

@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React, { createRef, PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import makeCancellable from 'make-cancellable-promise';
 import invariant from 'tiny-invariant';
@@ -16,6 +16,8 @@ export class AnnotationLayerInternal extends PureComponent {
   state = {
     annotations: null,
   };
+
+  layerElement = createRef();
 
   componentDidMount() {
     const { page } = this.props;
@@ -102,7 +104,7 @@ export class AnnotationLayerInternal extends PureComponent {
 
     const parameters = {
       annotations,
-      div: this.annotationLayer,
+      div: this.layerElement.current,
       imageResourcesPath,
       linkService,
       page,
@@ -110,7 +112,7 @@ export class AnnotationLayerInternal extends PureComponent {
       viewport,
     };
 
-    this.annotationLayer.innerHTML = '';
+    this.layerElement.current.innerHTML = '';
 
     try {
       pdfjs.AnnotationLayer.render(parameters);
@@ -122,12 +124,7 @@ export class AnnotationLayerInternal extends PureComponent {
 
   render() {
     return (
-      <div
-        className="react-pdf__Page__annotations annotationLayer"
-        ref={(ref) => {
-          this.annotationLayer = ref;
-        }}
-      >
+      <div className="react-pdf__Page__annotations annotationLayer" ref={this.layerElement}>
         {this.renderAnnotationLayer()}
       </div>
     );

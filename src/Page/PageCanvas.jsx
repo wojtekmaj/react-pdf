@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React, { createRef, PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import mergeRefs from 'merge-refs';
 import warning from 'tiny-warning';
@@ -13,6 +13,8 @@ import { isPage, isRef, isRotate } from '../shared/propTypes';
 const ANNOTATION_MODE = pdfjs.AnnotationMode;
 
 export class PageCanvasInternal extends PureComponent {
+  canvasElement = createRef();
+
   componentDidMount() {
     this.drawPageOnCanvas();
   }
@@ -29,14 +31,15 @@ export class PageCanvasInternal extends PureComponent {
   componentWillUnmount() {
     this.cancelRenderingTask();
 
+    const { current: canvas } = this.canvasElement;
+
     /**
      * Zeroing the width and height cause most browsers to release graphics
      * resources immediately, which can greatly reduce memory consumption.
      */
-    if (this.canvasLayer) {
-      this.canvasLayer.width = 0;
-      this.canvasLayer.height = 0;
-      this.canvasLayer = null;
+    if (canvas) {
+      canvas.width = 0;
+      canvas.height = 0;
     }
   }
 
@@ -88,7 +91,7 @@ export class PageCanvasInternal extends PureComponent {
   }
 
   drawPageOnCanvas = () => {
-    const { canvasLayer: canvas } = this;
+    const { current: canvas } = this.canvasElement;
 
     if (!canvas) {
       return null;
@@ -129,9 +132,7 @@ export class PageCanvasInternal extends PureComponent {
       <canvas
         className="react-pdf__Page__canvas"
         dir="ltr"
-        ref={mergeRefs(canvasRef, (ref) => {
-          this.canvasLayer = ref;
-        })}
+        ref={mergeRefs(canvasRef, this.canvasElement)}
         style={{
           display: 'block',
           userSelect: 'none',

@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React, { createRef, PureComponent } from 'react';
 import PropTypes from 'prop-types';
 
 import PageContext from '../PageContext';
@@ -6,6 +6,8 @@ import PageContext from '../PageContext';
 import { isPage, isRotate } from '../shared/propTypes';
 
 export class TextLayerItemInternal extends PureComponent {
+  itemElement = createRef();
+
   componentDidMount() {
     this.alignTextItem();
   }
@@ -72,7 +74,7 @@ export class TextLayerItemInternal extends PureComponent {
   }
 
   alignTextItem() {
-    const element = this.item;
+    const { current: element } = this.itemElement;
 
     if (!element) {
       return;
@@ -114,9 +116,7 @@ export class TextLayerItemInternal extends PureComponent {
 
     return (
       <span
-        ref={(ref) => {
-          this.item = ref;
-        }}
+        ref={this.itemElement}
         style={{
           height: '1em',
           fontFamily: 'sans-serif',

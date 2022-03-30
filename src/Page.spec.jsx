@@ -45,7 +45,7 @@ describe('Page', () => {
 
     registerPageArguments.push(
       page._pageIndex,
-      undefined, // Page reference is not defined in Enzyme
+      null, // Page reference is not defined in Enzyme
     );
     unregisterPageArguments = page._pageIndex;
   });
