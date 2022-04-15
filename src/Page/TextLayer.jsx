@@ -91,11 +91,21 @@ export class TextLayerInternal extends PureComponent {
       return null;
     }
 
+    const { customTextRenderer, page, scale, rotate } = this.props;
+
+    const textItemProps = {
+      customTextRenderer,
+      page,
+      rotate,
+      scale,
+    };
+
     return textItems.map((textItem, itemIndex) => (
       <TextLayerItem
         // eslint-disable-next-line react/no-array-index-key
         key={itemIndex}
         itemIndex={itemIndex}
+        {...textItemProps}
         {...textItem}
       />
     ));
@@ -126,6 +136,7 @@ export class TextLayerInternal extends PureComponent {
 }
 
 TextLayerInternal.propTypes = {
+  customTextRenderer: PropTypes.func,
   onGetTextError: PropTypes.func,
   onGetTextSuccess: PropTypes.func,
   page: isPage.isRequired,

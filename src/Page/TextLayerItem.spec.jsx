@@ -3,7 +3,7 @@ import { shallow } from 'enzyme';
 
 import { pdfjs } from '../entry.jest';
 
-import { TextLayerItemInternal as TextLayerItem } from './TextLayerItem';
+import TextLayerItem from './TextLayerItem';
 
 import { loadPDF } from '../../test-utils';
 
