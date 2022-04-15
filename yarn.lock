@@ -5961,15 +5961,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"pdfjs-dist@npm:2.12.313":
-  version: 2.12.313
-  resolution: "pdfjs-dist@npm:2.12.313"
+"pdfjs-dist@npm:2.13.216":
+  version: 2.13.216
+  resolution: "pdfjs-dist@npm:2.13.216"
+  dependencies:
+    web-streams-polyfill: ^3.2.0
   peerDependencies:
     worker-loader: ^3.0.8
   peerDependenciesMeta:
     worker-loader:
       optional: true
-  checksum: 0571ff3653d75e7eaf86c840c6fe83a92456c20b6f40c2de666df2e3c30de1e05a4920f18799a3d59005c73dcea1a6f45728845a20fdae9b08a3a774d13aee1b
+  checksum: b7b6a04e6d6ef0048140a10776dd6cc42d18248268d539ca416852a0dc386f3c410afbd399b30d7a4b68f7d29be84afb207789d7a9372fb0524c5e18f3b22177
   languageName: node
   linkType: hard
 
@@ -6214,7 +6216,7 @@ __metadata:
     make-event-props: ^1.1.0
     merge-class-names: ^1.1.1
     merge-refs: ^1.0.0
-    pdfjs-dist: 2.12.313
+    pdfjs-dist: 2.13.216
     prettier: ^2.5.0
     pretty-quick: ^3.1.0
     prop-types: ^15.6.2
@@ -7241,6 +7243,13 @@ __metadata:
     glob-to-regexp: ^0.4.1
     graceful-fs: ^4.1.2
   checksum: 70a34f92842d94b5d842980f866d568d7a467de667c96ae5759c759f46587e49265863171f4650bdbafc5f3870a28f2b4453e9e847098ec4b718b38926d47d22
+  languageName: node
+  linkType: hard
+
+"web-streams-polyfill@npm:^3.2.0":
+  version: 3.2.1
+  resolution: "web-streams-polyfill@npm:3.2.1"
+  checksum: b119c78574b6d65935e35098c2afdcd752b84268e18746606af149e3c424e15621b6f1ff0b42b2676dc012fc4f0d313f964b41a4b5031e525faa03997457da02
   languageName: node
   linkType: hard
 
