@@ -84,11 +84,11 @@ export class TextLayerItemInternal extends PureComponent {
 
     const { fontName, scale, width } = this.props;
 
-    element.style.fontFamily = `${fontName}, sans-serif`;
-
     this.getFontData(fontName).then((fontData) => {
-      const fallbackFontName = fontData ? fontData.fallbackName : 'sans-serif';
-      element.style.fontFamily = `${fontName}, ${fallbackFontName}`;
+      const fallbackFontName = fontData && fontData.fallbackName;
+      if (fallbackFontName) {
+        element.style.fontFamily = `${fontName}, ${fallbackFontName}, sans-serif`;
+      }
 
       const targetWidth = width * scale;
       const actualWidth = this.getElementWidth(element);
@@ -112,14 +112,14 @@ export class TextLayerItemInternal extends PureComponent {
 
   render() {
     const { fontSize, top, left } = this;
-    const { customTextRenderer, scale, str: text } = this.props;
+    const { customTextRenderer, fontName, scale, str: text } = this.props;
 
     return (
       <span
         ref={this.itemElement}
         style={{
           height: '1em',
-          fontFamily: 'sans-serif',
+          fontFamily: `${fontName}, sans-serif`,
           fontSize: `${fontSize * scale}px`,
           position: 'absolute',
           top: `${top * scale}px`,
