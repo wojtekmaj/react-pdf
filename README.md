@@ -36,13 +36,14 @@ React-PDF is under constant development. This documentation is written for React
 
 #### React
 
-To use the latest version of React-PDF, your project needs to use React 16.3 or later.
+To use the latest version of React-PDF, your project needs to use React 16.8 or later.
 
 If you use an older version of React, please refer to the table below to a find suitable React-PDF version.
 
 | React version | Newest compatible React-PDF version |
 | ------------- | ----------------------------------- |
-| ≥16.3         | latest                              |
+| ≥16.8         | latest                              |
+| ≥16.3         | 5.x                                 |
 | ≥15.5         | 4.x                                 |
 
 #### Internet Explorer
