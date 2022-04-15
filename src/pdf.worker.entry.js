@@ -5,7 +5,4 @@
  * this bundle, not theirs.
  */
 
-(typeof window !== 'undefined'
-  ? window
-  : {}
-).pdfjsWorker = require('pdfjs-dist/legacy/build/pdf.worker');
+(typeof window !== 'undefined' ? window : {}).pdfjsWorker = require('pdfjs-dist/build/pdf.worker');

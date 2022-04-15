@@ -34,6 +34,19 @@ React-PDF is under constant development. This documentation is written for React
 
 ### Compatibility
 
+#### Browser support
+
+React-PDF supports all modern browsers. It is tested with the latest versions of Chrome, Edge, Safari, Firefox, and Opera.
+
+The following browsers are supported in React-PDF v6:
+
+- Chrome ≥73
+- Edge (Chromium-based)
+- Safari ≥12.1
+- Firefox ≥45(?)
+
+If you need to support older browsers, you will need to use React-PDF v5. If you need to support Internet Explorer 11, you will need to use React-PDF v4.
+
 #### React
 
 To use the latest version of React-PDF, your project needs to use React 16.3 or later.
@@ -115,11 +128,11 @@ Create React App 4 (`react-scripts@4.0.0`) uses Webpack 4 under the hood, so you
 
 Create React App 5 (`react-scripts@5.0.0`) uses Webpack 5 under the hood, so the aim is to use the entry file built for Webpack 5. However, the way Webpack is configured in CRA 5 causes it to crash at build time on most machines with _JavaScript heap out of memory_ error.
 
-[Standard instructions](#standard-browserify-esbuild-and-others) will also work with Create React App. Please note that in CRA, you can copy `pdf.worker.js` file from `pdfjs-dist/legacy/build` to `public` directory in order for it to be copied to your project's output folder at build time.
+[Standard instructions](#standard-browserify-esbuild-and-others) will also work with Create React App. Please note that in CRA, you can copy `pdf.worker.js` file from `pdfjs-dist/build` to `public` directory in order for it to be copied to your project's output folder at build time.
 
 #### Standard (Browserify, esbuild and others)
 
-If you use Browserify, esbuild, or other bundlers, you will have to make sure on your own that `pdf.worker.js` file from `pdfjs-dist/legacy/build` is copied to your project's output folder.
+If you use Browserify, esbuild, or other bundlers, you will have to make sure on your own that `pdf.worker.js` file from `pdfjs-dist/build` is copied to your project's output folder.
 
 For example, you could use a custom script like:
 
@@ -128,7 +141,7 @@ import path from 'path';
 import fs from 'fs';
 
 const pdfjsDistPath = path.dirname(require.resolve('pdfjs-dist/package.json'));
-const pdfWorkerPath = path.join(pdfjsDistPath, 'legacy', 'build', 'pdf.worker.js');
+const pdfWorkerPath = path.join(pdfjsDistPath, 'build', 'pdf.worker.js');
 
 fs.copyFileSync(pdfWorkerPath, './dist/pdf.worker.js');
 ```
@@ -144,7 +157,7 @@ Alternatively, you could use the minified `pdf.worker.min.js` from an external C
 
 ```js
 import { pdfjs } from 'react-pdf';
-pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/legacy/build/pdf.worker.min.js`;
+pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.js`;
 ```
 
 ### Support for annotations
