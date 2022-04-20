@@ -2,7 +2,7 @@ import React, { createRef, PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import mergeRefs from 'merge-refs';
 import warning from 'tiny-warning';
-import * as pdfjs from 'pdfjs-dist/legacy/build/pdf';
+import * as pdfjs from 'pdfjs-dist/build/pdf';
 
 import PageContext from '../PageContext';
 

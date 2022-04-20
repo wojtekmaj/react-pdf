@@ -6,7 +6,8 @@
     "!**/src/pdf.worker.entry.js"
   ],
   "moduleNameMapper": {
-    "\\.(css|less)$": "<rootDir>/__mocks__/styleMock.js"
+    "\\.(css|less)$": "<rootDir>/__mocks__/styleMock.js",
+    "pdfjs-dist/(.*)": "pdfjs-dist/legacy/$1"
   },
   "setupFiles": ["<rootDir>/jest.setup.js"],
   "testEnvironment": "<rootDir>/jest.env.js"

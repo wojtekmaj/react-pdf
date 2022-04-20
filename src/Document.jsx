@@ -8,7 +8,7 @@ import makeCancellable from 'make-cancellable-promise';
 import mergeClassNames from 'merge-class-names';
 import invariant from 'tiny-invariant';
 import warning from 'tiny-warning';
-import * as pdfjs from 'pdfjs-dist/legacy/build/pdf';
+import * as pdfjs from 'pdfjs-dist/build/pdf';
 
 import DocumentContext from './DocumentContext';
 
