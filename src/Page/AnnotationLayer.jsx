@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import makeCancellable from 'make-cancellable-promise';
 import invariant from 'tiny-invariant';
 import warning from 'tiny-warning';
-import * as pdfjs from 'pdfjs-dist/legacy/build/pdf';
+import * as pdfjs from 'pdfjs-dist/build/pdf';
 
 import DocumentContext from '../DocumentContext';
 import PageContext from '../PageContext';

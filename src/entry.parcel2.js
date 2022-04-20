@@ -1,4 +1,4 @@
-import * as pdfjs from 'pdfjs-dist/legacy/build/pdf';
+import * as pdfjs from 'pdfjs-dist/build/pdf';
 
 import Document from './Document';
 import Outline from './Outline';
@@ -10,7 +10,7 @@ displayWorkerWarning();
 
 if (typeof window !== 'undefined' && 'Worker' in window) {
   pdfjs.GlobalWorkerOptions.workerPort = new Worker(
-    new URL('./pdf.worker.entry.js', import.meta.url), 
+    new URL('./pdf.worker.entry.js', import.meta.url),
     { type: 'module' },
   );
 }
