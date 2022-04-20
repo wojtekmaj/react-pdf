@@ -28,11 +28,6 @@ module.exports = {
   resolve: {
     extensions: ['.js', '.jsx'],
   },
-  resolveLoader: {
-    alias: {
-      'file-loader': require.resolve('file-loader'),
-    },
-  },
   module: {
     rules: [
       {
