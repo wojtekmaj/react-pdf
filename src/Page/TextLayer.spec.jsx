@@ -1,5 +1,5 @@
 import React from 'react';
-import { shallow } from 'enzyme';
+import { mount, shallow } from 'enzyme';
 
 import { pdfjs } from '../entry.jest';
 
@@ -36,10 +36,10 @@ describe('TextLayer', () => {
     it('loads text content and calls onGetTextSuccess callback properly', async () => {
       const { func: onGetTextSuccess, promise: onGetTextSuccessPromise } = makeAsyncCallback();
 
-      shallow(<TextLayer onGetTextSuccess={onGetTextSuccess} page={page} />);
+      mount(<TextLayer onGetTextSuccess={onGetTextSuccess} page={page} />);
 
       expect.assertions(1);
-      await expect(onGetTextSuccessPromise).resolves.toMatchObject(desiredTextItems);
+      await expect(onGetTextSuccessPromise).resolves.toMatchObject({ items: desiredTextItems });
     });
 
     it('calls onGetTextError when failed to load text content', async () => {
@@ -47,7 +47,7 @@ describe('TextLayer', () => {
 
       muteConsole();
 
-      shallow(<TextLayer onGetTextError={onGetTextError} page={failingPage} />);
+      mount(<TextLayer onGetTextError={onGetTextError} page={failingPage} />);
 
       expect.assertions(1);
       await expect(onGetTextErrorPromise).resolves.toBeInstanceOf(Error);
@@ -58,12 +58,12 @@ describe('TextLayer', () => {
     it('replaces text content properly', async () => {
       const { func: onGetTextSuccess, promise: onGetTextSuccessPromise } = makeAsyncCallback();
 
-      const mountedComponent = shallow(
-        <TextLayer onGetTextSuccess={onGetTextSuccess} page={page} />,
-      );
+      const mountedComponent = mount(<TextLayer onGetTextSuccess={onGetTextSuccess} page={page} />);
 
       expect.assertions(2);
-      await expect(onGetTextSuccessPromise).resolves.toMatchObject(desiredTextItems);
+      await expect(onGetTextSuccessPromise).resolves.toMatchObject({
+        items: desiredTextItems,
+      });
 
       const { func: onGetTextSuccess2, promise: onGetTextSuccessPromise2 } = makeAsyncCallback();
 
@@ -72,7 +72,9 @@ describe('TextLayer', () => {
         page: page2,
       });
 
-      await expect(onGetTextSuccessPromise2).resolves.toMatchObject(desiredTextItems2);
+      await expect(onGetTextSuccessPromise2).resolves.toMatchObject({
+        items: desiredTextItems2,
+      });
     });
 
     it('throws an error when placed outside Page', () => {
@@ -84,50 +86,65 @@ describe('TextLayer', () => {
 
   describe('rendering', () => {
     it('renders text content properly', async () => {
-      const { func: onGetTextSuccess, promise: onGetTextSuccessPromise } = makeAsyncCallback();
+      const { func: onRenderTextLayerSuccess, promise: onRenderTextLayerSuccessPromise } =
+        makeAsyncCallback();
 
-      const component = shallow(<TextLayer onGetTextSuccess={onGetTextSuccess} page={page} />);
+      const component = mount(
+        <TextLayer onRenderTextLayerSuccess={onRenderTextLayerSuccess} page={page} />,
+      );
 
       expect.assertions(1);
-      return onGetTextSuccessPromise.then(() => {
-        component.update();
-        const textItems = component.children();
+      return onRenderTextLayerSuccessPromise.then(() => {
+        const textItems = component.getDOMNode().children;
 
         expect(textItems).toHaveLength(desiredTextItems.length);
       });
     });
 
-    it('renders text content at a given rotation', async () => {
-      const { func: onGetTextSuccess, promise: onGetTextSuccessPromise } = makeAsyncCallback();
-      const rotate = 90;
+    it('calls customTextRenderer with necessary arguments', () => {
+      const { func: onRenderTextLayerSuccess, promise: onRenderTextLayerSuccessPromise } =
+        makeAsyncCallback();
 
-      const component = shallow(
-        <TextLayer onGetTextSuccess={onGetTextSuccess} page={page} rotate={rotate} />,
+      const customTextRenderer = jest.fn();
+
+      mount(
+        <TextLayer
+          customTextRenderer={customTextRenderer}
+          onRenderTextLayerSuccess={onRenderTextLayerSuccess}
+          page={page}
+        />,
       );
 
-      expect.assertions(1);
-      return onGetTextSuccessPromise.then(() => {
-        component.update();
-        const { rotate: instanceRotate } = component.instance();
-
-        expect(instanceRotate).toEqual(rotate);
+      expect.assertions(2);
+      return onRenderTextLayerSuccessPromise.then(() => {
+        expect(customTextRenderer).toHaveBeenCalledTimes(desiredTextItems.length);
+        expect(customTextRenderer).toHaveBeenCalledWith(
+          expect.objectContaining({
+            str: expect.any(String),
+            itemIndex: expect.any(Number),
+          }),
+        );
       });
     });
 
-    it('renders text content at a given scale', async () => {
-      const { func: onGetTextSuccess, promise: onGetTextSuccessPromise } = makeAsyncCallback();
-      const scale = 2;
+    it('renders text content properly given customTextRenderer', () => {
+      const { func: onRenderTextLayerSuccess, promise: onRenderTextLayerSuccessPromise } =
+        makeAsyncCallback();
 
-      const component = shallow(
-        <TextLayer onGetTextSuccess={onGetTextSuccess} page={page} scale={scale} />,
+      const customTextRenderer = () => 'Test value';
+
+      const component = mount(
+        <TextLayer
+          customTextRenderer={customTextRenderer}
+          onRenderTextLayerSuccess={onRenderTextLayerSuccess}
+          page={page}
+        />,
       );
 
       expect.assertions(1);
-      return onGetTextSuccessPromise.then(() => {
-        component.update();
-        const { unrotatedViewport: viewport } = component.instance();
-
-        expect(viewport.scale).toEqual(scale);
+      return onRenderTextLayerSuccessPromise.then(() => {
+        const textItem = component.text();
+        expect(textItem).toContain('Test value');
       });
     });
   });
