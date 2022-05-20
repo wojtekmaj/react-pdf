@@ -1,5 +1,5 @@
 import React from 'react';
-import { shallow, mount } from 'enzyme';
+import { fireEvent, getAllByRole, render, screen } from '@testing-library/react';
 
 import { pdfjs } from './entry.jest';
 import { OutlineItemInternal as OutlineItem } from './OutlineItem';
@@ -24,17 +24,18 @@ describe('OutlineItem', () => {
 
   describe('rendering', () => {
     it('renders an item properly', () => {
-      const component = shallow(<OutlineItem item={outlineItem} pdf={pdf} />);
+      render(<OutlineItem item={outlineItem} pdf={pdf} />);
 
-      const title = component.find('a').first();
+      const item = screen.getAllByRole('listitem')[0];
 
-      expect(title.text()).toBe(outlineItem.title);
+      expect(item).toHaveTextContent(outlineItem.title);
     });
 
     it("renders item's subitems properly", () => {
-      const component = mount(<OutlineItem item={outlineItem} pdf={pdf} />);
+      render(<OutlineItem item={outlineItem} pdf={pdf} />);
 
-      const subitems = component.children().find('OutlineItemInternal');
+      const item = screen.getAllByRole('listitem')[0];
+      const subitems = getAllByRole(item, 'listitem');
 
       expect(subitems).toHaveLength(outlineItem.items.length);
     });
@@ -42,10 +43,11 @@ describe('OutlineItem', () => {
     it('calls onClick with proper arguments when clicked a link', () => {
       const { func: onClick, promise: onClickPromise } = makeAsyncCallback();
 
-      const component = mount(<OutlineItem item={outlineItem} onClick={onClick} pdf={pdf} />);
+      render(<OutlineItem item={outlineItem} onClick={onClick} pdf={pdf} />);
 
-      const title = component.find('a').first();
-      title.simulate('click');
+      const item = screen.getAllByRole('listitem')[0];
+      const link = getAllByRole(item, 'link')[0];
+      fireEvent.click(link);
 
       return onClickPromise.then(() => {
         expect(onClick).toHaveBeenCalled();

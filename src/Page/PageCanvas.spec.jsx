@@ -1,5 +1,5 @@
 import React from 'react';
-import { mount } from 'enzyme';
+import { render } from '@testing-library/react';
 
 import { pdfjs } from '../entry.jest';
 
@@ -34,7 +34,7 @@ describe('PageCanvas', () => {
 
       muteConsole();
 
-      mount(
+      render(
         <PageCanvas onRenderSuccess={onRenderSuccess} page={pageWithRendererMocked} scale={1} />,
       );
 
@@ -50,7 +50,7 @@ describe('PageCanvas', () => {
 
       muteConsole();
 
-      mount(<PageCanvas onRenderError={onRenderError} page={failingPage} scale={1} />);
+      render(<PageCanvas onRenderError={onRenderError} page={failingPage} scale={1} />);
 
       expect.assertions(1);
 
@@ -64,7 +64,7 @@ describe('PageCanvas', () => {
     it('passes canvas element to canvasRef properly', () => {
       const canvasRef = jest.fn();
 
-      mount(<PageCanvas canvasRef={canvasRef} page={page} scale={1} />);
+      render(<PageCanvas canvasRef={canvasRef} page={page} scale={1} />);
 
       expect(canvasRef).toHaveBeenCalled();
       expect(canvasRef.mock.calls[0][0]).toBeInstanceOf(HTMLElement);
