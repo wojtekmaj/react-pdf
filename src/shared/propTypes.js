@@ -45,12 +45,7 @@ export const isLinkService = PropTypes.instanceOf(LinkService);
 export const isLinkTarget = PropTypes.oneOf(['_self', '_blank', '_parent', '_top']);
 
 export const isPage = PropTypes.shape({
-  _transport: PropTypes.shape({
-    fontLoader: PropTypes.object.isRequired,
-  }).isRequired,
-  commonObjs: PropTypes.shape({
-    _objs: PropTypes.object.isRequired,
-  }).isRequired,
+  commonObjs: PropTypes.shape({}).isRequired,
   getAnnotations: PropTypes.func.isRequired,
   getTextContent: PropTypes.func.isRequired,
   getViewport: PropTypes.func.isRequired,

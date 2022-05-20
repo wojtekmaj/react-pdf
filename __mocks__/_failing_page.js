@@ -1,9 +1,5 @@
 export default {
-  _transport: {
-    fontLoader: {},
-  },
   commonObjs: {
-    _objs: {},
     get: () => {},
   },
   getAnnotations: () => new Promise((resolve, reject) => reject(new Error())),
