@@ -1,5 +1,5 @@
-import React from 'react';
-import { mount, shallow } from 'enzyme';
+import React, { createRef } from 'react';
+import { render } from '@testing-library/react';
 
 import { pdfjs } from '../entry.jest';
 
@@ -39,7 +39,7 @@ describe('AnnotationLayer', () => {
       const { func: onGetAnnotationsSuccess, promise: onGetAnnotationsSuccessPromise } =
         makeAsyncCallback();
 
-      mount(
+      render(
         <AnnotationLayer
           linkService={linkService}
           onGetAnnotationsSuccess={onGetAnnotationsSuccess}
@@ -57,7 +57,7 @@ describe('AnnotationLayer', () => {
 
       muteConsole();
 
-      mount(
+      render(
         <AnnotationLayer
           linkService={linkService}
           onGetAnnotationsError={onGetAnnotationsError}
@@ -75,7 +75,7 @@ describe('AnnotationLayer', () => {
       const { func: onGetAnnotationsSuccess, promise: onGetAnnotationsSuccessPromise } =
         makeAsyncCallback();
 
-      const mountedComponent = mount(
+      const { rerender } = render(
         <AnnotationLayer
           linkService={linkService}
           onGetAnnotationsSuccess={onGetAnnotationsSuccess}
@@ -89,17 +89,20 @@ describe('AnnotationLayer', () => {
       const { func: onGetAnnotationsSuccess2, promise: onGetAnnotationsSuccessPromise2 } =
         makeAsyncCallback();
 
-      mountedComponent.setProps({
-        onGetAnnotationsSuccess: onGetAnnotationsSuccess2,
-        page: page2,
-      });
+      rerender(
+        <AnnotationLayer
+          linkService={linkService}
+          onGetAnnotationsSuccess={onGetAnnotationsSuccess2}
+          page={page2}
+        />,
+      );
 
       await expect(onGetAnnotationsSuccessPromise2).resolves.toMatchObject(desiredAnnotations2);
     });
 
     it('throws an error when placed outside Page', () => {
       muteConsole();
-      expect(() => shallow(<AnnotationLayer />)).toThrow();
+      expect(() => render(<AnnotationLayer />)).toThrow();
       restoreConsole();
     });
   });
@@ -111,7 +114,7 @@ describe('AnnotationLayer', () => {
         promise: onRenderAnnotationLayerSuccessPromise,
       } = makeAsyncCallback();
 
-      const component = mount(
+      const { container } = render(
         <AnnotationLayer
           linkService={linkService}
           onRenderAnnotationLayerSuccess={onRenderAnnotationLayerSuccess}
@@ -122,9 +125,7 @@ describe('AnnotationLayer', () => {
       expect.assertions(1);
 
       return onRenderAnnotationLayerSuccessPromise.then(() => {
-        component.update();
-        const renderedLayer = component.getDOMNode();
-        const annotationItems = [...renderedLayer.children];
+        const annotationItems = [...container.firstChild.children];
 
         expect(annotationItems).toHaveLength(desiredAnnotations.length);
       });
@@ -149,7 +150,7 @@ describe('AnnotationLayer', () => {
           customLinkService.setExternalLinkTarget(externalLinkTarget);
         }
 
-        const component = mount(
+        const { container } = render(
           <AnnotationLayer
             linkService={customLinkService}
             onRenderAnnotationLayerSuccess={onRenderAnnotationLayerSuccess}
@@ -160,9 +161,7 @@ describe('AnnotationLayer', () => {
         expect.assertions(desiredAnnotations.length);
 
         return onRenderAnnotationLayerSuccessPromise.then(() => {
-          component.update();
-          const renderedLayer = component.getDOMNode();
-          const annotationItems = [...renderedLayer.children];
+          const annotationItems = [...container.firstChild.children];
           const annotationLinkItems = annotationItems
             .map((item) => item.firstChild)
             .filter((item) => item.tagName === 'A');
@@ -188,7 +187,7 @@ describe('AnnotationLayer', () => {
           customLinkService.setExternalLinkRel(externalLinkRel);
         }
 
-        const component = mount(
+        const { container } = render(
           <AnnotationLayer
             linkService={customLinkService}
             onRenderAnnotationLayerSuccess={onRenderAnnotationLayerSuccess}
@@ -199,9 +198,7 @@ describe('AnnotationLayer', () => {
         expect.assertions(desiredAnnotations.length);
 
         return onRenderAnnotationLayerSuccessPromise.then(() => {
-          component.update();
-          const renderedLayer = component.getDOMNode();
-          const annotationItems = [...renderedLayer.children];
+          const annotationItems = [...container.firstChild.children];
           const annotationLinkItems = annotationItems
             .map((item) => item.firstChild)
             .filter((item) => item.tagName === 'A');
@@ -217,20 +214,21 @@ describe('AnnotationLayer', () => {
         promise: onRenderAnnotationLayerSuccessPromise,
       } = makeAsyncCallback();
       const rotate = 90;
+      const instance = createRef();
 
-      const component = mount(
+      render(
         <AnnotationLayer
           linkService={linkService}
           onRenderAnnotationLayerSuccess={onRenderAnnotationLayerSuccess}
           page={page}
           rotate={rotate}
+          ref={instance}
         />,
       );
 
       expect.assertions(1);
       return onRenderAnnotationLayerSuccessPromise.then(() => {
-        component.update();
-        const { viewport } = component.instance();
+        const { viewport } = instance.current;
 
         expect(viewport.rotation).toEqual(rotate);
       });
@@ -242,20 +240,21 @@ describe('AnnotationLayer', () => {
         promise: onRenderAnnotationLayerSuccessPromise,
       } = makeAsyncCallback();
       const scale = 2;
+      const instance = createRef();
 
-      const component = mount(
+      render(
         <AnnotationLayer
           linkService={linkService}
           onRenderAnnotationLayerSuccess={onRenderAnnotationLayerSuccess}
           page={page}
           scale={scale}
+          ref={instance}
         />,
       );
 
       expect.assertions(1);
       return onRenderAnnotationLayerSuccessPromise.then(() => {
-        component.update();
-        const { viewport } = component.instance();
+        const { viewport } = instance.current;
 
         expect(viewport.scale).toEqual(scale);
       });
@@ -274,7 +273,7 @@ describe('AnnotationLayer', () => {
         `<img[^>]+src="${imageResourcesPath}annotation-note.svg"`,
       );
 
-      const component = mount(
+      const { container } = render(
         <AnnotationLayer
           linkService={linkService}
           onRenderAnnotationLayerSuccess={onRenderAnnotationLayerSuccess}
@@ -284,8 +283,8 @@ describe('AnnotationLayer', () => {
 
       expect.assertions(1);
       return onRenderAnnotationLayerSuccessPromise.then(() => {
-        component.update();
-        const stringifiedAnnotationLayerNode = component.html();
+        const stringifiedAnnotationLayerNode = container.outerHTML;
+
         expect(stringifiedAnnotationLayerNode).toMatch(desiredImageTagRegExp);
       });
     });
@@ -303,7 +302,7 @@ describe('AnnotationLayer', () => {
         `<img[^>]+src="${imageResourcesPath}annotation-note.svg"`,
       );
 
-      const component = mount(
+      const { container } = render(
         <AnnotationLayer
           imageResourcesPath={imageResourcesPath}
           linkService={linkService}
@@ -314,8 +313,8 @@ describe('AnnotationLayer', () => {
 
       expect.assertions(1);
       return onRenderAnnotationLayerSuccessPromise.then(() => {
-        component.update();
-        const stringifiedAnnotationLayerNode = component.html();
+        const stringifiedAnnotationLayerNode = container.outerHTML;
+
         expect(stringifiedAnnotationLayerNode).toMatch(desiredImageTagRegExp);
       });
     });

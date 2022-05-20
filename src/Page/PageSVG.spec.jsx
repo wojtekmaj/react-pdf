@@ -1,5 +1,5 @@
 import React from 'react';
-import { mount } from 'enzyme';
+import { render } from '@testing-library/react';
 
 import { pdfjs } from '../entry.jest';
 
@@ -27,7 +27,7 @@ describe('PageSVG', () => {
 
       muteConsole();
 
-      mount(<PageSVG onRenderSuccess={onRenderSuccess} page={page} scale={1} />);
+      render(<PageSVG onRenderSuccess={onRenderSuccess} page={page} scale={1} />);
 
       expect.assertions(1);
 
@@ -41,7 +41,7 @@ describe('PageSVG', () => {
 
       muteConsole();
 
-      mount(<PageSVG onRenderError={onRenderError} page={failingPage} scale={1} />);
+      render(<PageSVG onRenderError={onRenderError} page={failingPage} scale={1} />);
 
       expect.assertions(1);
 
