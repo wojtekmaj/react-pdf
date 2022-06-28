@@ -77,7 +77,7 @@
     "make-event-props": "^1.1.0",
     "merge-class-names": "^1.1.1",
     "merge-refs": "^1.0.0",
-    "pdfjs-dist": "2.13.216",
+    "pdfjs-dist": "2.14.305",
     "prop-types": "^15.6.2",
     "tiny-invariant": "^1.0.0",
     "tiny-warning": "^1.0.0"
