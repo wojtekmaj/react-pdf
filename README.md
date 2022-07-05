@@ -60,6 +60,10 @@ If you use an older version of React, please refer to the table below to a find 
 | ≥16.3         | 5.x                                 |
 | ≥15.5         | 4.x                                 |
 
+#### Preact
+
+React-PDF may be used with Preact. However, if you want to use text layer in PDFs rendered by React-PDF, you'll also need to install `preact-render-to-string` package.
+
 ### Installation
 
 Add React-PDF to your project by executing `npm install react-pdf` or `yarn add react-pdf`.
