@@ -92,7 +92,7 @@
     "@testing-library/react": "^12.1.0",
     "eslint": "^8.5.0",
     "eslint-config-wojtekmaj": "^0.6.5",
-    "husky": "^7.0.0",
+    "husky": "^8.0.0",
     "jest": "^27.0.0",
     "jest-canvas-mock": "^2.3.1",
     "prettier": "^2.5.0",
