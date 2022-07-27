@@ -23,8 +23,9 @@ A minimal demo page can be found in `sample` directory.
 
 ## Before you continue
 
-React-PDF is under constant development. This documentation is written for React-PDF 5.x branch. If you want to see documentation for other versions of React-PDF, use dropdown on top of GitHub page to switch to an appropriate tag. Here are quick links to the newest docs from each branch:
+React-PDF is under constant development. This documentation is written for React-PDF 6.x branch. If you want to see documentation for other versions of React-PDF, use dropdown on top of GitHub page to switch to an appropriate tag. Here are quick links to the newest docs from each branch:
 
+- [v5.x](https://github.com/wojtekmaj/react-pdf/blob/v5.x/README.md)
 - [v4.x](https://github.com/wojtekmaj/react-pdf/blob/v4.x/README.md)
 - [v3.x](https://github.com/wojtekmaj/react-pdf/blob/v3.x/README.md)
 - [v2.x](https://github.com/wojtekmaj/react-pdf/blob/v2.x/README.md)
@@ -49,18 +50,19 @@ If you need to support older browsers, you will need to use React-PDF v5. If you
 
 #### React
 
-To use the latest version of React-PDF, your project needs to use React 16.3 or later.
+To use the latest version of React-PDF, your project needs to use React 16.8 or later.
 
 If you use an older version of React, please refer to the table below to a find suitable React-PDF version.
 
 | React version | Newest compatible React-PDF version |
 | ------------- | ----------------------------------- |
-| ≥16.3         | latest                              |
+| ≥16.8         | latest                              |
+| ≥16.3         | 5.x                                 |
 | ≥15.5         | 4.x                                 |
 
-#### Internet Explorer
+#### Preact
 
-Internet Explorer is not supported in React-PDF 5.x or later. If you need Internet Explorer support, you will need to use React-PDF 4.x instead. Don't worry - it still receives bug fixes and even occasional small features!
+React-PDF may be used with Preact. However, if you want to use text layer in PDFs rendered by React-PDF, you'll also need to install `preact-render-to-string` package.
 
 ### Installation
 

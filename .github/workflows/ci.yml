@@ -25,6 +25,8 @@ jobs:
 
       - name: Install dependencies
         run: yarn --immutable
+        env:
+          HUSKY: 0
 
       - name: Run tests
         run: yarn lint
@@ -44,6 +46,8 @@ jobs:
 
       - name: Install dependencies
         run: yarn --immutable
+        env:
+          HUSKY: 0
 
       - name: Run tests
         run: yarn jest

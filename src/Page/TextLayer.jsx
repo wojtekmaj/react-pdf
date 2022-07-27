@@ -1,5 +1,5 @@
 import React, { createRef, PureComponent } from 'react';
-import ReactDOMServer from 'react-dom/server';
+import { renderToStaticMarkup } from 'react-dom/server';
 import PropTypes from 'prop-types';
 import makeCancellable from 'make-cancellable-promise';
 import invariant from 'tiny-invariant';
@@ -140,7 +140,7 @@ export class TextLayerInternal extends PureComponent {
               itemIndex: elementIndex,
               ...textContent.items[elementIndex],
             });
-            element.innerHTML = ReactDOMServer.renderToStaticMarkup(reactContent);
+            element.innerHTML = renderToStaticMarkup(reactContent);
           });
         }
         this.onRenderSuccess();
