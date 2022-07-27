@@ -5429,7 +5429,6 @@ __metadata:
   resolution: "react-pdf@portal:../::locator=react-pdf-test-page%40workspace%3A."
   dependencies:
     "@babel/runtime": ^7.0.0
-    file-loader: ^6.0.0
     make-cancellable-promise: ^1.0.0
     make-event-props: ^1.1.0
     merge-class-names: ^1.1.1
@@ -5439,6 +5438,7 @@ __metadata:
     tiny-invariant: ^1.0.0
     tiny-warning: ^1.0.0
   peerDependencies:
+    file-loader: ^6.0.0
     react: ^16.8.0 || ^17.0.0 || ^18.0.0
     react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0
   languageName: node

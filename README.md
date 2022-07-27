@@ -124,6 +124,10 @@ import { Document, Page } from 'react-pdf/dist/esm/entry.webpack';
 | Webpack 4 | `react-pdf/dist/esm/entry.webpack`  |
 | Webpack 5 | `react-pdf/dist/esm/entry.webpack5` |
 
+#### Webpack 4
+
+If you want to use React-PDF with Webpack 4, you'll need to manually install `file-loader` package.
+
 #### Create React App
 
 Create React App 4 (`react-scripts@4.0.0`) uses Webpack 4 under the hood, so you can use the entry file built for Webpack 4.

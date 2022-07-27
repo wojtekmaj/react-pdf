@@ -72,7 +72,6 @@
   "license": "MIT",
   "dependencies": {
     "@babel/runtime": "^7.0.0",
-    "file-loader": "^6.0.0",
     "make-cancellable-promise": "^1.0.0",
     "make-event-props": "^1.1.0",
     "merge-class-names": "^1.1.1",
@@ -103,8 +102,14 @@
     "webpack": "^5.20.0"
   },
   "peerDependencies": {
+    "file-loader": "^6.0.0",
     "react": "^16.8.0 || ^17.0.0 || ^18.0.0",
     "react-dom": "^16.8.0 || ^17.0.0 || ^18.0.0"
+  },
+  "peerDependenciesMeta": {
+    "file-loader": {
+      "optional": true
+    }
   },
   "resolutions": {
     "semver@7.0.0": "^7.0.0"
