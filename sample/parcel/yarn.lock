@@ -2817,12 +2817,12 @@ __metadata:
   linkType: hard
 
 "deasync@npm:^0.1.14":
-  version: 0.1.24
-  resolution: "deasync@npm:0.1.24"
+  version: 0.1.27
+  resolution: "deasync@npm:0.1.27"
   dependencies:
     bindings: ^1.5.0
     node-addon-api: ^1.7.1
-  checksum: 7e87a1faa8511fb157620f9470160efd352cb7fda2c76e45e58acf40fdc96fde89f846f253ee714ec338c45b07b465196776a89947f29a261cbf28a5b3662f73
+  checksum: 2a3629f36e2e9d9a26622c68dbaf96a9034805ed4cedc7d0b73ea05121113be257f118a13353606a859f625123d32f695702cb6db8bbfe661869ef884f7e5ec9
   languageName: node
   linkType: hard
 
