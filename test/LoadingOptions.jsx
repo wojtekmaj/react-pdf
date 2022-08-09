@@ -5,11 +5,7 @@ import samplePDF from './test.pdf';
 
 import { isFile } from './shared/propTypes';
 
-export default function LoadingOptions({
-  file,
-  setFile,
-  setRender,
-}) {
+export default function LoadingOptions({ file, setFile, setRender }) {
   function onFileChange(event) {
     setFile(event.target.files[0]);
   }
@@ -35,7 +31,9 @@ export default function LoadingOptions({
       return;
     }
 
-    fetch(url).then((response) => response.blob()).then(setFile);
+    fetch(url)
+      .then((response) => response.blob())
+      .then(setFile);
   }
 
   function onUseImported() {
@@ -56,69 +54,37 @@ export default function LoadingOptions({
 
   return (
     <fieldset id="loadingoptions">
-      <legend htmlFor="loadingoptions">
-        Load file
-      </legend>
+      <legend htmlFor="loadingoptions">Load file</legend>
 
-      <label htmlFor="file">
-        Load from file:
-      </label>
-      <input
-        id="file"
-        onChange={onFileChange}
-        type="file"
-      />
+      <label htmlFor="file">Load from file:</label>
+      <input id="file" onChange={onFileChange} type="file" />
 
       <form onSubmit={onURLChange}>
-        <label htmlFor="url">
-          Load from URL:
-        </label>
-        <input
-          id="url"
-          type="text"
-        />
-        <button type="submit">
-          Apply
-        </button>
+        <label htmlFor="url">Load from URL:</label>
+        <input id="url" type="text" />
+        <button type="submit">Apply</button>
       </form>
 
       <form onSubmit={onRequestChange}>
-        <label htmlFor="fetchAndPass">
-          Fetch and pass:
-        </label>
-        <input
-          id="fetchAndPass"
-          type="text"
-        />
-        <button type="submit">
-          Apply
-        </button>
+        <label htmlFor="fetchAndPass">Fetch and pass:</label>
+        <input id="fetchAndPass" type="text" />
+        <button type="submit">Apply</button>
       </form>
 
       <div>
-        <button
-          onClick={onUseImported}
-          type="button"
-        >
+        <button onClick={onUseImported} type="button">
           Use imported file
         </button>
       </div>
 
       <div>
-        <button
-          onClick={onImportAndUnmount}
-          type="button"
-        >
+        <button onClick={onImportAndUnmount} type="button">
           Import, unmount and mount
         </button>
       </div>
 
       <div>
-        <button
-          disabled={file === null}
-          onClick={unloadFile}
-          type="button"
-        >
+        <button disabled={file === null} onClick={unloadFile} type="button">
           Unload file
         </button>
       </div>

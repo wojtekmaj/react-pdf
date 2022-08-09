@@ -15,8 +15,6 @@ export const eventProps = (() => {
   return result;
 })();
 
-/* eslint-disable react/forbid-prop-types */
-
 const fileTypes = [
   PropTypes.string,
   PropTypes.instanceOf(ArrayBuffer),
@@ -47,12 +45,7 @@ export const isLinkService = PropTypes.instanceOf(LinkService);
 export const isLinkTarget = PropTypes.oneOf(['_self', '_blank', '_parent', '_top']);
 
 export const isPage = PropTypes.shape({
-  _transport: PropTypes.shape({
-    fontLoader: PropTypes.object.isRequired,
-  }).isRequired,
-  commonObjs: PropTypes.shape({
-    _objs: PropTypes.object.isRequired,
-  }).isRequired,
+  commonObjs: PropTypes.shape({}).isRequired,
   getAnnotations: PropTypes.func.isRequired,
   getTextContent: PropTypes.func.isRequired,
   getViewport: PropTypes.func.isRequired,
@@ -68,7 +61,9 @@ export const isPageIndex = (props, propName, componentName) => {
 
   if (isDefined(pageIndex)) {
     if (typeof pageIndex !== 'number') {
-      return new Error(`\`${propName}\` of type \`${typeof pageIndex}\` supplied to \`${componentName}\`, expected \`number\`.`);
+      return new Error(
+        `\`${propName}\` of type \`${typeof pageIndex}\` supplied to \`${componentName}\`, expected \`number\`.`,
+      );
     }
 
     if (pageIndex < 0) {
@@ -81,7 +76,9 @@ export const isPageIndex = (props, propName, componentName) => {
       return new Error(`Expected \`${propName}\` to be less or equal to ${numPages - 1}.`);
     }
   } else if (!isDefined(pageNumber)) {
-    return new Error(`\`${propName}\` not supplied. Either pageIndex or pageNumber must be supplied to \`${componentName}\`.`);
+    return new Error(
+      `\`${propName}\` not supplied. Either pageIndex or pageNumber must be supplied to \`${componentName}\`.`,
+    );
   }
 
   // Everything is fine
@@ -97,7 +94,9 @@ export const isPageNumber = (props, propName, componentName) => {
 
   if (isDefined(pageNumber)) {
     if (typeof pageNumber !== 'number') {
-      return new Error(`\`${propName}\` of type \`${typeof pageNumber}\` supplied to \`${componentName}\`, expected \`number\`.`);
+      return new Error(
+        `\`${propName}\` of type \`${typeof pageNumber}\` supplied to \`${componentName}\`, expected \`number\`.`,
+      );
     }
 
     if (pageNumber < 1) {
@@ -110,7 +109,9 @@ export const isPageNumber = (props, propName, componentName) => {
       return new Error(`Expected \`${propName}\` to be less or equal to ${numPages}.`);
     }
   } else if (!isDefined(pageIndex)) {
-    return new Error(`\`${propName}\` not supplied. Either pageIndex or pageNumber must be supplied to \`${componentName}\`.`);
+    return new Error(
+      `\`${propName}\` not supplied. Either pageIndex or pageNumber must be supplied to \`${componentName}\`.`,
+    );
   }
 
   // Everything is fine

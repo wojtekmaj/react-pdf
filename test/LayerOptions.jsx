@@ -3,18 +3,18 @@ import PropTypes from 'prop-types';
 
 export default function LayerOptions({
   renderAnnotationLayer,
-  renderInteractiveForms,
+  renderForms,
   renderTextLayer,
   setRenderAnnotationLayer,
-  setRenderInteractiveForms,
+  setRenderForms,
   setRenderTextLayer,
 }) {
   function onRenderAnnotationLayerChange(event) {
     setRenderAnnotationLayer(event.target.checked);
   }
 
-  function onRenderInteractiveFormsChange(event) {
-    setRenderInteractiveForms(event.target.checked);
+  function onRenderFormsChange(event) {
+    setRenderForms(event.target.checked);
   }
 
   function onRenderTextLayersChange(event) {
@@ -23,9 +23,7 @@ export default function LayerOptions({
 
   return (
     <fieldset id="layeroptions">
-      <legend htmlFor="layeroptions">
-        Layer options
-      </legend>
+      <legend htmlFor="layeroptions">Layer options</legend>
 
       <div>
         <input
@@ -34,9 +32,7 @@ export default function LayerOptions({
           onChange={onRenderTextLayersChange}
           type="checkbox"
         />
-        <label htmlFor="renderTextLayer">
-          Render text layer
-        </label>
+        <label htmlFor="renderTextLayer">Render text layer</label>
       </div>
 
       <div>
@@ -46,22 +42,18 @@ export default function LayerOptions({
           onChange={onRenderAnnotationLayerChange}
           type="checkbox"
         />
-        <label htmlFor="renderAnnotationLayer">
-          Render annotation layer
-        </label>
+        <label htmlFor="renderAnnotationLayer">Render annotation layer</label>
       </div>
 
       <div>
         <input
-          checked={renderAnnotationLayer && renderInteractiveForms}
+          checked={renderAnnotationLayer && renderForms}
           disabled={!renderAnnotationLayer}
-          id="renderInteractiveForms"
-          onChange={onRenderInteractiveFormsChange}
+          id="renderForms"
+          onChange={onRenderFormsChange}
           type="checkbox"
         />
-        <label htmlFor="renderInteractiveForms">
-          Render interactive forms
-        </label>
+        <label htmlFor="renderForms">Render forms</label>
       </div>
     </fieldset>
   );
@@ -69,9 +61,9 @@ export default function LayerOptions({
 
 LayerOptions.propTypes = {
   renderAnnotationLayer: PropTypes.bool,
-  renderInteractiveForms: PropTypes.bool,
+  renderForms: PropTypes.bool,
   renderTextLayer: PropTypes.bool,
   setRenderAnnotationLayer: PropTypes.func.isRequired,
-  setRenderInteractiveForms: PropTypes.func.isRequired,
+  setRenderForms: PropTypes.func.isRequired,
   setRenderTextLayer: PropTypes.func.isRequired,
 };

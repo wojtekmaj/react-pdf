@@ -1,9 +1,4 @@
-import {
-  pdfjs,
-  Document,
-  Outline,
-  Page,
-} from './entry';
+import { pdfjs, Document, Outline, Page } from './entry';
 
 describe('default entry', () => {
   describe('has pdfjs exported properly', () => {

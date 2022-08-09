@@ -1,0 +1,42 @@
+{
+  "name": "react-pdf-sample-page-create-react-app-5",
+  "version": "4.0.0",
+  "description": "A sample page for React-PDF.",
+  "private": true,
+  "main": "src/index.jsx",
+  "scripts": {
+    "copy-cmaps": "node ./scripts/copy-cmaps.js",
+    "copy-standard-fonts": "node ./scripts/copy-standard-fonts.js",
+    "copy-worker": "node ./scripts/copy-worker.js",
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "author": {
+    "name": "Wojciech Maj",
+    "email": "kontakt@wojtekmaj.pl"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "react": "^17.0.0",
+    "react-dom": "^17.0.0",
+    "react-pdf": "latest",
+    "react-scripts": "5.0.0"
+  },
+  "resolutions": {
+    "mini-css-extract-plugin": "~2.4.0"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}

@@ -1,10 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-export default function AnnotationOptions({
-  externalLinkTarget,
-  setExternalLinkTarget,
-}) {
+export default function AnnotationOptions({ externalLinkTarget, setExternalLinkTarget }) {
   function onExternalLinkTargetChange(event) {
     const { value } = event.target;
 
@@ -13,25 +10,19 @@ export default function AnnotationOptions({
 
   return (
     <fieldset id="annotationoptions">
-      <legend htmlFor="annotationoptions">
-        Annotation options
-      </legend>
+      <legend htmlFor="annotationoptions">Annotation options</legend>
 
-      <label htmlFor="externalLinkTarget">
-        External link target
-      </label>
+      <label htmlFor="externalLinkTarget">External link target</label>
       <div>
         <input
-          checked={!externalLinkTarget || (externalLinkTarget === 'unset')}
+          checked={!externalLinkTarget || externalLinkTarget === 'unset'}
           id="targetUnset"
           name="externalLinkTarget"
           onChange={onExternalLinkTargetChange}
           type="radio"
           value="unset"
         />
-        <label htmlFor="targetUnset">
-          Unset
-        </label>
+        <label htmlFor="targetUnset">Unset</label>
       </div>
       <div>
         <input
@@ -42,9 +33,7 @@ export default function AnnotationOptions({
           type="radio"
           value="_self"
         />
-        <label htmlFor="targetSelf">
-          _self
-        </label>
+        <label htmlFor="targetSelf">_self</label>
       </div>
       <div>
         <input
@@ -55,9 +44,7 @@ export default function AnnotationOptions({
           type="radio"
           value="_blank"
         />
-        <label htmlFor="targetBlank">
-          _blank
-        </label>
+        <label htmlFor="targetBlank">_blank</label>
       </div>
     </fieldset>
   );

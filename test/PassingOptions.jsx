@@ -4,11 +4,7 @@ import { isDataURI } from 'react-pdf/src/shared/utils';
 
 import { isFile } from './shared/propTypes';
 
-export default function PassingOptions({
-  file,
-  passMethod,
-  setPassMethod,
-}) {
+export default function PassingOptions({ file, passMethod, setPassMethod }) {
   const sourceType = (() => {
     if (file === null) {
       return 'null';
@@ -37,9 +33,7 @@ export default function PassingOptions({
 
   return (
     <fieldset id="passingoptions">
-      <legend htmlFor="passingoptions">
-        Passing options
-      </legend>
+      <legend htmlFor="passingoptions">Passing options</legend>
 
       <div>
         <input
@@ -50,11 +44,7 @@ export default function PassingOptions({
           type="radio"
           value="null"
         />
-        <label htmlFor="passNormal">
-          Pass as is (
-          {sourceType}
-          )
-        </label>
+        <label htmlFor="passNormal">Pass as is ({sourceType})</label>
       </div>
       <div>
         <input
@@ -65,9 +55,7 @@ export default function PassingOptions({
           type="radio"
           value="object"
         />
-        <label htmlFor="passObject">
-          Pass as a parameter object
-        </label>
+        <label htmlFor="passObject">Pass as a parameter object</label>
       </div>
       <div>
         <input
@@ -78,9 +66,7 @@ export default function PassingOptions({
           type="radio"
           value="string"
         />
-        <label htmlFor="passString">
-          Pass as a string/data URI
-        </label>
+        <label htmlFor="passString">Pass as a string/data URI</label>
       </div>
       <div>
         <input
@@ -91,9 +77,7 @@ export default function PassingOptions({
           type="radio"
           value="blob"
         />
-        <label htmlFor="passBlob">
-          Pass as a File/Blob
-        </label>
+        <label htmlFor="passBlob">Pass as a File/Blob</label>
       </div>
     </fieldset>
   );

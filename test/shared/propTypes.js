@@ -1,7 +1,5 @@
 import PropTypes from 'prop-types';
 
-/* eslint-disable react/forbid-prop-types */
-
 const fileTypes = [
   PropTypes.string,
   PropTypes.instanceOf(ArrayBuffer),

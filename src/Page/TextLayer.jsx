@@ -1,38 +1,37 @@
-import React, { PureComponent } from 'react';
+import React, { createRef, PureComponent } from 'react';
+import { renderToStaticMarkup } from 'react-dom/server';
 import PropTypes from 'prop-types';
 import makeCancellable from 'make-cancellable-promise';
+import invariant from 'tiny-invariant';
+import warning from 'tiny-warning';
+import * as pdfjs from 'pdfjs-dist/build/pdf';
 
 import PageContext from '../PageContext';
 
-import TextLayerItem from './TextLayerItem';
-
-import {
-  cancelRunningTask,
-  errorOnDev,
-} from '../shared/utils';
+import { cancelRunningTask } from '../shared/utils';
 
 import { isPage, isRotate } from '../shared/propTypes';
 
 export class TextLayerInternal extends PureComponent {
   state = {
-    textItems: null,
-  }
+    textContent: null,
+  };
+
+  layerElement = createRef();
 
   componentDidMount() {
     const { page } = this.props;
 
-    if (!page) {
-      throw new Error('Attempted to load page text content, but no page was specified.');
-    }
+    invariant(page, 'Attempted to load page text content, but no page was specified.');
 
-    this.loadTextItems();
+    this.loadTextContent();
   }
 
   componentDidUpdate(prevProps) {
     const { page } = this.props;
 
-    if (prevProps.page && (page !== prevProps.page)) {
-      this.loadTextItems();
+    if (prevProps.page && page !== prevProps.page) {
+      this.loadTextContent();
     }
   }
 
@@ -40,36 +39,56 @@ export class TextLayerInternal extends PureComponent {
     cancelRunningTask(this.runningTask);
   }
 
-  loadTextItems = () => {
+  loadTextContent = () => {
     const { page } = this.props;
 
     const cancellable = makeCancellable(page.getTextContent());
     this.runningTask = cancellable;
 
     cancellable.promise
-      .then(({ items: textItems }) => {
-        this.setState({ textItems }, this.onLoadSuccess);
+      .then((textContent) => {
+        this.setState({ textContent }, this.onLoadSuccess);
       })
       .catch((error) => {
         this.onLoadError(error);
       });
-  }
+  };
 
   onLoadSuccess = () => {
     const { onGetTextSuccess } = this.props;
-    const { textItems } = this.state;
+    const { textContent } = this.state;
 
-    if (onGetTextSuccess) onGetTextSuccess(textItems);
-  }
+    if (onGetTextSuccess) onGetTextSuccess(textContent);
+  };
 
   onLoadError = (error) => {
     this.setState({ textItems: false });
 
-    errorOnDev(error);
+    warning(error);
 
     const { onGetTextError } = this.props;
 
     if (onGetTextError) onGetTextError(error);
+  };
+
+  onRenderSuccess = () => {
+    const { onRenderTextLayerSuccess } = this.props;
+
+    if (onRenderTextLayerSuccess) onRenderTextLayerSuccess();
+  };
+
+  onRenderError = (error) => {
+    warning(error);
+
+    const { onRenderTextLayerError } = this.props;
+
+    if (onRenderTextLayerError) onRenderTextLayerError(error);
+  };
+
+  get viewport() {
+    const { page, rotate, scale } = this.props;
+
+    return page.getViewport({ scale, rotation: rotate });
   }
 
   get unrotatedViewport() {
@@ -87,50 +106,70 @@ export class TextLayerInternal extends PureComponent {
     return rotate - page.rotate;
   }
 
-  renderTextItems() {
-    const { textItems } = this.state;
+  renderTextLayer() {
+    const { textContent } = this.state;
 
-    if (!textItems) {
+    if (!textContent) {
       return null;
     }
 
-    return textItems.map((textItem, itemIndex) => (
-      <TextLayerItem
-        // eslint-disable-next-line react/no-array-index-key
-        key={itemIndex}
-        itemIndex={itemIndex}
-        {...textItem}
-      />
-    ));
+    const { viewport } = this;
+    const { customTextRenderer, enhanceTextSelection } = this.props;
+
+    // If another rendering is in progress, let's cancel it
+    cancelRunningTask(this.runningTask);
+
+    const parameters = {
+      container: this.layerElement.current,
+      enhanceTextSelection,
+      textContent,
+      viewport,
+    };
+
+    this.layerElement.current.innerHTML = '';
+
+    this.runningTask = pdfjs.renderTextLayer(parameters);
+    const cancellable = makeCancellable(this.runningTask.promise);
+    this.runningTask = cancellable;
+
+    cancellable.promise
+      .then(() => {
+        if (customTextRenderer) {
+          Array.from(this.layerElement.current.children).forEach((element, elementIndex) => {
+            const reactContent = customTextRenderer({
+              itemIndex: elementIndex,
+              ...textContent.items[elementIndex],
+            });
+            element.innerHTML = renderToStaticMarkup(reactContent);
+          });
+        }
+        this.onRenderSuccess();
+      })
+      .catch((error) => {
+        this.onRenderError(error);
+      });
   }
 
   render() {
-    const { unrotatedViewport: viewport, rotate } = this;
-
     return (
-      <div
-        className="react-pdf__Page__textContent"
-        style={{
-          position: 'absolute',
-          top: '50%',
-          left: '50%',
-          width: `${viewport.width}px`,
-          height: `${viewport.height}px`,
-          color: 'transparent',
-          transform: `translate(-50%, -50%) rotate(${rotate}deg)`,
-          WebkitTransform: `translate(-50%, -50%) rotate(${rotate}deg)`,
-          pointerEvents: 'none',
-        }}
-      >
-        {this.renderTextItems()}
+      <div className="react-pdf__Page__textContent textLayer" ref={this.layerElement}>
+        {this.renderTextLayer()}
       </div>
     );
   }
 }
 
+TextLayerInternal.defaultProps = {
+  enhanceTextSelection: true,
+};
+
 TextLayerInternal.propTypes = {
+  customTextRenderer: PropTypes.func,
+  enhanceTextSelection: PropTypes.bool,
   onGetTextError: PropTypes.func,
   onGetTextSuccess: PropTypes.func,
+  onRenderTextLayerError: PropTypes.func,
+  onRenderTextLayerSuccess: PropTypes.func,
   page: isPage.isRequired,
   rotate: isRotate,
   scale: PropTypes.number,

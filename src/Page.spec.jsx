@@ -1,5 +1,5 @@
-import React from 'react';
-import { mount, shallow } from 'enzyme';
+import React, { createRef } from 'react';
+import { fireEvent, render } from '@testing-library/react';
 
 import { pdfjs } from './entry.jest';
 
@@ -7,12 +7,18 @@ import { PageInternal as Page } from './Page';
 
 import failingPdf from '../__mocks__/_failing_pdf';
 import silentlyFailingPdf from '../__mocks__/_silently_failing_pdf';
-import {
-  loadPDF, makeAsyncCallback, muteConsole, restoreConsole,
-} from '../test-utils';
+import { loadPDF, makeAsyncCallback, muteConsole, restoreConsole } from '../test-utils';
 
 const pdfFile = loadPDF('./__mocks__/_pdf.pdf');
 const pdfFile2 = loadPDF('./__mocks__/_pdf2.pdf');
+
+jest.mock(
+  './Page/AnnotationLayer',
+  () =>
+    function AnnotationLayer() {
+      return <div className="react-pdf__Page__annotations" />;
+    },
+);
 
 describe('Page', () => {
   // Loaded PDF file
@@ -45,10 +51,7 @@ describe('Page', () => {
     desiredLoadedPage3._pageIndex = page3._pageIndex;
     desiredLoadedPage3._pageInfo = page3._pageInfo;
 
-    registerPageArguments.push(
-      page._pageIndex,
-      undefined, // Page reference is not defined in Enzyme
-    );
+    registerPageArguments.push(page._pageIndex, expect.any(HTMLDivElement));
     unregisterPageArguments = page._pageIndex;
   });
 
@@ -56,13 +59,7 @@ describe('Page', () => {
     it('loads a page and calls onLoadSuccess callback properly', async () => {
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
-      shallow(
-        <Page
-          onLoadSuccess={onLoadSuccess}
-          pageIndex={0}
-          pdf={pdf}
-        />,
-      );
+      render(<Page onLoadSuccess={onLoadSuccess} pageIndex={0} pdf={pdf} />);
 
       expect.assertions(1);
       await expect(onLoadSuccessPromise).resolves.toMatchObject(desiredLoadedPage);
@@ -71,17 +68,10 @@ describe('Page', () => {
     it('returns all desired parameters in onLoadSuccess callback', () => {
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
-      const component = shallow(
-        <Page
-          onLoadSuccess={onLoadSuccess}
-          pageIndex={0}
-          pdf={pdf}
-        />,
-      );
+      render(<Page onLoadSuccess={onLoadSuccess} pageIndex={0} pdf={pdf} />);
 
       expect.assertions(5);
       return onLoadSuccessPromise.then((page) => {
-        component.update();
         expect(page.width).toBeDefined();
         expect(page.height).toBeDefined();
         expect(page.originalWidth).toBeDefined();
@@ -96,13 +86,7 @@ describe('Page', () => {
 
       muteConsole();
 
-      shallow(
-        <Page
-          onLoadError={onLoadError}
-          pageIndex={0}
-          pdf={failingPdf}
-        />,
-      );
+      render(<Page onLoadError={onLoadError} pageIndex={0} pdf={failingPdf} />);
 
       expect.assertions(1);
       await expect(onLoadErrorPromise).resolves.toBeInstanceOf(Error);
@@ -113,47 +97,29 @@ describe('Page', () => {
     it('loads page when given pageIndex', () => {
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
-      const component = shallow(
-        <Page
-          onLoadSuccess={onLoadSuccess}
-          pageIndex={0}
-          pdf={pdf}
-        />,
-      );
+      render(<Page onLoadSuccess={onLoadSuccess} pageIndex={0} pdf={pdf} />);
 
       expect.assertions(1);
-      return onLoadSuccessPromise.then(() => {
-        expect(component.state().page).toMatchObject(desiredLoadedPage);
+      return onLoadSuccessPromise.then((page) => {
+        expect(page).toMatchObject(desiredLoadedPage);
       });
     });
 
     it('loads page when given pageNumber', () => {
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
-      const component = shallow(
-        <Page
-          onLoadSuccess={onLoadSuccess}
-          pageNumber={1}
-          pdf={pdf}
-        />,
-      );
+      render(<Page onLoadSuccess={onLoadSuccess} pageNumber={1} pdf={pdf} />);
 
       expect.assertions(1);
-      return onLoadSuccessPromise.then(() => {
-        expect(component.state().page).toMatchObject(desiredLoadedPage);
+      return onLoadSuccessPromise.then((page) => {
+        expect(page).toMatchObject(desiredLoadedPage);
       });
     });
 
     it('calls registerPage when loaded a page', async () => {
       const { func: registerPage, promise: registerPagePromise } = makeAsyncCallback();
 
-      shallow(
-        <Page
-          pageIndex={0}
-          pdf={pdf}
-          registerPage={registerPage}
-        />,
-      );
+      render(<Page pageIndex={0} pdf={pdf} registerPage={registerPage} />);
 
       expect.assertions(1);
       await expect(registerPagePromise).resolves.toMatchObject(registerPageArguments);
@@ -162,15 +128,9 @@ describe('Page', () => {
     it('calls unregisterPage on unmount', async () => {
       const { func: unregisterPage, promise: nuregisterPagePromise } = makeAsyncCallback();
 
-      const component = shallow(
-        <Page
-          pageIndex={0}
-          pdf={pdf}
-          unregisterPage={unregisterPage}
-        />,
-      );
+      const { unmount } = render(<Page pageIndex={0} pdf={pdf} unregisterPage={unregisterPage} />);
 
-      component.unmount();
+      unmount();
 
       expect.assertions(1);
       await expect(nuregisterPagePromise).resolves.toBe(unregisterPageArguments);
@@ -179,23 +139,14 @@ describe('Page', () => {
     it('replaces a page properly when pdf is changed', async () => {
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
-      const mountedComponent = shallow(
-        <Page
-          onLoadSuccess={onLoadSuccess}
-          pageIndex={0}
-          pdf={pdf}
-        />,
-      );
+      const { rerender } = render(<Page onLoadSuccess={onLoadSuccess} pageIndex={0} pdf={pdf} />);
 
       expect.assertions(2);
       await expect(onLoadSuccessPromise).resolves.toMatchObject(desiredLoadedPage);
 
       const { func: onLoadSuccess2, promise: onLoadSuccessPromise2 } = makeAsyncCallback();
 
-      mountedComponent.setProps({
-        onLoadSuccess: onLoadSuccess2,
-        pdf: pdf2,
-      });
+      rerender(<Page onLoadSuccess={onLoadSuccess2} pageIndex={0} pdf={pdf2} />);
 
       await expect(onLoadSuccessPromise2).resolves.toMatchObject(desiredLoadedPage3);
     });
@@ -203,29 +154,22 @@ describe('Page', () => {
     it('replaces a page properly when pageNumber is changed', async () => {
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
-      const mountedComponent = shallow(
-        <Page
-          onLoadSuccess={onLoadSuccess}
-          pageIndex={0}
-          pdf={pdf}
-        />,
-      );
+      const { rerender } = render(<Page onLoadSuccess={onLoadSuccess} pageIndex={0} pdf={pdf} />);
 
       expect.assertions(2);
       await expect(onLoadSuccessPromise).resolves.toMatchObject(desiredLoadedPage);
 
       const { func: onLoadSuccess2, promise: onLoadSuccessPromise2 } = makeAsyncCallback();
 
-      mountedComponent.setProps({
-        onLoadSuccess: onLoadSuccess2,
-        pageIndex: 1,
-      });
+      rerender(<Page onLoadSuccess={onLoadSuccess2} pageIndex={1} pdf={pdf} />);
 
       await expect(onLoadSuccessPromise2).resolves.toMatchObject(desiredLoadedPage2);
     });
 
     it('throws an error when placed outside Document', () => {
-      expect(() => shallow(<Page pageIndex={0} />)).toThrow();
+      muteConsole();
+      expect(() => render(<Page pageIndex={0} />)).toThrow();
+      restoreConsole();
     });
   });
 
@@ -233,29 +177,17 @@ describe('Page', () => {
     it('applies className to its wrapper when given a string', () => {
       const className = 'testClassName';
 
-      const component = shallow(
-        <Page
-          className={className}
-          pageIndex={0}
-          pdf={pdf}
-        />,
-      );
+      const { container } = render(<Page className={className} pageIndex={0} pdf={pdf} />);
 
-      const wrapperClassName = component.find('.react-pdf__Page').prop('className');
+      const wrapper = container.querySelector('.react-pdf__Page');
 
-      expect(wrapperClassName.includes(className)).toBe(true);
+      expect(wrapper).toHaveClass(className);
     });
 
     it('passes container element to inputRef properly', () => {
       const inputRef = jest.fn();
 
-      mount(
-        <Page
-          inputRef={inputRef}
-          pageIndex={1}
-          pdf={silentlyFailingPdf}
-        />,
-      );
+      render(<Page inputRef={inputRef} pageIndex={1} pdf={silentlyFailingPdf} />);
 
       expect(inputRef).toHaveBeenCalled();
       expect(inputRef.mock.calls[0][0]).toBeInstanceOf(HTMLElement);
@@ -264,37 +196,30 @@ describe('Page', () => {
     it('passes canvas element to PageCanvas properly', async () => {
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
-      const canvasRef = jest.fn();
+      const canvasRef = createRef();
 
-      const component = shallow(
-        <Page
-          canvasRef={canvasRef}
-          onLoadSuccess={onLoadSuccess}
-          pageIndex={0}
-          pdf={pdf}
-        />,
+      const { container } = render(
+        <Page canvasRef={canvasRef} onLoadSuccess={onLoadSuccess} pageIndex={0} pdf={pdf} />,
       );
 
       expect.assertions(1);
 
       await onLoadSuccessPromise;
 
-      const pageCanvas = component.find('PageCanvas');
+      const pageCanvas = container.querySelector('.react-pdf__Page__canvas');
 
-      expect(pageCanvas.prop('canvasRef')).toBe(canvasRef);
+      expect(canvasRef.current).toBe(pageCanvas);
     });
 
     it('renders "No page specified." when given neither pageIndex nor pageNumber', () => {
       muteConsole();
 
-      const component = shallow(
-        <Page pdf={pdf} />,
-      );
+      const { container } = render(<Page pdf={pdf} />);
 
-      const noData = component.find('Message');
+      const noData = container.querySelector('.react-pdf__message');
 
-      expect(noData).toHaveLength(1);
-      expect(noData.prop('children')).toBe('No page specified.');
+      expect(noData).toBeInTheDocument();
+      expect(noData).toHaveTextContent('No page specified.');
 
       restoreConsole();
     });
@@ -302,17 +227,12 @@ describe('Page', () => {
     it('renders custom no data message when given nothing and noData is given', () => {
       muteConsole();
 
-      const component = shallow(
-        <Page
-          noData="Nothing here"
-          pdf={pdf}
-        />,
-      );
+      const { container } = render(<Page noData="Nothing here" pdf={pdf} />);
 
-      const noData = component.find('Message');
+      const noData = container.querySelector('.react-pdf__message');
 
-      expect(noData).toHaveLength(1);
-      expect(noData.prop('children')).toBe('Nothing here');
+      expect(noData).toBeInTheDocument();
+      expect(noData).toHaveTextContent('Nothing here');
 
       restoreConsole();
     });
@@ -320,307 +240,185 @@ describe('Page', () => {
     it('renders custom no data message when given nothing and noData is given as a function', () => {
       muteConsole();
 
-      const component = shallow(
-        <Page
-          noData={() => 'Nothing here'}
-          pdf={pdf}
-        />,
-      );
+      const { container } = render(<Page noData={() => 'Nothing here'} pdf={pdf} />);
 
-      const noData = component.find('Message');
+      const noData = container.querySelector('.react-pdf__message');
 
-      expect(noData).toHaveLength(1);
-      expect(noData.prop('children')).toBe('Nothing here');
+      expect(noData).toBeInTheDocument();
+      expect(noData).toHaveTextContent('Nothing here');
 
       restoreConsole();
     });
 
     it('renders "Loading page…" when loading a page', async () => {
-      const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
+      const { container } = render(<Page pageIndex={0} pdf={pdf} />);
 
-      const component = shallow(
-        <Page
-          onLoadSuccess={onLoadSuccess}
-          pageIndex={0}
-          pdf={pdf}
-        />,
-      );
+      const loading = container.querySelector('.react-pdf__message');
 
-      expect.assertions(2);
-
-      await onLoadSuccessPromise;
-
-      // Since the page loads automatically, we need to simulate its loading state
-      component.setState({ page: null });
-
-      const loading = component.find('Message');
-
-      expect(loading).toHaveLength(1);
-      expect(loading.prop('children')).toBe('Loading page…');
+      expect(loading).toBeInTheDocument();
+      expect(loading).toHaveTextContent('Loading page…');
     });
 
     it('renders custom loading message when loading a page and loading prop is given', async () => {
-      const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
+      const { container } = render(<Page loading="Loading" pageIndex={0} pdf={pdf} />);
 
-      const component = shallow(
-        <Page
-          loading="Loading"
-          onLoadSuccess={onLoadSuccess}
-          pageIndex={0}
-          pdf={pdf}
-        />,
-      );
+      const loading = container.querySelector('.react-pdf__message');
 
-      expect.assertions(2);
-
-      await onLoadSuccessPromise;
-
-      // Since the page loads automatically, we need to simulate its loading state
-      component.setState({ page: null });
-
-      const loading = component.find('Message');
-
-      expect(loading).toHaveLength(1);
-      expect(loading.prop('children')).toBe('Loading');
+      expect(loading).toBeInTheDocument();
+      expect(loading).toHaveTextContent('Loading');
     });
 
     it('renders custom loading message when loading a page and loading prop is given as a function', async () => {
-      const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
+      const { container } = render(<Page loading={() => 'Loading'} pageIndex={0} pdf={pdf} />);
 
-      const component = shallow(
-        <Page
-          loading="Loading"
-          onLoadSuccess={onLoadSuccess}
-          pageIndex={0}
-          pdf={pdf}
-        />,
-      );
+      const loading = container.querySelector('.react-pdf__message');
 
-      expect.assertions(2);
-
-      await onLoadSuccessPromise;
-
-      // Since the page loads automatically, we need to simulate its loading state
-      component.setState({ page: null });
-
-      const loading = component.find('Message');
-
-      expect(loading).toHaveLength(1);
-      expect(loading.prop('children')).toBe('Loading');
+      expect(loading).toBeInTheDocument();
+      expect(loading).toHaveTextContent('Loading');
     });
 
-    it('ignores pageIndex when given pageIndex and pageNumber', async () => {
+    it('ignores pageIndex when given pageIndex and pageNumber', () => {
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
-      const component = shallow(
-        <Page
-          onLoadSuccess={onLoadSuccess}
-          pageIndex={1}
-          pageNumber={1}
-          pdf={pdf}
-        />,
-      );
+      render(<Page onLoadSuccess={onLoadSuccess} pageIndex={1} pageNumber={1} pdf={pdf} />);
 
       expect.assertions(1);
 
-      await onLoadSuccessPromise;
-
-      expect(component.state().page).toMatchObject(desiredLoadedPage);
+      return onLoadSuccessPromise.then((page) => {
+        expect(page).toMatchObject(desiredLoadedPage);
+      });
     });
 
-    it('orders page to be rendered with default rotation when given nothing', async () => {
+    it('requests page to be rendered with default rotation when given nothing', async () => {
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
+      const instance = createRef();
 
-      const component = shallow(
-        <Page
-          onLoadSuccess={onLoadSuccess}
-          pageIndex={0}
-          pdf={pdf}
-        />,
-      );
-
-      expect.assertions(1);
+      render(<Page onLoadSuccess={onLoadSuccess} pageIndex={0} pdf={pdf} ref={instance} />);
 
       await onLoadSuccessPromise;
 
-      expect(component.instance().rotate).toBe(0);
+      expect(instance.current.rotate).toBe(0);
     });
 
-    it('requests page to be rendered with default rotation when given rotate prop', async () => {
+    it('requests page to be rendered with given rotation when given rotate prop', async () => {
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
+      const instance = createRef();
 
-      const component = shallow(
-        <Page
-          onLoadSuccess={onLoadSuccess}
-          pageIndex={0}
-          pdf={pdf}
-          rotate={90}
-        />,
+      render(
+        <Page onLoadSuccess={onLoadSuccess} pageIndex={0} pdf={pdf} rotate={90} ref={instance} />,
       );
-
-      expect.assertions(1);
 
       await onLoadSuccessPromise;
 
-      expect(component.instance().rotate).toBe(90);
+      expect(instance.current.rotate).toBe(90);
     });
 
     it('requests page to be rendered in canvas mode by default', async () => {
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
-      const component = shallow(
-        <Page
-          onLoadSuccess={onLoadSuccess}
-          pageIndex={0}
-          pdf={pdf}
-        />,
-      );
+      const { container } = render(<Page onLoadSuccess={onLoadSuccess} pageIndex={0} pdf={pdf} />);
 
       expect.assertions(1);
 
       await onLoadSuccessPromise;
 
-      component.update();
-
-      const pageCanvas = component.find('PageCanvas');
-      expect(pageCanvas).toHaveLength(1);
+      const pageCanvas = container.querySelector('.react-pdf__Page__canvas');
+      expect(pageCanvas).toBeInTheDocument();
     });
 
     it('requests page not to be rendered when given renderMode = "none"', () => {
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
-      const component = shallow(
-        <Page
-          onLoadSuccess={onLoadSuccess}
-          pageIndex={0}
-          pdf={pdf}
-          renderMode="none"
-        />,
+      const { container } = render(
+        <Page onLoadSuccess={onLoadSuccess} pageIndex={0} pdf={pdf} renderMode="none" />,
       );
 
       expect.assertions(2);
       return onLoadSuccessPromise.then(() => {
-        component.update();
-        const pageCanvas = component.find('PageCanvas');
-        const pageSVG = component.find('PageSVG');
-        expect(pageCanvas).toHaveLength(0);
-        expect(pageSVG).toHaveLength(0);
+        const pageCanvas = container.querySelector('.react-pdf__Page__canvas');
+        const pageSVG = container.querySelector('.react-pdf__Page__svg');
+        expect(pageCanvas).not.toBeInTheDocument();
+        expect(pageSVG).not.toBeInTheDocument();
       });
     });
 
     it('requests page to be rendered in canvas mode when given renderMode = "canvas"', async () => {
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
-      const component = shallow(
-        <Page
-          onLoadSuccess={onLoadSuccess}
-          pageIndex={0}
-          pdf={pdf}
-          renderMode="canvas"
-        />,
+      const { container } = render(
+        <Page onLoadSuccess={onLoadSuccess} pageIndex={0} pdf={pdf} renderMode="canvas" />,
       );
 
       expect.assertions(1);
 
       await onLoadSuccessPromise;
 
-      component.update();
-
-      const pageCanvas = component.find('PageCanvas');
-      expect(pageCanvas).toHaveLength(1);
+      const pageCanvas = container.querySelector('.react-pdf__Page__canvas');
+      expect(pageCanvas).toBeInTheDocument();
     });
 
     it('requests page to be rendered in SVG mode when given renderMode = "svg"', async () => {
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
-      const component = shallow(
-        <Page
-          onLoadSuccess={onLoadSuccess}
-          pageIndex={0}
-          pdf={pdf}
-          renderMode="svg"
-        />,
+      const { container } = render(
+        <Page onLoadSuccess={onLoadSuccess} pageIndex={0} pdf={pdf} renderMode="svg" />,
       );
 
       expect.assertions(1);
 
       await onLoadSuccessPromise;
 
-      component.update();
-
-      const pageSVG = component.find('PageSVG');
-      expect(pageSVG).toHaveLength(1);
+      const pageSVG = container.querySelector('.react-pdf__Page__svg');
+      expect(pageSVG).toBeInTheDocument();
     });
 
     it('requests text content to be rendered by default', async () => {
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
-      const component = shallow(
-        <Page
-          onLoadSuccess={onLoadSuccess}
-          pageIndex={0}
-          pdf={pdf}
-        />,
-      );
+      const { container } = render(<Page onLoadSuccess={onLoadSuccess} pageIndex={0} pdf={pdf} />);
 
       expect.assertions(1);
 
       await onLoadSuccessPromise;
 
-      component.update();
-
-      const textLayer = component.find('TextLayer');
-      expect(textLayer).toHaveLength(1);
+      const textLayer = container.querySelector('.react-pdf__Page__textContent');
+      expect(textLayer).toBeInTheDocument();
     });
 
     it('requests text content to be rendered when given renderTextLayer = true', async () => {
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
-      const component = shallow(
-        <Page
-          onLoadSuccess={onLoadSuccess}
-          pageIndex={0}
-          pdf={pdf}
-          renderTextLayer
-        />,
+      const { container } = render(
+        <Page onLoadSuccess={onLoadSuccess} pageIndex={0} pdf={pdf} renderTextLayer />,
       );
 
       expect.assertions(1);
 
       await onLoadSuccessPromise;
 
-      component.update();
-
-      const textLayer = component.find('TextLayer');
-      expect(textLayer).toHaveLength(1);
+      const textLayer = container.querySelector('.react-pdf__Page__textContent');
+      expect(textLayer).toBeInTheDocument();
     });
 
     it('does not request text content to be rendered when given renderTextLayer = false', async () => {
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
-      const component = shallow(
-        <Page
-          onLoadSuccess={onLoadSuccess}
-          pageIndex={0}
-          pdf={pdf}
-          renderTextLayer={false}
-        />,
+      const { container } = render(
+        <Page onLoadSuccess={onLoadSuccess} pageIndex={0} pdf={pdf} renderTextLayer={false} />,
       );
 
       expect.assertions(1);
 
       await onLoadSuccessPromise;
 
-      component.update();
-
-      const textLayer = component.find('TextLayer');
-      expect(textLayer).toHaveLength(0);
+      const textLayer = container.querySelector('.react-pdf__Page__textContent');
+      expect(textLayer).not.toBeInTheDocument();
     });
 
     it('renders TextLayer when given renderMode = "canvas"', async () => {
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
-      const component = shallow(
+      const { container } = render(
         <Page
           onLoadSuccess={onLoadSuccess}
           pageIndex={0}
@@ -634,16 +432,14 @@ describe('Page', () => {
 
       await onLoadSuccessPromise;
 
-      component.update();
-
-      const textLayer = component.find('TextLayer');
-      expect(textLayer).toHaveLength(1);
+      const textLayer = container.querySelector('.react-pdf__Page__textContent');
+      expect(textLayer).toBeInTheDocument();
     });
 
     it('renders TextLayer when given renderMode = "svg"', async () => {
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
-      const component = shallow(
+      const { container } = render(
         <Page
           onLoadSuccess={onLoadSuccess}
           pageIndex={0}
@@ -657,58 +453,42 @@ describe('Page', () => {
 
       await onLoadSuccessPromise;
 
-      component.update();
-      const textLayer = component.find('TextLayer');
-      expect(textLayer).toHaveLength(1);
+      const textLayer = container.querySelector('.react-pdf__Page__textContent');
+      expect(textLayer).toBeInTheDocument();
     });
 
     it('requests annotations to be rendered by default', async () => {
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
-      const component = shallow(
-        <Page
-          onLoadSuccess={onLoadSuccess}
-          pageIndex={0}
-          pdf={pdf}
-        />,
-      );
+      const { container } = render(<Page onLoadSuccess={onLoadSuccess} pageIndex={0} pdf={pdf} />);
 
       expect.assertions(1);
 
       await onLoadSuccessPromise;
 
-      component.update();
-
-      const annotationLayer = component.find('AnnotationLayer');
-      expect(annotationLayer).toHaveLength(1);
+      const annotationLayer = container.querySelector('.react-pdf__Page__annotations');
+      expect(annotationLayer).toBeInTheDocument();
     });
 
     it('requests annotations to be rendered when given renderAnnotationLayer = true', async () => {
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
-      const component = shallow(
-        <Page
-          onLoadSuccess={onLoadSuccess}
-          pageIndex={0}
-          pdf={pdf}
-          renderAnnotationLayer
-        />,
+      const { container } = render(
+        <Page onLoadSuccess={onLoadSuccess} pageIndex={0} pdf={pdf} renderAnnotationLayer />,
       );
 
       expect.assertions(1);
 
       await onLoadSuccessPromise;
 
-      component.update();
-
-      const annotationLayer = component.find('AnnotationLayer');
-      expect(annotationLayer).toHaveLength(1);
+      const annotationLayer = container.querySelector('.react-pdf__Page__annotations');
+      expect(annotationLayer).toBeInTheDocument();
     });
 
     it('does not request annotations to be rendered when given renderAnnotationLayer = false', async () => {
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
-      const component = shallow(
+      const { container } = render(
         <Page
           onLoadSuccess={onLoadSuccess}
           pageIndex={0}
@@ -721,29 +501,19 @@ describe('Page', () => {
 
       await onLoadSuccessPromise;
 
-      component.update();
-
-      const annotationLayer = component.find('AnnotationLayer');
-      expect(annotationLayer).toHaveLength(0);
+      const annotationLayer = container.querySelector('.react-pdf__Page__annotations');
+      expect(annotationLayer).not.toBeInTheDocument();
     });
   });
 
   it('requests page to be rendered at its original size given nothing', () => {
     const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
-    const component = shallow(
-      <Page
-        onLoadSuccess={onLoadSuccess}
-        pageIndex={0}
-        pdf={pdf}
-      />,
-    );
+    render(<Page onLoadSuccess={onLoadSuccess} pageIndex={0} pdf={pdf} />);
 
     expect.assertions(1);
 
     return onLoadSuccessPromise.then((page) => {
-      component.update();
-
       expect(page.width).toEqual(page.originalWidth);
     });
   });
@@ -752,20 +522,11 @@ describe('Page', () => {
     const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
     const scale = 1.5;
 
-    const component = shallow(
-      <Page
-        onLoadSuccess={onLoadSuccess}
-        pageIndex={0}
-        pdf={pdf}
-        scale={scale}
-      />,
-    );
+    render(<Page onLoadSuccess={onLoadSuccess} pageIndex={0} pdf={pdf} scale={scale} />);
 
     expect.assertions(1);
 
     return onLoadSuccessPromise.then((page) => {
-      component.update();
-
       expect(page.width).toEqual(page.originalWidth * scale);
     });
   });
@@ -774,20 +535,11 @@ describe('Page', () => {
     const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
     const width = 600;
 
-    const component = shallow(
-      <Page
-        onLoadSuccess={onLoadSuccess}
-        pageIndex={0}
-        pdf={pdf}
-        width={width}
-      />,
-    );
+    render(<Page onLoadSuccess={onLoadSuccess} pageIndex={0} pdf={pdf} width={width} />);
 
     expect.assertions(1);
 
     return onLoadSuccessPromise.then((page) => {
-      component.update();
-
       expect(page.width).toEqual(width);
     });
   });
@@ -797,21 +549,13 @@ describe('Page', () => {
     const width = 600;
     const scale = 1.5;
 
-    const component = shallow(
-      <Page
-        onLoadSuccess={onLoadSuccess}
-        pageIndex={0}
-        pdf={pdf}
-        scale={scale}
-        width={width}
-      />,
+    render(
+      <Page onLoadSuccess={onLoadSuccess} pageIndex={0} pdf={pdf} scale={scale} width={width} />,
     );
 
     expect.assertions(1);
 
     return onLoadSuccessPromise.then((page) => {
-      component.update();
-
       expect(page.width).toBeCloseTo(width * scale);
     });
   });
@@ -820,20 +564,11 @@ describe('Page', () => {
     const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
     const height = 850;
 
-    const component = shallow(
-      <Page
-        height={height}
-        onLoadSuccess={onLoadSuccess}
-        pageIndex={0}
-        pdf={pdf}
-      />,
-    );
+    render(<Page height={height} onLoadSuccess={onLoadSuccess} pageIndex={0} pdf={pdf} />);
 
     expect.assertions(1);
 
     return onLoadSuccessPromise.then((page) => {
-      component.update();
-
       expect(page.height).toEqual(height);
     });
   });
@@ -843,21 +578,13 @@ describe('Page', () => {
     const height = 850;
     const scale = 1.5;
 
-    const component = shallow(
-      <Page
-        height={height}
-        onLoadSuccess={onLoadSuccess}
-        pageIndex={0}
-        pdf={pdf}
-        scale={scale}
-      />,
+    render(
+      <Page height={height} onLoadSuccess={onLoadSuccess} pageIndex={0} pdf={pdf} scale={scale} />,
     );
 
     expect.assertions(1);
 
     return onLoadSuccessPromise.then((page) => {
-      component.update();
-
       expect(page.height).toBeCloseTo(height * scale);
     });
   });
@@ -867,21 +594,13 @@ describe('Page', () => {
     const width = 600;
     const height = 100;
 
-    const component = shallow(
-      <Page
-        height={height}
-        onLoadSuccess={onLoadSuccess}
-        pageIndex={0}
-        pdf={pdf}
-        width={width}
-      />,
+    render(
+      <Page height={height} onLoadSuccess={onLoadSuccess} pageIndex={0} pdf={pdf} width={width} />,
     );
 
     expect.assertions(2);
 
     return onLoadSuccessPromise.then((page) => {
-      component.update();
-
       expect(page.width).toEqual(width);
       // Expect proportions to be correct even though invalid height was provided
       expect(page.height).toEqual(page.originalHeight * (page.width / page.originalWidth));
@@ -894,7 +613,7 @@ describe('Page', () => {
     const height = 100;
     const scale = 1.5;
 
-    const component = shallow(
+    render(
       <Page
         height={height}
         onLoadSuccess={onLoadSuccess}
@@ -908,8 +627,6 @@ describe('Page', () => {
     expect.assertions(2);
 
     return onLoadSuccessPromise.then((page) => {
-      component.update();
-
       expect(page.width).toBeCloseTo(width * scale);
       // Expect proportions to be correct even though invalid height was provided
       expect(page.height).toEqual(page.originalHeight * (page.width / page.originalWidth));
@@ -919,15 +636,10 @@ describe('Page', () => {
   it('calls onClick callback when clicked a page (sample of mouse events family)', () => {
     const onClick = jest.fn();
 
-    const component = mount(
-      <Page
-        onClick={onClick}
-        pdf={pdf}
-      />,
-    );
+    const { container } = render(<Page onClick={onClick} pdf={pdf} />);
 
-    const page = component.find('.react-pdf__Page');
-    page.simulate('click');
+    const page = container.querySelector('.react-pdf__Page');
+    fireEvent.click(page);
 
     expect(onClick).toHaveBeenCalled();
   });
@@ -935,15 +647,10 @@ describe('Page', () => {
   it('calls onTouchStart callback when touched a page (sample of touch events family)', () => {
     const onTouchStart = jest.fn();
 
-    const component = mount(
-      <Page
-        onTouchStart={onTouchStart}
-        pdf={pdf}
-      />,
-    );
+    const { container } = render(<Page onTouchStart={onTouchStart} pdf={pdf} />);
 
-    const page = component.find('.react-pdf__Page');
-    page.simulate('touchstart');
+    const page = container.querySelector('.react-pdf__Page');
+    fireEvent.touchStart(page);
 
     expect(onTouchStart).toHaveBeenCalled();
   });

@@ -1,9 +1,11 @@
-import React, { PureComponent } from 'react';
+import React, { createRef, PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import makeCancellable from 'make-cancellable-promise';
 import makeEventProps from 'make-event-props';
 import mergeClassNames from 'merge-class-names';
 import mergeRefs from 'merge-refs';
+import invariant from 'tiny-invariant';
+import warning from 'tiny-warning';
 
 import DocumentContext from './DocumentContext';
 import PageContext from './PageContext';
@@ -14,12 +16,7 @@ import PageSVG from './Page/PageSVG';
 import TextLayer from './Page/TextLayer';
 import AnnotationLayer from './Page/AnnotationLayer';
 
-import {
-  cancelRunningTask,
-  errorOnDev,
-  isProvided,
-  makePageCallback,
-} from './shared/utils';
+import { cancelRunningTask, isProvided, makePageCallback } from './shared/utils';
 
 import {
   eventProps,
@@ -37,14 +34,14 @@ const defaultScale = 1;
 export class PageInternal extends PureComponent {
   state = {
     page: null,
-  }
+  };
+
+  pageElement = createRef();
 
   componentDidMount() {
     const { pdf } = this.props;
 
-    if (!pdf) {
-      throw new Error('Attempted to load a page, but no document was specified.');
-    }
+    invariant(pdf, 'Attempted to load a page, but no document was specified.');
 
     this.loadPage();
   }
@@ -53,8 +50,8 @@ export class PageInternal extends PureComponent {
     const { pdf } = this.props;
 
     if (
-      (prevProps.pdf && (pdf !== prevProps.pdf))
-      || this.getPageNumber() !== this.getPageNumber(prevProps)
+      (prevProps.pdf && pdf !== prevProps.pdf) ||
+      this.getPageNumber() !== this.getPageNumber(prevProps)
     ) {
       const { unregisterPage } = this.props;
 
@@ -82,6 +79,7 @@ export class PageInternal extends PureComponent {
     const {
       canvasBackground,
       customTextRenderer,
+      enhanceTextSelection,
       onGetAnnotationsError,
       onGetAnnotationsSuccess,
       onGetTextError,
@@ -90,12 +88,16 @@ export class PageInternal extends PureComponent {
       onRenderAnnotationLayerSuccess,
       onRenderError,
       onRenderSuccess,
+      onRenderTextLayerError,
+      onRenderTextLayerSuccess,
+      renderForms,
       renderInteractiveForms,
     } = this.props;
 
     return {
       canvasBackground,
       customTextRenderer,
+      enhanceTextSelection,
       onGetAnnotationsError,
       onGetAnnotationsSuccess,
       onGetTextError,
@@ -104,8 +106,10 @@ export class PageInternal extends PureComponent {
       onRenderAnnotationLayerSuccess,
       onRenderError,
       onRenderSuccess,
+      onRenderTextLayerError,
+      onRenderTextLayerSuccess,
       page,
-      renderInteractiveForms,
+      renderForms: renderForms ?? renderInteractiveForms, // For backward compatibility
       rotate: this.rotate,
       scale: this.scale,
     };
@@ -120,19 +124,21 @@ export class PageInternal extends PureComponent {
 
     if (onLoadSuccess) onLoadSuccess(makePageCallback(page, this.scale));
 
-    if (registerPage) registerPage(this.pageIndex, this.ref);
-  }
+    if (registerPage) registerPage(this.pageIndex, this.pageElement.current);
+  };
 
   /**
    * Called when a page failed to load
    */
   onLoadError = (error) => {
-    errorOnDev(error);
+    this.setState({ page: false });
+
+    warning(error);
 
     const { onLoadError } = this.props;
 
     if (onLoadError) onLoadError(error);
-  }
+  };
 
   getPageIndex(props = this.props) {
     if (isProvided(props.pageNumber)) {
@@ -201,9 +207,7 @@ export class PageInternal extends PureComponent {
     // If width/height is defined, calculate the scale of the page so it could be of desired width.
     if (width || height) {
       const viewport = page.getViewport({ scale: 1, rotation: rotate });
-      pageScale = width
-        ? width / viewport.width
-        : height / viewport.height;
+      pageScale = width ? width / viewport.width : height / viewport.height;
     }
 
     return scaleWithDefault * pageScale;
@@ -256,10 +260,9 @@ export class PageInternal extends PureComponent {
         this.setState({ page }, this.onLoadSuccess);
       })
       .catch((error) => {
-        this.setState({ page: false });
         this.onLoadError(error);
       });
-  }
+  };
 
   renderMainLayer() {
     const { canvasRef, renderMode } = this.props;
@@ -268,17 +271,10 @@ export class PageInternal extends PureComponent {
       case 'none':
         return null;
       case 'svg':
-        return (
-          <PageSVG key={`${this.pageKeyNoScale}_svg`} />
-        );
+        return <PageSVG key={`${this.pageKeyNoScale}_svg`} />;
       case 'canvas':
       default:
-        return (
-          <PageCanvas
-            key={`${this.pageKey}_canvas`}
-            canvasRef={canvasRef}
-          />
-        );
+        return <PageCanvas key={`${this.pageKey}_canvas`} canvasRef={canvasRef} />;
     }
   }
 
@@ -289,9 +285,7 @@ export class PageInternal extends PureComponent {
       return null;
     }
 
-    return (
-      <TextLayer key={`${this.pageKey}_text`} />
-    );
+    return <TextLayer key={`${this.pageKey}_text`} />;
   }
 
   renderAnnotationLayer() {
@@ -306,15 +300,11 @@ export class PageInternal extends PureComponent {
      * Therefore, as a fallback, we render "traditional" AnnotationLayer component.
      */
 
-    return (
-      <AnnotationLayer key={`${this.pageKey}_annotations`} />
-    );
+    return <AnnotationLayer key={`${this.pageKey}_annotations`} />;
   }
 
   renderChildren() {
-    const {
-      children,
-    } = this.props;
+    const { children } = this.props;
 
     return (
       <PageContext.Provider value={this.childContext}>
@@ -334,31 +324,21 @@ export class PageInternal extends PureComponent {
     if (!pageNumber) {
       const { noData } = this.props;
 
-      return (
-        <Message type="no-data">
-          {typeof noData === 'function' ? noData() : noData}
-        </Message>
-      );
+      return <Message type="no-data">{typeof noData === 'function' ? noData() : noData}</Message>;
     }
 
     if (pdf === null || page === null) {
       const { loading } = this.props;
 
       return (
-        <Message type="loading">
-          {typeof loading === 'function' ? loading() : loading}
-        </Message>
+        <Message type="loading">{typeof loading === 'function' ? loading() : loading}</Message>
       );
     }
 
     if (pdf === false || page === false) {
       const { error } = this.props;
 
-      return (
-        <Message type="error">
-          {typeof error === 'function' ? error() : error}
-        </Message>
-      );
+      return <Message type="error">{typeof error === 'function' ? error() : error}</Message>;
     }
 
     return this.renderChildren();
@@ -372,7 +352,7 @@ export class PageInternal extends PureComponent {
       <div
         className={mergeClassNames('react-pdf__Page', className)}
         data-page-number={pageNumber}
-        ref={mergeRefs(inputRef, this.ref)}
+        ref={mergeRefs(inputRef, this.pageElement)}
         style={{ position: 'relative' }}
         {...this.eventProps}
       >
@@ -387,16 +367,13 @@ PageInternal.defaultProps = {
   loading: 'Loading page…',
   noData: 'No page specified.',
   renderAnnotationLayer: true,
-  renderInteractiveForms: false,
+  renderForms: false,
   renderMode: 'canvas',
   renderTextLayer: true,
   scale: defaultScale,
 };
 
-const isFunctionOrNode = PropTypes.oneOfType([
-  PropTypes.func,
-  PropTypes.node,
-]);
+const isFunctionOrNode = PropTypes.oneOfType([PropTypes.func, PropTypes.node]);
 
 PageInternal.propTypes = {
   ...eventProps,
@@ -404,6 +381,7 @@ PageInternal.propTypes = {
   children: PropTypes.node,
   className: isClassName,
   customTextRenderer: PropTypes.func,
+  enhanceTextSelection: PropTypes.bool,
   error: isFunctionOrNode,
   height: PropTypes.number,
   imageResourcesPath: PropTypes.string,
@@ -416,12 +394,15 @@ PageInternal.propTypes = {
   onLoadSuccess: PropTypes.func,
   onRenderError: PropTypes.func,
   onRenderSuccess: PropTypes.func,
+  onRenderTextLayerError: PropTypes.func,
+  onRenderTextLayerSuccess: PropTypes.func,
   pageIndex: isPageIndex,
   pageNumber: isPageNumber,
   pdf: isPdf,
   registerPage: PropTypes.func,
   renderAnnotationLayer: PropTypes.bool,
-  renderInteractiveForms: PropTypes.bool,
+  renderForms: PropTypes.bool,
+  renderInteractiveForms: PropTypes.bool, // For backward compatibility
   renderMode: isRenderMode,
   renderTextLayer: PropTypes.bool,
   rotate: isRotate,
@@ -433,13 +414,7 @@ PageInternal.propTypes = {
 function Page(props, ref) {
   return (
     <DocumentContext.Consumer>
-      {(context) => (
-        <PageInternal
-          ref={ref}
-          {...context}
-          {...props}
-        />
-      )}
+      {(context) => <PageInternal ref={ref} {...context} {...props} />}
     </DocumentContext.Consumer>
   );
 }

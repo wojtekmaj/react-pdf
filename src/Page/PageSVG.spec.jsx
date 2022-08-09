@@ -1,5 +1,5 @@
 import React from 'react';
-import { mount } from 'enzyme';
+import { render } from '@testing-library/react';
 
 import { pdfjs } from '../entry.jest';
 
@@ -7,9 +7,7 @@ import { PageSVGInternal as PageSVG } from './PageSVG';
 
 import failingPage from '../../__mocks__/_failing_page';
 
-import {
-  loadPDF, makeAsyncCallback, muteConsole, restoreConsole,
-} from '../../test-utils';
+import { loadPDF, makeAsyncCallback, muteConsole, restoreConsole } from '../../test-utils';
 
 const pdfFile = loadPDF('./__mocks__/_pdf.pdf');
 
@@ -29,13 +27,7 @@ describe('PageSVG', () => {
 
       muteConsole();
 
-      mount(
-        <PageSVG
-          onRenderSuccess={onRenderSuccess}
-          page={page}
-          scale={1}
-        />,
-      );
+      render(<PageSVG onRenderSuccess={onRenderSuccess} page={page} scale={1} />);
 
       expect.assertions(1);
 
@@ -45,19 +37,11 @@ describe('PageSVG', () => {
     });
 
     it('calls onRenderError when failed to render canvas', async () => {
-      const {
-        func: onRenderError, promise: onRenderErrorPromise,
-      } = makeAsyncCallback();
+      const { func: onRenderError, promise: onRenderErrorPromise } = makeAsyncCallback();
 
       muteConsole();
 
-      mount(
-        <PageSVG
-          onRenderError={onRenderError}
-          page={failingPage}
-          scale={1}
-        />,
-      );
+      render(<PageSVG onRenderError={onRenderError} page={failingPage} scale={1} />);
 
       expect.assertions(1);
 

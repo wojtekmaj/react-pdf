@@ -1,3 +1,6 @@
+import invariant from 'tiny-invariant';
+import warning from 'tiny-warning';
+
 /**
  * Checks if we're running in a browser environment.
  */
@@ -7,11 +10,6 @@ export const isBrowser = typeof window !== 'undefined';
  * Checks whether we're running from a local file system.
  */
 export const isLocalFileSystem = isBrowser && window.location.protocol === 'file:';
-
-/**
- * Checks whether we're running on a production build or not.
- */
-export const isProduction = process.env.NODE_ENV === 'production';
 
 /**
  * Checks whether a variable is defined.
@@ -55,9 +53,7 @@ export function isArrayBuffer(variable) {
  * @param {*} variable Variable to check
  */
 export function isBlob(variable) {
-  if (!isBrowser) {
-    throw new Error('Attempted to check if a variable is a Blob on a non-browser environment.');
-  }
+  invariant(isBrowser, 'isBlob can only be used in a browser environment');
 
   return variable instanceof Blob;
 }
@@ -68,9 +64,7 @@ export function isBlob(variable) {
  * @param {*} variable Variable to check
  */
 export function isFile(variable) {
-  if (!isBrowser) {
-    throw new Error('Attempted to check if a variable is a File on a non-browser environment.');
-  }
+  invariant(isBrowser, 'isFile can only be used in a browser environment');
 
   return variable instanceof File;
 }
@@ -85,9 +79,7 @@ export function isDataURI(str) {
 }
 
 export function dataURItoByteString(dataURI) {
-  if (!isDataURI(dataURI)) {
-    throw new Error('Invalid data URI.');
-  }
+  invariant(isDataURI(dataURI), 'Invalid data URI.');
 
   const [headersString, dataString] = dataURI.split(',');
   const headers = headersString.split(';');
@@ -103,25 +95,21 @@ export function getPixelRatio() {
   return (isBrowser && window.devicePixelRatio) || 1;
 }
 
-function consoleOnDev(method, ...message) {
-  if (!isProduction) {
-    // eslint-disable-next-line no-console
-    console[method](...message);
-  }
-}
-
-export function warnOnDev(...message) {
-  consoleOnDev('warn', ...message);
-}
-
-export function errorOnDev(...message) {
-  consoleOnDev('error', ...message);
-}
+const allowFileAccessFromFilesTip =
+  'On Chromium based browsers, you can use --allow-file-access-from-files flag for debugging purposes.';
 
 export function displayCORSWarning() {
-  if (isLocalFileSystem) {
-    warnOnDev('Loading PDF as base64 strings/URLs might not work on protocols other than HTTP/HTTPS. On Google Chrome, you can use --allow-file-access-from-files flag for debugging purposes.');
-  }
+  warning(
+    !isLocalFileSystem,
+    `Loading PDF as base64 strings/URLs may not work on protocols other than HTTP/HTTPS. ${allowFileAccessFromFilesTip}`,
+  );
+}
+
+export function displayWorkerWarning() {
+  warning(
+    !isLocalFileSystem,
+    `Loading PDF.js worker may not work on protocols other than HTTP/HTTPS. ${allowFileAccessFromFilesTip}`,
+  );
 }
 
 export function cancelRunningTask(runningTask) {
@@ -129,10 +117,30 @@ export function cancelRunningTask(runningTask) {
 }
 
 export function makePageCallback(page, scale) {
-  Object.defineProperty(page, 'width', { get() { return this.view[2] * scale; }, configurable: true });
-  Object.defineProperty(page, 'height', { get() { return this.view[3] * scale; }, configurable: true });
-  Object.defineProperty(page, 'originalWidth', { get() { return this.view[2]; }, configurable: true });
-  Object.defineProperty(page, 'originalHeight', { get() { return this.view[3]; }, configurable: true });
+  Object.defineProperty(page, 'width', {
+    get() {
+      return this.view[2] * scale;
+    },
+    configurable: true,
+  });
+  Object.defineProperty(page, 'height', {
+    get() {
+      return this.view[3] * scale;
+    },
+    configurable: true,
+  });
+  Object.defineProperty(page, 'originalWidth', {
+    get() {
+      return this.view[2];
+    },
+    configurable: true,
+  });
+  Object.defineProperty(page, 'originalHeight', {
+    get() {
+      return this.view[3];
+    },
+    configurable: true,
+  });
   return page;
 }
 

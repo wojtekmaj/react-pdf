@@ -12,14 +12,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import invariant from 'tiny-invariant';
 
-/* eslint-disable class-methods-use-this, no-empty-function */
+const DEFAULT_LINK_REL = 'noopener noreferrer nofollow';
 
 export default class LinkService {
   constructor() {
     this.externalLinkTarget = null;
     this.externalLinkRel = null;
-    this.externalLinkEnabled = true;
   }
 
   setDocument(pdfDocument) {
@@ -28,6 +28,14 @@ export default class LinkService {
 
   setViewer(pdfViewer) {
     this.pdfViewer = pdfViewer;
+  }
+
+  setExternalLinkRel(externalLinkRel) {
+    this.externalLinkRel = externalLinkRel;
+  }
+
+  setExternalLinkTarget(externalLinkTarget) {
+    this.externalLinkTarget = externalLinkTarget;
   }
 
   setHistory() {}
@@ -59,39 +67,41 @@ export default class LinkService {
       } else {
         dest.then(resolve);
       }
-    })
-      .then((explicitDest) => {
-        if (!Array.isArray(explicitDest)) {
-          throw new Error(`"${explicitDest}" is not a valid destination array.`);
-        }
+    }).then((explicitDest) => {
+      invariant(Array.isArray(explicitDest), `"${explicitDest}" is not a valid destination array.`);
 
-        const destRef = explicitDest[0];
+      const destRef = explicitDest[0];
 
-        new Promise((resolve) => {
-          if (destRef instanceof Object) {
-            this.pdfDocument.getPageIndex(destRef)
-              .then((pageIndex) => {
-                resolve(pageIndex + 1);
-              })
-              .catch(() => {
-                throw new Error(`"${destRef}" is not a valid page reference.`);
-              });
-          } else if (typeof destRef === 'number') {
-            resolve(destRef + 1);
-          } else {
-            throw new Error(`"${destRef}" is not a valid destination reference.`);
-          }
-        })
-          .then((pageNumber) => {
-            if (!pageNumber || pageNumber < 1 || pageNumber > this.pagesCount) {
-              throw new Error(`"${pageNumber}" is not a valid page number.`);
-            }
-
-            this.pdfViewer.scrollPageIntoView({
-              pageNumber,
+      new Promise((resolve) => {
+        if (destRef instanceof Object) {
+          this.pdfDocument
+            .getPageIndex(destRef)
+            .then((pageIndex) => {
+              resolve(pageIndex);
+            })
+            .catch(() => {
+              invariant(false, `"${destRef}" is not a valid page reference.`);
             });
-          });
+        } else if (typeof destRef === 'number') {
+          resolve(destRef);
+        } else {
+          invariant(false, `"${destRef}" is not a valid destination reference.`);
+        }
+      }).then((pageIndex) => {
+        const pageNumber = pageIndex + 1;
+
+        invariant(
+          pageNumber >= 1 && pageNumber <= this.pagesCount,
+          `"${pageNumber}" is not a valid page number.`,
+        );
+
+        this.pdfViewer.scrollPageIntoView({
+          dest,
+          pageIndex,
+          pageNumber,
+        });
       });
+    });
   }
 
   navigateTo(dest) {
@@ -99,6 +109,12 @@ export default class LinkService {
   }
 
   goToPage() {}
+
+  addLinkAttributes(link, url, newWindow) {
+    link.href = url;
+    link.rel = this.externalLinkRel || DEFAULT_LINK_REL;
+    link.target = newWindow ? '_blank' : this.externalLinkTarget || '';
+  }
 
   getDestinationHash() {
     return '#';

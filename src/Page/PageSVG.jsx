@@ -1,21 +1,18 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import * as pdfjs from 'pdfjs-dist/legacy/build/pdf';
+import warning from 'tiny-warning';
+import * as pdfjs from 'pdfjs-dist/build/pdf';
 
 import PageContext from '../PageContext';
 
-import {
-  errorOnDev,
-  isCancelException,
-  makePageCallback,
-} from '../shared/utils';
+import { isCancelException, makePageCallback } from '../shared/utils';
 
 import { isPage, isRotate } from '../shared/propTypes';
 
 export class PageSVGInternal extends PureComponent {
   state = {
     svg: null,
-  }
+  };
 
   componentDidMount() {
     this.renderSVG();
@@ -30,7 +27,7 @@ export class PageSVGInternal extends PureComponent {
     const { onRenderSuccess, page, scale } = this.props;
 
     if (onRenderSuccess) onRenderSuccess(makePageCallback(page, scale));
-  }
+  };
 
   /**
    * Called when a page fails to render.
@@ -40,12 +37,12 @@ export class PageSVGInternal extends PureComponent {
       return;
     }
 
-    errorOnDev(error);
+    warning(error);
 
     const { onRenderError } = this.props;
 
     if (onRenderError) onRenderError(error);
-  }
+  };
 
   get viewport() {
     const { page, rotate, scale } = this.props;
@@ -61,14 +58,15 @@ export class PageSVGInternal extends PureComponent {
     return this.renderer
       .then((operatorList) => {
         const svgGfx = new pdfjs.SVGGraphics(page.commonObjs, page.objs);
-        this.renderer = svgGfx.getSVG(operatorList, this.viewport)
+        this.renderer = svgGfx
+          .getSVG(operatorList, this.viewport)
           .then((svg) => {
             this.setState({ svg }, this.onRenderSuccess);
           })
           .catch(this.onRenderError);
       })
       .catch(this.onRenderError);
-  }
+  };
 
   drawPageOnContainer = (element) => {
     const { svg } = this.state;
@@ -85,7 +83,7 @@ export class PageSVGInternal extends PureComponent {
     const { width, height } = this.viewport;
     svg.setAttribute('width', width);
     svg.setAttribute('height', height);
-  }
+  };
 
   render() {
     const { width, height } = this.viewport;

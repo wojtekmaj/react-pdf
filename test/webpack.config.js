@@ -8,6 +8,12 @@ const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin'
 const isProduction = process.env.NODE_ENV === 'production';
 const isDevelopment = !isProduction;
 
+const cMapsDir = path.join(path.dirname(require.resolve('pdfjs-dist/package.json')), 'cmaps');
+const standardFontsDir = path.join(
+  path.dirname(require.resolve('pdfjs-dist/package.json')),
+  'standard_fonts',
+);
+
 module.exports = {
   mode: isProduction ? 'production' : 'development',
   bail: isProduction,
@@ -21,11 +27,6 @@ module.exports = {
   },
   resolve: {
     extensions: ['.js', '.jsx'],
-  },
-  resolveLoader: {
-    alias: {
-      'file-loader': require.resolve('file-loader'),
-    },
   },
   module: {
     rules: [
@@ -52,10 +53,7 @@ module.exports = {
       },
       {
         test: /\.css$/,
-        use: [
-          isProduction ? MiniCssExtractPlugin.loader : 'style-loader',
-          'css-loader',
-        ],
+        use: [isProduction ? MiniCssExtractPlugin.loader : 'style-loader', 'css-loader'],
       },
       {
         test: /\.pdf$/,
@@ -67,16 +65,18 @@ module.exports = {
     new CopyWebpackPlugin({
       patterns: [
         'test.pdf',
-        { from: '../node_modules/pdfjs-dist/cmaps/', to: 'cmaps/' },
+        { from: cMapsDir, to: 'cmaps/' },
+        { from: standardFontsDir, to: 'standard_fonts/' },
       ],
     }),
     new HtmlWebpackPlugin({
       template: 'index.html',
     }),
-    isProduction && new MiniCssExtractPlugin({
-      filename: '[name].[chunkhash:8].css',
-      chunkFilename: '[name].[chunkhash:8].css',
-    }),
+    isProduction &&
+      new MiniCssExtractPlugin({
+        filename: '[name].[chunkhash:8].css',
+        chunkFilename: '[name].[chunkhash:8].css',
+      }),
     isDevelopment && new ReactRefreshWebpackPlugin(),
   ].filter(Boolean),
   optimization: {

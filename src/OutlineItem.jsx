@@ -11,64 +11,59 @@ import { isDefined } from './shared/utils';
 import { isPdf } from './shared/propTypes';
 
 export class OutlineItemInternal extends PureComponent {
-  getDestination = () => new Promise((resolve, reject) => {
-    const { item, pdf } = this.props;
+  getDestination = () =>
+    new Promise((resolve, reject) => {
+      const { item, pdf } = this.props;
 
-    if (!isDefined(this.destination)) {
-      if (typeof item.dest === 'string') {
-        pdf.getDestination(item.dest)
-          .then(resolve)
-          .catch(reject);
-      } else {
-        resolve(item.dest);
+      if (!isDefined(this.destination)) {
+        if (typeof item.dest === 'string') {
+          pdf.getDestination(item.dest).then(resolve).catch(reject);
+        } else {
+          resolve(item.dest);
+        }
       }
-    }
 
-    return this.destination;
-  })
-    .then((destination) => {
+      return this.destination;
+    }).then((destination) => {
       this.destination = destination;
       return destination;
-    })
+    });
 
-  getPageIndex = () => new Promise((resolve, reject) => {
-    const { pdf } = this.props;
-    if (isDefined(this.pageIndex)) {
-      resolve(this.pageIndex);
-    }
+  getPageIndex = () =>
+    new Promise((resolve, reject) => {
+      const { pdf } = this.props;
+      if (isDefined(this.pageIndex)) {
+        resolve(this.pageIndex);
+      }
 
-    this.getDestination()
-      .then((destination) => {
+      this.getDestination().then((destination) => {
         if (!destination) {
           return;
         }
 
         const [ref] = destination;
-        pdf.getPageIndex(new Ref(ref))
-          .then(resolve)
-          .catch(reject);
+        pdf.getPageIndex(new Ref(ref)).then(resolve).catch(reject);
       });
-  })
-    .then((pageIndex) => {
+    }).then((pageIndex) => {
       this.pageIndex = pageIndex;
       return this.pageIndex;
-    })
+    });
 
-  getPageNumber = () => new Promise((resolve, reject) => {
-    if (isDefined(this.pageNumber)) {
-      resolve(this.pageNumber);
-    }
+  getPageNumber = () =>
+    new Promise((resolve, reject) => {
+      if (isDefined(this.pageNumber)) {
+        resolve(this.pageNumber);
+      }
 
-    this.getPageIndex()
-      .then((pageIndex) => {
-        resolve(pageIndex + 1);
-      })
-      .catch(reject);
-  })
-    .then((pageNumber) => {
+      this.getPageIndex()
+        .then((pageIndex) => {
+          resolve(pageIndex + 1);
+        })
+        .catch(reject);
+    }).then((pageNumber) => {
       this.pageNumber = pageNumber;
       return pageNumber;
-    })
+    });
 
   onClick = (event) => {
     const { onClick } = this.props;
@@ -79,14 +74,16 @@ export class OutlineItemInternal extends PureComponent {
       return false;
     }
 
-    return Promise.all([this.getPageIndex(), this.getPageNumber()])
-      .then(([pageIndex, pageNumber]) => {
+    return Promise.all([this.getDestination(), this.getPageIndex(), this.getPageNumber()]).then(
+      ([dest, pageIndex, pageNumber]) => {
         onClick({
+          dest,
           pageIndex,
           pageNumber,
         });
-      });
-  }
+      },
+    );
+  };
 
   renderSubitems() {
     const { item, ...otherProps } = this.props;
@@ -99,19 +96,13 @@ export class OutlineItemInternal extends PureComponent {
 
     return (
       <ul>
-        {
-          subitems.map((subitem, subitemIndex) => (
-            <OutlineItemInternal
-              key={
-                typeof subitem.destination === 'string'
-                  ? subitem.destination
-                  : subitemIndex
-              }
-              item={subitem}
-              {...otherProps}
-            />
-          ))
-        }
+        {subitems.map((subitem, subitemIndex) => (
+          <OutlineItemInternal
+            key={typeof subitem.destination === 'string' ? subitem.destination : subitemIndex}
+            item={subitem}
+            {...otherProps}
+          />
+        ))}
       </ul>
     );
   }
@@ -119,13 +110,10 @@ export class OutlineItemInternal extends PureComponent {
   render() {
     const { item } = this.props;
 
-    /* eslint-disable jsx-a11y/anchor-is-valid */
     return (
       <li>
-        <a
-          href="#"
-          onClick={this.onClick}
-        >
+        {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+        <a href="#" onClick={this.onClick}>
           {item.title}
         </a>
         {this.renderSubitems()}
@@ -134,18 +122,17 @@ export class OutlineItemInternal extends PureComponent {
   }
 }
 
-const isDestination = PropTypes.oneOfType([
-  PropTypes.string,
-  PropTypes.arrayOf(PropTypes.any),
-]);
+const isDestination = PropTypes.oneOfType([PropTypes.string, PropTypes.arrayOf(PropTypes.any)]);
 
 OutlineItemInternal.propTypes = {
   item: PropTypes.shape({
     dest: isDestination,
-    items: PropTypes.arrayOf(PropTypes.shape({
-      dest: isDestination,
-      title: PropTypes.string,
-    })),
+    items: PropTypes.arrayOf(
+      PropTypes.shape({
+        dest: isDestination,
+        title: PropTypes.string,
+      }),
+    ),
     title: PropTypes.string,
   }).isRequired,
   onClick: PropTypes.func,

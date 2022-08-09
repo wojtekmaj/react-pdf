@@ -1,6 +1,6 @@
 {
   "name": "react-pdf",
-  "version": "5.6.0",
+  "version": "6.0.0-beta.3",
   "description": "Display PDFs in your React app as easily as if they were images.",
   "main": "dist/umd/entry.js",
   "module": "dist/esm/entry.js",
@@ -13,8 +13,8 @@
     "clean": "rimraf dist",
     "copy-styles": "node ./copy-styles.js",
     "jest": "jest",
-    "jest-coverage": "jest --coverage",
     "lint": "eslint sample/ src/ test/ --ext .jsx,.js",
+    "postinstall": "husky install",
     "prepack": "yarn clean && yarn build",
     "test": "yarn lint && yarn jest"
   },
@@ -72,13 +72,14 @@
   "license": "MIT",
   "dependencies": {
     "@babel/runtime": "^7.0.0",
-    "file-loader": "^6.0.0",
     "make-cancellable-promise": "^1.0.0",
     "make-event-props": "^1.1.0",
     "merge-class-names": "^1.1.1",
     "merge-refs": "^1.0.0",
     "pdfjs-dist": "https://github.com/samuelhalff/pdfjs-dist.git#1d1f5b7457af68135da1cb465addba722c2517e6",
     "prop-types": "^15.6.2"
+    "tiny-invariant": "^1.0.0",
+    "tiny-warning": "^1.0.0"
   },
   "devDependencies": {
     "@babel/cli": "^7.15.0",
@@ -86,29 +87,36 @@
     "@babel/plugin-transform-runtime": "^7.15.0",
     "@babel/preset-env": "^7.15.0",
     "@babel/preset-react": "^7.14.0",
-    "@wojtekmaj/enzyme-adapter-react-17": "^0.6.0",
-    "babel-eslint": "^10.0.0",
-    "enzyme": "^3.10.0",
-    "eslint": "~7.19.0",
-    "eslint-config-wojtekmaj": "^0.5.0",
+    "@testing-library/jest-dom": "^5.15.0",
+    "@testing-library/react": "^12.1.0",
+    "eslint": "^8.5.0",
+    "eslint-config-wojtekmaj": "^0.6.5",
+    "husky": "^8.0.0",
     "jest": "^27.0.0",
+    "jest-canvas-mock": "^2.3.1",
+    "prettier": "^2.5.0",
+    "pretty-quick": "^3.1.0",
     "react": "^17.0.0",
     "react-dom": "^17.0.0",
     "rimraf": "^3.0.0",
     "webpack": "^5.20.0"
   },
   "peerDependencies": {
-    "react": "^16.3.0 || ^17.0.0-0",
-    "react-dom": "^16.3.0 || ^17.0.0-0"
+    "file-loader": "^6.0.0",
+    "react": "^16.8.0 || ^17.0.0 || ^18.0.0",
+    "react-dom": "^16.8.0 || ^17.0.0 || ^18.0.0"
+  },
+  "peerDependenciesMeta": {
+    "file-loader": {
+      "optional": true
+    }
   },
   "resolutions": {
     "semver@7.0.0": "^7.0.0"
   },
   "files": [
-    "LICENSE",
-    "README.md",
-    "dist/",
-    "src/"
+    "dist",
+    "src"
   ],
   "repository": {
     "type": "git",

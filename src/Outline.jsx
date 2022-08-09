@@ -3,35 +3,27 @@ import PropTypes from 'prop-types';
 import makeCancellable from 'make-cancellable-promise';
 import makeEventProps from 'make-event-props';
 import mergeClassNames from 'merge-class-names';
+import invariant from 'tiny-invariant';
+import warning from 'tiny-warning';
 
 import DocumentContext from './DocumentContext';
 import OutlineContext from './OutlineContext';
 
 import OutlineItem from './OutlineItem';
 
-import {
-  cancelRunningTask,
-  errorOnDev,
-} from './shared/utils';
+import { cancelRunningTask } from './shared/utils';
 
-import {
-  eventProps,
-  isClassName,
-  isPdf,
-  isRef,
-} from './shared/propTypes';
+import { eventProps, isClassName, isPdf, isRef } from './shared/propTypes';
 
 export class OutlineInternal extends PureComponent {
   state = {
     outline: null,
-  }
+  };
 
   componentDidMount() {
     const { pdf } = this.props;
 
-    if (!pdf) {
-      throw new Error('Attempted to load an outline, but no document was specified.');
-    }
+    invariant(pdf, 'Attempted to load an outline, but no document was specified.');
 
     this.loadOutline();
   }
@@ -39,7 +31,7 @@ export class OutlineInternal extends PureComponent {
   componentDidUpdate(prevProps) {
     const { pdf } = this.props;
 
-    if (prevProps.pdf && (pdf !== prevProps.pdf)) {
+    if (prevProps.pdf && pdf !== prevProps.pdf) {
       this.loadOutline();
     }
   }
@@ -68,7 +60,7 @@ export class OutlineInternal extends PureComponent {
       .catch((error) => {
         this.onLoadError(error);
       });
-  }
+  };
 
   get childContext() {
     return {
@@ -77,7 +69,6 @@ export class OutlineInternal extends PureComponent {
   }
 
   get eventProps() {
-    // eslint-disable-next-line react/destructuring-assignment
     return makeEventProps(this.props, () => this.state.outline);
   }
 
@@ -89,7 +80,7 @@ export class OutlineInternal extends PureComponent {
     const { outline } = this.state;
 
     if (onLoadSuccess) onLoadSuccess(outline);
-  }
+  };
 
   /**
    * Called when an outline failed to read successfully
@@ -97,41 +88,36 @@ export class OutlineInternal extends PureComponent {
   onLoadError = (error) => {
     this.setState({ outline: false });
 
-    errorOnDev(error);
+    warning(error);
 
     const { onLoadError } = this.props;
 
     if (onLoadError) onLoadError(error);
-  }
+  };
 
-  onItemClick = ({ pageIndex, pageNumber }) => {
+  onItemClick = ({ dest, pageIndex, pageNumber }) => {
     const { onItemClick } = this.props;
 
     if (onItemClick) {
       onItemClick({
+        dest,
         pageIndex,
         pageNumber,
       });
     }
-  }
+  };
 
   renderOutline() {
     const { outline } = this.state;
 
     return (
       <ul>
-        {
-          outline.map((item, itemIndex) => (
-            <OutlineItem
-              key={
-                typeof item.destination === 'string'
-                  ? item.destination
-                  : itemIndex
-              }
-              item={item}
-            />
-          ))
-        }
+        {outline.map((item, itemIndex) => (
+          <OutlineItem
+            key={typeof item.destination === 'string' ? item.destination : itemIndex}
+            item={item}
+          />
+        ))}
       </ul>
     );
   }

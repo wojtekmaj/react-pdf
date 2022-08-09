@@ -4,6 +4,8 @@
   "description": "A sample page for React-PDF.",
   "private": true,
   "scripts": {
+    "copy-cmaps": "node ./scripts/copy-cmaps.js",
+    "copy-standard-fonts": "node ./scripts/copy-standard-fonts.js",
     "build": "parcel build index.html --public-url ./",
     "start": "parcel index.html"
   },
@@ -25,6 +27,13 @@
     "parcel-bundler": "^1.12.4"
   },
   "resolutions": {
+    "postcss@6.0.1": "^6.0.1",
+    "postcss@7.0.32": "^7.0.32",
     "semver@7.0.0": "^7.0.0"
+  },
+  "dependenciesMeta": {
+    "parcel-bundler": {
+      "built": false
+    }
   }
 }

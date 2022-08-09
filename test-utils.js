@@ -1,3 +1,4 @@
+/* eslint-env jest */
 const fs = require('fs');
 
 export const makeAsyncCallback = (callbackValue) => {
