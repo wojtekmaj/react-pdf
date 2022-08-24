@@ -77,7 +77,7 @@
     "babel-runtime": "^6.26.0",
     "lodash.once": "^4.1.1",
     "merge-class-names": "^1.1.1",
-    "pdfjs-dist": "2.0.305",
+    "pdfjs-dist": "2.0.943",
     "prop-types": "^15.6.1"
   },
   "devDependencies": {
