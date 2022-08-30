@@ -109,7 +109,7 @@ export class PageInternal extends PureComponent {
       onRenderTextLayerError,
       onRenderTextLayerSuccess,
       page,
-      renderForms: renderForms ?? renderInteractiveForms, // For backward compatibility
+      renderForms: renderInteractiveForms ?? renderForms, // For backward compatibility
       rotate: this.rotate,
       scale: this.scale,
     };

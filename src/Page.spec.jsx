@@ -313,6 +313,74 @@ describe('Page', () => {
       expect(instance.current.rotate).toBe(90);
     });
 
+    it('requests page to be rendered with forms when given legacy renderInteractiveForms prop', async () => {
+      const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
+      const instance = createRef();
+
+      render(
+        <Page
+          onLoadSuccess={onLoadSuccess}
+          renderInteractiveForms={true}
+          pageIndex={0}
+          pdf={pdf}
+          ref={instance}
+        />,
+      );
+
+      await onLoadSuccessPromise;
+
+      expect(instance.current.childContext.renderForms).toBe(true);
+    });
+
+    it('requests page to be rendered with forms when given renderForms prop', async () => {
+      const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
+      const instance = createRef();
+
+      render(
+        <Page
+          onLoadSuccess={onLoadSuccess}
+          renderForms={true}
+          pageIndex={0}
+          pdf={pdf}
+          ref={instance}
+        />,
+      );
+
+      await onLoadSuccessPromise;
+
+      expect(instance.current.childContext.renderForms).toBe(true);
+    });
+
+    it('requests page to be rendered without forms when given false renderForms prop', async () => {
+      const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
+      const instance = createRef();
+
+      render(
+        <Page
+          onLoadSuccess={onLoadSuccess}
+          renderForms={false}
+          pageIndex={0}
+          pdf={pdf}
+          ref={instance}
+        />,
+      );
+
+      await onLoadSuccessPromise;
+
+      expect(instance.current.childContext.renderForms).toBe(false);
+    });
+
+    it('requests page to be rendered without forms by default', async () => {
+      const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
+      const instance = createRef();
+
+      render(<Page onLoadSuccess={onLoadSuccess} pageIndex={0} pdf={pdf} ref={instance} />);
+
+      await onLoadSuccessPromise;
+
+      expect(instance.current.childContext.renderForms).toBe(false);
+    });
+
     it('requests page to be rendered in canvas mode by default', async () => {
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
