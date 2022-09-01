@@ -506,6 +506,77 @@ describe('Page', () => {
     });
   });
 
+  it('requests page to be rendered without forms by default', async () => {
+    const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
+    const instance = createRef();
+
+    render(<Page onLoadSuccess={onLoadSuccess} pageIndex={0} pdf={pdf} ref={instance} />);
+
+    expect.assertions(1);
+
+    await onLoadSuccessPromise;
+
+    expect(instance.current.childContext.renderForms).toBeFalsy();
+  });
+
+  it('requests page to be rendered with forms given renderForms = true', async () => {
+    const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
+    const instance = createRef();
+
+    render(
+      <Page onLoadSuccess={onLoadSuccess} pageIndex={0} pdf={pdf} ref={instance} renderForms />,
+    );
+
+    expect.assertions(1);
+
+    await onLoadSuccessPromise;
+
+    expect(instance.current.childContext.renderForms).toBe(true);
+  });
+
+  it('requests page to be rendered with forms given legacy renderInteractiveForms = true', async () => {
+    const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
+    const instance = createRef();
+
+    render(
+      <Page
+        onLoadSuccess={onLoadSuccess}
+        pageIndex={0}
+        pdf={pdf}
+        ref={instance}
+        renderInteractiveForms
+      />,
+    );
+
+    expect.assertions(1);
+
+    await onLoadSuccessPromise;
+
+    expect(instance.current.childContext.renderForms).toBe(true);
+  });
+
+  it('requests page to be rendered without forms given renderForms = false and legacy renderInteractiveForms = true', async () => {
+    const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
+    const instance = createRef();
+
+    render(
+      <Page
+        onLoadSuccess={onLoadSuccess}
+        pageIndex={0}
+        pdf={pdf}
+        ref={instance}
+        renderForms={false}
+        renderInteractiveForms
+      />,
+    );
+
+    expect.assertions(1);
+
+    await onLoadSuccessPromise;
+
+    expect(instance.current.childContext.renderForms).toBeFalsy();
+  });
+
   it('requests page to be rendered at its original size given nothing', () => {
     const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
