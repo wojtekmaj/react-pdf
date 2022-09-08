@@ -114,7 +114,7 @@ import { Document, Page } from 'react-pdf';
 write:
 
 ```js
-import { Document, Page } from 'react-pdf/dist/esm/entry.webpack';
+import { Document, Page } from 'react-pdf/dist/esm/entry.webpack5';
 ```
 
 | Bundler   | Entry file                          |
