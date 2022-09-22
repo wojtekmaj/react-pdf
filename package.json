@@ -16,7 +16,8 @@
     "lint": "eslint sample/ src/ test/ --ext .jsx,.js",
     "postinstall": "husky install",
     "prepack": "yarn clean && yarn build",
-    "test": "yarn lint && yarn jest"
+    "prettier": "prettier --check .",
+    "test": "yarn lint && yarn prettier && yarn jest"
   },
   "keywords": [
     "pdf",
