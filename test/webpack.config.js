@@ -27,7 +27,7 @@ module.exports = {
   },
   resolve: {
     alias: {
-      react: require.resolve('react'),
+      'react': require.resolve('react'),
       'react-dom/server': require.resolve('react-dom/server'),
       'react-dom': require.resolve('react-dom'),
     },
