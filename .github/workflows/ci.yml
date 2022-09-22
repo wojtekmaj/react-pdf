@@ -18,6 +18,16 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
+      - name: Cache .yarn/cache
+        uses: actions/cache@v3
+        env:
+          cache-name: yarn-cache
+        with:
+          path: .yarn/cache
+          key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-${{ env.cache-name }}
+
       - name: Use Node.js
         uses: actions/setup-node@v3
         with:
@@ -38,6 +48,16 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+
+      - name: Cache .yarn/cache
+        uses: actions/cache@v3
+        env:
+          cache-name: yarn-cache
+        with:
+          path: .yarn/cache
+          key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-${{ env.cache-name }}
 
       - name: Use Node.js
         uses: actions/setup-node@v3
