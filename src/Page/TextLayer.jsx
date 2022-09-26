@@ -24,6 +24,14 @@ export class TextLayerInternal extends PureComponent {
 
     invariant(page, 'Attempted to load page text content, but no page was specified.');
 
+    warning(
+      parseInt(
+        window.getComputedStyle(document.body).getPropertyValue('--react-pdf-text-layer'),
+        10,
+      ) === 1,
+      'TextLayer styles not found. Read more: https://github.com/wojtekmaj/react-pdf#support-for-text-layer',
+    );
+
     this.loadTextContent();
   }
 

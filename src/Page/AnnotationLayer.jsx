@@ -24,6 +24,14 @@ export class AnnotationLayerInternal extends PureComponent {
 
     invariant(page, 'Attempted to load page annotations, but no page was specified.');
 
+    warning(
+      parseInt(
+        window.getComputedStyle(document.body).getPropertyValue('--react-pdf-annotation-layer'),
+        10,
+      ) === 1,
+      'AnnotationLayer styles not found. Read more: https://github.com/wojtekmaj/react-pdf#support-for-annotations',
+    );
+
     this.loadAnnotations();
   }
 
