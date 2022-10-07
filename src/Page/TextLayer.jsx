@@ -122,14 +122,13 @@ export class TextLayerInternal extends PureComponent {
     }
 
     const { viewport } = this;
-    const { customTextRenderer, enhanceTextSelection } = this.props;
+    const { customTextRenderer } = this.props;
 
     // If another rendering is in progress, let's cancel it
     cancelRunningTask(this.runningTask);
 
     const parameters = {
       container: this.layerElement.current,
-      enhanceTextSelection,
       textContent,
       viewport,
     };
@@ -167,13 +166,8 @@ export class TextLayerInternal extends PureComponent {
   }
 }
 
-TextLayerInternal.defaultProps = {
-  enhanceTextSelection: true,
-};
-
 TextLayerInternal.propTypes = {
   customTextRenderer: PropTypes.func,
-  enhanceTextSelection: PropTypes.bool,
   onGetTextError: PropTypes.func,
   onGetTextSuccess: PropTypes.func,
   onRenderTextLayerError: PropTypes.func,

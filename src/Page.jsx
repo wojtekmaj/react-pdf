@@ -79,7 +79,6 @@ export class PageInternal extends PureComponent {
     const {
       canvasBackground,
       customTextRenderer,
-      enhanceTextSelection,
       onGetAnnotationsError,
       onGetAnnotationsSuccess,
       onGetTextError,
@@ -97,7 +96,6 @@ export class PageInternal extends PureComponent {
     return {
       canvasBackground,
       customTextRenderer,
-      enhanceTextSelection,
       onGetAnnotationsError,
       onGetAnnotationsSuccess,
       onGetTextError,
@@ -380,7 +378,6 @@ PageInternal.propTypes = {
   children: PropTypes.node,
   className: isClassName,
   customTextRenderer: PropTypes.func,
-  enhanceTextSelection: PropTypes.bool,
   error: isFunctionOrNode,
   height: PropTypes.number,
   imageResourcesPath: PropTypes.string,
