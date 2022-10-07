@@ -27,6 +27,7 @@
   overflow: hidden;
   line-height: 1;
   text-size-adjust: none;
+  forced-color-adjust: none;
 }
 
 .textLayer span,
