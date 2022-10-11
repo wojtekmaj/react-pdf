@@ -33,6 +33,9 @@ jobs:
         with:
           node-version: '16'
 
+      - name: Enable Corepack
+        run: corepack enable
+
       - name: Install dependencies
         run: yarn --immutable
         env:
@@ -64,6 +67,9 @@ jobs:
         with:
           node-version: '16'
 
+      - name: Enable Corepack
+        run: corepack enable
+
       - name: Install dependencies
         run: yarn --immutable
         env:
@@ -94,6 +100,9 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '16'
+
+      - name: Enable Corepack
+        run: corepack enable
 
       - name: Install dependencies
         run: yarn --immutable
