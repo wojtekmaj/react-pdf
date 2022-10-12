@@ -14,7 +14,6 @@
     "copy-styles": "node ./copy-styles.js",
     "jest": "jest",
     "lint": "eslint sample src test --ext .jsx,.js",
-    "postinstall": "husky install",
     "prepack": "yarn clean && yarn build",
     "prettier": "prettier --check . --cache",
     "test": "yarn lint && yarn prettier && yarn jest"
@@ -56,8 +55,8 @@
     "jest-environment-jsdom": "^29.0.0",
     "prettier": "^2.7.0",
     "pretty-quick": "^3.1.0",
-    "react": "^17.0.0",
-    "react-dom": "^17.0.0",
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0",
     "rimraf": "^3.0.0",
     "webpack": "^5.20.0"
   },
@@ -72,7 +71,7 @@
     }
   },
   "resolutions": {
-    "semver@7.0.0": "^7.0.0"
+    "semver": "^7"
   },
   "files": [
     "dist",
