@@ -16,7 +16,7 @@
     "lint": "eslint sample src test --ext .jsx,.js",
     "prepack": "yarn clean && yarn build",
     "prettier": "prettier --check . --cache",
-    "postinstall": "yarn prepack",
+    "postinstall": "yarn install && yarn prepack",
     "test": "yarn lint && yarn prettier && yarn jest"
   },
   "keywords": [
