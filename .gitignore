@@ -11,7 +11,7 @@ yarn-error.log
 
 # Project-generated directories
 coverage
-dist
+# dist
 node_modules
 
 # Other
