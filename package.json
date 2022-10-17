@@ -34,7 +34,7 @@
     "make-event-props": "^1.1.0",
     "merge-class-names": "^1.1.1",
     "merge-refs": "^1.0.0",
-    "pdfjs-dist": "https://github.com/samuelhalff/pdfjs-dist.git#1d1f5b7457af68135da1cb465addba722c2517e6",
+    "pdfjs-dist": "https://github.com/samuelhalff/pdfjs-dist.git",
     "prop-types": "^15.6.2",
     "tiny-invariant": "^1.0.0",
     "tiny-warning": "^1.0.0"
