@@ -4091,7 +4091,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"iconv-lite@npm:0.4.24, iconv-lite@npm:^0.4.4":
+"iconv-lite@npm:0.4.24":
   version: 0.4.24
   resolution: "iconv-lite@npm:0.4.24"
   dependencies:
@@ -4100,7 +4100,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"iconv-lite@npm:^0.6.2":
+"iconv-lite@npm:^0.6.2, iconv-lite@npm:^0.6.3":
   version: 0.6.3
   resolution: "iconv-lite@npm:0.6.3"
   dependencies:
@@ -4793,9 +4793,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"less@npm:^4.0.0":
-  version: 4.1.2
-  resolution: "less@npm:4.1.2"
+"less@npm:^4.1.3":
+  version: 4.1.3
+  resolution: "less@npm:4.1.3"
   dependencies:
     copy-anything: ^2.0.1
     errno: ^0.1.1
@@ -4803,7 +4803,7 @@ __metadata:
     image-size: ~0.5.0
     make-dir: ^2.1.0
     mime: ^1.4.1
-    needle: ^2.5.2
+    needle: ^3.1.0
     parse-node-version: ^1.0.1
     source-map: ~0.6.0
     tslib: ^2.3.0
@@ -4824,7 +4824,7 @@ __metadata:
       optional: true
   bin:
     lessc: bin/lessc
-  checksum: d3cbc3e18a8313e44f7feaf5fce1728b25911e116a8b9f7206e1f7bf5660902ddaf470b58e68a52288488c8a337433b7de686a3d2405ce49155c2280191983de
+  checksum: 1470fbec993a375eb28d729cd906805fd62b7a7f1b4f5b4d62d04e81eaba987a9373e74aa0b9fa9191149ebc0bfb42e2ea98a038555555b7b241c10a854067cc
   languageName: node
   linkType: hard
 
@@ -5299,16 +5299,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"needle@npm:^2.5.2":
-  version: 2.9.1
-  resolution: "needle@npm:2.9.1"
+"needle@npm:^3.1.0":
+  version: 3.1.0
+  resolution: "needle@npm:3.1.0"
   dependencies:
     debug: ^3.2.6
-    iconv-lite: ^0.4.4
+    iconv-lite: ^0.6.3
     sax: ^1.2.4
   bin:
-    needle: ./bin/needle
-  checksum: 746ae3a3782f0a057ff304a98843cc6f2009f978a0fad0c3e641a9d46d0b5702bb3e197ba08aecd48678067874a991c4f5fc320c7e51a4c041d9dd3441146cf0
+    needle: bin/needle
+  checksum: 662c8a019d0b2b30137f43e1641aa03d96f9da7ce0d3951af8d6d23c1526c123a992d82fcf9f4e68cba6a52e361a7decfb2c71a56cc0e60230248e5a3520f6ad
   languageName: node
   linkType: hard
 
@@ -6540,7 +6540,7 @@ __metadata:
     "@babel/core": ^7.15.0
     "@babel/preset-env": ^7.15.0
     "@babel/preset-react": ^7.14.0
-    less: ^4.0.0
+    less: ^4.1.3
     parcel-bundler: ^1.12.4
     react: ^17.0.0
     react-dom: ^17.0.0
