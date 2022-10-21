@@ -30,7 +30,7 @@
     "eslint": "^8.5.0",
     "html-webpack-plugin": "^5.1.0",
     "less": "^4.0.0",
-    "less-loader": "^10.0.0",
+    "less-loader": "^11.0.0",
     "mini-css-extract-plugin": "^2.0.0",
     "react-refresh": "^0.10.0",
     "style-loader": "^3.0.0",
