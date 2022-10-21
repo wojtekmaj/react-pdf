@@ -47,7 +47,7 @@
     "@babel/preset-env": "^7.15.0",
     "@babel/preset-react": "^7.14.0",
     "@testing-library/jest-dom": "^5.15.0",
-    "@testing-library/react": "^12.1.0",
+    "@testing-library/react": "^13.4.0",
     "eslint": "^8.5.0",
     "eslint-config-wojtekmaj": "^0.7.1",
     "husky": "^8.0.0",
