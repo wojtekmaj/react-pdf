@@ -26,6 +26,12 @@ function Child(props) {
   );
 }
 
+function waitForAsync() {
+  return new Promise((resolve) => {
+    setTimeout(resolve, 0);
+  });
+}
+
 describe('Document', () => {
   // Object with basic loaded PDF information that shall match after successful loading
   const desiredLoadedPdf = {};
@@ -260,6 +266,8 @@ describe('Document', () => {
 
       await onLoadErrorPromise;
 
+      await waitForAsync();
+
       const error = container.querySelector('.react-pdf__message');
 
       expect(error).toBeInTheDocument();
@@ -282,6 +290,8 @@ describe('Document', () => {
 
       await onLoadErrorPromise;
 
+      await waitForAsync();
+
       const error = container.querySelector('.react-pdf__message');
 
       expect(error).toBeInTheDocument();
@@ -303,6 +313,8 @@ describe('Document', () => {
       expect.assertions(2);
 
       await onLoadErrorPromise;
+
+      await waitForAsync();
 
       const error = container.querySelector('.react-pdf__message');
 
