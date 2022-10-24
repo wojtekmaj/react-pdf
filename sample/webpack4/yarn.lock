@@ -5202,17 +5202,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"less-loader@npm:^7.3.0":
-  version: 7.3.0
-  resolution: "less-loader@npm:7.3.0"
+"less-loader@npm:^11.1.0":
+  version: 11.1.0
+  resolution: "less-loader@npm:11.1.0"
   dependencies:
     klona: ^2.0.4
-    loader-utils: ^2.0.0
-    schema-utils: ^3.0.0
   peerDependencies:
     less: ^3.5.0 || ^4.0.0
-    webpack: ^4.0.0 || ^5.0.0
-  checksum: 1279be755428655a37fe3def27b6edcdac403bbdd0d350bf041d4b09ad02de81024edf367cb984e127e9175a3698860595e34383731dcc343a94aa044f6fa834
+    webpack: ^5.0.0
+  checksum: 041216e0a6d95e24c9724f470719db3eb70b3888c45b1a1e9cd55edabe8ae79709522cd6c6713b466b3e9948544074e2a5b2be50ac3ced5ff41dfa9675f3b182
   languageName: node
   linkType: hard
 
@@ -6702,7 +6700,7 @@ __metadata:
     css-loader: ^5.2.0
     html-webpack-plugin: ^4.5.0
     less: ^4.0.0
-    less-loader: ^7.3.0
+    less-loader: ^11.1.0
     react: ^18.2.0
     react-dom: ^18.2.0
     react-pdf: latest
