@@ -223,15 +223,11 @@ export class PageInternal extends PureComponent {
   }
 
   get pageKey() {
-    const { page } = this.state;
-
-    return `${page.pageIndex}@${this.scale}/${this.rotate}`;
+    return `${this.pageIndex}@${this.scale}/${this.rotate}`;
   }
 
   get pageKeyNoScale() {
-    const { page } = this.state;
-
-    return `${page.pageIndex}/${this.rotate}`;
+    return `${this.pageIndex}/${this.rotate}`;
   }
 
   loadPage = () => {
