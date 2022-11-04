@@ -1,0 +1,30 @@
+{
+  "name": "react-pdf-sample-page-vite",
+  "version": "4.0.0",
+  "description": "A sample page for React-PDF.",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "vite build",
+    "start": "vite serve"
+  },
+  "author": {
+    "name": "Wojciech Maj",
+    "email": "kontakt@wojtekmaj.pl"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-pdf": "latest"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.15.0",
+    "@babel/preset-env": "^7.15.0",
+    "@babel/preset-react": "^7.14.0",
+    "@vitejs/plugin-react": "^2.2.0",
+    "less": "^4.0.0",
+    "vite": "^3.2.2",
+    "vite-plugin-html": "^3.2.0"
+  }
+}
