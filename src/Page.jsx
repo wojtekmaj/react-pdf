@@ -347,7 +347,11 @@ export class PageInternal extends PureComponent {
         className={mergeClassNames('react-pdf__Page', className)}
         data-page-number={pageNumber}
         ref={mergeRefs(inputRef, this.pageElement)}
-        style={{ position: 'relative' }}
+        style={{
+          position: 'relative',
+          minWidth: 'min-content',
+          minHeight: 'min-content',
+        }}
         {...this.eventProps}
       >
         {this.renderContent()}
