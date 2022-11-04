@@ -136,6 +136,19 @@ Create React App 5 (`react-scripts@5.0.0`) uses Webpack 5 under the hood, so the
 
 [Standard instructions](#standard-browserify-esbuild-and-others) will also work with Create React App. Please note that in CRA, you can copy `pdf.worker.js` file from `pdfjs-dist/build` to `public` directory in order for it to be copied to your project's output folder at build time.
 
+#### Vite.js
+
+The worker needs to be [explicitly loaded as a URL](https://vitejs.dev/guide/features.html#static-assets) and then specified via `workerSrc`.
+
+```js
+import { Document, Page, pdfjs } from "react-pdf"
+import workerSrc from "pdfjs-dist/build/pdf.worker.min.js?url"
+
+pdfjs.GlobalWorkerOptions.workerSrc = workerSrc
+
+...
+```
+
 #### Standard (Browserify, esbuild and others)
 
 If you use Browserify, esbuild, or other bundlers, you will have to make sure on your own that `pdf.worker.js` file from `pdfjs-dist/build` is copied to your project's output folder.
