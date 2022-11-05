@@ -184,18 +184,16 @@ export default function Test() {
       scale: pageScale,
       width: pageWidth,
       customTextRenderer: (textItem) =>
-        textItem.str.split('ipsum').reduce(
-          (strArray, currentValue, currentIndex) =>
-            currentIndex === 0
-              ? [...strArray, currentValue]
-              : [
-                  ...strArray,
-                  // eslint-disable-next-line react/no-array-index-key
-                  <mark key={currentIndex}>ipsum</mark>,
-                  currentValue,
-                ],
-          [],
-        ),
+        textItem.str
+          .split('ipsum')
+          .reduce(
+            (strArray, currentValue, currentIndex) =>
+              currentIndex === 0
+                ? [...strArray, currentValue]
+                : [...strArray, '<mark>ipsum</mark>', currentValue],
+            [],
+          )
+          .join(''),
     };
   }
 

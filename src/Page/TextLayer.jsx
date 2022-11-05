@@ -1,5 +1,4 @@
 import React, { createRef, PureComponent } from 'react';
-import { renderToStaticMarkup } from 'react-dom/server';
 import PropTypes from 'prop-types';
 import makeCancellable from 'make-cancellable-promise';
 import invariant from 'tiny-invariant';
@@ -143,11 +142,11 @@ export class TextLayerInternal extends PureComponent {
       .then(() => {
         if (customTextRenderer) {
           Array.from(this.layerElement.current.children).forEach((element, elementIndex) => {
-            const reactContent = customTextRenderer({
+            const content = customTextRenderer({
               itemIndex: elementIndex,
               ...textContent.items[elementIndex],
             });
-            element.innerHTML = renderToStaticMarkup(reactContent);
+            element.innerHTML = content;
           });
         }
         this.onRenderSuccess();
