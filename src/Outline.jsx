@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import makeCancellable from 'make-cancellable-promise';
 import makeEventProps from 'make-event-props';
-import mergeClassNames from 'merge-class-names';
+import clsx from 'clsx';
 import invariant from 'tiny-invariant';
 import warning from 'tiny-warning';
 
@@ -133,11 +133,7 @@ export class OutlineInternal extends PureComponent {
     const { className, inputRef } = this.props;
 
     return (
-      <div
-        className={mergeClassNames('react-pdf__Outline', className)}
-        ref={inputRef}
-        {...this.eventProps}
-      >
+      <div className={clsx('react-pdf__Outline', className)} ref={inputRef} {...this.eventProps}>
         <OutlineContext.Provider value={this.childContext}>
           {this.renderOutline()}
         </OutlineContext.Provider>
