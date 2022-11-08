@@ -4,8 +4,8 @@
   "description": "A sample page for React-PDF.",
   "private": true,
   "scripts": {
-    "build": "NODE_ENV=production webpack",
-    "start": "NODE_ENV=development webpack serve"
+    "build": "NODE_OPTIONS=--openssl-legacy-provider NODE_ENV=production webpack",
+    "start": "NODE_OPTIONS=--openssl-legacy-provider NODE_ENV=development webpack serve"
   },
   "author": {
     "name": "Wojciech Maj",
