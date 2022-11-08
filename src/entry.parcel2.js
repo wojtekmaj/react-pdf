@@ -8,11 +8,6 @@ import { displayWorkerWarning } from './shared/utils';
 
 displayWorkerWarning();
 
-if (typeof window !== 'undefined' && 'Worker' in window) {
-  pdfjs.GlobalWorkerOptions.workerPort = new Worker(
-    new URL('./pdf.worker.entry.js', import.meta.url),
-    { type: 'module' },
-  );
-}
+pdfjs.GlobalWorkerOptions.workerSrc = new URL('npm:pdfjs-dist/build/pdf.worker', import.meta.url);
 
 export { pdfjs, Document, Outline, Page };
