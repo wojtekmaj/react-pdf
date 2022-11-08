@@ -121,9 +121,9 @@ import { Document, Page } from 'react-pdf/dist/esm/entry.webpack5';
 | --------- | ----------------------------------- |
 | Parcel 1  | `react-pdf/dist/esm/entry.parcel`   |
 | Parcel 2  | `react-pdf/dist/esm/entry.parcel2`  |
+| Vite      | `react-pdf/dist/esm/entry.vite`     |
 | Webpack 4 | `react-pdf/dist/esm/entry.webpack`  |
 | Webpack 5 | `react-pdf/dist/esm/entry.webpack5` |
-| Vite      | `react-pdf/dist/esm/entry.vite`     |
 
 #### Webpack 4
 
