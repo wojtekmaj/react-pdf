@@ -24,6 +24,7 @@
     "babel-loader": "^8.0.0",
     "copy-webpack-plugin": "^6.4.0",
     "css-loader": "^5.2.0",
+    "file-loader": "^6.0.0",
     "html-webpack-plugin": "^4.5.0",
     "less": "^4.0.0",
     "less-loader": "^7.3.0",
