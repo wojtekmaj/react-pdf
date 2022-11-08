@@ -1,6 +1,6 @@
 import * as pdfjs from 'pdfjs-dist/build/pdf';
 // eslint-disable-next-line import/no-unresolved
-import pdfjsWorker from 'pdfjs-dist/build/pdf.worker?url';
+import pdfjsWorker from './pdf.worker.entry?url';
 
 import Document from './Document';
 import Outline from './Outline';
