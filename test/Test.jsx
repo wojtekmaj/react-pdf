@@ -183,17 +183,7 @@ export default function Test() {
       renderTextLayer,
       scale: pageScale,
       width: pageWidth,
-      customTextRenderer: (textItem) =>
-        textItem.str
-          .split('ipsum')
-          .reduce(
-            (strArray, currentValue, currentIndex) =>
-              currentIndex === 0
-                ? [...strArray, currentValue]
-                : [...strArray, '<mark>ipsum</mark>', currentValue],
-            [],
-          )
-          .join(''),
+      customTextRenderer: ({ str }) => str && str.replace(/ipsum/g, `<mark>ipsum</mark>`),
     };
   }
 
