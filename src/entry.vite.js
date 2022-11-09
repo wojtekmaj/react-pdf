@@ -1,6 +1,4 @@
 import * as pdfjs from 'pdfjs-dist/build/pdf';
-// eslint-disable-next-line import/no-unresolved
-import pdfjsWorker from './pdf.worker.entry?url';
 
 import Document from './Document';
 import Outline from './Outline';
@@ -10,6 +8,6 @@ import { displayWorkerWarning } from './shared/utils';
 
 displayWorkerWarning();
 
-pdfjs.GlobalWorkerOptions.workerSrc = pdfjsWorker;
+pdfjs.GlobalWorkerOptions.workerSrc = new URL('pdfjs-dist/build/pdf.worker.js', import.meta.url);
 
 export { pdfjs, Document, Outline, Page };
