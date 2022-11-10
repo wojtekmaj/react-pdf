@@ -18,6 +18,8 @@ export class TextLayerInternal extends PureComponent {
 
   layerElement = createRef();
 
+  endElement = createRef();
+
   componentDidMount() {
     const { page } = this.props;
 
@@ -92,6 +94,26 @@ export class TextLayerInternal extends PureComponent {
     if (onRenderTextLayerError) onRenderTextLayerError(error);
   };
 
+  onMouseDown = () => {
+    const end = this.endElement.current;
+
+    if (!end) {
+      return;
+    }
+
+    end.classList.add('active');
+  };
+
+  onMouseUp = () => {
+    const end = this.endElement.current;
+
+    if (!end) {
+      return;
+    }
+
+    end.classList.remove('active');
+  };
+
   get viewport() {
     const { page, rotate, scale } = this.props;
 
@@ -120,16 +142,18 @@ export class TextLayerInternal extends PureComponent {
       return null;
     }
 
+    const container = this.layerElement.current;
+
     const { viewport } = this;
     const { customTextRenderer } = this.props;
 
     // If another rendering is in progress, let's cancel it
     cancelRunningTask(this.runningTask);
 
-    this.layerElement.current.innerHTML = '';
+    container.innerHTML = '';
 
     const parameters = {
-      container: this.layerElement.current,
+      container,
       textContent,
       viewport,
     };
@@ -139,6 +163,11 @@ export class TextLayerInternal extends PureComponent {
 
     cancellable.promise
       .then(() => {
+        const end = document.createElement('div');
+        end.className = 'endOfContent';
+        container.append(end);
+        this.endElement.current = end;
+
         if (customTextRenderer) {
           textContent.items.forEach((item, itemIndex) => {
             const child = this.layerElement.current.children[itemIndex];
@@ -161,7 +190,13 @@ export class TextLayerInternal extends PureComponent {
 
   render() {
     return (
-      <div className="react-pdf__Page__textContent textLayer" ref={this.layerElement}>
+      // eslint-disable-next-line jsx-a11y/no-static-element-interactions
+      <div
+        className="react-pdf__Page__textContent textLayer"
+        onMouseUp={this.onMouseUp}
+        onMouseDown={this.onMouseDown}
+        ref={this.layerElement}
+      >
         {this.renderTextLayer()}
       </div>
     );
