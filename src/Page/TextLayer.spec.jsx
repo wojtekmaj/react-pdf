@@ -94,7 +94,7 @@ describe('TextLayer', () => {
       return onRenderTextLayerSuccessPromise.then(() => {
         const textItems = [...container.firstChild.children];
 
-        expect(textItems).toHaveLength(desiredTextItems.length);
+        expect(textItems).toHaveLength(desiredTextItems.length + 1);
       });
     });
 
