@@ -1,4 +1,4 @@
-import * as pdfjs from 'pdfjs-dist/build/pdf';
+import * as pdfjs from 'pdfjs-dist/build/pdf.min';
 
 import Document from './Document';
 import Outline from './Outline';
@@ -8,6 +8,9 @@ import { displayWorkerWarning } from './shared/utils';
 
 displayWorkerWarning();
 
-pdfjs.GlobalWorkerOptions.workerSrc = new URL('pdfjs-dist/build/pdf.worker.js', import.meta.url);
+pdfjs.GlobalWorkerOptions.workerSrc = new URL(
+  'pdfjs-dist/build/pdf.worker.min.js',
+  import.meta.url,
+);
 
 export { pdfjs, Document, Outline, Page };

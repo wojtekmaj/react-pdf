@@ -4,3 +4,4 @@
 **/public/cmaps/*
 **/public/standard_fonts/*
 **/public/pdf.worker.js
+**/public/pdf.worker.min.js
