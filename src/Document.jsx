@@ -115,15 +115,14 @@ export default class Document extends PureComponent {
 
         const { options, onLoadProgress, onPassword } = this.props;
 
-        this.loadingTask = pdfjs.getDocument({ ...source, ...options });
-        this.loadingTask.onPassword = onPassword;
+        const destroyable = pdfjs.getDocument({ ...source, ...options });
+        destroyable.onPassword = onPassword;
         if (onLoadProgress) {
-          this.loadingTask.onProgress = onLoadProgress;
+          destroyable.onProgress = onLoadProgress;
         }
-        const cancellable = makeCancellable(this.loadingTask.promise);
-        this.runningTask = cancellable;
+        this.loadingTask = destroyable;
 
-        cancellable.promise
+        destroyable.promise
           .then((pdf) => {
             this.setState((prevState) => {
               if (prevState.pdf && prevState.pdf.fingerprint === pdf.fingerprint) {

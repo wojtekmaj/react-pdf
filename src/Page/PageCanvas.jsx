@@ -1,6 +1,5 @@
 import React, { createRef, PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import makeCancellable from 'make-cancellable-promise';
 import mergeRefs from 'merge-refs';
 import warning from 'tiny-warning';
 import * as pdfjs from 'pdfjs-dist/build/pdf';
@@ -121,9 +120,10 @@ export class PageCanvasInternal extends PureComponent {
     // If another render is in progress, let's cancel it
     this.cancelRenderingTask();
 
-    this.renderer = makeCancellable(page.render(renderContext).promise);
+    const cancellable = page.render(renderContext);
+    this.renderer = cancellable;
 
-    return this.renderer.promise.then(this.onRenderSuccess).catch(this.onRenderError);
+    return cancellable.promise.then(this.onRenderSuccess).catch(this.onRenderError);
   };
 
   render() {
