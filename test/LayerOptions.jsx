@@ -5,9 +5,11 @@ export default function LayerOptions({
   renderAnnotationLayer,
   renderForms,
   renderTextLayer,
+  customTextRenderer,
   setRenderAnnotationLayer,
   setRenderForms,
   setRenderTextLayer,
+  setCustomTextRenderer,
 }) {
   function onRenderAnnotationLayerChange(event) {
     setRenderAnnotationLayer(event.target.checked);
@@ -19,6 +21,10 @@ export default function LayerOptions({
 
   function onRenderTextLayersChange(event) {
     setRenderTextLayer(event.target.checked);
+  }
+
+  function onCustomTextRendererChange(event) {
+    setCustomTextRenderer(event.target.checked);
   }
 
   return (
@@ -33,6 +39,17 @@ export default function LayerOptions({
           type="checkbox"
         />
         <label htmlFor="renderTextLayer">Render text layer</label>
+      </div>
+
+      <div>
+        <input
+          checked={customTextRenderer}
+          disabled={!renderTextLayer}
+          id="customTextRenderer"
+          onChange={onCustomTextRendererChange}
+          type="checkbox"
+        />
+        <label htmlFor="customTextRenderer">Custom text renderer</label>
       </div>
 
       <div>
@@ -63,7 +80,9 @@ LayerOptions.propTypes = {
   renderAnnotationLayer: PropTypes.bool,
   renderForms: PropTypes.bool,
   renderTextLayer: PropTypes.bool,
+  customTextRenderer: PropTypes.bool,
   setRenderAnnotationLayer: PropTypes.func.isRequired,
   setRenderForms: PropTypes.func.isRequired,
   setRenderTextLayer: PropTypes.func.isRequired,
+  setCustomTextRenderer: PropTypes.func.isRequired,
 };
