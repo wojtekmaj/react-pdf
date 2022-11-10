@@ -183,7 +183,7 @@ export default function Test() {
       renderTextLayer,
       scale: pageScale,
       width: pageWidth,
-      customTextRenderer: ({ str }) => str && str.replace(/ipsum/g, `<mark>ipsum</mark>`),
+      customTextRenderer: ({ str }) => str.replace(/ipsum/g, `<mark>ipsum</mark>`),
     };
   }
 

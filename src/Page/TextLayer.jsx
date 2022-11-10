@@ -141,14 +141,18 @@ export class TextLayerInternal extends PureComponent {
     cancellable.promise
       .then(() => {
         if (customTextRenderer) {
-          Array.from(this.layerElement.current.children).forEach((element, elementIndex) => {
+          textContent.items.forEach((item, itemIndex) => {
+            const child = this.layerElement.current.children[itemIndex];
+
             const content = customTextRenderer({
-              itemIndex: elementIndex,
-              ...textContent.items[elementIndex],
+              itemIndex,
+              ...item,
             });
-            element.innerHTML = content;
+
+            child.innerHTML = content;
           });
         }
+
         this.onRenderSuccess();
       })
       .catch((error) => {
