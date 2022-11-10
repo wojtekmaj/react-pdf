@@ -126,29 +126,32 @@ export class TextLayerInternal extends PureComponent {
     // If another rendering is in progress, let's cancel it
     cancelRunningTask(this.runningTask);
 
+    this.layerElement.current.innerHTML = '';
+
     const parameters = {
       container: this.layerElement.current,
       textContent,
       viewport,
     };
 
-    this.layerElement.current.innerHTML = '';
-
-    this.runningTask = pdfjs.renderTextLayer(parameters);
-    const cancellable = makeCancellable(this.runningTask.promise);
+    const cancellable = pdfjs.renderTextLayer(parameters);
     this.runningTask = cancellable;
 
     cancellable.promise
       .then(() => {
         if (customTextRenderer) {
-          Array.from(this.layerElement.current.children).forEach((element, elementIndex) => {
+          textContent.items.forEach((item, itemIndex) => {
+            const child = this.layerElement.current.children[itemIndex];
+
             const content = customTextRenderer({
-              itemIndex: elementIndex,
-              ...textContent.items[elementIndex],
+              itemIndex,
+              ...item,
             });
-            element.innerHTML = content;
+
+            child.innerHTML = content;
           });
         }
+
         this.onRenderSuccess();
       })
       .catch((error) => {

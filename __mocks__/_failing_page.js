@@ -12,5 +12,6 @@ export default {
   }),
   render: () => ({
     promise: new Promise((resolve, reject) => reject(new Error())),
+    cancel: () => {},
   }),
 };
