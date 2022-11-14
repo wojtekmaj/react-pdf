@@ -20,7 +20,7 @@
     "react-pdf": "latest"
   },
   "devDependencies": {
-    "@parcel/transformer-less": "^2.0.1",
+    "@parcel/transformer-less": "^2.8.0",
     "parcel": "^2.0.0"
   }
 }
