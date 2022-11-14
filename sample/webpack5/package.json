@@ -23,7 +23,7 @@
     "@babel/preset-react": "^7.14.0",
     "babel-loader": "^9.0.1",
     "copy-webpack-plugin": "^11.0.0",
-    "css-loader": "^6.0.0",
+    "css-loader": "^6.7.2",
     "html-webpack-plugin": "^5.1.0",
     "less": "^4.0.0",
     "less-loader": "^11.0.0",
