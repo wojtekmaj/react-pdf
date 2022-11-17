@@ -98,13 +98,13 @@ describe('TextLayer', () => {
       expect(textItems).toHaveLength(desiredTextItems.length + 1);
     });
 
-    it('calls customTextRenderer with necessary arguments', async () => {
+    it('renders text content properly given customTextRenderer', async () => {
       const { func: onRenderTextLayerSuccess, promise: onRenderTextLayerSuccessPromise } =
         makeAsyncCallback();
 
       const customTextRenderer = jest.fn();
 
-      render(
+      const { container } = render(
         <TextLayer
           customTextRenderer={customTextRenderer}
           onRenderTextLayerSuccess={onRenderTextLayerSuccess}
@@ -112,9 +112,68 @@ describe('TextLayer', () => {
         />,
       );
 
-      expect.assertions(2);
+      expect.assertions(1);
 
       await onRenderTextLayerSuccessPromise;
+
+      const textItems = [...container.firstChild.children];
+      expect(textItems).toHaveLength(desiredTextItems.length + 1);
+    });
+
+    it('maps textContent items to actual TextLayer children properly', async () => {
+      const { func: onRenderTextLayerSuccess, promise: onRenderTextLayerSuccessPromise } =
+        makeAsyncCallback();
+
+      const { container, rerender } = render(
+        <TextLayer onRenderTextLayerSuccess={onRenderTextLayerSuccess} page={page} />,
+      );
+
+      expect.assertions(1);
+
+      await onRenderTextLayerSuccessPromise;
+
+      const innerHTML = container.firstChild.innerHTML;
+
+      const { func: onRenderTextLayerSuccess2, promise: onRenderTextLayerSuccessPromise2 } =
+        makeAsyncCallback();
+
+      const customTextRenderer = (item) => item.str;
+
+      rerender(
+        <TextLayer
+          customTextRenderer={customTextRenderer}
+          onRenderTextLayerSuccess={onRenderTextLayerSuccess2}
+          page={page}
+        />,
+      );
+
+      await onRenderTextLayerSuccessPromise2;
+
+      const innerHTML2 = container.firstChild.innerHTML;
+
+      expect(innerHTML).toEqual(innerHTML2);
+    });
+
+    it('calls customTextRenderer with necessary arguments', async () => {
+      const { func: onRenderTextLayerSuccess, promise: onRenderTextLayerSuccessPromise } =
+        makeAsyncCallback();
+
+      const customTextRenderer = jest.fn();
+
+      const { container } = render(
+        <TextLayer
+          customTextRenderer={customTextRenderer}
+          onRenderTextLayerSuccess={onRenderTextLayerSuccess}
+          page={page}
+        />,
+      );
+
+      expect.assertions(3);
+
+      await onRenderTextLayerSuccessPromise;
+
+      const textItems = [...container.firstChild.children];
+      expect(textItems).toHaveLength(desiredTextItems.length + 1);
 
       expect(customTextRenderer).toHaveBeenCalledTimes(desiredTextItems.length);
       expect(customTextRenderer).toHaveBeenCalledWith(
