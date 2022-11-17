@@ -91,14 +91,14 @@ describe('TextLayer', () => {
       );
 
       expect.assertions(1);
-      return onRenderTextLayerSuccessPromise.then(() => {
-        const textItems = [...container.firstChild.children];
 
-        expect(textItems).toHaveLength(desiredTextItems.length + 1);
-      });
+      await onRenderTextLayerSuccessPromise;
+
+      const textItems = [...container.firstChild.children];
+      expect(textItems).toHaveLength(desiredTextItems.length + 1);
     });
 
-    it('calls customTextRenderer with necessary arguments', () => {
+    it('calls customTextRenderer with necessary arguments', async () => {
       const { func: onRenderTextLayerSuccess, promise: onRenderTextLayerSuccessPromise } =
         makeAsyncCallback();
 
@@ -113,18 +113,19 @@ describe('TextLayer', () => {
       );
 
       expect.assertions(2);
-      return onRenderTextLayerSuccessPromise.then(() => {
-        expect(customTextRenderer).toHaveBeenCalledTimes(desiredTextItems.length);
-        expect(customTextRenderer).toHaveBeenCalledWith(
-          expect.objectContaining({
-            str: expect.any(String),
-            itemIndex: expect.any(Number),
-          }),
-        );
-      });
+
+      await onRenderTextLayerSuccessPromise;
+
+      expect(customTextRenderer).toHaveBeenCalledTimes(desiredTextItems.length);
+      expect(customTextRenderer).toHaveBeenCalledWith(
+        expect.objectContaining({
+          str: expect.any(String),
+          itemIndex: expect.any(Number),
+        }),
+      );
     });
 
-    it('renders text content properly given customTextRenderer', () => {
+    it('renders text content properly given customTextRenderer', async () => {
       const { func: onRenderTextLayerSuccess, promise: onRenderTextLayerSuccessPromise } =
         makeAsyncCallback();
 
@@ -139,9 +140,10 @@ describe('TextLayer', () => {
       );
 
       expect.assertions(1);
-      return onRenderTextLayerSuccessPromise.then(() => {
-        expect(container).toHaveTextContent('Test value');
-      });
+
+      await onRenderTextLayerSuccessPromise;
+
+      expect(container).toHaveTextContent('Test value');
     });
   });
 });

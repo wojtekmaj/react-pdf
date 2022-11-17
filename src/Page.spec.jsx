@@ -65,20 +65,21 @@ describe('Page', () => {
       await expect(onLoadSuccessPromise).resolves.toMatchObject(desiredLoadedPage);
     });
 
-    it('returns all desired parameters in onLoadSuccess callback', () => {
+    it('returns all desired parameters in onLoadSuccess callback', async () => {
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
       render(<Page onLoadSuccess={onLoadSuccess} pageIndex={0} pdf={pdf} />);
 
       expect.assertions(5);
-      return onLoadSuccessPromise.then((page) => {
-        expect(page.width).toBeDefined();
-        expect(page.height).toBeDefined();
-        expect(page.originalWidth).toBeDefined();
-        expect(page.originalHeight).toBeDefined();
-        // Example of a method that got stripped away in the past
-        expect(page.getTextContent).toBeInstanceOf(Function);
-      });
+
+      const page = await onLoadSuccessPromise;
+
+      expect(page.width).toBeDefined();
+      expect(page.height).toBeDefined();
+      expect(page.originalWidth).toBeDefined();
+      expect(page.originalHeight).toBeDefined();
+      // Example of a method that got stripped away in the past
+      expect(page.getTextContent).toBeInstanceOf(Function);
     });
 
     it('calls onLoadError when failed to load a page', async () => {
@@ -94,26 +95,28 @@ describe('Page', () => {
       restoreConsole();
     });
 
-    it('loads page when given pageIndex', () => {
+    it('loads page when given pageIndex', async () => {
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
       render(<Page onLoadSuccess={onLoadSuccess} pageIndex={0} pdf={pdf} />);
 
       expect.assertions(1);
-      return onLoadSuccessPromise.then((page) => {
-        expect(page).toMatchObject(desiredLoadedPage);
-      });
+
+      const page = await onLoadSuccessPromise;
+
+      expect(page).toMatchObject(desiredLoadedPage);
     });
 
-    it('loads page when given pageNumber', () => {
+    it('loads page when given pageNumber', async () => {
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
       render(<Page onLoadSuccess={onLoadSuccess} pageNumber={1} pdf={pdf} />);
 
       expect.assertions(1);
-      return onLoadSuccessPromise.then((page) => {
-        expect(page).toMatchObject(desiredLoadedPage);
-      });
+
+      const page = await onLoadSuccessPromise;
+
+      expect(page).toMatchObject(desiredLoadedPage);
     });
 
     it('calls registerPage when loaded a page', async () => {
@@ -277,16 +280,16 @@ describe('Page', () => {
       expect(loading).toHaveTextContent('Loading');
     });
 
-    it('ignores pageIndex when given pageIndex and pageNumber', () => {
+    it('ignores pageIndex when given pageIndex and pageNumber', async () => {
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
       render(<Page onLoadSuccess={onLoadSuccess} pageIndex={1} pageNumber={1} pdf={pdf} />);
 
       expect.assertions(1);
 
-      return onLoadSuccessPromise.then((page) => {
-        expect(page).toMatchObject(desiredLoadedPage);
-      });
+      const page = await onLoadSuccessPromise;
+
+      expect(page).toMatchObject(desiredLoadedPage);
     });
 
     it('requests page to be rendered with default rotation when given nothing', async () => {
@@ -326,7 +329,7 @@ describe('Page', () => {
       expect(pageCanvas).toBeInTheDocument();
     });
 
-    it('requests page not to be rendered when given renderMode = "none"', () => {
+    it('requests page not to be rendered when given renderMode = "none"', async () => {
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
       const { container } = render(
@@ -334,12 +337,13 @@ describe('Page', () => {
       );
 
       expect.assertions(2);
-      return onLoadSuccessPromise.then(() => {
-        const pageCanvas = container.querySelector('.react-pdf__Page__canvas');
-        const pageSVG = container.querySelector('.react-pdf__Page__svg');
-        expect(pageCanvas).not.toBeInTheDocument();
-        expect(pageSVG).not.toBeInTheDocument();
-      });
+
+      await onLoadSuccessPromise;
+
+      const pageCanvas = container.querySelector('.react-pdf__Page__canvas');
+      const pageSVG = container.querySelector('.react-pdf__Page__svg');
+      expect(pageCanvas).not.toBeInTheDocument();
+      expect(pageSVG).not.toBeInTheDocument();
     });
 
     it('requests page to be rendered in canvas mode when given renderMode = "canvas"', async () => {
@@ -577,19 +581,19 @@ describe('Page', () => {
     expect(instance.current.childContext.renderForms).toBeFalsy();
   });
 
-  it('requests page to be rendered at its original size given nothing', () => {
+  it('requests page to be rendered at its original size given nothing', async () => {
     const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
     render(<Page onLoadSuccess={onLoadSuccess} pageIndex={0} pdf={pdf} />);
 
     expect.assertions(1);
 
-    return onLoadSuccessPromise.then((page) => {
-      expect(page.width).toEqual(page.originalWidth);
-    });
+    const page = await onLoadSuccessPromise;
+
+    expect(page.width).toEqual(page.originalWidth);
   });
 
-  it('requests page to be rendered with a proper scale when given scale', () => {
+  it('requests page to be rendered with a proper scale when given scale', async () => {
     const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
     const scale = 1.5;
 
@@ -597,12 +601,12 @@ describe('Page', () => {
 
     expect.assertions(1);
 
-    return onLoadSuccessPromise.then((page) => {
-      expect(page.width).toEqual(page.originalWidth * scale);
-    });
+    const page = await onLoadSuccessPromise;
+
+    expect(page.width).toEqual(page.originalWidth * scale);
   });
 
-  it('requests page to be rendered with a proper scale when given width', () => {
+  it('requests page to be rendered with a proper scale when given width', async () => {
     const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
     const width = 600;
 
@@ -610,12 +614,12 @@ describe('Page', () => {
 
     expect.assertions(1);
 
-    return onLoadSuccessPromise.then((page) => {
-      expect(page.width).toEqual(width);
-    });
+    const page = await onLoadSuccessPromise;
+
+    expect(page.width).toEqual(width);
   });
 
-  it('requests page to be rendered with a proper scale when given width and scale (multiplies)', () => {
+  it('requests page to be rendered with a proper scale when given width and scale (multiplies)', async () => {
     const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
     const width = 600;
     const scale = 1.5;
@@ -626,12 +630,12 @@ describe('Page', () => {
 
     expect.assertions(1);
 
-    return onLoadSuccessPromise.then((page) => {
-      expect(page.width).toBeCloseTo(width * scale);
-    });
+    const page = await onLoadSuccessPromise;
+
+    expect(page.width).toBeCloseTo(width * scale);
   });
 
-  it('requests page to be rendered with a proper scale when given height', () => {
+  it('requests page to be rendered with a proper scale when given height', async () => {
     const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
     const height = 850;
 
@@ -639,12 +643,12 @@ describe('Page', () => {
 
     expect.assertions(1);
 
-    return onLoadSuccessPromise.then((page) => {
-      expect(page.height).toEqual(height);
-    });
+    const page = await onLoadSuccessPromise;
+
+    expect(page.height).toEqual(height);
   });
 
-  it('requests page to be rendered with a proper scale when given height and scale (multiplies)', () => {
+  it('requests page to be rendered with a proper scale when given height and scale (multiplies)', async () => {
     const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
     const height = 850;
     const scale = 1.5;
@@ -655,12 +659,12 @@ describe('Page', () => {
 
     expect.assertions(1);
 
-    return onLoadSuccessPromise.then((page) => {
-      expect(page.height).toBeCloseTo(height * scale);
-    });
+    const page = await onLoadSuccessPromise;
+
+    expect(page.height).toBeCloseTo(height * scale);
   });
 
-  it('requests page to be rendered with a proper scale when given width and height (ignores height)', () => {
+  it('requests page to be rendered with a proper scale when given width and height (ignores height)', async () => {
     const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
     const width = 600;
     const height = 100;
@@ -671,14 +675,14 @@ describe('Page', () => {
 
     expect.assertions(2);
 
-    return onLoadSuccessPromise.then((page) => {
-      expect(page.width).toEqual(width);
-      // Expect proportions to be correct even though invalid height was provided
-      expect(page.height).toEqual(page.originalHeight * (page.width / page.originalWidth));
-    });
+    const page = await onLoadSuccessPromise;
+
+    expect(page.width).toEqual(width);
+    // Expect proportions to be correct even though invalid height was provided
+    expect(page.height).toEqual(page.originalHeight * (page.width / page.originalWidth));
   });
 
-  it('requests page to be rendered with a proper scale when given width, height and scale (ignores height, multiplies)', () => {
+  it('requests page to be rendered with a proper scale when given width, height and scale (ignores height, multiplies)', async () => {
     const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
     const width = 600;
     const height = 100;
@@ -697,11 +701,11 @@ describe('Page', () => {
 
     expect.assertions(2);
 
-    return onLoadSuccessPromise.then((page) => {
-      expect(page.width).toBeCloseTo(width * scale);
-      // Expect proportions to be correct even though invalid height was provided
-      expect(page.height).toEqual(page.originalHeight * (page.width / page.originalWidth));
-    });
+    const page = await onLoadSuccessPromise;
+
+    expect(page.width).toBeCloseTo(width * scale);
+    // Expect proportions to be correct even though invalid height was provided
+    expect(page.height).toEqual(page.originalHeight * (page.width / page.originalWidth));
   });
 
   it('calls onClick callback when clicked a page (sample of mouse events family)', () => {

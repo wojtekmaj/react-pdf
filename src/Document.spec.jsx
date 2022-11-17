@@ -140,11 +140,11 @@ describe('Document', () => {
 
       expect.assertions(1);
 
-      return onSourceErrorPromise.then((error) => {
-        expect(error).toMatchObject(expect.any(Error));
+      const error = await onSourceErrorPromise;
 
-        restoreConsole();
-      });
+      expect(error).toMatchObject(expect.any(Error));
+
+      restoreConsole();
     });
 
     it('replaces a file properly', async () => {

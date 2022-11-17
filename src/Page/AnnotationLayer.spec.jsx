@@ -124,11 +124,10 @@ describe('AnnotationLayer', () => {
 
       expect.assertions(1);
 
-      return onRenderAnnotationLayerSuccessPromise.then(() => {
-        const annotationItems = [...container.firstChild.children];
+      await onRenderAnnotationLayerSuccessPromise;
 
-        expect(annotationItems).toHaveLength(desiredAnnotations.length);
-      });
+      const annotationItems = [...container.firstChild.children];
+      expect(annotationItems).toHaveLength(desiredAnnotations.length);
     });
 
     it.each`
@@ -140,7 +139,7 @@ describe('AnnotationLayer', () => {
       ${'_top'}          | ${'_top'}
     `(
       'renders all links with target $target given externalLinkTarget = $externalLinkTarget',
-      ({ externalLinkTarget, target }) => {
+      async ({ externalLinkTarget, target }) => {
         const {
           func: onRenderAnnotationLayerSuccess,
           promise: onRenderAnnotationLayerSuccessPromise,
@@ -160,14 +159,14 @@ describe('AnnotationLayer', () => {
 
         expect.assertions(desiredAnnotations.length);
 
-        return onRenderAnnotationLayerSuccessPromise.then(() => {
-          const annotationItems = [...container.firstChild.children];
-          const annotationLinkItems = annotationItems
-            .map((item) => item.firstChild)
-            .filter((item) => item.tagName === 'A');
+        await onRenderAnnotationLayerSuccessPromise;
 
-          annotationLinkItems.forEach((link) => expect(link.getAttribute('target')).toBe(target));
-        });
+        const annotationItems = [...container.firstChild.children];
+        const annotationLinkItems = annotationItems
+          .map((item) => item.firstChild)
+          .filter((item) => item.tagName === 'A');
+
+        annotationLinkItems.forEach((link) => expect(link.getAttribute('target')).toBe(target));
       },
     );
 
@@ -177,7 +176,7 @@ describe('AnnotationLayer', () => {
       ${'noopener'}   | ${'noopener'}
     `(
       'renders all links with rel $rel given externalLinkRel = $externalLinkRel',
-      ({ externalLinkRel, rel }) => {
+      async ({ externalLinkRel, rel }) => {
         const {
           func: onRenderAnnotationLayerSuccess,
           promise: onRenderAnnotationLayerSuccessPromise,
@@ -197,14 +196,14 @@ describe('AnnotationLayer', () => {
 
         expect.assertions(desiredAnnotations.length);
 
-        return onRenderAnnotationLayerSuccessPromise.then(() => {
-          const annotationItems = [...container.firstChild.children];
-          const annotationLinkItems = annotationItems
-            .map((item) => item.firstChild)
-            .filter((item) => item.tagName === 'A');
+        await onRenderAnnotationLayerSuccessPromise;
 
-          annotationLinkItems.forEach((link) => expect(link.getAttribute('rel')).toBe(rel));
-        });
+        const annotationItems = [...container.firstChild.children];
+        const annotationLinkItems = annotationItems
+          .map((item) => item.firstChild)
+          .filter((item) => item.tagName === 'A');
+
+        annotationLinkItems.forEach((link) => expect(link.getAttribute('rel')).toBe(rel));
       },
     );
 
@@ -227,11 +226,11 @@ describe('AnnotationLayer', () => {
       );
 
       expect.assertions(1);
-      return onRenderAnnotationLayerSuccessPromise.then(() => {
-        const { viewport } = instance.current;
 
-        expect(viewport.rotation).toEqual(rotate);
-      });
+      await onRenderAnnotationLayerSuccessPromise;
+
+      const { viewport } = instance.current;
+      expect(viewport.rotation).toEqual(rotate);
     });
 
     it('renders annotations at a given scale', async () => {
@@ -253,11 +252,11 @@ describe('AnnotationLayer', () => {
       );
 
       expect.assertions(1);
-      return onRenderAnnotationLayerSuccessPromise.then(() => {
-        const { viewport } = instance.current;
 
-        expect(viewport.scale).toEqual(scale);
-      });
+      await onRenderAnnotationLayerSuccessPromise;
+
+      const { viewport } = instance.current;
+      expect(viewport.scale).toEqual(scale);
     });
 
     it('renders annotations with the default imageResourcesPath given no imageResourcesPath', async () => {
@@ -282,11 +281,11 @@ describe('AnnotationLayer', () => {
       );
 
       expect.assertions(1);
-      return onRenderAnnotationLayerSuccessPromise.then(() => {
-        const stringifiedAnnotationLayerNode = container.outerHTML;
 
-        expect(stringifiedAnnotationLayerNode).toMatch(desiredImageTagRegExp);
-      });
+      await onRenderAnnotationLayerSuccessPromise;
+
+      const stringifiedAnnotationLayerNode = container.outerHTML;
+      expect(stringifiedAnnotationLayerNode).toMatch(desiredImageTagRegExp);
     });
 
     it('renders annotations with the specified imageResourcesPath given imageResourcesPath', async () => {
@@ -312,11 +311,11 @@ describe('AnnotationLayer', () => {
       );
 
       expect.assertions(1);
-      return onRenderAnnotationLayerSuccessPromise.then(() => {
-        const stringifiedAnnotationLayerNode = container.outerHTML;
 
-        expect(stringifiedAnnotationLayerNode).toMatch(desiredImageTagRegExp);
-      });
+      await onRenderAnnotationLayerSuccessPromise;
+
+      const stringifiedAnnotationLayerNode = container.outerHTML;
+      expect(stringifiedAnnotationLayerNode).toMatch(desiredImageTagRegExp);
     });
   });
 });

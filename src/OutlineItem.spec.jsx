@@ -40,7 +40,7 @@ describe('OutlineItem', () => {
       expect(subitems).toHaveLength(outlineItem.items.length);
     });
 
-    it('calls onClick with proper arguments when clicked a link', () => {
+    it('calls onClick with proper arguments when clicked a link', async () => {
       const { func: onClick, promise: onClickPromise } = makeAsyncCallback();
 
       render(<OutlineItem item={outlineItem} onClick={onClick} pdf={pdf} />);
@@ -49,9 +49,9 @@ describe('OutlineItem', () => {
       const link = getAllByRole(item, 'link')[0];
       fireEvent.click(link);
 
-      return onClickPromise.then(() => {
-        expect(onClick).toHaveBeenCalled();
-      });
+      await onClickPromise;
+
+      expect(onClick).toHaveBeenCalled();
     });
   });
 });
