@@ -1,14 +1,23 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { AnnotationMode } from 'pdfjs-dist/legacy/build/pdf';
 
 export default function LayerOptions({
+  annotationMode,
   renderAnnotationLayer,
   renderForms,
   renderTextLayer,
+  setAnnotationMode,
   setRenderAnnotationLayer,
   setRenderForms,
   setRenderTextLayer,
 }) {
+  function onAnnotationModeChange(event) {
+    const { value } = event.target;
+
+    setAnnotationMode(value.length > 0 ? Number(value) : null);
+  }
+
   function onRenderAnnotationLayerChange(event) {
     setRenderAnnotationLayer(event.target.checked);
   }
@@ -55,14 +64,28 @@ export default function LayerOptions({
         />
         <label htmlFor="renderForms">Render forms</label>
       </div>
+
+      <div>
+        <label htmlFor="annotationMode">Annotation mode</label>
+        <select id="annotationMode" value={annotationMode ?? ''} onChange={onAnnotationModeChange}>
+          <option value="">Unset</option>
+          {Object.entries(AnnotationMode).map(([name, value]) => (
+            <option key={name} value={value}>
+              {name}
+            </option>
+          ))}
+        </select>
+      </div>
     </fieldset>
   );
 }
 
 LayerOptions.propTypes = {
+  annotationMode: PropTypes.number,
   renderAnnotationLayer: PropTypes.bool,
   renderForms: PropTypes.bool,
   renderTextLayer: PropTypes.bool,
+  setAnnotationMode: PropTypes.func.isRequired,
   setRenderAnnotationLayer: PropTypes.func.isRequired,
   setRenderForms: PropTypes.func.isRequired,
   setRenderTextLayer: PropTypes.func.isRequired,

@@ -36,9 +36,13 @@ export class AnnotationLayerInternal extends PureComponent {
   }
 
   componentDidUpdate(prevProps) {
-    const { page, renderForms } = this.props;
+    const { annotationMode, page, renderForms } = this.props;
 
-    if ((prevProps.page && page !== prevProps.page) || renderForms !== prevProps.renderForms) {
+    if (
+      (prevProps.page && page !== prevProps.page) ||
+      annotationMode !== prevProps.annotationMode ||
+      renderForms !== prevProps.renderForms
+    ) {
       this.loadAnnotations();
     }
   }
@@ -106,7 +110,7 @@ export class AnnotationLayerInternal extends PureComponent {
       return;
     }
 
-    const { imageResourcesPath, linkService, page, renderForms } = this.props;
+    const { annotationMode, imageResourcesPath, linkService, page, renderForms } = this.props;
 
     const viewport = this.viewport.clone({ dontFlip: true });
 
@@ -116,7 +120,10 @@ export class AnnotationLayerInternal extends PureComponent {
       imageResourcesPath,
       linkService,
       page,
-      renderForms,
+      renderForms:
+        annotationMode !== null && annotationMode !== undefined
+          ? annotationMode === pdfjs.AnnotationMode.ENABLE_FORMS
+          : renderForms,
       viewport,
     };
 
@@ -140,6 +147,7 @@ export class AnnotationLayerInternal extends PureComponent {
 }
 
 AnnotationLayerInternal.propTypes = {
+  annotationMode: PropTypes.number,
   imageResourcesPath: PropTypes.string,
   linkService: isLinkService.isRequired,
   onGetAnnotationsError: PropTypes.func,

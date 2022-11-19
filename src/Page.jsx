@@ -6,6 +6,7 @@ import clsx from 'clsx';
 import mergeRefs from 'merge-refs';
 import invariant from 'tiny-invariant';
 import warning from 'tiny-warning';
+import { AnnotationMode } from 'pdfjs-dist/legacy/build/pdf';
 
 import DocumentContext from './DocumentContext';
 import PageContext from './PageContext';
@@ -77,6 +78,7 @@ export class PageInternal extends PureComponent {
     }
 
     const {
+      annotationMode,
       canvasBackground,
       customTextRenderer,
       onGetAnnotationsError,
@@ -94,6 +96,7 @@ export class PageInternal extends PureComponent {
     } = this.props;
 
     return {
+      annotationMode,
       canvasBackground,
       customTextRenderer,
       onGetAnnotationsError,
@@ -361,6 +364,7 @@ export class PageInternal extends PureComponent {
 }
 
 PageInternal.defaultProps = {
+  annotationMode: AnnotationMode.ENABLE,
   error: 'Failed to load the page.',
   loading: 'Loading page…',
   noData: 'No page specified.',
@@ -374,6 +378,7 @@ const isFunctionOrNode = PropTypes.oneOfType([PropTypes.func, PropTypes.node]);
 
 PageInternal.propTypes = {
   ...eventProps,
+  annotationMode: PropTypes.number,
   canvasBackground: PropTypes.string,
   children: PropTypes.node,
   className: isClassName,

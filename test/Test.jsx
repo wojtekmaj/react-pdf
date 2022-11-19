@@ -49,6 +49,7 @@ export const readAsDataURL = (file) =>
 /* eslint-disable no-console */
 
 export default function Test() {
+  const [annotationMode, setAnnotationMode] = useState(null);
   const [canvasBackground, setCanvasBackground] = useState(null);
   const [displayAll, setDisplayAll] = useState(false);
   const [externalLinkTarget, setExternalLinkTarget] = useState(null);
@@ -172,6 +173,7 @@ export default function Test() {
 
   function getPageProps() {
     return {
+      annotationMode,
       canvasBackground,
       className: 'custom-classname-page',
       height: pageHeight,
@@ -206,9 +208,11 @@ export default function Test() {
           <LoadingOptions file={file} setFile={setFile} setRender={setRender} />
           <PassingOptions file={file} passMethod={passMethod} setPassMethod={setPassMethod} />
           <LayerOptions
+            annotationMode={annotationMode}
             renderAnnotationLayer={renderAnnotationLayer}
             renderForms={renderForms}
             renderTextLayer={renderTextLayer}
+            setAnnotationMode={setAnnotationMode}
             setRenderAnnotationLayer={setRenderAnnotationLayer}
             setRenderForms={setRenderForms}
             setRenderTextLayer={setRenderTextLayer}
