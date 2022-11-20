@@ -169,7 +169,8 @@ export class TextLayerInternal extends PureComponent {
         this.endElement.current = end;
 
         if (customTextRenderer) {
-          textContent.items.forEach((item, itemIndex) => {
+          let itemIndex = 0;
+          textContent.items.forEach((item) => {
             const child = this.layerElement.current.children[itemIndex];
 
             const content = customTextRenderer({
@@ -178,6 +179,7 @@ export class TextLayerInternal extends PureComponent {
             });
 
             child.innerHTML = content;
+            itemIndex += item.str && item.hasEOL ? 2 : 1;
           });
         }
 
