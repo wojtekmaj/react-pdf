@@ -50,6 +50,7 @@ export const readAsDataURL = (file) =>
 
 export default function Test() {
   const [canvasBackground, setCanvasBackground] = useState(null);
+  const [devicePixelRatio, setDevicePixelRatio] = useState(null);
   const [displayAll, setDisplayAll] = useState(false);
   const [externalLinkTarget, setExternalLinkTarget] = useState(null);
   const [file, setFile] = useState(null);
@@ -175,6 +176,7 @@ export default function Test() {
     return {
       canvasBackground,
       className: 'custom-classname-page',
+      devicePixelRatio,
       height: pageHeight,
       onClick: (event, page) => console.log('Clicked a page', { event, page }),
       onRenderSuccess: onPageRenderSuccess,
@@ -220,6 +222,7 @@ export default function Test() {
           />
           <ViewOptions
             canvasBackground={canvasBackground}
+            devicePixelRatio={devicePixelRatio}
             displayAll={displayAll}
             pageHeight={pageHeight}
             pageScale={pageScale}
@@ -227,6 +230,7 @@ export default function Test() {
             renderMode={renderMode}
             rotate={rotate}
             setCanvasBackground={setCanvasBackground}
+            setDevicePixelRatio={setDevicePixelRatio}
             setDisplayAll={setDisplayAll}
             setPageHeight={setPageHeight}
             setPageScale={setPageScale}

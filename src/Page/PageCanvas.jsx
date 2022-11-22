@@ -6,7 +6,7 @@ import * as pdfjs from 'pdfjs-dist/build/pdf';
 
 import PageContext from '../PageContext';
 
-import { getPixelRatio, isCancelException, makePageCallback } from '../shared/utils';
+import { getDevicePixelRatio, isCancelException, makePageCallback } from '../shared/utils';
 
 import { isPage, isRef, isRotate } from '../shared/propTypes';
 
@@ -20,8 +20,12 @@ export class PageCanvasInternal extends PureComponent {
   }
 
   componentDidUpdate(prevProps) {
-    const { canvasBackground, page, renderForms } = this.props;
-    if (canvasBackground !== prevProps.canvasBackground || renderForms !== prevProps.renderForms) {
+    const { canvasBackground, devicePixelRatio, page, renderForms } = this.props;
+    if (
+      canvasBackground !== prevProps.canvasBackground ||
+      devicePixelRatio !== prevProps.devicePixelRatio ||
+      renderForms !== prevProps.renderForms
+    ) {
       // Ensures the canvas will be re-rendered from scratch. Otherwise all form data will stay.
       page.cleanup();
       this.drawPageOnCanvas();
@@ -76,12 +80,17 @@ export class PageCanvasInternal extends PureComponent {
     if (onRenderError) onRenderError(error);
   };
 
+  get devicePixelRatio() {
+    const { devicePixelRatio } = this.props;
+
+    return devicePixelRatio || getDevicePixelRatio();
+  }
+
   get renderViewport() {
+    const { devicePixelRatio } = this;
     const { page, rotate, scale } = this.props;
 
-    const pixelRatio = getPixelRatio();
-
-    return page.getViewport({ scale: scale * pixelRatio, rotation: rotate });
+    return page.getViewport({ scale: scale * devicePixelRatio, rotation: rotate });
   }
 
   get viewport() {
@@ -146,6 +155,7 @@ export class PageCanvasInternal extends PureComponent {
 PageCanvasInternal.propTypes = {
   canvasBackground: PropTypes.string,
   canvasRef: isRef,
+  devicePixelRatio: PropTypes.number,
   onRenderError: PropTypes.func,
   onRenderSuccess: PropTypes.func,
   page: isPage.isRequired,

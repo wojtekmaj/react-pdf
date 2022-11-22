@@ -91,7 +91,7 @@ export function dataURItoByteString(dataURI) {
   return unescape(dataString);
 }
 
-export function getPixelRatio() {
+export function getDevicePixelRatio() {
   return (isBrowser && window.devicePixelRatio) || 1;
 }
 

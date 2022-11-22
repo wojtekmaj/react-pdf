@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 
 export default function ViewOptions({
   canvasBackground,
+  devicePixelRatio,
   displayAll,
   pageHeight,
   pageScale,
@@ -10,6 +11,7 @@ export default function ViewOptions({
   renderMode,
   rotate,
   setCanvasBackground,
+  setDevicePixelRatio,
   setDisplayAll,
   setPageHeight,
   setPageScale,
@@ -19,6 +21,19 @@ export default function ViewOptions({
 }) {
   function onCanvasBackgroundChange(event) {
     setCanvasBackground(event.target.value);
+  }
+
+  function onDevicePixelRatioChange(event) {
+    event.preventDefault();
+
+    const form = event.target;
+    const { value: devicePixelRatio } = form.devicePixelRatio;
+
+    if (!devicePixelRatio) {
+      return;
+    }
+
+    setDevicePixelRatio(parseInt(devicePixelRatio, 10));
   }
 
   function onDisplayAllChange(event) {
@@ -101,6 +116,10 @@ export default function ViewOptions({
     setPageWidth(null);
   }
 
+  function resetDevicePixelRatio() {
+    setDevicePixelRatio(null);
+  }
+
   return (
     <fieldset id="viewoptions">
       <legend htmlFor="viewoptions">View options</legend>
@@ -157,6 +176,27 @@ export default function ViewOptions({
         </button>
         <button disabled={pageScale === null} onClick={resetScale} type="button">
           Reset scale
+        </button>
+      </form>
+
+      <form onSubmit={onDevicePixelRatioChange}>
+        <label htmlFor="devicePixelRatio">Device pixel ratio:</label>
+        &nbsp;
+        <input
+          defaultValue={devicePixelRatio}
+          id="devicePixelRatio"
+          max={3}
+          min={1}
+          name="devicePixelRatio"
+          step={1}
+          type="number"
+        />
+        &nbsp;
+        <button style={{ display: 'none' }} type="submit">
+          Set device pixel ratio
+        </button>
+        <button disabled={devicePixelRatio === null} onClick={resetDevicePixelRatio} type="button">
+          Reset device pixel ratio
         </button>
       </form>
 
@@ -227,6 +267,7 @@ export default function ViewOptions({
 
 ViewOptions.propTypes = {
   canvasBackground: PropTypes.string,
+  devicePixelRatio: PropTypes.number,
   displayAll: PropTypes.bool,
   pageHeight: PropTypes.number,
   pageScale: PropTypes.number,
@@ -234,6 +275,7 @@ ViewOptions.propTypes = {
   renderMode: PropTypes.oneOf(['canvas', 'none', 'svg']),
   rotate: PropTypes.number,
   setCanvasBackground: PropTypes.func.isRequired,
+  setDevicePixelRatio: PropTypes.func.isRequired,
   setDisplayAll: PropTypes.func.isRequired,
   setPageHeight: PropTypes.func.isRequired,
   setPageScale: PropTypes.func.isRequired,
