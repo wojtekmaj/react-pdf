@@ -65,7 +65,7 @@ export default function Test() {
   const [renderForms, setRenderForms] = useState(true);
   const [renderMode, setRenderMode] = useState('canvas');
   const [renderTextLayer, setRenderTextLayer] = useState(true);
-  const [customTextRenderer, setCustomTextRenderer] = useState(true);
+  const [useCustomTextRenderer, setUseCustomTextRenderer] = useState(true);
   const [rotate, setRotate] = useState(null);
 
   const onDocumentLoadProgress = useCallback((progressData) => {
@@ -184,9 +184,9 @@ export default function Test() {
       renderTextLayer,
       scale: pageScale,
       width: pageWidth,
-      ...(customTextRenderer && {
-        customTextRenderer: ({ str }) => str.replace(/ipsum/g, `<mark>ipsum</mark>`),
-      }),
+      customTextRenderer: useCustomTextRenderer
+        ? ({ str }) => str.replace(/ipsum/g, `<mark>ipsum</mark>`)
+        : null,
     };
   }
 
@@ -212,11 +212,11 @@ export default function Test() {
             renderAnnotationLayer={renderAnnotationLayer}
             renderForms={renderForms}
             renderTextLayer={renderTextLayer}
-            customTextRenderer={customTextRenderer}
+            useCustomTextRenderer={useCustomTextRenderer}
             setRenderAnnotationLayer={setRenderAnnotationLayer}
             setRenderForms={setRenderForms}
             setRenderTextLayer={setRenderTextLayer}
-            setCustomTextRenderer={setCustomTextRenderer}
+            setUseCustomTextRenderer={setUseCustomTextRenderer}
           />
           <ViewOptions
             canvasBackground={canvasBackground}

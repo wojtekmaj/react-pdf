@@ -5,11 +5,11 @@ export default function LayerOptions({
   renderAnnotationLayer,
   renderForms,
   renderTextLayer,
-  customTextRenderer,
+  useCustomTextRenderer,
   setRenderAnnotationLayer,
   setRenderForms,
   setRenderTextLayer,
-  setCustomTextRenderer,
+  setUseCustomTextRenderer,
 }) {
   function onRenderAnnotationLayerChange(event) {
     setRenderAnnotationLayer(event.target.checked);
@@ -23,8 +23,8 @@ export default function LayerOptions({
     setRenderTextLayer(event.target.checked);
   }
 
-  function onCustomTextRendererChange(event) {
-    setCustomTextRenderer(event.target.checked);
+  function onUseCustomTextRendererChange(event) {
+    setUseCustomTextRenderer(event.target.checked);
   }
 
   return (
@@ -43,13 +43,13 @@ export default function LayerOptions({
 
       <div>
         <input
-          checked={customTextRenderer}
+          checked={useCustomTextRenderer}
           disabled={!renderTextLayer}
-          id="customTextRenderer"
-          onChange={onCustomTextRendererChange}
+          id="useCustomTextRenderer"
+          onChange={onUseCustomTextRendererChange}
           type="checkbox"
         />
-        <label htmlFor="customTextRenderer">Custom text renderer</label>
+        <label htmlFor="useCustomTextRenderer">Use custom text renderer</label>
       </div>
 
       <div>
@@ -80,9 +80,9 @@ LayerOptions.propTypes = {
   renderAnnotationLayer: PropTypes.bool,
   renderForms: PropTypes.bool,
   renderTextLayer: PropTypes.bool,
-  customTextRenderer: PropTypes.bool,
+  useCustomTextRenderer: PropTypes.bool,
   setRenderAnnotationLayer: PropTypes.func.isRequired,
   setRenderForms: PropTypes.func.isRequired,
   setRenderTextLayer: PropTypes.func.isRequired,
-  setCustomTextRenderer: PropTypes.func.isRequired,
+  setUseCustomTextRenderer: PropTypes.func.isRequired,
 };
