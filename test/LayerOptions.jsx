@@ -43,7 +43,7 @@ export default function LayerOptions({
 
       <div>
         <input
-          checked={useCustomTextRenderer}
+          checked={renderTextLayer && useCustomTextRenderer}
           disabled={!renderTextLayer}
           id="useCustomTextRenderer"
           onChange={onUseCustomTextRendererChange}
