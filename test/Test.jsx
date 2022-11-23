@@ -187,7 +187,7 @@ export default function Test() {
       scale: pageScale,
       width: pageWidth,
       customTextRenderer: useCustomTextRenderer
-        ? ({ str }) => str.replace(/ipsum/g, `<mark>ipsum</mark>`)
+        ? ({ str }) => str.replace(/ipsum/g, (value) => `<mark>${value}</mark>`)
         : null,
     };
   }
