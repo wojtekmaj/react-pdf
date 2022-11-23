@@ -70,6 +70,7 @@ export class PageInternal extends PureComponent {
   }
 
   get childContext() {
+    const { pageIndex, pageNumber } = this;
     const { page } = this.state;
 
     if (!page) {
@@ -109,6 +110,8 @@ export class PageInternal extends PureComponent {
       onRenderTextLayerError,
       onRenderTextLayerSuccess,
       page,
+      pageIndex,
+      pageNumber,
       renderForms: renderForms ?? renderInteractiveForms, // For backward compatibility
       rotate: this.rotate,
       scale: this.scale,

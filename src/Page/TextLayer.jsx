@@ -145,7 +145,7 @@ export class TextLayerInternal extends PureComponent {
     const container = this.layerElement.current;
 
     const { viewport } = this;
-    const { customTextRenderer } = this.props;
+    const { customTextRenderer, pageIndex, pageNumber } = this.props;
 
     // If another rendering is in progress, let's cancel it
     cancelRunningTask(this.runningTask);
@@ -174,6 +174,8 @@ export class TextLayerInternal extends PureComponent {
             const child = this.layerElement.current.children[index];
 
             const content = customTextRenderer({
+              pageIndex,
+              pageNumber,
               itemIndex,
               ...item,
             });
@@ -212,6 +214,8 @@ TextLayerInternal.propTypes = {
   onRenderTextLayerError: PropTypes.func,
   onRenderTextLayerSuccess: PropTypes.func,
   page: isPage.isRequired,
+  pageIndex: PropTypes.number.isRequired,
+  pageNumber: PropTypes.number.isRequired,
   rotate: isRotate,
   scale: PropTypes.number,
 };
