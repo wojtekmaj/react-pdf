@@ -53,5 +53,29 @@ describe('OutlineItem', () => {
 
       expect(onClick).toHaveBeenCalled();
     });
+
+    it('calls onClick with proper arguments multiple times when clicked a link multiple times', async () => {
+      const { func: onClick, promise: onClickPromise } = makeAsyncCallback();
+
+      const { rerender } = render(<OutlineItem item={outlineItem} onClick={onClick} pdf={pdf} />);
+
+      const item = screen.getAllByRole('listitem')[0];
+      const link = getAllByRole(item, 'link')[0];
+      fireEvent.click(link);
+
+      await onClickPromise;
+
+      expect(onClick).toHaveBeenCalledTimes(1);
+
+      const { func: onClick2, promise: onClickPromise2 } = makeAsyncCallback();
+
+      rerender(<OutlineItem item={outlineItem} onClick={onClick2} pdf={pdf} />);
+
+      fireEvent.click(link);
+
+      await onClickPromise2;
+
+      expect(onClick2).toHaveBeenCalledTimes(1);
+    });
   });
 });

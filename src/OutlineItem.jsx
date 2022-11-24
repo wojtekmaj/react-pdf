@@ -13,17 +13,18 @@ import { isPdf } from './shared/propTypes';
 export class OutlineItemInternal extends PureComponent {
   getDestination = () =>
     new Promise((resolve, reject) => {
-      const { item, pdf } = this.props;
-
-      if (!isDefined(this.destination)) {
-        if (typeof item.dest === 'string') {
-          pdf.getDestination(item.dest).then(resolve).catch(reject);
-        } else {
-          resolve(item.dest);
-        }
+      if (isDefined(this.destination)) {
+        resolve(this.destination);
+        return;
       }
 
-      return this.destination;
+      const { item, pdf } = this.props;
+
+      if (typeof item.dest === 'string') {
+        pdf.getDestination(item.dest).then(resolve).catch(reject);
+      } else {
+        resolve(item.dest);
+      }
     }).then((destination) => {
       this.destination = destination;
       return destination;
@@ -34,6 +35,7 @@ export class OutlineItemInternal extends PureComponent {
       const { pdf } = this.props;
       if (isDefined(this.pageIndex)) {
         resolve(this.pageIndex);
+        return;
       }
 
       this.getDestination().then((destination) => {
@@ -53,6 +55,7 @@ export class OutlineItemInternal extends PureComponent {
     new Promise((resolve, reject) => {
       if (isDefined(this.pageNumber)) {
         resolve(this.pageNumber);
+        return;
       }
 
       this.getPageIndex()
