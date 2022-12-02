@@ -4,7 +4,7 @@ import warning from 'tiny-warning';
 /**
  * Checks if we're running in a browser environment.
  */
-export const isBrowser = typeof window !== 'undefined';
+export const isBrowser = typeof document !== 'undefined';
 
 /**
  * Checks whether we're running from a local file system.
