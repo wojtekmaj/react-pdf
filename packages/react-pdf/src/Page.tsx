@@ -37,6 +37,7 @@ import type { EventProps } from 'make-event-props';
 import type {
   ClassName,
   CustomRenderer,
+  CustomTextLayerRenderer,
   CustomTextRenderer,
   NodeOrRenderer,
   OnGetAnnotationsError,
@@ -67,6 +68,7 @@ export type PageProps = {
   children?: React.ReactNode;
   className?: ClassName;
   customRenderer?: CustomRenderer;
+  customTextLayerRenderer?: CustomTextLayerRenderer;
   customTextRenderer?: CustomTextRenderer;
   devicePixelRatio?: number;
   error?: NodeOrRenderer;
@@ -120,6 +122,7 @@ const Page: React.FC<PageProps> = function Page(props) {
     children,
     className,
     customRenderer: CustomRenderer,
+    customTextLayerRenderer,
     customTextRenderer,
     devicePixelRatio,
     error = 'Failed to load the page.',
@@ -298,6 +301,7 @@ const Page: React.FC<PageProps> = function Page(props) {
         ? {
             _className,
             canvasBackground,
+            customTextLayerRenderer,
             customTextRenderer,
             devicePixelRatio,
             onGetAnnotationsError: onGetAnnotationsErrorProps,
@@ -324,6 +328,7 @@ const Page: React.FC<PageProps> = function Page(props) {
     [
       _className,
       canvasBackground,
+      customTextLayerRenderer,
       customTextRenderer,
       devicePixelRatio,
       onGetAnnotationsErrorProps,
