@@ -30,7 +30,7 @@ export function isProvided(variable) {
 }
 
 /**
- * Checkes whether a variable provided is a string.
+ * Checks whether a variable provided is a string.
  *
  * @param {*} variable Variable to check
  */
@@ -48,7 +48,7 @@ export function isArrayBuffer(variable) {
 }
 
 /**
- * Checkes whether a variable provided is a Blob.
+ * Checks whether a variable provided is a Blob.
  *
  * @param {*} variable Variable to check
  */
@@ -59,7 +59,7 @@ export function isBlob(variable) {
 }
 
 /**
- * Checkes whether a variable provided is a File.
+ * Checks whether a variable provided is a File.
  *
  * @param {*} variable Variable to check
  */
