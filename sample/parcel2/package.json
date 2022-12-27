@@ -21,6 +21,6 @@
   },
   "devDependencies": {
     "@parcel/transformer-less": "^2.0.1",
-    "parcel": "^2.0.0"
+    "parcel": "^2.8.2"
   }
 }
