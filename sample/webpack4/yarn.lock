@@ -6725,8 +6725,8 @@ __metadata:
   linkType: soft
 
 "react-pdf@npm:latest":
-  version: 6.0.0
-  resolution: "react-pdf@npm:6.0.0"
+  version: 6.2.1
+  resolution: "react-pdf@npm:6.2.1"
   dependencies:
     "@babel/runtime": ^7.0.0
     clsx: ^1.2.1
@@ -6744,7 +6744,7 @@ __metadata:
   peerDependenciesMeta:
     file-loader:
       optional: true
-  checksum: cc7751036397755186ac1a1b8c9fd7dfc30bbb899493b36cbde394358bca0768415fb1ab1db90bafb028a993b3de47900c31be24f93a21330f903e6254f09cb9
+  checksum: eba9b904c0ba1e6d2056e282e941216a11bd19d9abc975d3ddd567b21aa8f06efb6fdfe4104c89977dd0486693bd6b1f786ac73a58ecb8f2a427b0dfd2b43c56
   languageName: node
   linkType: hard
 
