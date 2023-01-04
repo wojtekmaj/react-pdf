@@ -4,33 +4,40 @@ updates:
     directory: "/"
     schedule:
       interval: "weekly"
+    open-pull-requests-limit: 10
 
   - package-ecosystem: "npm"
     directory: "/sample/create-react-app-5"
     schedule:
       interval: "weekly"
+    open-pull-requests-limit: 10
 
   - package-ecosystem: "npm"
     directory: "/sample/parcel"
     schedule:
       interval: "weekly"
+    open-pull-requests-limit: 10
 
   - package-ecosystem: "npm"
     directory: "/sample/parcel2"
     schedule:
       interval: "weekly"
+    open-pull-requests-limit: 10
 
   - package-ecosystem: "npm"
     directory: "/sample/webpack4"
     schedule:
       interval: "weekly"
+    open-pull-requests-limit: 10
 
   - package-ecosystem: "npm"
     directory: "/sample/webpack5"
     schedule:
       interval: "weekly"
+    open-pull-requests-limit: 10
 
   - package-ecosystem: "npm"
     directory: "/test"
     schedule:
       interval: "weekly"
+    open-pull-requests-limit: 10
