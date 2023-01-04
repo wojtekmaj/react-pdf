@@ -5,7 +5,7 @@
   "private": true,
   "scripts": {
     "build": "NODE_ENV=production webpack",
-    "start": "NODE_ENV=development webpack serve"
+    "dev": "NODE_ENV=development webpack serve"
   },
   "author": {
     "name": "Wojciech Maj",
