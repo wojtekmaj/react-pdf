@@ -5,13 +5,13 @@
   "private": true,
   "main": "src/index.jsx",
   "scripts": {
+    "build": "react-scripts build",
     "copy-cmaps": "node ./scripts/copy-cmaps.js",
     "copy-standard-fonts": "node ./scripts/copy-standard-fonts.js",
     "copy-worker": "node ./scripts/copy-worker.js",
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "dev": "react-scripts start",
+    "eject": "react-scripts eject",
+    "test": "react-scripts test"
   },
   "author": {
     "name": "Wojciech Maj",

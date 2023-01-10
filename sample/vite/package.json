@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "build": "vite build",
-    "start": "vite serve"
+    "dev": "vite serve"
   },
   "author": {
     "name": "Wojciech Maj",
