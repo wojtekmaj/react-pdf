@@ -26,8 +26,6 @@
     "css-loader": "^5.2.0",
     "file-loader": "^6.0.0",
     "html-webpack-plugin": "^4.5.0",
-    "less": "^4.0.0",
-    "less-loader": "^7.3.0",
     "style-loader": "^2.0.0",
     "webpack": "^4.46.0",
     "webpack-cli": "^4.7.0",
