@@ -3,7 +3,7 @@ import { Document, Page } from 'react-pdf/dist/esm/entry.parcel2';
 import 'react-pdf/dist/esm/Page/AnnotationLayer.css';
 import 'react-pdf/dist/esm/Page/TextLayer.css';
 
-import './Sample.less';
+import './Sample.css';
 
 const pdfFile = new URL('./sample.pdf', import.meta.url).toString();
 

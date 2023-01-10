@@ -50,14 +50,6 @@ module.exports = {
         ],
       },
       {
-        test: /\.less$/,
-        use: [
-          isProduction ? MiniCssExtractPlugin.loader : 'style-loader',
-          'css-loader',
-          'less-loader',
-        ],
-      },
-      {
         test: /\.css$/,
         use: [isProduction ? MiniCssExtractPlugin.loader : 'style-loader', 'css-loader'],
       },

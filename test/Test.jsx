@@ -6,7 +6,7 @@ import 'react-pdf/src/Page/TextLayer.css';
 
 import { isArrayBuffer, isBlob, isBrowser, isFile, loadFromFile } from 'react-pdf/src/shared/utils';
 
-import './Test.less';
+import './Test.css';
 
 import AnnotationOptions from './AnnotationOptions';
 import LayerOptions from './LayerOptions';
