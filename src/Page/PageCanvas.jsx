@@ -118,7 +118,7 @@ export class PageCanvasInternal extends PureComponent {
     const renderContext = {
       annotationMode: renderForms ? ANNOTATION_MODE.ENABLE_FORMS : ANNOTATION_MODE.ENABLE,
       get canvasContext() {
-        return canvas.getContext('2d');
+        return canvas.getContext('2d', { alpha: false });
       },
       viewport: renderViewport,
     };
