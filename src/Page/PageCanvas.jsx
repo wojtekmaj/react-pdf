@@ -54,6 +54,22 @@ export class PageCanvasInternal extends PureComponent {
     }
   }
 
+  hideCanvas = () => {
+    this.setCanvasVisible(false);
+  };
+
+  showCanvas = () => {
+    this.setCanvasVisible(true);
+  };
+
+  setCanvasVisible = (visible) => {
+    const { current: canvas } = this.canvasElement;
+
+    if (canvas) {
+      canvas.style.visibility = visible ? 'visible' : 'hidden';
+    }
+  };
+
   /**
    * Called when a page is rendered successfully.
    */
@@ -109,6 +125,9 @@ export class PageCanvasInternal extends PureComponent {
     const { renderViewport, viewport } = this;
     const { canvasBackground, page, renderForms } = this.props;
 
+    // Hiding the canvas on redraw ensures we get rid of black flickering
+    this.hideCanvas();
+
     canvas.width = renderViewport.width;
     canvas.height = renderViewport.height;
 
@@ -132,7 +151,13 @@ export class PageCanvasInternal extends PureComponent {
     const cancellable = page.render(renderContext);
     this.renderer = cancellable;
 
-    return cancellable.promise.then(this.onRenderSuccess).catch(this.onRenderError);
+    return (
+      cancellable.promise
+        // Show the canvas on success and on errors
+        .then(this.onRenderSuccess)
+        .catch(this.onRenderError)
+        .finally(this.showCanvas)
+    );
   };
 
   render() {
@@ -144,6 +169,7 @@ export class PageCanvasInternal extends PureComponent {
         dir="ltr"
         ref={mergeRefs(canvasRef, this.canvasElement)}
         style={{
+          visibility: 'hidden',
           display: 'block',
           userSelect: 'none',
         }}
