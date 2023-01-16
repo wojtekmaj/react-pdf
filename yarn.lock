@@ -5576,9 +5576,9 @@ __metadata:
   linkType: hard
 
 "make-cancellable-promise@npm:^1.0.0":
-  version: 1.1.0
-  resolution: "make-cancellable-promise@npm:1.1.0"
-  checksum: e036fa6164acb52b0e6298c4d5f4e0ba887e4c96de15ef1e316fcc8374995c29543e8a3ea48d38e1c2c767e985c8869c744774af5881700a90d21128b7535a68
+  version: 1.2.0
+  resolution: "make-cancellable-promise@npm:1.2.0"
+  checksum: 2f443d10e712a96c70e40bb168a9027ac97e0909bba4f568105b712a86e1dba8449188f0902659fc84feb09c9902cb4ede684a09c2239fc7d76f1b027905b487
   languageName: node
   linkType: hard
 
