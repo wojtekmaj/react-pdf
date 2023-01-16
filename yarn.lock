@@ -5642,9 +5642,11 @@ __metadata:
   linkType: hard
 
 "merge-refs@npm:^1.0.0":
-  version: 1.0.0
-  resolution: "merge-refs@npm:1.0.0"
-  checksum: 3b4ea1a178c52349a0e725281aa34b130fb6819d22f8e616ae30da6f4da223d9c3a53f6e1a427c5ba56bf6b162c98de95a53f76e01a343e10162823fee33f64a
+  version: 1.1.0
+  resolution: "merge-refs@npm:1.1.0"
+  dependencies:
+    "@types/react": "*"
+  checksum: bbf716d4a73a17c1a89e388e3a62d35b06e92a192292c26bcba6273a588d6b3e64640aa8b08359869a8d7a06a80710b6da127a7791cb7bd8b4eaac7fa9638203
   languageName: node
   linkType: hard
 
