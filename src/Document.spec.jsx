@@ -26,8 +26,8 @@ function Child(props) {
   );
 }
 
-function waitForAsync() {
-  return new Promise((resolve) => {
+async function waitForAsync() {
+  await new Promise((resolve) => {
     setTimeout(resolve, 0);
   });
 }
