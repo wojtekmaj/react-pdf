@@ -52,7 +52,7 @@ export const isPage = PropTypes.shape({
   render: PropTypes.func.isRequired,
 });
 
-export const isPageIndex = (props, propName, componentName) => {
+export function isPageIndex(props, propName, componentName) {
   const { [propName]: pageIndex, pageNumber, pdf } = props;
 
   if (!isDefined(pdf)) {
@@ -83,9 +83,9 @@ export const isPageIndex = (props, propName, componentName) => {
 
   // Everything is fine
   return null;
-};
+}
 
-export const isPageNumber = (props, propName, componentName) => {
+export function isPageNumber(props, propName, componentName) {
   const { [propName]: pageNumber, pageIndex, pdf } = props;
 
   if (!isDefined(pdf)) {
@@ -116,7 +116,7 @@ export const isPageNumber = (props, propName, componentName) => {
 
   // Everything is fine
   return null;
-};
+}
 
 export const isPdf = PropTypes.oneOfType([
   PropTypes.shape({

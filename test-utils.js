@@ -1,7 +1,7 @@
 /* eslint-env jest */
 const fs = require('fs');
 
-export const makeAsyncCallback = (callbackValue) => {
+export function makeAsyncCallback(callbackValue) {
   let promiseResolve;
   const promise = new Promise((resolve) => {
     promiseResolve = resolve;
@@ -13,9 +13,9 @@ export const makeAsyncCallback = (callbackValue) => {
   );
 
   return { promise, func };
-};
+}
 
-export const loadPDF = (path) => {
+export function loadPDF(path) {
   const raw = fs.readFileSync(path);
   const arrayBuffer = raw.buffer;
 
@@ -35,16 +35,16 @@ export const loadPDF = (path) => {
       return new File([arrayBuffer], { type: 'application/pdf' });
     },
   };
-};
+}
 
-export const muteConsole = () => {
+export function muteConsole() {
   jest.spyOn(global.console, 'log').mockImplementation(() => {});
   jest.spyOn(global.console, 'error').mockImplementation(() => {});
   jest.spyOn(global.console, 'warn').mockImplementation(() => {});
-};
+}
 
-export const restoreConsole = () => {
+export function restoreConsole() {
   global.console.log.mockRestore();
   global.console.error.mockRestore();
   global.console.warn.mockRestore();
-};
+}

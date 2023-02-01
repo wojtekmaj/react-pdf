@@ -22,8 +22,8 @@ const options = {
   standardFontDataUrl: 'standard_fonts/',
 };
 
-export const readAsDataURL = (file) =>
-  new Promise((resolve, reject) => {
+export function readAsDataURL(file) {
+  return new Promise((resolve, reject) => {
     const reader = new FileReader();
 
     reader.onload = () => resolve(reader.result);
@@ -45,6 +45,7 @@ export const readAsDataURL = (file) =>
 
     return null;
   });
+}
 
 /* eslint-disable no-console */
 
