@@ -53,8 +53,8 @@ export default function LoadingOptions({ file, setFile, setRender }) {
   }
 
   return (
-    <fieldset id="loadingoptions">
-      <legend htmlFor="loadingoptions">Load file</legend>
+    <fieldset>
+      <legend>Load file</legend>
 
       <label htmlFor="file">Load from file:</label>
       <input id="file" onChange={onFileChange} type="file" />

@@ -32,8 +32,8 @@ export default function PassingOptions({ file, passMethod, setPassMethod }) {
   }
 
   return (
-    <fieldset id="passingoptions">
-      <legend htmlFor="passingoptions">Passing options</legend>
+    <fieldset>
+      <legend>Passing options</legend>
 
       <div>
         <input

@@ -121,8 +121,8 @@ export default function ViewOptions({
   }
 
   return (
-    <fieldset id="viewoptions">
-      <legend htmlFor="viewoptions">View options</legend>
+    <fieldset>
+      <legend>View options</legend>
 
       <label htmlFor="canvasBackground">Canvas background:</label>
       <input

@@ -9,8 +9,8 @@ export default function AnnotationOptions({ externalLinkTarget, setExternalLinkT
   }
 
   return (
-    <fieldset id="annotationoptions">
-      <legend htmlFor="annotationoptions">Annotation options</legend>
+    <fieldset>
+      <legend>Annotation options</legend>
 
       <label htmlFor="externalLinkTarget">External link target</label>
       <div>
