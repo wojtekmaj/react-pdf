@@ -11,7 +11,7 @@
     "build-js-esm": "BABEL_ENV=production-esm babel src -d dist/esm --ignore \"**/*.spec.js,**/*.spec.jsx\"",
     "build-js-cjs": "BABEL_ENV=production-cjs babel src -d dist/cjs --ignore \"**/*.spec.js,**/*.spec.jsx\"",
     "clean": "rimraf dist",
-    "copy-styles": "node ./copy-styles.js",
+    "copy-styles": "node ./copy-styles.mjs",
     "jest": "jest",
     "lint": "eslint sample src test --ext .js,.jsx",
     "postinstall": "husky install",

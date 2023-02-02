@@ -1,5 +1,5 @@
 /* eslint-env jest */
-const fs = require('fs');
+import fs from 'fs';
 
 export function makeAsyncCallback(callbackValue) {
   let promiseResolve;

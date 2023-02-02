@@ -6,9 +6,9 @@
   "main": "src/index.jsx",
   "scripts": {
     "build": "react-scripts build",
-    "copy-cmaps": "node ./scripts/copy-cmaps.js",
-    "copy-standard-fonts": "node ./scripts/copy-standard-fonts.js",
-    "copy-worker": "node ./scripts/copy-worker.js",
+    "copy-cmaps": "node ./scripts/copy-cmaps.mjs",
+    "copy-standard-fonts": "node ./scripts/copy-standard-fonts.mjs",
+    "copy-worker": "node ./scripts/copy-worker.mjs",
     "dev": "react-scripts start",
     "eject": "react-scripts eject",
     "test": "react-scripts test"
