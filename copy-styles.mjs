@@ -1,4 +1,4 @@
-const fs = require('fs');
+import fs from 'fs';
 
 fs.copyFile('src/Page/AnnotationLayer.css', 'dist/esm/Page/AnnotationLayer.css', (error) => {
   if (error) {
