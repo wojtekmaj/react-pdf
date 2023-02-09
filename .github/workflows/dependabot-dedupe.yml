@@ -54,7 +54,7 @@ jobs:
       - name: Commit changes
         run: |
           git add .
-          git commit -m 'Dedupe dependencies' || true
+          git commit -m '[dependabot skip] Dedupe dependencies' || true
         working-directory: ${{ env.WORKING_DIRECTORY }}
 
       - name: Push changes
