@@ -26,7 +26,6 @@
     "babel-loader": "^9.0.1",
     "copy-webpack-plugin": "^11.0.0",
     "css-loader": "^6.0.0",
-    "eslint": "^8.26.0",
     "html-webpack-plugin": "^5.1.0",
     "mini-css-extract-plugin": "^2.0.0",
     "react-refresh": "^0.14.0",
