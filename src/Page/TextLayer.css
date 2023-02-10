@@ -15,6 +15,15 @@
 
 :root {
   --react-pdf-text-layer: 1;
+  --highlight-bg-color: rgba(180, 0, 170, 1);
+  --highlight-selected-bg-color: rgba(0, 100, 0, 1);
+}
+
+@media screen and (forced-colors: active) {
+  :root {
+    --highlight-bg-color: Highlight;
+    --highlight-selected-bg-color: ButtonText;
+  }
 }
 
 .textLayer {
@@ -28,6 +37,9 @@
   line-height: 1;
   text-size-adjust: none;
   forced-color-adjust: none;
+  transform-origin: 0 0;
+  z-index: 2;
+  --scale-factor: 1;
 }
 
 .textLayer span,
@@ -49,7 +61,7 @@
 .textLayer .highlight {
   margin: -1px;
   padding: 1px;
-  background-color: rgba(180, 0, 170, 1);
+  background-color: var(--highlight-bg-color);
   border-radius: 4px;
 }
 
@@ -70,7 +82,7 @@
 }
 
 .textLayer .highlight.selected {
-  background-color: rgba(0, 100, 0, 1);
+  background-color: var(--highlight-selected-bg-color);
 }
 
 /* Avoids https://github.com/mozilla/pdf.js/issues/13840 in Chrome */
