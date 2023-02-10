@@ -29,8 +29,5 @@
     "webpack": "^5.20.0",
     "webpack-cli": "^5.0.0",
     "webpack-dev-server": "^4.0.0"
-  },
-  "resolutions": {
-    "semver@7.0.0": "^7.0.0"
   }
 }

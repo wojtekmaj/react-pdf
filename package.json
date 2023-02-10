@@ -71,9 +71,6 @@
       "optional": true
     }
   },
-  "resolutions": {
-    "semver@7.0.0": "^7.0.0"
-  },
   "files": [
     "dist",
     "src"
