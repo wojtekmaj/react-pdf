@@ -72,7 +72,7 @@ export class AnnotationLayerInternal extends PureComponent {
   onLoadError = (error) => {
     this.setState({ annotations: false });
 
-    warning(error);
+    warning(false, error);
 
     const { onGetAnnotationsError } = this.props;
 
@@ -86,7 +86,7 @@ export class AnnotationLayerInternal extends PureComponent {
   };
 
   onRenderError = (error) => {
-    warning(error);
+    warning(false, error);
 
     const { onRenderAnnotationLayerError } = this.props;
 

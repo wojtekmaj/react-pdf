@@ -73,7 +73,7 @@ export class TextLayerInternal extends PureComponent {
   onLoadError = (error) => {
     this.setState({ textItems: false });
 
-    warning(error);
+    warning(false, error);
 
     const { onGetTextError } = this.props;
 
@@ -87,7 +87,7 @@ export class TextLayerInternal extends PureComponent {
   };
 
   onRenderError = (error) => {
-    warning(error);
+    warning(false, error);
 
     const { onRenderTextLayerError } = this.props;
 

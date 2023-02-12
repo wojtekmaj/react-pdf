@@ -88,7 +88,7 @@ export class OutlineInternal extends PureComponent {
   onLoadError = (error) => {
     this.setState({ outline: false });
 
-    warning(error);
+    warning(false, error);
 
     const { onLoadError } = this.props;
 

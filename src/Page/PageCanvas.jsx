@@ -73,7 +73,7 @@ export class PageCanvasInternal extends PureComponent {
       return;
     }
 
-    warning(error);
+    warning(false, error);
 
     const { onRenderError } = this.props;
 

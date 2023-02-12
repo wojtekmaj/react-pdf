@@ -182,7 +182,7 @@ export default class Document extends PureComponent {
    * Called when a document source failed to be resolved correctly
    */
   onSourceError = (error) => {
-    warning(error);
+    warning(false, error);
 
     const { onSourceError } = this.props;
 
@@ -208,7 +208,7 @@ export default class Document extends PureComponent {
   onLoadError = (error) => {
     this.setState({ pdf: false });
 
-    warning(error);
+    warning(false, error);
 
     const { onLoadError } = this.props;
 

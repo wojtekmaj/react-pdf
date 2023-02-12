@@ -136,7 +136,7 @@ export class PageInternal extends PureComponent {
   onLoadError = (error) => {
     this.setState({ page: false });
 
-    warning(error);
+    warning(false, error);
 
     const { onLoadError } = this.props;
 

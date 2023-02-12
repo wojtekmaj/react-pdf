@@ -37,7 +37,7 @@ export class PageSVGInternal extends PureComponent {
       return;
     }
 
-    warning(error);
+    warning(false, error);
 
     const { onRenderError } = this.props;
 
