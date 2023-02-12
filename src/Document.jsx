@@ -384,5 +384,10 @@ Document.propTypes = {
   onPassword: PropTypes.func,
   onSourceError: PropTypes.func,
   onSourceSuccess: PropTypes.func,
+  options: PropTypes.shape({
+    cMapUrl: PropTypes.string,
+    cMapPacked: PropTypes.bool,
+    standardFontDataUrl: PropTypes.string,
+  }),
   rotate: PropTypes.number,
 };
