@@ -32,7 +32,7 @@ export function loadPDF(path) {
       return `data:application/pdf;base64,${raw.toString('base64')}`;
     },
     get file() {
-      return new File([arrayBuffer], { type: 'application/pdf' });
+      return new File([arrayBuffer], 'test.pdf', { type: 'application/pdf' });
     },
   };
 }
