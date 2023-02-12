@@ -31,7 +31,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/core@npm:^7.20.7":
+"@babel/core@npm:^7.20.12":
   version: 7.20.12
   resolution: "@babel/core@npm:7.20.12"
   dependencies:
@@ -519,18 +519,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@vitejs/plugin-react@npm:^3.0.0":
-  version: 3.0.1
-  resolution: "@vitejs/plugin-react@npm:3.0.1"
+"@vitejs/plugin-react@npm:^3.1.0":
+  version: 3.1.0
+  resolution: "@vitejs/plugin-react@npm:3.1.0"
   dependencies:
-    "@babel/core": ^7.20.7
+    "@babel/core": ^7.20.12
     "@babel/plugin-transform-react-jsx-self": ^7.18.6
     "@babel/plugin-transform-react-jsx-source": ^7.19.6
     magic-string: ^0.27.0
     react-refresh: ^0.14.0
   peerDependencies:
-    vite: ^4.0.0
-  checksum: fde9dd4d3a3387d3a93ea164f58b71a40786842d66b072e75b10ef3c1c1f30cbe545367c4adb980d15f310a70c3ca24f8bf36ea5e896d0fcae0adc926172ca58
+    vite: ^4.1.0-beta.0
+  checksum: 450fac79e67cba9e1581c860f78e687b44108ab4117663ef20db279316e03cd8e87f94fef376e27cc5e200bd52813dcc09b70ea570c7c7cc291fcd47eb260fbc
   languageName: node
   linkType: hard
 
@@ -1590,7 +1590,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "react-pdf-sample-page-vite4@workspace:."
   dependencies:
-    "@vitejs/plugin-react": ^3.0.0
+    "@vitejs/plugin-react": ^3.1.0
     react: ^18.2.0
     react-dom: ^18.2.0
     react-pdf: latest
