@@ -50,7 +50,7 @@ export function muteConsole() {
 }
 
 export function restoreConsole() {
-  global.console.log.mockRestore();
-  global.console.error.mockRestore();
-  global.console.warn.mockRestore();
+  jest.mocked(global.console.log).mockRestore();
+  jest.mocked(global.console.error).mockRestore();
+  jest.mocked(global.console.warn).mockRestore();
 }
