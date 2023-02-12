@@ -152,23 +152,25 @@ export function loadFromFile(file) {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
 
-    reader.onload = () => resolve(new Uint8Array(reader.result));
+    reader.onload = () => {
+      resolve(reader.result);
+    };
+
     reader.onerror = (event) => {
-      switch (event.target.error.code) {
-        case event.target.error.NOT_FOUND_ERR:
+      const { error } = event.target;
+
+      switch (error.code) {
+        case error.NOT_FOUND_ERR:
           return reject(new Error('Error while reading a file: File not found.'));
-        case event.target.error.NOT_READABLE_ERR:
-          return reject(new Error('Error while reading a file: File not readable.'));
-        case event.target.error.SECURITY_ERR:
+        case error.SECURITY_ERR:
           return reject(new Error('Error while reading a file: Security error.'));
-        case event.target.error.ABORT_ERR:
+        case error.ABORT_ERR:
           return reject(new Error('Error while reading a file: Aborted.'));
         default:
           return reject(new Error('Error while reading a file.'));
       }
     };
-    reader.readAsArrayBuffer(file);
 
-    return null;
+    reader.readAsArrayBuffer(file);
   });
 }
