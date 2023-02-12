@@ -38,7 +38,9 @@ export default class LinkService {
     this.externalLinkTarget = externalLinkTarget;
   }
 
-  setHistory() {}
+  setHistory() {
+    // Intentionally empty
+  }
 
   get pagesCount() {
     return this.pdfDocument ? this.pdfDocument.numPages : 0;
@@ -56,7 +58,9 @@ export default class LinkService {
     return 0;
   }
 
-  set rotation(value) {}
+  set rotation(value) {
+    // Intentionally empty
+  }
 
   goToDestination(dest) {
     new Promise((resolve) => {
@@ -108,7 +112,9 @@ export default class LinkService {
     this.goToDestination(dest);
   }
 
-  goToPage() {}
+  goToPage() {
+    // Intentionally empty
+  }
 
   addLinkAttributes(link, url, newWindow) {
     link.href = url;
@@ -124,11 +130,17 @@ export default class LinkService {
     return '#';
   }
 
-  setHash() {}
+  setHash() {
+    // Intentionally empty
+  }
 
-  executeNamedAction() {}
+  executeNamedAction() {
+    // Intentionally empty
+  }
 
-  cachePageRef() {}
+  cachePageRef() {
+    // Intentionally empty
+  }
 
   isPageVisible() {
     return true;
