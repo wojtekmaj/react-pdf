@@ -157,6 +157,10 @@ export function loadFromFile(file) {
     };
 
     reader.onerror = (event) => {
+      if (!event.target) {
+        return reject(new Error('Error while reading a file.'));
+      }
+
       const { error } = event.target;
 
       switch (error.code) {
