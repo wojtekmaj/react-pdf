@@ -25,7 +25,13 @@ updates:
     open-pull-requests-limit: 10
 
   - package-ecosystem: "npm"
-    directory: "/sample/vite"
+    directory: "/sample/vite3"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 10
+
+  - package-ecosystem: "npm"
+    directory: "/sample/vite4"
     schedule:
       interval: "weekly"
     open-pull-requests-limit: 10

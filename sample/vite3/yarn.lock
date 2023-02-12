@@ -1634,9 +1634,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-pdf-sample-page-vite@workspace:.":
+"react-pdf-sample-page-vite3@workspace:.":
   version: 0.0.0-use.local
-  resolution: "react-pdf-sample-page-vite@workspace:."
+  resolution: "react-pdf-sample-page-vite3@workspace:."
   dependencies:
     "@vitejs/plugin-react": ^2.2.0
     react: ^18.2.0
