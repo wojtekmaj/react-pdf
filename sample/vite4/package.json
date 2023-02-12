@@ -1,5 +1,5 @@
 {
-  "name": "react-pdf-sample-page-vite",
+  "name": "react-pdf-sample-page-vite4",
   "version": "4.0.0",
   "description": "A sample page for React-PDF.",
   "private": true,
@@ -19,7 +19,7 @@
     "react-pdf": "latest"
   },
   "devDependencies": {
-    "@vitejs/plugin-react": "^2.2.0",
-    "vite": "^3.0.0"
+    "@vitejs/plugin-react": "^3.0.0",
+    "vite": "^4.0.0"
   }
 }

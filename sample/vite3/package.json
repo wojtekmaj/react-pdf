@@ -1,0 +1,25 @@
+{
+  "name": "react-pdf-sample-page-vite3",
+  "version": "4.0.0",
+  "description": "A sample page for React-PDF.",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "vite build",
+    "dev": "vite serve"
+  },
+  "author": {
+    "name": "Wojciech Maj",
+    "email": "kontakt@wojtekmaj.pl"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-pdf": "latest"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^2.2.0",
+    "vite": "^3.0.0"
+  }
+}
