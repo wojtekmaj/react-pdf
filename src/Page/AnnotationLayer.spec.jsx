@@ -1,7 +1,7 @@
 import React, { createRef } from 'react';
 import { render } from '@testing-library/react';
 
-import { pdfjs } from '../entry.jest';
+import { pdfjs } from '../index.jest';
 
 import { AnnotationLayerInternal as AnnotationLayer } from './AnnotationLayer';
 import LinkService from '../LinkService';

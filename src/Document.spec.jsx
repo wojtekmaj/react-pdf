@@ -1,7 +1,7 @@
 import React, { createRef } from 'react';
 import { fireEvent, getByTestId, render } from '@testing-library/react';
 
-import { pdfjs } from './entry.jest';
+import { pdfjs } from './index.jest';
 
 import Document from './Document';
 import DocumentContext from './DocumentContext';

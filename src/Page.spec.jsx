@@ -1,7 +1,7 @@
 import React, { createRef } from 'react';
 import { fireEvent, render } from '@testing-library/react';
 
-import { pdfjs } from './entry.jest';
+import { pdfjs } from './index.jest';
 
 import { PageInternal as Page } from './Page';
 

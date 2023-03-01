@@ -1,7 +1,7 @@
 import React from 'react';
 import { fireEvent, getAllByRole, render, screen } from '@testing-library/react';
 
-import { pdfjs } from './entry.jest';
+import { pdfjs } from './index.jest';
 import { OutlineItemInternal as OutlineItem } from './OutlineItem';
 
 import { loadPDF, makeAsyncCallback } from '../test-utils';
