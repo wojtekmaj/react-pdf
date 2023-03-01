@@ -5,6 +5,9 @@
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
   "source": "src/index.js",
+  "sideEffects": [
+    "*.css"
+  ],
   "scripts": {
     "build": "yarn build-js && yarn copy-styles",
     "build-js": "yarn build-js-esm && yarn build-js-cjs",
