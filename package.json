@@ -2,9 +2,12 @@
   "name": "react-pdf",
   "version": "6.2.2",
   "description": "Display PDFs in your React app as easily as if they were images.",
-  "main": "dist/cjs/entry.js",
-  "module": "dist/esm/entry.js",
-  "source": "src/entry.js",
+  "main": "dist/cjs/index.js",
+  "module": "dist/esm/index.js",
+  "source": "src/index.js",
+  "sideEffects": [
+    "*.css"
+  ],
   "scripts": {
     "build": "yarn build-js && yarn copy-styles",
     "build-js": "yarn build-js-esm && yarn build-js-cjs",
@@ -13,11 +16,12 @@
     "clean": "rimraf dist",
     "copy-styles": "node ./copy-styles.mjs",
     "jest": "jest",
-    "lint": "eslint . --ext .js,.jsx",
+    "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
     "postinstall": "husky install",
     "prepack": "yarn clean && yarn build",
     "prettier": "prettier --check . --cache",
-    "test": "yarn lint && yarn prettier && yarn jest"
+    "test": "yarn lint && yarn tsc && yarn prettier && yarn jest",
+    "tsc": "tsc --noEmit"
   },
   "keywords": [
     "pdf",
@@ -41,13 +45,17 @@
     "tiny-warning": "^1.0.0"
   },
   "devDependencies": {
-    "@babel/cli": "^7.15.0",
     "@babel/core": "^7.15.0",
     "@babel/plugin-transform-runtime": "^7.15.0",
     "@babel/preset-env": "^7.15.0",
     "@babel/preset-react": "^7.14.0",
+    "@babel/preset-typescript": "^7.18.6",
     "@testing-library/jest-dom": "^5.15.0",
     "@testing-library/react": "^13.4.0",
+    "@testing-library/user-event": "^14.4.0",
+    "@types/jest": "^29.0.0",
+    "@typescript-eslint/eslint-plugin": "^5.41.0",
+    "@typescript-eslint/parser": "^5.44.0",
     "eslint": "^8.26.0",
     "eslint-config-wojtekmaj": "^0.7.1",
     "husky": "^8.0.0",
@@ -58,7 +66,8 @@
     "pretty-quick": "^3.1.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "rimraf": "^3.0.0"
+    "rimraf": "^3.0.0",
+    "typescript": "^4.9.5"
   },
   "peerDependencies": {
     "file-loader": "^6.0.0",

@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 
-import { pdfjs } from './entry.jest';
+import { pdfjs } from './index.jest';
 
 import { OutlineInternal as Outline } from './Outline';
 

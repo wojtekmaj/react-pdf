@@ -1,8 +1,8 @@
 {
   "collectCoverageFrom": [
     "**/src/**.{js,jsx}",
-    "!**/src/entry.js",
-    "!**/src/entry.*.js",
+    "!**/src/index.js",
+    "!**/src/index.*.js",
     "!**/src/pdf.worker.entry.js"
   ],
   "moduleNameMapper": {
