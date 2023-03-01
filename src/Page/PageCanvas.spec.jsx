@@ -1,7 +1,7 @@
 import React from 'react';
 import { render } from '@testing-library/react';
 
-import { pdfjs } from '../entry.jest';
+import { pdfjs } from '../index.test';
 
 import { PageCanvasInternal as PageCanvas } from './PageCanvas';
 

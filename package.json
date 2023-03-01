@@ -2,9 +2,9 @@
   "name": "react-pdf",
   "version": "6.2.2",
   "description": "Display PDFs in your React app as easily as if they were images.",
-  "main": "dist/cjs/entry.js",
-  "module": "dist/esm/entry.js",
-  "source": "src/entry.js",
+  "main": "dist/cjs/index.js",
+  "module": "dist/esm/index.js",
+  "source": "src/index.js",
   "scripts": {
     "build": "yarn build-js && yarn copy-styles",
     "build-js": "yarn build-js-esm && yarn build-js-cjs",
