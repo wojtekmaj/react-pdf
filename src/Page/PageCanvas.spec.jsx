@@ -24,7 +24,9 @@ describe('PageCanvas', () => {
     pageWithRendererMocked = Object.assign(page, {
       render: () => ({
         promise: new Promise((resolve) => resolve()),
-        cancel: () => {},
+        cancel: () => {
+          // Intentionally empty
+        },
       }),
     });
   });
