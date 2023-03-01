@@ -1997,17 +1997,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/jest@npm:*":
-  version: 29.2.5
-  resolution: "@types/jest@npm:29.2.5"
-  dependencies:
-    expect: ^29.0.0
-    pretty-format: ^29.0.0
-  checksum: d668470f00ec4cb8b8457f1fd90f7358fad8f22d74b85006dad6be522d6b9bf10f49f597e88d1d1a518d211c1b65be32a1f27f0e49ce0658d110a9206b8ea310
-  languageName: node
-  linkType: hard
-
-"@types/jest@npm:^29.0.0":
+"@types/jest@npm:*, @types/jest@npm:^29.0.0":
   version: 29.4.0
   resolution: "@types/jest@npm:29.4.0"
   dependencies:
