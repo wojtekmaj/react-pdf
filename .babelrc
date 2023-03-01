@@ -1,6 +1,5 @@
 {
-  "presets": ["@babel/env", "@babel/react"],
-  "plugins": ["@babel/transform-runtime"],
+  "presets": ["@babel/typescript", "@babel/env", "@babel/react"],
   "env": {
     "production-esm": {
       "presets": [
@@ -11,8 +10,7 @@
           }
         ],
         "@babel/react"
-      ],
-      "plugins": [["@babel/transform-runtime", { "useESModules": true }]]
+      ]
     }
   }
 }
