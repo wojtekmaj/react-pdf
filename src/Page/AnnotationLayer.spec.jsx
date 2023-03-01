@@ -126,7 +126,7 @@ describe('AnnotationLayer', () => {
 
       await onRenderAnnotationLayerSuccessPromise;
 
-      const annotationItems = [...container.firstChild.children];
+      const annotationItems = [...container.firstElementChild.children];
       expect(annotationItems).toHaveLength(desiredAnnotations.length);
     });
 
@@ -161,7 +161,7 @@ describe('AnnotationLayer', () => {
 
         await onRenderAnnotationLayerSuccessPromise;
 
-        const annotationItems = [...container.firstChild.children];
+        const annotationItems = [...container.firstElementChild.children];
         const annotationLinkItems = annotationItems
           .map((item) => item.firstChild)
           .filter((item) => item.tagName === 'A');
@@ -198,7 +198,7 @@ describe('AnnotationLayer', () => {
 
         await onRenderAnnotationLayerSuccessPromise;
 
-        const annotationItems = [...container.firstChild.children];
+        const annotationItems = [...container.firstElementChild.children];
         const annotationLinkItems = annotationItems
           .map((item) => item.firstChild)
           .filter((item) => item.tagName === 'A');

@@ -94,7 +94,7 @@ describe('TextLayer', () => {
 
       await onRenderTextLayerSuccessPromise;
 
-      const textItems = [...container.firstChild.children];
+      const textItems = [...container.firstElementChild.children];
       expect(textItems).toHaveLength(desiredTextItems.length + 1);
     });
 
@@ -116,7 +116,7 @@ describe('TextLayer', () => {
 
       await onRenderTextLayerSuccessPromise;
 
-      const textItems = [...container.firstChild.children];
+      const textItems = [...container.firstElementChild.children];
       expect(textItems).toHaveLength(desiredTextItems.length + 1);
     });
 
@@ -132,7 +132,7 @@ describe('TextLayer', () => {
 
       await onRenderTextLayerSuccessPromise;
 
-      const innerHTML = container.firstChild.innerHTML;
+      const innerHTML = container.firstElementChild.innerHTML;
 
       const { func: onRenderTextLayerSuccess2, promise: onRenderTextLayerSuccessPromise2 } =
         makeAsyncCallback();
@@ -149,7 +149,7 @@ describe('TextLayer', () => {
 
       await onRenderTextLayerSuccessPromise2;
 
-      const innerHTML2 = container.firstChild.innerHTML;
+      const innerHTML2 = container.firstElementChild.innerHTML;
 
       expect(innerHTML).toEqual(innerHTML2);
     });
@@ -172,7 +172,7 @@ describe('TextLayer', () => {
 
       await onRenderTextLayerSuccessPromise;
 
-      const textItems = [...container.firstChild.children];
+      const textItems = [...container.firstElementChild.children];
       expect(textItems).toHaveLength(desiredTextItems.length + 1);
 
       expect(customTextRenderer).toHaveBeenCalledTimes(desiredTextItems.length);
