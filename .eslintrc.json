@@ -1,10 +1,22 @@
 {
-  "extends": "wojtekmaj/react-no-automatic-runtime",
+  "extends": [
+    "wojtekmaj/react-no-automatic-runtime",
+    "plugin:@typescript-eslint/eslint-recommended",
+    "plugin:@typescript-eslint/recommended"
+  ],
+  "parser": "@typescript-eslint/parser",
+  "plugins": ["@typescript-eslint"],
   "overrides": [
     {
       "files": ["sample/**", "test/**"],
       "rules": {
         "import/no-unresolved": "off"
+      }
+    },
+    {
+      "files": ["jest.env.js", "webpack.config.js"],
+      "rules": {
+        "@typescript-eslint/no-var-requires": "off"
       }
     }
   ]
