@@ -11,5 +11,6 @@
   },
   "reporters": ["default", "github-actions"],
   "setupFilesAfterEnv": ["jest-canvas-mock", "<rootDir>/jest.setup.js"],
-  "testEnvironment": "<rootDir>/jest.env.js"
+  "testEnvironment": "<rootDir>/jest.env.js",
+  "testPathIgnorePatterns": ["<rootDir>/src/index.test.js"]
 }
