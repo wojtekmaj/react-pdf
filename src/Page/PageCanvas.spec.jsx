@@ -1,3 +1,4 @@
+import { beforeAll, describe, expect, it, vi } from 'vitest';
 import React from 'react';
 import { render } from '@testing-library/react';
 
@@ -65,7 +66,7 @@ describe('PageCanvas', () => {
 
   describe('rendering', () => {
     it('passes canvas element to canvasRef properly', () => {
-      const canvasRef = jest.fn();
+      const canvasRef = vi.fn();
 
       render(<PageCanvas canvasRef={canvasRef} page={page} scale={1} />);
 

@@ -1,3 +1,4 @@
+import { beforeAll, describe, expect, it, vi } from 'vitest';
 import React, { createRef } from 'react';
 import { fireEvent, render } from '@testing-library/react';
 
@@ -12,13 +13,11 @@ import { loadPDF, makeAsyncCallback, muteConsole, restoreConsole } from '../test
 const pdfFile = loadPDF('./__mocks__/_pdf.pdf');
 const pdfFile2 = loadPDF('./__mocks__/_pdf2.pdf');
 
-jest.mock(
-  './Page/AnnotationLayer',
-  () =>
-    function AnnotationLayer() {
-      return <div className="react-pdf__Page__annotations" />;
-    },
-);
+vi.mock('./Page/AnnotationLayer', () => ({
+  default: function AnnotationLayer() {
+    return <div className="react-pdf__Page__annotations" />;
+  },
+}));
 
 describe('Page', () => {
   // Loaded PDF file
@@ -190,7 +189,7 @@ describe('Page', () => {
     });
 
     it('passes container element to inputRef properly', () => {
-      const inputRef = jest.fn();
+      const inputRef = vi.fn();
 
       render(<Page inputRef={inputRef} pageIndex={1} pdf={silentlyFailingPdf} />);
 
@@ -711,7 +710,7 @@ describe('Page', () => {
   });
 
   it('calls onClick callback when clicked a page (sample of mouse events family)', () => {
-    const onClick = jest.fn();
+    const onClick = vi.fn();
 
     const { container } = render(<Page onClick={onClick} pdf={pdf} />);
 
@@ -722,7 +721,7 @@ describe('Page', () => {
   });
 
   it('calls onTouchStart callback when touched a page (sample of touch events family)', () => {
-    const onTouchStart = jest.fn();
+    const onTouchStart = vi.fn();
 
     const { container } = render(<Page onTouchStart={onTouchStart} pdf={pdf} />);
 

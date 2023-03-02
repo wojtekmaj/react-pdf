@@ -1,3 +1,4 @@
+import { describe, expect, it } from 'vitest';
 import { isDataURI, dataURItoByteString } from './utils';
 
 describe('isDataURI()', () => {
