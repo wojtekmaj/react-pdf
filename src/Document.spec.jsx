@@ -230,30 +230,32 @@ describe('Document', () => {
     });
 
     it('renders "Loading PDF…" when loading a file', async () => {
-      const { container } = render(<Document file={pdfFile.file} />);
+      const { container, findByText } = render(<Document file={pdfFile.file} />);
 
       const loading = container.querySelector('.react-pdf__message');
 
       expect(loading).toBeInTheDocument();
-      expect(loading).toHaveTextContent('Loading PDF…');
+      expect(await findByText('Loading PDF…')).toBeInTheDocument();
     });
 
     it('renders custom loading message when loading a file and loading prop is given', async () => {
-      const { container } = render(<Document file={pdfFile.file} loading="Loading" />);
+      const { container, findByText } = render(<Document file={pdfFile.file} loading="Loading" />);
 
       const loading = container.querySelector('.react-pdf__message');
 
       expect(loading).toBeInTheDocument();
-      expect(loading).toHaveTextContent('Loading');
+      expect(await findByText('Loading')).toBeInTheDocument();
     });
 
     it('renders custom loading message when loading a file and loading prop is given as a function', async () => {
-      const { container } = render(<Document file={pdfFile.file} loading={() => 'Loading'} />);
+      const { container, findByText } = render(
+        <Document file={pdfFile.file} loading={() => 'Loading'} />,
+      );
 
       const loading = container.querySelector('.react-pdf__message');
 
       expect(loading).toBeInTheDocument();
-      expect(loading).toHaveTextContent('Loading');
+      expect(await findByText('Loading')).toBeInTheDocument();
     });
 
     it('renders "Failed to load PDF file." when failed to load a document', async () => {
@@ -262,7 +264,9 @@ describe('Document', () => {
 
       muteConsole();
 
-      const { container } = render(<Document file={failingPdf} onLoadError={onLoadError} />);
+      const { container, findByText } = render(
+        <Document file={failingPdf} onLoadError={onLoadError} />,
+      );
 
       expect.assertions(2);
 
@@ -273,7 +277,7 @@ describe('Document', () => {
       const error = container.querySelector('.react-pdf__message');
 
       expect(error).toBeInTheDocument();
-      expect(error).toHaveTextContent('Failed to load PDF file.');
+      expect(await findByText('Failed to load PDF file.')).toBeInTheDocument();
 
       restoreConsole();
     });
@@ -284,7 +288,7 @@ describe('Document', () => {
 
       muteConsole();
 
-      const { container } = render(
+      const { container, findByText } = render(
         <Document error="Error" file={failingPdf} onLoadError={onLoadError} />,
       );
 
@@ -297,7 +301,7 @@ describe('Document', () => {
       const error = container.querySelector('.react-pdf__message');
 
       expect(error).toBeInTheDocument();
-      expect(error).toHaveTextContent('Error');
+      expect(await findByText('Error')).toBeInTheDocument();
 
       restoreConsole();
     });
@@ -308,7 +312,7 @@ describe('Document', () => {
 
       muteConsole();
 
-      const { container } = render(
+      const { container, findByText } = render(
         <Document error="Error" file={failingPdf} onLoadError={onLoadError} />,
       );
 
@@ -321,7 +325,7 @@ describe('Document', () => {
       const error = container.querySelector('.react-pdf__message');
 
       expect(error).toBeInTheDocument();
-      expect(error).toHaveTextContent('Error');
+      expect(await findByText('Error')).toBeInTheDocument();
 
       restoreConsole();
     });
