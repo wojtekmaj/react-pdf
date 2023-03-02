@@ -1594,7 +1594,7 @@ __metadata:
     react: ^18.2.0
     react-dom: ^18.2.0
     react-pdf: latest
-    vite: ^4.0.0
+    vite: ^4.1.4
   languageName: unknown
   linkType: soft
 
@@ -1934,9 +1934,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"vite@npm:^4.0.0":
-  version: 4.1.1
-  resolution: "vite@npm:4.1.1"
+"vite@npm:^4.1.4":
+  version: 4.1.4
+  resolution: "vite@npm:4.1.4"
   dependencies:
     esbuild: ^0.16.14
     fsevents: ~2.3.2
@@ -1968,7 +1968,7 @@ __metadata:
       optional: true
   bin:
     vite: bin/vite.js
-  checksum: aad14b660b69068f6596ab7e760dd71642862996328e404a4d265e090ae0d06c7064cf8415ffb135cd8b79d5157dc1dcb48b56386caaa96a474fb53bdd8cac3d
+  checksum: 50a9a1f2e29e0ee8fefdec60314d38fb9b746df0bb6ae5a8114014b5bfd95e0fc9b29c0d5e73939361ba53af7eb66c7d20c5656bbe53a783e96540bd3b907c47
   languageName: node
   linkType: hard
 
