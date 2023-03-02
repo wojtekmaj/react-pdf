@@ -1,12 +1,12 @@
-/* eslint-env jest */
 import fs from 'fs';
+import { vi } from 'vitest';
 
 export function makeAsyncCallback(callbackValue) {
   let promiseResolve;
   const promise = new Promise((resolve) => {
     promiseResolve = resolve;
   });
-  const func = jest.fn(
+  const func = vi.fn(
     callbackValue
       ? () => promiseResolve(callbackValue)
       : (...args) => promiseResolve(args.length === 1 ? args[0] : args),
@@ -38,19 +38,19 @@ export function loadPDF(path) {
 }
 
 export function muteConsole() {
-  jest.spyOn(global.console, 'log').mockImplementation(() => {
+  vi.spyOn(global.console, 'log').mockImplementation(() => {
     // Intentionally empty
   });
-  jest.spyOn(global.console, 'error').mockImplementation(() => {
+  vi.spyOn(global.console, 'error').mockImplementation(() => {
     // Intentionally empty
   });
-  jest.spyOn(global.console, 'warn').mockImplementation(() => {
+  vi.spyOn(global.console, 'warn').mockImplementation(() => {
     // Intentionally empty
   });
 }
 
 export function restoreConsole() {
-  jest.mocked(global.console.log).mockRestore();
-  jest.mocked(global.console.error).mockRestore();
-  jest.mocked(global.console.warn).mockRestore();
+  vi.mocked(global.console.log).mockRestore();
+  vi.mocked(global.console.error).mockRestore();
+  vi.mocked(global.console.warn).mockRestore();
 }

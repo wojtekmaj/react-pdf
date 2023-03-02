@@ -110,4 +110,4 @@ jobs:
           HUSKY: 0
 
       - name: Run tests
-        run: yarn jest
+        run: yarn unit

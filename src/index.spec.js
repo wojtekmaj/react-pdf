@@ -1,3 +1,4 @@
+import { describe, expect, it } from 'vitest';
 import { pdfjs, Document, Outline, Page } from './index';
 
 describe('default entry', () => {

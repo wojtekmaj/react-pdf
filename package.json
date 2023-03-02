@@ -15,13 +15,13 @@
     "build-js-cjs": "BABEL_ENV=production-cjs babel src -d dist/cjs --ignore \"**/*.spec.js,**/*.spec.jsx\"",
     "clean": "rimraf dist",
     "copy-styles": "node ./copy-styles.mjs",
-    "jest": "jest",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
     "postinstall": "husky install",
     "prepack": "yarn clean && yarn build",
     "prettier": "prettier --check . --cache",
-    "test": "yarn lint && yarn tsc && yarn prettier && yarn jest",
-    "tsc": "tsc --noEmit"
+    "test": "yarn lint && yarn tsc && yarn prettier && yarn unit",
+    "tsc": "tsc --noEmit",
+    "unit": "vitest run"
   },
   "keywords": [
     "pdf",
@@ -44,28 +44,23 @@
     "tiny-warning": "^1.0.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.15.0",
-    "@babel/preset-env": "^7.15.0",
-    "@babel/preset-react": "^7.14.0",
-    "@babel/preset-typescript": "^7.18.6",
     "@testing-library/jest-dom": "^5.15.0",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^14.4.0",
-    "@types/jest": "^29.0.0",
     "@typescript-eslint/eslint-plugin": "^5.41.0",
     "@typescript-eslint/parser": "^5.44.0",
     "eslint": "^8.26.0",
     "eslint-config-wojtekmaj": "^0.7.1",
     "husky": "^8.0.0",
-    "jest": "^29.0.0",
-    "jest-canvas-mock": "^2.3.1",
-    "jest-environment-jsdom": "^29.0.0",
+    "jsdom": "^21.1.0",
     "prettier": "^2.7.0",
     "pretty-quick": "^3.1.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "rimraf": "^3.0.0",
-    "typescript": "^4.9.5"
+    "typescript": "^4.9.5",
+    "vitest": "^0.29.2",
+    "vitest-canvas-mock": "^0.2.2"
   },
   "peerDependencies": {
     "file-loader": "^6.0.0",

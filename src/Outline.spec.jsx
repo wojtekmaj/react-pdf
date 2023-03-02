@@ -1,3 +1,4 @@
+import { beforeAll, describe, expect, it, vi } from 'vitest';
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 
@@ -97,7 +98,7 @@ describe('Outline', () => {
     it('passes container element to inputRef properly', async () => {
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
-      const inputRef = jest.fn();
+      const inputRef = vi.fn();
 
       render(<Outline inputRef={inputRef} onLoadSuccess={onLoadSuccess} pdf={pdf} />);
 

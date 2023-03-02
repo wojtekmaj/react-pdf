@@ -1,3 +1,4 @@
+import { beforeAll, describe, expect, it, vi } from 'vitest';
 import React from 'react';
 import { render } from '@testing-library/react';
 
@@ -104,7 +105,7 @@ describe('TextLayer', () => {
       const { func: onRenderTextLayerSuccess, promise: onRenderTextLayerSuccessPromise } =
         makeAsyncCallback();
 
-      const customTextRenderer = jest.fn();
+      const customTextRenderer = vi.fn();
 
       const { container } = render(
         <TextLayer
@@ -160,7 +161,7 @@ describe('TextLayer', () => {
       const { func: onRenderTextLayerSuccess, promise: onRenderTextLayerSuccessPromise } =
         makeAsyncCallback();
 
-      const customTextRenderer = jest.fn();
+      const customTextRenderer = vi.fn();
 
       const { container } = render(
         <TextLayer

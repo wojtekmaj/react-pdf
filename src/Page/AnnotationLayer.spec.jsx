@@ -1,3 +1,4 @@
+import { beforeAll, describe, expect, it } from 'vitest';
 import React, { createRef } from 'react';
 import { render } from '@testing-library/react';
 
