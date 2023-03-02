@@ -76,7 +76,9 @@ describe('TextLayer', () => {
 
     it('throws an error when placed outside Page', () => {
       muteConsole();
+
       expect(() => render(<TextLayer />)).toThrow();
+
       restoreConsole();
     });
   });

@@ -171,7 +171,9 @@ describe('Page', () => {
 
     it('throws an error when placed outside Document', () => {
       muteConsole();
+
       expect(() => render(<Page pageIndex={0} />)).toThrow();
+
       restoreConsole();
     });
   });

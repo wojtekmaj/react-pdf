@@ -102,7 +102,9 @@ describe('AnnotationLayer', () => {
 
     it('throws an error when placed outside Page', () => {
       muteConsole();
+
       expect(() => render(<AnnotationLayer />)).toThrow();
+
       restoreConsole();
     });
   });
