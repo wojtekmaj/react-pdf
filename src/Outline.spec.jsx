@@ -68,7 +68,11 @@ describe('Outline', () => {
     });
 
     it('throws an error when placed outside Document', () => {
+      muteConsole();
+
       expect(() => render(<Outline />)).toThrow();
+
+      restoreConsole();
     });
   });
 
