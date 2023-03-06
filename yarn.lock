@@ -1764,17 +1764,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-config-wojtekmaj@npm:^0.7.1":
-  version: 0.7.1
-  resolution: "eslint-config-wojtekmaj@npm:0.7.1"
+"eslint-config-wojtekmaj@npm:^0.8.2":
+  version: 0.8.2
+  resolution: "eslint-config-wojtekmaj@npm:0.8.2"
   dependencies:
+    "@typescript-eslint/eslint-plugin": ^5.41.0
+    "@typescript-eslint/parser": ^5.44.0
     eslint-plugin-import: ^2.25.0
     eslint-plugin-jsx-a11y: ^6.5.0
     eslint-plugin-react: ^7.28.0
     eslint-plugin-react-hooks: ^4.3.0
   peerDependencies:
     eslint: ^7.0.0 || ^8.0.0
-  checksum: 1c6ffe1eae4299a3ff2c64902e0cbcf51686bc14f931281807eec2c8703af46c77c19cce2fb472d4002228b2d3c3abbc049210744175f98e49e7cc42753bbd44
+  checksum: f9bf504bb3a6e4d6f4a9ca99297fdb4ffffa14c0c912fa866876dcc54ffef078bcb930b6639230e222f51ba2cadd06509858ad929b72e5662a3f3d67d126c658
   languageName: node
   linkType: hard
 
@@ -3973,11 +3975,9 @@ __metadata:
     "@testing-library/jest-dom": ^5.15.0
     "@testing-library/react": ^13.4.0
     "@testing-library/user-event": ^14.4.0
-    "@typescript-eslint/eslint-plugin": ^5.41.0
-    "@typescript-eslint/parser": ^5.44.0
     clsx: ^1.2.1
     eslint: ^8.26.0
-    eslint-config-wojtekmaj: ^0.7.1
+    eslint-config-wojtekmaj: ^0.8.2
     husky: ^8.0.0
     jsdom: ^21.1.0
     make-cancellable-promise: ^1.0.0

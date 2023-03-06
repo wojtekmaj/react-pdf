@@ -1,11 +1,5 @@
 {
-  "extends": [
-    "wojtekmaj/react-no-automatic-runtime",
-    "plugin:@typescript-eslint/eslint-recommended",
-    "plugin:@typescript-eslint/recommended"
-  ],
-  "parser": "@typescript-eslint/parser",
-  "plugins": ["@typescript-eslint"],
+  "extends": "wojtekmaj/react-no-automatic-runtime",
   "overrides": [
     {
       "files": ["sample/**", "test/**"],
