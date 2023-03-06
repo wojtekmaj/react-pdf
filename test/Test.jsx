@@ -256,11 +256,13 @@ export default function Test() {
             onSourceError={onDocumentLoadError}
           >
             <div className="Test__container__content__toc">
-              {render && <Outline className="custom-classname-outline" onItemClick={onItemClick} />}
+              {render ? (
+                <Outline className="custom-classname-outline" onItemClick={onItemClick} />
+              ) : null}
             </div>
             <div className="Test__container__content__document">
-              {render &&
-                (displayAll ? (
+              {render ? (
+                displayAll ? (
                   Array.from(new Array(numPages), (el, index) => (
                     <Page
                       {...pageProps}
@@ -273,7 +275,8 @@ export default function Test() {
                   ))
                 ) : (
                   <Page {...pageProps} pageNumber={pageNumber || 1} />
-                ))}
+                )
+              ) : null}
             </div>
             {displayAll || (
               <div className="Test__container__content__controls">

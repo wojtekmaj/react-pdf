@@ -43,7 +43,7 @@ export default function LayerOptions({
 
       <div>
         <input
-          checked={renderTextLayer && useCustomTextRenderer}
+          checked={renderTextLayer ? useCustomTextRenderer : false}
           disabled={!renderTextLayer}
           id="useCustomTextRenderer"
           onChange={onUseCustomTextRendererChange}
@@ -64,7 +64,7 @@ export default function LayerOptions({
 
       <div>
         <input
-          checked={renderAnnotationLayer && renderForms}
+          checked={renderAnnotationLayer ? renderForms : null}
           disabled={!renderAnnotationLayer}
           id="renderForms"
           onChange={onRenderFormsChange}
