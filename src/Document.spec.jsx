@@ -506,30 +506,35 @@ describe('Document', () => {
 
   it.each`
     externalLinkRel | rel
-    ${null}         | ${null}
+    ${null}         | ${'noopener noreferrer nofollow'}
     ${'noopener'}   | ${'noopener'}
     ${'noreferrer'} | ${'noreferrer'}
     ${'nofollow'}   | ${'nofollow'}
   `(
     'returns externalLinkRel = $rel given externalLinkRel prop = $externalLinkRel',
     async ({ externalLinkRel, rel }) => {
-      const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
-      const instance = createRef();
+      const {
+        func: onRenderAnnotationLayerSuccess,
+        promise: onRenderAnnotationLayerSuccessPromise,
+      } = makeAsyncCallback();
 
-      render(
-        <Document
-          externalLinkRel={externalLinkRel}
-          file={pdfFile.file}
-          onLoadSuccess={onLoadSuccess}
-          ref={instance}
-        />,
+      const { container } = render(
+        <Document externalLinkRel={externalLinkRel} file={pdfFile.file}>
+          <Page
+            onRenderAnnotationLayerSuccess={onRenderAnnotationLayerSuccess}
+            renderMode="none"
+            pageNumber={1}
+          />
+        </Document>,
       );
 
       expect.assertions(1);
 
-      await onLoadSuccessPromise;
+      await onRenderAnnotationLayerSuccessPromise;
 
-      expect(instance.current.linkService.externalLinkRel).toBe(rel);
+      const link = container.querySelector('a');
+
+      expect(link.rel).toBe(rel);
     },
   );
 
