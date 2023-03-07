@@ -120,21 +120,6 @@ export class TextLayerInternal extends PureComponent {
     return page.getViewport({ scale, rotation: rotate });
   }
 
-  get unrotatedViewport() {
-    const { page, scale } = this.props;
-
-    return page.getViewport({ scale });
-  }
-
-  /**
-   * It might happen that the page is rotated by default. In such cases, we shouldn't rotate
-   * text content.
-   */
-  get rotate() {
-    const { page, rotate } = this.props;
-    return rotate - page.rotate;
-  }
-
   renderTextLayer() {
     const { textContent } = this.state;
 
