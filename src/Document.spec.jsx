@@ -507,10 +507,9 @@ describe('Document', () => {
   it.each`
     externalLinkRel | rel
     ${null}         | ${null}
-    ${'_self'}      | ${'_self'}
-    ${'_blank'}     | ${'_blank'}
-    ${'_parent'}    | ${'_parent'}
-    ${'_top'}       | ${'_top'}
+    ${'noopener'}   | ${'noopener'}
+    ${'noreferrer'} | ${'noreferrer'}
+    ${'nofollow'}   | ${'nofollow'}
   `(
     'returns externalLinkRel = $rel given externalLinkRel prop = $externalLinkRel',
     async ({ externalLinkRel, rel }) => {
