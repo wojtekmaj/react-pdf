@@ -6,6 +6,7 @@ import { pdfjs } from './index.test';
 
 import Document from './Document';
 import DocumentContext from './DocumentContext';
+import Page from './Page';
 
 import { makeAsyncCallback, loadPDF, muteConsole, restoreConsole } from '../test-utils';
 
@@ -469,7 +470,7 @@ describe('Document', () => {
   describe('linkService', () => {
     it.each`
       externalLinkTarget | target
-      ${null}            | ${null}
+      ${null}            | ${''}
       ${'_self'}         | ${'_self'}
       ${'_blank'}        | ${'_blank'}
       ${'_parent'}       | ${'_parent'}
@@ -477,24 +478,28 @@ describe('Document', () => {
     `(
       'returns externalLinkTarget = $target given externalLinkTarget prop = $externalLinkTarget',
       async ({ externalLinkTarget, target }) => {
-        const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
+        const {
+          func: onRenderAnnotationLayerSuccess,
+          promise: onRenderAnnotationLayerSuccessPromise,
+        } = makeAsyncCallback();
 
-        const instance = createRef();
-
-        render(
-          <Document
-            externalLinkTarget={externalLinkTarget}
-            file={pdfFile.file}
-            onLoadSuccess={onLoadSuccess}
-            ref={instance}
-          />,
+        const { container } = render(
+          <Document externalLinkTarget={externalLinkTarget} file={pdfFile.file}>
+            <Page
+              onRenderAnnotationLayerSuccess={onRenderAnnotationLayerSuccess}
+              renderMode="none"
+              pageNumber={1}
+            />
+          </Document>,
         );
 
         expect.assertions(1);
 
-        await onLoadSuccessPromise;
+        await onRenderAnnotationLayerSuccessPromise;
 
-        expect(instance.current.linkService.externalLinkTarget).toBe(target);
+        const link = container.querySelector('a');
+
+        expect(link.target).toBe(target);
       },
     );
   });
