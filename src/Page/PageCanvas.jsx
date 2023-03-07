@@ -20,11 +20,13 @@ export class PageCanvasInternal extends PureComponent {
   }
 
   componentDidUpdate(prevProps) {
-    const { canvasBackground, devicePixelRatio, page, renderForms } = this.props;
+    const { canvasBackground, devicePixelRatio, page, renderForms, readFrequently } = this.props;
     if (
       canvasBackground !== prevProps.canvasBackground ||
       devicePixelRatio !== prevProps.devicePixelRatio ||
-      renderForms !== prevProps.renderForms
+      renderForms !== prevProps.renderForms ||
+      readFrequently !== prevProps.readFrequently
+
     ) {
       // Ensures the canvas will be re-rendered from scratch. Otherwise all form data will stay.
       page.cleanup();
@@ -107,7 +109,7 @@ export class PageCanvasInternal extends PureComponent {
     }
 
     const { renderViewport, viewport } = this;
-    const { canvasBackground, page, renderForms } = this.props;
+    const { canvasBackground, page, renderForms, readFrequently } = this.props;
 
     canvas.width = renderViewport.width;
     canvas.height = renderViewport.height;
@@ -118,7 +120,7 @@ export class PageCanvasInternal extends PureComponent {
     const renderContext = {
       annotationMode: renderForms ? ANNOTATION_MODE.ENABLE_FORMS : ANNOTATION_MODE.ENABLE,
       get canvasContext() {
-        return canvas.getContext('2d', { alpha: false });
+        return canvas.getContext('2d', readFrequently ? { willReadFrequently: true } : { alpha: false });
       },
       viewport: renderViewport,
     };
