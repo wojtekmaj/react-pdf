@@ -1,5 +1,5 @@
 import { beforeAll, describe, expect, it } from 'vitest';
-import React, { createRef } from 'react';
+import React from 'react';
 import { render } from '@testing-library/react';
 
 import { pdfjs } from '../index.test';
@@ -216,24 +216,26 @@ describe('AnnotationLayer', () => {
         promise: onRenderAnnotationLayerSuccessPromise,
       } = makeAsyncCallback();
       const rotate = 90;
-      const instance = createRef();
 
-      render(
+      const { container } = render(
         <AnnotationLayer
           linkService={linkService}
           onRenderAnnotationLayerSuccess={onRenderAnnotationLayerSuccess}
           page={page}
           rotate={rotate}
-          ref={instance}
         />,
       );
 
-      expect.assertions(1);
+      expect.assertions(2);
 
       await onRenderAnnotationLayerSuccessPromise;
 
-      const { viewport } = instance.current;
-      expect(viewport.rotation).toEqual(rotate);
+      const annotationLayer = container.firstElementChild;
+
+      // Expect the annotation layer to be rotated
+      const viewport = page.getViewport({ scale: 1 });
+      expect(parseInt(annotationLayer.style.width, 10)).toBe(Math.floor(viewport.width));
+      expect(parseInt(annotationLayer.style.height, 10)).toBe(Math.floor(viewport.height));
     });
 
     it('renders annotations at a given scale', async () => {
@@ -242,24 +244,26 @@ describe('AnnotationLayer', () => {
         promise: onRenderAnnotationLayerSuccessPromise,
       } = makeAsyncCallback();
       const scale = 2;
-      const instance = createRef();
 
-      render(
+      const { container } = render(
         <AnnotationLayer
           linkService={linkService}
           onRenderAnnotationLayerSuccess={onRenderAnnotationLayerSuccess}
           page={page}
           scale={scale}
-          ref={instance}
         />,
       );
 
-      expect.assertions(1);
+      expect.assertions(2);
 
       await onRenderAnnotationLayerSuccessPromise;
 
-      const { viewport } = instance.current;
-      expect(viewport.scale).toEqual(scale);
+      const annotationLayer = container.firstElementChild;
+
+      // Expect the annotation layer to be scaled
+      const viewport = page.getViewport({ scale });
+      expect(parseInt(annotationLayer.style.width, 10)).toBe(Math.floor(viewport.width));
+      expect(parseInt(annotationLayer.style.height, 10)).toBe(Math.floor(viewport.height));
     });
 
     it('renders annotations with the default imageResourcesPath given no imageResourcesPath', async () => {

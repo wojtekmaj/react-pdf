@@ -152,6 +152,10 @@ AnnotationLayerInternal.propTypes = {
   scale: PropTypes.number,
 };
 
+AnnotationLayerInternal.defaultProps = {
+  scale: 1,
+};
+
 const AnnotationLayer = (props) => (
   <DocumentContext.Consumer>
     {(documentContext) => (
