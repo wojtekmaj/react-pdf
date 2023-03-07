@@ -49,6 +49,7 @@ describe('AnnotationLayer', () => {
       );
 
       expect.assertions(1);
+
       await expect(onGetAnnotationsSuccessPromise).resolves.toMatchObject(desiredAnnotations);
     });
 
@@ -67,6 +68,7 @@ describe('AnnotationLayer', () => {
       );
 
       expect.assertions(1);
+
       await expect(onGetAnnotationsErrorPromise).resolves.toBeInstanceOf(Error);
 
       restoreConsole();
@@ -85,6 +87,7 @@ describe('AnnotationLayer', () => {
       );
 
       expect.assertions(2);
+
       await expect(onGetAnnotationsSuccessPromise).resolves.toMatchObject(desiredAnnotations);
 
       const { func: onGetAnnotationsSuccess2, promise: onGetAnnotationsSuccessPromise2 } =
@@ -130,6 +133,7 @@ describe('AnnotationLayer', () => {
       await onRenderAnnotationLayerSuccessPromise;
 
       const annotationItems = [...container.firstElementChild.children];
+
       expect(annotationItems).toHaveLength(desiredAnnotations.length);
     });
 
@@ -232,8 +236,9 @@ describe('AnnotationLayer', () => {
 
       const annotationLayer = container.firstElementChild;
 
-      // Expect the annotation layer to be rotated
       const viewport = page.getViewport({ scale: 1 });
+
+      // Expect the annotation layer to be rotated
       expect(parseInt(annotationLayer.style.width, 10)).toBe(Math.floor(viewport.width));
       expect(parseInt(annotationLayer.style.height, 10)).toBe(Math.floor(viewport.height));
     });
@@ -260,8 +265,9 @@ describe('AnnotationLayer', () => {
 
       const annotationLayer = container.firstElementChild;
 
-      // Expect the annotation layer to be scaled
       const viewport = page.getViewport({ scale });
+
+      // Expect the annotation layer to be scaled
       expect(parseInt(annotationLayer.style.width, 10)).toBe(Math.floor(viewport.width));
       expect(parseInt(annotationLayer.style.height, 10)).toBe(Math.floor(viewport.height));
     });
@@ -292,6 +298,7 @@ describe('AnnotationLayer', () => {
       await onRenderAnnotationLayerSuccessPromise;
 
       const stringifiedAnnotationLayerNode = container.outerHTML;
+
       expect(stringifiedAnnotationLayerNode).toMatch(desiredImageTagRegExp);
     });
 
@@ -322,6 +329,7 @@ describe('AnnotationLayer', () => {
       await onRenderAnnotationLayerSuccessPromise;
 
       const stringifiedAnnotationLayerNode = container.outerHTML;
+
       expect(stringifiedAnnotationLayerNode).toMatch(desiredImageTagRegExp);
     });
   });

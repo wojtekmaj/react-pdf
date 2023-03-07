@@ -61,6 +61,7 @@ describe('Document', () => {
       );
 
       expect.assertions(2);
+
       await expect(onSourceSuccessPromise).resolves.toBe(OK);
       await expect(onLoadSuccessPromise).resolves.toMatchObject(desiredLoadedPdf);
     });
@@ -78,6 +79,7 @@ describe('Document', () => {
       );
 
       expect.assertions(2);
+
       await expect(onSourceSuccessPromise).resolves.toBe(OK);
       await expect(onLoadSuccessPromise).resolves.toMatchObject(desiredLoadedPdf);
     });
@@ -96,6 +98,7 @@ describe('Document', () => {
       );
 
       expect.assertions(2);
+
       await expect(onSourceSuccessPromise).resolves.toBe(OK);
       await expect(onLoadSuccessPromise).resolves.toMatchObject(desiredLoadedPdf);
     });
@@ -113,6 +116,7 @@ describe('Document', () => {
       );
 
       expect.assertions(2);
+
       await expect(onSourceSuccessPromise).resolves.toBe(OK);
       await expect(onLoadSuccessPromise).resolves.toMatchObject(desiredLoadedPdf);
     });
@@ -130,6 +134,7 @@ describe('Document', () => {
       );
 
       expect.assertions(2);
+
       await expect(onSourceSuccessPromise).resolves.toBe(OK);
       await expect(onLoadSuccessPromise).resolves.toMatchObject(desiredLoadedPdf);
     });
@@ -350,6 +355,7 @@ describe('Document', () => {
       await onLoadSuccessPromise;
 
       const child = getByTestId(container, 'child');
+
       expect(child.dataset.rendermode).toBe('svg');
     });
 
@@ -367,6 +373,7 @@ describe('Document', () => {
       await onLoadSuccessPromise;
 
       const child = getByTestId(container, 'child');
+
       expect(child.dataset.rotate).toBe('90');
     });
 
@@ -389,6 +396,7 @@ describe('Document', () => {
       await onLoadSuccessPromise;
 
       const child = getByTestId(container, 'child');
+
       expect(child.dataset.rendermode).toBe('canvas');
     });
 
@@ -406,6 +414,7 @@ describe('Document', () => {
       await onLoadSuccessPromise;
 
       const child = getByTestId(container, 'child');
+
       expect(child.dataset.rotate).toBe('180');
     });
   });
