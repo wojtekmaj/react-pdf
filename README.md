@@ -148,8 +148,8 @@ If you use Browserify, esbuild, or other bundlers, you will have to make sure on
 For example, you could use a custom script like:
 
 ```js
-import path from 'path';
-import fs from 'fs';
+import path from 'node:path';
+import fs from 'node:fs';
 
 const pdfjsDistPath = path.dirname(require.resolve('pdfjs-dist/package.json'));
 const pdfWorkerPath = path.join(pdfjsDistPath, 'build', 'pdf.worker.js');
@@ -212,7 +212,7 @@ npm install copy-webpack-plugin --save-dev
 Now, in your Webpack config, import the plugin:
 
 ```js
-import path from 'path';
+import path from 'node:path';
 import CopyWebpackPlugin from 'copy-webpack-plugin';
 ```
 
@@ -236,8 +236,8 @@ If you use Parcel, Browserify or other bundling tools, you will have to make sur
 For example, you could use a custom script like:
 
 ```js
-import path from 'path';
-import fs from 'fs';
+import path from 'node:path';
+import fs from 'node:fs';
 
 const cMapsDir = path.join(path.dirname(require.resolve('pdfjs-dist/package.json')), 'cmaps');
 
@@ -299,7 +299,7 @@ npm install copy-webpack-plugin --save-dev
 Now, in your Webpack config, import the plugin:
 
 ```js
-import path from 'path';
+import path from 'node:path';
 import CopyWebpackPlugin from 'copy-webpack-plugin';
 ```
 
@@ -323,8 +323,8 @@ If you use Parcel, Browserify or other bundling tools, you will have to make sur
 For example, you could use a custom script like:
 
 ```js
-import path from 'path';
-import fs from 'fs';
+import path from 'node:path';
+import fs from 'node:fs';
 
 const standardFontsDir = path.join(
   path.dirname(require.resolve('pdfjs-dist/package.json')),

@@ -1,4 +1,4 @@
-import fs from 'fs';
+import fs from 'node:fs';
 
 fs.copyFile('src/Page/AnnotationLayer.css', 'dist/esm/Page/AnnotationLayer.css', (error) => {
   if (error) {
