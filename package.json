@@ -45,7 +45,7 @@
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^5.15.0",
-    "@testing-library/react": "^13.4.0",
+    "@testing-library/react": "^14.0.0",
     "@testing-library/user-event": "^14.4.0",
     "eslint": "^8.26.0",
     "eslint-config-wojtekmaj": "^0.8.2",
