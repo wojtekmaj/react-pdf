@@ -36,6 +36,7 @@ describe('Outline', () => {
       render(<Outline onLoadSuccess={onLoadSuccess} pdf={pdf} />);
 
       expect.assertions(1);
+
       await expect(onLoadSuccessPromise).resolves.toMatchObject(desiredLoadedOutline);
     });
 
@@ -47,6 +48,7 @@ describe('Outline', () => {
       render(<Outline onLoadError={onLoadError} pdf={failingPdf} />);
 
       expect.assertions(1);
+
       await expect(onLoadErrorPromise).resolves.toBeInstanceOf(Error);
 
       restoreConsole();
@@ -58,6 +60,7 @@ describe('Outline', () => {
       const { rerender } = render(<Outline onLoadSuccess={onLoadSuccess} pdf={pdf} />);
 
       expect.assertions(2);
+
       await expect(onLoadSuccessPromise).resolves.toMatchObject(desiredLoadedOutline);
 
       const { func: onLoadSuccess2, promise: onLoadSuccessPromise2 } = makeAsyncCallback();
@@ -88,6 +91,7 @@ describe('Outline', () => {
       );
 
       expect.assertions(1);
+
       await onLoadSuccessPromise;
 
       const wrapper = container.querySelector('.react-pdf__Outline');
@@ -103,6 +107,7 @@ describe('Outline', () => {
       render(<Outline inputRef={inputRef} onLoadSuccess={onLoadSuccess} pdf={pdf} />);
 
       expect.assertions(2);
+
       await onLoadSuccessPromise;
 
       expect(inputRef).toHaveBeenCalled();
@@ -115,6 +120,7 @@ describe('Outline', () => {
       render(<Outline onLoadSuccess={onLoadSuccess} pdf={pdf} />);
 
       expect.assertions(1);
+
       await onLoadSuccessPromise;
 
       const items = screen.getAllByRole('listitem');

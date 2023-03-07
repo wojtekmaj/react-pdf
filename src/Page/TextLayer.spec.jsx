@@ -40,6 +40,7 @@ describe('TextLayer', () => {
       render(<TextLayer onGetTextSuccess={onGetTextSuccess} page={page} />);
 
       expect.assertions(1);
+
       await expect(onGetTextSuccessPromise).resolves.toMatchObject({ items: desiredTextItems });
     });
 
@@ -51,6 +52,7 @@ describe('TextLayer', () => {
       render(<TextLayer onGetTextError={onGetTextError} page={failingPage} />);
 
       expect.assertions(1);
+
       await expect(onGetTextErrorPromise).resolves.toBeInstanceOf(Error);
 
       restoreConsole();
@@ -62,6 +64,7 @@ describe('TextLayer', () => {
       const { rerender } = render(<TextLayer onGetTextSuccess={onGetTextSuccess} page={page} />);
 
       expect.assertions(2);
+
       await expect(onGetTextSuccessPromise).resolves.toMatchObject({
         items: desiredTextItems,
       });
@@ -98,6 +101,7 @@ describe('TextLayer', () => {
       await onRenderTextLayerSuccessPromise;
 
       const textItems = [...container.firstElementChild.children];
+
       expect(textItems).toHaveLength(desiredTextItems.length + 1);
     });
 
@@ -120,6 +124,7 @@ describe('TextLayer', () => {
       await onRenderTextLayerSuccessPromise;
 
       const textItems = [...container.firstElementChild.children];
+
       expect(textItems).toHaveLength(desiredTextItems.length + 1);
     });
 
@@ -176,6 +181,7 @@ describe('TextLayer', () => {
       await onRenderTextLayerSuccessPromise;
 
       const textItems = [...container.firstElementChild.children];
+
       expect(textItems).toHaveLength(desiredTextItems.length + 1);
 
       expect(customTextRenderer).toHaveBeenCalledTimes(desiredTextItems.length);

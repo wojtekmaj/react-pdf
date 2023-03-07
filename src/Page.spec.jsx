@@ -61,6 +61,7 @@ describe('Page', () => {
       render(<Page onLoadSuccess={onLoadSuccess} pageIndex={0} pdf={pdf} />);
 
       expect.assertions(1);
+
       await expect(onLoadSuccessPromise).resolves.toMatchObject(desiredLoadedPage);
     });
 
@@ -89,6 +90,7 @@ describe('Page', () => {
       render(<Page onLoadError={onLoadError} pageIndex={0} pdf={failingPdf} />);
 
       expect.assertions(1);
+
       await expect(onLoadErrorPromise).resolves.toBeInstanceOf(Error);
 
       restoreConsole();
@@ -124,6 +126,7 @@ describe('Page', () => {
       render(<Page pageIndex={0} pdf={pdf} registerPage={registerPage} />);
 
       expect.assertions(1);
+
       await expect(registerPagePromise).resolves.toMatchObject(registerPageArguments);
     });
 
@@ -135,6 +138,7 @@ describe('Page', () => {
       unmount();
 
       expect.assertions(1);
+
       await expect(nuregisterPagePromise).resolves.toBe(unregisterPageArguments);
     });
 
@@ -144,6 +148,7 @@ describe('Page', () => {
       const { rerender } = render(<Page onLoadSuccess={onLoadSuccess} pageIndex={0} pdf={pdf} />);
 
       expect.assertions(2);
+
       await expect(onLoadSuccessPromise).resolves.toMatchObject(desiredLoadedPage);
 
       const { func: onLoadSuccess2, promise: onLoadSuccessPromise2 } = makeAsyncCallback();
@@ -159,6 +164,7 @@ describe('Page', () => {
       const { rerender } = render(<Page onLoadSuccess={onLoadSuccess} pageIndex={0} pdf={pdf} />);
 
       expect.assertions(2);
+
       await expect(onLoadSuccessPromise).resolves.toMatchObject(desiredLoadedPage);
 
       const { func: onLoadSuccess2, promise: onLoadSuccessPromise2 } = makeAsyncCallback();
