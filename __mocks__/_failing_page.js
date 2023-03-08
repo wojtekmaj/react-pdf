@@ -1,4 +1,7 @@
 export default {
+  cleanup: () => {
+    // Intentionally empty
+  },
   commonObjs: {
     get: () => {
       // Intentionally empty
