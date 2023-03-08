@@ -1,4 +1,4 @@
-import React, { createRef, PureComponent } from 'react';
+import React, { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import makeCancellable from 'make-cancellable-promise';
 import invariant from 'tiny-invariant';
@@ -11,129 +11,139 @@ import { cancelRunningTask } from '../shared/utils';
 
 import { isPage, isRotate } from '../shared/propTypes';
 
-export class TextLayerInternal extends PureComponent {
-  state = {
-    textContent: null,
-  };
+export function TextLayerInternal({
+  customTextRenderer,
+  onGetTextError,
+  onGetTextSuccess,
+  onRenderTextLayerError,
+  onRenderTextLayerSuccess,
+  page,
+  pageIndex,
+  pageNumber,
+  rotate: rotateProps,
+  scale,
+}) {
+  const [textContent, setTextContent] = useState(null);
+  const layerElement = useRef();
+  const endElement = useRef();
 
-  layerElement = createRef();
+  invariant(page, 'Attempted to load page text content, but no page was specified.');
 
-  endElement = createRef();
+  warning(
+    parseInt(
+      window.getComputedStyle(document.body).getPropertyValue('--react-pdf-text-layer'),
+      10,
+    ) === 1,
+    'TextLayer styles not found. Read more: https://github.com/wojtekmaj/react-pdf#support-for-text-layer',
+  );
 
-  componentDidMount() {
-    const { page } = this.props;
+  /**
+   * Called when a page text content is read successfully
+   */
+  const onLoadSuccess = useCallback(
+    (nextTextContent) => {
+      if (onGetTextSuccess) {
+        onGetTextSuccess(nextTextContent);
+      }
+    },
+    [onGetTextSuccess],
+  );
+  /**
+   * Called when a page text content failed to read successfully
+   */
+  const onLoadError = useCallback(
+    (error) => {
+      setTextContent(false);
 
-    invariant(page, 'Attempted to load page text content, but no page was specified.');
+      warning(false, error);
 
-    warning(
-      parseInt(
-        window.getComputedStyle(document.body).getPropertyValue('--react-pdf-text-layer'),
-        10,
-      ) === 1,
-      'TextLayer styles not found. Read more: https://github.com/wojtekmaj/react-pdf#support-for-text-layer',
-    );
+      if (onGetTextError) {
+        onGetTextError(error);
+      }
+    },
+    [onGetTextError],
+  );
 
-    this.loadTextContent();
+  function resetTextContent() {
+    setTextContent(null);
   }
 
-  componentDidUpdate(prevProps) {
-    const { page } = this.props;
+  useEffect(resetTextContent, [page]);
 
-    if (prevProps.page && page !== prevProps.page) {
-      this.loadTextContent();
-    }
-  }
-
-  componentWillUnmount() {
-    cancelRunningTask(this.runningTask);
-  }
-
-  loadTextContent = () => {
-    const { page } = this.props;
-
+  function loadTextContent() {
     const cancellable = makeCancellable(page.getTextContent());
-    this.runningTask = cancellable;
+    const runningTask = cancellable;
 
     cancellable.promise
-      .then((textContent) => {
-        this.setState({ textContent }, this.onLoadSuccess);
+      .then((nextTextContent) => {
+        setTextContent(nextTextContent);
+
+        // Waiting for textContent to be set in state
+        setTimeout(() => {
+          onLoadSuccess(nextTextContent);
+        }, 0);
       })
-      .catch((error) => {
-        this.onLoadError(error);
-      });
-  };
+      .catch(onLoadError);
 
-  onLoadSuccess = () => {
-    const { onGetTextSuccess } = this.props;
-    const { textContent } = this.state;
+    return () => cancelRunningTask(runningTask);
+  }
 
-    if (onGetTextSuccess) onGetTextSuccess(textContent);
-  };
+  useEffect(loadTextContent, [onLoadError, onLoadSuccess, page]);
 
-  onLoadError = (error) => {
-    this.setState({ textItems: false });
+  /**
+   * Called when a text layer is rendered successfully
+   */
+  const onRenderSuccess = useCallback(() => {
+    if (onRenderTextLayerSuccess) {
+      onRenderTextLayerSuccess();
+    }
+  }, [onRenderTextLayerSuccess]);
 
-    warning(false, error);
+  /**
+   * Called when a text layer failed to render successfully
+   */
+  const onRenderError = useCallback(
+    (error) => {
+      warning(false, error);
 
-    const { onGetTextError } = this.props;
+      if (onRenderTextLayerError) {
+        onRenderTextLayerError(error);
+      }
+    },
+    [onRenderTextLayerError],
+  );
 
-    if (onGetTextError) onGetTextError(error);
-  };
-
-  onRenderSuccess = () => {
-    const { onRenderTextLayerSuccess } = this.props;
-
-    if (onRenderTextLayerSuccess) onRenderTextLayerSuccess();
-  };
-
-  onRenderError = (error) => {
-    warning(false, error);
-
-    const { onRenderTextLayerError } = this.props;
-
-    if (onRenderTextLayerError) onRenderTextLayerError(error);
-  };
-
-  onMouseDown = () => {
-    const end = this.endElement.current;
+  function onMouseDown() {
+    const end = endElement.current;
 
     if (!end) {
       return;
     }
 
     end.classList.add('active');
-  };
+  }
 
-  onMouseUp = () => {
-    const end = this.endElement.current;
+  function onMouseUp() {
+    const end = endElement.current;
 
     if (!end) {
       return;
     }
 
     end.classList.remove('active');
-  };
-
-  get viewport() {
-    const { page, rotate, scale } = this.props;
-
-    return page.getViewport({ scale, rotation: rotate });
   }
 
-  renderTextLayer() {
-    const { textContent } = this.state;
+  const viewport = useMemo(
+    () => page.getViewport({ scale, rotation: rotateProps }),
+    [page, rotateProps, scale],
+  );
 
+  function renderTextLayer() {
     if (!textContent) {
-      return null;
+      return;
     }
 
-    const container = this.layerElement.current;
-
-    const { viewport } = this;
-    const { customTextRenderer, pageIndex, pageNumber } = this.props;
-
-    // If another rendering is in progress, let's cancel it
-    cancelRunningTask(this.runningTask);
+    const container = layerElement.current;
 
     container.innerHTML = '';
 
@@ -144,19 +154,19 @@ export class TextLayerInternal extends PureComponent {
     };
 
     const cancellable = pdfjs.renderTextLayer(parameters);
-    this.runningTask = cancellable;
+    const runningTask = cancellable;
 
     cancellable.promise
       .then(() => {
         const end = document.createElement('div');
         end.className = 'endOfContent';
         container.append(end);
-        this.endElement.current = end;
+        endElement.current = end;
 
         if (customTextRenderer) {
           let index = 0;
           textContent.items.forEach((item, itemIndex) => {
-            const child = this.layerElement.current.children[index];
+            const child = layerElement.current.children[index];
 
             const content = customTextRenderer({
               pageIndex,
@@ -170,26 +180,33 @@ export class TextLayerInternal extends PureComponent {
           });
         }
 
-        this.onRenderSuccess();
+        // Intentional immediate callback
+        onRenderSuccess();
       })
-      .catch((error) => {
-        this.onRenderError(error);
-      });
+      .catch(onRenderError);
+
+    return () => cancelRunningTask(runningTask);
   }
 
-  render() {
-    return (
-      // eslint-disable-next-line jsx-a11y/no-static-element-interactions
-      <div
-        className="react-pdf__Page__textContent textLayer"
-        onMouseUp={this.onMouseUp}
-        onMouseDown={this.onMouseDown}
-        ref={this.layerElement}
-      >
-        {this.renderTextLayer()}
-      </div>
-    );
-  }
+  useLayoutEffect(renderTextLayer, [
+    customTextRenderer,
+    onRenderError,
+    onRenderSuccess,
+    pageIndex,
+    pageNumber,
+    textContent,
+    viewport,
+  ]);
+
+  return (
+    // eslint-disable-next-line jsx-a11y/no-static-element-interactions
+    <div
+      className="react-pdf__Page__textContent textLayer"
+      onMouseUp={onMouseUp}
+      onMouseDown={onMouseDown}
+      ref={layerElement}
+    />
+  );
 }
 
 TextLayerInternal.propTypes = {
