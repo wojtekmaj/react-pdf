@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React, { useRef } from 'react';
 import PropTypes from 'prop-types';
 
 import DocumentContext from './DocumentContext';
@@ -10,87 +10,68 @@ import { isDefined } from './shared/utils';
 
 import { isPdf } from './shared/propTypes';
 
-export class OutlineItemInternal extends PureComponent {
-  getDestination = () =>
-    new Promise((resolve, reject) => {
-      if (isDefined(this.destination)) {
-        resolve(this.destination);
-        return;
-      }
+function useCachedValue(getter) {
+  const ref = useRef();
 
-      const { item, pdf } = this.props;
+  if (isDefined(ref.current)) {
+    return () => ref.current;
+  }
 
-      if (typeof item.dest === 'string') {
-        pdf.getDestination(item.dest).then(resolve).catch(reject);
-      } else {
-        resolve(item.dest);
-      }
-    }).then((destination) => {
-      this.destination = destination;
-      return destination;
-    });
+  return () => {
+    const value = getter();
 
-  getPageIndex = () =>
-    new Promise((resolve, reject) => {
-      const { pdf } = this.props;
-      if (isDefined(this.pageIndex)) {
-        resolve(this.pageIndex);
-        return;
-      }
+    ref.current = value;
 
-      this.getDestination().then((destination) => {
-        if (!destination) {
-          return;
-        }
+    return value;
+  };
+}
 
-        const [ref] = destination;
-        pdf.getPageIndex(new Ref(ref)).then(resolve).catch(reject);
-      });
-    }).then((pageIndex) => {
-      this.pageIndex = pageIndex;
-      return this.pageIndex;
-    });
+export function OutlineItemInternal({ item, onClick: onClickProps, pdf, ...otherProps }) {
+  const getDestination = useCachedValue(() => {
+    if (typeof item.dest === 'string') {
+      return pdf.getDestination(item.dest);
+    }
 
-  getPageNumber = () =>
-    new Promise((resolve, reject) => {
-      if (isDefined(this.pageNumber)) {
-        resolve(this.pageNumber);
-        return;
-      }
+    return item.dest;
+  });
 
-      this.getPageIndex()
-        .then((pageIndex) => {
-          resolve(pageIndex + 1);
-        })
-        .catch(reject);
-    }).then((pageNumber) => {
-      this.pageNumber = pageNumber;
-      return pageNumber;
-    });
+  const getPageIndex = useCachedValue(async () => {
+    const destination = await getDestination();
 
-  onClick = (event) => {
-    const { onClick } = this.props;
+    if (!destination) {
+      return;
+    }
 
+    const [ref] = destination;
+
+    return pdf.getPageIndex(new Ref(ref));
+  });
+
+  const getPageNumber = useCachedValue(async () => {
+    const pageIndex = await getPageIndex();
+
+    return pageIndex + 1;
+  });
+
+  function onClick(event) {
     event.preventDefault();
 
-    if (!onClick) {
+    if (!onClickProps) {
       return false;
     }
 
-    return Promise.all([this.getDestination(), this.getPageIndex(), this.getPageNumber()]).then(
+    return Promise.all([getDestination(), getPageIndex(), getPageNumber()]).then(
       ([dest, pageIndex, pageNumber]) => {
-        onClick({
+        onClickProps({
           dest,
           pageIndex,
           pageNumber,
         });
       },
     );
-  };
+  }
 
-  renderSubitems() {
-    const { item, ...otherProps } = this.props;
-
+  function renderSubitems() {
     if (!item.items || !item.items.length) {
       return null;
     }
@@ -103,6 +84,8 @@ export class OutlineItemInternal extends PureComponent {
           <OutlineItemInternal
             key={typeof subitem.destination === 'string' ? subitem.destination : subitemIndex}
             item={subitem}
+            onClick={onClickProps}
+            pdf={pdf}
             {...otherProps}
           />
         ))}
@@ -110,19 +93,15 @@ export class OutlineItemInternal extends PureComponent {
     );
   }
 
-  render() {
-    const { item } = this.props;
-
-    return (
-      <li>
-        {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-        <a href="#" onClick={this.onClick}>
-          {item.title}
-        </a>
-        {this.renderSubitems()}
-      </li>
-    );
-  }
+  return (
+    <li>
+      {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+      <a href="#" onClick={onClick}>
+        {item.title}
+      </a>
+      {renderSubitems()}
+    </li>
+  );
 }
 
 const isDestination = PropTypes.oneOfType([PropTypes.string, PropTypes.arrayOf(PropTypes.any)]);
