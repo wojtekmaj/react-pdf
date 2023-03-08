@@ -12,17 +12,13 @@ import { loadPDF, makeAsyncCallback, muteConsole, restoreConsole } from '../test
 
 const pdfFile = loadPDF('./__mocks__/_pdf.pdf');
 const pdfFile2 = loadPDF('./__mocks__/_pdf2.pdf');
-
-vi.mock('./Page/AnnotationLayer', () => ({
-  default: function AnnotationLayer() {
-    return <div className="react-pdf__Page__annotations" />;
-  },
-}));
+const pdfFile4 = loadPDF('./__mocks__/_pdf4.pdf');
 
 describe('Page', () => {
   // Loaded PDF file
   let pdf;
   let pdf2;
+  let pdf4;
 
   // Object with basic loaded page information that shall match after successful loading
   const desiredLoadedPage = {};
@@ -52,6 +48,8 @@ describe('Page', () => {
 
     registerPageArguments.push(page._pageIndex, expect.any(HTMLDivElement));
     unregisterPageArguments = page._pageIndex;
+
+    pdf4 = await pdfjs.getDocument({ data: pdfFile4.arrayBuffer }).promise;
   });
 
   describe('loading', () => {
@@ -300,27 +298,50 @@ describe('Page', () => {
     });
 
     it('requests page to be rendered with default rotation when given nothing', async () => {
-      const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
-      const instance = createRef();
+      const { func: onRenderSuccess, promise: onRenderSuccessPromise } = makeAsyncCallback();
 
-      render(<Page onLoadSuccess={onLoadSuccess} pageIndex={0} pdf={pdf} ref={instance} />);
+      const { container } = render(
+        <Page onRenderSuccess={onRenderSuccess} pageIndex={0} pdf={pdf} renderMode="svg" />,
+      );
 
-      await onLoadSuccessPromise;
+      const page = await onRenderSuccessPromise;
 
-      expect(instance.current.rotate).toBe(0);
+      const pageSvg = container.querySelector('.react-pdf__Page__svg');
+
+      const { width, height } = window.getComputedStyle(pageSvg);
+
+      const viewport = page.getViewport({ scale: 1 });
+
+      // Expect the annotation layer not to be rotated
+      expect(parseInt(width, 10)).toBe(Math.floor(viewport.width));
+      expect(parseInt(height, 10)).toBe(Math.floor(viewport.height));
     });
 
     it('requests page to be rendered with given rotation when given rotate prop', async () => {
-      const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
-      const instance = createRef();
+      const { func: onRenderSuccess, promise: onRenderSuccessPromise } = makeAsyncCallback();
+      const rotate = 90;
 
-      render(
-        <Page onLoadSuccess={onLoadSuccess} pageIndex={0} pdf={pdf} rotate={90} ref={instance} />,
+      const { container } = render(
+        <Page
+          onRenderSuccess={onRenderSuccess}
+          pageIndex={0}
+          pdf={pdf}
+          renderMode="svg"
+          rotate={rotate}
+        />,
       );
 
-      await onLoadSuccessPromise;
+      const page = await onRenderSuccessPromise;
 
-      expect(instance.current.rotate).toBe(90);
+      const pageSvg = container.querySelector('.react-pdf__Page__svg');
+
+      const { width, height } = window.getComputedStyle(pageSvg);
+
+      const viewport = page.getViewport({ scale: 1, rotation: rotate });
+
+      // Expect the annotation layer to be rotated
+      expect(parseInt(width, 10)).toBe(Math.floor(viewport.width));
+      expect(parseInt(height, 10)).toBe(Math.floor(viewport.height));
     });
 
     it('requests page to be rendered in canvas mode by default', async () => {
@@ -530,74 +551,95 @@ describe('Page', () => {
   });
 
   it('requests page to be rendered without forms by default', async () => {
-    const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
-    const instance = createRef();
+    const { func: onRenderAnnotationLayerSuccess, promise: onRenderAnnotationLayerSuccessPromise } =
+      makeAsyncCallback();
 
-    render(<Page onLoadSuccess={onLoadSuccess} pageIndex={0} pdf={pdf} ref={instance} />);
+    const { container } = render(
+      <Page
+        onRenderAnnotationLayerSuccess={onRenderAnnotationLayerSuccess}
+        pageIndex={0}
+        pdf={pdf4}
+        renderMode="none"
+      />,
+    );
 
     expect.assertions(1);
 
-    await onLoadSuccessPromise;
+    await onRenderAnnotationLayerSuccessPromise;
 
-    expect(instance.current.childContext.renderForms).toBeFalsy();
+    const textWidgetAnnotation = container.querySelector('.textWidgetAnnotation');
+
+    expect(textWidgetAnnotation).toBeFalsy();
   });
 
   it('requests page to be rendered with forms given renderForms = true', async () => {
-    const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
-    const instance = createRef();
+    const { func: onRenderAnnotationLayerSuccess, promise: onRenderAnnotationLayerSuccessPromise } =
+      makeAsyncCallback();
 
-    render(
-      <Page onLoadSuccess={onLoadSuccess} pageIndex={0} pdf={pdf} ref={instance} renderForms />,
+    const { container } = render(
+      <Page
+        onRenderAnnotationLayerSuccess={onRenderAnnotationLayerSuccess}
+        pageIndex={0}
+        pdf={pdf4}
+        renderForms
+        renderMode="none"
+      />,
     );
 
     expect.assertions(1);
 
-    await onLoadSuccessPromise;
+    await onRenderAnnotationLayerSuccessPromise;
 
-    expect(instance.current.childContext.renderForms).toBe(true);
+    const textWidgetAnnotation = container.querySelector('.textWidgetAnnotation');
+
+    expect(textWidgetAnnotation).toBeTruthy();
   });
 
   it('requests page to be rendered with forms given legacy renderInteractiveForms = true', async () => {
-    const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
-    const instance = createRef();
+    const { func: onRenderAnnotationLayerSuccess, promise: onRenderAnnotationLayerSuccessPromise } =
+      makeAsyncCallback();
 
-    render(
+    const { container } = render(
       <Page
-        onLoadSuccess={onLoadSuccess}
+        onRenderAnnotationLayerSuccess={onRenderAnnotationLayerSuccess}
         pageIndex={0}
-        pdf={pdf}
-        ref={instance}
+        pdf={pdf4}
         renderInteractiveForms
+        renderMode="none"
       />,
     );
 
     expect.assertions(1);
 
-    await onLoadSuccessPromise;
+    await onRenderAnnotationLayerSuccessPromise;
 
-    expect(instance.current.childContext.renderForms).toBe(true);
+    const textWidgetAnnotation = container.querySelector('.textWidgetAnnotation');
+
+    expect(textWidgetAnnotation).toBeTruthy();
   });
 
   it('requests page to be rendered without forms given renderForms = false and legacy renderInteractiveForms = true', async () => {
-    const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
-    const instance = createRef();
+    const { func: onRenderAnnotationLayerSuccess, promise: onRenderAnnotationLayerSuccessPromise } =
+      makeAsyncCallback();
 
-    render(
+    const { container } = render(
       <Page
-        onLoadSuccess={onLoadSuccess}
+        onRenderAnnotationLayerSuccess={onRenderAnnotationLayerSuccess}
         pageIndex={0}
-        pdf={pdf}
-        ref={instance}
+        pdf={pdf4}
         renderForms={false}
         renderInteractiveForms
+        renderMode="none"
       />,
     );
 
     expect.assertions(1);
 
-    await onLoadSuccessPromise;
+    await onRenderAnnotationLayerSuccessPromise;
 
-    expect(instance.current.childContext.renderForms).toBeFalsy();
+    const textWidgetAnnotation = container.querySelector('.textWidgetAnnotation');
+
+    expect(textWidgetAnnotation).toBeFalsy();
   });
 
   it('requests page to be rendered at its original size given nothing', async () => {
