@@ -236,11 +236,13 @@ describe('AnnotationLayer', () => {
 
       const annotationLayer = container.firstElementChild;
 
+      const { width, height } = window.getComputedStyle(annotationLayer);
+
       const viewport = page.getViewport({ scale: 1 });
 
       // Expect the annotation layer to be rotated
-      expect(parseInt(annotationLayer.style.width, 10)).toBe(Math.floor(viewport.width));
-      expect(parseInt(annotationLayer.style.height, 10)).toBe(Math.floor(viewport.height));
+      expect(parseInt(width, 10)).toBe(Math.floor(viewport.width));
+      expect(parseInt(height, 10)).toBe(Math.floor(viewport.height));
     });
 
     it('renders annotations at a given scale', async () => {
@@ -265,11 +267,13 @@ describe('AnnotationLayer', () => {
 
       const annotationLayer = container.firstElementChild;
 
+      const { width, height } = window.getComputedStyle(annotationLayer);
+
       const viewport = page.getViewport({ scale });
 
       // Expect the annotation layer to be scaled
-      expect(parseInt(annotationLayer.style.width, 10)).toBe(Math.floor(viewport.width));
-      expect(parseInt(annotationLayer.style.height, 10)).toBe(Math.floor(viewport.height));
+      expect(parseInt(width, 10)).toBe(Math.floor(viewport.width));
+      expect(parseInt(height, 10)).toBe(Math.floor(viewport.height));
     });
 
     it('renders annotations with the default imageResourcesPath given no imageResourcesPath', async () => {
