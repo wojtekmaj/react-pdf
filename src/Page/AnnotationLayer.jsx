@@ -1,4 +1,4 @@
-import React, { createRef, PureComponent } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import makeCancellable from 'make-cancellable-promise';
 import invariant from 'tiny-invariant';
@@ -12,131 +12,151 @@ import { cancelRunningTask } from '../shared/utils';
 
 import { isLinkService, isPage, isRotate } from '../shared/propTypes';
 
-export class AnnotationLayerInternal extends PureComponent {
-  state = {
-    annotations: null,
-  };
+export function AnnotationLayerInternal({
+  imageResourcesPath,
+  linkService,
+  onGetAnnotationsError: onGetAnnotationsErrorProps,
+  onGetAnnotationsSuccess: onGetAnnotationsSuccessProps,
+  onRenderAnnotationLayerError: onRenderAnnotationLayerErrorProps,
+  onRenderAnnotationLayerSuccess: onRenderAnnotationLayerSuccessProps,
+  page,
+  renderForms,
+  rotate: rotateProps,
+  scale = 1,
+}) {
+  const [annotations, setAnnotations] = useState(null);
+  const layerElement = useRef();
 
-  layerElement = createRef();
+  invariant(page, 'Attempted to load page annotations, but no page was specified.');
 
-  componentDidMount() {
-    const { page } = this.props;
+  warning(
+    parseInt(
+      window.getComputedStyle(document.body).getPropertyValue('--react-pdf-annotation-layer'),
+      10,
+    ) === 1,
+    'AnnotationLayer styles not found. Read more: https://github.com/wojtekmaj/react-pdf#support-for-annotations',
+  );
 
-    invariant(page, 'Attempted to load page annotations, but no page was specified.');
+  const onLoadSuccess = useCallback(
+    (nextAnnotations) => {
+      if (onGetAnnotationsSuccessProps) {
+        onGetAnnotationsSuccessProps(nextAnnotations);
+      }
+    },
+    [onGetAnnotationsSuccessProps],
+  );
 
-    warning(
-      parseInt(
-        window.getComputedStyle(document.body).getPropertyValue('--react-pdf-annotation-layer'),
-        10,
-      ) === 1,
-      'AnnotationLayer styles not found. Read more: https://github.com/wojtekmaj/react-pdf#support-for-annotations',
-    );
+  const onLoadError = useCallback(
+    (error) => {
+      setAnnotations(false);
 
-    this.loadAnnotations();
+      warning(false, error);
+
+      if (onGetAnnotationsErrorProps) onGetAnnotationsErrorProps(error);
+    },
+    [onGetAnnotationsErrorProps],
+  );
+
+  function resetAnnotations() {
+    setAnnotations(null);
   }
 
-  componentDidUpdate(prevProps) {
-    const { page, renderForms } = this.props;
+  useEffect(resetAnnotations, [page]);
 
-    if ((prevProps.page && page !== prevProps.page) || renderForms !== prevProps.renderForms) {
-      this.loadAnnotations();
-    }
-  }
-
-  componentWillUnmount() {
-    cancelRunningTask(this.runningTask);
-  }
-
-  loadAnnotations = () => {
-    const { page } = this.props;
-
+  function loadAnnotations() {
     const cancellable = makeCancellable(page.getAnnotations());
-    this.runningTask = cancellable;
+    const runningTask = cancellable;
 
     cancellable.promise
-      .then((annotations) => {
-        this.setState({ annotations }, this.onLoadSuccess);
+      .then((nextAnnotations) => {
+        setAnnotations(nextAnnotations);
+
+        // Waiting for annotations to be set in state
+        setTimeout(() => {
+          onLoadSuccess(nextAnnotations);
+        }, 0);
       })
-      .catch((error) => {
-        this.onLoadError(error);
-      });
-  };
+      .catch(onLoadError);
 
-  onLoadSuccess = () => {
-    const { onGetAnnotationsSuccess } = this.props;
-    const { annotations } = this.state;
-
-    if (onGetAnnotationsSuccess) onGetAnnotationsSuccess(annotations);
-  };
-
-  onLoadError = (error) => {
-    this.setState({ annotations: false });
-
-    warning(false, error);
-
-    const { onGetAnnotationsError } = this.props;
-
-    if (onGetAnnotationsError) onGetAnnotationsError(error);
-  };
-
-  onRenderSuccess = () => {
-    const { onRenderAnnotationLayerSuccess } = this.props;
-
-    if (onRenderAnnotationLayerSuccess) onRenderAnnotationLayerSuccess();
-  };
-
-  onRenderError = (error) => {
-    warning(false, error);
-
-    const { onRenderAnnotationLayerError } = this.props;
-
-    if (onRenderAnnotationLayerError) onRenderAnnotationLayerError(error);
-  };
-
-  get viewport() {
-    const { page, rotate, scale } = this.props;
-
-    return page.getViewport({ scale, rotation: rotate });
+    return () => {
+      cancelRunningTask(runningTask);
+    };
   }
 
-  renderAnnotationLayer() {
-    const { annotations } = this.state;
+  useEffect(loadAnnotations, [page, onLoadError, onLoadSuccess, renderForms]);
 
+  const onRenderSuccess = useCallback(() => {
+    if (onRenderAnnotationLayerSuccessProps) {
+      onRenderAnnotationLayerSuccessProps();
+    }
+  }, [onRenderAnnotationLayerSuccessProps]);
+
+  const onRenderError = useCallback(
+    (error) => {
+      warning(false, error);
+      if (onRenderAnnotationLayerErrorProps) {
+        onRenderAnnotationLayerErrorProps(error);
+      }
+    },
+    [onRenderAnnotationLayerErrorProps],
+  );
+
+  const viewport = useMemo(
+    () => page.getViewport({ scale, rotation: rotateProps }),
+    [page, rotateProps, scale],
+  );
+
+  function renderAnnotationLayer() {
     if (!annotations) {
       return;
     }
 
-    const { imageResourcesPath, linkService, page, renderForms } = this.props;
+    const { current: layer } = layerElement;
 
-    const viewport = this.viewport.clone({ dontFlip: true });
+    if (!layer) {
+      return null;
+    }
+
+    const clonedViewport = viewport.clone({ dontFlip: true });
 
     const parameters = {
       annotations,
-      div: this.layerElement.current,
+      div: layer,
       imageResourcesPath,
       linkService,
       page,
       renderForms,
-      viewport,
+      viewport: clonedViewport,
     };
 
-    this.layerElement.current.innerHTML = '';
+    layer.innerHTML = '';
 
     try {
       pdfjs.AnnotationLayer.render(parameters);
-      this.onRenderSuccess();
+
+      // Intentional immediate callback
+      onRenderSuccess();
     } catch (error) {
-      this.onRenderError(error);
+      onRenderError(error);
     }
+
+    return () => {
+      // TODO: Cancel running task?
+    };
   }
 
-  render() {
-    return (
-      <div className="react-pdf__Page__annotations annotationLayer" ref={this.layerElement}>
-        {this.renderAnnotationLayer()}
-      </div>
-    );
-  }
+  useEffect(renderAnnotationLayer, [
+    annotations,
+    imageResourcesPath,
+    linkService,
+    onRenderError,
+    onRenderSuccess,
+    page,
+    renderForms,
+    viewport,
+  ]);
+
+  return <div className="react-pdf__Page__annotations annotationLayer" ref={layerElement} />;
 }
 
 AnnotationLayerInternal.propTypes = {

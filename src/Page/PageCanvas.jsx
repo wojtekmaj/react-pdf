@@ -1,4 +1,4 @@
-import React, { createRef, PureComponent } from 'react';
+import React, { createRef, useCallback, useEffect, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import mergeRefs from 'merge-refs';
 import warning from 'tiny-warning';
@@ -6,108 +6,78 @@ import * as pdfjs from 'pdfjs-dist/build/pdf';
 
 import PageContext from '../PageContext';
 
-import { getDevicePixelRatio, isCancelException, makePageCallback } from '../shared/utils';
+import {
+  cancelRunningTask,
+  getDevicePixelRatio,
+  isCancelException,
+  makePageCallback,
+} from '../shared/utils';
 
 import { isPage, isRef, isRotate } from '../shared/propTypes';
 
 const ANNOTATION_MODE = pdfjs.AnnotationMode;
 
-export class PageCanvasInternal extends PureComponent {
-  canvasElement = createRef();
+export function PageCanvasInternal({
+  canvasBackground,
+  canvasRef,
+  devicePixelRatio: devicePixelRatioProps,
+  onRenderError: onRenderErrorProps,
+  onRenderSuccess: onRenderSuccessProps,
+  page,
+  renderForms,
+  rotate: rotateProps,
+  scale,
+}) {
+  const canvasElement = createRef();
 
-  componentDidMount() {
-    this.drawPageOnCanvas();
-  }
-
-  componentDidUpdate(prevProps) {
-    const { canvasBackground, devicePixelRatio, page, renderForms } = this.props;
-    if (
-      canvasBackground !== prevProps.canvasBackground ||
-      devicePixelRatio !== prevProps.devicePixelRatio ||
-      renderForms !== prevProps.renderForms
-    ) {
-      // Ensures the canvas will be re-rendered from scratch. Otherwise all form data will stay.
-      page.cleanup();
-      this.drawPageOnCanvas();
-    }
-  }
-
-  componentWillUnmount() {
-    this.cancelRenderingTask();
-
-    const { current: canvas } = this.canvasElement;
-
-    /**
-     * Zeroing the width and height cause most browsers to release graphics
-     * resources immediately, which can greatly reduce memory consumption.
-     */
-    if (canvas) {
-      canvas.width = 0;
-      canvas.height = 0;
-    }
-  }
-
-  cancelRenderingTask() {
-    if (this.renderer) {
-      this.renderer.cancel();
-      this.renderer = null;
-    }
-  }
+  const devicePixelRatio = devicePixelRatioProps || getDevicePixelRatio();
 
   /**
    * Called when a page is rendered successfully.
    */
-  onRenderSuccess = () => {
-    this.renderer = null;
-
-    const { onRenderSuccess, page, scale } = this.props;
-
-    if (onRenderSuccess) onRenderSuccess(makePageCallback(page, scale));
-  };
+  const onRenderSuccess = useCallback(() => {
+    if (onRenderSuccessProps) {
+      onRenderSuccessProps(makePageCallback(page, scale));
+    }
+  }, [onRenderSuccessProps, page, scale]);
 
   /**
    * Called when a page fails to render.
    */
-  onRenderError = (error) => {
-    if (isCancelException(error)) {
-      return;
-    }
+  const onRenderError = useCallback(
+    (error) => {
+      if (isCancelException(error)) {
+        return;
+      }
 
-    warning(false, error);
+      warning(false, error);
 
-    const { onRenderError } = this.props;
+      if (onRenderErrorProps) {
+        onRenderErrorProps(error);
+      }
+    },
+    [onRenderErrorProps],
+  );
 
-    if (onRenderError) onRenderError(error);
-  };
+  const renderViewport = useMemo(
+    () => page.getViewport({ scale: scale * devicePixelRatio, rotation: rotateProps }),
+    [devicePixelRatio, page, rotateProps, scale],
+  );
 
-  get devicePixelRatio() {
-    const { devicePixelRatio } = this.props;
+  const viewport = useMemo(
+    () => page.getViewport({ scale, rotation: rotateProps }),
+    [page, rotateProps, scale],
+  );
 
-    return devicePixelRatio || getDevicePixelRatio();
-  }
+  function drawPageOnCanvas() {
+    // Ensures the canvas will be re-rendered from scratch. Otherwise all form data will stay.
+    page.cleanup();
 
-  get renderViewport() {
-    const { devicePixelRatio } = this;
-    const { page, rotate, scale } = this.props;
-
-    return page.getViewport({ scale: scale * devicePixelRatio, rotation: rotate });
-  }
-
-  get viewport() {
-    const { page, rotate, scale } = this.props;
-
-    return page.getViewport({ scale, rotation: rotate });
-  }
-
-  drawPageOnCanvas = () => {
-    const { current: canvas } = this.canvasElement;
+    const { current: canvas } = canvasElement;
 
     if (!canvas) {
       return null;
     }
-
-    const { renderViewport, viewport } = this;
-    const { canvasBackground, page, renderForms } = this.props;
 
     canvas.width = renderViewport.width;
     canvas.height = renderViewport.height;
@@ -126,30 +96,52 @@ export class PageCanvasInternal extends PureComponent {
       renderContext.background = canvasBackground;
     }
 
-    // If another render is in progress, let's cancel it
-    this.cancelRenderingTask();
-
     const cancellable = page.render(renderContext);
-    this.renderer = cancellable;
+    const runningTask = cancellable;
 
-    return cancellable.promise.then(this.onRenderSuccess).catch(this.onRenderError);
-  };
+    cancellable.promise.then(onRenderSuccess).catch(onRenderError);
 
-  render() {
-    const { canvasRef } = this.props;
-
-    return (
-      <canvas
-        className="react-pdf__Page__canvas"
-        dir="ltr"
-        ref={mergeRefs(canvasRef, this.canvasElement)}
-        style={{
-          display: 'block',
-          userSelect: 'none',
-        }}
-      />
-    );
+    return () => cancelRunningTask(runningTask);
   }
+
+  useEffect(drawPageOnCanvas, [
+    canvasBackground,
+    canvasElement,
+    devicePixelRatio,
+    onRenderError,
+    onRenderSuccess,
+    page,
+    renderForms,
+    renderViewport,
+    viewport,
+  ]);
+
+  const cleanup = useCallback(() => {
+    const { current: canvas } = canvasElement;
+
+    /**
+     * Zeroing the width and height cause most browsers to release graphics
+     * resources immediately, which can greatly reduce memory consumption.
+     */
+    if (canvas) {
+      canvas.width = 0;
+      canvas.height = 0;
+    }
+  }, [canvasElement]);
+
+  useEffect(() => cleanup, [cleanup]);
+
+  return (
+    <canvas
+      className="react-pdf__Page__canvas"
+      dir="ltr"
+      ref={mergeRefs(canvasRef, canvasElement)}
+      style={{
+        display: 'block',
+        userSelect: 'none',
+      }}
+    />
+  );
 }
 
 PageCanvasInternal.propTypes = {

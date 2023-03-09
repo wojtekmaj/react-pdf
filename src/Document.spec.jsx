@@ -444,7 +444,7 @@ describe('Document', () => {
       const pageNumber = 6;
 
       // Simulate clicking on an outline item
-      instance.current.viewer.scrollPageIntoView({ dest, pageIndex, pageNumber });
+      instance.current.viewer.current.scrollPageIntoView({ dest, pageIndex, pageNumber });
 
       expect(onItemClick).toHaveBeenCalledTimes(1);
       expect(onItemClick).toHaveBeenCalledWith({ dest, pageIndex, pageNumber });
@@ -467,10 +467,10 @@ describe('Document', () => {
       const pageNumber = 6;
 
       // Register fake page in Document viewer
-      instance.current.pages[pageIndex] = { scrollIntoView };
+      instance.current.pages.current[pageIndex] = { scrollIntoView };
 
       // Simulate clicking on an outline item
-      instance.current.viewer.scrollPageIntoView({ dest, pageIndex, pageNumber });
+      instance.current.viewer.current.scrollPageIntoView({ dest, pageIndex, pageNumber });
 
       expect(scrollIntoView).toHaveBeenCalledTimes(1);
     });

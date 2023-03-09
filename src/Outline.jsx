@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import makeCancellable from 'make-cancellable-promise';
 import makeEventProps from 'make-event-props';
@@ -15,101 +15,97 @@ import { cancelRunningTask } from './shared/utils';
 
 import { eventProps, isClassName, isPdf, isRef } from './shared/propTypes';
 
-export class OutlineInternal extends PureComponent {
-  state = {
-    outline: null,
-  };
+export function OutlineInternal({
+  className,
+  inputRef,
+  onItemClick: onItemClickProps,
+  onLoadError: onLoadErrorProps,
+  onLoadSuccess: onLoadSuccessProps,
+  pdf,
+  ...otherProps
+}) {
+  const [outline, setOutline] = useState(null);
 
-  componentDidMount() {
-    const { pdf } = this.props;
-
-    invariant(pdf, 'Attempted to load an outline, but no document was specified.');
-
-    this.loadOutline();
-  }
-
-  componentDidUpdate(prevProps) {
-    const { pdf } = this.props;
-
-    if (prevProps.pdf && pdf !== prevProps.pdf) {
-      this.loadOutline();
-    }
-  }
-
-  componentWillUnmount() {
-    cancelRunningTask(this.runningTask);
-  }
-
-  loadOutline = () => {
-    const { pdf } = this.props;
-
-    this.setState((prevState) => {
-      if (!prevState.outline) {
-        return null;
-      }
-      return { outline: null };
-    });
-
-    const cancellable = makeCancellable(pdf.getOutline());
-    this.runningTask = cancellable;
-
-    cancellable.promise
-      .then((outline) => {
-        this.setState({ outline }, this.onLoadSuccess);
-      })
-      .catch((error) => {
-        this.onLoadError(error);
-      });
-  };
-
-  get childContext() {
-    return {
-      onClick: this.onItemClick,
-    };
-  }
-
-  get eventProps() {
-    return makeEventProps(this.props, () => this.state.outline);
-  }
+  invariant(pdf, 'Attempted to load an outline, but no document was specified.');
 
   /**
    * Called when an outline is read successfully
    */
-  onLoadSuccess = () => {
-    const { onLoadSuccess } = this.props;
-    const { outline } = this.state;
-
-    if (onLoadSuccess) onLoadSuccess(outline);
-  };
+  const onLoadSuccess = useCallback(
+    (nextOutline) => {
+      if (onLoadSuccessProps) {
+        onLoadSuccessProps(nextOutline);
+      }
+    },
+    [onLoadSuccessProps],
+  );
 
   /**
    * Called when an outline failed to read successfully
    */
-  onLoadError = (error) => {
-    this.setState({ outline: false });
+  const onLoadError = useCallback(
+    (error) => {
+      setOutline(false);
 
-    warning(false, error);
+      warning(false, error);
 
-    const { onLoadError } = this.props;
+      if (onLoadErrorProps) {
+        onLoadErrorProps(error);
+      }
+    },
+    [onLoadErrorProps],
+  );
 
-    if (onLoadError) onLoadError(error);
-  };
-
-  onItemClick = ({ dest, pageIndex, pageNumber }) => {
-    const { onItemClick } = this.props;
-
-    if (onItemClick) {
-      onItemClick({
+  function onItemClick({ dest, pageIndex, pageNumber }) {
+    if (onItemClickProps) {
+      onItemClickProps({
         dest,
         pageIndex,
         pageNumber,
       });
     }
+  }
+
+  function resetOutline() {
+    setOutline(null);
+  }
+
+  useEffect(resetOutline, [pdf]);
+
+  function loadOutline() {
+    const cancellable = makeCancellable(pdf.getOutline());
+    const runningTask = cancellable;
+
+    cancellable.promise
+      .then((nextOutline) => {
+        setOutline(nextOutline);
+
+        // Waiting for outline to be set in state
+        setTimeout(() => {
+          onLoadSuccess(nextOutline);
+        }, 0);
+      })
+      .catch(onLoadError);
+
+    return () => cancelRunningTask(runningTask);
+  }
+
+  useEffect(loadOutline, [onLoadError, onLoadSuccess, pdf]);
+
+  const childContext = {
+    onClick: onItemClick,
   };
 
-  renderOutline() {
-    const { outline } = this.state;
+  const eventProps = useMemo(
+    () => makeEventProps(otherProps, () => outline),
+    [otherProps, outline],
+  );
 
+  if (!outline) {
+    return null;
+  }
+
+  function renderOutline() {
     return (
       <ul>
         {outline.map((item, itemIndex) => (
@@ -122,24 +118,11 @@ export class OutlineInternal extends PureComponent {
     );
   }
 
-  render() {
-    const { pdf } = this.props;
-    const { outline } = this.state;
-
-    if (!pdf || !outline) {
-      return null;
-    }
-
-    const { className, inputRef } = this.props;
-
-    return (
-      <div className={clsx('react-pdf__Outline', className)} ref={inputRef} {...this.eventProps}>
-        <OutlineContext.Provider value={this.childContext}>
-          {this.renderOutline()}
-        </OutlineContext.Provider>
-      </div>
-    );
-  }
+  return (
+    <div className={clsx('react-pdf__Outline', className)} ref={inputRef} {...eventProps}>
+      <OutlineContext.Provider value={childContext}>{renderOutline()}</OutlineContext.Provider>
+    </div>
+  );
 }
 
 OutlineInternal.propTypes = {
