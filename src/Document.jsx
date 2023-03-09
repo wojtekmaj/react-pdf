@@ -67,8 +67,8 @@ const Document = forwardRef(function Document(
   },
   ref,
 ) {
-  const [source, setSource] = useState(null);
-  const [pdf, setPdf] = useState(null);
+  const [source, setSource] = useState(undefined);
+  const [pdf, setPdf] = useState(undefined);
 
   const linkService = useRef(new LinkService());
 
@@ -114,28 +114,27 @@ const Document = forwardRef(function Document(
   /**
    * Called when a document source is resolved correctly
    */
-  const onSourceSuccess = useCallback(() => {
+  function onSourceSuccess() {
     if (onSourceSuccessProps) {
       onSourceSuccessProps();
     }
-  }, [onSourceSuccessProps]);
+  }
 
   /**
    * Called when a document source failed to be resolved correctly
    */
-  const onSourceError = useCallback(
-    (error) => {
-      warning(false, error);
+  function onSourceError(error) {
+    setSource(false);
 
-      if (onSourceErrorProps) {
-        onSourceErrorProps(error);
-      }
-    },
-    [onSourceErrorProps],
-  );
+    warning(false, error);
+
+    if (onSourceErrorProps) {
+      onSourceErrorProps(error);
+    }
+  }
 
   function resetSource() {
-    setSource(null);
+    setSource(undefined);
   }
 
   useEffect(resetSource, [file]);
@@ -204,54 +203,59 @@ const Document = forwardRef(function Document(
     return file;
   }, [file]);
 
-  useEffect(() => {
-    const cancellable = makeCancellable(findDocumentSource());
+  useEffect(
+    () => {
+      const cancellable = makeCancellable(findDocumentSource());
 
-    cancellable.promise
-      .then((nextSource) => {
-        setSource(nextSource);
+      cancellable.promise.then(setSource).catch(onSourceError);
+
+      return () => {
+        cancelRunningTask(cancellable);
+      };
+    },
+    // Ommitted callbacks so they are not called every time they change
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [findDocumentSource],
+  );
+
+  useEffect(
+    () => {
+      if (typeof source !== 'undefined' && source !== false) {
         onSourceSuccess();
-      })
-      .catch(onSourceError);
-
-    return () => {
-      cancelRunningTask(cancellable);
-    };
-  }, [findDocumentSource, onSourceError, onSourceSuccess]);
+      }
+    },
+    // Ommitted callbacks so they are not called every time they change
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [source],
+  );
 
   /**
    * Called when a document is read successfully
    */
-  const onLoadSuccess = useCallback(
-    (nextPdf) => {
-      if (onLoadSuccessProps) {
-        onLoadSuccessProps(nextPdf);
-      }
+  function onLoadSuccess() {
+    if (onLoadSuccessProps) {
+      onLoadSuccessProps(pdf);
+    }
 
-      pages.current = new Array(nextPdf.numPages);
-      linkService.current.setDocument(nextPdf);
-    },
-    [onLoadSuccessProps],
-  );
+    pages.current = new Array(pdf.numPages);
+    linkService.current.setDocument(pdf);
+  }
 
   /**
    * Called when a document failed to read successfully
    */
-  const onLoadError = useCallback(
-    (error) => {
-      setPdf(false);
+  function onLoadError(error) {
+    setPdf(false);
 
-      warning(false, error);
+    warning(false, error);
 
-      if (onLoadErrorProps) {
-        onLoadErrorProps(error);
-      }
-    },
-    [onLoadErrorProps],
-  );
+    if (onLoadErrorProps) {
+      onLoadErrorProps(error);
+    }
+  }
 
   function resetDocument() {
-    setPdf(null);
+    setPdf(undefined);
   }
 
   useEffect(resetDocument, [source]);
@@ -268,30 +272,30 @@ const Document = forwardRef(function Document(
     }
     const loadingTask = destroyable;
 
-    loadingTask.promise
-      .then((nextPdf) => {
-        setPdf(nextPdf);
-
-        // Waiting for pdf to be set in state
-        setTimeout(() => {
-          onLoadSuccess(nextPdf);
-        }, 0);
-      })
-      .catch(onLoadError);
+    loadingTask.promise.then(setPdf).catch(onLoadError);
 
     return () => {
       loadingTask.destroy();
     };
   }
 
-  useEffect(loadDocument, [
-    onLoadError,
-    onLoadProgress,
-    onLoadSuccess,
-    onPassword,
-    options,
-    source,
-  ]);
+  useEffect(
+    loadDocument,
+    // Ommitted callbacks so they are not called every time they change
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [options, source],
+  );
+
+  useEffect(
+    () => {
+      if (typeof pdf !== 'undefined' && pdf !== false) {
+        onLoadSuccess();
+      }
+    },
+    // Ommitted callbacks so they are not called every time they change
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [pdf],
+  );
 
   function setupLinkService() {
     linkService.current.setViewer(viewer.current);
@@ -330,7 +334,7 @@ const Document = forwardRef(function Document(
       return <Message type="no-data">{typeof noData === 'function' ? noData() : noData}</Message>;
     }
 
-    if (pdf === null) {
+    if (pdf === undefined || pdf === null) {
       return (
         <Message type="loading">{typeof loading === 'function' ? loading() : loading}</Message>
       );

@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import makeCancellable from 'make-cancellable-promise';
 import makeEventProps from 'make-event-props';
@@ -24,37 +24,31 @@ export function OutlineInternal({
   pdf,
   ...otherProps
 }) {
-  const [outline, setOutline] = useState(null);
+  const [outline, setOutline] = useState(undefined);
 
   invariant(pdf, 'Attempted to load an outline, but no document was specified.');
 
   /**
    * Called when an outline is read successfully
    */
-  const onLoadSuccess = useCallback(
-    (nextOutline) => {
-      if (onLoadSuccessProps) {
-        onLoadSuccessProps(nextOutline);
-      }
-    },
-    [onLoadSuccessProps],
-  );
+  function onLoadSuccess() {
+    if (onLoadSuccessProps) {
+      onLoadSuccessProps(outline);
+    }
+  }
 
   /**
    * Called when an outline failed to read successfully
    */
-  const onLoadError = useCallback(
-    (error) => {
-      setOutline(false);
+  function onLoadError(error) {
+    setOutline(false);
 
-      warning(false, error);
+    warning(false, error);
 
-      if (onLoadErrorProps) {
-        onLoadErrorProps(error);
-      }
-    },
-    [onLoadErrorProps],
-  );
+    if (onLoadErrorProps) {
+      onLoadErrorProps(error);
+    }
+  }
 
   function onItemClick({ dest, pageIndex, pageNumber }) {
     if (onItemClickProps) {
@@ -67,7 +61,7 @@ export function OutlineInternal({
   }
 
   function resetOutline() {
-    setOutline(null);
+    setOutline(undefined);
   }
 
   useEffect(resetOutline, [pdf]);
@@ -76,21 +70,28 @@ export function OutlineInternal({
     const cancellable = makeCancellable(pdf.getOutline());
     const runningTask = cancellable;
 
-    cancellable.promise
-      .then((nextOutline) => {
-        setOutline(nextOutline);
-
-        // Waiting for outline to be set in state
-        setTimeout(() => {
-          onLoadSuccess(nextOutline);
-        }, 0);
-      })
-      .catch(onLoadError);
+    cancellable.promise.then(setOutline).catch(onLoadError);
 
     return () => cancelRunningTask(runningTask);
   }
 
-  useEffect(loadOutline, [onLoadError, onLoadSuccess, pdf]);
+  useEffect(
+    loadOutline,
+    // Ommitted callbacks so they are not called every time they change
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [outline, pdf],
+  );
+
+  useEffect(
+    () => {
+      if (typeof outline !== 'undefined' && outline !== false) {
+        onLoadSuccess();
+      }
+    },
+    // Ommitted callbacks so they are not called every time they change
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [outline],
+  );
 
   const childContext = {
     onClick: onItemClick,

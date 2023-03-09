@@ -38,29 +38,26 @@ export function PageCanvasInternal({
   /**
    * Called when a page is rendered successfully.
    */
-  const onRenderSuccess = useCallback(() => {
+  function onRenderSuccess() {
     if (onRenderSuccessProps) {
       onRenderSuccessProps(makePageCallback(page, scale));
     }
-  }, [onRenderSuccessProps, page, scale]);
+  }
 
   /**
    * Called when a page fails to render.
    */
-  const onRenderError = useCallback(
-    (error) => {
-      if (isCancelException(error)) {
-        return;
-      }
+  function onRenderError(error) {
+    if (isCancelException(error)) {
+      return;
+    }
 
-      warning(false, error);
+    warning(false, error);
 
-      if (onRenderErrorProps) {
-        onRenderErrorProps(error);
-      }
-    },
-    [onRenderErrorProps],
-  );
+    if (onRenderErrorProps) {
+      onRenderErrorProps(error);
+    }
+  }
 
   const renderViewport = useMemo(
     () => page.getViewport({ scale: scale * devicePixelRatio, rotation: rotateProps }),
@@ -107,17 +104,20 @@ export function PageCanvasInternal({
     return () => cancelRunningTask(runningTask);
   }
 
-  useEffect(drawPageOnCanvas, [
-    canvasBackground,
-    canvasElement,
-    devicePixelRatio,
-    onRenderError,
-    onRenderSuccess,
-    page,
-    renderForms,
-    renderViewport,
-    viewport,
-  ]);
+  useEffect(
+    drawPageOnCanvas,
+    // Ommitted callbacks so they are not called every time they change
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [
+      canvasBackground,
+      canvasElement,
+      devicePixelRatio,
+      page,
+      renderForms,
+      renderViewport,
+      viewport,
+    ],
+  );
 
   const cleanup = useCallback(() => {
     const { current: canvas } = canvasElement;

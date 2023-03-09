@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import makeCancellable from 'make-cancellable-promise';
 import invariant from 'tiny-invariant';
@@ -24,7 +24,7 @@ export function AnnotationLayerInternal({
   rotate: rotateProps,
   scale = 1,
 }) {
-  const [annotations, setAnnotations] = useState(null);
+  const [annotations, setAnnotations] = useState(undefined);
   const layerElement = useRef();
 
   invariant(page, 'Attempted to load page annotations, but no page was specified.');
@@ -37,28 +37,24 @@ export function AnnotationLayerInternal({
     'AnnotationLayer styles not found. Read more: https://github.com/wojtekmaj/react-pdf#support-for-annotations',
   );
 
-  const onLoadSuccess = useCallback(
-    (nextAnnotations) => {
-      if (onGetAnnotationsSuccessProps) {
-        onGetAnnotationsSuccessProps(nextAnnotations);
-      }
-    },
-    [onGetAnnotationsSuccessProps],
-  );
+  function onLoadSuccess() {
+    if (onGetAnnotationsSuccessProps) {
+      onGetAnnotationsSuccessProps(annotations);
+    }
+  }
 
-  const onLoadError = useCallback(
-    (error) => {
-      setAnnotations(false);
+  function onLoadError(error) {
+    setAnnotations(false);
 
-      warning(false, error);
+    warning(false, error);
 
-      if (onGetAnnotationsErrorProps) onGetAnnotationsErrorProps(error);
-    },
-    [onGetAnnotationsErrorProps],
-  );
+    if (onGetAnnotationsErrorProps) {
+      onGetAnnotationsErrorProps(error);
+    }
+  }
 
   function resetAnnotations() {
-    setAnnotations(null);
+    setAnnotations(undefined);
   }
 
   useEffect(resetAnnotations, [page]);
@@ -67,39 +63,44 @@ export function AnnotationLayerInternal({
     const cancellable = makeCancellable(page.getAnnotations());
     const runningTask = cancellable;
 
-    cancellable.promise
-      .then((nextAnnotations) => {
-        setAnnotations(nextAnnotations);
-
-        // Waiting for annotations to be set in state
-        setTimeout(() => {
-          onLoadSuccess(nextAnnotations);
-        }, 0);
-      })
-      .catch(onLoadError);
+    cancellable.promise.then(setAnnotations).catch(onLoadError);
 
     return () => {
       cancelRunningTask(runningTask);
     };
   }
 
-  useEffect(loadAnnotations, [page, onLoadError, onLoadSuccess, renderForms]);
+  useEffect(
+    loadAnnotations,
+    // Ommitted callbacks so they are not called every time they change
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [page, renderForms],
+  );
 
-  const onRenderSuccess = useCallback(() => {
+  useEffect(
+    () => {
+      if (typeof annotations !== 'undefined' && annotations !== false) {
+        onLoadSuccess();
+      }
+    },
+    // Ommitted callbacks so they are not called every time they change
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [annotations],
+  );
+
+  function onRenderSuccess() {
     if (onRenderAnnotationLayerSuccessProps) {
       onRenderAnnotationLayerSuccessProps();
     }
-  }, [onRenderAnnotationLayerSuccessProps]);
+  }
 
-  const onRenderError = useCallback(
-    (error) => {
-      warning(false, error);
-      if (onRenderAnnotationLayerErrorProps) {
-        onRenderAnnotationLayerErrorProps(error);
-      }
-    },
-    [onRenderAnnotationLayerErrorProps],
-  );
+  function onRenderError(error) {
+    warning(false, error);
+
+    if (onRenderAnnotationLayerErrorProps) {
+      onRenderAnnotationLayerErrorProps(error);
+    }
+  }
 
   const viewport = useMemo(
     () => page.getViewport({ scale, rotation: rotateProps }),
@@ -145,16 +146,12 @@ export function AnnotationLayerInternal({
     };
   }
 
-  useEffect(renderAnnotationLayer, [
-    annotations,
-    imageResourcesPath,
-    linkService,
-    onRenderError,
-    onRenderSuccess,
-    page,
-    renderForms,
-    viewport,
-  ]);
+  useEffect(
+    renderAnnotationLayer,
+    // Ommitted callbacks so they are not called every time they change
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [annotations, imageResourcesPath, linkService, page, renderForms, viewport],
+  );
 
   return <div className="react-pdf__Page__annotations annotationLayer" ref={layerElement} />;
 }

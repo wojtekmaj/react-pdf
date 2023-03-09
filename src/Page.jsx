@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import makeCancellable from 'make-cancellable-promise';
 import makeEventProps from 'make-event-props';
@@ -70,7 +70,7 @@ export function PageInternal({
   width,
   ...otherProps
 }) {
-  const [page, setPage] = useState(null);
+  const [page, setPage] = useState(undefined);
   const pageElement = useRef();
 
   invariant(pdf, 'Attempted to load a page, but no document was specified.');
@@ -111,30 +111,25 @@ export function PageInternal({
     return page.rotate;
   })();
 
-  const getScale = useCallback(
-    (currentPage) => {
-      if (!currentPage) {
-        return null;
-      }
+  const scale = useMemo(() => {
+    if (!page) {
+      return null;
+    }
 
-      // Be default, we'll render page at 100% * scale width.
-      let pageScale = 1;
+    // Be default, we'll render page at 100% * scale width.
+    let pageScale = 1;
 
-      // Passing scale explicitly null would cause the page not to render
-      const scaleWithDefault = scaleProps === null ? defaultScale : scaleProps;
+    // Passing scale explicitly null would cause the page not to render
+    const scaleWithDefault = scaleProps === null ? defaultScale : scaleProps;
 
-      // If width/height is defined, calculate the scale of the page so it could be of desired width.
-      if (width || height) {
-        const viewport = currentPage.getViewport({ scale: 1, rotation: rotate });
-        pageScale = width ? width / viewport.width : height / viewport.height;
-      }
+    // If width/height is defined, calculate the scale of the page so it could be of desired width.
+    if (width || height) {
+      const viewport = page.getViewport({ scale: 1, rotation: rotate });
+      pageScale = width ? width / viewport.width : height / viewport.height;
+    }
 
-      return scaleWithDefault * pageScale;
-    },
-    [height, rotate, scaleProps, width],
-  );
-
-  const scale = useMemo(() => getScale(page), [getScale, page]);
+    return scaleWithDefault * pageScale;
+  }, [height, page, rotate, scaleProps, width]);
 
   function hook() {
     return () => {
@@ -149,31 +144,31 @@ export function PageInternal({
   /**
    * Called when a page is loaded successfully
    */
-  const onLoadSuccess = useCallback(
-    (nextPage, nextScale) => {
-      if (onLoadSuccessProps) {
-        onLoadSuccessProps(makePageCallback(nextPage, nextScale));
-      }
-    },
-    [onLoadSuccessProps],
-  );
+  function onLoadSuccess() {
+    if (onLoadSuccessProps) {
+      onLoadSuccessProps(makePageCallback(page, scale));
+    }
+
+    if (registerPage) {
+      registerPage(pageIndex, pageElement.current);
+    }
+  }
 
   /**
    * Called when a page failed to load
    */
-  const onLoadError = useCallback(
-    (error) => {
-      warning(false, error);
+  function onLoadError(error) {
+    setPage(false);
 
-      if (onLoadErrorProps) {
-        onLoadErrorProps(error);
-      }
-    },
-    [onLoadErrorProps],
-  );
+    warning(false, error);
+
+    if (onLoadErrorProps) {
+      onLoadErrorProps(error);
+    }
+  }
 
   function resetPage() {
-    setPage(null);
+    setPage(undefined);
   }
 
   useEffect(resetPage, [pdf, pageIndex]);
@@ -186,37 +181,28 @@ export function PageInternal({
     const cancellable = makeCancellable(pdf.getPage(pageNumber));
     const runningTask = cancellable;
 
-    cancellable.promise
-      .then((nextPage) => {
-        setPage(nextPage);
-
-        // Waiting for page to be set in state
-        setTimeout(() => {
-          const nextScale = getScale(nextPage);
-          onLoadSuccess(nextPage, nextScale);
-        }, 0);
-
-        if (registerPage) {
-          registerPage(pageIndex, pageElement.current);
-        }
-      })
-      .catch((error) => {
-        setPage(false);
-        onLoadError(error);
-      });
+    cancellable.promise.then(setPage).catch(onLoadError);
 
     return () => cancelRunningTask(runningTask);
   }
 
-  useEffect(loadPage, [
-    getScale,
-    pdf,
-    onLoadError,
-    onLoadSuccess,
-    pageIndex,
-    pageNumber,
-    registerPage,
-  ]);
+  useEffect(
+    loadPage,
+    // Ommitted callbacks so they are not called every time they change
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [pdf, pageIndex, pageNumber, registerPage],
+  );
+
+  useEffect(
+    () => {
+      if (typeof page !== 'undefined' && page !== false) {
+        onLoadSuccess();
+      }
+    },
+    // Ommitted callbacks so they are not called every time they change
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [page, scale],
+  );
 
   const childContext = page
     ? {
@@ -299,7 +285,7 @@ export function PageInternal({
       return <Message type="no-data">{typeof noData === 'function' ? noData() : noData}</Message>;
     }
 
-    if (pdf === null || page === null) {
+    if (pdf === null || page === undefined || page === null) {
       return (
         <Message type="loading">{typeof loading === 'function' ? loading() : loading}</Message>
       );

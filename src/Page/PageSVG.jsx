@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import makeCancellable from 'make-cancellable-promise';
 import invariant from 'tiny-invariant';
@@ -25,64 +25,72 @@ export function PageSVGInternal({
   /**
    * Called when a page is rendered successfully
    */
-  const onRenderSuccess = useCallback(() => {
+  function onRenderSuccess() {
     if (onRenderSuccessProps) {
       onRenderSuccessProps(makePageCallback(page, scale));
     }
-  }, [onRenderSuccessProps, page, scale]);
+  }
 
   /**
    * Called when a page fails to render
    */
-  const onRenderError = useCallback(
-    (error) => {
-      if (isCancelException(error)) {
-        return;
-      }
+  function onRenderError(error) {
+    if (isCancelException(error)) {
+      return;
+    }
 
-      warning(false, error);
+    setSvg(false);
 
-      if (onRenderErrorProps) {
-        onRenderErrorProps(error);
-      }
-    },
-    [onRenderErrorProps],
-  );
+    warning(false, error);
+
+    if (onRenderErrorProps) {
+      onRenderErrorProps(error);
+    }
+  }
 
   const viewport = useMemo(
     () => page.getViewport({ scale, rotation: rotateProps }),
     [page, rotateProps, scale],
   );
 
-  function renderSVG() {
-    if (svg) {
-      return;
-    }
+  function resetSVG() {
+    setSvg(undefined);
+  }
 
+  useEffect(resetSVG, [page, viewport]);
+
+  function renderSVG() {
     const cancellable = makeCancellable(page.getOperatorList());
     const runningTask = cancellable.promise;
 
     cancellable.promise
       .then((operatorList) => {
         const svgGfx = new pdfjs.SVGGraphics(page.commonObjs, page.objs);
-        svgGfx
-          .getSVG(operatorList, viewport)
-          .then((nextSvg) => {
-            setSvg(nextSvg);
 
-            // Waiting for svg to be set in state
-            setTimeout(() => {
-              onRenderSuccess();
-            }, 0);
-          })
-          .catch(onRenderError);
+        svgGfx.getSVG(operatorList, viewport).then(setSvg).catch(onRenderError);
       })
       .catch(onRenderError);
 
     return () => cancelRunningTask(runningTask);
   }
 
-  useEffect(renderSVG, [onRenderError, onRenderSuccess, page, svg, viewport]);
+  useEffect(
+    renderSVG,
+    // Ommitted callbacks so they are not called every time they change
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [page, viewport],
+  );
+
+  useEffect(
+    () => {
+      if (typeof svg !== 'undefined' && svg !== false) {
+        onRenderSuccess();
+      }
+    },
+    // Ommitted callbacks so they are not called every time they change
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [svg],
+  );
 
   function drawPageOnContainer(element) {
     if (!element || !svg) {

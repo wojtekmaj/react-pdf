@@ -23,7 +23,7 @@ export function TextLayerInternal({
   rotate: rotateProps,
   scale,
 }) {
-  const [textContent, setTextContent] = useState(null);
+  const [textContent, setTextContent] = useState(undefined);
   const layerElement = useRef();
   const endElement = useRef();
 
@@ -40,32 +40,27 @@ export function TextLayerInternal({
   /**
    * Called when a page text content is read successfully
    */
-  const onLoadSuccess = useCallback(
-    (nextTextContent) => {
-      if (onGetTextSuccess) {
-        onGetTextSuccess(nextTextContent);
-      }
-    },
-    [onGetTextSuccess],
-  );
+  function onLoadSuccess() {
+    if (onGetTextSuccess) {
+      onGetTextSuccess(textContent);
+    }
+  }
+
   /**
    * Called when a page text content failed to read successfully
    */
-  const onLoadError = useCallback(
-    (error) => {
-      setTextContent(false);
+  function onLoadError(error) {
+    setTextContent(false);
 
-      warning(false, error);
+    warning(false, error);
 
-      if (onGetTextError) {
-        onGetTextError(error);
-      }
-    },
-    [onGetTextError],
-  );
+    if (onGetTextError) {
+      onGetTextError(error);
+    }
+  }
 
   function resetTextContent() {
-    setTextContent(null);
+    setTextContent(undefined);
   }
 
   useEffect(resetTextContent, [page]);
@@ -74,21 +69,28 @@ export function TextLayerInternal({
     const cancellable = makeCancellable(page.getTextContent());
     const runningTask = cancellable;
 
-    cancellable.promise
-      .then((nextTextContent) => {
-        setTextContent(nextTextContent);
-
-        // Waiting for textContent to be set in state
-        setTimeout(() => {
-          onLoadSuccess(nextTextContent);
-        }, 0);
-      })
-      .catch(onLoadError);
+    cancellable.promise.then(setTextContent).catch(onLoadError);
 
     return () => cancelRunningTask(runningTask);
   }
 
-  useEffect(loadTextContent, [onLoadError, onLoadSuccess, page]);
+  useEffect(
+    loadTextContent,
+    // Ommitted callbacks so they are not called every time they change
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [page],
+  );
+
+  useEffect(
+    () => {
+      if (typeof textContent !== 'undefined' && textContent !== false) {
+        onLoadSuccess();
+      }
+    },
+    // Ommitted callbacks so they are not called every time they change
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [textContent],
+  );
 
   /**
    * Called when a text layer is rendered successfully
