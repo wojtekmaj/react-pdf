@@ -25,6 +25,7 @@ export function OutlineInternal({
   ...otherProps
 }) {
   const [outline, setOutline] = useState(undefined);
+  const [outlineError, setOutlineError] = useState(undefined);
 
   invariant(pdf, 'Attempted to load an outline, but no document was specified.');
 
@@ -40,13 +41,11 @@ export function OutlineInternal({
   /**
    * Called when an outline failed to read successfully
    */
-  function onLoadError(error) {
-    setOutline(false);
-
-    warning(false, error);
+  function onLoadError() {
+    warning(false, outlineError);
 
     if (onLoadErrorProps) {
-      onLoadErrorProps(error);
+      onLoadErrorProps(outlineError);
     }
   }
 
@@ -62,6 +61,7 @@ export function OutlineInternal({
 
   function resetOutline() {
     setOutline(undefined);
+    setOutlineError(undefined);
   }
 
   useEffect(resetOutline, [pdf]);
@@ -70,23 +70,28 @@ export function OutlineInternal({
     const cancellable = makeCancellable(pdf.getOutline());
     const runningTask = cancellable;
 
-    cancellable.promise.then(setOutline).catch(onLoadError);
+    cancellable.promise.then(setOutline).catch((error) => {
+      setOutline(false);
+      setOutlineError(error);
+    });
 
     return () => cancelRunningTask(runningTask);
   }
 
-  useEffect(
-    loadOutline,
-    // Ommitted callbacks so they are not called every time they change
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [outline, pdf],
-  );
+  useEffect(loadOutline, [outline, pdf]);
 
   useEffect(
     () => {
-      if (typeof outline !== 'undefined' && outline !== false) {
-        onLoadSuccess();
+      if (outline === undefined) {
+        return;
       }
+
+      if (outline === false) {
+        onLoadError();
+        return;
+      }
+
+      onLoadSuccess();
     },
     // Ommitted callbacks so they are not called every time they change
     // eslint-disable-next-line react-hooks/exhaustive-deps

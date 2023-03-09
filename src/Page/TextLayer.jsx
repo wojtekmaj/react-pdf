@@ -24,6 +24,7 @@ export function TextLayerInternal({
   scale,
 }) {
   const [textContent, setTextContent] = useState(undefined);
+  const [textContentError, setTextContentError] = useState(undefined);
   const layerElement = useRef();
   const endElement = useRef();
 
@@ -49,18 +50,17 @@ export function TextLayerInternal({
   /**
    * Called when a page text content failed to read successfully
    */
-  function onLoadError(error) {
-    setTextContent(false);
-
-    warning(false, error);
+  function onLoadError() {
+    warning(false, textContentError);
 
     if (onGetTextError) {
-      onGetTextError(error);
+      onGetTextError(textContentError);
     }
   }
 
   function resetTextContent() {
     setTextContent(undefined);
+    setTextContentError(undefined);
   }
 
   useEffect(resetTextContent, [page]);
@@ -69,23 +69,28 @@ export function TextLayerInternal({
     const cancellable = makeCancellable(page.getTextContent());
     const runningTask = cancellable;
 
-    cancellable.promise.then(setTextContent).catch(onLoadError);
+    cancellable.promise.then(setTextContent).catch((error) => {
+      setTextContent(false);
+      setTextContentError(error);
+    });
 
     return () => cancelRunningTask(runningTask);
   }
 
-  useEffect(
-    loadTextContent,
-    // Ommitted callbacks so they are not called every time they change
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [page],
-  );
+  useEffect(loadTextContent, [page]);
 
   useEffect(
     () => {
-      if (typeof textContent !== 'undefined' && textContent !== false) {
-        onLoadSuccess();
+      if (textContent === undefined) {
+        return;
       }
+
+      if (textContent === false) {
+        onLoadError();
+        return;
+      }
+
+      onLoadSuccess();
     },
     // Ommitted callbacks so they are not called every time they change
     // eslint-disable-next-line react-hooks/exhaustive-deps

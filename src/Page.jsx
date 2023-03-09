@@ -71,6 +71,7 @@ export function PageInternal({
   ...otherProps
 }) {
   const [page, setPage] = useState(undefined);
+  const [pageError, setPageError] = useState(undefined);
   const pageElement = useRef();
 
   invariant(pdf, 'Attempted to load a page, but no document was specified.');
@@ -157,18 +158,17 @@ export function PageInternal({
   /**
    * Called when a page failed to load
    */
-  function onLoadError(error) {
-    setPage(false);
-
-    warning(false, error);
+  function onLoadError() {
+    warning(false, pageError);
 
     if (onLoadErrorProps) {
-      onLoadErrorProps(error);
+      onLoadErrorProps(pageError);
     }
   }
 
   function resetPage() {
     setPage(undefined);
+    setPageError(undefined);
   }
 
   useEffect(resetPage, [pdf, pageIndex]);
@@ -181,23 +181,28 @@ export function PageInternal({
     const cancellable = makeCancellable(pdf.getPage(pageNumber));
     const runningTask = cancellable;
 
-    cancellable.promise.then(setPage).catch(onLoadError);
+    cancellable.promise.then(setPage).catch((error) => {
+      setPage(false);
+      setPageError(error);
+    });
 
     return () => cancelRunningTask(runningTask);
   }
 
-  useEffect(
-    loadPage,
-    // Ommitted callbacks so they are not called every time they change
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [pdf, pageIndex, pageNumber, registerPage],
-  );
+  useEffect(loadPage, [pdf, pageIndex, pageNumber, registerPage]);
 
   useEffect(
     () => {
-      if (typeof page !== 'undefined' && page !== false) {
-        onLoadSuccess();
+      if (page === undefined) {
+        return;
       }
+
+      if (page === false) {
+        onLoadError();
+        return;
+      }
+
+      onLoadSuccess();
     },
     // Ommitted callbacks so they are not called every time they change
     // eslint-disable-next-line react-hooks/exhaustive-deps

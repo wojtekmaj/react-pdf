@@ -18,7 +18,8 @@ export function PageSVGInternal({
   rotate: rotateProps,
   scale,
 }) {
-  const [svg, setSvg] = useState(null);
+  const [svg, setSvg] = useState(undefined);
+  const [svgError, setSvgError] = useState(undefined);
 
   invariant(page, 'Attempted to render page SVG, but no page was specified.');
 
@@ -34,17 +35,15 @@ export function PageSVGInternal({
   /**
    * Called when a page fails to render
    */
-  function onRenderError(error) {
-    if (isCancelException(error)) {
+  function onRenderError() {
+    if (isCancelException(svgError)) {
       return;
     }
 
-    setSvg(false);
-
-    warning(false, error);
+    warning(false, svgError);
 
     if (onRenderErrorProps) {
-      onRenderErrorProps(error);
+      onRenderErrorProps(svgError);
     }
   }
 
@@ -55,6 +54,7 @@ export function PageSVGInternal({
 
   function resetSVG() {
     setSvg(undefined);
+    setSvgError(undefined);
   }
 
   useEffect(resetSVG, [page, viewport]);
@@ -67,25 +67,36 @@ export function PageSVGInternal({
       .then((operatorList) => {
         const svgGfx = new pdfjs.SVGGraphics(page.commonObjs, page.objs);
 
-        svgGfx.getSVG(operatorList, viewport).then(setSvg).catch(onRenderError);
+        svgGfx
+          .getSVG(operatorList, viewport)
+          .then(setSvg)
+          .catch((error) => {
+            setSvg(false);
+            setSvgError(error);
+          });
       })
-      .catch(onRenderError);
+      .catch((error) => {
+        setSvg(false);
+        setSvgError(error);
+      });
 
     return () => cancelRunningTask(runningTask);
   }
 
-  useEffect(
-    renderSVG,
-    // Ommitted callbacks so they are not called every time they change
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [page, viewport],
-  );
+  useEffect(renderSVG, [page, viewport]);
 
   useEffect(
     () => {
-      if (typeof svg !== 'undefined' && svg !== false) {
-        onRenderSuccess();
+      if (svg === undefined) {
+        return;
       }
+
+      if (svg === false) {
+        onRenderError();
+        return;
+      }
+
+      onRenderSuccess();
     },
     // Ommitted callbacks so they are not called every time they change
     // eslint-disable-next-line react-hooks/exhaustive-deps

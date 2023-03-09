@@ -25,6 +25,7 @@ export function AnnotationLayerInternal({
   scale = 1,
 }) {
   const [annotations, setAnnotations] = useState(undefined);
+  const [annotationsError, setAnnotationsError] = useState(undefined);
   const layerElement = useRef();
 
   invariant(page, 'Attempted to load page annotations, but no page was specified.');
@@ -43,18 +44,17 @@ export function AnnotationLayerInternal({
     }
   }
 
-  function onLoadError(error) {
-    setAnnotations(false);
-
-    warning(false, error);
+  function onLoadError() {
+    warning(false, annotationsError);
 
     if (onGetAnnotationsErrorProps) {
-      onGetAnnotationsErrorProps(error);
+      onGetAnnotationsErrorProps(annotationsError);
     }
   }
 
   function resetAnnotations() {
     setAnnotations(undefined);
+    setAnnotationsError(undefined);
   }
 
   useEffect(resetAnnotations, [page]);
@@ -63,25 +63,30 @@ export function AnnotationLayerInternal({
     const cancellable = makeCancellable(page.getAnnotations());
     const runningTask = cancellable;
 
-    cancellable.promise.then(setAnnotations).catch(onLoadError);
+    cancellable.promise.then(setAnnotations).catch((error) => {
+      setAnnotations(false);
+      setAnnotationsError(error);
+    });
 
     return () => {
       cancelRunningTask(runningTask);
     };
   }
 
-  useEffect(
-    loadAnnotations,
-    // Ommitted callbacks so they are not called every time they change
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [page, renderForms],
-  );
+  useEffect(loadAnnotations, [page, renderForms]);
 
   useEffect(
     () => {
-      if (typeof annotations !== 'undefined' && annotations !== false) {
-        onLoadSuccess();
+      if (annotations === undefined) {
+        return;
       }
+
+      if (annotations === false) {
+        onLoadError();
+        return;
+      }
+
+      onLoadSuccess();
     },
     // Ommitted callbacks so they are not called every time they change
     // eslint-disable-next-line react-hooks/exhaustive-deps

@@ -68,7 +68,9 @@ const Document = forwardRef(function Document(
   ref,
 ) {
   const [source, setSource] = useState(undefined);
+  const [sourceError, setSourceError] = useState(undefined);
   const [pdf, setPdf] = useState(undefined);
+  const [pdfError, setPdfError] = useState(undefined);
 
   const linkService = useRef(new LinkService());
 
@@ -123,18 +125,17 @@ const Document = forwardRef(function Document(
   /**
    * Called when a document source failed to be resolved correctly
    */
-  function onSourceError(error) {
-    setSource(false);
-
-    warning(false, error);
+  function onSourceError() {
+    warning(false, sourceError);
 
     if (onSourceErrorProps) {
-      onSourceErrorProps(error);
+      onSourceErrorProps(sourceError);
     }
   }
 
   function resetSource() {
     setSource(undefined);
+    setSourceError(undefined);
   }
 
   useEffect(resetSource, [file]);
@@ -203,25 +204,29 @@ const Document = forwardRef(function Document(
     return file;
   }, [file]);
 
-  useEffect(
-    () => {
-      const cancellable = makeCancellable(findDocumentSource());
+  useEffect(() => {
+    const cancellable = makeCancellable(findDocumentSource());
 
-      cancellable.promise.then(setSource).catch(onSourceError);
+    cancellable.promise.then(setSource).catch((error) => {
+      setSource(false);
+      setSourceError(error);
+    });
 
-      return () => {
-        cancelRunningTask(cancellable);
-      };
-    },
-    // Ommitted callbacks so they are not called every time they change
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [findDocumentSource],
-  );
+    return () => {
+      cancelRunningTask(cancellable);
+    };
+  }, [findDocumentSource]);
 
   useEffect(
     () => {
-      if (typeof source !== 'undefined' && source !== false) {
+      if (typeof source === 'undefined') {
+        return;
+      }
+
+      if (source || source === null) {
         onSourceSuccess();
+      } else {
+        onSourceError();
       }
     },
     // Ommitted callbacks so they are not called every time they change
@@ -244,18 +249,17 @@ const Document = forwardRef(function Document(
   /**
    * Called when a document failed to read successfully
    */
-  function onLoadError(error) {
-    setPdf(false);
-
-    warning(false, error);
+  function onLoadError() {
+    warning(false, pdfError);
 
     if (onLoadErrorProps) {
-      onLoadErrorProps(error);
+      onLoadErrorProps(pdfError);
     }
   }
 
   function resetDocument() {
     setPdf(undefined);
+    setPdfError(undefined);
   }
 
   useEffect(resetDocument, [source]);
@@ -272,7 +276,10 @@ const Document = forwardRef(function Document(
     }
     const loadingTask = destroyable;
 
-    loadingTask.promise.then(setPdf).catch(onLoadError);
+    loadingTask.promise.then(setPdf).catch((error) => {
+      setPdf(false);
+      setPdfError(error);
+    });
 
     return () => {
       loadingTask.destroy();
@@ -288,8 +295,14 @@ const Document = forwardRef(function Document(
 
   useEffect(
     () => {
-      if (typeof pdf !== 'undefined' && pdf !== false) {
+      if (typeof pdf === 'undefined') {
+        return;
+      }
+
+      if (pdf || pdf === null) {
         onLoadSuccess();
+      } else {
+        onLoadError();
       }
     },
     // Ommitted callbacks so they are not called every time they change
