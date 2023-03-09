@@ -1,6 +1,7 @@
 import React, { createRef, useCallback, useEffect, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import mergeRefs from 'merge-refs';
+import invariant from 'tiny-invariant';
 import warning from 'tiny-warning';
 import * as pdfjs from 'pdfjs-dist/build/pdf';
 
@@ -29,6 +30,8 @@ export function PageCanvasInternal({
   scale,
 }) {
   const canvasElement = createRef();
+
+  invariant(page, 'Attempted to render page canvas, but no page was specified.');
 
   const devicePixelRatio = devicePixelRatioProps || getDevicePixelRatio();
 

@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import makeCancellable from 'make-cancellable-promise';
+import invariant from 'tiny-invariant';
 import warning from 'tiny-warning';
 import * as pdfjs from 'pdfjs-dist/build/pdf';
 
@@ -18,6 +19,8 @@ export function PageSVGInternal({
   scale,
 }) {
   const [svg, setSvg] = useState(null);
+
+  invariant(page, 'Attempted to render page SVG, but no page was specified.');
 
   /**
    * Called when a page is rendered successfully
