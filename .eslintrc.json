@@ -4,13 +4,8 @@
     {
       "files": ["sample/**", "test/**"],
       "rules": {
+        "@typescript-eslint/no-var-requires": "off",
         "import/no-unresolved": "off"
-      }
-    },
-    {
-      "files": ["jest.env.js", "webpack.config.js"],
-      "rules": {
-        "@typescript-eslint/no-var-requires": "off"
       }
     }
   ]
