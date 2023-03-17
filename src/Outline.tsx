@@ -16,7 +16,23 @@ import { cancelRunningTask } from './shared/utils';
 import { useResolver } from './shared/hooks';
 import { eventProps, isClassName, isPdf, isRef } from './shared/propTypes';
 
-export default function Outline(props) {
+import type { PDFDocumentProxy } from 'pdfjs-dist';
+import type { OnItemClickArgs } from './shared/types';
+
+type PDFOutline = Awaited<ReturnType<PDFDocumentProxy['getOutline']>>;
+
+type EventProps = ReturnType<typeof makeEventProps>;
+
+type OutlineProps = {
+  className?: string;
+  inputRef?: React.RefObject<HTMLDivElement>;
+  onItemClick?: (props: OnItemClickArgs) => void;
+  onLoadError?: (error: Error) => void;
+  onLoadSuccess?: (outline: PDFOutline | null) => void;
+  pdf?: PDFDocumentProxy | false;
+} & EventProps;
+
+export default function Outline(props: OutlineProps) {
   const context = useContext(DocumentContext);
 
   invariant(context, 'Unable to find Document context. Did you wrap <Outline /> in <Document />?');
@@ -34,13 +50,17 @@ export default function Outline(props) {
 
   invariant(pdf, 'Attempted to load an outline, but no document was specified.');
 
-  const [outlineState, outlineDispatch] = useResolver();
+  const [outlineState, outlineDispatch] = useResolver<PDFOutline | null>();
   const { value: outline, error: outlineError } = outlineState;
 
   /**
    * Called when an outline is read successfully
    */
   function onLoadSuccess() {
+    if (typeof outline === 'undefined' || outline === false) {
+      return;
+    }
+
     if (onLoadSuccessProps) {
       onLoadSuccessProps(outline);
     }
@@ -50,14 +70,19 @@ export default function Outline(props) {
    * Called when an outline failed to read successfully
    */
   function onLoadError() {
-    warning(false, outlineError);
+    if (!outlineError) {
+      // Impossible, but TypeScript doesn't know that
+      return;
+    }
+
+    warning(false, outlineError.toString());
 
     if (onLoadErrorProps) {
       onLoadErrorProps(outlineError);
     }
   }
 
-  function onItemClick({ dest, pageIndex, pageNumber }) {
+  function onItemClick({ dest, pageIndex, pageNumber }: OnItemClickArgs) {
     if (onItemClickProps) {
       onItemClickProps({
         dest,
@@ -74,6 +99,11 @@ export default function Outline(props) {
   useEffect(resetOutline, [outlineDispatch, pdf]);
 
   function loadOutline() {
+    if (!pdf) {
+      // Impossible, but TypeScript doesn't know that
+      return;
+    }
+
     const cancellable = makeCancellable(pdf.getOutline());
     const runningTask = cancellable;
 
@@ -122,6 +152,10 @@ export default function Outline(props) {
   }
 
   function renderOutline() {
+    if (!outline) {
+      return null;
+    }
+
     return (
       <ul>
         {outline.map((item, itemIndex) => (

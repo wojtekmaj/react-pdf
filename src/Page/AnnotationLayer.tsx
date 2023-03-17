@@ -10,6 +10,8 @@ import PageContext from '../PageContext';
 import { useResolver } from '../shared/hooks';
 import { cancelRunningTask } from '../shared/utils';
 
+import type { Annotations } from '../shared/types';
+
 export default function AnnotationLayer() {
   const documentContext = useContext(DocumentContext);
 
@@ -36,9 +38,9 @@ export default function AnnotationLayer() {
     scale = 1,
   } = mergedProps;
 
-  const [annotationsState, annotationsDispatch] = useResolver();
+  const [annotationsState, annotationsDispatch] = useResolver<Annotations>();
   const { value: annotations, error: annotationsError } = annotationsState;
-  const layerElement = useRef();
+  const layerElement = useRef<HTMLDivElement>(null);
 
   invariant(page, 'Attempted to load page annotations, but no page was specified.');
 
@@ -51,13 +53,23 @@ export default function AnnotationLayer() {
   );
 
   function onLoadSuccess() {
+    if (!annotations) {
+      // Impossible, but TypeScript doesn't know that
+      return;
+    }
+
     if (onGetAnnotationsSuccessProps) {
       onGetAnnotationsSuccessProps(annotations);
     }
   }
 
   function onLoadError() {
-    warning(false, annotationsError);
+    if (!annotationsError) {
+      // Impossible, but TypeScript doesn't know that
+      return;
+    }
+
+    warning(false, annotationsError.toString());
 
     if (onGetAnnotationsErrorProps) {
       onGetAnnotationsErrorProps(annotationsError);
@@ -71,6 +83,10 @@ export default function AnnotationLayer() {
   useEffect(resetAnnotations, [annotationsDispatch, page]);
 
   function loadAnnotations() {
+    if (!page) {
+      return;
+    }
+
     const cancellable = makeCancellable(page.getAnnotations());
     const runningTask = cancellable;
 
@@ -113,8 +129,8 @@ export default function AnnotationLayer() {
     }
   }
 
-  function onRenderError(error) {
-    warning(false, error);
+  function onRenderError(error: unknown) {
+    warning(false, `${error}`);
 
     if (onRenderAnnotationLayerErrorProps) {
       onRenderAnnotationLayerErrorProps(error);
@@ -127,7 +143,7 @@ export default function AnnotationLayer() {
   );
 
   function renderAnnotationLayer() {
-    if (!annotations) {
+    if (!page || !annotations) {
       return;
     }
 
@@ -142,6 +158,7 @@ export default function AnnotationLayer() {
     const parameters = {
       annotations,
       div: layer,
+      downloadManager: null,
       imageResourcesPath,
       linkService,
       page,

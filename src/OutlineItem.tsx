@@ -9,11 +9,16 @@ import Ref from './Ref';
 
 import { isDefined } from './shared/utils';
 
-function useCachedValue(getter) {
-  const ref = useRef();
+import type { PDFDocumentProxy } from 'pdfjs-dist';
+import type { RefProxy } from 'pdfjs-dist/types/src/display/api';
 
-  if (isDefined(ref.current)) {
-    return () => ref.current;
+function useCachedValue<T>(getter: () => T): () => T {
+  const ref = useRef<T>();
+
+  const currentValue = ref.current;
+
+  if (isDefined(currentValue)) {
+    return () => currentValue;
   }
 
   return () => {
@@ -25,7 +30,15 @@ function useCachedValue(getter) {
   };
 }
 
-export default function OutlineItem(props) {
+type PDFOutline = Awaited<ReturnType<PDFDocumentProxy['getOutline']>>;
+
+type PDFOutlineItem = PDFOutline[number];
+
+type OutlineItemProps = {
+  item: PDFOutlineItem;
+};
+
+export default function OutlineItem(props: OutlineItemProps) {
   const documentContext = useContext(DocumentContext);
 
   invariant(
@@ -40,6 +53,8 @@ export default function OutlineItem(props) {
   const mergedProps = { ...documentContext, ...outlineContext, ...props };
   const { item, onClick: onClickProps, pdf, ...otherProps } = mergedProps;
 
+  invariant(pdf, 'Attempted to load an outline, but no document was specified.');
+
   const getDestination = useCachedValue(() => {
     if (typeof item.dest === 'string') {
       return pdf.getDestination(item.dest);
@@ -52,10 +67,10 @@ export default function OutlineItem(props) {
     const destination = await getDestination();
 
     if (!destination) {
-      return;
+      throw new Error('Destination not found.');
     }
 
-    const [ref] = destination;
+    const [ref] = destination as [RefProxy];
 
     return pdf.getPageIndex(new Ref(ref));
   });
@@ -66,7 +81,7 @@ export default function OutlineItem(props) {
     return pageIndex + 1;
   });
 
-  function onClick(event) {
+  function onClick(event: React.MouseEvent<HTMLAnchorElement>) {
     event.preventDefault();
 
     if (!onClickProps) {

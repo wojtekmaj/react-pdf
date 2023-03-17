@@ -11,31 +11,43 @@ import { loadPDF, makeAsyncCallback, muteConsole, restoreConsole } from '../test
 
 import DocumentContext from './DocumentContext';
 
+import type { PDFDocumentProxy } from 'pdfjs-dist';
+import type { DocumentContextType } from './shared/types';
+
+type PDFOutline = Awaited<ReturnType<PDFDocumentProxy['getOutline']>>;
+
 const pdfFile = loadPDF('./__mocks__/_pdf.pdf');
 const pdfFile2 = loadPDF('./__mocks__/_pdf2.pdf');
 
-function renderWithContext(children, context) {
+function renderWithContext(children: React.ReactNode, context: Partial<DocumentContextType>) {
   const { rerender, ...otherResult } = render(
-    <DocumentContext.Provider value={context}>{children}</DocumentContext.Provider>,
+    <DocumentContext.Provider value={context as DocumentContextType}>
+      {children}
+    </DocumentContext.Provider>,
   );
 
   return {
     ...otherResult,
-    rerender: (nextChildren, nextContext = context) =>
+    rerender: (
+      nextChildren: React.ReactNode,
+      nextContext: Partial<DocumentContextType> = context,
+    ) =>
       rerender(
-        <DocumentContext.Provider value={nextContext}>{nextChildren}</DocumentContext.Provider>,
+        <DocumentContext.Provider value={nextContext as DocumentContextType}>
+          {nextChildren}
+        </DocumentContext.Provider>,
       ),
   };
 }
 
 describe('Outline', () => {
   // Loaded PDF file
-  let pdf;
-  let pdf2;
+  let pdf: PDFDocumentProxy;
+  let pdf2: PDFDocumentProxy;
 
   // Object with basic loaded outline information that shall match after successful loading
-  let desiredLoadedOutline;
-  let desiredLoadedOutline2;
+  let desiredLoadedOutline: PDFOutline;
+  let desiredLoadedOutline2: PDFOutline;
 
   beforeAll(async () => {
     pdf = await pdfjs.getDocument({ data: pdfFile.arrayBuffer }).promise;
@@ -119,7 +131,7 @@ describe('Outline', () => {
     it('passes container element to inputRef properly', async () => {
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
-      const inputRef = createRef();
+      const inputRef = createRef<HTMLDivElement>();
 
       renderWithContext(<Outline inputRef={inputRef} onLoadSuccess={onLoadSuccess} />, { pdf });
 

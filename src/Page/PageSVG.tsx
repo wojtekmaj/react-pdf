@@ -9,6 +9,13 @@ import PageContext from '../PageContext';
 import { useResolver } from '../shared/hooks';
 import { cancelRunningTask, isCancelException, makePageCallback } from '../shared/utils';
 
+import type { PageViewport } from 'pdfjs-dist';
+import type { PDFOperatorList } from 'pdfjs-dist/types/src/display/api';
+
+type SVGGraphics = {
+  getSVG: (operatorList: PDFOperatorList, viewport: PageViewport) => Promise<SVGElement>;
+};
+
 export default function PageSVG() {
   const context = useContext(PageContext);
 
@@ -22,7 +29,7 @@ export default function PageSVG() {
     scale,
   } = context;
 
-  const [svgState, svgDispatch] = useResolver();
+  const [svgState, svgDispatch] = useResolver<SVGElement>();
   const { value: svg, error: svgError } = svgState;
 
   invariant(page, 'Attempted to render page SVG, but no page was specified.');
@@ -31,6 +38,11 @@ export default function PageSVG() {
    * Called when a page is rendered successfully
    */
   function onRenderSuccess() {
+    if (!page) {
+      // Impossible, but TypeScript doesn't know that
+      return;
+    }
+
     if (onRenderSuccessProps) {
       onRenderSuccessProps(makePageCallback(page, scale));
     }
@@ -40,11 +52,16 @@ export default function PageSVG() {
    * Called when a page fails to render
    */
   function onRenderError() {
+    if (!svgError) {
+      // Impossible, but TypeScript doesn't know that
+      return;
+    }
+
     if (isCancelException(svgError)) {
       return;
     }
 
-    warning(false, svgError);
+    warning(false, svgError.toString());
 
     if (onRenderErrorProps) {
       onRenderErrorProps(svgError);
@@ -63,11 +80,15 @@ export default function PageSVG() {
   useEffect(resetSVG, [page, svgDispatch, viewport]);
 
   function renderSVG() {
+    if (!page) {
+      return;
+    }
+
     const cancellable = makeCancellable(page.getOperatorList());
 
     cancellable.promise
       .then((operatorList) => {
-        const svgGfx = new pdfjs.SVGGraphics(page.commonObjs, page.objs);
+        const svgGfx: SVGGraphics = new pdfjs.SVGGraphics(page.commonObjs, page.objs);
 
         svgGfx
           .getSVG(operatorList, viewport)
@@ -105,7 +126,7 @@ export default function PageSVG() {
     [svg],
   );
 
-  function drawPageOnContainer(element) {
+  function drawPageOnContainer(element: HTMLDivElement | null) {
     if (!element || !svg) {
       return;
     }
@@ -117,8 +138,8 @@ export default function PageSVG() {
 
     const { width, height } = viewport;
 
-    svg.setAttribute('width', width);
-    svg.setAttribute('height', height);
+    svg.setAttribute('width', `${width}`);
+    svg.setAttribute('height', `${height}`);
   }
 
   const { width, height } = viewport;

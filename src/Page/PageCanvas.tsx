@@ -15,9 +15,15 @@ import {
 
 import { isRef } from '../shared/propTypes';
 
+import type { RenderParameters } from 'pdfjs-dist/types/src/display/api';
+
 const ANNOTATION_MODE = pdfjs.AnnotationMode;
 
-export default function PageCanvas({ canvasRef, ...props }) {
+type PageCanvasProps = {
+  canvasRef?: React.Ref<HTMLCanvasElement>;
+};
+
+export default function PageCanvas(props: PageCanvasProps) {
   const context = useContext(PageContext);
 
   invariant(context, 'Unable to find Page context.');
@@ -33,8 +39,9 @@ export default function PageCanvas({ canvasRef, ...props }) {
     rotate,
     scale,
   } = mergedProps;
+  const { canvasRef } = props;
 
-  const canvasElement = useRef();
+  const canvasElement = useRef<HTMLCanvasElement>(null);
 
   invariant(page, 'Attempted to render page canvas, but no page was specified.');
 
@@ -44,6 +51,11 @@ export default function PageCanvas({ canvasRef, ...props }) {
    * Called when a page is rendered successfully.
    */
   function onRenderSuccess() {
+    if (!page) {
+      // Impossible, but TypeScript doesn't know that
+      return;
+    }
+
     if (onRenderSuccessProps) {
       onRenderSuccessProps(makePageCallback(page, scale));
     }
@@ -52,12 +64,12 @@ export default function PageCanvas({ canvasRef, ...props }) {
   /**
    * Called when a page fails to render.
    */
-  function onRenderError(error) {
+  function onRenderError(error: Error) {
     if (isCancelException(error)) {
       return;
     }
 
-    warning(false, error);
+    warning(false, error.toString());
 
     if (onRenderErrorProps) {
       onRenderErrorProps(error);
@@ -75,6 +87,10 @@ export default function PageCanvas({ canvasRef, ...props }) {
   );
 
   function drawPageOnCanvas() {
+    if (!page) {
+      return;
+    }
+
     // Ensures the canvas will be re-rendered from scratch. Otherwise all form data will stay.
     page.cleanup();
 
@@ -90,10 +106,10 @@ export default function PageCanvas({ canvasRef, ...props }) {
     canvas.style.width = `${Math.floor(viewport.width)}px`;
     canvas.style.height = `${Math.floor(viewport.height)}px`;
 
-    const renderContext = {
+    const renderContext: RenderParameters = {
       annotationMode: renderForms ? ANNOTATION_MODE.ENABLE_FORMS : ANNOTATION_MODE.ENABLE,
       get canvasContext() {
-        return canvas.getContext('2d', { alpha: false });
+        return canvas.getContext('2d', { alpha: false }) as CanvasRenderingContext2D;
       },
       viewport: renderViewport,
     };

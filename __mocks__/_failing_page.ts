@@ -1,6 +1,8 @@
+import type { PDFPageProxy } from 'pdfjs-dist';
+
 export default {
   cleanup: () => {
-    // Intentionally empty
+    return true;
   },
   commonObjs: {
     get: () => {
@@ -21,4 +23,4 @@ export default {
       // Intentionally empty
     },
   }),
-};
+} as unknown as PDFPageProxy;

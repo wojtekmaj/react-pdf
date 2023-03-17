@@ -1,5 +1,8 @@
 export default class Ref {
-  constructor({ num, gen }) {
+  num: number;
+  gen: number;
+
+  constructor({ num, gen }: { num: number; gen: number }) {
     this.num = num;
     this.gen = gen;
   }

@@ -1,19 +1,39 @@
 import fs from 'node:fs';
 import { vi } from 'vitest';
 
-export function makeAsyncCallback(callbackValue) {
-  let promiseResolve;
-  const promise = new Promise((resolve) => {
+function makeAsyncCallbackWithoutValue<T extends unknown[]>() {
+  let promiseResolve: (args: T) => void;
+  const promise = new Promise<T>((resolve) => {
     promiseResolve = resolve;
   });
-  const func = vi.fn(
-    callbackValue ? () => promiseResolve(callbackValue) : (...args) => promiseResolve(args),
-  );
+  type Func = (...args: T) => void;
+  const func: Func = vi.fn((...args) => promiseResolve(args));
 
-  return { promise, func };
+  return { func, promise };
 }
 
-export function loadPDF(path) {
+function makeAsyncCallbackWithValue<T>(value: T) {
+  let promiseResolve: (arg: T) => void;
+  const promise = new Promise<T>((resolve) => {
+    promiseResolve = resolve;
+  });
+  const func = vi.fn(() => promiseResolve(value));
+
+  return { func, promise };
+}
+
+export function makeAsyncCallback<T extends unknown[]>(): ReturnType<
+  typeof makeAsyncCallbackWithoutValue<T>
+>;
+export function makeAsyncCallback<T>(value?: T): ReturnType<typeof makeAsyncCallbackWithValue<T>>;
+export function makeAsyncCallback<T>(value?: T) {
+  if (value === undefined) {
+    return makeAsyncCallbackWithoutValue();
+  }
+  return makeAsyncCallbackWithValue<T>(value);
+}
+
+export function loadPDF(path: string) {
   const raw = fs.readFileSync(path);
   const arrayBuffer = raw.buffer;
 

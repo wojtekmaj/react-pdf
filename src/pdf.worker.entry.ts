@@ -5,4 +5,7 @@
  * this bundle, not theirs.
  */
 
-(typeof window !== 'undefined' ? window : {}).pdfjsWorker = require('pdfjs-dist/build/pdf.worker');
+(
+  (typeof window !== 'undefined' ? window : {}) as Window &
+    typeof globalThis & { pdfjsWorker: unknown }
+).pdfjsWorker = require('pdfjs-dist/build/pdf.worker');

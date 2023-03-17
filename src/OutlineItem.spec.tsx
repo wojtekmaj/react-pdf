@@ -10,25 +10,37 @@ import { loadPDF, makeAsyncCallback } from '../test-utils';
 import DocumentContext from './DocumentContext';
 import OutlineContext from './OutlineContext';
 
+import type { PDFDocumentProxy } from 'pdfjs-dist';
+import type { DocumentContextType, OutlineContextType } from './shared/types';
+
 const pdfFile = loadPDF('./__mocks__/_pdf.pdf');
 
-function renderWithContext(children, documentContext, outlineContext) {
+type PDFOutline = Awaited<ReturnType<PDFDocumentProxy['getOutline']>>;
+type PDFOutlineItem = PDFOutline[number];
+
+function renderWithContext(
+  children: React.ReactNode,
+  documentContext: Partial<DocumentContextType>,
+  outlineContext: Partial<OutlineContextType>,
+) {
   const { rerender, ...otherResult } = render(
-    <DocumentContext.Provider value={documentContext}>
-      <OutlineContext.Provider value={outlineContext}>{children}</OutlineContext.Provider>
+    <DocumentContext.Provider value={documentContext as DocumentContextType}>
+      <OutlineContext.Provider value={outlineContext as OutlineContextType}>
+        {children}
+      </OutlineContext.Provider>
     </DocumentContext.Provider>,
   );
 
   return {
     ...otherResult,
     rerender: (
-      nextChildren,
-      nextDocumentContext = documentContext,
-      nextOutlineContext = outlineContext,
+      nextChildren: React.ReactNode,
+      nextDocumentContext: Partial<DocumentContextType> = documentContext,
+      nextOutlineContext: Partial<OutlineContextType> = outlineContext,
     ) =>
       rerender(
-        <DocumentContext.Provider value={nextDocumentContext}>
-          <OutlineContext.Provider value={nextOutlineContext}>
+        <DocumentContext.Provider value={nextDocumentContext as DocumentContextType}>
+          <OutlineContext.Provider value={nextOutlineContext as OutlineContextType}>
             {nextChildren}
           </OutlineContext.Provider>
         </DocumentContext.Provider>,
@@ -38,16 +50,16 @@ function renderWithContext(children, documentContext, outlineContext) {
 
 describe('OutlineItem', () => {
   // Loaded PDF file
-  let pdf;
+  let pdf: PDFDocumentProxy;
 
   // Object with basic loaded outline item information
-  let outlineItem;
+  let outlineItem: PDFOutlineItem;
 
   beforeAll(async () => {
     pdf = await pdfjs.getDocument({ data: pdfFile.arrayBuffer }).promise;
 
     const outlineItems = await pdf.getOutline();
-    [outlineItem] = outlineItems;
+    [outlineItem] = outlineItems as [PDFOutlineItem];
   });
 
   describe('rendering', () => {
@@ -66,7 +78,7 @@ describe('OutlineItem', () => {
 
       renderWithContext(<OutlineItem item={outlineItem} />, { pdf }, { onClick });
 
-      const item = screen.getAllByRole('listitem')[0];
+      const item = screen.getAllByRole('listitem')[0] as HTMLElement;
       const subitems = getAllByRole(item, 'listitem');
 
       expect(subitems).toHaveLength(outlineItem.items.length);
@@ -77,8 +89,8 @@ describe('OutlineItem', () => {
 
       renderWithContext(<OutlineItem item={outlineItem} />, { pdf }, { onClick });
 
-      const item = screen.getAllByRole('listitem')[0];
-      const link = getAllByRole(item, 'link')[0];
+      const item = screen.getAllByRole('listitem')[0] as HTMLElement;
+      const link = getAllByRole(item, 'link')[0] as HTMLAnchorElement;
       fireEvent.click(link);
 
       await onClickPromise;
@@ -95,8 +107,8 @@ describe('OutlineItem', () => {
         { onClick },
       );
 
-      const item = screen.getAllByRole('listitem')[0];
-      const link = getAllByRole(item, 'link')[0];
+      const item = screen.getAllByRole('listitem')[0] as HTMLElement;
+      const link = getAllByRole(item, 'link')[0] as HTMLAnchorElement;
       fireEvent.click(link);
 
       await onClickPromise;

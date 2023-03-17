@@ -6,8 +6,18 @@ import { isDefined } from './utils';
 
 import LinkService from '../LinkService';
 
-export const eventProps = (() => {
-  const result = {};
+import type { PDFDocumentProxy } from 'pdfjs-dist';
+
+const mouseTouchKeyboardEvents = [...mouseEvents, ...touchEvents, ...keyboardEvents];
+
+type MouseTouchKeyboardEvents = (typeof mouseTouchKeyboardEvents)[number];
+
+type Props = {
+  [K in MouseTouchKeyboardEvents]?: typeof PropTypes.func;
+};
+
+export const eventProps: Props = (() => {
+  const result = {} as Props;
 
   [...mouseEvents, ...touchEvents, ...keyboardEvents].forEach((eventName) => {
     result[eventName] = PropTypes.func;
@@ -47,7 +57,7 @@ const fileTypes = [
   }),
 ];
 if (typeof Blob !== 'undefined') {
-  fileTypes.push(PropTypes.instanceOf(Blob));
+  (fileTypes as Array<PropTypes.Validator<unknown>>).push(PropTypes.instanceOf(Blob));
 }
 
 export const isClassName = PropTypes.oneOfType([
@@ -69,7 +79,11 @@ export const isPage = PropTypes.shape({
   render: PropTypes.func.isRequired,
 });
 
-export function isPageIndex(props, propName, componentName) {
+export function isPageIndex(
+  props: Record<string, unknown> & { pdf?: PDFDocumentProxy },
+  propName: string,
+  componentName: string,
+) {
   const { [propName]: pageIndex, pageNumber, pdf } = props;
 
   if (!isDefined(pdf)) {
@@ -102,7 +116,11 @@ export function isPageIndex(props, propName, componentName) {
   return null;
 }
 
-export function isPageNumber(props, propName, componentName) {
+export function isPageNumber(
+  props: Record<string, unknown> & { pdf?: PDFDocumentProxy },
+  propName: string,
+  componentName: string,
+) {
   const { [propName]: pageNumber, pageIndex, pdf } = props;
 
   if (!isDefined(pdf)) {
@@ -148,7 +166,8 @@ export const isPdf = PropTypes.oneOfType([
 export const isRef = PropTypes.oneOfType([
   PropTypes.func,
   PropTypes.shape({
-    current: PropTypes.any,
+    current: PropTypes.oneOfType([PropTypes.instanceOf(HTMLDivElement), PropTypes.oneOf([null])])
+      .isRequired,
   }),
 ]);
 

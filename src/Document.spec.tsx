@@ -10,17 +10,26 @@ import Page from './Page';
 
 import { makeAsyncCallback, loadPDF, muteConsole, restoreConsole } from '../test-utils';
 
+import type { PDFDocumentProxy } from 'pdfjs-dist';
+import type { ScrollPageIntoViewArgs } from './shared/types';
+
 const pdfFile = loadPDF('./__mocks__/_pdf.pdf');
 const pdfFile2 = loadPDF('./__mocks__/_pdf2.pdf');
 
 const OK = Symbol('OK');
 
 // eslint-disable-next-line react/prop-types
-function ChildInternal({ renderMode, rotate }) {
+function ChildInternal({
+  renderMode,
+  rotate,
+}: {
+  renderMode?: string | null;
+  rotate?: number | null;
+}) {
   return <div data-testid="child" data-rendermode={renderMode} data-rotate={rotate} />;
 }
 
-function Child(props) {
+function Child(props: React.ComponentProps<typeof ChildInternal>) {
   return (
     <DocumentContext.Consumer>
       {(context) => <ChildInternal {...context} {...props} />}
@@ -36,8 +45,8 @@ async function waitForAsync() {
 
 describe('Document', () => {
   // Object with basic loaded PDF information that shall match after successful loading
-  const desiredLoadedPdf = {};
-  const desiredLoadedPdf2 = {};
+  const desiredLoadedPdf: Partial<PDFDocumentProxy> = {};
+  const desiredLoadedPdf2: Partial<PDFDocumentProxy> = {};
 
   beforeAll(async () => {
     const pdf = await pdfjs.getDocument({ data: pdfFile.arrayBuffer }).promise;
@@ -144,6 +153,7 @@ describe('Document', () => {
 
       muteConsole();
 
+      // @ts-expect-error-next-line
       render(<Document file={() => null} onSourceError={onSourceError} />);
 
       expect.assertions(1);
@@ -200,7 +210,7 @@ describe('Document', () => {
     });
 
     it('passes container element to inputRef properly', () => {
-      const inputRef = createRef();
+      const inputRef = createRef<HTMLDivElement>();
 
       render(<Document inputRef={inputRef} />);
 
@@ -423,7 +433,10 @@ describe('Document', () => {
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
       const onItemClick = vi.fn();
-      const instance = createRef();
+      const instance = createRef<{
+        pages: React.RefObject<Record<string, unknown>[]>;
+        viewer: React.RefObject<{ scrollPageIntoView: (args: ScrollPageIntoViewArgs) => void }>;
+      }>();
 
       render(
         <Document
@@ -434,11 +447,19 @@ describe('Document', () => {
         />,
       );
 
+      if (!instance.current) {
+        throw new Error('Document ref is not set');
+      }
+
+      if (!instance.current.viewer.current) {
+        throw new Error('Viewer ref is not set');
+      }
+
       expect.assertions(2);
 
       await onLoadSuccessPromise;
 
-      const dest = [];
+      const dest: number[] = [];
       const pageIndex = 5;
       const pageNumber = 6;
 
@@ -451,9 +472,24 @@ describe('Document', () => {
 
     it('attempts to find a page and scroll it into view if onItemClick is not given', async () => {
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
-      const instance = createRef();
+      const instance = createRef<{
+        pages: React.RefObject<Record<string, unknown>[]>;
+        viewer: React.RefObject<{ scrollPageIntoView: (args: ScrollPageIntoViewArgs) => void }>;
+      }>();
 
       render(<Document file={pdfFile.file} onLoadSuccess={onLoadSuccess} ref={instance} />);
+
+      if (!instance.current) {
+        throw new Error('Document ref is not set');
+      }
+
+      if (!instance.current.pages.current) {
+        throw new Error('Pages ref is not set');
+      }
+
+      if (!instance.current.viewer.current) {
+        throw new Error('Viewer ref is not set');
+      }
 
       expect.assertions(1);
 
@@ -461,7 +497,7 @@ describe('Document', () => {
 
       const scrollIntoView = vi.fn();
 
-      const dest = [];
+      const dest: number[] = [];
       const pageIndex = 5;
       const pageNumber = 6;
 
@@ -505,7 +541,7 @@ describe('Document', () => {
 
         await onRenderAnnotationLayerSuccessPromise;
 
-        const link = container.querySelector('a');
+        const link = container.querySelector('a') as HTMLAnchorElement;
 
         expect(link.target).toBe(target);
       },
@@ -540,7 +576,7 @@ describe('Document', () => {
 
       await onRenderAnnotationLayerSuccessPromise;
 
-      const link = container.querySelector('a');
+      const link = container.querySelector('a') as HTMLAnchorElement;
 
       expect(link.rel).toBe(rel);
     },
@@ -551,7 +587,7 @@ describe('Document', () => {
 
     const { container } = render(<Document onClick={onClick} />);
 
-    const document = container.querySelector('.react-pdf__Document');
+    const document = container.querySelector('.react-pdf__Document') as HTMLDivElement;
     fireEvent.click(document);
 
     expect(onClick).toHaveBeenCalled();
@@ -562,7 +598,7 @@ describe('Document', () => {
 
     const { container } = render(<Document onTouchStart={onTouchStart} />);
 
-    const document = container.querySelector('.react-pdf__Document');
+    const document = container.querySelector('.react-pdf__Document') as HTMLDivElement;
     fireEvent.touchStart(document);
 
     expect(onTouchStart).toHaveBeenCalled();

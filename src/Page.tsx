@@ -30,9 +30,68 @@ import {
   isRotate,
 } from './shared/propTypes';
 
+import type { PDFDocumentProxy, PDFPageProxy } from 'pdfjs-dist';
+import type {
+  CustomTextRenderer,
+  NodeOrRenderer,
+  OnGetAnnotationsError,
+  OnGetAnnotationsSuccess,
+  OnGetTextError,
+  OnGetTextSuccess,
+  OnPageLoadError,
+  OnPageLoadSuccess,
+  OnRenderAnnotationLayerError,
+  OnRenderAnnotationLayerSuccess,
+  OnRenderError,
+  OnRenderSuccess,
+  OnRenderTextLayerError,
+  OnRenderTextLayerSuccess,
+  RenderMode,
+} from './shared/types';
+
 const defaultScale = 1;
 
-export default function Page(props) {
+type EventProps = ReturnType<typeof makeEventProps>;
+
+type PageProps = {
+  canvasBackground?: string;
+  canvasRef?: React.Ref<HTMLCanvasElement>;
+  children?: React.ReactNode;
+  className?: string;
+  customTextRenderer?: CustomTextRenderer;
+  devicePixelRatio?: number;
+  error?: NodeOrRenderer;
+  height?: number;
+  imageResourcesPath?: string;
+  inputRef?: React.Ref<HTMLDivElement>;
+  loading?: NodeOrRenderer;
+  noData?: NodeOrRenderer;
+  onGetAnnotationsError?: OnGetAnnotationsError;
+  onGetAnnotationsSuccess?: OnGetAnnotationsSuccess;
+  onGetTextError?: OnGetTextError;
+  onGetTextSuccess?: OnGetTextSuccess;
+  onLoadError?: OnPageLoadError;
+  onLoadSuccess?: OnPageLoadSuccess;
+  onRenderAnnotationLayerError?: OnRenderAnnotationLayerError;
+  onRenderAnnotationLayerSuccess?: OnRenderAnnotationLayerSuccess;
+  onRenderError?: OnRenderError;
+  onRenderSuccess?: OnRenderSuccess;
+  onRenderTextLayerError?: OnRenderTextLayerError;
+  onRenderTextLayerSuccess?: OnRenderTextLayerSuccess;
+  pageIndex?: number;
+  pageNumber?: number;
+  pdf?: PDFDocumentProxy | false;
+  renderAnnotationLayer?: boolean;
+  renderForms?: boolean;
+  renderInteractiveForms?: boolean;
+  renderMode?: RenderMode;
+  renderTextLayer?: boolean;
+  rotate?: number | null;
+  scale?: number;
+  width?: number;
+} & EventProps;
+
+export default function Page(props: PageProps) {
   const context = useContext(DocumentContext);
 
   invariant(context, 'Unable to find Document context. Did you wrap <Page /> in <Document />?');
@@ -77,9 +136,9 @@ export default function Page(props) {
     ...otherProps
   } = mergedProps;
 
-  const [pageState, pageDispatch] = useResolver();
+  const [pageState, pageDispatch] = useResolver<PDFPageProxy>();
   const { value: page, error: pageError } = pageState;
-  const pageElement = useRef();
+  const pageElement = useRef<HTMLDivElement>(null);
 
   invariant(pdf, 'Attempted to load a page, but no document was specified.');
 
@@ -102,8 +161,12 @@ export default function Page(props) {
 
     // If width/height is defined, calculate the scale of the page so it could be of desired width.
     if (width || height) {
-      const viewport = page.getViewport({ scale: 1, rotation: rotate });
-      pageScale = width ? width / viewport.width : height / viewport.height;
+      const viewport = page.getViewport({ scale: 1, rotation: rotate as number });
+      if (width) {
+        pageScale = width / viewport.width;
+      } else if (height) {
+        pageScale = height / viewport.height;
+      }
     }
 
     return scaleWithDefault * pageScale;
@@ -111,6 +174,11 @@ export default function Page(props) {
 
   function hook() {
     return () => {
+      if (pageIndex === null) {
+        // Impossible, but TypeScript doesn't know that
+        return;
+      }
+
       if (unregisterPage) {
         unregisterPage(pageIndex);
       }
@@ -124,10 +192,20 @@ export default function Page(props) {
    */
   function onLoadSuccess() {
     if (onLoadSuccessProps) {
+      if (!page || !scale) {
+        // Impossible, but TypeScript doesn't know that
+        return;
+      }
+
       onLoadSuccessProps(makePageCallback(page, scale));
     }
 
     if (registerPage) {
+      if (pageIndex === null || !pageElement.current) {
+        // Impossible, but TypeScript doesn't know that
+        return;
+      }
+
       registerPage(pageIndex, pageElement.current);
     }
   }
@@ -136,7 +214,12 @@ export default function Page(props) {
    * Called when a page failed to load
    */
   function onLoadError() {
-    warning(false, pageError);
+    if (!pageError) {
+      // Impossible, but TypeScript doesn't know that
+      return;
+    }
+
+    warning(false, pageError.toString());
 
     if (onLoadErrorProps) {
       onLoadErrorProps(pageError);
@@ -150,7 +233,7 @@ export default function Page(props) {
   useEffect(resetPage, [pageDispatch, pdf, pageIndex]);
 
   function loadPage() {
-    if (!pageNumber) {
+    if (!pdf || !pageNumber) {
       return;
     }
 
@@ -188,32 +271,38 @@ export default function Page(props) {
     [page, scale],
   );
 
-  const childContext = page
-    ? {
-        canvasBackground,
-        customTextRenderer,
-        devicePixelRatio,
-        onGetAnnotationsError: onGetAnnotationsErrorProps,
-        onGetAnnotationsSuccess: onGetAnnotationsSuccessProps,
-        onGetTextError: onGetTextErrorProps,
-        onGetTextSuccess: onGetTextSuccessProps,
-        onRenderAnnotationLayerError: onRenderAnnotationLayerErrorProps,
-        onRenderAnnotationLayerSuccess: onRenderAnnotationLayerSuccessProps,
-        onRenderError: onRenderErrorProps,
-        onRenderSuccess: onRenderSuccessProps,
-        onRenderTextLayerError: onRenderTextLayerErrorProps,
-        onRenderTextLayerSuccess: onRenderTextLayerSuccessProps,
-        page,
-        pageIndex,
-        pageNumber,
-        renderForms,
-        rotate: rotate,
-        scale: scale,
-      }
-    : null;
+  const childContext =
+    // Technically there cannot be page without pageIndex, pageNumber, rotate and scale, but TypeScript doesn't know that
+    page &&
+    isProvided(pageIndex) &&
+    isProvided(pageNumber) &&
+    isProvided(rotate) &&
+    isProvided(scale)
+      ? {
+          canvasBackground,
+          customTextRenderer,
+          devicePixelRatio,
+          onGetAnnotationsError: onGetAnnotationsErrorProps,
+          onGetAnnotationsSuccess: onGetAnnotationsSuccessProps,
+          onGetTextError: onGetTextErrorProps,
+          onGetTextSuccess: onGetTextSuccessProps,
+          onRenderAnnotationLayerError: onRenderAnnotationLayerErrorProps,
+          onRenderAnnotationLayerSuccess: onRenderAnnotationLayerSuccessProps,
+          onRenderError: onRenderErrorProps,
+          onRenderSuccess: onRenderSuccessProps,
+          onRenderTextLayerError: onRenderTextLayerErrorProps,
+          onRenderTextLayerSuccess: onRenderTextLayerSuccessProps,
+          page,
+          pageIndex,
+          pageNumber,
+          renderForms,
+          rotate,
+          scale,
+        }
+      : null;
 
   const eventProps = useMemo(
-    () => makeEventProps(otherProps, () => (page ? makePageCallback(page, scale) : null)),
+    () => makeEventProps(otherProps, () => (page && scale ? makePageCallback(page, scale) : null)),
     [otherProps, page, scale],
   );
 

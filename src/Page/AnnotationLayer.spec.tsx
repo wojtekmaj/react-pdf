@@ -14,41 +14,53 @@ import { loadPDF, makeAsyncCallback, muteConsole, restoreConsole } from '../../t
 import DocumentContext from '../DocumentContext';
 import PageContext from '../PageContext';
 
+import type { Annotations, DocumentContextType, PageContextType } from '../shared/types';
+import type { RenderResult } from '@testing-library/react';
+import { PDFPageProxy } from 'pdfjs-dist';
+
 const pdfFile = loadPDF('./__mocks__/_pdf.pdf');
 const annotatedPdfFile = loadPDF('./__mocks__/_pdf3.pdf');
 
-function renderWithContext(children, documentContext, pageContext) {
+function renderWithContext(
+  children: React.ReactNode,
+  documentContext: Partial<DocumentContextType>,
+  pageContext: Partial<PageContextType>,
+) {
   const { rerender, ...otherResult } = render(
-    <DocumentContext.Provider value={documentContext}>
-      <PageContext.Provider value={pageContext}>{children}</PageContext.Provider>
+    <DocumentContext.Provider value={documentContext as DocumentContextType}>
+      <PageContext.Provider value={pageContext as PageContextType}>{children}</PageContext.Provider>
     </DocumentContext.Provider>,
   );
 
+  const customRerender = (
+    nextChildren: React.ReactNode,
+    nextDocumentContext: Partial<DocumentContextType> = documentContext,
+    nextPageContext: Partial<PageContextType> = pageContext,
+  ) =>
+    rerender(
+      <DocumentContext.Provider value={nextDocumentContext as DocumentContextType}>
+        <PageContext.Provider value={nextPageContext as PageContextType}>
+          {nextChildren}
+        </PageContext.Provider>
+      </DocumentContext.Provider>,
+    );
+
   return {
     ...otherResult,
-    rerender: (
-      nextChildren,
-      nextDocumentContext = documentContext,
-      nextPageContext = pageContext,
-    ) =>
-      rerender(
-        <DocumentContext.Provider value={nextDocumentContext}>
-          <PageContext.Provider value={nextPageContext}>{nextChildren}</PageContext.Provider>
-        </DocumentContext.Provider>,
-      ),
-  };
+    rerender: customRerender,
+  } as RenderResult & { rerender: typeof customRerender };
 }
 
 describe('AnnotationLayer', () => {
   const linkService = new LinkService();
 
   // Loaded page
-  let page;
-  let page2;
+  let page: PDFPageProxy;
+  let page2: PDFPageProxy;
 
   // Loaded page text items
-  let desiredAnnotations;
-  let desiredAnnotations2;
+  let desiredAnnotations: Annotations;
+  let desiredAnnotations2: Annotations;
 
   beforeAll(async () => {
     const pdf = await pdfjs.getDocument({ data: pdfFile.arrayBuffer }).promise;
@@ -129,7 +141,7 @@ describe('AnnotationLayer', () => {
     it('throws an error when placed outside Page', () => {
       muteConsole();
 
-      expect(() => renderWithContext(<AnnotationLayer />)).toThrow();
+      expect(() => render(<AnnotationLayer />)).toThrow();
 
       restoreConsole();
     });
@@ -155,7 +167,8 @@ describe('AnnotationLayer', () => {
 
       await onRenderAnnotationLayerSuccessPromise;
 
-      const annotationItems = [...container.firstElementChild.children];
+      const wrapper = container.firstElementChild as HTMLDivElement;
+      const annotationItems = Array.from(wrapper.children);
 
       expect(annotationItems).toHaveLength(desiredAnnotations.length);
     });
@@ -192,9 +205,10 @@ describe('AnnotationLayer', () => {
 
         await onRenderAnnotationLayerSuccessPromise;
 
-        const annotationItems = [...container.firstElementChild.children];
+        const wrapper = container.firstElementChild as HTMLDivElement;
+        const annotationItems = Array.from(wrapper.children);
         const annotationLinkItems = annotationItems
-          .map((item) => item.firstChild)
+          .map((item) => item.firstChild as HTMLElement)
           .filter((item) => item.tagName === 'A');
 
         annotationLinkItems.forEach((link) => expect(link.getAttribute('target')).toBe(target));
@@ -230,9 +244,10 @@ describe('AnnotationLayer', () => {
 
         await onRenderAnnotationLayerSuccessPromise;
 
-        const annotationItems = [...container.firstElementChild.children];
+        const wrapper = container.firstElementChild as HTMLDivElement;
+        const annotationItems = Array.from(wrapper.children);
         const annotationLinkItems = annotationItems
-          .map((item) => item.firstChild)
+          .map((item) => item.firstChild as HTMLElement)
           .filter((item) => item.tagName === 'A');
 
         annotationLinkItems.forEach((link) => expect(link.getAttribute('rel')).toBe(rel));

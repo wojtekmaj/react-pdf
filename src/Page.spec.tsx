@@ -12,38 +12,48 @@ import { loadPDF, makeAsyncCallback, muteConsole, restoreConsole } from '../test
 
 import DocumentContext from './DocumentContext';
 
+import type { PDFDocumentProxy, PDFPageProxy } from 'pdfjs-dist';
+import type { DocumentContextType, PageCallback } from './shared/types';
+
 const pdfFile = loadPDF('./__mocks__/_pdf.pdf');
 const pdfFile2 = loadPDF('./__mocks__/_pdf2.pdf');
 const pdfFile4 = loadPDF('./__mocks__/_pdf4.pdf');
 
-function renderWithContext(children, context) {
+function renderWithContext(children: React.ReactNode, context: Partial<DocumentContextType>) {
   const { rerender, ...otherResult } = render(
-    <DocumentContext.Provider value={context}>{children}</DocumentContext.Provider>,
+    <DocumentContext.Provider value={context as DocumentContextType}>
+      {children}
+    </DocumentContext.Provider>,
   );
 
   return {
     ...otherResult,
-    rerender: (nextChildren, nextContext = context) =>
+    rerender: (
+      nextChildren: React.ReactNode,
+      nextContext: Partial<DocumentContextType> = context,
+    ) =>
       rerender(
-        <DocumentContext.Provider value={nextContext}>{nextChildren}</DocumentContext.Provider>,
+        <DocumentContext.Provider value={nextContext as DocumentContextType}>
+          {nextChildren}
+        </DocumentContext.Provider>,
       ),
   };
 }
 
 describe('Page', () => {
   // Loaded PDF file
-  let pdf;
-  let pdf2;
-  let pdf4;
+  let pdf: PDFDocumentProxy;
+  let pdf2: PDFDocumentProxy;
+  let pdf4: PDFDocumentProxy;
 
   // Object with basic loaded page information that shall match after successful loading
-  const desiredLoadedPage = {};
-  const desiredLoadedPage2 = {};
-  const desiredLoadedPage3 = {};
+  const desiredLoadedPage: Partial<PDFPageProxy> = {};
+  const desiredLoadedPage2: Partial<PDFPageProxy> = {};
+  const desiredLoadedPage3: Partial<PDFPageProxy> = {};
 
   // Callbacks used in registerPage and unregisterPage callbacks
-  let registerPageArguments;
-  let unregisterPageArguments;
+  let registerPageArguments: [number, HTMLDivElement];
+  let unregisterPageArguments: [number];
 
   beforeAll(async () => {
     pdf = await pdfjs.getDocument({ data: pdfFile.arrayBuffer }).promise;
@@ -80,7 +90,8 @@ describe('Page', () => {
     });
 
     it('returns all desired parameters in onLoadSuccess callback', async () => {
-      const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
+      const { func: onLoadSuccess, promise: onLoadSuccessPromise } =
+        makeAsyncCallback<[PageCallback]>();
 
       renderWithContext(<Page onLoadSuccess={onLoadSuccess} pageIndex={0} />, { pdf });
 
@@ -229,7 +240,7 @@ describe('Page', () => {
     });
 
     it('passes container element to inputRef properly', () => {
-      const inputRef = createRef();
+      const inputRef = createRef<HTMLDivElement>();
 
       renderWithContext(<Page inputRef={inputRef} pageIndex={1} />, {
         pdf: silentlyFailingPdf,
@@ -241,7 +252,7 @@ describe('Page', () => {
     it('passes canvas element to PageCanvas properly', async () => {
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
-      const canvasRef = createRef();
+      const canvasRef = createRef<HTMLCanvasElement>();
 
       const { container } = renderWithContext(
         <Page canvasRef={canvasRef} onLoadSuccess={onLoadSuccess} pageIndex={0} />,
@@ -340,7 +351,8 @@ describe('Page', () => {
     });
 
     it('requests page to be rendered with default rotation when given nothing', async () => {
-      const { func: onRenderSuccess, promise: onRenderSuccessPromise } = makeAsyncCallback();
+      const { func: onRenderSuccess, promise: onRenderSuccessPromise } =
+        makeAsyncCallback<[PageCallback]>();
 
       const { container } = renderWithContext(
         <Page onRenderSuccess={onRenderSuccess} pageIndex={0} renderMode="svg" />,
@@ -349,7 +361,7 @@ describe('Page', () => {
 
       const [page] = await onRenderSuccessPromise;
 
-      const pageSvg = container.querySelector('.react-pdf__Page__svg');
+      const pageSvg = container.querySelector('.react-pdf__Page__svg') as SVGElement;
 
       const { width, height } = window.getComputedStyle(pageSvg);
 
@@ -361,7 +373,8 @@ describe('Page', () => {
     });
 
     it('requests page to be rendered with given rotation when given rotate prop', async () => {
-      const { func: onRenderSuccess, promise: onRenderSuccessPromise } = makeAsyncCallback();
+      const { func: onRenderSuccess, promise: onRenderSuccessPromise } =
+        makeAsyncCallback<[PageCallback]>();
       const rotate = 90;
 
       const { container } = renderWithContext(
@@ -371,7 +384,7 @@ describe('Page', () => {
 
       const [page] = await onRenderSuccessPromise;
 
-      const pageSvg = container.querySelector('.react-pdf__Page__svg');
+      const pageSvg = container.querySelector('.react-pdf__Page__svg') as SVGElement;
 
       const { width, height } = window.getComputedStyle(pageSvg);
 
@@ -635,7 +648,8 @@ describe('Page', () => {
   });
 
   it('requests page to be rendered at its original size given nothing', async () => {
-    const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
+    const { func: onLoadSuccess, promise: onLoadSuccessPromise } =
+      makeAsyncCallback<[PageCallback]>();
 
     renderWithContext(<Page onLoadSuccess={onLoadSuccess} pageIndex={0} />, { pdf });
 
@@ -647,7 +661,8 @@ describe('Page', () => {
   });
 
   it('requests page to be rendered with a proper scale when given scale', async () => {
-    const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
+    const { func: onLoadSuccess, promise: onLoadSuccessPromise } =
+      makeAsyncCallback<[PageCallback]>();
     const scale = 1.5;
 
     renderWithContext(<Page onLoadSuccess={onLoadSuccess} pageIndex={0} scale={scale} />, { pdf });
@@ -660,7 +675,8 @@ describe('Page', () => {
   });
 
   it('requests page to be rendered with a proper scale when given width', async () => {
-    const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
+    const { func: onLoadSuccess, promise: onLoadSuccessPromise } =
+      makeAsyncCallback<[PageCallback]>();
     const width = 600;
 
     renderWithContext(<Page onLoadSuccess={onLoadSuccess} pageIndex={0} width={width} />, { pdf });
@@ -673,7 +689,8 @@ describe('Page', () => {
   });
 
   it('requests page to be rendered with a proper scale when given width and scale (multiplies)', async () => {
-    const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
+    const { func: onLoadSuccess, promise: onLoadSuccessPromise } =
+      makeAsyncCallback<[PageCallback]>();
     const width = 600;
     const scale = 1.5;
 
@@ -692,7 +709,8 @@ describe('Page', () => {
   });
 
   it('requests page to be rendered with a proper scale when given height', async () => {
-    const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
+    const { func: onLoadSuccess, promise: onLoadSuccessPromise } =
+      makeAsyncCallback<[PageCallback]>();
     const height = 850;
 
     renderWithContext(<Page height={height} onLoadSuccess={onLoadSuccess} pageIndex={0} />, {
@@ -707,7 +725,8 @@ describe('Page', () => {
   });
 
   it('requests page to be rendered with a proper scale when given height and scale (multiplies)', async () => {
-    const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
+    const { func: onLoadSuccess, promise: onLoadSuccessPromise } =
+      makeAsyncCallback<[PageCallback]>();
     const height = 850;
     const scale = 1.5;
 
@@ -726,7 +745,8 @@ describe('Page', () => {
   });
 
   it('requests page to be rendered with a proper scale when given width and height (ignores height)', async () => {
-    const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
+    const { func: onLoadSuccess, promise: onLoadSuccessPromise } =
+      makeAsyncCallback<[PageCallback]>();
     const width = 600;
     const height = 100;
 
@@ -747,7 +767,8 @@ describe('Page', () => {
   });
 
   it('requests page to be rendered with a proper scale when given width, height and scale (ignores height, multiplies)', async () => {
-    const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
+    const { func: onLoadSuccess, promise: onLoadSuccessPromise } =
+      makeAsyncCallback<[PageCallback]>();
     const width = 600;
     const height = 100;
     const scale = 1.5;
@@ -777,7 +798,7 @@ describe('Page', () => {
 
     const { container } = renderWithContext(<Page onClick={onClick} />, { pdf });
 
-    const page = container.querySelector('.react-pdf__Page');
+    const page = container.querySelector('.react-pdf__Page') as HTMLDivElement;
     fireEvent.click(page);
 
     expect(onClick).toHaveBeenCalled();
@@ -788,7 +809,7 @@ describe('Page', () => {
 
     const { container } = renderWithContext(<Page onTouchStart={onTouchStart} />, { pdf });
 
-    const page = container.querySelector('.react-pdf__Page');
+    const page = container.querySelector('.react-pdf__Page') as HTMLDivElement;
     fireEvent.touchStart(page);
 
     expect(onTouchStart).toHaveBeenCalled();

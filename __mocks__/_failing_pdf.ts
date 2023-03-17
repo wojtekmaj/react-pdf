@@ -1,3 +1,5 @@
+import type { PDFDocumentProxy } from 'pdfjs-dist';
+
 export default {
   _pdfInfo: {
     fingerprint: 'a62067476e69734bb8eb60122615dfbf',
@@ -7,4 +9,4 @@ export default {
   getOutline: () => new Promise((resolve, reject) => reject(new Error())),
   getPage: () => new Promise((resolve, reject) => reject(new Error())),
   numPages: 4,
-};
+} as unknown as PDFDocumentProxy;
