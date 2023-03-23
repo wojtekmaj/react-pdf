@@ -4,7 +4,6 @@
     "declaration": false,
     "downlevelIteration": true,
     "esModuleInterop": true,
-    "importsNotUsedAsValues": "error",
     "isolatedModules": true,
     "jsx": "react",
     "moduleResolution": "node",
