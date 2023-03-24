@@ -71,7 +71,7 @@ describe('PageCanvas', () => {
       render(<PageCanvas canvasRef={canvasRef} page={page} scale={1} />);
 
       expect(canvasRef).toHaveBeenCalled();
-      expect(canvasRef.mock.calls[0][0]).toBeInstanceOf(HTMLElement);
+      expect(canvasRef).toHaveBeenCalledWith(expect.any(HTMLElement));
     });
   });
 });

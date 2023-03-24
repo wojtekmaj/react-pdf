@@ -205,7 +205,7 @@ describe('Document', () => {
       render(<Document inputRef={inputRef} />);
 
       expect(inputRef).toHaveBeenCalled();
-      expect(inputRef.mock.calls[0][0]).toBeInstanceOf(HTMLElement);
+      expect(inputRef).toHaveBeenCalledWith(expect.any(HTMLElement));
     });
 
     it('renders "No PDF file specified." when given nothing', () => {

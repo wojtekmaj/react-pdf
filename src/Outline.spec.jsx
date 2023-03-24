@@ -111,7 +111,7 @@ describe('Outline', () => {
       await onLoadSuccessPromise;
 
       expect(inputRef).toHaveBeenCalled();
-      expect(inputRef.mock.calls[0][0]).toBeInstanceOf(HTMLElement);
+      expect(inputRef).toHaveBeenCalledWith(expect.any(HTMLElement));
     });
 
     it('renders OutlineItem components properly', async () => {
