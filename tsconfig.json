@@ -2,7 +2,6 @@
   "compilerOptions": {
     "allowJs": true,
     "declaration": false,
-    "downlevelIteration": true,
     "esModuleInterop": true,
     "isolatedModules": true,
     "jsx": "react",
