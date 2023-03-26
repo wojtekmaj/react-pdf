@@ -3139,7 +3139,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"make-event-props@npm:^1.1.0":
+"make-event-props@npm:^1.4.2":
   version: 1.4.2
   resolution: "make-event-props@npm:1.4.2"
   checksum: 3da247c14a6a2974db96e53058842dd781db2b68daab8a99cd6d988795579481f6ec032696ebf59f500d2848f3c8496e4896dabdf9b172081b593d0064486b9e
@@ -3984,7 +3984,7 @@ __metadata:
     husky: ^8.0.0
     jsdom: ^21.1.0
     make-cancellable-promise: ^1.0.0
-    make-event-props: ^1.1.0
+    make-event-props: ^1.4.2
     merge-refs: ^1.0.0
     pdfjs-dist: 2.16.105
     prettier: ^2.7.0

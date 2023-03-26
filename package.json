@@ -36,7 +36,7 @@
   "dependencies": {
     "clsx": "^1.2.1",
     "make-cancellable-promise": "^1.0.0",
-    "make-event-props": "^1.1.0",
+    "make-event-props": "^1.4.2",
     "merge-refs": "^1.0.0",
     "pdfjs-dist": "2.16.105",
     "prop-types": "^15.6.2",
