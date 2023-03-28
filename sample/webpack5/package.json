@@ -28,6 +28,6 @@
     "style-loader": "^3.0.0",
     "webpack": "^5.76.3",
     "webpack-cli": "^5.0.0",
-    "webpack-dev-server": "^4.0.0"
+    "webpack-dev-server": "^4.13.1"
   }
 }
