@@ -11,9 +11,6 @@ const fileTypes = [
     withCredentials: PropTypes.bool,
   }),
 ];
-if (typeof File !== 'undefined') {
-  fileTypes.push(PropTypes.instanceOf(File));
-}
 if (typeof Blob !== 'undefined') {
   fileTypes.push(PropTypes.instanceOf(Blob));
 }
