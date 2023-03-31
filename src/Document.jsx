@@ -40,23 +40,41 @@ import { eventProps, isClassName, isFile, isRef } from './shared/propTypes';
 
 const { PDFDataRangeTransport } = pdfjs;
 
+const defaultOnPassword = (callback, reason) => {
+  switch (reason) {
+    case PasswordResponses.NEED_PASSWORD: {
+      // eslint-disable-next-line no-alert
+      const password = prompt('Enter the password to open this PDF file.');
+      callback(password);
+      break;
+    }
+    case PasswordResponses.INCORRECT_PASSWORD: {
+      // eslint-disable-next-line no-alert
+      const password = prompt('Invalid password. Please try again.');
+      callback(password);
+      break;
+    }
+    default:
+  }
+};
+
 const Document = forwardRef(function Document(
   {
     children,
     className,
-    error,
+    error = 'Failed to load PDF file.',
     externalLinkRel,
     externalLinkTarget,
     file,
     inputRef,
     imageResourcesPath,
-    loading,
-    noData,
+    loading = 'Loading PDF…',
+    noData = 'No PDF file specified.',
     onItemClick,
     onLoadError: onLoadErrorProps,
     onLoadProgress,
     onLoadSuccess: onLoadSuccessProps,
-    onPassword,
+    onPassword = defaultOnPassword,
     onSourceError: onSourceErrorProps,
     onSourceSuccess: onSourceSuccessProps,
     options,
@@ -367,29 +385,6 @@ const Document = forwardRef(function Document(
     </div>
   );
 });
-
-Document.defaultProps = {
-  error: 'Failed to load PDF file.',
-  loading: 'Loading PDF…',
-  noData: 'No PDF file specified.',
-  onPassword: (callback, reason) => {
-    switch (reason) {
-      case PasswordResponses.NEED_PASSWORD: {
-        // eslint-disable-next-line no-alert
-        const password = prompt('Enter the password to open this PDF file.');
-        callback(password);
-        break;
-      }
-      case PasswordResponses.INCORRECT_PASSWORD: {
-        // eslint-disable-next-line no-alert
-        const password = prompt('Invalid password. Please try again.');
-        callback(password);
-        break;
-      }
-      default:
-    }
-  },
-};
 
 const isFunctionOrNode = PropTypes.oneOfType([PropTypes.func, PropTypes.node]);
 

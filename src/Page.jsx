@@ -44,11 +44,11 @@ export default function Page(props) {
     className,
     customTextRenderer,
     devicePixelRatio,
-    error,
+    error = 'Failed to load the page.',
     height,
     inputRef,
-    loading,
-    noData,
+    loading = 'Loading page…',
+    noData = 'No page specified.',
     onGetAnnotationsError: onGetAnnotationsErrorProps,
     onGetAnnotationsSuccess: onGetAnnotationsSuccessProps,
     onGetTextError: onGetTextErrorProps,
@@ -65,12 +65,12 @@ export default function Page(props) {
     pageNumber: pageNumberProps,
     pdf,
     registerPage,
-    renderAnnotationLayer: renderAnnotationLayerProps,
-    renderForms,
-    renderMode,
-    renderTextLayer: renderTextLayerProps,
+    renderAnnotationLayer: renderAnnotationLayerProps = true,
+    renderForms = false,
+    renderMode = 'canvas',
+    renderTextLayer: renderTextLayerProps = true,
     rotate: rotateProps,
-    scale: scaleProps,
+    scale: scaleProps = defaultScale,
     unregisterPage,
     width,
     ...otherProps
@@ -295,17 +295,6 @@ export default function Page(props) {
     </div>
   );
 }
-
-Page.defaultProps = {
-  error: 'Failed to load the page.',
-  loading: 'Loading page…',
-  noData: 'No page specified.',
-  renderAnnotationLayer: true,
-  renderForms: false,
-  renderMode: 'canvas',
-  renderTextLayer: true,
-  scale: defaultScale,
-};
 
 const isFunctionOrNode = PropTypes.oneOfType([PropTypes.func, PropTypes.node]);
 
