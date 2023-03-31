@@ -607,53 +607,6 @@ describe('Page', () => {
     expect(textWidgetAnnotation).toBeTruthy();
   });
 
-  it('requests page to be rendered with forms given legacy renderInteractiveForms = true', async () => {
-    const { func: onRenderAnnotationLayerSuccess, promise: onRenderAnnotationLayerSuccessPromise } =
-      makeAsyncCallback();
-
-    const { container } = render(
-      <Page
-        onRenderAnnotationLayerSuccess={onRenderAnnotationLayerSuccess}
-        pageIndex={0}
-        pdf={pdf4}
-        renderInteractiveForms
-        renderMode="none"
-      />,
-    );
-
-    expect.assertions(1);
-
-    await onRenderAnnotationLayerSuccessPromise;
-
-    const textWidgetAnnotation = container.querySelector('.textWidgetAnnotation');
-
-    expect(textWidgetAnnotation).toBeTruthy();
-  });
-
-  it('requests page to be rendered without forms given renderForms = false and legacy renderInteractiveForms = true', async () => {
-    const { func: onRenderAnnotationLayerSuccess, promise: onRenderAnnotationLayerSuccessPromise } =
-      makeAsyncCallback();
-
-    const { container } = render(
-      <Page
-        onRenderAnnotationLayerSuccess={onRenderAnnotationLayerSuccess}
-        pageIndex={0}
-        pdf={pdf4}
-        renderForms={false}
-        renderInteractiveForms
-        renderMode="none"
-      />,
-    );
-
-    expect.assertions(1);
-
-    await onRenderAnnotationLayerSuccessPromise;
-
-    const textWidgetAnnotation = container.querySelector('.textWidgetAnnotation');
-
-    expect(textWidgetAnnotation).toBeFalsy();
-  });
-
   it('requests page to be rendered at its original size given nothing', async () => {
     const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 

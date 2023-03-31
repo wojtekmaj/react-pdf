@@ -175,8 +175,6 @@ AnnotationLayerInternal.propTypes = {
 };
 
 AnnotationLayerInternal.defaultProps = {
-  // Can be moved to Page.defaultProps after renderInteractiveForms is removed
-  renderForms: false,
   scale: 1,
 };
 

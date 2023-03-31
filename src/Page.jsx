@@ -61,7 +61,6 @@ export function PageInternal({
   registerPage,
   renderAnnotationLayer: renderAnnotationLayerProps,
   renderForms,
-  renderInteractiveForms,
   renderMode,
   renderTextLayer: renderTextLayerProps,
   rotate: rotateProps,
@@ -197,7 +196,7 @@ export function PageInternal({
         page,
         pageIndex,
         pageNumber,
-        renderForms: renderForms ?? renderInteractiveForms, // For backward compatibility
+        renderForms,
         rotate: rotate,
         scale: scale,
       }
@@ -295,6 +294,7 @@ PageInternal.defaultProps = {
   loading: 'Loading page…',
   noData: 'No page specified.',
   renderAnnotationLayer: true,
+  renderForms: false,
   renderMode: 'canvas',
   renderTextLayer: true,
   scale: defaultScale,
@@ -330,7 +330,6 @@ PageInternal.propTypes = {
   registerPage: PropTypes.func,
   renderAnnotationLayer: PropTypes.bool,
   renderForms: PropTypes.bool,
-  renderInteractiveForms: PropTypes.bool, // For backward compatibility
   renderMode: isRenderMode,
   renderTextLayer: PropTypes.bool,
   rotate: isRotate,
