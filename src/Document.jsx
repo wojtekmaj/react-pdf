@@ -269,9 +269,11 @@ const Document = forwardRef(function Document(
     }
 
     const destroyable = pdfjs.getDocument({ ...source, ...options });
-    destroyable.onPassword = onPassword;
     if (onLoadProgress) {
       destroyable.onProgress = onLoadProgress;
+    }
+    if (onPassword) {
+      destroyable.onPassword = onPassword;
     }
     const loadingTask = destroyable;
 
