@@ -4,7 +4,7 @@ import { render } from '@testing-library/react';
 
 import { pdfjs } from '../index.test';
 
-import { AnnotationLayerInternal as AnnotationLayer } from './AnnotationLayer';
+import AnnotationLayer from './AnnotationLayer';
 import LinkService from '../LinkService';
 
 import failingPage from '../../__mocks__/_failing_page';

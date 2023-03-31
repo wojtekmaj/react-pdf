@@ -1,5 +1,12 @@
-import React, { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
-import PropTypes from 'prop-types';
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import makeCancellable from 'make-cancellable-promise';
 import invariant from 'tiny-invariant';
 import warning from 'tiny-warning';
@@ -9,20 +16,22 @@ import PageContext from '../PageContext';
 
 import { cancelRunningTask } from '../shared/utils';
 
-import { isPage, isRotate } from '../shared/propTypes';
+export default function TextLayer(props) {
+  const context = useContext(PageContext);
+  const mergedProps = { ...context, ...props };
+  const {
+    customTextRenderer,
+    onGetTextError,
+    onGetTextSuccess,
+    onRenderTextLayerError,
+    onRenderTextLayerSuccess,
+    page,
+    pageIndex,
+    pageNumber,
+    rotate: rotateProps,
+    scale,
+  } = mergedProps;
 
-export function TextLayerInternal({
-  customTextRenderer,
-  onGetTextError,
-  onGetTextSuccess,
-  onRenderTextLayerError,
-  onRenderTextLayerSuccess,
-  page,
-  pageIndex,
-  pageNumber,
-  rotate: rotateProps,
-  scale,
-}) {
   const [textContent, setTextContent] = useState(undefined);
   const [textContentError, setTextContentError] = useState(undefined);
   const layerElement = useRef();
@@ -201,6 +210,7 @@ export function TextLayerInternal({
     customTextRenderer,
     onRenderError,
     onRenderSuccess,
+    page,
     pageIndex,
     pageNumber,
     textContent,
@@ -215,26 +225,5 @@ export function TextLayerInternal({
       onMouseDown={onMouseDown}
       ref={layerElement}
     />
-  );
-}
-
-TextLayerInternal.propTypes = {
-  customTextRenderer: PropTypes.func,
-  onGetTextError: PropTypes.func,
-  onGetTextSuccess: PropTypes.func,
-  onRenderTextLayerError: PropTypes.func,
-  onRenderTextLayerSuccess: PropTypes.func,
-  page: isPage.isRequired,
-  pageIndex: PropTypes.number.isRequired,
-  pageNumber: PropTypes.number.isRequired,
-  rotate: isRotate,
-  scale: PropTypes.number,
-};
-
-export default function TextLayer(props) {
-  return (
-    <PageContext.Consumer>
-      {(context) => <TextLayerInternal {...context} {...props} />}
-    </PageContext.Consumer>
   );
 }

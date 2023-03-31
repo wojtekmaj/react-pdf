@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useContext, useEffect, useMemo, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import makeCancellable from 'make-cancellable-promise';
 import makeEventProps from 'make-event-props';
@@ -31,44 +31,48 @@ import {
 
 const defaultScale = 1;
 
-export function PageInternal({
-  canvasBackground,
-  canvasRef,
-  children,
-  className,
-  customTextRenderer,
-  devicePixelRatio,
-  error,
-  height,
-  inputRef,
-  loading,
-  noData,
-  onGetAnnotationsError: onGetAnnotationsErrorProps,
-  onGetAnnotationsSuccess: onGetAnnotationsSuccessProps,
-  onGetTextError: onGetTextErrorProps,
-  onGetTextSuccess: onGetTextSuccessProps,
-  onLoadError: onLoadErrorProps,
-  onLoadSuccess: onLoadSuccessProps,
-  onRenderAnnotationLayerError: onRenderAnnotationLayerErrorProps,
-  onRenderAnnotationLayerSuccess: onRenderAnnotationLayerSuccessProps,
-  onRenderError: onRenderErrorProps,
-  onRenderSuccess: onRenderSuccessProps,
-  onRenderTextLayerError: onRenderTextLayerErrorProps,
-  onRenderTextLayerSuccess: onRenderTextLayerSuccessProps,
-  pageIndex: pageIndexProps,
-  pageNumber: pageNumberProps,
-  pdf,
-  registerPage,
-  renderAnnotationLayer: renderAnnotationLayerProps,
-  renderForms,
-  renderMode,
-  renderTextLayer: renderTextLayerProps,
-  rotate: rotateProps,
-  scale: scaleProps,
-  unregisterPage,
-  width,
-  ...otherProps
-}) {
+export default function Page(props) {
+  const context = useContext(DocumentContext);
+  const mergedProps = { ...context, ...props };
+  const {
+    canvasBackground,
+    canvasRef,
+    children,
+    className,
+    customTextRenderer,
+    devicePixelRatio,
+    error,
+    height,
+    inputRef,
+    loading,
+    noData,
+    onGetAnnotationsError: onGetAnnotationsErrorProps,
+    onGetAnnotationsSuccess: onGetAnnotationsSuccessProps,
+    onGetTextError: onGetTextErrorProps,
+    onGetTextSuccess: onGetTextSuccessProps,
+    onLoadError: onLoadErrorProps,
+    onLoadSuccess: onLoadSuccessProps,
+    onRenderAnnotationLayerError: onRenderAnnotationLayerErrorProps,
+    onRenderAnnotationLayerSuccess: onRenderAnnotationLayerSuccessProps,
+    onRenderError: onRenderErrorProps,
+    onRenderSuccess: onRenderSuccessProps,
+    onRenderTextLayerError: onRenderTextLayerErrorProps,
+    onRenderTextLayerSuccess: onRenderTextLayerSuccessProps,
+    pageIndex: pageIndexProps,
+    pageNumber: pageNumberProps,
+    pdf,
+    registerPage,
+    renderAnnotationLayer: renderAnnotationLayerProps,
+    renderForms,
+    renderMode,
+    renderTextLayer: renderTextLayerProps,
+    rotate: rotateProps,
+    scale: scaleProps,
+    unregisterPage,
+    width,
+    ...otherProps
+  } = mergedProps;
+
   const [page, setPage] = useState(undefined);
   const [pageError, setPageError] = useState(undefined);
   const pageElement = useRef();
@@ -289,7 +293,7 @@ export function PageInternal({
   );
 }
 
-PageInternal.defaultProps = {
+Page.defaultProps = {
   error: 'Failed to load the page.',
   loading: 'Loading page…',
   noData: 'No page specified.',
@@ -302,7 +306,7 @@ PageInternal.defaultProps = {
 
 const isFunctionOrNode = PropTypes.oneOfType([PropTypes.func, PropTypes.node]);
 
-PageInternal.propTypes = {
+Page.propTypes = {
   ...eventProps,
   canvasBackground: PropTypes.string,
   canvasRef: isRef,
@@ -337,11 +341,3 @@ PageInternal.propTypes = {
   unregisterPage: PropTypes.func,
   width: PropTypes.number,
 };
-
-export default function Page(props) {
-  return (
-    <DocumentContext.Consumer>
-      {(context) => <PageInternal {...context} {...props} />}
-    </DocumentContext.Consumer>
-  );
-}

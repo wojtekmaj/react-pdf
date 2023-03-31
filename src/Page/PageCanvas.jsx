@@ -1,5 +1,4 @@
-import React, { createRef, useCallback, useEffect, useMemo } from 'react';
-import PropTypes from 'prop-types';
+import React, { createRef, useCallback, useContext, useEffect, useMemo } from 'react';
 import mergeRefs from 'merge-refs';
 import invariant from 'tiny-invariant';
 import warning from 'tiny-warning';
@@ -14,21 +13,24 @@ import {
   makePageCallback,
 } from '../shared/utils';
 
-import { isPage, isRef, isRotate } from '../shared/propTypes';
+import { isRef } from '../shared/propTypes';
 
 const ANNOTATION_MODE = pdfjs.AnnotationMode;
 
-export function PageCanvasInternal({
-  canvasBackground,
-  canvasRef,
-  devicePixelRatio: devicePixelRatioProps,
-  onRenderError: onRenderErrorProps,
-  onRenderSuccess: onRenderSuccessProps,
-  page,
-  renderForms,
-  rotate: rotateProps,
-  scale,
-}) {
+export default function PageCanvas({ canvasRef, ...props }) {
+  const context = useContext(PageContext);
+  const mergedProps = { ...context, ...props };
+  const {
+    canvasBackground,
+    devicePixelRatio: devicePixelRatioProps,
+    onRenderError: onRenderErrorProps,
+    onRenderSuccess: onRenderSuccessProps,
+    page,
+    renderForms,
+    rotate: rotateProps,
+    scale,
+  } = mergedProps;
+
   const canvasElement = createRef();
 
   invariant(page, 'Attempted to render page canvas, but no page was specified.');
@@ -147,22 +149,6 @@ export function PageCanvasInternal({
   );
 }
 
-PageCanvasInternal.propTypes = {
-  canvasBackground: PropTypes.string,
+PageCanvas.propTypes = {
   canvasRef: isRef,
-  devicePixelRatio: PropTypes.number,
-  onRenderError: PropTypes.func,
-  onRenderSuccess: PropTypes.func,
-  page: isPage.isRequired,
-  renderForms: PropTypes.bool,
-  rotate: isRotate,
-  scale: PropTypes.number.isRequired,
 };
-
-export default function PageCanvas(props) {
-  return (
-    <PageContext.Consumer>
-      {(context) => <PageCanvasInternal {...context} {...props} />}
-    </PageContext.Consumer>
-  );
-}

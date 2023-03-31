@@ -4,7 +4,7 @@ import { render } from '@testing-library/react';
 
 import { pdfjs } from '../index.test';
 
-import { TextLayerInternal as TextLayer } from './TextLayer';
+import TextLayer from './TextLayer';
 
 import failingPage from '../../__mocks__/_failing_page';
 
