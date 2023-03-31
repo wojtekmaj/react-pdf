@@ -33,11 +33,10 @@ import {
   isBlob,
   isBrowser,
   isDataURI,
-  isFile,
   loadFromFile,
 } from './shared/utils';
 
-import { eventProps, isClassName, isFile as isFileProp, isRef } from './shared/propTypes';
+import { eventProps, isClassName, isFile, isRef } from './shared/propTypes';
 
 const { PDFDataRangeTransport } = pdfjs;
 
@@ -172,7 +171,7 @@ const Document = forwardRef(function Document(
      */
     if (isBrowser) {
       // File is a Blob
-      if (isBlob(file) || isFile(file)) {
+      if (isBlob(file)) {
         const data = await loadFromFile(file);
 
         return { data };
@@ -399,7 +398,7 @@ Document.propTypes = {
   error: isFunctionOrNode,
   externalLinkRel: PropTypes.string,
   externalLinkTarget: PropTypes.string,
-  file: isFileProp,
+  file: isFile,
   imageResourcesPath: PropTypes.string,
   inputRef: isRef,
   loading: isFunctionOrNode,

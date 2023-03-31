@@ -59,17 +59,6 @@ export function isBlob(variable) {
 }
 
 /**
- * Checks whether a variable provided is a File.
- *
- * @param {*} variable Variable to check
- */
-export function isFile(variable) {
-  invariant(isBrowser, 'isFile can only be used in a browser environment');
-
-  return variable instanceof File;
-}
-
-/**
  * Checks whether a string provided is a data URI.
  *
  * @param {string} str String to check

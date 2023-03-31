@@ -4,7 +4,7 @@ import { Document, Outline, Page } from 'react-pdf/src/index.vite';
 import 'react-pdf/src/Page/AnnotationLayer.css';
 import 'react-pdf/src/Page/TextLayer.css';
 
-import { isArrayBuffer, isBlob, isBrowser, isFile, loadFromFile } from 'react-pdf/src/shared/utils';
+import { isArrayBuffer, isBlob, isBrowser, loadFromFile } from 'react-pdf/src/shared/utils';
 
 import './Test.css';
 
@@ -149,7 +149,7 @@ export default function Test() {
              */
             if (isBrowser) {
               // File is a Blob
-              if (isBlob(file) || isFile(file)) {
+              if (isBlob(file)) {
                 return { data: await loadFromFile(file) };
               }
             }
