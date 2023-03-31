@@ -18,7 +18,6 @@ import { cancelRunningTask } from '../shared/utils';
 
 export default function TextLayer() {
   const context = useContext(PageContext);
-  const mergedProps = { ...context };
   const {
     customTextRenderer,
     onGetTextError,
@@ -30,7 +29,7 @@ export default function TextLayer() {
     pageNumber,
     rotate: rotateProps,
     scale,
-  } = mergedProps;
+  } = context;
 
   const [textContent, setTextContent] = useState(undefined);
   const [textContentError, setTextContentError] = useState(undefined);

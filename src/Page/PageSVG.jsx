@@ -10,14 +10,13 @@ import { cancelRunningTask, isCancelException, makePageCallback } from '../share
 
 export default function PageSVG() {
   const context = useContext(PageContext);
-  const mergedProps = { ...context };
   const {
     onRenderSuccess: onRenderSuccessProps,
     onRenderError: onRenderErrorProps,
     page,
     rotate: rotateProps,
     scale,
-  } = mergedProps;
+  } = context;
 
   const [svg, setSvg] = useState(undefined);
   const [svgError, setSvgError] = useState(undefined);
