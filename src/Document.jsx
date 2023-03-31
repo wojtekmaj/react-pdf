@@ -185,12 +185,12 @@ const Document = forwardRef(function Document(
     );
 
     invariant(
-      file.url || file.data || file.range,
+      'data' in file || 'range' in file || 'url' in file,
       'Invalid parameter object: need either .data, .range or .url',
     );
 
     // File .url is a string
-    if (typeof file.url === 'string') {
+    if ('url' in file && typeof file.url === 'string') {
       if (isDataURI(file.url)) {
         const { url, ...otherParams } = file;
         const fileByteString = dataURItoByteString(url);
