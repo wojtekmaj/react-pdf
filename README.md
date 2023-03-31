@@ -41,10 +41,10 @@ React-PDF supports all modern browsers. It is tested with the latest versions of
 
 The following browsers are supported in React-PDF v6:
 
-- Chrome ≥76
-- Edge (Chromium-based)
+- Chrome ≥85
+- Edge ≥85
 - Safari ≥14.1
-- Firefox ≥90(?)
+- Firefox ESR
 
 You may extend the list of supported browsers by providing additional polyfills (e.g. for `Promise.allSettled`) and configuring your bundler to transpile `pdfjs-dist`.
 

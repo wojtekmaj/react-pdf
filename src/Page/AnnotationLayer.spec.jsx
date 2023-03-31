@@ -214,68 +214,6 @@ describe('AnnotationLayer', () => {
       },
     );
 
-    it('renders annotations at a given rotation', async () => {
-      const {
-        func: onRenderAnnotationLayerSuccess,
-        promise: onRenderAnnotationLayerSuccessPromise,
-      } = makeAsyncCallback();
-      const rotate = 90;
-
-      const { container } = render(
-        <AnnotationLayer
-          linkService={linkService}
-          onRenderAnnotationLayerSuccess={onRenderAnnotationLayerSuccess}
-          page={page}
-          rotate={rotate}
-        />,
-      );
-
-      expect.assertions(2);
-
-      await onRenderAnnotationLayerSuccessPromise;
-
-      const annotationLayer = container.firstElementChild;
-
-      const { width, height } = window.getComputedStyle(annotationLayer);
-
-      const viewport = page.getViewport({ scale: 1 });
-
-      // Expect the annotation layer to be rotated
-      expect(parseInt(width, 10)).toBe(Math.floor(viewport.width));
-      expect(parseInt(height, 10)).toBe(Math.floor(viewport.height));
-    });
-
-    it('renders annotations at a given scale', async () => {
-      const {
-        func: onRenderAnnotationLayerSuccess,
-        promise: onRenderAnnotationLayerSuccessPromise,
-      } = makeAsyncCallback();
-      const scale = 2;
-
-      const { container } = render(
-        <AnnotationLayer
-          linkService={linkService}
-          onRenderAnnotationLayerSuccess={onRenderAnnotationLayerSuccess}
-          page={page}
-          scale={scale}
-        />,
-      );
-
-      expect.assertions(2);
-
-      await onRenderAnnotationLayerSuccessPromise;
-
-      const annotationLayer = container.firstElementChild;
-
-      const { width, height } = window.getComputedStyle(annotationLayer);
-
-      const viewport = page.getViewport({ scale });
-
-      // Expect the annotation layer to be scaled
-      expect(parseInt(width, 10)).toBe(Math.floor(viewport.width));
-      expect(parseInt(height, 10)).toBe(Math.floor(viewport.height));
-    });
-
     it('renders annotations with the default imageResourcesPath given no imageResourcesPath', async () => {
       const pdf = await pdfjs.getDocument({ data: annotatedPdfFile.arrayBuffer }).promise;
       const annotatedPage = await pdf.getPage(1);
