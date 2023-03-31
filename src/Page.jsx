@@ -76,41 +76,11 @@ export function PageInternal({
 
   invariant(pdf, 'Attempted to load a page, but no document was specified.');
 
-  const pageIndex = (() => {
-    if (isProvided(pageNumberProps)) {
-      return pageNumberProps - 1;
-    }
+  const pageIndex = isProvided(pageNumberProps) ? pageNumberProps - 1 : pageIndexProps ?? null;
 
-    if (isProvided(pageIndexProps)) {
-      return pageIndexProps;
-    }
+  const pageNumber = pageNumberProps ?? (isProvided(pageIndexProps) ? pageIndexProps + 1 : null);
 
-    return null;
-  })();
-
-  const pageNumber = (() => {
-    if (isProvided(pageNumberProps)) {
-      return pageNumberProps;
-    }
-
-    if (isProvided(pageIndexProps)) {
-      return pageIndexProps + 1;
-    }
-
-    return null;
-  })();
-
-  const rotate = (() => {
-    if (isProvided(rotateProps)) {
-      return rotateProps;
-    }
-
-    if (!page) {
-      return null;
-    }
-
-    return page.rotate;
-  })();
+  const rotate = rotateProps ?? (page ? page.rotate : null);
 
   const scale = useMemo(() => {
     if (!page) {
@@ -121,7 +91,7 @@ export function PageInternal({
     let pageScale = 1;
 
     // Passing scale explicitly null would cause the page not to render
-    const scaleWithDefault = scaleProps === null ? defaultScale : scaleProps;
+    const scaleWithDefault = scaleProps ?? defaultScale;
 
     // If width/height is defined, calculate the scale of the page so it could be of desired width.
     if (width || height) {

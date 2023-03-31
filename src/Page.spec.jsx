@@ -118,6 +118,18 @@ describe('Page', () => {
       expect(page).toMatchObject(desiredLoadedPage);
     });
 
+    it('loads page of a given number when given conflicting pageNumber and pageIndex', async () => {
+      const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
+
+      render(<Page onLoadSuccess={onLoadSuccess} pageIndex={1} pageNumber={1} pdf={pdf} />);
+
+      expect.assertions(1);
+
+      const page = await onLoadSuccessPromise;
+
+      expect(page).toMatchObject(desiredLoadedPage);
+    });
+
     it('calls registerPage when loaded a page', async () => {
       const { func: registerPage, promise: registerPagePromise } = makeAsyncCallback();
 
