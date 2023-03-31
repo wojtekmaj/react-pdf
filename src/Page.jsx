@@ -305,6 +305,7 @@ const isFunctionOrNode = PropTypes.oneOfType([PropTypes.func, PropTypes.node]);
 PageInternal.propTypes = {
   ...eventProps,
   canvasBackground: PropTypes.string,
+  canvasRef: isRef,
   children: PropTypes.node,
   className: isClassName,
   customTextRenderer: PropTypes.func,
