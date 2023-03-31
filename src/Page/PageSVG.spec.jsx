@@ -4,7 +4,7 @@ import { render } from '@testing-library/react';
 
 import { pdfjs } from '../index.test';
 
-import { PageSVGInternal as PageSVG } from './PageSVG';
+import PageSVG from './PageSVG';
 
 import failingPage from '../../__mocks__/_failing_page';
 

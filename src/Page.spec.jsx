@@ -4,7 +4,7 @@ import { fireEvent, render } from '@testing-library/react';
 
 import { pdfjs } from './index.test';
 
-import { PageInternal as Page } from './Page';
+import Page from './Page';
 
 import failingPdf from '../__mocks__/_failing_pdf';
 import silentlyFailingPdf from '../__mocks__/_silently_failing_pdf';

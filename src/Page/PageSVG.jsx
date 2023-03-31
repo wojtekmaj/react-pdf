@@ -1,5 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
-import PropTypes from 'prop-types';
+import React, { useContext, useEffect, useMemo, useState } from 'react';
 import makeCancellable from 'make-cancellable-promise';
 import invariant from 'tiny-invariant';
 import warning from 'tiny-warning';
@@ -9,15 +8,17 @@ import PageContext from '../PageContext';
 
 import { cancelRunningTask, isCancelException, makePageCallback } from '../shared/utils';
 
-import { isPage, isRotate } from '../shared/propTypes';
+export default function PageSVG(props) {
+  const context = useContext(PageContext);
+  const mergedProps = { ...context, ...props };
+  const {
+    onRenderSuccess: onRenderSuccessProps,
+    onRenderError: onRenderErrorProps,
+    page,
+    rotate: rotateProps,
+    scale,
+  } = mergedProps;
 
-export function PageSVGInternal({
-  onRenderSuccess: onRenderSuccessProps,
-  onRenderError: onRenderErrorProps,
-  page,
-  rotate: rotateProps,
-  scale,
-}) {
   const [svg, setSvg] = useState(undefined);
   const [svgError, setSvgError] = useState(undefined);
 
@@ -135,21 +136,5 @@ export function PageSVGInternal({
         userSelect: 'none',
       }}
     />
-  );
-}
-
-PageSVGInternal.propTypes = {
-  onRenderError: PropTypes.func,
-  onRenderSuccess: PropTypes.func,
-  page: isPage.isRequired,
-  rotate: isRotate,
-  scale: PropTypes.number.isRequired,
-};
-
-export default function PageSVG(props) {
-  return (
-    <PageContext.Consumer>
-      {(context) => <PageSVGInternal {...context} {...props} />}
-    </PageContext.Consumer>
   );
 }

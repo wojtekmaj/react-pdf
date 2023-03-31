@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useContext, useEffect, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import makeCancellable from 'make-cancellable-promise';
 import makeEventProps from 'make-event-props';
@@ -15,15 +15,19 @@ import { cancelRunningTask } from './shared/utils';
 
 import { eventProps, isClassName, isPdf, isRef } from './shared/propTypes';
 
-export function OutlineInternal({
-  className,
-  inputRef,
-  onItemClick: onItemClickProps,
-  onLoadError: onLoadErrorProps,
-  onLoadSuccess: onLoadSuccessProps,
-  pdf,
-  ...otherProps
-}) {
+export default function Outline(props) {
+  const context = useContext(DocumentContext);
+  const mergedProps = { ...context, ...props };
+  const {
+    className,
+    inputRef,
+    onItemClick: onItemClickProps,
+    onLoadError: onLoadErrorProps,
+    onLoadSuccess: onLoadSuccessProps,
+    pdf,
+    ...otherProps
+  } = mergedProps;
+
   const [outline, setOutline] = useState(undefined);
   const [outlineError, setOutlineError] = useState(undefined);
 
@@ -131,7 +135,7 @@ export function OutlineInternal({
   );
 }
 
-OutlineInternal.propTypes = {
+Outline.propTypes = {
   className: isClassName,
   inputRef: isRef,
   onItemClick: PropTypes.func,
@@ -140,11 +144,3 @@ OutlineInternal.propTypes = {
   pdf: isPdf,
   ...eventProps,
 };
-
-export default function Outline(props) {
-  return (
-    <DocumentContext.Consumer>
-      {(context) => <OutlineInternal {...context} {...props} />}
-    </DocumentContext.Consumer>
-  );
-}

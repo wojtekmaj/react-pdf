@@ -1,5 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
-import PropTypes from 'prop-types';
+import React, { useContext, useEffect, useMemo, useRef, useState } from 'react';
 import makeCancellable from 'make-cancellable-promise';
 import invariant from 'tiny-invariant';
 import warning from 'tiny-warning';
@@ -10,20 +9,23 @@ import PageContext from '../PageContext';
 
 import { cancelRunningTask } from '../shared/utils';
 
-import { isLinkService, isPage, isRotate } from '../shared/propTypes';
+export default function AnnotationLayer(props) {
+  const documentContext = useContext(DocumentContext);
+  const pageContext = useContext(PageContext);
+  const mergedProps = { ...documentContext, ...pageContext, ...props };
+  const {
+    imageResourcesPath,
+    linkService,
+    onGetAnnotationsError: onGetAnnotationsErrorProps,
+    onGetAnnotationsSuccess: onGetAnnotationsSuccessProps,
+    onRenderAnnotationLayerError: onRenderAnnotationLayerErrorProps,
+    onRenderAnnotationLayerSuccess: onRenderAnnotationLayerSuccessProps,
+    page,
+    renderForms,
+    rotate: rotateProps,
+    scale = 1,
+  } = mergedProps;
 
-export function AnnotationLayerInternal({
-  imageResourcesPath,
-  linkService,
-  onGetAnnotationsError: onGetAnnotationsErrorProps,
-  onGetAnnotationsSuccess: onGetAnnotationsSuccessProps,
-  onRenderAnnotationLayerError: onRenderAnnotationLayerErrorProps,
-  onRenderAnnotationLayerSuccess: onRenderAnnotationLayerSuccessProps,
-  page,
-  renderForms,
-  rotate: rotateProps,
-  scale = 1,
-}) {
   const [annotations, setAnnotations] = useState(undefined);
   const [annotationsError, setAnnotationsError] = useState(undefined);
   const layerElement = useRef();
@@ -160,34 +162,3 @@ export function AnnotationLayerInternal({
 
   return <div className="react-pdf__Page__annotations annotationLayer" ref={layerElement} />;
 }
-
-AnnotationLayerInternal.propTypes = {
-  imageResourcesPath: PropTypes.string,
-  linkService: isLinkService.isRequired,
-  onGetAnnotationsError: PropTypes.func,
-  onGetAnnotationsSuccess: PropTypes.func,
-  onRenderAnnotationLayerError: PropTypes.func,
-  onRenderAnnotationLayerSuccess: PropTypes.func,
-  page: isPage,
-  renderForms: PropTypes.bool,
-  rotate: isRotate,
-  scale: PropTypes.number,
-};
-
-AnnotationLayerInternal.defaultProps = {
-  scale: 1,
-};
-
-const AnnotationLayer = (props) => (
-  <DocumentContext.Consumer>
-    {(documentContext) => (
-      <PageContext.Consumer>
-        {(pageContext) => (
-          <AnnotationLayerInternal {...documentContext} {...pageContext} {...props} />
-        )}
-      </PageContext.Consumer>
-    )}
-  </DocumentContext.Consumer>
-);
-
-export default AnnotationLayer;

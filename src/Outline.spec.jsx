@@ -4,7 +4,7 @@ import { render, screen } from '@testing-library/react';
 
 import { pdfjs } from './index.test';
 
-import { OutlineInternal as Outline } from './Outline';
+import Outline from './Outline';
 
 import failingPdf from '../__mocks__/_failing_pdf';
 import { loadPDF, makeAsyncCallback, muteConsole, restoreConsole } from '../test-utils';

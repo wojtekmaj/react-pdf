@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useContext, useRef } from 'react';
 import PropTypes from 'prop-types';
 
 import DocumentContext from './DocumentContext';
@@ -7,8 +7,6 @@ import OutlineContext from './OutlineContext';
 import Ref from './Ref';
 
 import { isDefined } from './shared/utils';
-
-import { isPdf } from './shared/propTypes';
 
 function useCachedValue(getter) {
   const ref = useRef();
@@ -26,7 +24,12 @@ function useCachedValue(getter) {
   };
 }
 
-export function OutlineItemInternal({ item, onClick: onClickProps, pdf, ...otherProps }) {
+export default function OutlineItem(props) {
+  const documentContext = useContext(DocumentContext);
+  const outlineContext = useContext(OutlineContext);
+  const mergedProps = { ...documentContext, ...outlineContext, ...props };
+  const { item, onClick: onClickProps, pdf, ...otherProps } = mergedProps;
+
   const getDestination = useCachedValue(() => {
     if (typeof item.dest === 'string') {
       return pdf.getDestination(item.dest);
@@ -81,11 +84,9 @@ export function OutlineItemInternal({ item, onClick: onClickProps, pdf, ...other
     return (
       <ul>
         {subitems.map((subitem, subitemIndex) => (
-          <OutlineItemInternal
+          <OutlineItem
             key={typeof subitem.destination === 'string' ? subitem.destination : subitemIndex}
             item={subitem}
-            onClick={onClickProps}
-            pdf={pdf}
             {...otherProps}
           />
         ))}
@@ -106,7 +107,7 @@ export function OutlineItemInternal({ item, onClick: onClickProps, pdf, ...other
 
 const isDestination = PropTypes.oneOfType([PropTypes.string, PropTypes.arrayOf(PropTypes.any)]);
 
-OutlineItemInternal.propTypes = {
+OutlineItem.propTypes = {
   item: PropTypes.shape({
     dest: isDestination,
     items: PropTypes.arrayOf(
@@ -117,20 +118,4 @@ OutlineItemInternal.propTypes = {
     ),
     title: PropTypes.string,
   }).isRequired,
-  onClick: PropTypes.func,
-  pdf: isPdf.isRequired,
 };
-
-const OutlineItem = (props) => (
-  <DocumentContext.Consumer>
-    {(documentContext) => (
-      <OutlineContext.Consumer>
-        {(outlineContext) => (
-          <OutlineItemInternal {...documentContext} {...outlineContext} {...props} />
-        )}
-      </OutlineContext.Consumer>
-    )}
-  </DocumentContext.Consumer>
-);
-
-export default OutlineItem;

@@ -4,7 +4,7 @@ import { render } from '@testing-library/react';
 
 import { pdfjs } from '../index.test';
 
-import { PageCanvasInternal as PageCanvas } from './PageCanvas';
+import PageCanvas from './PageCanvas';
 
 import failingPage from '../../__mocks__/_failing_page';
 
