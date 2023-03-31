@@ -16,9 +16,9 @@ import PageContext from '../PageContext';
 
 import { cancelRunningTask } from '../shared/utils';
 
-export default function TextLayer(props) {
+export default function TextLayer() {
   const context = useContext(PageContext);
-  const mergedProps = { ...context, ...props };
+  const mergedProps = { ...context };
   const {
     customTextRenderer,
     onGetTextError,
