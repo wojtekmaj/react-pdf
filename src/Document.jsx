@@ -415,7 +415,9 @@ Document.propTypes = {
   options: PropTypes.shape({
     cMapUrl: PropTypes.string,
     cMapPacked: PropTypes.bool,
+    httpHeaders: PropTypes.object,
     standardFontDataUrl: PropTypes.string,
+    withCredentials: PropTypes.bool,
   }),
   rotate: PropTypes.number,
 };

@@ -20,10 +20,8 @@ const fileTypes = [
   PropTypes.instanceOf(ArrayBuffer),
   PropTypes.shape({
     data: PropTypes.oneOfType([PropTypes.object, PropTypes.string]),
-    httpHeaders: PropTypes.object,
     range: PropTypes.object,
     url: PropTypes.string,
-    withCredentials: PropTypes.bool,
   }),
 ];
 if (typeof Blob !== 'undefined') {
