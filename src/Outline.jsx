@@ -17,6 +17,9 @@ import { eventProps, isClassName, isPdf, isRef } from './shared/propTypes';
 
 export default function Outline(props) {
   const context = useContext(DocumentContext);
+
+  invariant(context, 'Unable to find Document context. Did you wrap <Outline /> in <Document />?');
+
   const mergedProps = { ...context, ...props };
   const {
     className,
@@ -28,10 +31,10 @@ export default function Outline(props) {
     ...otherProps
   } = mergedProps;
 
+  invariant(pdf, 'Attempted to load an outline, but no document was specified.');
+
   const [outline, setOutline] = useState(undefined);
   const [outlineError, setOutlineError] = useState(undefined);
-
-  invariant(pdf, 'Attempted to load an outline, but no document was specified.');
 
   /**
    * Called when an outline is read successfully

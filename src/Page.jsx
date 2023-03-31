@@ -33,6 +33,9 @@ const defaultScale = 1;
 
 export default function Page(props) {
   const context = useContext(DocumentContext);
+
+  invariant(context, 'Unable to find Document context. Did you wrap <Page /> in <Document />?');
+
   const mergedProps = { ...context, ...props };
   const {
     canvasBackground,

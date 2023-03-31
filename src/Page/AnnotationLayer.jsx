@@ -11,7 +11,16 @@ import { cancelRunningTask } from '../shared/utils';
 
 export default function AnnotationLayer() {
   const documentContext = useContext(DocumentContext);
+
+  invariant(
+    documentContext,
+    'Unable to find Document context. Did you wrap <Page /> in <Document />?',
+  );
+
   const pageContext = useContext(PageContext);
+
+  invariant(pageContext, 'Unable to find Page context.');
+
   const mergedProps = { ...documentContext, ...pageContext };
   const {
     imageResourcesPath,

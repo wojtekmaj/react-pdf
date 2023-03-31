@@ -10,6 +10,9 @@ import { cancelRunningTask, isCancelException, makePageCallback } from '../share
 
 export default function PageSVG() {
   const context = useContext(PageContext);
+
+  invariant(context, 'Unable to find Page context.');
+
   const {
     onRenderSuccess: onRenderSuccessProps,
     onRenderError: onRenderErrorProps,

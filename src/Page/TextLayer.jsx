@@ -18,6 +18,9 @@ import { cancelRunningTask } from '../shared/utils';
 
 export default function TextLayer() {
   const context = useContext(PageContext);
+
+  invariant(context, 'Unable to find Page context.');
+
   const {
     customTextRenderer,
     onGetTextError,

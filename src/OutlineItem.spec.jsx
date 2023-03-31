@@ -1,4 +1,4 @@
-import { beforeAll, describe, expect, it } from 'vitest';
+import { beforeAll, describe, expect, it, vi } from 'vitest';
 import React from 'react';
 import { fireEvent, getAllByRole, render, screen } from '@testing-library/react';
 
@@ -52,7 +52,9 @@ describe('OutlineItem', () => {
 
   describe('rendering', () => {
     it('renders an item properly', () => {
-      renderWithContext(<OutlineItem item={outlineItem} />, { pdf });
+      const onClick = vi.fn();
+
+      renderWithContext(<OutlineItem item={outlineItem} />, { pdf }, { onClick });
 
       const item = screen.getAllByRole('listitem')[0];
 
@@ -60,7 +62,9 @@ describe('OutlineItem', () => {
     });
 
     it("renders item's subitems properly", () => {
-      renderWithContext(<OutlineItem item={outlineItem} />, { pdf });
+      const onClick = vi.fn();
+
+      renderWithContext(<OutlineItem item={outlineItem} />, { pdf }, { onClick });
 
       const item = screen.getAllByRole('listitem')[0];
       const subitems = getAllByRole(item, 'listitem');

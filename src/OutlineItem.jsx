@@ -1,5 +1,6 @@
 import React, { useContext, useRef } from 'react';
 import PropTypes from 'prop-types';
+import invariant from 'tiny-invariant';
 
 import DocumentContext from './DocumentContext';
 import OutlineContext from './OutlineContext';
@@ -26,7 +27,16 @@ function useCachedValue(getter) {
 
 export default function OutlineItem(props) {
   const documentContext = useContext(DocumentContext);
+
+  invariant(
+    documentContext,
+    'Unable to find Document context. Did you wrap <Outline /> in <Document />?',
+  );
+
   const outlineContext = useContext(OutlineContext);
+
+  invariant(outlineContext, 'Unable to find Outline context.');
+
   const mergedProps = { ...documentContext, ...outlineContext, ...props };
   const { item, onClick: onClickProps, pdf, ...otherProps } = mergedProps;
 
