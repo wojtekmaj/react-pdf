@@ -399,7 +399,7 @@ Document.propTypes = {
   className: isClassName,
   error: isFunctionOrNode,
   externalLinkRel: PropTypes.string,
-  externalLinkTarget: PropTypes.string,
+  externalLinkTarget: PropTypes.oneOf(['_self', '_blank', '_parent', '_top']),
   file: isFile,
   imageResourcesPath: PropTypes.string,
   inputRef: isRef,
