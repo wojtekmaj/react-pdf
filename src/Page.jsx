@@ -339,12 +339,10 @@ PageInternal.propTypes = {
   width: PropTypes.number,
 };
 
-function Page(props, ref) {
+export default function Page(props) {
   return (
     <DocumentContext.Consumer>
-      {(context) => <PageInternal ref={ref} {...context} {...props} />}
+      {(context) => <PageInternal {...context} {...props} />}
     </DocumentContext.Consumer>
   );
 }
-
-export default React.forwardRef(Page);
