@@ -8,5 +8,6 @@ export default defineConfig({
     environment: 'jsdom',
     exclude: [...configDefaults.exclude, 'src/index.test.js'],
     setupFiles: 'vitest.setup.ts',
+    threads: false,
   },
 });
