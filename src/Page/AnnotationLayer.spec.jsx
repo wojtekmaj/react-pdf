@@ -11,8 +11,33 @@ import failingPage from '../../__mocks__/_failing_page';
 
 import { loadPDF, makeAsyncCallback, muteConsole, restoreConsole } from '../../test-utils';
 
+import DocumentContext from '../DocumentContext';
+import PageContext from '../PageContext';
+
 const pdfFile = loadPDF('./__mocks__/_pdf.pdf');
 const annotatedPdfFile = loadPDF('./__mocks__/_pdf3.pdf');
+
+function renderWithContext(children, documentContext, pageContext) {
+  const { rerender, ...otherResult } = render(
+    <DocumentContext.Provider value={documentContext}>
+      <PageContext.Provider value={pageContext}>{children}</PageContext.Provider>
+    </DocumentContext.Provider>,
+  );
+
+  return {
+    ...otherResult,
+    rerender: (
+      nextChildren,
+      nextDocumentContext = documentContext,
+      nextPageContext = pageContext,
+    ) =>
+      rerender(
+        <DocumentContext.Provider value={nextDocumentContext}>
+          <PageContext.Provider value={nextPageContext}>{nextChildren}</PageContext.Provider>
+        </DocumentContext.Provider>,
+      ),
+  };
+}
 
 describe('AnnotationLayer', () => {
   const linkService = new LinkService();
@@ -40,13 +65,7 @@ describe('AnnotationLayer', () => {
       const { func: onGetAnnotationsSuccess, promise: onGetAnnotationsSuccessPromise } =
         makeAsyncCallback();
 
-      render(
-        <AnnotationLayer
-          linkService={linkService}
-          onGetAnnotationsSuccess={onGetAnnotationsSuccess}
-          page={page}
-        />,
-      );
+      renderWithContext(<AnnotationLayer />, { linkService }, { onGetAnnotationsSuccess, page });
 
       expect.assertions(1);
 
@@ -59,12 +78,13 @@ describe('AnnotationLayer', () => {
 
       muteConsole();
 
-      render(
-        <AnnotationLayer
-          linkService={linkService}
-          onGetAnnotationsError={onGetAnnotationsError}
-          page={failingPage}
-        />,
+      renderWithContext(
+        <AnnotationLayer />,
+        { linkService },
+        {
+          onGetAnnotationsError,
+          page: failingPage,
+        },
       );
 
       expect.assertions(1);
@@ -78,12 +98,13 @@ describe('AnnotationLayer', () => {
       const { func: onGetAnnotationsSuccess, promise: onGetAnnotationsSuccessPromise } =
         makeAsyncCallback();
 
-      const { rerender } = render(
-        <AnnotationLayer
-          linkService={linkService}
-          onGetAnnotationsSuccess={onGetAnnotationsSuccess}
-          page={page}
-        />,
+      const { rerender } = renderWithContext(
+        <AnnotationLayer />,
+        { linkService },
+        {
+          onGetAnnotationsSuccess,
+          page,
+        },
       );
 
       expect.assertions(2);
@@ -94,11 +115,12 @@ describe('AnnotationLayer', () => {
         makeAsyncCallback();
 
       rerender(
-        <AnnotationLayer
-          linkService={linkService}
-          onGetAnnotationsSuccess={onGetAnnotationsSuccess2}
-          page={page2}
-        />,
+        <AnnotationLayer />,
+        { linkService },
+        {
+          onGetAnnotationsSuccess: onGetAnnotationsSuccess2,
+          page: page2,
+        },
       );
 
       await expect(onGetAnnotationsSuccessPromise2).resolves.toMatchObject(desiredAnnotations2);
@@ -107,7 +129,7 @@ describe('AnnotationLayer', () => {
     it('throws an error when placed outside Page', () => {
       muteConsole();
 
-      expect(() => render(<AnnotationLayer />)).toThrow();
+      expect(() => renderWithContext(<AnnotationLayer />)).toThrow();
 
       restoreConsole();
     });
@@ -120,12 +142,13 @@ describe('AnnotationLayer', () => {
         promise: onRenderAnnotationLayerSuccessPromise,
       } = makeAsyncCallback();
 
-      const { container } = render(
-        <AnnotationLayer
-          linkService={linkService}
-          onRenderAnnotationLayerSuccess={onRenderAnnotationLayerSuccess}
-          page={page}
-        />,
+      const { container } = renderWithContext(
+        <AnnotationLayer />,
+        { linkService },
+        {
+          onRenderAnnotationLayerSuccess,
+          page,
+        },
       );
 
       expect.assertions(1);
@@ -156,12 +179,13 @@ describe('AnnotationLayer', () => {
           customLinkService.setExternalLinkTarget(externalLinkTarget);
         }
 
-        const { container } = render(
-          <AnnotationLayer
-            linkService={customLinkService}
-            onRenderAnnotationLayerSuccess={onRenderAnnotationLayerSuccess}
-            page={page}
-          />,
+        const { container } = renderWithContext(
+          <AnnotationLayer />,
+          { linkService: customLinkService },
+          {
+            onRenderAnnotationLayerSuccess,
+            page,
+          },
         );
 
         expect.assertions(desiredAnnotations.length);
@@ -193,12 +217,13 @@ describe('AnnotationLayer', () => {
           customLinkService.setExternalLinkRel(externalLinkRel);
         }
 
-        const { container } = render(
-          <AnnotationLayer
-            linkService={customLinkService}
-            onRenderAnnotationLayerSuccess={onRenderAnnotationLayerSuccess}
-            page={page}
-          />,
+        const { container } = renderWithContext(
+          <AnnotationLayer />,
+          { linkService: customLinkService },
+          {
+            onRenderAnnotationLayerSuccess,
+            page,
+          },
         );
 
         expect.assertions(desiredAnnotations.length);
@@ -227,12 +252,13 @@ describe('AnnotationLayer', () => {
         `<img[^>]+src="${imageResourcesPath}annotation-note.svg"`,
       );
 
-      const { container } = render(
-        <AnnotationLayer
-          linkService={linkService}
-          onRenderAnnotationLayerSuccess={onRenderAnnotationLayerSuccess}
-          page={annotatedPage}
-        />,
+      const { container } = renderWithContext(
+        <AnnotationLayer />,
+        { linkService },
+        {
+          onRenderAnnotationLayerSuccess,
+          page: annotatedPage,
+        },
       );
 
       expect.assertions(1);
@@ -257,13 +283,16 @@ describe('AnnotationLayer', () => {
         `<img[^>]+src="${imageResourcesPath}annotation-note.svg"`,
       );
 
-      const { container } = render(
-        <AnnotationLayer
-          imageResourcesPath={imageResourcesPath}
-          linkService={linkService}
-          onRenderAnnotationLayerSuccess={onRenderAnnotationLayerSuccess}
-          page={annotatedPage}
-        />,
+      const { container } = renderWithContext(
+        <AnnotationLayer />,
+        {
+          imageResourcesPath,
+          linkService,
+        },
+        {
+          onRenderAnnotationLayerSuccess,
+          page: annotatedPage,
+        },
       );
 
       expect.assertions(1);
