@@ -9,8 +9,24 @@ import Outline from './Outline';
 import failingPdf from '../__mocks__/_failing_pdf';
 import { loadPDF, makeAsyncCallback, muteConsole, restoreConsole } from '../test-utils';
 
+import DocumentContext from './DocumentContext';
+
 const pdfFile = loadPDF('./__mocks__/_pdf.pdf');
 const pdfFile2 = loadPDF('./__mocks__/_pdf2.pdf');
+
+function renderWithContext(children, context) {
+  const { rerender, ...otherResult } = render(
+    <DocumentContext.Provider value={context}>{children}</DocumentContext.Provider>,
+  );
+
+  return {
+    ...otherResult,
+    rerender: (nextChildren, nextContext = context) =>
+      rerender(
+        <DocumentContext.Provider value={nextContext}>{nextChildren}</DocumentContext.Provider>,
+      ),
+  };
+}
 
 describe('Outline', () => {
   // Loaded PDF file
@@ -33,7 +49,7 @@ describe('Outline', () => {
     it('loads an outline and calls onLoadSuccess callback properly', async () => {
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
-      render(<Outline onLoadSuccess={onLoadSuccess} pdf={pdf} />);
+      renderWithContext(<Outline onLoadSuccess={onLoadSuccess} />, { pdf });
 
       expect.assertions(1);
 
@@ -45,7 +61,7 @@ describe('Outline', () => {
 
       muteConsole();
 
-      render(<Outline onLoadError={onLoadError} pdf={failingPdf} />);
+      renderWithContext(<Outline onLoadError={onLoadError} />, { pdf: failingPdf });
 
       expect.assertions(1);
 
@@ -57,7 +73,7 @@ describe('Outline', () => {
     it('replaces an outline properly when pdf is changed', async () => {
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
-      const { rerender } = render(<Outline onLoadSuccess={onLoadSuccess} pdf={pdf} />);
+      const { rerender } = renderWithContext(<Outline onLoadSuccess={onLoadSuccess} />, { pdf });
 
       expect.assertions(2);
 
@@ -65,7 +81,7 @@ describe('Outline', () => {
 
       const { func: onLoadSuccess2, promise: onLoadSuccessPromise2 } = makeAsyncCallback();
 
-      rerender(<Outline onLoadSuccess={onLoadSuccess2} pdf={pdf2} />);
+      rerender(<Outline onLoadSuccess={onLoadSuccess2} />, { pdf: pdf2 });
 
       // It would have been .toMatchObject if not for the fact _pdf2.pdf has no outline
       await expect(onLoadSuccessPromise2).resolves.toBe(desiredLoadedOutline2);
@@ -86,8 +102,9 @@ describe('Outline', () => {
 
       const className = 'testClassName';
 
-      const { container } = render(
-        <Outline className={className} onLoadSuccess={onLoadSuccess} pdf={pdf} />,
+      const { container } = renderWithContext(
+        <Outline className={className} onLoadSuccess={onLoadSuccess} />,
+        { pdf },
       );
 
       expect.assertions(1);
@@ -104,7 +121,7 @@ describe('Outline', () => {
 
       const inputRef = vi.fn();
 
-      render(<Outline inputRef={inputRef} onLoadSuccess={onLoadSuccess} pdf={pdf} />);
+      renderWithContext(<Outline inputRef={inputRef} onLoadSuccess={onLoadSuccess} />, { pdf });
 
       expect.assertions(2);
 
@@ -117,7 +134,7 @@ describe('Outline', () => {
     it('renders OutlineItem components properly', async () => {
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
-      render(<Outline onLoadSuccess={onLoadSuccess} pdf={pdf} />);
+      renderWithContext(<Outline onLoadSuccess={onLoadSuccess} />, { pdf });
 
       expect.assertions(1);
 

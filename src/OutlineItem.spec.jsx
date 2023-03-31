@@ -7,7 +7,34 @@ import OutlineItem from './OutlineItem';
 
 import { loadPDF, makeAsyncCallback } from '../test-utils';
 
+import DocumentContext from './DocumentContext';
+import OutlineContext from './OutlineContext';
+
 const pdfFile = loadPDF('./__mocks__/_pdf.pdf');
+
+function renderWithContext(children, documentContext, outlineContext) {
+  const { rerender, ...otherResult } = render(
+    <DocumentContext.Provider value={documentContext}>
+      <OutlineContext.Provider value={outlineContext}>{children}</OutlineContext.Provider>
+    </DocumentContext.Provider>,
+  );
+
+  return {
+    ...otherResult,
+    rerender: (
+      nextChildren,
+      nextDocumentContext = documentContext,
+      nextOutlineContext = outlineContext,
+    ) =>
+      rerender(
+        <DocumentContext.Provider value={nextDocumentContext}>
+          <OutlineContext.Provider value={nextOutlineContext}>
+            {nextChildren}
+          </OutlineContext.Provider>
+        </DocumentContext.Provider>,
+      ),
+  };
+}
 
 describe('OutlineItem', () => {
   // Loaded PDF file
@@ -25,7 +52,7 @@ describe('OutlineItem', () => {
 
   describe('rendering', () => {
     it('renders an item properly', () => {
-      render(<OutlineItem item={outlineItem} pdf={pdf} />);
+      renderWithContext(<OutlineItem item={outlineItem} />, { pdf });
 
       const item = screen.getAllByRole('listitem')[0];
 
@@ -33,7 +60,7 @@ describe('OutlineItem', () => {
     });
 
     it("renders item's subitems properly", () => {
-      render(<OutlineItem item={outlineItem} pdf={pdf} />);
+      renderWithContext(<OutlineItem item={outlineItem} />, { pdf });
 
       const item = screen.getAllByRole('listitem')[0];
       const subitems = getAllByRole(item, 'listitem');
@@ -44,7 +71,7 @@ describe('OutlineItem', () => {
     it('calls onClick with proper arguments when clicked a link', async () => {
       const { func: onClick, promise: onClickPromise } = makeAsyncCallback();
 
-      render(<OutlineItem item={outlineItem} onClick={onClick} pdf={pdf} />);
+      renderWithContext(<OutlineItem item={outlineItem} />, { pdf }, { onClick });
 
       const item = screen.getAllByRole('listitem')[0];
       const link = getAllByRole(item, 'link')[0];
@@ -58,7 +85,11 @@ describe('OutlineItem', () => {
     it('calls onClick with proper arguments multiple times when clicked a link multiple times', async () => {
       const { func: onClick, promise: onClickPromise } = makeAsyncCallback();
 
-      const { rerender } = render(<OutlineItem item={outlineItem} onClick={onClick} pdf={pdf} />);
+      const { rerender } = renderWithContext(
+        <OutlineItem item={outlineItem} />,
+        { pdf },
+        { onClick },
+      );
 
       const item = screen.getAllByRole('listitem')[0];
       const link = getAllByRole(item, 'link')[0];
@@ -70,7 +101,7 @@ describe('OutlineItem', () => {
 
       const { func: onClick2, promise: onClickPromise2 } = makeAsyncCallback();
 
-      rerender(<OutlineItem item={outlineItem} onClick={onClick2} pdf={pdf} />);
+      rerender(<OutlineItem item={outlineItem} />, { pdf }, { onClick: onClick2 });
 
       fireEvent.click(link);
 

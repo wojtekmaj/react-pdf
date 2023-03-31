@@ -10,7 +10,21 @@ import failingPage from '../../__mocks__/_failing_page';
 
 import { loadPDF, makeAsyncCallback, muteConsole, restoreConsole } from '../../test-utils';
 
+import PageContext from '../PageContext';
+
 const pdfFile = loadPDF('./__mocks__/_pdf.pdf');
+
+function renderWithContext(children, context) {
+  const { rerender, ...otherResult } = render(
+    <PageContext.Provider value={context}>{children}</PageContext.Provider>,
+  );
+
+  return {
+    ...otherResult,
+    rerender: (nextChildren, nextContext = context) =>
+      rerender(<PageContext.Provider value={nextContext}>{nextChildren}</PageContext.Provider>),
+  };
+}
 
 describe('TextLayer', () => {
   // Loaded page
@@ -37,7 +51,10 @@ describe('TextLayer', () => {
     it('loads text content and calls onGetTextSuccess callback properly', async () => {
       const { func: onGetTextSuccess, promise: onGetTextSuccessPromise } = makeAsyncCallback();
 
-      render(<TextLayer onGetTextSuccess={onGetTextSuccess} page={page} />);
+      renderWithContext(<TextLayer />, {
+        onGetTextSuccess,
+        page,
+      });
 
       expect.assertions(1);
 
@@ -49,7 +66,10 @@ describe('TextLayer', () => {
 
       muteConsole();
 
-      render(<TextLayer onGetTextError={onGetTextError} page={failingPage} />);
+      renderWithContext(<TextLayer />, {
+        onGetTextError,
+        page: failingPage,
+      });
 
       expect.assertions(1);
 
@@ -61,7 +81,10 @@ describe('TextLayer', () => {
     it('replaces text content properly', async () => {
       const { func: onGetTextSuccess, promise: onGetTextSuccessPromise } = makeAsyncCallback();
 
-      const { rerender } = render(<TextLayer onGetTextSuccess={onGetTextSuccess} page={page} />);
+      const { rerender } = renderWithContext(<TextLayer />, {
+        onGetTextSuccess,
+        page,
+      });
 
       expect.assertions(2);
 
@@ -71,7 +94,10 @@ describe('TextLayer', () => {
 
       const { func: onGetTextSuccess2, promise: onGetTextSuccessPromise2 } = makeAsyncCallback();
 
-      rerender(<TextLayer onGetTextSuccess={onGetTextSuccess2} page={page2} />);
+      rerender(<TextLayer />, {
+        onGetTextSuccess: onGetTextSuccess2,
+        page: page2,
+      });
 
       await expect(onGetTextSuccessPromise2).resolves.toMatchObject({
         items: desiredTextItems2,
@@ -92,9 +118,7 @@ describe('TextLayer', () => {
       const { func: onRenderTextLayerSuccess, promise: onRenderTextLayerSuccessPromise } =
         makeAsyncCallback();
 
-      const { container } = render(
-        <TextLayer onRenderTextLayerSuccess={onRenderTextLayerSuccess} page={page} />,
-      );
+      const { container } = renderWithContext(<TextLayer />, { onRenderTextLayerSuccess, page });
 
       expect.assertions(1);
 
@@ -111,13 +135,11 @@ describe('TextLayer', () => {
 
       const customTextRenderer = vi.fn();
 
-      const { container } = render(
-        <TextLayer
-          customTextRenderer={customTextRenderer}
-          onRenderTextLayerSuccess={onRenderTextLayerSuccess}
-          page={page}
-        />,
-      );
+      const { container } = renderWithContext(<TextLayer />, {
+        customTextRenderer,
+        onRenderTextLayerSuccess,
+        page,
+      });
 
       expect.assertions(1);
 
@@ -132,9 +154,10 @@ describe('TextLayer', () => {
       const { func: onRenderTextLayerSuccess, promise: onRenderTextLayerSuccessPromise } =
         makeAsyncCallback();
 
-      const { container, rerender } = render(
-        <TextLayer onRenderTextLayerSuccess={onRenderTextLayerSuccess} page={page} />,
-      );
+      const { container, rerender } = renderWithContext(<TextLayer />, {
+        onRenderTextLayerSuccess,
+        page,
+      });
 
       expect.assertions(1);
 
@@ -147,13 +170,11 @@ describe('TextLayer', () => {
 
       const customTextRenderer = (item) => item.str;
 
-      rerender(
-        <TextLayer
-          customTextRenderer={customTextRenderer}
-          onRenderTextLayerSuccess={onRenderTextLayerSuccess2}
-          page={page}
-        />,
-      );
+      rerender(<TextLayer />, {
+        customTextRenderer,
+        onRenderTextLayerSuccess: onRenderTextLayerSuccess2,
+        page,
+      });
 
       await onRenderTextLayerSuccessPromise2;
 
@@ -168,13 +189,11 @@ describe('TextLayer', () => {
 
       const customTextRenderer = vi.fn();
 
-      const { container } = render(
-        <TextLayer
-          customTextRenderer={customTextRenderer}
-          onRenderTextLayerSuccess={onRenderTextLayerSuccess}
-          page={page}
-        />,
-      );
+      const { container } = renderWithContext(<TextLayer />, {
+        customTextRenderer,
+        onRenderTextLayerSuccess,
+        page,
+      });
 
       expect.assertions(3);
 
@@ -199,13 +218,11 @@ describe('TextLayer', () => {
 
       const customTextRenderer = () => 'Test value';
 
-      const { container } = render(
-        <TextLayer
-          customTextRenderer={customTextRenderer}
-          onRenderTextLayerSuccess={onRenderTextLayerSuccess}
-          page={page}
-        />,
-      );
+      const { container } = renderWithContext(<TextLayer />, {
+        customTextRenderer,
+        onRenderTextLayerSuccess,
+        page,
+      });
 
       expect.assertions(1);
 
