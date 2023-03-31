@@ -8,9 +8,9 @@ import PageContext from '../PageContext';
 
 import { cancelRunningTask, isCancelException, makePageCallback } from '../shared/utils';
 
-export default function PageSVG(props) {
+export default function PageSVG() {
   const context = useContext(PageContext);
-  const mergedProps = { ...context, ...props };
+  const mergedProps = { ...context };
   const {
     onRenderSuccess: onRenderSuccessProps,
     onRenderError: onRenderErrorProps,

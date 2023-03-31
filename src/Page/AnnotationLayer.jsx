@@ -9,10 +9,10 @@ import PageContext from '../PageContext';
 
 import { cancelRunningTask } from '../shared/utils';
 
-export default function AnnotationLayer(props) {
+export default function AnnotationLayer() {
   const documentContext = useContext(DocumentContext);
   const pageContext = useContext(PageContext);
-  const mergedProps = { ...documentContext, ...pageContext, ...props };
+  const mergedProps = { ...documentContext, ...pageContext };
   const {
     imageResourcesPath,
     linkService,
