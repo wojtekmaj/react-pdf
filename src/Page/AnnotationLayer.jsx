@@ -31,7 +31,7 @@ export default function AnnotationLayer() {
     onRenderAnnotationLayerSuccess: onRenderAnnotationLayerSuccessProps,
     page,
     renderForms,
-    rotate: rotateProps,
+    rotate,
     scale = 1,
   } = mergedProps;
 
@@ -119,8 +119,8 @@ export default function AnnotationLayer() {
   }
 
   const viewport = useMemo(
-    () => page.getViewport({ scale, rotation: rotateProps }),
-    [page, rotateProps, scale],
+    () => page.getViewport({ scale, rotation: rotate }),
+    [page, rotate, scale],
   );
 
   function renderAnnotationLayer() {

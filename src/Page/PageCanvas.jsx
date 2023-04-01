@@ -30,7 +30,7 @@ export default function PageCanvas({ canvasRef, ...props }) {
     onRenderSuccess: onRenderSuccessProps,
     page,
     renderForms,
-    rotate: rotateProps,
+    rotate,
     scale,
   } = mergedProps;
 
@@ -65,13 +65,13 @@ export default function PageCanvas({ canvasRef, ...props }) {
   }
 
   const renderViewport = useMemo(
-    () => page.getViewport({ scale: scale * devicePixelRatio, rotation: rotateProps }),
-    [devicePixelRatio, page, rotateProps, scale],
+    () => page.getViewport({ scale: scale * devicePixelRatio, rotation: rotate }),
+    [devicePixelRatio, page, rotate, scale],
   );
 
   const viewport = useMemo(
-    () => page.getViewport({ scale, rotation: rotateProps }),
-    [page, rotateProps, scale],
+    () => page.getViewport({ scale, rotation: rotate }),
+    [page, rotate, scale],
   );
 
   function drawPageOnCanvas() {

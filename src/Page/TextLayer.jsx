@@ -30,7 +30,7 @@ export default function TextLayer() {
     page,
     pageIndex,
     pageNumber,
-    rotate: rotateProps,
+    rotate,
     scale,
   } = context;
 
@@ -152,8 +152,8 @@ export default function TextLayer() {
   }
 
   const viewport = useMemo(
-    () => page.getViewport({ scale, rotation: rotateProps }),
-    [page, rotateProps, scale],
+    () => page.getViewport({ scale, rotation: rotate }),
+    [page, rotate, scale],
   );
 
   function renderTextLayer() {
