@@ -161,14 +161,14 @@ export default function TextLayer() {
       return;
     }
 
-    const container = layerElement.current;
+    const { current: layer } = layerElement;
 
-    container.innerHTML = '';
+    layer.innerHTML = '';
 
     const textContentSource = page.streamTextContent();
 
     const parameters = {
-      container,
+      container: layer,
       textContentSource,
       viewport,
     };
@@ -180,13 +180,13 @@ export default function TextLayer() {
       .then(() => {
         const end = document.createElement('div');
         end.className = 'endOfContent';
-        container.append(end);
+        layer.append(end);
         endElement.current = end;
 
         if (customTextRenderer) {
           let index = 0;
           textContent.items.forEach((item, itemIndex) => {
-            const child = layerElement.current.children[index];
+            const child = layer.children[index];
 
             const content = customTextRenderer({
               pageIndex,
