@@ -64,7 +64,6 @@ export default function PageSVG() {
 
   function renderSVG() {
     const cancellable = makeCancellable(page.getOperatorList());
-    const runningTask = cancellable.promise;
 
     cancellable.promise
       .then((operatorList) => {
@@ -83,7 +82,7 @@ export default function PageSVG() {
         setSvgError(error);
       });
 
-    return () => cancelRunningTask(runningTask);
+    return () => cancelRunningTask(cancellable);
   }
 
   useEffect(renderSVG, [page, viewport]);
