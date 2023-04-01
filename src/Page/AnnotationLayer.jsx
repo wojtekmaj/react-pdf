@@ -131,7 +131,7 @@ export default function AnnotationLayer() {
     const { current: layer } = layerElement;
 
     if (!layer) {
-      return null;
+      return;
     }
 
     const clonedViewport = viewport.clone({ dontFlip: true });
