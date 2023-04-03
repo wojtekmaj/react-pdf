@@ -1823,9 +1823,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-config-wojtekmaj@npm:^0.8.2":
-  version: 0.8.2
-  resolution: "eslint-config-wojtekmaj@npm:0.8.2"
+"eslint-config-wojtekmaj@npm:^0.8.3":
+  version: 0.8.3
+  resolution: "eslint-config-wojtekmaj@npm:0.8.3"
   dependencies:
     "@typescript-eslint/eslint-plugin": ^5.41.0
     "@typescript-eslint/parser": ^5.44.0
@@ -1835,7 +1835,7 @@ __metadata:
     eslint-plugin-react-hooks: ^4.3.0
   peerDependencies:
     eslint: ^7.0.0 || ^8.0.0
-  checksum: f9bf504bb3a6e4d6f4a9ca99297fdb4ffffa14c0c912fa866876dcc54ffef078bcb930b6639230e222f51ba2cadd06509858ad929b72e5662a3f3d67d126c658
+  checksum: 100612b75955d7e7e0d6c2832800b14108cede4d4e0cd7f4ffbfe588ae20c385bd345ce18267f43c7af583deb9220f46064ab115bda5d62e4bb1cd8e0d299f00
   languageName: node
   linkType: hard
 
@@ -4131,7 +4131,7 @@ __metadata:
     "@testing-library/user-event": ^14.4.0
     clsx: ^1.2.1
     eslint: ^8.26.0
-    eslint-config-wojtekmaj: ^0.8.2
+    eslint-config-wojtekmaj: ^0.8.3
     husky: ^8.0.0
     jsdom: ^21.1.0
     make-cancellable-promise: ^1.0.0
