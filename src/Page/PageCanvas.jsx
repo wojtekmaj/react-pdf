@@ -1,4 +1,4 @@
-import React, { createRef, useCallback, useContext, useEffect, useMemo } from 'react';
+import React, { useCallback, useContext, useEffect, useMemo, useRef } from 'react';
 import mergeRefs from 'merge-refs';
 import invariant from 'tiny-invariant';
 import warning from 'tiny-warning';
@@ -34,7 +34,7 @@ export default function PageCanvas({ canvasRef, ...props }) {
     scale,
   } = mergedProps;
 
-  const canvasElement = createRef();
+  const canvasElement = useRef();
 
   invariant(page, 'Attempted to render page canvas, but no page was specified.');
 
