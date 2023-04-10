@@ -88,7 +88,7 @@ export default function Outline(props) {
     return () => cancelRunningTask(runningTask);
   }
 
-  useEffect(loadOutline, [outline, outlineDispatch, pdf]);
+  useEffect(loadOutline, [outlineDispatch, pdf]);
 
   useEffect(
     () => {
