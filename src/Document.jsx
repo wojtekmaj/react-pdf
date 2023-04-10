@@ -8,7 +8,6 @@ import React, {
   useImperativeHandle,
   useMemo,
   useRef,
-  useState,
 } from 'react';
 import PropTypes from 'prop-types';
 import makeEventProps from 'make-event-props';
@@ -36,6 +35,7 @@ import {
   loadFromFile,
 } from './shared/utils';
 
+import { useResolver } from './shared/hooks';
 import { eventProps, isClassName, isFile, isRef } from './shared/propTypes';
 
 const { PDFDataRangeTransport } = pdfjs;
@@ -84,10 +84,10 @@ const Document = forwardRef(function Document(
   },
   ref,
 ) {
-  const [source, setSource] = useState(undefined);
-  const [sourceError, setSourceError] = useState(undefined);
-  const [pdf, setPdf] = useState(undefined);
-  const [pdfError, setPdfError] = useState(undefined);
+  const [sourceState, sourceDispatch] = useResolver();
+  const { value: source, error: sourceError } = sourceState;
+  const [pdfState, pdfDispatch] = useResolver();
+  const { value: pdf, error: pdfError } = pdfState;
 
   const linkService = useRef(new LinkService());
 
@@ -151,11 +151,10 @@ const Document = forwardRef(function Document(
   }
 
   function resetSource() {
-    setSource(undefined);
-    setSourceError(undefined);
+    sourceDispatch({ type: 'RESET' });
   }
 
-  useEffect(resetSource, [file]);
+  useEffect(resetSource, [file, sourceDispatch]);
 
   const findDocumentSource = useCallback(async () => {
     if (!file) {
@@ -224,15 +223,18 @@ const Document = forwardRef(function Document(
   useEffect(() => {
     const cancellable = makeCancellable(findDocumentSource());
 
-    cancellable.promise.then(setSource).catch((error) => {
-      setSource(false);
-      setSourceError(error);
-    });
+    cancellable.promise
+      .then((nextSource) => {
+        sourceDispatch({ type: 'RESOLVE', value: nextSource });
+      })
+      .catch((error) => {
+        sourceDispatch({ type: 'REJECT', error });
+      });
 
     return () => {
       cancelRunningTask(cancellable);
     };
-  }, [findDocumentSource]);
+  }, [findDocumentSource, sourceDispatch]);
 
   useEffect(
     () => {
@@ -275,11 +277,10 @@ const Document = forwardRef(function Document(
   }
 
   function resetDocument() {
-    setPdf(undefined);
-    setPdfError(undefined);
+    pdfDispatch({ type: 'RESET' });
   }
 
-  useEffect(resetDocument, [source]);
+  useEffect(resetDocument, [pdfDispatch, source]);
 
   function loadDocument() {
     if (!source) {
@@ -295,10 +296,13 @@ const Document = forwardRef(function Document(
     }
     const loadingTask = destroyable;
 
-    loadingTask.promise.then(setPdf).catch((error) => {
-      setPdf(false);
-      setPdfError(error);
-    });
+    loadingTask.promise
+      .then((nextPdf) => {
+        pdfDispatch({ type: 'RESOLVE', value: nextPdf });
+      })
+      .catch((error) => {
+        pdfDispatch({ type: 'REJECT', error });
+      });
 
     return () => {
       loadingTask.destroy();
@@ -309,7 +313,7 @@ const Document = forwardRef(function Document(
     loadDocument,
     // Ommitted callbacks so they are not called every time they change
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [options, source],
+    [options, pdfDispatch, source],
   );
 
   useEffect(

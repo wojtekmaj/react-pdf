@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useMemo, useState } from 'react';
+import React, { useContext, useEffect, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import makeCancellable from 'make-cancellable-promise';
 import makeEventProps from 'make-event-props';
@@ -13,6 +13,7 @@ import OutlineItem from './OutlineItem';
 
 import { cancelRunningTask } from './shared/utils';
 
+import { useResolver } from './shared/hooks';
 import { eventProps, isClassName, isPdf, isRef } from './shared/propTypes';
 
 export default function Outline(props) {
@@ -33,8 +34,8 @@ export default function Outline(props) {
 
   invariant(pdf, 'Attempted to load an outline, but no document was specified.');
 
-  const [outline, setOutline] = useState(undefined);
-  const [outlineError, setOutlineError] = useState(undefined);
+  const [outlineState, outlineDispatch] = useResolver();
+  const { value: outline, error: outlineError } = outlineState;
 
   /**
    * Called when an outline is read successfully
@@ -67,25 +68,27 @@ export default function Outline(props) {
   }
 
   function resetOutline() {
-    setOutline(undefined);
-    setOutlineError(undefined);
+    outlineDispatch({ type: 'RESET' });
   }
 
-  useEffect(resetOutline, [pdf]);
+  useEffect(resetOutline, [outlineDispatch, pdf]);
 
   function loadOutline() {
     const cancellable = makeCancellable(pdf.getOutline());
     const runningTask = cancellable;
 
-    cancellable.promise.then(setOutline).catch((error) => {
-      setOutline(false);
-      setOutlineError(error);
-    });
+    cancellable.promise
+      .then((nextOutline) => {
+        outlineDispatch({ type: 'RESOLVE', value: nextOutline });
+      })
+      .catch((error) => {
+        outlineDispatch({ type: 'REJECT', error });
+      });
 
     return () => cancelRunningTask(runningTask);
   }
 
-  useEffect(loadOutline, [outline, pdf]);
+  useEffect(loadOutline, [outline, outlineDispatch, pdf]);
 
   useEffect(
     () => {
