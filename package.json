@@ -11,8 +11,8 @@
   "scripts": {
     "build": "yarn build-js && yarn copy-styles",
     "build-js": "yarn build-js-esm && yarn build-js-cjs",
-    "build-js-esm": "BABEL_ENV=production-esm babel src -d dist/esm --ignore \"**/*.spec.js,**/*.spec.jsx\"",
-    "build-js-cjs": "BABEL_ENV=production-cjs babel src -d dist/cjs --ignore \"**/*.spec.js,**/*.spec.jsx\"",
+    "build-js-esm": "tsc --project tsconfig.build.json --outDir dist/esm --module esnext",
+    "build-js-cjs": "tsc --project tsconfig.build.json --outDir dist/cjs --module commonjs",
     "clean": "rimraf dist",
     "copy-styles": "node ./copy-styles.mjs",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
