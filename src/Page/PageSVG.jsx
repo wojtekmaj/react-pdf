@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useMemo, useState } from 'react';
+import React, { useContext, useEffect, useMemo } from 'react';
 import makeCancellable from 'make-cancellable-promise';
 import invariant from 'tiny-invariant';
 import warning from 'tiny-warning';
@@ -6,6 +6,7 @@ import pdfjs from 'pdfjs-dist';
 
 import PageContext from '../PageContext';
 
+import { useResolver } from '../shared/hooks';
 import { cancelRunningTask, isCancelException, makePageCallback } from '../shared/utils';
 
 export default function PageSVG() {
@@ -21,8 +22,8 @@ export default function PageSVG() {
     scale,
   } = context;
 
-  const [svg, setSvg] = useState(undefined);
-  const [svgError, setSvgError] = useState(undefined);
+  const [svgState, svgDispatch] = useResolver();
+  const { value: svg, error: svgError } = svgState;
 
   invariant(page, 'Attempted to render page SVG, but no page was specified.');
 
@@ -56,11 +57,10 @@ export default function PageSVG() {
   );
 
   function resetSVG() {
-    setSvg(undefined);
-    setSvgError(undefined);
+    svgDispatch({ type: 'RESET' });
   }
 
-  useEffect(resetSVG, [page, viewport]);
+  useEffect(resetSVG, [page, svgDispatch, viewport]);
 
   function renderSVG() {
     const cancellable = makeCancellable(page.getOperatorList());
@@ -71,21 +71,21 @@ export default function PageSVG() {
 
         svgGfx
           .getSVG(operatorList, viewport)
-          .then(setSvg)
+          .then((nextSvg) => {
+            svgDispatch({ type: 'RESOLVE', value: nextSvg });
+          })
           .catch((error) => {
-            setSvg(false);
-            setSvgError(error);
+            svgDispatch({ type: 'REJECT', error });
           });
       })
       .catch((error) => {
-        setSvg(false);
-        setSvgError(error);
+        svgDispatch({ type: 'REJECT', error });
       });
 
     return () => cancelRunningTask(cancellable);
   }
 
-  useEffect(renderSVG, [page, viewport]);
+  useEffect(renderSVG, [page, svgDispatch, viewport]);
 
   useEffect(
     () => {

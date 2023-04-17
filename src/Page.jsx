@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useMemo, useRef, useState } from 'react';
+import React, { useContext, useEffect, useMemo, useRef } from 'react';
 import PropTypes from 'prop-types';
 import makeCancellable from 'make-cancellable-promise';
 import makeEventProps from 'make-event-props';
@@ -18,6 +18,7 @@ import AnnotationLayer from './Page/AnnotationLayer';
 
 import { cancelRunningTask, isProvided, makePageCallback } from './shared/utils';
 
+import { useResolver } from './shared/hooks';
 import {
   eventProps,
   isClassName,
@@ -76,8 +77,8 @@ export default function Page(props) {
     ...otherProps
   } = mergedProps;
 
-  const [page, setPage] = useState(undefined);
-  const [pageError, setPageError] = useState(undefined);
+  const [pageState, pageDispatch] = useResolver();
+  const { value: page, error: pageError } = pageState;
   const pageElement = useRef();
 
   invariant(pdf, 'Attempted to load a page, but no document was specified.');
@@ -143,11 +144,10 @@ export default function Page(props) {
   }
 
   function resetPage() {
-    setPage(undefined);
-    setPageError(undefined);
+    pageDispatch({ type: 'RESET' });
   }
 
-  useEffect(resetPage, [pdf, pageIndex]);
+  useEffect(resetPage, [pageDispatch, pdf, pageIndex]);
 
   function loadPage() {
     if (!pageNumber) {
@@ -157,15 +157,18 @@ export default function Page(props) {
     const cancellable = makeCancellable(pdf.getPage(pageNumber));
     const runningTask = cancellable;
 
-    cancellable.promise.then(setPage).catch((error) => {
-      setPage(false);
-      setPageError(error);
-    });
+    cancellable.promise
+      .then((nextPage) => {
+        pageDispatch({ type: 'RESOLVE', value: nextPage });
+      })
+      .catch((error) => {
+        pageDispatch({ type: 'REJECT', error });
+      });
 
     return () => cancelRunningTask(runningTask);
   }
 
-  useEffect(loadPage, [pdf, pageIndex, pageNumber, registerPage]);
+  useEffect(loadPage, [pageDispatch, pdf, pageIndex, pageNumber, registerPage]);
 
   useEffect(
     () => {

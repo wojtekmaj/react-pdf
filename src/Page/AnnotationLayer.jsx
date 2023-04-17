@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useMemo, useRef, useState } from 'react';
+import React, { useContext, useEffect, useMemo, useRef } from 'react';
 import makeCancellable from 'make-cancellable-promise';
 import invariant from 'tiny-invariant';
 import warning from 'tiny-warning';
@@ -7,6 +7,7 @@ import pdfjs from 'pdfjs-dist';
 import DocumentContext from '../DocumentContext';
 import PageContext from '../PageContext';
 
+import { useResolver } from '../shared/hooks';
 import { cancelRunningTask } from '../shared/utils';
 
 export default function AnnotationLayer() {
@@ -35,8 +36,8 @@ export default function AnnotationLayer() {
     scale = 1,
   } = mergedProps;
 
-  const [annotations, setAnnotations] = useState(undefined);
-  const [annotationsError, setAnnotationsError] = useState(undefined);
+  const [annotationsState, annotationsDispatch] = useResolver();
+  const { value: annotations, error: annotationsError } = annotationsState;
   const layerElement = useRef();
 
   invariant(page, 'Attempted to load page annotations, but no page was specified.');
@@ -64,27 +65,29 @@ export default function AnnotationLayer() {
   }
 
   function resetAnnotations() {
-    setAnnotations(undefined);
-    setAnnotationsError(undefined);
+    annotationsDispatch({ type: 'RESET' });
   }
 
-  useEffect(resetAnnotations, [page]);
+  useEffect(resetAnnotations, [annotationsDispatch, page]);
 
   function loadAnnotations() {
     const cancellable = makeCancellable(page.getAnnotations());
     const runningTask = cancellable;
 
-    cancellable.promise.then(setAnnotations).catch((error) => {
-      setAnnotations(false);
-      setAnnotationsError(error);
-    });
+    cancellable.promise
+      .then((nextAnnotations) => {
+        annotationsDispatch({ type: 'RESOLVE', value: nextAnnotations });
+      })
+      .catch((error) => {
+        annotationsDispatch({ type: 'REJECT', error });
+      });
 
     return () => {
       cancelRunningTask(runningTask);
     };
   }
 
-  useEffect(loadAnnotations, [page, renderForms]);
+  useEffect(loadAnnotations, [annotationsDispatch, page, renderForms]);
 
   useEffect(
     () => {

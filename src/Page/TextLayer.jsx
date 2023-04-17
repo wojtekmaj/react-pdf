@@ -1,12 +1,4 @@
-import React, {
-  useCallback,
-  useContext,
-  useEffect,
-  useLayoutEffect,
-  useMemo,
-  useRef,
-  useState,
-} from 'react';
+import React, { useCallback, useContext, useEffect, useLayoutEffect, useMemo, useRef } from 'react';
 import makeCancellable from 'make-cancellable-promise';
 import invariant from 'tiny-invariant';
 import warning from 'tiny-warning';
@@ -14,6 +6,7 @@ import pdfjs from 'pdfjs-dist';
 
 import PageContext from '../PageContext';
 
+import { useResolver } from '../shared/hooks';
 import { cancelRunningTask } from '../shared/utils';
 
 export default function TextLayer() {
@@ -34,8 +27,8 @@ export default function TextLayer() {
     scale,
   } = context;
 
-  const [textContent, setTextContent] = useState(undefined);
-  const [textContentError, setTextContentError] = useState(undefined);
+  const [textContentState, textContentDispatch] = useResolver();
+  const { value: textContent, error: textContentError } = textContentState;
   const layerElement = useRef();
   const endElement = useRef();
 
@@ -70,25 +63,27 @@ export default function TextLayer() {
   }
 
   function resetTextContent() {
-    setTextContent(undefined);
-    setTextContentError(undefined);
+    textContentDispatch({ type: 'RESET' });
   }
 
-  useEffect(resetTextContent, [page]);
+  useEffect(resetTextContent, [page, textContentDispatch]);
 
   function loadTextContent() {
     const cancellable = makeCancellable(page.getTextContent());
     const runningTask = cancellable;
 
-    cancellable.promise.then(setTextContent).catch((error) => {
-      setTextContent(false);
-      setTextContentError(error);
-    });
+    cancellable.promise
+      .then((nextTextContent) => {
+        textContentDispatch({ type: 'RESOLVE', value: nextTextContent });
+      })
+      .catch((error) => {
+        textContentDispatch({ type: 'REJECT', error });
+      });
 
     return () => cancelRunningTask(runningTask);
   }
 
-  useEffect(loadTextContent, [page]);
+  useEffect(loadTextContent, [page, textContentDispatch]);
 
   useEffect(
     () => {
