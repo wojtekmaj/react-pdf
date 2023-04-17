@@ -81,7 +81,7 @@ export default function PageCanvas({ canvasRef, ...props }) {
     const { current: canvas } = canvasElement;
 
     if (!canvas) {
-      return null;
+      return;
     }
 
     canvas.width = renderViewport.width;
