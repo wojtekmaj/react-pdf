@@ -200,12 +200,11 @@ describe('Document', () => {
     });
 
     it('passes container element to inputRef properly', () => {
-      const inputRef = vi.fn();
+      const inputRef = createRef();
 
       render(<Document inputRef={inputRef} />);
 
-      expect(inputRef).toHaveBeenCalled();
-      expect(inputRef).toHaveBeenCalledWith(expect.any(HTMLElement));
+      expect(inputRef.current).toBeInstanceOf(HTMLDivElement);
     });
 
     it('renders "No PDF file specified." when given nothing', () => {

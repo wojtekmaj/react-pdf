@@ -229,14 +229,13 @@ describe('Page', () => {
     });
 
     it('passes container element to inputRef properly', () => {
-      const inputRef = vi.fn();
+      const inputRef = createRef();
 
       renderWithContext(<Page inputRef={inputRef} pageIndex={1} />, {
         pdf: silentlyFailingPdf,
       });
 
-      expect(inputRef).toHaveBeenCalled();
-      expect(inputRef).toHaveBeenCalledWith(expect.any(HTMLElement));
+      expect(inputRef.current).toBeInstanceOf(HTMLDivElement);
     });
 
     it('passes canvas element to PageCanvas properly', async () => {

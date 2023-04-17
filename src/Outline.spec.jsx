@@ -1,5 +1,5 @@
-import { beforeAll, describe, expect, it, vi } from 'vitest';
-import React from 'react';
+import { beforeAll, describe, expect, it } from 'vitest';
+import React, { createRef } from 'react';
 import { render, screen } from '@testing-library/react';
 
 import { pdfjs } from './index.test';
@@ -119,16 +119,15 @@ describe('Outline', () => {
     it('passes container element to inputRef properly', async () => {
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
-      const inputRef = vi.fn();
+      const inputRef = createRef();
 
       renderWithContext(<Outline inputRef={inputRef} onLoadSuccess={onLoadSuccess} />, { pdf });
 
-      expect.assertions(2);
+      expect.assertions(1);
 
       await onLoadSuccessPromise;
 
-      expect(inputRef).toHaveBeenCalled();
-      expect(inputRef).toHaveBeenCalledWith(expect.any(HTMLElement));
+      expect(inputRef.current).toBeInstanceOf(HTMLDivElement);
     });
 
     it('renders OutlineItem components properly', async () => {
