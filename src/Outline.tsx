@@ -17,11 +17,10 @@ import { useResolver } from './shared/hooks';
 import { eventProps, isClassName, isPdf, isRef } from './shared/propTypes';
 
 import type { PDFDocumentProxy } from 'pdfjs-dist';
+import type { EventProps } from 'make-event-props';
 import type { OnItemClickArgs } from './shared/types';
 
 type PDFOutline = Awaited<ReturnType<PDFDocumentProxy['getOutline']>>;
-
-type EventProps = ReturnType<typeof makeEventProps>;
 
 type OutlineProps = {
   className?: string;
@@ -30,7 +29,7 @@ type OutlineProps = {
   onLoadError?: (error: Error) => void;
   onLoadSuccess?: (outline: PDFOutline | null) => void;
   pdf?: PDFDocumentProxy | false;
-} & EventProps;
+} & EventProps<PDFOutline | null | false | undefined>;
 
 export default function Outline(props: OutlineProps) {
   const context = useContext(DocumentContext);

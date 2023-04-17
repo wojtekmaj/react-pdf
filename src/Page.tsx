@@ -31,6 +31,7 @@ import {
 } from './shared/propTypes';
 
 import type { PDFDocumentProxy, PDFPageProxy } from 'pdfjs-dist';
+import type { EventProps } from 'make-event-props';
 import type {
   CustomTextRenderer,
   NodeOrRenderer,
@@ -46,12 +47,11 @@ import type {
   OnRenderSuccess,
   OnRenderTextLayerError,
   OnRenderTextLayerSuccess,
+  PageCallback,
   RenderMode,
 } from './shared/types';
 
 const defaultScale = 1;
-
-type EventProps = ReturnType<typeof makeEventProps>;
 
 type PageProps = {
   canvasBackground?: string;
@@ -89,7 +89,7 @@ type PageProps = {
   rotate?: number | null;
   scale?: number;
   width?: number;
-} & EventProps;
+} & EventProps<PageCallback | null>;
 
 export default function Page(props: PageProps) {
   const context = useContext(DocumentContext);

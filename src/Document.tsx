@@ -39,6 +39,7 @@ import { useResolver } from './shared/hooks';
 import { eventProps, isClassName, isFile, isRef } from './shared/propTypes';
 
 import type { PDFDocumentProxy } from 'pdfjs-dist';
+import type { EventProps } from 'make-event-props';
 import type {
   ClassName,
   ExternalLinkRel,
@@ -73,8 +74,6 @@ type OnSourceError = OnError;
 
 type OnSourceSuccess = () => void;
 
-type EventProps = ReturnType<typeof makeEventProps>;
-
 type DocumentProps = {
   children?: React.ReactNode;
   className?: ClassName;
@@ -96,7 +95,7 @@ type DocumentProps = {
   options?: Options;
   renderMode?: RenderMode;
   rotate?: number | null;
-} & EventProps;
+} & EventProps<PDFDocumentProxy | false | undefined>;
 
 const defaultOnPassword: OnPassword = (callback, reason) => {
   switch (reason) {
