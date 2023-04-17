@@ -4,7 +4,15 @@ import { isDataURI } from 'react-pdf/src/shared/utils';
 
 import { isFile } from './shared/propTypes';
 
-export default function PassingOptions({ file, passMethod, setPassMethod }) {
+import type { File, PassMethod } from './shared/types';
+
+type PassingOptionsProps = {
+  file: File | null;
+  passMethod: PassMethod | undefined;
+  setPassMethod: (value: PassMethod | undefined) => void;
+};
+
+export default function PassingOptions({ file, passMethod, setPassMethod }: PassingOptionsProps) {
   const sourceType = (() => {
     if (file === null) {
       return 'null';
@@ -25,10 +33,14 @@ export default function PassingOptions({ file, passMethod, setPassMethod }) {
     return typeof file;
   })();
 
-  function onPassMethodChange(event) {
+  function onPassMethodChange(event: React.ChangeEvent<HTMLInputElement>) {
     const nextPassMethod = event.target.value;
 
-    setPassMethod(nextPassMethod === 'null' ? null : nextPassMethod);
+    if (nextPassMethod === 'undefined') {
+      setPassMethod(undefined);
+    } else {
+      setPassMethod(nextPassMethod as PassMethod);
+    }
   }
 
   return (
@@ -37,12 +49,12 @@ export default function PassingOptions({ file, passMethod, setPassMethod }) {
 
       <div>
         <input
-          checked={passMethod === null}
+          checked={passMethod === undefined}
           id="passNormal"
           name="passMethod"
           onChange={onPassMethodChange}
           type="radio"
-          value="null"
+          value="undefined"
         />
         <label htmlFor="passNormal">Pass as is ({sourceType})</label>
       </div>

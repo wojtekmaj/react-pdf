@@ -1,11 +1,25 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-export default function AnnotationOptions({ externalLinkTarget, setExternalLinkTarget }) {
-  function onExternalLinkTargetChange(event) {
+import type { ExternalLinkTarget } from './shared/types';
+
+type AnnotationOptionsProps = {
+  externalLinkTarget: ExternalLinkTarget | undefined;
+  setExternalLinkTarget: (value: ExternalLinkTarget | undefined) => void;
+};
+
+export default function AnnotationOptions({
+  externalLinkTarget,
+  setExternalLinkTarget,
+}: AnnotationOptionsProps) {
+  function onExternalLinkTargetChange(event: React.ChangeEvent<HTMLInputElement>) {
     const { value } = event.target;
 
-    setExternalLinkTarget(value !== 'unset' ? value : null);
+    if (value === 'undefined') {
+      setExternalLinkTarget(undefined);
+    } else {
+      setExternalLinkTarget(value as '_blank' | '_self');
+    }
   }
 
   return (
@@ -15,12 +29,12 @@ export default function AnnotationOptions({ externalLinkTarget, setExternalLinkT
       <label htmlFor="externalLinkTarget">External link target</label>
       <div>
         <input
-          checked={!externalLinkTarget || externalLinkTarget === 'unset'}
+          checked={externalLinkTarget === undefined}
           id="targetUnset"
           name="externalLinkTarget"
           onChange={onExternalLinkTargetChange}
           type="radio"
-          value="unset"
+          value="undefined"
         />
         <label htmlFor="targetUnset">Unset</label>
       </div>
