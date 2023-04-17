@@ -6,8 +6,17 @@ export default {
     numPages: 4,
   },
   fingerprint: 'a62067476e69734bb8eb60122615dfbf',
-  getDestination: () => new Promise((resolve, reject) => reject(new RenderingCancelledException())),
-  getOutline: () => new Promise((resolve, reject) => reject(new RenderingCancelledException())),
-  getPage: () => new Promise((resolve, reject) => reject(new RenderingCancelledException())),
+  getDestination: () =>
+    new Promise((resolve, reject) =>
+      reject(new RenderingCancelledException('Cancelled', 'cancelled')),
+    ),
+  getOutline: () =>
+    new Promise((resolve, reject) =>
+      reject(new RenderingCancelledException('Cancelled', 'cancelled')),
+    ),
+  getPage: () =>
+    new Promise((resolve, reject) =>
+      reject(new RenderingCancelledException('Cancelled', 'cancelled')),
+    ),
   numPages: 4,
 };
