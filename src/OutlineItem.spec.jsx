@@ -41,7 +41,7 @@ describe('OutlineItem', () => {
   let pdf;
 
   // Object with basic loaded outline item information
-  let outlineItem = null;
+  let outlineItem;
 
   beforeAll(async () => {
     pdf = await pdfjs.getDocument({ data: pdfFile.arrayBuffer }).promise;

@@ -42,8 +42,8 @@ describe('Page', () => {
   const desiredLoadedPage3 = {};
 
   // Callbacks used in registerPage and unregisterPage callbacks
-  const registerPageArguments = [];
-  let unregisterPageArguments = null;
+  let registerPageArguments;
+  let unregisterPageArguments;
 
   beforeAll(async () => {
     pdf = await pdfjs.getDocument({ data: pdfFile.arrayBuffer }).promise;
@@ -62,7 +62,7 @@ describe('Page', () => {
     desiredLoadedPage3._pageIndex = page3._pageIndex;
     desiredLoadedPage3._pageInfo = page3._pageInfo;
 
-    registerPageArguments.push(page._pageIndex, expect.any(HTMLDivElement));
+    registerPageArguments = [page._pageIndex, expect.any(HTMLDivElement)];
     unregisterPageArguments = page._pageIndex;
 
     pdf4 = await pdfjs.getDocument({ data: pdfFile4.arrayBuffer }).promise;

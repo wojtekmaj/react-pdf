@@ -34,8 +34,8 @@ describe('Outline', () => {
   let pdf2;
 
   // Object with basic loaded outline information that shall match after successful loading
-  let desiredLoadedOutline = null;
-  let desiredLoadedOutline2 = null;
+  let desiredLoadedOutline;
+  let desiredLoadedOutline2;
 
   beforeAll(async () => {
     pdf = await pdfjs.getDocument({ data: pdfFile.arrayBuffer }).promise;
