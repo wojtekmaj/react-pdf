@@ -2,7 +2,7 @@ import React, { useCallback, useContext, useEffect, useLayoutEffect, useMemo, us
 import makeCancellable from 'make-cancellable-promise';
 import invariant from 'tiny-invariant';
 import warning from 'tiny-warning';
-import pdfjs from 'pdfjs-dist';
+import * as pdfjs from 'pdfjs-dist';
 
 import PageContext from '../PageContext';
 

@@ -2,7 +2,7 @@ import React, { useCallback, useContext, useEffect, useMemo, useRef } from 'reac
 import mergeRefs from 'merge-refs';
 import invariant from 'tiny-invariant';
 import warning from 'tiny-warning';
-import pdfjs from 'pdfjs-dist';
+import * as pdfjs from 'pdfjs-dist';
 
 import PageContext from '../PageContext';
 

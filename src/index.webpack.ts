@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment, import/no-unresolved */
-import pdfjs from 'pdfjs-dist';
+import * as pdfjs from 'pdfjs-dist';
 // @ts-ignore-next-line
 import pdfjsWorker from 'file-loader!pdfjs-dist/build/pdf.worker';
 
