@@ -242,11 +242,12 @@ const Document = forwardRef(function Document(
         return;
       }
 
-      if (source || source === null) {
-        onSourceSuccess();
-      } else {
+      if (source === false) {
         onSourceError();
+        return;
       }
+
+      onSourceSuccess();
     },
     // Ommitted callbacks so they are not called every time they change
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -322,11 +323,12 @@ const Document = forwardRef(function Document(
         return;
       }
 
-      if (pdf || pdf === null) {
-        onLoadSuccess();
-      } else {
+      if (pdf === false) {
         onLoadError();
+        return;
       }
+
+      onLoadSuccess();
     },
     // Ommitted callbacks so they are not called every time they change
     // eslint-disable-next-line react-hooks/exhaustive-deps
