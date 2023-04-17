@@ -53,7 +53,7 @@ describe('Outline', () => {
 
       expect.assertions(1);
 
-      await expect(onLoadSuccessPromise).resolves.toMatchObject(desiredLoadedOutline);
+      await expect(onLoadSuccessPromise).resolves.toMatchObject([desiredLoadedOutline]);
     });
 
     it('calls onLoadError when failed to load an outline', async () => {
@@ -65,7 +65,7 @@ describe('Outline', () => {
 
       expect.assertions(1);
 
-      await expect(onLoadErrorPromise).resolves.toBeInstanceOf(Error);
+      await expect(onLoadErrorPromise).resolves.toMatchObject([expect.any(Error)]);
 
       restoreConsole();
     });
@@ -77,14 +77,14 @@ describe('Outline', () => {
 
       expect.assertions(2);
 
-      await expect(onLoadSuccessPromise).resolves.toMatchObject(desiredLoadedOutline);
+      await expect(onLoadSuccessPromise).resolves.toMatchObject([desiredLoadedOutline]);
 
       const { func: onLoadSuccess2, promise: onLoadSuccessPromise2 } = makeAsyncCallback();
 
       rerender(<Outline onLoadSuccess={onLoadSuccess2} />, { pdf: pdf2 });
 
       // It would have been .toMatchObject if not for the fact _pdf2.pdf has no outline
-      await expect(onLoadSuccessPromise2).resolves.toBe(desiredLoadedOutline2);
+      await expect(onLoadSuccessPromise2).resolves.toMatchObject([desiredLoadedOutline2]);
     });
 
     it('throws an error when placed outside Document', () => {

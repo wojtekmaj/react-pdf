@@ -63,7 +63,7 @@ describe('Page', () => {
     desiredLoadedPage3._pageInfo = page3._pageInfo;
 
     registerPageArguments = [page._pageIndex, expect.any(HTMLDivElement)];
-    unregisterPageArguments = page._pageIndex;
+    unregisterPageArguments = [page._pageIndex];
 
     pdf4 = await pdfjs.getDocument({ data: pdfFile4.arrayBuffer }).promise;
   });
@@ -76,7 +76,7 @@ describe('Page', () => {
 
       expect.assertions(1);
 
-      await expect(onLoadSuccessPromise).resolves.toMatchObject(desiredLoadedPage);
+      await expect(onLoadSuccessPromise).resolves.toMatchObject([desiredLoadedPage]);
     });
 
     it('returns all desired parameters in onLoadSuccess callback', async () => {
@@ -86,7 +86,7 @@ describe('Page', () => {
 
       expect.assertions(5);
 
-      const page = await onLoadSuccessPromise;
+      const [page] = await onLoadSuccessPromise;
 
       expect(page.width).toBeDefined();
       expect(page.height).toBeDefined();
@@ -105,7 +105,7 @@ describe('Page', () => {
 
       expect.assertions(1);
 
-      await expect(onLoadErrorPromise).resolves.toBeInstanceOf(Error);
+      await expect(onLoadErrorPromise).resolves.toMatchObject([expect.any(Error)]);
 
       restoreConsole();
     });
@@ -117,7 +117,7 @@ describe('Page', () => {
 
       expect.assertions(1);
 
-      const page = await onLoadSuccessPromise;
+      const [page] = await onLoadSuccessPromise;
 
       expect(page).toMatchObject(desiredLoadedPage);
     });
@@ -129,7 +129,7 @@ describe('Page', () => {
 
       expect.assertions(1);
 
-      const page = await onLoadSuccessPromise;
+      const [page] = await onLoadSuccessPromise;
 
       expect(page).toMatchObject(desiredLoadedPage);
     });
@@ -143,7 +143,7 @@ describe('Page', () => {
 
       expect.assertions(1);
 
-      const page = await onLoadSuccessPromise;
+      const [page] = await onLoadSuccessPromise;
 
       expect(page).toMatchObject(desiredLoadedPage);
     });
@@ -167,7 +167,7 @@ describe('Page', () => {
 
       expect.assertions(1);
 
-      await expect(nuregisterPagePromise).resolves.toBe(unregisterPageArguments);
+      await expect(nuregisterPagePromise).resolves.toMatchObject(unregisterPageArguments);
     });
 
     it('replaces a page properly when pdf is changed', async () => {
@@ -179,13 +179,13 @@ describe('Page', () => {
 
       expect.assertions(2);
 
-      await expect(onLoadSuccessPromise).resolves.toMatchObject(desiredLoadedPage);
+      await expect(onLoadSuccessPromise).resolves.toMatchObject([desiredLoadedPage]);
 
       const { func: onLoadSuccess2, promise: onLoadSuccessPromise2 } = makeAsyncCallback();
 
       rerender(<Page onLoadSuccess={onLoadSuccess2} pageIndex={0} />, { pdf: pdf2 });
 
-      await expect(onLoadSuccessPromise2).resolves.toMatchObject(desiredLoadedPage3);
+      await expect(onLoadSuccessPromise2).resolves.toMatchObject([desiredLoadedPage3]);
     });
 
     it('replaces a page properly when pageNumber is changed', async () => {
@@ -197,13 +197,13 @@ describe('Page', () => {
 
       expect.assertions(2);
 
-      await expect(onLoadSuccessPromise).resolves.toMatchObject(desiredLoadedPage);
+      await expect(onLoadSuccessPromise).resolves.toMatchObject([desiredLoadedPage]);
 
       const { func: onLoadSuccess2, promise: onLoadSuccessPromise2 } = makeAsyncCallback();
 
       rerender(<Page onLoadSuccess={onLoadSuccess2} pageIndex={1} />, { pdf });
 
-      await expect(onLoadSuccessPromise2).resolves.toMatchObject(desiredLoadedPage2);
+      await expect(onLoadSuccessPromise2).resolves.toMatchObject([desiredLoadedPage2]);
     });
 
     it('throws an error when placed outside Document', () => {
@@ -334,7 +334,7 @@ describe('Page', () => {
 
       expect.assertions(1);
 
-      const page = await onLoadSuccessPromise;
+      const [page] = await onLoadSuccessPromise;
 
       expect(page).toMatchObject(desiredLoadedPage);
     });
@@ -347,7 +347,7 @@ describe('Page', () => {
         { pdf },
       );
 
-      const page = await onRenderSuccessPromise;
+      const [page] = await onRenderSuccessPromise;
 
       const pageSvg = container.querySelector('.react-pdf__Page__svg');
 
@@ -369,7 +369,7 @@ describe('Page', () => {
         { pdf },
       );
 
-      const page = await onRenderSuccessPromise;
+      const [page] = await onRenderSuccessPromise;
 
       const pageSvg = container.querySelector('.react-pdf__Page__svg');
 
@@ -641,7 +641,7 @@ describe('Page', () => {
 
     expect.assertions(1);
 
-    const page = await onLoadSuccessPromise;
+    const [page] = await onLoadSuccessPromise;
 
     expect(page.width).toEqual(page.originalWidth);
   });
@@ -654,7 +654,7 @@ describe('Page', () => {
 
     expect.assertions(1);
 
-    const page = await onLoadSuccessPromise;
+    const [page] = await onLoadSuccessPromise;
 
     expect(page.width).toEqual(page.originalWidth * scale);
   });
@@ -667,7 +667,7 @@ describe('Page', () => {
 
     expect.assertions(1);
 
-    const page = await onLoadSuccessPromise;
+    const [page] = await onLoadSuccessPromise;
 
     expect(page.width).toEqual(width);
   });
@@ -686,7 +686,7 @@ describe('Page', () => {
 
     expect.assertions(1);
 
-    const page = await onLoadSuccessPromise;
+    const [page] = await onLoadSuccessPromise;
 
     expect(page.width).toBeCloseTo(width * scale);
   });
@@ -701,7 +701,7 @@ describe('Page', () => {
 
     expect.assertions(1);
 
-    const page = await onLoadSuccessPromise;
+    const [page] = await onLoadSuccessPromise;
 
     expect(page.height).toEqual(height);
   });
@@ -720,7 +720,7 @@ describe('Page', () => {
 
     expect.assertions(1);
 
-    const page = await onLoadSuccessPromise;
+    const [page] = await onLoadSuccessPromise;
 
     expect(page.height).toBeCloseTo(height * scale);
   });
@@ -739,7 +739,7 @@ describe('Page', () => {
 
     expect.assertions(2);
 
-    const page = await onLoadSuccessPromise;
+    const [page] = await onLoadSuccessPromise;
 
     expect(page.width).toEqual(width);
     // Expect proportions to be correct even though invalid height was provided
@@ -765,7 +765,7 @@ describe('Page', () => {
 
     expect.assertions(2);
 
-    const page = await onLoadSuccessPromise;
+    const [page] = await onLoadSuccessPromise;
 
     expect(page.width).toBeCloseTo(width * scale);
     // Expect proportions to be correct even though invalid height was provided

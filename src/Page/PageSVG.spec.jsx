@@ -50,7 +50,7 @@ describe('PageSVG', () => {
 
       expect.assertions(1);
 
-      await expect(onRenderSuccessPromise).resolves.toMatchObject({});
+      await expect(onRenderSuccessPromise).resolves.toMatchObject([{}]);
 
       restoreConsole();
     });
@@ -68,7 +68,7 @@ describe('PageSVG', () => {
 
       expect.assertions(1);
 
-      await expect(onRenderErrorPromise).resolves.toBeInstanceOf(Error);
+      await expect(onRenderErrorPromise).resolves.toMatchObject([expect.any(Error)]);
 
       restoreConsole();
     });

@@ -7,9 +7,7 @@ export function makeAsyncCallback(callbackValue) {
     promiseResolve = resolve;
   });
   const func = vi.fn(
-    callbackValue
-      ? () => promiseResolve(callbackValue)
-      : (...args) => promiseResolve(args.length === 1 ? args[0] : args),
+    callbackValue ? () => promiseResolve(callbackValue) : (...args) => promiseResolve(args),
   );
 
   return { promise, func };

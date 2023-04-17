@@ -69,7 +69,7 @@ describe('AnnotationLayer', () => {
 
       expect.assertions(1);
 
-      await expect(onGetAnnotationsSuccessPromise).resolves.toMatchObject(desiredAnnotations);
+      await expect(onGetAnnotationsSuccessPromise).resolves.toMatchObject([desiredAnnotations]);
     });
 
     it('calls onGetAnnotationsError when failed to load annotations', async () => {
@@ -89,7 +89,7 @@ describe('AnnotationLayer', () => {
 
       expect.assertions(1);
 
-      await expect(onGetAnnotationsErrorPromise).resolves.toBeInstanceOf(Error);
+      await expect(onGetAnnotationsErrorPromise).resolves.toMatchObject([expect.any(Error)]);
 
       restoreConsole();
     });
@@ -109,7 +109,7 @@ describe('AnnotationLayer', () => {
 
       expect.assertions(2);
 
-      await expect(onGetAnnotationsSuccessPromise).resolves.toMatchObject(desiredAnnotations);
+      await expect(onGetAnnotationsSuccessPromise).resolves.toMatchObject([desiredAnnotations]);
 
       const { func: onGetAnnotationsSuccess2, promise: onGetAnnotationsSuccessPromise2 } =
         makeAsyncCallback();
@@ -123,7 +123,7 @@ describe('AnnotationLayer', () => {
         },
       );
 
-      await expect(onGetAnnotationsSuccessPromise2).resolves.toMatchObject(desiredAnnotations2);
+      await expect(onGetAnnotationsSuccessPromise2).resolves.toMatchObject([desiredAnnotations2]);
     });
 
     it('throws an error when placed outside Page', () => {

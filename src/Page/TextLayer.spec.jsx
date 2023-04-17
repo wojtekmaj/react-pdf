@@ -58,7 +58,7 @@ describe('TextLayer', () => {
 
       expect.assertions(1);
 
-      await expect(onGetTextSuccessPromise).resolves.toMatchObject({ items: desiredTextItems });
+      await expect(onGetTextSuccessPromise).resolves.toMatchObject([{ items: desiredTextItems }]);
     });
 
     it('calls onGetTextError when failed to load text content', async () => {
@@ -73,7 +73,7 @@ describe('TextLayer', () => {
 
       expect.assertions(1);
 
-      await expect(onGetTextErrorPromise).resolves.toBeInstanceOf(Error);
+      await expect(onGetTextErrorPromise).resolves.toMatchObject([expect.any(Error)]);
 
       restoreConsole();
     });
@@ -88,9 +88,11 @@ describe('TextLayer', () => {
 
       expect.assertions(2);
 
-      await expect(onGetTextSuccessPromise).resolves.toMatchObject({
-        items: desiredTextItems,
-      });
+      await expect(onGetTextSuccessPromise).resolves.toMatchObject([
+        {
+          items: desiredTextItems,
+        },
+      ]);
 
       const { func: onGetTextSuccess2, promise: onGetTextSuccessPromise2 } = makeAsyncCallback();
 
@@ -99,9 +101,11 @@ describe('TextLayer', () => {
         page: page2,
       });
 
-      await expect(onGetTextSuccessPromise2).resolves.toMatchObject({
-        items: desiredTextItems2,
-      });
+      await expect(onGetTextSuccessPromise2).resolves.toMatchObject([
+        {
+          items: desiredTextItems2,
+        },
+      ]);
     });
 
     it('throws an error when placed outside Page', () => {

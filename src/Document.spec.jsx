@@ -63,7 +63,7 @@ describe('Document', () => {
       expect.assertions(2);
 
       await expect(onSourceSuccessPromise).resolves.toBe(OK);
-      await expect(onLoadSuccessPromise).resolves.toMatchObject(desiredLoadedPdf);
+      await expect(onLoadSuccessPromise).resolves.toMatchObject([desiredLoadedPdf]);
     });
 
     it('loads a file and calls onSourceSuccess and onLoadSuccess callbacks via data URI properly (param object)', async () => {
@@ -81,7 +81,7 @@ describe('Document', () => {
       expect.assertions(2);
 
       await expect(onSourceSuccessPromise).resolves.toBe(OK);
-      await expect(onLoadSuccessPromise).resolves.toMatchObject(desiredLoadedPdf);
+      await expect(onLoadSuccessPromise).resolves.toMatchObject([desiredLoadedPdf]);
     });
 
     // FIXME: In Jest, it used to be worked around as described in https://github.com/facebook/jest/issues/7780
@@ -100,7 +100,7 @@ describe('Document', () => {
       expect.assertions(2);
 
       await expect(onSourceSuccessPromise).resolves.toBe(OK);
-      await expect(onLoadSuccessPromise).resolves.toMatchObject(desiredLoadedPdf);
+      await expect(onLoadSuccessPromise).resolves.toMatchObject([desiredLoadedPdf]);
     });
 
     it('loads a file and calls onSourceSuccess and onLoadSuccess callbacks via Blob properly', async () => {
@@ -118,7 +118,7 @@ describe('Document', () => {
       expect.assertions(2);
 
       await expect(onSourceSuccessPromise).resolves.toBe(OK);
-      await expect(onLoadSuccessPromise).resolves.toMatchObject(desiredLoadedPdf);
+      await expect(onLoadSuccessPromise).resolves.toMatchObject([desiredLoadedPdf]);
     });
 
     it('loads a file and calls onSourceSuccess and onLoadSuccess callbacks via File properly', async () => {
@@ -136,7 +136,7 @@ describe('Document', () => {
       expect.assertions(2);
 
       await expect(onSourceSuccessPromise).resolves.toBe(OK);
-      await expect(onLoadSuccessPromise).resolves.toMatchObject(desiredLoadedPdf);
+      await expect(onLoadSuccessPromise).resolves.toMatchObject([desiredLoadedPdf]);
     });
 
     it('fails to load a file and calls onSourceError given invalid file source', async () => {
@@ -148,7 +148,7 @@ describe('Document', () => {
 
       expect.assertions(1);
 
-      const error = await onSourceErrorPromise;
+      const [error] = await onSourceErrorPromise;
 
       expect(error).toMatchObject(expect.any(Error));
 
@@ -170,7 +170,7 @@ describe('Document', () => {
       expect.assertions(4);
 
       await expect(onSourceSuccessPromise).resolves.toBe(OK);
-      await expect(onLoadSuccessPromise).resolves.toMatchObject(desiredLoadedPdf);
+      await expect(onLoadSuccessPromise).resolves.toMatchObject([desiredLoadedPdf]);
 
       const { func: onSourceSuccess2, promise: onSourceSuccessPromise2 } = makeAsyncCallback(OK);
       const { func: onLoadSuccess2, promise: onLoadSuccessPromise2 } = makeAsyncCallback();
@@ -184,7 +184,7 @@ describe('Document', () => {
       );
 
       await expect(onSourceSuccessPromise2).resolves.toBe(OK);
-      await expect(onLoadSuccessPromise2).resolves.toMatchObject(desiredLoadedPdf2);
+      await expect(onLoadSuccessPromise2).resolves.toMatchObject([desiredLoadedPdf2]);
     });
   });
 
