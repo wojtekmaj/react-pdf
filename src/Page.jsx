@@ -326,13 +326,11 @@ Page.propTypes = {
   pageIndex: isPageIndex,
   pageNumber: isPageNumber,
   pdf: isPdf,
-  registerPage: PropTypes.func,
   renderAnnotationLayer: PropTypes.bool,
   renderForms: PropTypes.bool,
   renderMode: isRenderMode,
   renderTextLayer: PropTypes.bool,
   rotate: isRotate,
   scale: PropTypes.number,
-  unregisterPage: PropTypes.func,
   width: PropTypes.number,
 };
