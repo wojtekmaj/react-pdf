@@ -125,10 +125,7 @@ export default function Outline(props) {
     return (
       <ul>
         {outline.map((item, itemIndex) => (
-          <OutlineItem
-            key={typeof item.destination === 'string' ? item.destination : itemIndex}
-            item={item}
-          />
+          <OutlineItem key={typeof item.dest === 'string' ? item.dest : itemIndex} item={item} />
         ))}
       </ul>
     );

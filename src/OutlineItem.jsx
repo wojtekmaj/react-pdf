@@ -95,7 +95,7 @@ export default function OutlineItem(props) {
       <ul>
         {subitems.map((subitem, subitemIndex) => (
           <OutlineItem
-            key={typeof subitem.destination === 'string' ? subitem.destination : subitemIndex}
+            key={typeof subitem.dest === 'string' ? subitem.dest : subitemIndex}
             item={subitem}
             {...otherProps}
           />
