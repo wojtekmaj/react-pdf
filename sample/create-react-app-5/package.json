@@ -3,7 +3,7 @@
   "version": "4.0.0",
   "description": "A sample page for React-PDF.",
   "private": true,
-  "main": "src/index.jsx",
+  "main": "src/index.tsx",
   "scripts": {
     "build": "react-scripts build",
     "copy-cmaps": "node ./scripts/copy-cmaps.mjs",
@@ -23,6 +23,9 @@
     "react-dom": "^18.2.0",
     "react-pdf": "latest",
     "react-scripts": "^5.0.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.0.4"
   },
   "resolutions": {
     "mini-css-extract-plugin": "~2.4.0"

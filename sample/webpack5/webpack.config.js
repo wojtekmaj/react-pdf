@@ -17,7 +17,7 @@ module.exports = {
   bail: isProduction,
   context: path.join(__dirname),
   entry: {
-    src: './index.jsx',
+    src: './index.tsx',
   },
   output: {
     path: path.resolve(__dirname, 'dist'),

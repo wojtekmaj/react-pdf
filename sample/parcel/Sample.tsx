@@ -7,21 +7,29 @@ import './Sample.css';
 
 import pdfFile from './sample.pdf';
 
+import type { PDFDocumentProxy } from 'pdfjs-dist';
+
 const options = {
   cMapUrl: 'cmaps/',
   cMapPacked: true,
   standardFontDataUrl: 'standard_fonts/',
 };
 
-export default function Sample() {
-  const [file, setFile] = useState(pdfFile);
-  const [numPages, setNumPages] = useState(null);
+type PDFFile = string | File | null;
 
-  function onFileChange(event) {
-    setFile(event.target.files[0]);
+export default function Sample() {
+  const [file, setFile] = useState<PDFFile>(pdfFile);
+  const [numPages, setNumPages] = useState<number>();
+
+  function onFileChange(event: React.ChangeEvent<HTMLInputElement>) {
+    const { files } = event.target;
+
+    if (files && files[0]) {
+      setFile(files[0] || null);
+    }
   }
 
-  function onDocumentLoadSuccess({ numPages: nextNumPages }) {
+  function onDocumentLoadSuccess({ numPages: nextNumPages }: PDFDocumentProxy) {
     setNumPages(nextNumPages);
   }
 

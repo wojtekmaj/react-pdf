@@ -1,9 +1,13 @@
 import React, { useState } from 'react';
-import { Document, Page } from 'react-pdf/dist/esm/index.webpack';
+import { Document, Page } from 'react-pdf/dist/esm/index.parcel2';
 import 'react-pdf/dist/esm/Page/AnnotationLayer.css';
 import 'react-pdf/dist/esm/Page/TextLayer.css';
 
 import './Sample.css';
+
+import type { PDFDocumentProxy } from 'pdfjs-dist';
+
+const pdfFile = new URL('./sample.pdf', import.meta.url).toString();
 
 const options = {
   cMapUrl: 'cmaps/',
@@ -11,15 +15,21 @@ const options = {
   standardFontDataUrl: 'standard_fonts/',
 };
 
-export default function Sample() {
-  const [file, setFile] = useState('./sample.pdf');
-  const [numPages, setNumPages] = useState(null);
+type PDFFile = string | File | null;
 
-  function onFileChange(event) {
-    setFile(event.target.files[0]);
+export default function Sample() {
+  const [file, setFile] = useState<PDFFile>(pdfFile);
+  const [numPages, setNumPages] = useState<number>();
+
+  function onFileChange(event: React.ChangeEvent<HTMLInputElement>) {
+    const { files } = event.target;
+
+    if (files && files[0]) {
+      setFile(files[0] || null);
+    }
   }
 
-  function onDocumentLoadSuccess({ numPages: nextNumPages }) {
+  function onDocumentLoadSuccess({ numPages: nextNumPages }: PDFDocumentProxy) {
     setNumPages(nextNumPages);
   }
 
