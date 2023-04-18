@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { mouseEvents, touchEvents, keyboardEvents } from 'make-event-props';
+import { allEvents } from 'make-event-props';
 import { PDFDataRangeTransport } from 'pdfjs-dist';
 
 import { isDefined } from './utils';
@@ -8,18 +8,16 @@ import LinkService from '../LinkService';
 
 import type { PDFDocumentProxy } from 'pdfjs-dist';
 
-const mouseTouchKeyboardEvents = [...mouseEvents, ...touchEvents, ...keyboardEvents];
-
-type MouseTouchKeyboardEvents = (typeof mouseTouchKeyboardEvents)[number];
+type AllEvents = (typeof allEvents)[number];
 
 type Props = {
-  [K in MouseTouchKeyboardEvents]?: typeof PropTypes.func;
+  [K in AllEvents]?: typeof PropTypes.func;
 };
 
 export const eventProps: Props = (() => {
-  const result = {} as Props;
+  const result: Props = {};
 
-  [...mouseEvents, ...touchEvents, ...keyboardEvents].forEach((eventName) => {
+  allEvents.forEach((eventName) => {
     result[eventName] = PropTypes.func;
   });
 
