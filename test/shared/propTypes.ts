@@ -32,7 +32,7 @@ const fileTypes = [
   }),
 ];
 if (typeof Blob !== 'undefined') {
-  fileTypes.push(PropTypes.instanceOf(Blob));
+  (fileTypes as Array<PropTypes.Validator<unknown>>).push(PropTypes.instanceOf(Blob));
 }
 
 export const isFile = PropTypes.oneOfType(fileTypes);

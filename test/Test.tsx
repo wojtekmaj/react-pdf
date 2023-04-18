@@ -16,81 +16,101 @@ import ViewOptions from './ViewOptions';
 
 import { dataURItoBlob } from './shared/utils';
 
+import type { PDFDocumentProxy, PDFPageProxy } from 'pdfjs-dist';
+import type { ExternalLinkTarget, File, PassMethod, RenderMode } from './shared/types';
+
 const options = {
   cMapUrl: 'cmaps/',
   cMapPacked: true,
   standardFontDataUrl: 'standard_fonts/',
 };
 
-export function readAsDataURL(file) {
+export function readAsDataURL(file: Blob): Promise<string> {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
 
-    reader.onload = () => resolve(reader.result);
+    reader.onload = () => {
+      if (!reader.result) {
+        return reject(new Error('Error while reading a file.'));
+      }
+
+      resolve(reader.result as string);
+    };
+
     reader.onerror = (event) => {
-      switch (event.target.error.code) {
-        case event.target.error.NOT_FOUND_ERR:
+      if (!event.target) {
+        return reject(new Error('Error while reading a file.'));
+      }
+
+      const { error } = event.target;
+
+      if (!error) {
+        return reject(new Error('Error while reading a file.'));
+      }
+
+      switch (error.code) {
+        case error.NOT_FOUND_ERR:
           return reject(new Error('Error while reading a file: File not found.'));
-        case event.target.error.NOT_READABLE_ERR:
-          return reject(new Error('Error while reading a file: File not readable.'));
-        case event.target.error.SECURITY_ERR:
+        case error.SECURITY_ERR:
           return reject(new Error('Error while reading a file: Security error.'));
-        case event.target.error.ABORT_ERR:
+        case error.ABORT_ERR:
           return reject(new Error('Error while reading a file: Aborted.'));
         default:
           return reject(new Error('Error while reading a file.'));
       }
     };
-    reader.readAsDataURL(file);
 
-    return null;
+    reader.readAsDataURL(file);
   });
 }
 
 /* eslint-disable no-console */
 
 export default function Test() {
-  const [canvasBackground, setCanvasBackground] = useState(null);
-  const [devicePixelRatio, setDevicePixelRatio] = useState(null);
+  const [canvasBackground, setCanvasBackground] = useState<string>();
+  const [devicePixelRatio, setDevicePixelRatio] = useState<number>();
   const [displayAll, setDisplayAll] = useState(false);
-  const [externalLinkTarget, setExternalLinkTarget] = useState(null);
-  const [file, setFile] = useState(null);
-  const [fileForProps, setFileForProps] = useState(null);
-  const [numPages, setNumPages] = useState(null);
-  const [pageHeight, setPageHeight] = useState(null);
-  const [pageNumber, setPageNumber] = useState(null);
-  const [pageScale, setPageScale] = useState(null);
-  const [pageWidth, setPageWidth] = useState(null);
-  const [passMethod, setPassMethod] = useState(null);
+  const [externalLinkTarget, setExternalLinkTarget] = useState<ExternalLinkTarget>();
+  const [file, setFile] = useState<File>(null);
+  const [fileForProps, setFileForProps] = useState<File>();
+  const [numPages, setNumPages] = useState<number>();
+  const [pageHeight, setPageHeight] = useState<number>();
+  const [pageNumber, setPageNumber] = useState<number>();
+  const [pageScale, setPageScale] = useState<number>();
+  const [pageWidth, setPageWidth] = useState<number>();
+  const [passMethod, setPassMethod] = useState<PassMethod>();
   const [render, setRender] = useState(true);
   const [renderAnnotationLayer, setRenderAnnotationLayer] = useState(true);
   const [renderForms, setRenderForms] = useState(true);
-  const [renderMode, setRenderMode] = useState('canvas');
+  const [renderMode, setRenderMode] = useState<RenderMode | undefined>('canvas');
   const [renderTextLayer, setRenderTextLayer] = useState(true);
   const [useCustomTextRenderer, setUseCustomTextRenderer] = useState(true);
-  const [rotate, setRotate] = useState(null);
+  const [rotate, setRotate] = useState<number>();
 
-  const onDocumentLoadProgress = useCallback((progressData) => {
+  const onDocumentLoadProgress = useCallback((progressData: { loaded: number; total: number }) => {
     console.log(
       'Loading a document',
       progressData.total ? progressData.loaded / progressData.total : '(unknown progress)',
     );
   }, []);
 
-  const onDocumentLoadSuccess = useCallback((document) => {
+  const onDocumentLoadSuccess = useCallback((document: PDFDocumentProxy) => {
     console.log('Loaded a document', document);
     const { numPages: nextNumPages } = document;
     setNumPages(nextNumPages);
     setPageNumber(1);
   }, []);
 
-  const onDocumentLoadError = useCallback((error) => {
+  const onDocumentLoadError = useCallback((error: Error) => {
     console.error(error);
   }, []);
 
-  const onPageRenderSuccess = useCallback((page) => console.log('Rendered a page', page), []);
+  const onPageRenderSuccess = useCallback(
+    (page: PDFPageProxy) => console.log('Rendered a page', page),
+    [],
+  );
 
-  const onItemClick = useCallback((args) => {
+  const onItemClick = useCallback((args: { pageNumber: number }) => {
     console.log('Clicked an item', args);
     const { pageNumber: nextPageNumber } = args;
     setPageNumber(nextPageNumber);
@@ -165,7 +185,7 @@ export default function Test() {
   }, [file, passMethod]);
 
   const changePage = useCallback(
-    (offset) => setPageNumber((prevPageNumber) => (prevPageNumber || 1) + offset),
+    (offset: number) => setPageNumber((prevPageNumber) => (prevPageNumber || 1) + offset),
     [],
   );
 
@@ -179,7 +199,8 @@ export default function Test() {
       className: 'custom-classname-page',
       devicePixelRatio,
       height: pageHeight,
-      onClick: (event, page) => console.log('Clicked a page', { event, page }),
+      onClick: (event: React.MouseEvent<HTMLDivElement>, page: PDFPageProxy | null) =>
+        console.log('Clicked a page', { event, page }),
       onRenderSuccess: onPageRenderSuccess,
       renderAnnotationLayer,
       renderForms,
@@ -188,8 +209,8 @@ export default function Test() {
       scale: pageScale,
       width: pageWidth,
       customTextRenderer: useCustomTextRenderer
-        ? ({ str }) => str.replace(/ipsum/g, (value) => `<mark>${value}</mark>`)
-        : null,
+        ? ({ str }: { str: string }) => str.replace(/ipsum/g, (value) => `<mark>${value}</mark>`)
+        : undefined,
     };
   }
 
@@ -248,7 +269,10 @@ export default function Test() {
           <Document
             {...documentProps}
             className="custom-classname-document"
-            onClick={(event, pdf) => console.log('Clicked a document', { event, pdf })}
+            onClick={(
+              event: React.MouseEvent<HTMLDivElement>,
+              pdf: PDFDocumentProxy | false | undefined,
+            ) => console.log('Clicked a document', { event, pdf })}
             onItemClick={onItemClick}
             onLoadError={onDocumentLoadError}
             onLoadProgress={onDocumentLoadProgress}
@@ -280,11 +304,15 @@ export default function Test() {
             </div>
             {displayAll || (
               <div className="Test__container__content__controls">
-                <button disabled={pageNumber <= 1} onClick={previousPage} type="button">
+                <button disabled={(pageNumber || 0) <= 1} onClick={previousPage} type="button">
                   Previous
                 </button>
                 <span>{`Page ${pageNumber || (numPages ? 1 : '--')} of ${numPages || '--'}`}</span>
-                <button disabled={pageNumber >= numPages} onClick={nextPage} type="button">
+                <button
+                  disabled={(pageNumber || 0) >= (numPages || 0)}
+                  onClick={nextPage}
+                  type="button"
+                >
                   Next
                 </button>
               </div>

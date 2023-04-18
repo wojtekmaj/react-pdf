@@ -1,6 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+type LayerOptionsProps = {
+  renderAnnotationLayer: boolean;
+  renderForms: boolean;
+  renderTextLayer: boolean;
+  useCustomTextRenderer: boolean;
+  setRenderAnnotationLayer: (value: boolean) => void;
+  setRenderForms: (value: boolean) => void;
+  setRenderTextLayer: (value: boolean) => void;
+  setUseCustomTextRenderer: (value: boolean) => void;
+};
+
 export default function LayerOptions({
   renderAnnotationLayer,
   renderForms,
@@ -10,20 +21,20 @@ export default function LayerOptions({
   setRenderForms,
   setRenderTextLayer,
   setUseCustomTextRenderer,
-}) {
-  function onRenderAnnotationLayerChange(event) {
+}: LayerOptionsProps) {
+  function onRenderAnnotationLayerChange(event: React.ChangeEvent<HTMLInputElement>) {
     setRenderAnnotationLayer(event.target.checked);
   }
 
-  function onRenderFormsChange(event) {
+  function onRenderFormsChange(event: React.ChangeEvent<HTMLInputElement>) {
     setRenderForms(event.target.checked);
   }
 
-  function onRenderTextLayersChange(event) {
+  function onRenderTextLayersChange(event: React.ChangeEvent<HTMLInputElement>) {
     setRenderTextLayer(event.target.checked);
   }
 
-  function onUseCustomTextRendererChange(event) {
+  function onUseCustomTextRendererChange(event: React.ChangeEvent<HTMLInputElement>) {
     setUseCustomTextRenderer(event.target.checked);
   }
 
@@ -64,7 +75,7 @@ export default function LayerOptions({
 
       <div>
         <input
-          checked={renderAnnotationLayer ? renderForms : null}
+          checked={renderAnnotationLayer ? renderForms : false}
           disabled={!renderAnnotationLayer}
           id="renderForms"
           onChange={onRenderFormsChange}

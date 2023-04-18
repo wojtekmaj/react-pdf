@@ -1,6 +1,6 @@
 import { dataURItoByteString } from 'react-pdf/src/shared/utils';
 
-function dataURItoUint8Array(dataURI) {
+function dataURItoUint8Array(dataURI: string): Uint8Array {
   const byteString = dataURItoByteString(dataURI);
 
   const ia = new Uint8Array(byteString.length);
@@ -16,9 +16,9 @@ function dataURItoUint8Array(dataURI) {
  *
  * @param {string} dataURI
  */
-export function dataURItoBlob(dataURI) {
+export function dataURItoBlob(dataURI: string): Blob {
   const ia = dataURItoUint8Array(dataURI);
-  const [header] = dataURI.split(';');
+  const [header = ''] = dataURI.split(';');
   const mimeString = header.split(':')[1];
   return new Blob([ia], { type: mimeString });
 }

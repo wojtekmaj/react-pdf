@@ -1,37 +1,48 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import PropTypes from 'prop-types';
 
 import samplePDF from './test.pdf';
 
 import { isFile } from './shared/propTypes';
 
-export default function LoadingOptions({ file, setFile, setRender }) {
-  function onFileChange(event) {
-    setFile(event.target.files[0]);
+import type { File } from './shared/types';
+
+type LoadingOptionsProps = {
+  file: File | null;
+  setFile: (value: File | null) => void;
+  setRender: (value: boolean) => void;
+};
+
+export default function LoadingOptions({ file, setFile, setRender }: LoadingOptionsProps) {
+  const url = useRef<HTMLInputElement>(null);
+  const fetchAndPass = useRef<HTMLInputElement>(null);
+
+  function onFileChange(event: React.ChangeEvent<HTMLInputElement>) {
+    const { files } = event.target;
+
+    if (files?.[0]) {
+      setFile(files[0]);
+    } else {
+      setFile(null);
+    }
   }
 
-  function onURLChange(event) {
+  function onURLChange(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
-    const url = event.target.querySelector('input').value;
+    const input = url.current;
+    const { value: nextUrl } = input as HTMLInputElement;
 
-    if (!url) {
-      return;
-    }
-
-    setFile(url);
+    setFile(nextUrl);
   }
 
-  function onRequestChange(event) {
+  function onRequestChange(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
-    const url = event.target.querySelector('input').value;
+    const input = fetchAndPass.current;
+    const { value: nextFetchAndPass } = input as HTMLInputElement;
 
-    if (!url) {
-      return;
-    }
-
-    fetch(url)
+    fetch(nextFetchAndPass)
       .then((response) => response.blob())
       .then(setFile);
   }

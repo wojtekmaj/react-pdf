@@ -1,5 +1,26 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import PropTypes from 'prop-types';
+
+import type { RenderMode } from './shared/types';
+
+type ViewOptionsProps = {
+  canvasBackground?: string;
+  devicePixelRatio?: number;
+  displayAll: boolean;
+  pageHeight?: number;
+  pageScale?: number;
+  pageWidth?: number;
+  renderMode?: RenderMode;
+  rotate?: number;
+  setCanvasBackground: (value: string | undefined) => void;
+  setDevicePixelRatio: (value: number | undefined) => void;
+  setDisplayAll: (value: boolean) => void;
+  setPageHeight: (value: number | undefined) => void;
+  setPageScale: (value: number | undefined) => void;
+  setPageWidth: (value: number | undefined) => void;
+  setRenderMode: (value: RenderMode | undefined) => void;
+  setRotate: React.Dispatch<React.SetStateAction<number | undefined>>;
+};
 
 export default function ViewOptions({
   canvasBackground,
@@ -18,73 +39,63 @@ export default function ViewOptions({
   setPageWidth,
   setRenderMode,
   setRotate,
-}) {
-  function onCanvasBackgroundChange(event) {
+}: ViewOptionsProps) {
+  const devicePixelRatioInput = useRef<HTMLInputElement>(null);
+  const pageHeightInput = useRef<HTMLInputElement>(null);
+  const pageWidthInput = useRef<HTMLInputElement>(null);
+
+  function onCanvasBackgroundChange(event: React.ChangeEvent<HTMLInputElement>) {
     setCanvasBackground(event.target.value);
   }
 
-  function onDevicePixelRatioChange(event) {
+  function onDevicePixelRatioChange(event: React.ChangeEvent<HTMLFormElement>) {
     event.preventDefault();
 
-    const form = event.target;
-    const { value: devicePixelRatio } = form.devicePixelRatio;
+    const input = devicePixelRatioInput.current;
+    const { valueAsNumber: devicePixelRatio } = input as HTMLInputElement;
 
-    if (!devicePixelRatio) {
-      return;
-    }
-
-    setDevicePixelRatio(parseInt(devicePixelRatio, 10));
+    setDevicePixelRatio(devicePixelRatio);
   }
 
-  function onDisplayAllChange(event) {
+  function onDisplayAllChange(event: React.ChangeEvent<HTMLInputElement>) {
     setDisplayAll(event.target.checked);
   }
 
-  function onPageHeightChange(event) {
+  function onPageHeightChange(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
-    const form = event.target;
-    const { value: height } = form.pageHeight;
+    const input = pageHeightInput.current;
+    const { valueAsNumber: nextHeight } = input as HTMLInputElement;
 
-    if (!height) {
-      return;
-    }
-
-    setPageHeight(parseInt(height, 10));
+    setPageHeight(nextHeight);
   }
 
-  function onPageScaleChange(event) {
+  function onPageScaleChange(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
-    const form = event.target;
-    const { value: scale } = form.pageScale;
+    const input = pageHeightInput.current;
+    const { valueAsNumber: nextScale } = input as HTMLInputElement;
 
-    if (!scale) {
-      return;
-    }
-
-    setPageScale(parseFloat(scale));
+    setPageScale(nextScale);
   }
 
-  function onPageWidthChange(event) {
+  function onPageWidthChange(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
-    const form = event.target;
-    const { value: width } = form.pageWidth;
+    const input = pageWidthInput.current;
+    const { valueAsNumber: nextWidth } = input as HTMLInputElement;
 
-    if (!width) {
-      return;
-    }
-
-    setPageWidth(parseInt(width, 10));
+    setPageWidth(nextWidth);
   }
 
-  function onRenderModeChange(event) {
-    setRenderMode(event.target.value);
+  function onRenderModeChange(event: React.ChangeEvent<HTMLInputElement>) {
+    const { value } = event.target;
+
+    setRenderMode(value as RenderMode);
   }
 
-  function changeRotation(by) {
-    setRotate((prevRotate) => (prevRotate + by + 360) % 360);
+  function changeRotation(by: number) {
+    setRotate((prevRotate) => ((prevRotate || 0) + by + 360) % 360);
   }
 
   function rotateLeft() {
@@ -95,29 +106,30 @@ export default function ViewOptions({
     changeRotation(90);
   }
 
-  function onChangeRotate(event) {
-    const nextRotate = Number(event.target.value);
-    changeRotation(nextRotate - rotate);
+  function onChangeRotate(event: React.ChangeEvent<HTMLInputElement>) {
+    const { valueAsNumber: nextRotate } = event.target;
+
+    changeRotation(nextRotate - (rotate || 0));
   }
 
   function resetRotation() {
-    setRotate(null);
+    setRotate(undefined);
   }
 
   function resetHeight() {
-    setPageHeight(null);
+    setPageHeight(undefined);
   }
 
   function resetScale() {
-    setPageScale(null);
+    setPageScale(undefined);
   }
 
   function resetWidth() {
-    setPageWidth(null);
+    setPageWidth(undefined);
   }
 
   function resetDevicePixelRatio() {
-    setDevicePixelRatio(null);
+    setDevicePixelRatio(undefined);
   }
 
   return (
@@ -135,7 +147,13 @@ export default function ViewOptions({
       <form onSubmit={onPageWidthChange}>
         <label htmlFor="pageWidth">Page width:</label>
         &nbsp;
-        <input defaultValue={pageWidth} id="pageWidth" min={0} name="pageWidth" type="number" />
+        <input
+          defaultValue={pageWidth ? `${pageWidth}` : ''}
+          id="pageWidth"
+          min={0}
+          name="pageWidth"
+          type="number"
+        />
         &nbsp;
         <button style={{ display: 'none' }} type="submit">
           Set width
@@ -148,7 +166,13 @@ export default function ViewOptions({
       <form onSubmit={onPageHeightChange}>
         <label htmlFor="pageHeight">Page height:</label>
         &nbsp;
-        <input defaultValue={pageHeight} id="pageHeight" min={0} name="pageHeight" type="number" />
+        <input
+          defaultValue={pageHeight ? `${pageHeight}` : ''}
+          id="pageHeight"
+          min={0}
+          name="pageHeight"
+          type="number"
+        />
         &nbsp;
         <button style={{ display: 'none' }} type="submit">
           Set height
@@ -162,7 +186,7 @@ export default function ViewOptions({
         <label htmlFor="pageScale">Page scale:</label>
         &nbsp;
         <input
-          defaultValue={pageScale}
+          defaultValue={pageScale ? `${pageScale}` : ''}
           id="pageScale"
           max={2}
           min={0}
@@ -183,7 +207,7 @@ export default function ViewOptions({
         <label htmlFor="devicePixelRatio">Device pixel ratio:</label>
         &nbsp;
         <input
-          defaultValue={devicePixelRatio}
+          defaultValue={devicePixelRatio ? `${devicePixelRatio}` : ''}
           id="devicePixelRatio"
           max={3}
           min={1}
@@ -268,7 +292,7 @@ export default function ViewOptions({
 ViewOptions.propTypes = {
   canvasBackground: PropTypes.string,
   devicePixelRatio: PropTypes.number,
-  displayAll: PropTypes.bool,
+  displayAll: PropTypes.bool.isRequired,
   pageHeight: PropTypes.number,
   pageScale: PropTypes.number,
   pageWidth: PropTypes.number,

@@ -21,7 +21,9 @@
     "react-pdf": "portal:../"
   },
   "devDependencies": {
+    "@types/babel__core": "^7.20.0",
     "@vitejs/plugin-react": "^3.0.0",
+    "typescript": "^5.0.4",
     "vite": "^4.0.0"
   }
 }
