@@ -24,7 +24,7 @@
     "babel-loader": "^9.0.1",
     "copy-webpack-plugin": "^11.0.0",
     "css-loader": "^6.0.0",
-    "html-webpack-plugin": "^5.1.0",
+    "html-webpack-plugin": "^5.5.1",
     "style-loader": "^3.0.0",
     "webpack": "^5.76.3",
     "webpack-cli": "^5.0.0",
