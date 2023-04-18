@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "declaration": true,
+    "esModuleInterop": true,
+    "isolatedModules": true,
+    "jsx": "react",
+    "module": "esnext",
+    "moduleResolution": "node",
+    "noUncheckedIndexedAccess": true,
+    "outDir": "dist",
+    "strict": true,
+    "strictNullChecks": true,
+    "target": "es2015"
+  }
+}
