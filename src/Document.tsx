@@ -42,14 +42,17 @@ import type { PDFDocumentProxy } from 'pdfjs-dist';
 import type { EventProps } from 'make-event-props';
 import type {
   ClassName,
+  DocumentCallback,
   ExternalLinkRel,
   ExternalLinkTarget,
   File,
   ImageResourcesPath,
   NodeOrRenderer,
+  OnDocumentLoadError,
+  OnDocumentLoadProgress,
+  OnDocumentLoadSuccess,
   OnError,
   OnItemClickArgs,
-  OnLoadProgressArgs,
   OnPasswordCallback,
   Options,
   PasswordResponse,
@@ -61,12 +64,6 @@ import type {
 const { PDFDataRangeTransport } = pdfjs;
 
 type OnItemClick = (args: OnItemClickArgs) => void;
-
-type OnLoadError = OnError;
-
-type OnLoadProgress = (args: OnLoadProgressArgs) => void;
-
-type OnLoadSuccess = (pdf: PDFDocumentProxy) => void;
 
 type OnPassword = (callback: OnPasswordCallback, reason: PasswordResponse) => void;
 
@@ -86,16 +83,16 @@ type DocumentProps = {
   loading?: NodeOrRenderer;
   noData?: NodeOrRenderer;
   onItemClick?: OnItemClick;
-  onLoadError?: OnLoadError;
-  onLoadProgress?: OnLoadProgress;
-  onLoadSuccess?: OnLoadSuccess;
+  onLoadError?: OnDocumentLoadError;
+  onLoadProgress?: OnDocumentLoadProgress;
+  onLoadSuccess?: OnDocumentLoadSuccess;
   onPassword?: OnPassword;
   onSourceError?: OnSourceError;
   onSourceSuccess?: OnSourceSuccess;
   options?: Options;
   renderMode?: RenderMode;
   rotate?: number | null;
-} & EventProps<PDFDocumentProxy | false | undefined>;
+} & EventProps<DocumentCallback | false | undefined>;
 
 const defaultOnPassword: OnPassword = (callback, reason) => {
   switch (reason) {

@@ -59,6 +59,8 @@ export type CustomTextRenderer = (
   props: { pageIndex: number; pageNumber: number; itemIndex: number } & TextItem,
 ) => string;
 
+export type DocumentCallback = PDFDocumentProxy;
+
 export type File = string | ArrayBuffer | Blob | Source | null;
 
 export type PageCallback = PDFPageProxy & {
@@ -69,6 +71,12 @@ export type PageCallback = PDFPageProxy & {
 };
 
 export type NodeOrRenderer = React.ReactNode | (() => React.ReactNode);
+
+export type OnDocumentLoadError = OnError;
+
+export type OnDocumentLoadProgress = (args: OnLoadProgressArgs) => void;
+
+export type OnDocumentLoadSuccess = (document: DocumentCallback) => void;
 
 export type OnGetAnnotationsError = OnError;
 
