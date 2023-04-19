@@ -21,7 +21,6 @@ import type { ExternalLinkTarget, File, PassMethod, RenderMode } from './shared/
 
 const options = {
   cMapUrl: 'cmaps/',
-  cMapPacked: true,
   standardFontDataUrl: 'standard_fonts/',
 };
 

@@ -11,7 +11,6 @@ const pdfFile = new URL('./sample.pdf', import.meta.url).toString();
 
 const options = {
   cMapUrl: 'cmaps/',
-  cMapPacked: true,
   standardFontDataUrl: 'standard_fonts/',
 };
 

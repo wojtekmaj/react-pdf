@@ -11,7 +11,6 @@ import type { PDFDocumentProxy } from 'pdfjs-dist';
 
 const options = {
   cMapUrl: 'cmaps/',
-  cMapPacked: true,
   standardFontDataUrl: 'standard_fonts/',
 };
 
