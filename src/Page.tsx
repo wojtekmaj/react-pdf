@@ -89,7 +89,7 @@ type PageProps = {
   rotate?: number | null;
   scale?: number;
   width?: number;
-} & EventProps<PageCallback | null>;
+} & EventProps<PageCallback | false | undefined>;
 
 export default function Page(props: PageProps) {
   const context = useContext(DocumentContext);
@@ -302,7 +302,10 @@ export default function Page(props: PageProps) {
       : null;
 
   const eventProps = useMemo(
-    () => makeEventProps(otherProps, () => (page && scale ? makePageCallback(page, scale) : null)),
+    () =>
+      makeEventProps(otherProps, () =>
+        page ? (scale ? makePageCallback(page, scale) : undefined) : page,
+      ),
     [otherProps, page, scale],
   );
 

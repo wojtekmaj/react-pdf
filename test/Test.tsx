@@ -198,7 +198,7 @@ export default function Test() {
       className: 'custom-classname-page',
       devicePixelRatio,
       height: pageHeight,
-      onClick: (event: React.MouseEvent<HTMLDivElement>, page: PDFPageProxy | null) =>
+      onClick: (event: React.MouseEvent<HTMLDivElement>, page: PDFPageProxy | false | undefined) =>
         console.log('Clicked a page', { event, page }),
       onRenderSuccess: onPageRenderSuccess,
       renderAnnotationLayer,
