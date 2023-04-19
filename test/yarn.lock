@@ -1727,9 +1727,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"pdfjs-dist@npm:3.3.122":
-  version: 3.3.122
-  resolution: "pdfjs-dist@npm:3.3.122"
+"pdfjs-dist@npm:3.5.141":
+  version: 3.5.141
+  resolution: "pdfjs-dist@npm:3.5.141"
   dependencies:
     canvas: ^2.11.0
     path2d-polyfill: ^2.0.1
@@ -1737,7 +1737,7 @@ __metadata:
   dependenciesMeta:
     canvas:
       optional: true
-  checksum: 9df747b17a6fbf6ce757568825431c28a292bb37031db3dcb4683bcf1991524eadedbf5a4496561080b6edad4511af28c294ceb4c42fc6c05cdaaf2203766635
+  checksum: b58e801b92a0d7b58b3799c0cf48f35deb45e140ef488744251a3e3dd148acef7aef4edfb8c7622b342c7068e8b7c01b754546ed0e60897e48665fa45af9d845
   languageName: node
   linkType: hard
 
@@ -1829,7 +1829,7 @@ __metadata:
     make-cancellable-promise: ^1.0.0
     make-event-props: ^1.5.0
     merge-refs: ^1.1.3
-    pdfjs-dist: 3.3.122
+    pdfjs-dist: 3.5.141
     prop-types: ^15.6.2
     tiny-invariant: ^1.0.0
     tiny-warning: ^1.0.0
