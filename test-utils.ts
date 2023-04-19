@@ -39,7 +39,9 @@ export function loadPDF(path: string) {
 
   return {
     raw,
-    arrayBuffer,
+    get arrayBuffer() {
+      return new Uint8Array(raw).buffer;
+    },
     get blob() {
       return new Blob([arrayBuffer], { type: 'application/pdf' });
     },
