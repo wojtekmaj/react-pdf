@@ -124,11 +124,11 @@ import { Document, Page } from 'react-pdf/dist/esm/index.webpack5';
 
 | Bundler   | Entry file                          |
 | --------- | ----------------------------------- |
-| Parcel 1  | `react-pdf/dist/esm/index.parcel`   |
-| Parcel 2  | `react-pdf/dist/esm/index.parcel2`  |
-| Vite      | `react-pdf/dist/esm/index.vite`     |
-| Webpack 4 | `react-pdf/dist/esm/index.webpack`  |
-| Webpack 5 | `react-pdf/dist/esm/index.webpack5` |
+| Parcel 1  | `react-pdf/dist/esm/entry.parcel`   |
+| Parcel 2  | `react-pdf/dist/esm/entry.parcel2`  |
+| Vite      | `react-pdf/dist/esm/entry.vite`     |
+| Webpack 4 | `react-pdf/dist/esm/entry.webpack`  |
+| Webpack 5 | `react-pdf/dist/esm/entry.webpack5` |
 
 #### Webpack 4
 
