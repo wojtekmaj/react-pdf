@@ -20,7 +20,7 @@
     "react-pdf": "latest"
   },
   "devDependencies": {
-    "buffer": "^5.5.0",
+    "buffer": "^6.0.3",
     "parcel": "^2.0.0",
     "process": "^0.11.10",
     "typescript": "^5.0.4"
