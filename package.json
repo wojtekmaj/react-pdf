@@ -16,7 +16,6 @@
     "clean": "rimraf dist",
     "copy-styles": "node ./copy-styles.mjs",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
-    "postinstall": "husky install",
     "prepack": "yarn clean && yarn build",
     "prettier": "prettier --check . --cache",
     "test": "yarn lint && yarn tsc && yarn prettier && yarn unit",
