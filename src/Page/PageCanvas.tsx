@@ -109,9 +109,7 @@ export default function PageCanvas(props: PageCanvasProps) {
 
     const renderContext: RenderParameters = {
       annotationMode: renderForms ? ANNOTATION_MODE.ENABLE_FORMS : ANNOTATION_MODE.ENABLE,
-      get canvasContext() {
-        return canvas.getContext('2d', { alpha: false }) as CanvasRenderingContext2D;
-      },
+      canvasContext: canvas.getContext('2d', { alpha: false }) as CanvasRenderingContext2D,
       viewport: renderViewport,
     };
     if (canvasBackground) {
