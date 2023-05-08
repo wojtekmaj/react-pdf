@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { PDFDataRangeTransport } from 'pdfjs-dist';
-import { pdfjs, Document, Outline, Page } from 'react-pdf';
+import { pdfjs, Document, Outline, Page } from 'react-pdf/src';
 import 'react-pdf/src/Page/AnnotationLayer.css';
 import 'react-pdf/src/Page/TextLayer.css';
 
