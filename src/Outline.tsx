@@ -24,7 +24,7 @@ type PDFOutline = Awaited<ReturnType<PDFDocumentProxy['getOutline']>>;
 
 type OutlineProps = {
   className?: string;
-  inputRef?: React.RefObject<HTMLDivElement>;
+  inputRef?: React.Ref<HTMLDivElement>;
   onItemClick?: (props: OnItemClickArgs) => void;
   onLoadError?: (error: Error) => void;
   onLoadSuccess?: (outline: PDFOutline | null) => void;

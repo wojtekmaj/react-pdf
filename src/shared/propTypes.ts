@@ -163,9 +163,8 @@ export const isPdf = PropTypes.oneOfType([
 
 export const isRef = PropTypes.oneOfType([
   PropTypes.func,
-  PropTypes.shape({
-    current: PropTypes.oneOfType([PropTypes.instanceOf(HTMLDivElement), PropTypes.oneOf([null])])
-      .isRequired,
+  PropTypes.exact({
+    current: PropTypes.any,
   }),
 ]);
 
