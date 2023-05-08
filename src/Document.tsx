@@ -462,7 +462,14 @@ const Document = forwardRef(function Document(
   }
 
   return (
-    <div className={clsx('react-pdf__Document', className)} ref={inputRef} {...eventProps}>
+    <div
+      className={clsx('react-pdf__Document', className)}
+      ref={inputRef}
+      style={{
+        ['--scale-factor' as string]: '1',
+      }}
+      {...eventProps}
+    >
       {renderContent()}
     </div>
   );

@@ -55,7 +55,6 @@
   left: 0;
   pointer-events: none;
   transform-origin: 0 0;
-  --scale-factor: 1;
 }
 
 .annotationLayer section {

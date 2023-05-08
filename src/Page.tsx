@@ -380,6 +380,7 @@ export default function Page(props: PageProps) {
       data-page-number={pageNumber}
       ref={mergeRefs(inputRef, pageElement)}
       style={{
+        ['--scale-factor' as string]: `${scale}`,
         position: 'relative',
         minWidth: 'min-content',
         minHeight: 'min-content',
