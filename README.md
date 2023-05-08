@@ -106,45 +106,55 @@ Check the [sample directory](https://github.com/wojtekmaj/react-pdf/tree/main/sa
 
 ### Configure PDF.js worker
 
-For React-PDF to work, PDF.js worker needs to be provided.
+For React-PDF to work, PDF.js worker needs to be provided. You have several options.
 
-To make it easier, special entry files were prepared for most popular bundlers. You can find them in the table below.
+#### Import worker (recommended)
 
-For example, if you want to use React-PDF with Webpack 5, instead of writing:
-
-```js
-import { Document, Page } from 'react-pdf';
-```
-
-write:
+For most cases, the following example will work:
 
 ```js
-import { Document, Page } from 'react-pdf/dist/esm/index.webpack5';
+import { pdfjs } from 'react-pdf';
+
+pdfjs.GlobalWorkerOptions.workerSrc = new URL(
+  'pdfjs-dist/build/pdf.worker.min.js',
+  import.meta.url,
+).toString();
 ```
 
-| Bundler   | Entry file                          |
-| --------- | ----------------------------------- |
-| Parcel 1  | `react-pdf/dist/esm/index.parcel`   |
-| Parcel 2  | `react-pdf/dist/esm/index.parcel2`  |
-| Vite      | `react-pdf/dist/esm/index.vite`     |
-| Webpack 4 | `react-pdf/dist/esm/index.webpack`  |
-| Webpack 5 | `react-pdf/dist/esm/index.webpack5` |
+<details>
+<summary>See more examples</summary>
 
-#### Webpack 4
+##### Parcel 1
 
-If you want to use React-PDF with Webpack 4, you'll need to manually install `file-loader` package.
+For Parcel 1, you will have use the following code:
 
-#### Create React App
+```js
+import { pdfjs } from 'react-pdf';
 
-Create React App 4 (`react-scripts@4.0.0`) uses Webpack 4 under the hood, so you can use the entry file built for Webpack 4.
+pdfjs.GlobalWorkerOptions.workerPort = new Worker(
+  'node_modules/pdfjs-dist/build/pdf.worker.entry.js',
+);
+```
 
-Create React App 5 (`react-scripts@5.0.0`) uses Webpack 5 under the hood, so the aim is to use the entry file built for Webpack 5. However, the way Webpack is configured in CRA 5 causes it to crash at build time on most machines with _JavaScript heap out of memory_ error.
+##### Parcel 2
 
-[Standard instructions](#standard-browserify-esbuild-and-others) will also work with Create React App. Please note that in CRA, you can copy `pdf.worker.js` file from `pdfjs-dist/build` to `public` directory in order for it to be copied to your project's output folder at build time.
+For Parcel 2, you need to use a slightly different code:
 
-#### Standard (Browserify, esbuild and others)
+````js
 
-If you use Browserify, esbuild, or other bundlers, you will have to make sure on your own that `pdf.worker.js` file from `pdfjs-dist/build` is copied to your project's output folder.
+```diff
+pdfjs.GlobalWorkerOptions.workerSrc = new URL(
+-  'pdfjs-dist/build/pdf.worker.min.js',
++  'npm:pdfjs-dist/build/pdf.worker.min.js',
+  import.meta.url,
+).toString();
+````
+
+</details>
+
+#### Copy worker to public directory
+
+You will have to make sure on your own that `pdf.worker.js` file from `pdfjs-dist/build` is copied to your project's output folder.
 
 For example, you could use a custom script like:
 
@@ -158,17 +168,11 @@ const pdfWorkerPath = path.join(pdfjsDistPath, 'build', 'pdf.worker.js');
 fs.copyFileSync(pdfWorkerPath, './dist/pdf.worker.js');
 ```
 
-If you don't need to debug `pdf.worker.js`, you can use `pdf.worker.min.js` file instead, which is roughly half the size. For this to work, however, you will need to specify `workerSrc` manually like so:
+#### Use external CDN
 
 ```js
 import { pdfjs } from 'react-pdf';
-pdfjs.GlobalWorkerOptions.workerSrc = 'pdf.worker.min.js';
-```
 
-Alternatively, you could use the minified `pdf.worker.min.js` from an external CDN:
-
-```js
-import { pdfjs } from 'react-pdf';
 pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.js`;
 ```
 

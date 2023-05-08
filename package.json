@@ -62,14 +62,8 @@
     "vitest-canvas-mock": "^0.2.2"
   },
   "peerDependencies": {
-    "file-loader": "^6.0.0",
     "react": "^16.8.0 || ^17.0.0 || ^18.0.0",
     "react-dom": "^16.8.0 || ^17.0.0 || ^18.0.0"
-  },
-  "peerDependenciesMeta": {
-    "file-loader": {
-      "optional": true
-    }
   },
   "files": [
     "dist",

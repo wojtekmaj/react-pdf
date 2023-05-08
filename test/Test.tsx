@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { PDFDataRangeTransport } from 'pdfjs-dist';
-import { Document, Outline, Page } from 'react-pdf/src/index.vite';
+import { pdfjs, Document, Outline, Page } from 'react-pdf';
 import 'react-pdf/src/Page/AnnotationLayer.css';
 import 'react-pdf/src/Page/TextLayer.css';
 
@@ -18,6 +18,11 @@ import { dataURItoBlob } from './shared/utils';
 
 import type { PDFDocumentProxy, PDFPageProxy } from 'pdfjs-dist';
 import type { ExternalLinkTarget, File, PassMethod, RenderMode } from './shared/types';
+
+pdfjs.GlobalWorkerOptions.workerSrc = new URL(
+  'pdfjs-dist/build/pdf.worker.min.js',
+  import.meta.url,
+).toString();
 
 const options = {
   cMapUrl: 'cmaps/',
