@@ -43,6 +43,7 @@ export default function ViewOptions({
   const devicePixelRatioInput = useRef<HTMLInputElement>(null);
   const pageHeightInput = useRef<HTMLInputElement>(null);
   const pageWidthInput = useRef<HTMLInputElement>(null);
+  const pageScaleInput = useRef<HTMLInputElement>(null);
 
   function onCanvasBackgroundChange(event: React.ChangeEvent<HTMLInputElement>) {
     setCanvasBackground(event.target.value);
@@ -73,7 +74,7 @@ export default function ViewOptions({
   function onPageScaleChange(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
-    const input = pageHeightInput.current;
+    const input = pageScaleInput.current;
     const { valueAsNumber: nextScale } = input as HTMLInputElement;
 
     setPageScale(nextScale);
@@ -152,6 +153,7 @@ export default function ViewOptions({
           id="pageWidth"
           min={0}
           name="pageWidth"
+          ref={pageWidthInput}
           type="number"
         />
         &nbsp;
@@ -171,6 +173,7 @@ export default function ViewOptions({
           id="pageHeight"
           min={0}
           name="pageHeight"
+          ref={pageHeightInput}
           type="number"
         />
         &nbsp;
@@ -191,6 +194,7 @@ export default function ViewOptions({
           max={2}
           min={0}
           name="pageScale"
+          ref={pageScaleInput}
           step="0.01"
           type="range"
         />
@@ -212,6 +216,7 @@ export default function ViewOptions({
           max={3}
           min={1}
           name="devicePixelRatio"
+          ref={devicePixelRatioInput}
           step={1}
           type="number"
         />
