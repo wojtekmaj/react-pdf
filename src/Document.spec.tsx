@@ -472,6 +472,7 @@ describe('Document', () => {
 
     it('attempts to find a page and scroll it into view if onItemClick is not given', async () => {
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
+
       const instance = createRef<{
         pages: React.RefObject<Record<string, unknown>[]>;
         viewer: React.RefObject<{ scrollPageIntoView: (args: ScrollPageIntoViewArgs) => void }>;

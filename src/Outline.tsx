@@ -172,11 +172,11 @@ export default function Outline(props: OutlineProps) {
 }
 
 Outline.propTypes = {
+  ...eventProps,
   className: isClassName,
   inputRef: isRef,
   onItemClick: PropTypes.func,
   onLoadError: PropTypes.func,
   onLoadSuccess: PropTypes.func,
   pdf: isPdf,
-  ...eventProps,
 };
