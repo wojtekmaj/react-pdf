@@ -25,7 +25,7 @@
     "react-scripts": "^5.0.0"
   },
   "devDependencies": {
-    "typescript": "^5.0.4"
+    "typescript": "^5.0.0"
   },
   "resolutions": {
     "mini-css-extract-plugin": "~2.4.0"
