@@ -105,6 +105,7 @@ export default function PageCanvas(props: PageCanvasProps) {
 
     canvas.style.width = `${Math.floor(viewport.width)}px`;
     canvas.style.height = `${Math.floor(viewport.height)}px`;
+    canvas.style.visibility = 'hidden';
 
     const renderContext: RenderParameters = {
       annotationMode: renderForms ? ANNOTATION_MODE.ENABLE_FORMS : ANNOTATION_MODE.ENABLE,
@@ -120,7 +121,13 @@ export default function PageCanvas(props: PageCanvasProps) {
     const cancellable = page.render(renderContext);
     const runningTask = cancellable;
 
-    cancellable.promise.then(onRenderSuccess).catch(onRenderError);
+    cancellable.promise
+      .then(() => {
+        canvas.style.visibility = '';
+
+        onRenderSuccess();
+      })
+      .catch(onRenderError);
 
     return () => cancelRunningTask(runningTask);
   }
