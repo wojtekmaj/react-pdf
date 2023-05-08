@@ -140,15 +140,13 @@ pdfjs.GlobalWorkerOptions.workerPort = new Worker(
 
 For Parcel 2, you need to use a slightly different code:
 
-````js
-
 ```diff
-pdfjs.GlobalWorkerOptions.workerSrc = new URL(
+ pdfjs.GlobalWorkerOptions.workerSrc = new URL(
 -  'pdfjs-dist/build/pdf.worker.min.js',
 +  'npm:pdfjs-dist/build/pdf.worker.min.js',
-  import.meta.url,
-).toString();
-````
+   import.meta.url,
+ ).toString();
+```
 
 </details>
 
