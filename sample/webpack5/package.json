@@ -18,9 +18,10 @@
     "react-pdf": "latest"
   },
   "devDependencies": {
-    "@babel/core": "^7.20.2",
-    "@babel/preset-env": "^7.20.2",
-    "@babel/preset-react": "^7.14.0",
+    "@babel/core": "^7.21.0",
+    "@babel/preset-env": "^7.21.0",
+    "@babel/preset-react": "^7.18.0",
+    "@babel/preset-typescript": "^7.21.0",
     "babel-loader": "^9.0.1",
     "copy-webpack-plugin": "^11.0.0",
     "css-loader": "^6.0.0",

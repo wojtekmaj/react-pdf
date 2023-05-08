@@ -20,9 +20,10 @@
     "react-pdf": "latest"
   },
   "devDependencies": {
-    "@babel/core": "^7.20.2",
-    "@babel/preset-env": "^7.20.2",
-    "@babel/preset-react": "^7.14.0",
+    "@babel/core": "^7.21.0",
+    "@babel/preset-env": "^7.21.0",
+    "@babel/preset-react": "^7.18.0",
+    "@babel/preset-typescript": "^7.21.0",
     "parcel-bundler": "^1.12.4",
     "typescript": "^5.0.0"
   },
