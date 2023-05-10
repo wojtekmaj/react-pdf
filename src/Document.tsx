@@ -16,6 +16,7 @@ import clsx from 'clsx';
 import invariant from 'tiny-invariant';
 import warning from 'tiny-warning';
 import * as pdfjs from 'pdfjs-dist';
+import { GlobalStyle } from './globalStyles/GlobalStyle';
 
 import DocumentContext from './DocumentContext';
 
@@ -470,6 +471,7 @@ const Document = forwardRef(function Document(
       }}
       {...eventProps}
     >
+      <GlobalStyle />
       {renderContent()}
     </div>
   );
