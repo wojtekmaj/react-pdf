@@ -121,6 +121,8 @@ pdfjs.GlobalWorkerOptions.workerSrc = new URL(
 ).toString();
 ```
 
+Note: pnpm requires .npmrc with `public-hoist-pattern[]=pdfjs-dist`
+
 <details>
 <summary>See more examples</summary>
 
