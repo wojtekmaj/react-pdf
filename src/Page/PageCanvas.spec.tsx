@@ -1,6 +1,6 @@
 import { beforeAll, describe, expect, it, vi } from 'vitest';
 import React from 'react';
-import { render } from '@testing-library/react';
+import { render, waitFor } from '@testing-library/react';
 
 import { pdfjs } from '../index.test';
 
@@ -102,6 +102,16 @@ describe('PageCanvas', () => {
 
       expect(canvasRef).toHaveBeenCalled();
       expect(canvasRef).toHaveBeenCalledWith(expect.any(HTMLElement));
+    });
+
+    it('generates a struct tree inside the canvas', async () => {
+      renderWithContext(<PageCanvas />, {
+        page,
+        scale: 1,
+      });
+
+      const canvas = document.querySelector('canvas');
+      await waitFor(() => expect(canvas?.children.length).not.toBe(0));
     });
   });
 });

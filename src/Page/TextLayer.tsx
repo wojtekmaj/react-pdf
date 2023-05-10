@@ -183,7 +183,7 @@ export default function TextLayer() {
 
     layer.innerHTML = '';
 
-    const textContentSource = page.streamTextContent();
+    const textContentSource = page.streamTextContent({ includeMarkedContent: !customTextRenderer });
 
     const parameters = {
       container: layer,

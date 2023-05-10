@@ -34,6 +34,18 @@ function renderWithContext(children: React.ReactNode, context: Partial<PageConte
   };
 }
 
+async function getRenderedTextLayer(page: PDFPageProxy, includeMarkedContent = true) {
+  const renderedTextLayer = document.createElement('div');
+
+  await pdfjs.renderTextLayer({
+    container: renderedTextLayer,
+    textContentSource: page.streamTextContent({ includeMarkedContent }),
+    viewport: page.getViewport({ scale: 1 }),
+  }).promise;
+
+  return renderedTextLayer;
+}
+
 describe('TextLayer', () => {
   // Loaded page
   let page: PDFPageProxy;
@@ -42,6 +54,9 @@ describe('TextLayer', () => {
   // Loaded page text items
   let desiredTextItems: TextContent['items'];
   let desiredTextItems2: TextContent['items'];
+
+  let markedRenderedTextLayer: HTMLDivElement;
+  let unmarkedRenderedTextLayer: HTMLDivElement;
 
   beforeAll(async () => {
     const pdf = await pdfjs.getDocument({ data: pdfFile.arrayBuffer }).promise;
@@ -53,6 +68,9 @@ describe('TextLayer', () => {
     page2 = await pdf.getPage(2);
     const textContent2 = await page2.getTextContent();
     desiredTextItems2 = textContent2.items;
+
+    markedRenderedTextLayer = await getRenderedTextLayer(page, true);
+    unmarkedRenderedTextLayer = await getRenderedTextLayer(page, false);
   });
 
   describe('loading', () => {
@@ -139,7 +157,7 @@ describe('TextLayer', () => {
       const wrapper = container.firstElementChild as HTMLDivElement;
       const textItems = wrapper.children;
 
-      expect(textItems).toHaveLength(desiredTextItems.length + 1);
+      expect(textItems).toHaveLength(markedRenderedTextLayer.children.length + 1);
     });
 
     it('renders text content properly given customTextRenderer', async () => {
@@ -161,42 +179,7 @@ describe('TextLayer', () => {
       const wrapper = container.firstElementChild as HTMLDivElement;
       const textItems = wrapper.children;
 
-      expect(textItems).toHaveLength(desiredTextItems.length + 1);
-    });
-
-    it('maps textContent items to actual TextLayer children properly', async () => {
-      const { func: onRenderTextLayerSuccess, promise: onRenderTextLayerSuccessPromise } =
-        makeAsyncCallback();
-
-      const { container, rerender } = renderWithContext(<TextLayer />, {
-        onRenderTextLayerSuccess,
-        page,
-      });
-
-      expect.assertions(1);
-
-      await onRenderTextLayerSuccessPromise;
-
-      const wrapper = container.firstElementChild as HTMLDivElement;
-      const innerHTML = wrapper.innerHTML;
-
-      const { func: onRenderTextLayerSuccess2, promise: onRenderTextLayerSuccessPromise2 } =
-        makeAsyncCallback();
-
-      const customTextRenderer = (item: { str: string }) => item.str;
-
-      rerender(<TextLayer />, {
-        customTextRenderer,
-        onRenderTextLayerSuccess: onRenderTextLayerSuccess2,
-        page,
-      });
-
-      await onRenderTextLayerSuccessPromise2;
-
-      const wrapper2 = container.firstElementChild as HTMLDivElement;
-      const innerHTML2 = wrapper2.innerHTML;
-
-      expect(innerHTML).toEqual(innerHTML2);
+      expect(textItems).toHaveLength(unmarkedRenderedTextLayer.children.length + 1);
     });
 
     it('calls customTextRenderer with necessary arguments', async () => {
