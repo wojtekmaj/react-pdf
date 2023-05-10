@@ -9,14 +9,13 @@
     "*.css"
   ],
   "scripts": {
-    "build": "yarn build-js && yarn copy-styles",
+    "build": "yarn build-js",
     "build-js": "yarn build-js-esm && yarn build-js-cjs",
     "build-js-esm": "tsc --project tsconfig.build.json --outDir dist/esm --module esnext",
     "build-js-cjs": "tsc --project tsconfig.build.json --outDir dist/cjs --module commonjs",
     "clean": "rimraf dist",
     "copy-styles": "node ./copy-styles.mjs",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
-    "postinstall": "husky install",
     "prepack": "yarn clean && yarn build",
     "prettier": "prettier --check . --cache",
     "test": "yarn lint && yarn tsc && yarn prettier && yarn unit",
@@ -48,6 +47,7 @@
     "@testing-library/jest-dom": "^5.15.0",
     "@testing-library/react": "^14.0.0",
     "@testing-library/user-event": "^14.4.0",
+    "@types/styled-components": "^5.1.26",
     "eslint": "^8.26.0",
     "eslint-config-wojtekmaj": "^0.8.3",
     "husky": "^8.0.0",
@@ -57,6 +57,7 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "rimraf": "^3.0.0",
+    "styled-components": "^5.3.10",
     "typescript": "^5.0.0",
     "vitest": "^0.30.1",
     "vitest-canvas-mock": "^0.2.2"
