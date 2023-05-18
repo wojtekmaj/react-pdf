@@ -22,7 +22,7 @@ import type { OnItemClickArgs } from './shared/types';
 
 type PDFOutline = Awaited<ReturnType<PDFDocumentProxy['getOutline']>>;
 
-type OutlineProps = {
+export type OutlineProps = {
   className?: string;
   inputRef?: React.Ref<HTMLDivElement>;
   onItemClick?: (props: OnItemClickArgs) => void;

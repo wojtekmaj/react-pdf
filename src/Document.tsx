@@ -71,7 +71,7 @@ type OnSourceError = OnError;
 
 type OnSourceSuccess = () => void;
 
-type DocumentProps = {
+export type DocumentProps = {
   children?: React.ReactNode;
   className?: ClassName;
   error?: NodeOrRenderer;

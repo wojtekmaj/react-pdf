@@ -53,7 +53,7 @@ import type {
 
 const defaultScale = 1;
 
-type PageProps = {
+export type PageProps = {
   canvasBackground?: string;
   canvasRef?: React.Ref<HTMLCanvasElement>;
   children?: React.ReactNode;
