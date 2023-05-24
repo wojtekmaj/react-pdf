@@ -91,11 +91,6 @@
   background-color: var(--highlight-selected-bg-color);
 }
 
-.textLayer ::selection {
-  background: blue;
-  background: AccentColor;
-}
-
 /* Avoids https://github.com/mozilla/pdf.js/issues/13840 in Chrome */
 .textLayer br::selection {
   background: transparent;
