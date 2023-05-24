@@ -83,7 +83,6 @@ export type PageProps = {
   pdf?: PDFDocumentProxy | false;
   renderAnnotationLayer?: boolean;
   renderForms?: boolean;
-  renderInteractiveForms?: boolean;
   renderMode?: RenderMode;
   renderTextLayer?: boolean;
   rotate?: number | null;
