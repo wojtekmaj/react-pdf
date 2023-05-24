@@ -39,10 +39,7 @@
 .textLayer {
   position: absolute;
   text-align: initial;
-  left: 0;
-  top: 0;
-  right: 0;
-  bottom: 0;
+  inset: 0;
   overflow: hidden;
   line-height: 1;
   text-size-adjust: none;
@@ -51,8 +48,7 @@
   z-index: 2;
 }
 
-.textLayer span,
-.textLayer br {
+.textLayer :is(span, br) {
   color: transparent;
   position: absolute;
   white-space: pre;
@@ -102,10 +98,7 @@
 .textLayer .endOfContent {
   display: block;
   position: absolute;
-  left: 0;
-  top: 100%;
-  right: 0;
-  bottom: 0;
+  inset: 100% 0 0;
   z-index: -1;
   cursor: default;
   user-select: none;
