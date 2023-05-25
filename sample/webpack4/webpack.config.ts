@@ -1,8 +1,11 @@
-const webpack = require('webpack');
-const path = require('node:path');
+import webpack from 'webpack';
+import path from 'node:path';
 
-const CopyWebpackPlugin = require('copy-webpack-plugin');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
+import CopyWebpackPlugin from 'copy-webpack-plugin';
+import HtmlWebpackPlugin from 'html-webpack-plugin';
+
+import type { Configuration } from 'webpack';
+import 'webpack-dev-server';
 
 const isProduction = process.env.NODE_ENV === 'production';
 
@@ -12,7 +15,7 @@ const standardFontsDir = path.join(
   'standard_fonts',
 );
 
-module.exports = {
+const config = {
   mode: isProduction ? 'production' : 'development',
   bail: isProduction,
   context: path.join(__dirname),
@@ -61,4 +64,6 @@ module.exports = {
     hot: true, // enable HMR on the server
     port: 3000,
   },
-};
+} satisfies Configuration;
+
+export default config;
