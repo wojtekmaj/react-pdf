@@ -6,7 +6,7 @@ import { isDefined } from './utils';
 
 import LinkService from '../LinkService';
 
-import type { PDFDocumentProxy } from 'pdfjs-dist';
+import type { Validator } from 'prop-types';
 
 type AllEvents = (typeof allEvents)[number];
 
@@ -77,11 +77,7 @@ export const isPage = PropTypes.shape({
   render: PropTypes.func.isRequired,
 });
 
-export function isPageIndex(
-  props: Record<string, unknown> & { pdf?: PDFDocumentProxy },
-  propName: string,
-  componentName: string,
-) {
+export const isPageIndex: Validator<number> = function isPageIndex(props, propName, componentName) {
   const { [propName]: pageIndex, pageNumber, pdf } = props;
 
   if (!isDefined(pdf)) {
@@ -112,12 +108,12 @@ export function isPageIndex(
 
   // Everything is fine
   return null;
-}
+};
 
-export function isPageNumber(
-  props: Record<string, unknown> & { pdf?: PDFDocumentProxy },
-  propName: string,
-  componentName: string,
+export const isPageNumber: Validator<number> = function isPageNumber(
+  props,
+  propName,
+  componentName,
 ) {
   const { [propName]: pageNumber, pageIndex, pdf } = props;
 
@@ -149,7 +145,7 @@ export function isPageNumber(
 
   // Everything is fine
   return null;
-}
+};
 
 export const isPdf = PropTypes.oneOfType([
   PropTypes.shape({
