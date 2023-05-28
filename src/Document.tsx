@@ -174,13 +174,11 @@ const Document = forwardRef(function Document(
 
   useImperativeHandle(
     ref,
-    () => {
-      return {
-        linkService,
-        pages,
-        viewer,
-      };
-    },
+    () => ({
+      linkService,
+      pages,
+      viewer,
+    }),
     [],
   );
 
