@@ -1,19 +1,20 @@
 import * as pdfjs from 'pdfjs-dist';
+import { displayWorkerWarning } from './shared/utils';
 
 import Document from './Document';
 import Outline from './Outline';
 import Page from './Page';
 
-import type { DocumentProps } from './Document';
-import type { OutlineProps } from './Outline';
-import type { PageProps } from './Page';
+export type { DocumentProps } from './Document';
+export type { OutlineProps } from './Outline';
+export type { PageProps } from './Page';
 
-import { displayWorkerWarning } from './shared/utils';
+export { useDocument } from './DocumentContext';
+export { useOutline } from './OutlineContext';
+export { usePage } from './PageContext';
+
+export { pdfjs, Document, Outline, Page };
 
 displayWorkerWarning();
 
 pdfjs.GlobalWorkerOptions.workerSrc = 'pdf.worker.js';
-
-export { pdfjs, Document, Outline, Page };
-
-export type { DocumentProps, OutlineProps, PageProps };

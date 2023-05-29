@@ -1,10 +1,10 @@
-import React, { useContext, useEffect, useMemo } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import makeCancellable from 'make-cancellable-promise';
 import invariant from 'tiny-invariant';
 import warning from 'tiny-warning';
 import * as pdfjs from 'pdfjs-dist';
 
-import PageContext from '../PageContext';
+import { usePage } from '../PageContext';
 
 import { useResolver } from '../shared/hooks';
 import { cancelRunningTask, isCancelException, makePageCallback } from '../shared/utils';
@@ -17,9 +17,7 @@ type SVGGraphics = {
 };
 
 export default function PageSVG() {
-  const context = useContext(PageContext);
-
-  invariant(context, 'Unable to find Page context.');
+  const context = usePage();
 
   const {
     onRenderSuccess: onRenderSuccessProps,

@@ -1,5 +1,14 @@
-import { createContext } from 'react';
+import { createContext, useContext } from 'react';
 
 import type { PageContextType } from './shared/types';
+import invariant from 'tiny-invariant';
 
-export default createContext<PageContextType>(null);
+const PageContext = createContext<PageContextType>(null);
+
+export default PageContext;
+
+export function usePage() {
+  const context = useContext(PageContext);
+  invariant(context, 'Unable to find Page context.');
+  return context;
+}

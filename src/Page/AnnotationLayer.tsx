@@ -1,11 +1,11 @@
-import React, { useContext, useEffect, useMemo, useRef } from 'react';
+import React, { useEffect, useMemo, useRef } from 'react';
 import makeCancellable from 'make-cancellable-promise';
 import invariant from 'tiny-invariant';
 import warning from 'tiny-warning';
 import * as pdfjs from 'pdfjs-dist';
 
-import DocumentContext from '../DocumentContext';
-import PageContext from '../PageContext';
+import { useDocument } from '../DocumentContext';
+import { usePage } from '../PageContext';
 
 import { useResolver } from '../shared/hooks';
 import { cancelRunningTask } from '../shared/utils';
@@ -13,16 +13,8 @@ import { cancelRunningTask } from '../shared/utils';
 import type { Annotations } from '../shared/types';
 
 export default function AnnotationLayer() {
-  const documentContext = useContext(DocumentContext);
-
-  invariant(
-    documentContext,
-    'Unable to find Document context. Did you wrap <Page /> in <Document />?',
-  );
-
-  const pageContext = useContext(PageContext);
-
-  invariant(pageContext, 'Unable to find Page context.');
+  const documentContext = useDocument();
+  const pageContext = usePage();
 
   const mergedProps = { ...documentContext, ...pageContext };
   const {

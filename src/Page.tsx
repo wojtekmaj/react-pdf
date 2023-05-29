@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useMemo, useRef } from 'react';
+import React, { useEffect, useMemo, useRef } from 'react';
 import PropTypes from 'prop-types';
 import makeCancellable from 'make-cancellable-promise';
 import makeEventProps from 'make-event-props';
@@ -7,7 +7,7 @@ import mergeRefs from 'merge-refs';
 import invariant from 'tiny-invariant';
 import warning from 'tiny-warning';
 
-import DocumentContext from './DocumentContext';
+import { useDocument } from './DocumentContext';
 import PageContext from './PageContext';
 
 import Message from './Message';
@@ -91,9 +91,7 @@ export type PageProps = {
 } & EventProps<PageCallback | false | undefined>;
 
 export default function Page(props: PageProps) {
-  const context = useContext(DocumentContext);
-
-  invariant(context, 'Unable to find Document context. Did you wrap <Page /> in <Document />?');
+  const context = useDocument();
 
   const mergedProps = { ...context, ...props };
   const {

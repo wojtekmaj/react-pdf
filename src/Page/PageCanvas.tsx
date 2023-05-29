@@ -1,10 +1,10 @@
-import React, { useCallback, useContext, useEffect, useMemo, useRef } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef } from 'react';
 import mergeRefs from 'merge-refs';
 import invariant from 'tiny-invariant';
 import warning from 'tiny-warning';
 import * as pdfjs from 'pdfjs-dist';
 
-import PageContext from '../PageContext';
+import { usePage } from '../PageContext';
 
 import {
   cancelRunningTask,
@@ -24,9 +24,7 @@ type PageCanvasProps = {
 };
 
 export default function PageCanvas(props: PageCanvasProps) {
-  const context = useContext(PageContext);
-
-  invariant(context, 'Unable to find Page context.');
+  const context = usePage();
 
   const mergedProps = { ...context, ...props };
   const {

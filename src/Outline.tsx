@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useMemo } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import makeCancellable from 'make-cancellable-promise';
 import makeEventProps from 'make-event-props';
@@ -6,7 +6,7 @@ import clsx from 'clsx';
 import invariant from 'tiny-invariant';
 import warning from 'tiny-warning';
 
-import DocumentContext from './DocumentContext';
+import { useDocument } from './DocumentContext';
 import OutlineContext from './OutlineContext';
 
 import OutlineItem from './OutlineItem';
@@ -32,9 +32,7 @@ export type OutlineProps = {
 } & EventProps<PDFOutline | null | false | undefined>;
 
 export default function Outline(props: OutlineProps) {
-  const context = useContext(DocumentContext);
-
-  invariant(context, 'Unable to find Document context. Did you wrap <Outline /> in <Document />?');
+  const context = useDocument();
 
   const mergedProps = { ...context, ...props };
   const {
