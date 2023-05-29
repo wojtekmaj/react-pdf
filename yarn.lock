@@ -2938,7 +2938,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jest-canvas-mock@npm:^2.4.0":
+"jest-canvas-mock@npm:2.5.0":
   version: 2.5.0
   resolution: "jest-canvas-mock@npm:2.5.0"
   dependencies:
