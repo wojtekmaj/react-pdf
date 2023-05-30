@@ -4,7 +4,6 @@
     {
       "files": ["sample/**", "test/**"],
       "rules": {
-        "@typescript-eslint/no-var-requires": "off",
         "import/no-unresolved": "off"
       }
     }
