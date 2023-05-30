@@ -47,7 +47,7 @@ The following browsers are supported in React-PDF v7:
 - Safari ≥14.1
 - Firefox ESR
 
-You may extend the list of supported browsers by providing additional polyfills (e.g. for `Promise.allSettled`) and configuring your bundler to transpile `pdfjs-dist`.
+You may extend the list of supported browsers by providing additional polyfills (e.g. for `Array.prototype.at` or `Promise.allSettled`) and configuring your bundler to transpile `pdfjs-dist`.
 
 If you need to support older browsers, you will need to use React-PDF v6 or v5.
 
