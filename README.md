@@ -40,14 +40,14 @@ React-PDF is under constant development. This documentation is written for React
 
 React-PDF supports all modern browsers. It is tested with the latest versions of Chrome, Edge, Safari, Firefox, and Opera.
 
-The following browsers are supported in React-PDF v7:
+The following browsers are supported out of the box in React-PDF v7:
 
-- Chrome ≥88
-- Edge ≥88
-- Safari ≥14.1
-- Firefox ESR
+- Chrome ≥92
+- Edge ≥92
+- Safari ≥15.4
+- Firefox ≥90
 
-You may extend the list of supported browsers by providing additional polyfills (e.g. for `Array.prototype.at` or `Promise.allSettled`) and configuring your bundler to transpile `pdfjs-dist`.
+You may extend the list of supported browsers by providing additional polyfills (e.g. for `Array.prototype.at` or `Promise.allSettled`) and either configuring your bundler to transpile `pdfjs-dist` or using [legacy PDF.js worker](#legacy-pdfjs-worker).
 
 If you need to support older browsers, you will need to use React-PDF v6 or v5.
 
@@ -175,6 +175,25 @@ fs.copyFileSync(pdfWorkerPath, './dist/pdf.worker.js');
 import { pdfjs } from 'react-pdf';
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.js`;
+```
+
+#### Legacy PDF.js worker
+
+If you need to support older browsers, you may use legacy PDF.js worker. To do so, follow the instructions above, but replace `/build/` with `legacy/build/` in PDF.js worker import path, for example:
+
+```diff
+ pdfjs.GlobalWorkerOptions.workerSrc = new URL(
+-  'pdfjs-dist/build/pdf.worker.min.js',
++  'pdfjs-dist/legacy/build/pdf.worker.min.js',
+   import.meta.url,
+ ).toString();
+```
+
+or:
+
+```diff
+-pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.js`;
++pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/legacy/build/pdf.worker.min.js`;
 ```
 
 ### Support for annotations
