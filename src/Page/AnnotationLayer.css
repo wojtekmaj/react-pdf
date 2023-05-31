@@ -73,6 +73,7 @@
   text-align: initial;
   pointer-events: auto;
   box-sizing: border-box;
+  margin: 0;
   transform-origin: 0 0;
 }
 
