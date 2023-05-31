@@ -376,6 +376,10 @@ const Document = forwardRef(function Document(
         pdfDispatch({ type: 'RESOLVE', value: nextPdf });
       })
       .catch((error) => {
+        if (loadingTask.destroyed) {
+          return;
+        }
+
         pdfDispatch({ type: 'REJECT', error });
       });
 
