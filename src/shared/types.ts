@@ -4,10 +4,19 @@ import type {
   PDFPageProxy,
   PasswordResponses,
 } from 'pdfjs-dist';
-
-import type { BinaryData, RefProxy, TextContent, TextItem } from 'pdfjs-dist/types/src/display/api';
+import type {
+  BinaryData,
+  DocumentInitParameters,
+  RefProxy,
+  TextContent,
+  TextItem,
+} from 'pdfjs-dist/types/src/display/api';
 import type { AnnotationLayerParameters } from 'pdfjs-dist/types/src/display/annotation_layer';
 import type LinkService from '../LinkService';
+
+type NullableObject<T extends object> = { [P in keyof T]: T[P] | null };
+
+type KeyOfUnion<T> = T extends unknown ? keyof T : never;
 
 /* Primitive types */
 export type Annotations = AnnotationLayerParameters['annotations'];
@@ -106,12 +115,11 @@ export type OnRenderTextLayerSuccess = () => void;
 
 export type PasswordResponse = (typeof PasswordResponses)[keyof typeof PasswordResponses];
 
-export type Options = {
-  cMapPacked?: boolean | null;
-  cMapUrl?: string | null;
-  httpHeaders?: object | null;
-  standardFontDataUrl?: string | null;
-  withCredentials?: boolean | null;
+export type Options = NullableObject<
+  Omit<DocumentInitParameters, KeyOfUnion<Source> | 'canvasMaxAreaInBytes'>
+> & {
+  // See https://github.com/mozilla/pdf.js/issues/16503
+  canvasMaxAreaInBytes?: number | null;
 };
 
 /* Context types */
