@@ -164,6 +164,7 @@ export default function AnnotationLayer() {
       page,
       renderForms,
       viewport: clonedViewport,
+      annotationStorage: documentContext?.pdf ? documentContext.pdf.annotationStorage : undefined,
     };
 
     layer.innerHTML = '';
