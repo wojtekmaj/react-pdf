@@ -33,6 +33,7 @@ export default function AnnotationLayer() {
     onRenderAnnotationLayerError: onRenderAnnotationLayerErrorProps,
     onRenderAnnotationLayerSuccess: onRenderAnnotationLayerSuccessProps,
     page,
+    pdf,
     renderForms,
     rotate,
     scale = 1,
@@ -143,7 +144,7 @@ export default function AnnotationLayer() {
   );
 
   function renderAnnotationLayer() {
-    if (!page || !annotations) {
+    if (!pdf || !page || !annotations) {
       return;
     }
 
@@ -157,6 +158,7 @@ export default function AnnotationLayer() {
 
     const parameters = {
       annotations,
+      annotationStorage: pdf.annotationStorage,
       div: layer,
       downloadManager: null,
       imageResourcesPath,
