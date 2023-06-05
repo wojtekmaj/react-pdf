@@ -149,7 +149,9 @@ const Document = forwardRef(function Document(
 
   const viewer = useRef({
     // Handling jumping to internal links target
-    scrollPageIntoView: ({ dest, pageIndex, pageNumber }: ScrollPageIntoViewArgs) => {
+    scrollPageIntoView: (args: ScrollPageIntoViewArgs) => {
+      const { dest, pageNumber, pageIndex = pageNumber - 1 } = args;
+
       // First, check if custom handling of onItemClick was provided
       if (onItemClick) {
         onItemClick({ dest, pageIndex, pageNumber });

@@ -36,7 +36,7 @@ export type ImageResourcesPath = string;
 export type OnError = (error: Error) => void;
 
 export type OnItemClickArgs = {
-  dest: Dest;
+  dest?: Dest;
   pageIndex: number;
   pageNumber: number;
 };
@@ -51,8 +51,8 @@ export type RegisterPage = (pageIndex: number, ref: HTMLDivElement) => void;
 export type RenderMode = 'canvas' | 'svg' | 'none';
 
 export type ScrollPageIntoViewArgs = {
-  dest: ResolvedDest;
-  pageIndex: number;
+  dest?: ResolvedDest;
+  pageIndex?: number;
   pageNumber: number;
 };
 
