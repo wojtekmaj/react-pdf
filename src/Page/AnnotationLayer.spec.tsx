@@ -14,9 +14,9 @@ import { loadPDF, makeAsyncCallback, muteConsole, restoreConsole } from '../../t
 import DocumentContext from '../DocumentContext';
 import PageContext from '../PageContext';
 
-import type { Annotations, DocumentContextType, PageContextType } from '../shared/types';
 import type { RenderResult } from '@testing-library/react';
-import { PDFPageProxy } from 'pdfjs-dist';
+import type { PDFDocumentProxy, PDFPageProxy } from 'pdfjs-dist';
+import type { Annotations, DocumentContextType, PageContextType } from '../shared/types';
 
 const pdfFile = loadPDF('./__mocks__/_pdf.pdf');
 const annotatedPdfFile = loadPDF('./__mocks__/_pdf3.pdf');
@@ -54,6 +54,9 @@ function renderWithContext(
 describe('AnnotationLayer', () => {
   const linkService = new LinkService();
 
+  // Loaded PDF file
+  let pdf: PDFDocumentProxy;
+
   // Loaded page
   let page: PDFPageProxy;
   let page2: PDFPageProxy;
@@ -63,7 +66,7 @@ describe('AnnotationLayer', () => {
   let desiredAnnotations2: Annotations;
 
   beforeAll(async () => {
-    const pdf = await pdfjs.getDocument({ data: pdfFile.arrayBuffer }).promise;
+    pdf = await pdfjs.getDocument({ data: pdfFile.arrayBuffer }).promise;
 
     page = await pdf.getPage(1);
     desiredAnnotations = await page.getAnnotations();
@@ -77,7 +80,17 @@ describe('AnnotationLayer', () => {
       const { func: onGetAnnotationsSuccess, promise: onGetAnnotationsSuccessPromise } =
         makeAsyncCallback();
 
-      renderWithContext(<AnnotationLayer />, { linkService }, { onGetAnnotationsSuccess, page });
+      renderWithContext(
+        <AnnotationLayer />,
+        {
+          linkService,
+          pdf,
+        },
+        {
+          onGetAnnotationsSuccess,
+          page,
+        },
+      );
 
       expect.assertions(1);
 
@@ -92,7 +105,10 @@ describe('AnnotationLayer', () => {
 
       renderWithContext(
         <AnnotationLayer />,
-        { linkService },
+        {
+          linkService,
+          pdf,
+        },
         {
           onGetAnnotationsError,
           page: failingPage,
@@ -112,7 +128,10 @@ describe('AnnotationLayer', () => {
 
       const { rerender } = renderWithContext(
         <AnnotationLayer />,
-        { linkService },
+        {
+          linkService,
+          pdf,
+        },
         {
           onGetAnnotationsSuccess,
           page,
@@ -128,7 +147,10 @@ describe('AnnotationLayer', () => {
 
       rerender(
         <AnnotationLayer />,
-        { linkService },
+        {
+          linkService,
+          pdf,
+        },
         {
           onGetAnnotationsSuccess: onGetAnnotationsSuccess2,
           page: page2,
@@ -156,7 +178,10 @@ describe('AnnotationLayer', () => {
 
       const { container } = renderWithContext(
         <AnnotationLayer />,
-        { linkService },
+        {
+          linkService,
+          pdf,
+        },
         {
           onRenderAnnotationLayerSuccess,
           page,
@@ -194,7 +219,10 @@ describe('AnnotationLayer', () => {
 
         const { container } = renderWithContext(
           <AnnotationLayer />,
-          { linkService: customLinkService },
+          {
+            linkService: customLinkService,
+            pdf,
+          },
           {
             onRenderAnnotationLayerSuccess,
             page,
@@ -233,7 +261,10 @@ describe('AnnotationLayer', () => {
 
         const { container } = renderWithContext(
           <AnnotationLayer />,
-          { linkService: customLinkService },
+          {
+            linkService: customLinkService,
+            pdf,
+          },
           {
             onRenderAnnotationLayerSuccess,
             page,
@@ -269,7 +300,10 @@ describe('AnnotationLayer', () => {
 
       const { container } = renderWithContext(
         <AnnotationLayer />,
-        { linkService },
+        {
+          linkService,
+          pdf,
+        },
         {
           onRenderAnnotationLayerSuccess,
           page: annotatedPage,
@@ -303,6 +337,7 @@ describe('AnnotationLayer', () => {
         {
           imageResourcesPath,
           linkService,
+          pdf,
         },
         {
           onRenderAnnotationLayerSuccess,
