@@ -23,6 +23,6 @@ function reducer<T>(state: State<T>, action: Action<T>): State<T> {
   }
 }
 
-export function useResolver<T>() {
+export default function useResolver<T>() {
   return useReducer(reducer<T>, { value: undefined, error: undefined });
 }

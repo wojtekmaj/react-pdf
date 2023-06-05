@@ -13,7 +13,7 @@ import OutlineItem from './OutlineItem';
 
 import { cancelRunningTask } from './shared/utils';
 
-import { useResolver } from './shared/hooks';
+import useResolver from './shared/hooks/useResolver';
 import { eventProps, isClassName, isPdf, isRef } from './shared/propTypes';
 
 import type { PDFDocumentProxy } from 'pdfjs-dist';

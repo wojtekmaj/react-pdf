@@ -18,7 +18,7 @@ import AnnotationLayer from './Page/AnnotationLayer';
 
 import { cancelRunningTask, isProvided, makePageCallback } from './shared/utils';
 
-import { useResolver } from './shared/hooks';
+import useResolver from './shared/hooks/useResolver';
 import {
   eventProps,
   isClassName,

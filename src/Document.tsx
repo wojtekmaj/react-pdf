@@ -35,7 +35,7 @@ import {
   loadFromFile,
 } from './shared/utils';
 
-import { useResolver } from './shared/hooks';
+import useResolver from './shared/hooks/useResolver';
 import { eventProps, isClassName, isFile, isRef } from './shared/propTypes';
 
 import type { PDFDocumentProxy } from 'pdfjs-dist';

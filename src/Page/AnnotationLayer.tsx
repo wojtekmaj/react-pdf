@@ -7,7 +7,7 @@ import * as pdfjs from 'pdfjs-dist';
 import DocumentContext from '../DocumentContext';
 import PageContext from '../PageContext';
 
-import { useResolver } from '../shared/hooks';
+import useResolver from '../shared/hooks/useResolver';
 import { cancelRunningTask } from '../shared/utils';
 
 import type { Annotations } from '../shared/types';

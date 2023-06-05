@@ -1,4 +1,4 @@
-import React, { useContext, useRef } from 'react';
+import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 import invariant from 'tiny-invariant';
 
@@ -7,28 +7,10 @@ import OutlineContext from './OutlineContext';
 
 import Ref from './Ref';
 
-import { isDefined } from './shared/utils';
+import useCachedValue from './shared/hooks/useCachedValue';
 
 import type { PDFDocumentProxy } from 'pdfjs-dist';
 import type { RefProxy } from 'pdfjs-dist/types/src/display/api';
-
-function useCachedValue<T>(getter: () => T): () => T {
-  const ref = useRef<T>();
-
-  const currentValue = ref.current;
-
-  if (isDefined(currentValue)) {
-    return () => currentValue;
-  }
-
-  return () => {
-    const value = getter();
-
-    ref.current = value;
-
-    return value;
-  };
-}
 
 type PDFOutline = Awaited<ReturnType<PDFDocumentProxy['getOutline']>>;
 

@@ -6,7 +6,7 @@ import * as pdfjs from 'pdfjs-dist';
 
 import PageContext from '../PageContext';
 
-import { useResolver } from '../shared/hooks';
+import useResolver from '../shared/hooks/useResolver';
 import { cancelRunningTask } from '../shared/utils';
 
 import type { TextContent, TextItem, TextMarkedContent } from 'pdfjs-dist/types/src/display/api';

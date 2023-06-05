@@ -6,7 +6,7 @@ import * as pdfjs from 'pdfjs-dist';
 
 import PageContext from '../PageContext';
 
-import { useResolver } from '../shared/hooks';
+import useResolver from '../shared/hooks/useResolver';
 import { cancelRunningTask, isCancelException, makePageCallback } from '../shared/utils';
 
 import type { PageViewport } from 'pdfjs-dist';
