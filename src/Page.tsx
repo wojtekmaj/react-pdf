@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useMemo, useRef } from 'react';
+import React, { useEffect, useMemo, useRef } from 'react';
 import PropTypes from 'prop-types';
 import makeCancellable from 'make-cancellable-promise';
 import makeEventProps from 'make-event-props';
@@ -7,7 +7,6 @@ import mergeRefs from 'merge-refs';
 import invariant from 'tiny-invariant';
 import warning from 'tiny-warning';
 
-import DocumentContext from './DocumentContext';
 import PageContext from './PageContext';
 
 import Message from './Message';
@@ -18,6 +17,7 @@ import AnnotationLayer from './Page/AnnotationLayer';
 
 import { cancelRunningTask, isProvided, makePageCallback } from './shared/utils';
 
+import useDocumentContext from './shared/hooks/useDocumentContext';
 import useResolver from './shared/hooks/useResolver';
 import {
   eventProps,
@@ -91,11 +91,14 @@ export type PageProps = {
 } & EventProps<PageCallback | false | undefined>;
 
 export default function Page(props: PageProps) {
-  const context = useContext(DocumentContext);
+  const documentContext = useDocumentContext();
 
-  invariant(context, 'Unable to find Document context. Did you wrap <Page /> in <Document />?');
+  invariant(
+    documentContext,
+    'Unable to find Document context. Did you wrap <Page /> in <Document />?',
+  );
 
-  const mergedProps = { ...context, ...props };
+  const mergedProps = { ...documentContext, ...props };
   const {
     canvasBackground,
     canvasRef,

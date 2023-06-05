@@ -1,11 +1,10 @@
-import React, { useCallback, useContext, useEffect, useMemo, useRef } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef } from 'react';
 import mergeRefs from 'merge-refs';
 import invariant from 'tiny-invariant';
 import warning from 'tiny-warning';
 import * as pdfjs from 'pdfjs-dist';
 
-import PageContext from '../PageContext';
-
+import usePageContext from '../shared/hooks/usePageContext';
 import {
   cancelRunningTask,
   getDevicePixelRatio,
@@ -24,11 +23,11 @@ type PageCanvasProps = {
 };
 
 export default function PageCanvas(props: PageCanvasProps) {
-  const context = useContext(PageContext);
+  const pageContext = usePageContext();
 
-  invariant(context, 'Unable to find Page context.');
+  invariant(pageContext, 'Unable to find Page context.');
 
-  const mergedProps = { ...context, ...props };
+  const mergedProps = { ...pageContext, ...props };
   const {
     canvasBackground,
     devicePixelRatio: devicePixelRatioProps,

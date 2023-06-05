@@ -1,13 +1,12 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import invariant from 'tiny-invariant';
-
-import DocumentContext from './DocumentContext';
-import OutlineContext from './OutlineContext';
 
 import Ref from './Ref';
 
 import useCachedValue from './shared/hooks/useCachedValue';
+import useDocumentContext from './shared/hooks/useDocumentContext';
+import useOutlineContext from './shared/hooks/useOutlineContext';
 
 import type { PDFDocumentProxy } from 'pdfjs-dist';
 import type { RefProxy } from 'pdfjs-dist/types/src/display/api';
@@ -21,14 +20,14 @@ type OutlineItemProps = {
 };
 
 export default function OutlineItem(props: OutlineItemProps) {
-  const documentContext = useContext(DocumentContext);
+  const documentContext = useDocumentContext();
 
   invariant(
     documentContext,
     'Unable to find Document context. Did you wrap <Outline /> in <Document />?',
   );
 
-  const outlineContext = useContext(OutlineContext);
+  const outlineContext = useOutlineContext();
 
   invariant(outlineContext, 'Unable to find Outline context.');
 

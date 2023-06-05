@@ -1,11 +1,10 @@
-import React, { useCallback, useContext, useEffect, useLayoutEffect, useMemo, useRef } from 'react';
+import React, { useCallback, useEffect, useLayoutEffect, useMemo, useRef } from 'react';
 import makeCancellable from 'make-cancellable-promise';
 import invariant from 'tiny-invariant';
 import warning from 'tiny-warning';
 import * as pdfjs from 'pdfjs-dist';
 
-import PageContext from '../PageContext';
-
+import usePageContext from '../shared/hooks/usePageContext';
 import useResolver from '../shared/hooks/useResolver';
 import { cancelRunningTask } from '../shared/utils';
 
@@ -16,9 +15,9 @@ function isTextItem(item: TextItem | TextMarkedContent): item is TextItem {
 }
 
 export default function TextLayer() {
-  const context = useContext(PageContext);
+  const pageContext = usePageContext();
 
-  invariant(context, 'Unable to find Page context.');
+  invariant(pageContext, 'Unable to find Page context.');
 
   const {
     customTextRenderer,
@@ -31,7 +30,7 @@ export default function TextLayer() {
     pageNumber,
     rotate,
     scale,
-  } = context;
+  } = pageContext;
 
   const [textContentState, textContentDispatch] = useResolver<TextContent>();
   const { value: textContent, error: textContentError } = textContentState;
