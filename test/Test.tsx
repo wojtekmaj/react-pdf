@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { PDFDataRangeTransport } from 'pdfjs-dist';
-import { pdfjs, Document, Outline, Page } from 'react-pdf/src';
+import { pdfjs, Document, Outline, Page, Thumbnail } from 'react-pdf/src';
 import 'react-pdf/src/Page/AnnotationLayer.css';
 import 'react-pdf/src/Page/TextLayer.css';
 
@@ -317,6 +317,13 @@ export default function Test() {
                 >
                   Next
                 </button>
+              </div>
+            )}
+            {displayAll || (
+              <div className="Test__container__content__thumbnails">
+                {Array.from(new Array(numPages), (el, index) => (
+                  <Thumbnail key={`thumbnail_${index + 1}`} pageNumber={index + 1} width={100} />
+                ))}
               </div>
             )}
           </Document>
