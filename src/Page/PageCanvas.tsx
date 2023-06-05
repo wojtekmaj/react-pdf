@@ -1,8 +1,10 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef } from 'react';
 import mergeRefs from 'merge-refs';
 import invariant from 'tiny-invariant';
 import warning from 'tiny-warning';
 import * as pdfjs from 'pdfjs-dist';
+
+import StructTree from '../StructTree';
 
 import usePageContext from '../shared/hooks/usePageContext';
 import {
@@ -14,8 +16,7 @@ import {
 
 import { isRef } from '../shared/propTypes';
 
-import type { RenderParameters, StructTreeNode } from 'pdfjs-dist/types/src/display/api';
-import StructTree from '../StructTree';
+import type { RenderParameters } from 'pdfjs-dist/types/src/display/api';
 
 const ANNOTATION_MODE = pdfjs.AnnotationMode;
 
@@ -34,7 +35,6 @@ export default function PageCanvas(props: PageCanvasProps) {
     devicePixelRatio: devicePixelRatioProps,
     onRenderError: onRenderErrorProps,
     onRenderSuccess: onRenderSuccessProps,
-    customTextRenderer,
     page,
     renderForms,
     rotate,
@@ -45,17 +45,6 @@ export default function PageCanvas(props: PageCanvasProps) {
   const canvasElement = useRef<HTMLCanvasElement>(null);
 
   invariant(page, 'Attempted to render page canvas, but no page was specified.');
-
-  const [structTree, setStructTree] = useState<StructTreeNode | null>(null);
-
-  useEffect(() => {
-    if (!customTextRenderer) {
-      page.getStructTree().then((tree) => {
-        setStructTree(tree);
-      });
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   const devicePixelRatio = devicePixelRatioProps || getDevicePixelRatio();
 
@@ -182,7 +171,7 @@ export default function PageCanvas(props: PageCanvasProps) {
         userSelect: 'none',
       }}
     >
-      {!!structTree && <StructTree node={structTree} />}
+      <StructTree />
     </canvas>
   );
 }
