@@ -201,9 +201,7 @@ export default function TextLayer() {
         layer.append(end);
         endElement.current = end;
 
-        const layerChildrenDeep = layer.querySelectorAll(
-          '.textLayer > *:not(.markedContent, .endOfContent), .textLayer > .markedContent > *',
-        );
+        const layerChildrenDeep = layer.querySelectorAll('.markedContent > *:not(.markedContent');
 
         if (customTextRenderer) {
           let index = 0;
