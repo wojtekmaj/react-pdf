@@ -478,6 +478,28 @@ Displays an outline (table of contents). Should be placed inside `<Document />`.
 | onLoadError   | Function called in case of an error while retrieving the outline.                                                                                  | n/a           | `(error) => alert('Error while retrieving the outline! ' + error.message)`                                                                                                                                                                                                                          |
 | onLoadSuccess | Function called when the outline is successfully retrieved.                                                                                        | n/a           | `(outline) => alert('The outline has been successfully retrieved.')`                                                                                                                                                                                                                                |
 
+### Thumbnail
+
+Displays a thumbnail of a page. Does not render the annotation layer or the text layer. Does not register itself as a link target, so the user will not be scrolled to a Thumbnail component when clicked on an internal link (e.g. in Table of Contents). When clicked, attempts to navigate to the page clicked (similarly to a link in Outline). Should be placed inside `<Document />`. Alternatively, it can have `pdf` prop passed, which can be obtained from `<Document />`'s `onLoadSuccess` callback function.
+
+#### Props
+
+Props are the same as in `<Page />` component, but certain annotation layer and text layer-related props are not available:
+
+- customTextRenderer
+- onClick
+- onGetAnnotationsError
+- onGetAnnotationsSuccess
+- onGetTextError
+- onGetTextSuccess
+- onRenderAnnotationLayerError
+- onRenderAnnotationLayerSuccess
+- onRenderTextLayerError
+- onRenderTextLayerSuccess
+- renderAnnotationLayer
+- renderForms
+- renderTextLayer
+
 ## Useful links
 
 - [React-PDF Wiki](https://github.com/wojtekmaj/react-pdf/wiki/)
