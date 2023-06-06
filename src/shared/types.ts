@@ -126,6 +126,7 @@ export type Options = NullableObject<
 export type DocumentContextType = {
   imageResourcesPath?: ImageResourcesPath;
   linkService: LinkService;
+  onItemClick?: (args: OnItemClickArgs) => void;
   pdf?: PDFDocumentProxy | false;
   registerPage: RegisterPage;
   renderMode?: RenderMode;
@@ -156,5 +157,5 @@ export type PageContextType = {
 } | null;
 
 export type OutlineContextType = {
-  onClick: (args: OnItemClickArgs) => void;
+  onClick?: (args: OnItemClickArgs) => void;
 } | null;

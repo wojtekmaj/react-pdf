@@ -43,7 +43,7 @@ export default function Outline(props: OutlineProps) {
   const {
     className,
     inputRef,
-    onItemClick: onItemClickProps,
+    onItemClick,
     onLoadError: onLoadErrorProps,
     onLoadSuccess: onLoadSuccessProps,
     pdf,
@@ -81,16 +81,6 @@ export default function Outline(props: OutlineProps) {
 
     if (onLoadErrorProps) {
       onLoadErrorProps(outlineError);
-    }
-  }
-
-  function onItemClick({ dest, pageIndex, pageNumber }: OnItemClickArgs) {
-    if (onItemClickProps) {
-      onItemClickProps({
-        dest,
-        pageIndex,
-        pageNumber,
-      });
     }
   }
 
