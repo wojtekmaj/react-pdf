@@ -176,7 +176,7 @@ export default function Page(props: PageProps) {
 
   function hook() {
     return () => {
-      if (pageIndex === null) {
+      if (!isProvided(pageIndex)) {
         // Impossible, but TypeScript doesn't know that
         return;
       }
@@ -203,7 +203,7 @@ export default function Page(props: PageProps) {
     }
 
     if (registerPage) {
-      if (pageIndex === null || !pageElement.current) {
+      if (!isProvided(pageIndex) || !pageElement.current) {
         // Impossible, but TypeScript doesn't know that
         return;
       }
@@ -275,11 +275,7 @@ export default function Page(props: PageProps) {
 
   const childContext =
     // Technically there cannot be page without pageIndex, pageNumber, rotate and scale, but TypeScript doesn't know that
-    page &&
-    isProvided(pageIndex) &&
-    isProvided(pageNumber) &&
-    isProvided(rotate) &&
-    isProvided(scale)
+    page && isProvided(pageIndex) && pageNumber && isProvided(rotate) && isProvided(scale)
       ? {
           canvasBackground,
           customTextRenderer,
