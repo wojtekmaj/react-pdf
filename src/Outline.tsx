@@ -131,7 +131,7 @@ export default function Outline(props: OutlineProps) {
   );
 
   const childContext = {
-    onClick: onItemClick,
+    onItemClick,
   };
 
   const eventProps = useMemo(

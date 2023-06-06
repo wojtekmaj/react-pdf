@@ -64,9 +64,9 @@ describe('OutlineItem', () => {
 
   describe('rendering', () => {
     it('renders an item properly', () => {
-      const onClick = vi.fn();
+      const onItemClick = vi.fn();
 
-      renderWithContext(<OutlineItem item={outlineItem} />, { pdf }, { onClick });
+      renderWithContext(<OutlineItem item={outlineItem} />, { pdf }, { onItemClick });
 
       const item = screen.getAllByRole('listitem')[0];
 
@@ -74,9 +74,9 @@ describe('OutlineItem', () => {
     });
 
     it("renders item's subitems properly", () => {
-      const onClick = vi.fn();
+      const onItemClick = vi.fn();
 
-      renderWithContext(<OutlineItem item={outlineItem} />, { pdf }, { onClick });
+      renderWithContext(<OutlineItem item={outlineItem} />, { pdf }, { onItemClick });
 
       const item = screen.getAllByRole('listitem')[0] as HTMLElement;
       const subitems = getAllByRole(item, 'listitem');
@@ -84,46 +84,46 @@ describe('OutlineItem', () => {
       expect(subitems).toHaveLength(outlineItem.items.length);
     });
 
-    it('calls onClick with proper arguments when clicked a link', async () => {
-      const { func: onClick, promise: onClickPromise } = makeAsyncCallback();
+    it('calls onItemClick with proper arguments when clicked a link', async () => {
+      const { func: onItemClick, promise: onItemClickPromise } = makeAsyncCallback();
 
-      renderWithContext(<OutlineItem item={outlineItem} />, { pdf }, { onClick });
+      renderWithContext(<OutlineItem item={outlineItem} />, { pdf }, { onItemClick });
 
       const item = screen.getAllByRole('listitem')[0] as HTMLElement;
       const link = getAllByRole(item, 'link')[0] as HTMLAnchorElement;
       fireEvent.click(link);
 
-      await onClickPromise;
+      await onItemClickPromise;
 
-      expect(onClick).toHaveBeenCalled();
+      expect(onItemClick).toHaveBeenCalled();
     });
 
-    it('calls onClick with proper arguments multiple times when clicked a link multiple times', async () => {
-      const { func: onClick, promise: onClickPromise } = makeAsyncCallback();
+    it('calls onItemClick with proper arguments multiple times when clicked a link multiple times', async () => {
+      const { func: onItemClick, promise: onItemClickPromise } = makeAsyncCallback();
 
       const { rerender } = renderWithContext(
         <OutlineItem item={outlineItem} />,
         { pdf },
-        { onClick },
+        { onItemClick },
       );
 
       const item = screen.getAllByRole('listitem')[0] as HTMLElement;
       const link = getAllByRole(item, 'link')[0] as HTMLAnchorElement;
       fireEvent.click(link);
 
-      await onClickPromise;
+      await onItemClickPromise;
 
-      expect(onClick).toHaveBeenCalledTimes(1);
+      expect(onItemClick).toHaveBeenCalledTimes(1);
 
-      const { func: onClick2, promise: onClickPromise2 } = makeAsyncCallback();
+      const { func: onItemClick2, promise: onItemClickPromise2 } = makeAsyncCallback();
 
-      rerender(<OutlineItem item={outlineItem} />, { pdf }, { onClick: onClick2 });
+      rerender(<OutlineItem item={outlineItem} />, { pdf }, { onItemClick: onItemClick2 });
 
       fireEvent.click(link);
 
-      await onClickPromise2;
+      await onItemClickPromise2;
 
-      expect(onClick2).toHaveBeenCalledTimes(1);
+      expect(onItemClick2).toHaveBeenCalledTimes(1);
     });
   });
 });

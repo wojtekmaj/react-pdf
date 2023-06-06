@@ -32,7 +32,7 @@ export default function OutlineItem(props: OutlineItemProps) {
   invariant(outlineContext, 'Unable to find Outline context.');
 
   const mergedProps = { ...documentContext, ...outlineContext, ...props };
-  const { item, onClick: onClickProps, pdf, ...otherProps } = mergedProps;
+  const { item, onItemClick, pdf, ...otherProps } = mergedProps;
 
   invariant(pdf, 'Attempted to load an outline, but no document was specified.');
 
@@ -65,13 +65,13 @@ export default function OutlineItem(props: OutlineItemProps) {
   function onClick(event: React.MouseEvent<HTMLAnchorElement>) {
     event.preventDefault();
 
-    if (!onClickProps) {
+    if (!onItemClick) {
       return;
     }
 
     return Promise.all([getDestination(), getPageIndex(), getPageNumber()]).then(
       ([dest, pageIndex, pageNumber]) => {
-        onClickProps({
+        onItemClick({
           dest,
           pageIndex,
           pageNumber,
