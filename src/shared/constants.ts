@@ -1,4 +1,5 @@
 // From pdfjs-dist/lib/web/struct_tree_layer_builder.js
+
 export const PDF_ROLE_TO_HTML_ROLE = {
   // Document level structure types
   Document: null, // There's a "document" role, but it doesn't make sense here.

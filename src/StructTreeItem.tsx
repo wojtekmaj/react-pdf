@@ -5,10 +5,10 @@ import {
   getAttributes,
   isStructTreeNode,
   isStructTreeNodeWithOnlyContentChild,
-} from './StructTree/utils';
+} from './shared/structTreeUtils';
 
 import type { StructTreeContent } from 'pdfjs-dist/types/src/display/api';
-import type { StructTreeNodeWithExtraAttributes } from './StructTree/types';
+import type { StructTreeNodeWithExtraAttributes } from './shared/types';
 
 type StructTreeItemProps = {
   node: StructTreeNodeWithExtraAttributes | StructTreeContent;
@@ -17,7 +17,7 @@ type StructTreeItemProps = {
 export default function StructTreeItem({ node }: StructTreeItemProps) {
   const attributes = useMemo(() => getAttributes(node), [node]);
 
-  const children = (() => {
+  const children = useMemo(() => {
     if (!isStructTreeNode(node)) {
       return null;
     }
@@ -32,7 +32,7 @@ export default function StructTreeItem({ node }: StructTreeItemProps) {
         <StructTreeItem key={index} node={child} />
       );
     });
-  })();
+  }, [node]);
 
   return <span {...attributes}>{children}</span>;
 }

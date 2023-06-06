@@ -9,7 +9,7 @@ import usePageContext from './shared/hooks/usePageContext';
 import useResolver from './shared/hooks/useResolver';
 import { cancelRunningTask } from './shared/utils';
 
-import type { StructTreeNodeWithExtraAttributes } from './StructTree/types';
+import type { StructTreeNodeWithExtraAttributes } from './shared/types';
 
 export default function StructTree() {
   const pageContext = usePageContext();

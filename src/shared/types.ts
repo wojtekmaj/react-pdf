@@ -165,3 +165,8 @@ export type PageContextType = {
 export type OutlineContextType = {
   onClick: (args: OnItemClickArgs) => void;
 } | null;
+
+export type StructTreeNodeWithExtraAttributes = StructTreeNode & {
+  alt?: string;
+  lang?: string;
+};
