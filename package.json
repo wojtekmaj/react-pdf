@@ -4,7 +4,8 @@
   "description": "Display PDFs in your React app as easily as if they were images.",
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
-  "source": "src/index.js",
+  "source": "src/index.ts",
+  "types": "dist/cjs/index.d.ts",
   "sideEffects": [
     "*.css"
   ],
