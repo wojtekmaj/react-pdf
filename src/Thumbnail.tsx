@@ -12,6 +12,7 @@ import type { PageProps } from './Page';
 export type ThumbnailProps = Omit<
   PageProps,
   | 'customTextRenderer'
+  | 'onClick'
   | 'onGetAnnotationsError'
   | 'onGetAnnotationsSuccess'
   | 'onGetTextError'
@@ -39,16 +40,17 @@ export default function Thumbnail(props: ThumbnailProps) {
 
   const pageNumber = pageNumberProps ?? (isProvided(pageIndexProps) ? pageIndexProps + 1 : null);
 
-  if (!pageNumber) {
-    throw new Error('Attempted to load a Thumbnail, but no pageNumber was specified.');
-  }
-
   return (
     <Page
       {...props}
       _className="react-pdf__Thumbnail"
       _enableRegisterUnregisterPage={false}
       onClick={() => {
+        if (!pageNumber) {
+          // Impossible, but TypeScript doesn't know that
+          return;
+        }
+
         linkService.goToPage(pageNumber);
       }}
       renderAnnotationLayer={false}
