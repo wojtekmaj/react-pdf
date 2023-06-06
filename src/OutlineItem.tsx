@@ -66,7 +66,7 @@ export default function OutlineItem(props: OutlineItemProps) {
     event.preventDefault();
 
     if (!onClickProps) {
-      return false;
+      return;
     }
 
     return Promise.all([getDestination(), getPageIndex(), getPageNumber()]).then(
