@@ -34,6 +34,12 @@ function renderWithContext(children: React.ReactNode, context: Partial<PageConte
   };
 }
 
+function getTextItems(container: HTMLElement) {
+  const wrapper = container.firstElementChild as HTMLDivElement;
+
+  return wrapper.querySelectorAll('.markedContent > *:not(.markedContent');
+}
+
 describe('TextLayer', () => {
   // Loaded page
   let page: PDFPageProxy;
@@ -136,10 +142,9 @@ describe('TextLayer', () => {
 
       await onRenderTextLayerSuccessPromise;
 
-      const wrapper = container.firstElementChild as HTMLDivElement;
-      const textItems = wrapper.children;
+      const textItems = getTextItems(container);
 
-      expect(textItems).toHaveLength(desiredTextItems.length + 1);
+      expect(textItems).toHaveLength(desiredTextItems.length);
     });
 
     it('renders text content properly given customTextRenderer', async () => {
@@ -158,10 +163,9 @@ describe('TextLayer', () => {
 
       await onRenderTextLayerSuccessPromise;
 
-      const wrapper = container.firstElementChild as HTMLDivElement;
-      const textItems = wrapper.children;
+      const textItems = getTextItems(container);
 
-      expect(textItems).toHaveLength(desiredTextItems.length + 1);
+      expect(textItems).toHaveLength(desiredTextItems.length);
     });
 
     it('maps textContent items to actual TextLayer children properly', async () => {
@@ -177,8 +181,7 @@ describe('TextLayer', () => {
 
       await onRenderTextLayerSuccessPromise;
 
-      const wrapper = container.firstElementChild as HTMLDivElement;
-      const innerHTML = wrapper.innerHTML;
+      const textItems = getTextItems(container);
 
       const { func: onRenderTextLayerSuccess2, promise: onRenderTextLayerSuccessPromise2 } =
         makeAsyncCallback();
@@ -193,10 +196,9 @@ describe('TextLayer', () => {
 
       await onRenderTextLayerSuccessPromise2;
 
-      const wrapper2 = container.firstElementChild as HTMLDivElement;
-      const innerHTML2 = wrapper2.innerHTML;
+      const textItems2 = getTextItems(container);
 
-      expect(innerHTML).toEqual(innerHTML2);
+      expect(textItems).toEqual(textItems2);
     });
 
     it('calls customTextRenderer with necessary arguments', async () => {
@@ -215,10 +217,9 @@ describe('TextLayer', () => {
 
       await onRenderTextLayerSuccessPromise;
 
-      const wrapper = container.firstElementChild as HTMLDivElement;
-      const textItems = wrapper.children;
+      const textItems = getTextItems(container);
 
-      expect(textItems).toHaveLength(desiredTextItems.length + 1);
+      expect(textItems).toHaveLength(desiredTextItems.length);
 
       expect(customTextRenderer).toHaveBeenCalledTimes(desiredTextItems.length);
       expect(customTextRenderer).toHaveBeenCalledWith(

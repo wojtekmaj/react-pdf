@@ -4,6 +4,8 @@ import invariant from 'tiny-invariant';
 import warning from 'tiny-warning';
 import * as pdfjs from 'pdfjs-dist';
 
+import StructTree from '../StructTree';
+
 import usePageContext from '../shared/hooks/usePageContext';
 import {
   cancelRunningTask,
@@ -35,6 +37,7 @@ export default function PageCanvas(props: PageCanvasProps) {
     onRenderSuccess: onRenderSuccessProps,
     page,
     renderForms,
+    renderTextLayer,
     rotate,
     scale,
   } = mergedProps;
@@ -168,7 +171,9 @@ export default function PageCanvas(props: PageCanvasProps) {
         display: 'block',
         userSelect: 'none',
       }}
-    />
+    >
+      {renderTextLayer ? <StructTree /> : null}
+    </canvas>
   );
 }
 

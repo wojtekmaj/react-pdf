@@ -103,5 +103,40 @@ describe('PageCanvas', () => {
       expect(canvasRef).toHaveBeenCalled();
       expect(canvasRef).toHaveBeenCalledWith(expect.any(HTMLElement));
     });
+
+    it('does not request structure tree to be rendered when renderTextLayer = false', async () => {
+      const { func: onRenderSuccess, promise: onRenderSuccessPromise } = makeAsyncCallback();
+
+      const { container } = renderWithContext(<PageCanvas />, {
+        onRenderSuccess,
+        page: pageWithRendererMocked,
+        renderTextLayer: false,
+      });
+
+      await onRenderSuccessPromise;
+
+      const structTree = container.querySelector('.react-pdf__Page__structTree');
+
+      expect(structTree).not.toBeInTheDocument();
+    });
+
+    it('renders StructTree when given renderTextLayer = true', async () => {
+      const { func: onGetStructTreeSuccess, promise: onGetStructTreeSuccessPromise } =
+        makeAsyncCallback();
+
+      const { container } = renderWithContext(<PageCanvas />, {
+        onGetStructTreeSuccess,
+        page: pageWithRendererMocked,
+        renderTextLayer: true,
+      });
+
+      expect.assertions(1);
+
+      await onGetStructTreeSuccessPromise;
+
+      const canvas = container.querySelector('canvas') as HTMLCanvasElement;
+
+      expect(canvas.children.length).toBeGreaterThan(0);
+    });
   });
 });

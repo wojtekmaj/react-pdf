@@ -37,6 +37,8 @@ import type {
   NodeOrRenderer,
   OnGetAnnotationsError,
   OnGetAnnotationsSuccess,
+  OnGetStructTreeError,
+  OnGetStructTreeSuccess,
   OnGetTextError,
   OnGetTextSuccess,
   OnPageLoadError,
@@ -68,6 +70,8 @@ export type PageProps = {
   noData?: NodeOrRenderer;
   onGetAnnotationsError?: OnGetAnnotationsError;
   onGetAnnotationsSuccess?: OnGetAnnotationsSuccess;
+  onGetStructTreeError?: OnGetStructTreeError;
+  onGetStructTreeSuccess?: OnGetStructTreeSuccess;
   onGetTextError?: OnGetTextError;
   onGetTextSuccess?: OnGetTextSuccess;
   onLoadError?: OnPageLoadError;
@@ -113,6 +117,8 @@ export default function Page(props: PageProps) {
     noData = 'No page specified.',
     onGetAnnotationsError: onGetAnnotationsErrorProps,
     onGetAnnotationsSuccess: onGetAnnotationsSuccessProps,
+    onGetStructTreeError: onGetStructTreeErrorProps,
+    onGetStructTreeSuccess: onGetStructTreeSuccessProps,
     onGetTextError: onGetTextErrorProps,
     onGetTextSuccess: onGetTextSuccessProps,
     onLoadError: onLoadErrorProps,
@@ -282,6 +288,8 @@ export default function Page(props: PageProps) {
           devicePixelRatio,
           onGetAnnotationsError: onGetAnnotationsErrorProps,
           onGetAnnotationsSuccess: onGetAnnotationsSuccessProps,
+          onGetStructTreeError: onGetStructTreeErrorProps,
+          onGetStructTreeSuccess: onGetStructTreeSuccessProps,
           onGetTextError: onGetTextErrorProps,
           onGetTextSuccess: onGetTextSuccessProps,
           onRenderAnnotationLayerError: onRenderAnnotationLayerErrorProps,
@@ -294,6 +302,7 @@ export default function Page(props: PageProps) {
           pageIndex,
           pageNumber,
           renderForms,
+          renderTextLayer: renderTextLayerProps,
           rotate,
           scale,
         }
