@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useLayoutEffect, useMemo, useRef } from 'react';
 import makeCancellable from 'make-cancellable-promise';
+import clsx from 'clsx';
 import invariant from 'tiny-invariant';
 import warning from 'tiny-warning';
 import * as pdfjs from 'pdfjs-dist';
@@ -248,7 +249,7 @@ export default function TextLayer() {
   return (
     // eslint-disable-next-line jsx-a11y/no-static-element-interactions
     <div
-      className="react-pdf__Page__textContent textLayer"
+      className={clsx('react-pdf__Page__textContent', 'textLayer')}
       onMouseUp={onMouseUp}
       onMouseDown={onMouseDown}
       ref={layerElement}

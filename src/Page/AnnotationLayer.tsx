@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useRef } from 'react';
 import makeCancellable from 'make-cancellable-promise';
+import clsx from 'clsx';
 import invariant from 'tiny-invariant';
 import warning from 'tiny-warning';
 import * as pdfjs from 'pdfjs-dist';
@@ -190,5 +191,7 @@ export default function AnnotationLayer() {
     [annotations, imageResourcesPath, linkService, page, renderForms, viewport],
   );
 
-  return <div className="react-pdf__Page__annotations annotationLayer" ref={layerElement} />;
+  return (
+    <div className={clsx('react-pdf__Page__annotations', 'annotationLayer')} ref={layerElement} />
+  );
 }
