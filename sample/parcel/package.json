@@ -4,8 +4,8 @@
   "description": "A sample page for React-PDF.",
   "private": true,
   "scripts": {
-    "copy-cmaps": "node ./scripts/copy-cmaps.mjs",
-    "copy-standard-fonts": "node ./scripts/copy-standard-fonts.mjs",
+    "copy-cmaps": "node --loader ts-node/esm ./scripts/copy-cmaps.ts",
+    "copy-standard-fonts": "node --loader ts-node/esm ./scripts/copy-standard-fonts.ts",
     "build": "parcel build index.html --public-url ./",
     "dev": "parcel index.html"
   },
@@ -24,7 +24,9 @@
     "@babel/preset-env": "^7.21.0",
     "@babel/preset-react": "^7.18.0",
     "@babel/preset-typescript": "^7.21.0",
+    "@types/node": "*",
     "parcel-bundler": "^1.12.4",
+    "ts-node": "^10.9.1",
     "typescript": "^5.0.0"
   },
   "resolutions": {

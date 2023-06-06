@@ -1,7 +1,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 
-function copyDir(from, to) {
+function copyDir(from: string, to: string) {
   // Ensure target directory exists
   fs.mkdirSync(to, { recursive: true });
 
