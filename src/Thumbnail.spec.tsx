@@ -236,7 +236,7 @@ describe('Thumbnail', () => {
 
       await onLoadSuccessPromise;
 
-      const pageCanvas = container.querySelector('.react-pdf__Thumbnail__canvas');
+      const pageCanvas = container.querySelector('.react-pdf__Thumbnail__page__canvas');
 
       expect(canvasRef.current).toBe(pageCanvas);
     });
@@ -339,7 +339,7 @@ describe('Thumbnail', () => {
 
       const [page] = await onRenderSuccessPromise;
 
-      const pageSvg = container.querySelector('.react-pdf__Thumbnail__svg') as SVGElement;
+      const pageSvg = container.querySelector('.react-pdf__Thumbnail__page__svg') as SVGElement;
 
       const { width, height } = window.getComputedStyle(pageSvg);
 
@@ -367,7 +367,7 @@ describe('Thumbnail', () => {
 
       const [page] = await onRenderSuccessPromise;
 
-      const pageSvg = container.querySelector('.react-pdf__Thumbnail__svg') as SVGElement;
+      const pageSvg = container.querySelector('.react-pdf__Thumbnail__page__svg') as SVGElement;
 
       const { width, height } = window.getComputedStyle(pageSvg);
 
@@ -390,7 +390,7 @@ describe('Thumbnail', () => {
 
       await onLoadSuccessPromise;
 
-      const pageCanvas = container.querySelector('.react-pdf__Thumbnail__canvas');
+      const pageCanvas = container.querySelector('.react-pdf__Thumbnail__page__canvas');
 
       expect(pageCanvas).toBeInTheDocument();
     });
@@ -407,8 +407,8 @@ describe('Thumbnail', () => {
 
       await onLoadSuccessPromise;
 
-      const pageCanvas = container.querySelector('.react-pdf__Thumbnail__canvas');
-      const pageSVG = container.querySelector('.react-pdf__Thumbnail__svg');
+      const pageCanvas = container.querySelector('.react-pdf__Thumbnail__page__canvas');
+      const pageSVG = container.querySelector('.react-pdf__Thumbnail__page__svg');
 
       expect(pageCanvas).not.toBeInTheDocument();
       expect(pageSVG).not.toBeInTheDocument();
@@ -426,7 +426,7 @@ describe('Thumbnail', () => {
 
       await onLoadSuccessPromise;
 
-      const pageCanvas = container.querySelector('.react-pdf__Thumbnail__canvas');
+      const pageCanvas = container.querySelector('.react-pdf__Thumbnail__page__canvas');
 
       expect(pageCanvas).toBeInTheDocument();
     });
@@ -443,7 +443,7 @@ describe('Thumbnail', () => {
 
       await onLoadSuccessPromise;
 
-      const pageSVG = container.querySelector('.react-pdf__Thumbnail__svg');
+      const pageSVG = container.querySelector('.react-pdf__Thumbnail__page__svg');
 
       expect(pageSVG).toBeInTheDocument();
     });
@@ -604,7 +604,7 @@ describe('Thumbnail', () => {
 
     const { container } = renderWithContext(<Thumbnail onTouchStart={onTouchStart} />, { pdf });
 
-    const page = container.querySelector('.react-pdf__Thumbnail') as HTMLDivElement;
+    const page = container.querySelector('.react-pdf__Thumbnail__page') as HTMLDivElement;
     fireEvent.touchStart(page);
 
     expect(onTouchStart).toHaveBeenCalled();

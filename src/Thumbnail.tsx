@@ -1,4 +1,5 @@
 import React from 'react';
+import clsx from 'clsx';
 import invariant from 'tiny-invariant';
 
 import Page from './Page';
@@ -8,10 +9,11 @@ import { isProvided } from './shared/utils';
 import useDocumentContext from './shared/hooks/useDocumentContext';
 
 import type { PageProps } from './Page';
-import type { OnItemClickArgs } from './shared/types';
+import type { ClassName, OnItemClickArgs } from './shared/types';
 
 export type ThumbnailProps = Omit<
   PageProps,
+  | 'className'
   | 'customTextRenderer'
   | 'onGetAnnotationsError'
   | 'onGetAnnotationsSuccess'
@@ -25,12 +27,11 @@ export type ThumbnailProps = Omit<
   | 'renderForms'
   | 'renderTextLayer'
 > & {
+  className?: ClassName;
   onItemClick?: (args: OnItemClickArgs) => void;
 };
 
 export default function Thumbnail(props: ThumbnailProps) {
-  const { pageIndex: pageIndexProps, pageNumber: pageNumberProps } = props;
-
   const documentContext = useDocumentContext();
 
   invariant(
@@ -39,7 +40,13 @@ export default function Thumbnail(props: ThumbnailProps) {
   );
 
   const mergedProps = { ...documentContext, ...props };
-  const { linkService, onItemClick } = mergedProps;
+  const {
+    className,
+    linkService,
+    onItemClick,
+    pageIndex: pageIndexProps,
+    pageNumber: pageNumberProps,
+  } = mergedProps;
 
   const pageIndex = isProvided(pageNumberProps) ? pageNumberProps - 1 : pageIndexProps ?? null;
 
@@ -62,12 +69,18 @@ export default function Thumbnail(props: ThumbnailProps) {
     }
   }
 
+  const { className: classNameProps, onItemClick: onItemClickProps, ...pageProps } = props;
+
   return (
     /* eslint-disable-next-line jsx-a11y/anchor-is-valid */
-    <a href={pageNumber ? '#' : undefined} onClick={onClick}>
+    <a
+      className={clsx('react-pdf__Thumbnail', className)}
+      href={pageNumber ? '#' : undefined}
+      onClick={onClick}
+    >
       <Page
-        {...props}
-        _className="react-pdf__Thumbnail"
+        {...pageProps}
+        _className="react-pdf__Thumbnail__page"
         _enableRegisterUnregisterPage={false}
         renderAnnotationLayer={false}
         renderTextLayer={false}

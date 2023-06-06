@@ -321,7 +321,12 @@ export default function Test() {
             )}
             <div className="Test__container__content__thumbnails">
               {Array.from(new Array(numPages), (el, index) => (
-                <Thumbnail key={`thumbnail_${index + 1}`} pageNumber={index + 1} width={100} />
+                <Thumbnail
+                  key={`thumbnail_${index + 1}`}
+                  className="custom-classname-thumbnail"
+                  pageNumber={index + 1}
+                  width={100}
+                />
               ))}
             </div>
           </Document>

@@ -499,11 +499,12 @@ Props are the same as in `<Page />` component, but certain annotation layer and 
 - renderForms
 - renderTextLayer
 
-One additional prop is available:
+On top of that, additional props are available:
 
-| Prop name   | Description                                                                                                                                  | Default value | Example values                                                                                |
-| ----------- | -------------------------------------------------------------------------------------------------------------------------------------------- | ------------- | --------------------------------------------------------------------------------------------- |
-| onItemClick | Function called when a thumbnail has been clicked. Usually, you would like to use this callback to move the user wherever they requested to. | n/a           | `({ dest, pageIndex, pageNumber }) => alert('Clicked an item from page ' + pageNumber + '!')` |
+| Prop name   | Description                                                                                                                                  | Default value | Example values                                                                                                                                             |
+| ----------- | -------------------------------------------------------------------------------------------------------------------------------------------- | ------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| className   | Class name(s) that will be added to rendered element along with the default `react-pdf__Thumbnail`.                                          | n/a           | <ul><li>String:<br />`"custom-class-name-1 custom-class-name-2"`</li><li>Array of strings:<br />`["custom-class-name-1", "custom-class-name-2"]`</li></ul> |
+| onItemClick | Function called when a thumbnail has been clicked. Usually, you would like to use this callback to move the user wherever they requested to. | n/a           | `({ dest, pageIndex, pageNumber }) => alert('Clicked an item from page ' + pageNumber + '!')`                                                              |
 
 ## Useful links
 
