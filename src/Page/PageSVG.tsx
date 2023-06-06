@@ -21,6 +21,7 @@ export default function PageSVG() {
   invariant(pageContext, 'Unable to find Page context.');
 
   const {
+    _className,
     onRenderSuccess: onRenderSuccessProps,
     onRenderError: onRenderErrorProps,
     page,
@@ -145,7 +146,7 @@ export default function PageSVG() {
 
   return (
     <div
-      className="react-pdf__Page__svg"
+      className={`${_className}__svg`}
       // Note: This cannot be shortened, as we need this function to be called with each render.
       ref={(ref) => drawPageOnContainer(ref)}
       style={{

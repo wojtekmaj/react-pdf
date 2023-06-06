@@ -31,6 +31,7 @@ export default function PageCanvas(props: PageCanvasProps) {
 
   const mergedProps = { ...pageContext, ...props };
   const {
+    _className,
     canvasBackground,
     devicePixelRatio: devicePixelRatioProps,
     onRenderError: onRenderErrorProps,
@@ -164,7 +165,7 @@ export default function PageCanvas(props: PageCanvasProps) {
 
   return (
     <canvas
-      className="react-pdf__Page__canvas"
+      className={`${_className}__canvas`}
       dir="ltr"
       ref={mergeRefs(canvasRef, canvasElement)}
       style={{

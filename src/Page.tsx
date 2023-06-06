@@ -289,6 +289,7 @@ export default function Page(props: PageProps) {
     // Technically there cannot be page without pageIndex, pageNumber, rotate and scale, but TypeScript doesn't know that
     page && isProvided(pageIndex) && pageNumber && isProvided(rotate) && isProvided(scale)
       ? {
+          _className,
           canvasBackground,
           customTextRenderer,
           devicePixelRatio,

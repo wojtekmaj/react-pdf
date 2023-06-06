@@ -140,6 +140,7 @@ export type DocumentContextType = {
 } | null;
 
 export type PageContextType = {
+  _className?: string;
   canvasBackground?: string;
   customTextRenderer?: CustomTextRenderer;
   devicePixelRatio?: number;
