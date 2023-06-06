@@ -36,18 +36,27 @@ export default function Thumbnail(props: ThumbnailProps) {
     'Unable to find Document context. Did you wrap <Page /> in <Document />?',
   );
 
-  const { linkService } = documentContext;
+  const { linkService, onItemClick } = documentContext;
+
+  const pageIndex = isProvided(pageNumberProps) ? pageNumberProps - 1 : pageIndexProps ?? null;
 
   const pageNumber = pageNumberProps ?? (isProvided(pageIndexProps) ? pageIndexProps + 1 : null);
 
   function onClick(event: React.MouseEvent<HTMLAnchorElement>) {
     event.preventDefault();
 
-    if (!pageNumber) {
+    if (!isProvided(pageIndex) || !pageNumber) {
       return;
     }
 
-    linkService.goToPage(pageNumber);
+    if (onItemClick) {
+      onItemClick({
+        pageIndex,
+        pageNumber,
+      });
+    } else {
+      linkService.goToPage(pageNumber);
+    }
   }
 
   return (
