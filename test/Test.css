@@ -149,3 +149,14 @@ body {
 .Test__container__content__controls button {
   width: 80px;
 }
+
+.Test__container__content__thumbnails {
+  display: flex;
+  margin-top: 1em;
+  gap: 1em;
+  overflow: auto;
+}
+
+.Test__container__content__thumbnails .react-pdf__Thumbnail {
+  border: 1px solid black;
+}

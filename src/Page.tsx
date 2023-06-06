@@ -56,6 +56,8 @@ import type {
 const defaultScale = 1;
 
 export type PageProps = {
+  _className?: string;
+  _enableRegisterUnregisterPage?: boolean;
   canvasBackground?: string;
   canvasRef?: React.Ref<HTMLCanvasElement>;
   children?: React.ReactNode;
@@ -85,12 +87,14 @@ export type PageProps = {
   pageIndex?: number;
   pageNumber?: number;
   pdf?: PDFDocumentProxy | false;
+  registerPage?: undefined;
   renderAnnotationLayer?: boolean;
   renderForms?: boolean;
   renderMode?: RenderMode;
   renderTextLayer?: boolean;
   rotate?: number | null;
   scale?: number;
+  unregisterPage?: undefined;
   width?: number;
 } & EventProps<PageCallback | false | undefined>;
 
@@ -104,6 +108,8 @@ export default function Page(props: PageProps) {
 
   const mergedProps = { ...documentContext, ...props };
   const {
+    _className = 'react-pdf__Page',
+    _enableRegisterUnregisterPage = true,
     canvasBackground,
     canvasRef,
     children,
@@ -187,13 +193,13 @@ export default function Page(props: PageProps) {
         return;
       }
 
-      if (unregisterPage) {
+      if (_enableRegisterUnregisterPage && unregisterPage) {
         unregisterPage(pageIndex);
       }
     };
   }
 
-  useEffect(hook, [pdf, pageIndex, unregisterPage]);
+  useEffect(hook, [_enableRegisterUnregisterPage, pdf, pageIndex, unregisterPage]);
 
   /**
    * Called when a page is loaded successfully
@@ -208,7 +214,7 @@ export default function Page(props: PageProps) {
       onLoadSuccessProps(makePageCallback(page, scale));
     }
 
-    if (registerPage) {
+    if (_enableRegisterUnregisterPage && registerPage) {
       if (!isProvided(pageIndex) || !pageElement.current) {
         // Impossible, but TypeScript doesn't know that
         return;
@@ -283,6 +289,7 @@ export default function Page(props: PageProps) {
     // Technically there cannot be page without pageIndex, pageNumber, rotate and scale, but TypeScript doesn't know that
     page && isProvided(pageIndex) && pageNumber && isProvided(rotate) && isProvided(scale)
       ? {
+          _className,
           canvasBackground,
           customTextRenderer,
           devicePixelRatio,
@@ -383,7 +390,7 @@ export default function Page(props: PageProps) {
 
   return (
     <div
-      className={clsx('react-pdf__Page', className)}
+      className={clsx(_className, className)}
       data-page-number={pageNumber}
       ref={mergeRefs(inputRef, pageElement)}
       style={{

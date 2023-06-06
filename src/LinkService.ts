@@ -151,8 +151,20 @@ export default class LinkService implements IPDFLinkService {
     this.goToDestination(dest);
   }
 
-  goToPage() {
-    // Intentionally empty
+  goToPage(pageNumber: number) {
+    const pageIndex = pageNumber - 1;
+
+    invariant(this.pdfViewer, 'PDF viewer is not initialized.');
+
+    invariant(
+      pageNumber >= 1 && pageNumber <= this.pagesCount,
+      `"${pageNumber}" is not a valid page number.`,
+    );
+
+    this.pdfViewer.scrollPageIntoView({
+      pageIndex,
+      pageNumber,
+    });
   }
 
   addLinkAttributes(link: HTMLAnchorElement, url: string, newWindow: boolean) {
