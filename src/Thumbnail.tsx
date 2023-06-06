@@ -40,21 +40,26 @@ export default function Thumbnail(props: ThumbnailProps) {
 
   const pageNumber = pageNumberProps ?? (isProvided(pageIndexProps) ? pageIndexProps + 1 : null);
 
-  return (
-    <Page
-      {...props}
-      _className="react-pdf__Thumbnail"
-      _enableRegisterUnregisterPage={false}
-      onClick={() => {
-        if (!pageNumber) {
-          // Impossible, but TypeScript doesn't know that
-          return;
-        }
+  function onClick(event: React.MouseEvent<HTMLAnchorElement>) {
+    event.preventDefault();
 
-        linkService.goToPage(pageNumber);
-      }}
-      renderAnnotationLayer={false}
-      renderTextLayer={false}
-    />
+    if (!pageNumber) {
+      return;
+    }
+
+    linkService.goToPage(pageNumber);
+  }
+
+  return (
+    /* eslint-disable-next-line jsx-a11y/anchor-is-valid */
+    <a href={pageNumber ? '#' : undefined} onClick={onClick}>
+      <Page
+        {...props}
+        _className="react-pdf__Thumbnail"
+        _enableRegisterUnregisterPage={false}
+        renderAnnotationLayer={false}
+        renderTextLayer={false}
+      />
+    </a>
   );
 }
