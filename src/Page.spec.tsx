@@ -367,7 +367,7 @@ describe('Page', () => {
 
       const viewport = page.getViewport({ scale: 1 });
 
-      // Expect the annotation layer not to be rotated
+      // Expect the SVG layer not to be rotated
       expect(parseInt(width, 10)).toBe(Math.floor(viewport.width));
       expect(parseInt(height, 10)).toBe(Math.floor(viewport.height));
     });
@@ -390,7 +390,7 @@ describe('Page', () => {
 
       const viewport = page.getViewport({ scale: 1, rotation: rotate });
 
-      // Expect the annotation layer to be rotated
+      // Expect the SVG layer to be rotated
       expect(parseInt(width, 10)).toBe(Math.floor(viewport.width));
       expect(parseInt(height, 10)).toBe(Math.floor(viewport.height));
     });
