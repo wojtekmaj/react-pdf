@@ -104,7 +104,7 @@ describe('PageCanvas', () => {
       expect(canvasRef).toHaveBeenCalledWith(expect.any(HTMLElement));
     });
 
-    it('does not request struct tree to be rendered when renderTextLayer = false', async () => {
+    it('does not request structure tree to be rendered when renderTextLayer = false', async () => {
       const { func: onRenderSuccess, promise: onRenderSuccessPromise } = makeAsyncCallback();
 
       const { container } = renderWithContext(<PageCanvas />, {

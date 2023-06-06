@@ -38,7 +38,7 @@ describe('StructTree', () => {
   let page: PDFPageProxy;
   let page2: PDFPageProxy;
 
-  // Loaded struct tree
+  // Loaded structure tree
   let desiredStructTree: StructTreeNode;
   let desiredStructTree2: StructTreeNode;
 
@@ -53,7 +53,7 @@ describe('StructTree', () => {
   });
 
   describe('loading', () => {
-    it('loads struct tree and calls onGetStructTreeSuccess callback properly', async () => {
+    it('loads structure tree and calls onGetStructTreeSuccess callback properly', async () => {
       const { func: onGetStructTreeSuccess, promise: onGetStructTreeSuccessPromise } =
         makeAsyncCallback();
 
@@ -85,7 +85,7 @@ describe('StructTree', () => {
       restoreConsole();
     });
 
-    it('replaces struct tree properly when page is changed', async () => {
+    it('replaces structure tree properly when page is changed', async () => {
       const { func: onGetStructTreeSuccess, promise: onGetStructTreeSuccessPromise } =
         makeAsyncCallback();
 
@@ -119,7 +119,7 @@ describe('StructTree', () => {
   });
 
   describe('rendering', () => {
-    it('renders struct tree properly', async () => {
+    it('renders structure tree properly', async () => {
       const { func: onGetStructTreeSuccess, promise: onGetStructTreeSuccessPromise } =
         makeAsyncCallback();
 
