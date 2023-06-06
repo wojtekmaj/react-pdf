@@ -434,6 +434,7 @@ const Document = forwardRef(function Document(
   const childContext = {
     imageResourcesPath,
     linkService: linkService.current,
+    onItemClick,
     pdf,
     registerPage,
     renderMode,

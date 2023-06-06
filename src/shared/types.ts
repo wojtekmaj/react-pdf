@@ -157,5 +157,5 @@ export type PageContextType = {
 } | null;
 
 export type OutlineContextType = {
-  onClick?: (args: OnItemClickArgs) => void;
+  onItemClick?: (args: OnItemClickArgs) => void;
 } | null;

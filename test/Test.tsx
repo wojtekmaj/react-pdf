@@ -284,9 +284,7 @@ export default function Test() {
             onSourceError={onDocumentLoadError}
           >
             <div className="Test__container__content__toc">
-              {render ? (
-                <Outline className="custom-classname-outline" onItemClick={onItemClick} />
-              ) : null}
+              {render ? <Outline className="custom-classname-outline" /> : null}
             </div>
             <div className="Test__container__content__document">
               {render ? (
