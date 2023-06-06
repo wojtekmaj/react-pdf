@@ -4,7 +4,6 @@
     "esModuleInterop": true,
     "isolatedModules": true,
     "jsx": "react",
-    "module": "esnext",
     "moduleResolution": "node",
     "noUncheckedIndexedAccess": true,
     "outDir": "dist",
