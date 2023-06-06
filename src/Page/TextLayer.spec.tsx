@@ -204,19 +204,11 @@ describe('TextLayer', () => {
 
       const wrapper2 = container.firstElementChild as HTMLDivElement;
       const wrapperChildren2 = Array.from(wrapper2.children);
-      const textItems2 = wrapperChildren2;
-
-      // Compare tag name and text content only as the styles change depending on the presence of markedContent
-      function getTagNameAndTextContent(element: Element) {
-        return {
-          tagName: element.tagName,
-          textContent: element.textContent,
-        };
-      }
-
-      expect(textItems.map(getTagNameAndTextContent)).toEqual(
-        textItems2.map(getTagNameAndTextContent),
+      const textItems2 = wrapperChildren2.flatMap((child) =>
+        child.classList.contains('markedContent') ? Array.from(child.children) : child,
       );
+
+      expect(textItems).toEqual(textItems2);
     });
 
     it('calls customTextRenderer with necessary arguments', async () => {

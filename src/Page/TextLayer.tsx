@@ -183,7 +183,7 @@ export default function TextLayer() {
 
     layer.innerHTML = '';
 
-    const textContentSource = page.streamTextContent({ includeMarkedContent: !customTextRenderer });
+    const textContentSource = page.streamTextContent({ includeMarkedContent: true });
 
     const parameters = {
       container: layer,
@@ -201,6 +201,10 @@ export default function TextLayer() {
         layer.append(end);
         endElement.current = end;
 
+        const layerChildrenDeep = layer.querySelectorAll(
+          '.textLayer > *:not(.markedContent, .endOfContent), .textLayer > .markedContent > *',
+        );
+
         if (customTextRenderer) {
           let index = 0;
           textContent.items.forEach((item, itemIndex) => {
@@ -208,7 +212,7 @@ export default function TextLayer() {
               return;
             }
 
-            const child = layer.children[index];
+            const child = layerChildrenDeep[index];
 
             if (!child) {
               return;

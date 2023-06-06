@@ -32,7 +32,6 @@ export default function PageCanvas(props: PageCanvasProps) {
   const mergedProps = { ...pageContext, ...props };
   const {
     canvasBackground,
-    customTextRenderer,
     devicePixelRatio: devicePixelRatioProps,
     onRenderError: onRenderErrorProps,
     onRenderSuccess: onRenderSuccessProps,
@@ -173,7 +172,7 @@ export default function PageCanvas(props: PageCanvasProps) {
         userSelect: 'none',
       }}
     >
-      {renderTextLayer && !customTextRenderer ? <StructTree /> : null}
+      {renderTextLayer ? <StructTree /> : null}
     </canvas>
   );
 }
