@@ -260,13 +260,13 @@ If you use Parcel, Browserify or other bundling tools, you will have to make sur
 
 For example, you could use a custom script like:
 
-```js
+```ts
 import path from 'node:path';
 import fs from 'node:fs';
 
 const cMapsDir = path.join(path.dirname(require.resolve('pdfjs-dist/package.json')), 'cmaps');
 
-function copyDir(from, to) {
+function copyDir(from: string, to: string) {
   // Ensure target directory exists
   fs.mkdirSync(to, { recursive: true });
 
@@ -347,7 +347,7 @@ If you use Parcel, Browserify or other bundling tools, you will have to make sur
 
 For example, you could use a custom script like:
 
-```js
+```ts
 import path from 'node:path';
 import fs from 'node:fs';
 
@@ -356,7 +356,7 @@ const standardFontsDir = path.join(
   'standard_fonts',
 );
 
-function copyDir(from, to) {
+function copyDir(from: string, to: string) {
   // Ensure target directory exists
   fs.mkdirSync(to, { recursive: true });
 
