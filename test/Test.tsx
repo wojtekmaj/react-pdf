@@ -319,13 +319,11 @@ export default function Test() {
                 </button>
               </div>
             )}
-            {displayAll || (
-              <div className="Test__container__content__thumbnails">
-                {Array.from(new Array(numPages), (el, index) => (
-                  <Thumbnail key={`thumbnail_${index + 1}`} pageNumber={index + 1} width={100} />
-                ))}
-              </div>
-            )}
+            <div className="Test__container__content__thumbnails">
+              {Array.from(new Array(numPages), (el, index) => (
+                <Thumbnail key={`thumbnail_${index + 1}`} pageNumber={index + 1} width={100} />
+              ))}
+            </div>
           </Document>
         </main>
       </div>
