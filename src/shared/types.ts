@@ -8,6 +8,7 @@ import type {
   BinaryData,
   DocumentInitParameters,
   RefProxy,
+  StructTreeNode,
   TextContent,
   TextItem,
 } from 'pdfjs-dist/types/src/display/api';
@@ -91,6 +92,10 @@ export type OnGetAnnotationsError = OnError;
 
 export type OnGetAnnotationsSuccess = (annotations: Annotations) => void;
 
+export type OnGetStructTreeError = OnError;
+
+export type OnGetStructTreeSuccess = (tree: StructTreeNode) => void;
+
 export type OnGetTextError = OnError;
 
 export type OnGetTextSuccess = (textContent: TextContent) => void;
@@ -139,6 +144,8 @@ export type PageContextType = {
   devicePixelRatio?: number;
   onGetAnnotationsError?: OnGetAnnotationsError;
   onGetAnnotationsSuccess?: OnGetAnnotationsSuccess;
+  onGetStructTreeError?: OnGetStructTreeError;
+  onGetStructTreeSuccess?: OnGetStructTreeSuccess;
   onGetTextError?: OnGetTextError;
   onGetTextSuccess?: OnGetTextSuccess;
   onRenderAnnotationLayerError?: OnRenderAnnotationLayerError;

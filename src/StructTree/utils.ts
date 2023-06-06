@@ -1,52 +1,71 @@
 import { HEADING_PATTERN, PDF_ROLE_TO_HTML_ROLE } from './constants';
 
-import type { StructTreeContent, StructTreeNode } from 'pdfjs-dist/types/src/display/api';
-import type { PdfTagRole, StructTreeAttributes } from './types';
+import type { StructTreeContent } from 'pdfjs-dist/types/src/display/api';
+import type { PdfTagRole, StructTreeAttributes, StructTreeNodeWithExtraAttributes } from './types';
 
-export function getRoleAttributes(node: StructTreeNode) {
+export function isStructTreeNode(
+  node: StructTreeNodeWithExtraAttributes | StructTreeContent,
+): node is StructTreeNodeWithExtraAttributes {
+  return 'children' in node;
+}
+
+export function isStructTreeNodeWithOnlyContentChild(
+  node: StructTreeNodeWithExtraAttributes | StructTreeContent,
+): boolean {
+  if (!isStructTreeNode(node)) {
+    return false;
+  }
+
+  return Boolean(node.children.length === 1 && node.children[0] && 'id' in node.children[0]);
+}
+
+export function getRoleAttributes(
+  node?: StructTreeNodeWithExtraAttributes | StructTreeContent,
+): StructTreeAttributes {
   const attributes: StructTreeAttributes = {};
 
-  const { role } = node;
+  if (!node) {
+    return attributes;
+  }
 
-  const match = role?.match(HEADING_PATTERN);
+  if ('role' in node) {
+    const { role } = node;
 
-  if (match) {
-    attributes.role = 'heading';
-    attributes['aria-level'] = Number(match[1]);
-  } else if (PDF_ROLE_TO_HTML_ROLE[role as PdfTagRole]) {
-    attributes.role = PDF_ROLE_TO_HTML_ROLE[role as PdfTagRole] ?? undefined;
+    const match = role?.match(HEADING_PATTERN);
+
+    if (match) {
+      attributes.role = 'heading';
+      attributes['aria-level'] = Number(match[1]);
+    } else if (PDF_ROLE_TO_HTML_ROLE[role as PdfTagRole]) {
+      attributes.role = PDF_ROLE_TO_HTML_ROLE[role as PdfTagRole] ?? undefined;
+    }
   }
 
   return attributes;
 }
 
 export function getStandardAttributes(
-  node: StructTreeNode | StructTreeContent,
+  node?: StructTreeNodeWithExtraAttributes | StructTreeContent,
 ): StructTreeAttributes {
   const attributes: StructTreeAttributes = {};
 
-  // TODO: Uncomment if possible to prove these node properties can exist
-  /*
-  if (node.alt !== undefined) {
+  if (!node) {
+    return attributes;
+  }
+
+  if ('alt' in node && node.alt !== undefined) {
     attributes['aria-label'] = node.alt;
   }
 
-  if (node.lang !== undefined) {
+  if ('lang' in node && node.lang !== undefined) {
     attributes.lang = node.lang;
   }
-  */
 
   if ('id' in node) {
     attributes['aria-owns'] = node.id;
   }
 
-  if (
-    'children' in node &&
-    node.children.length === 1 &&
-    node.children[0] &&
-    'type' in node.children[0] &&
-    node.children[0].type === 'content'
-  ) {
+  if (isStructTreeNode(node) && isStructTreeNodeWithOnlyContentChild(node)) {
     const contentChild = node.children[0];
 
     return {
@@ -58,7 +77,9 @@ export function getStandardAttributes(
   return attributes;
 }
 
-export function getAttributes(node?: StructTreeNode | false) {
+export function getAttributes(
+  node?: StructTreeNodeWithExtraAttributes | StructTreeContent | false,
+) {
   if (!node) {
     return null;
   }
