@@ -37,6 +37,7 @@ export default function PageCanvas(props: PageCanvasProps) {
     onRenderSuccess: onRenderSuccessProps,
     page,
     renderForms,
+    renderTextLayer,
     rotate,
     scale,
   } = mergedProps;
@@ -171,7 +172,7 @@ export default function PageCanvas(props: PageCanvasProps) {
         userSelect: 'none',
       }}
     >
-      <StructTree />
+      {renderTextLayer ? <StructTree /> : null}
     </canvas>
   );
 }

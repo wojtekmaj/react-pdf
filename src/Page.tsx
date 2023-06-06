@@ -306,6 +306,7 @@ export default function Page(props: PageProps) {
           pageIndex,
           pageNumber,
           renderForms,
+          renderTextLayer: renderTextLayerProps,
           rotate,
           scale,
         }

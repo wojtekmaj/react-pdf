@@ -11,10 +11,11 @@ import type { StructTreeContent } from 'pdfjs-dist/types/src/display/api';
 import type { StructTreeNodeWithExtraAttributes } from './shared/types';
 
 type StructTreeItemProps = {
+  className?: string;
   node: StructTreeNodeWithExtraAttributes | StructTreeContent;
 };
 
-export default function StructTreeItem({ node }: StructTreeItemProps) {
+export default function StructTreeItem({ className, node }: StructTreeItemProps) {
   const attributes = useMemo(() => getAttributes(node), [node]);
 
   const children = useMemo(() => {
@@ -34,7 +35,11 @@ export default function StructTreeItem({ node }: StructTreeItemProps) {
     });
   }, [node]);
 
-  return <span {...attributes}>{children}</span>;
+  return (
+    <span className={className} {...attributes}>
+      {children}
+    </span>
+  );
 }
 
 StructTreeItem.propTypes = {

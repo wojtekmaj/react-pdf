@@ -104,5 +104,5 @@ export default function StructTree() {
     return null;
   }
 
-  return <StructTreeItem node={structTree} />;
+  return <StructTreeItem className="react-pdf__Page__structTree structTree" node={structTree} />;
 }

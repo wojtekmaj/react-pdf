@@ -158,6 +158,7 @@ export type PageContextType = {
   pageIndex: number;
   pageNumber: number;
   renderForms: boolean;
+  renderTextLayer: boolean;
   rotate: number;
   scale: number;
 } | null;

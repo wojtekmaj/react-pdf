@@ -135,7 +135,7 @@ describe('StructTree', () => {
       const wrapper = container.firstElementChild as HTMLSpanElement;
 
       expect(wrapper.outerHTML).toBe(
-        '<span><span><span role="heading" aria-level="1" aria-owns="page3R_mcid0"></span><span aria-owns="page3R_mcid1"></span><span aria-owns="page3R_mcid2"></span><span role="figure" aria-owns="page3R_mcid12"></span><span aria-owns="page3R_mcid3"></span><span aria-owns="page3R_mcid4"></span><span role="heading" aria-level="2" aria-owns="page3R_mcid5"></span><span aria-owns="page3R_mcid6"></span><span><span aria-owns="page3R_mcid7"></span><span role="link"><span aria-owns="13R"></span><span aria-owns="page3R_mcid8"></span></span><span aria-owns="page3R_mcid9"></span></span><span aria-owns="page3R_mcid10"></span><span aria-owns="page3R_mcid11"></span></span></span>',
+        '<span class="react-pdf__Page__structTree structTree"><span><span role="heading" aria-level="1" aria-owns="page3R_mcid0"></span><span aria-owns="page3R_mcid1"></span><span aria-owns="page3R_mcid2"></span><span role="figure" aria-owns="page3R_mcid12"></span><span aria-owns="page3R_mcid3"></span><span aria-owns="page3R_mcid4"></span><span role="heading" aria-level="2" aria-owns="page3R_mcid5"></span><span aria-owns="page3R_mcid6"></span><span><span aria-owns="page3R_mcid7"></span><span role="link"><span aria-owns="13R"></span><span aria-owns="page3R_mcid8"></span></span><span aria-owns="page3R_mcid9"></span></span><span aria-owns="page3R_mcid10"></span><span aria-owns="page3R_mcid11"></span></span></span>',
       );
     });
   });
