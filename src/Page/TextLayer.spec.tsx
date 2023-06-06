@@ -34,6 +34,14 @@ function renderWithContext(children: React.ReactNode, context: Partial<PageConte
   };
 }
 
+function getTextItems(container: HTMLElement) {
+  const wrapper = container.firstElementChild as HTMLDivElement;
+
+  return wrapper.querySelectorAll(
+    '.textLayer > *:not(.markedContent, .endOfContent), .textLayer > .markedContent > *',
+  );
+}
+
 describe('TextLayer', () => {
   // Loaded page
   let page: PDFPageProxy;
@@ -136,13 +144,9 @@ describe('TextLayer', () => {
 
       await onRenderTextLayerSuccessPromise;
 
-      const wrapper = container.firstElementChild as HTMLDivElement;
-      const wrapperChildren = Array.from(wrapper.children);
-      const textItems = wrapperChildren.flatMap((child) =>
-        child.classList.contains('markedContent') ? Array.from(child.children) : child,
-      );
+      const textItems = getTextItems(container);
 
-      expect(textItems).toHaveLength(desiredTextItems.length + 1);
+      expect(textItems).toHaveLength(desiredTextItems.length);
     });
 
     it('renders text content properly given customTextRenderer', async () => {
@@ -161,13 +165,9 @@ describe('TextLayer', () => {
 
       await onRenderTextLayerSuccessPromise;
 
-      const wrapper = container.firstElementChild as HTMLDivElement;
-      const wrapperChildren = Array.from(wrapper.children);
-      const textItems = wrapperChildren.flatMap((child) =>
-        child.classList.contains('markedContent') ? Array.from(child.children) : child,
-      );
+      const textItems = getTextItems(container);
 
-      expect(textItems).toHaveLength(desiredTextItems.length + 1);
+      expect(textItems).toHaveLength(desiredTextItems.length);
     });
 
     it('maps textContent items to actual TextLayer children properly', async () => {
@@ -183,11 +183,7 @@ describe('TextLayer', () => {
 
       await onRenderTextLayerSuccessPromise;
 
-      const wrapper = container.firstElementChild as HTMLDivElement;
-      const wrapperChildren = Array.from(wrapper.children);
-      const textItems = wrapperChildren.flatMap((child) =>
-        child.classList.contains('markedContent') ? Array.from(child.children) : child,
-      );
+      const textItems = getTextItems(container);
 
       const { func: onRenderTextLayerSuccess2, promise: onRenderTextLayerSuccessPromise2 } =
         makeAsyncCallback();
@@ -202,11 +198,7 @@ describe('TextLayer', () => {
 
       await onRenderTextLayerSuccessPromise2;
 
-      const wrapper2 = container.firstElementChild as HTMLDivElement;
-      const wrapperChildren2 = Array.from(wrapper2.children);
-      const textItems2 = wrapperChildren2.flatMap((child) =>
-        child.classList.contains('markedContent') ? Array.from(child.children) : child,
-      );
+      const textItems2 = getTextItems(container);
 
       expect(textItems).toEqual(textItems2);
     });
@@ -227,13 +219,9 @@ describe('TextLayer', () => {
 
       await onRenderTextLayerSuccessPromise;
 
-      const wrapper = container.firstElementChild as HTMLDivElement;
-      const wrapperChildren = Array.from(wrapper.children);
-      const textItems = wrapperChildren.flatMap((child) =>
-        child.classList.contains('markedContent') ? Array.from(child.children) : child,
-      );
+      const textItems = getTextItems(container);
 
-      expect(textItems).toHaveLength(desiredTextItems.length + 1);
+      expect(textItems).toHaveLength(desiredTextItems.length);
 
       expect(customTextRenderer).toHaveBeenCalledTimes(desiredTextItems.length);
       expect(customTextRenderer).toHaveBeenCalledWith(
