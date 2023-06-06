@@ -8,11 +8,11 @@ import { isProvided } from './shared/utils';
 import useDocumentContext from './shared/hooks/useDocumentContext';
 
 import type { PageProps } from './Page';
+import type { OnItemClickArgs } from './shared/types';
 
 export type ThumbnailProps = Omit<
   PageProps,
   | 'customTextRenderer'
-  | 'onClick'
   | 'onGetAnnotationsError'
   | 'onGetAnnotationsSuccess'
   | 'onGetTextError'
@@ -24,7 +24,9 @@ export type ThumbnailProps = Omit<
   | 'renderAnnotationLayer'
   | 'renderForms'
   | 'renderTextLayer'
->;
+> & {
+  onItemClick?: (args: OnItemClickArgs) => void;
+};
 
 export default function Thumbnail(props: ThumbnailProps) {
   const { pageIndex: pageIndexProps, pageNumber: pageNumberProps } = props;
@@ -36,7 +38,8 @@ export default function Thumbnail(props: ThumbnailProps) {
     'Unable to find Document context. Did you wrap <Page /> in <Document />?',
   );
 
-  const { linkService, onItemClick } = documentContext;
+  const mergedProps = { ...documentContext, ...props };
+  const { linkService, onItemClick } = mergedProps;
 
   const pageIndex = isProvided(pageNumberProps) ? pageNumberProps - 1 : pageIndexProps ?? null;
 
