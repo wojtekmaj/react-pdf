@@ -114,11 +114,22 @@ export default function Test() {
     [],
   );
 
+  const onPageClick = useCallback(
+    (event: React.MouseEvent<HTMLDivElement>, page: PDFPageProxy | false | undefined) =>
+      console.log('Clicked a page', { event, page }),
+    [],
+  );
+
   const onItemClick = useCallback((args: { pageNumber: number }) => {
     console.log('Clicked an item', args);
     const { pageNumber: nextPageNumber } = args;
     setPageNumber(nextPageNumber);
   }, []);
+
+  const customTextRenderer = useCallback(
+    ({ str }: { str: string }) => str.replace(/ipsum/g, (value) => `<mark>${value}</mark>`),
+    [],
+  );
 
   useEffect(() => {
     (async () => {
@@ -197,34 +208,27 @@ export default function Test() {
 
   const nextPage = useCallback(() => changePage(1), [changePage]);
 
-  function getPageProps() {
-    return {
-      canvasBackground,
-      className: 'custom-classname-page',
-      devicePixelRatio,
-      height: pageHeight,
-      onClick: (event: React.MouseEvent<HTMLDivElement>, page: PDFPageProxy | false | undefined) =>
-        console.log('Clicked a page', { event, page }),
-      onRenderSuccess: onPageRenderSuccess,
-      renderAnnotationLayer,
-      renderForms,
-      renderMode,
-      renderTextLayer,
-      scale: pageScale,
-      width: pageWidth,
-      customTextRenderer: useCustomTextRenderer
-        ? ({ str }: { str: string }) => str.replace(/ipsum/g, (value) => `<mark>${value}</mark>`)
-        : undefined,
-    };
-  }
-
-  const pageProps = getPageProps();
-
   const documentProps = {
     externalLinkTarget,
     file: fileForProps,
     options,
     rotate,
+  };
+
+  const pageProps = {
+    canvasBackground,
+    className: 'custom-classname-page',
+    customTextRenderer: useCustomTextRenderer ? customTextRenderer : undefined,
+    devicePixelRatio,
+    height: pageHeight,
+    onClick: onPageClick,
+    onRenderSuccess: onPageRenderSuccess,
+    renderAnnotationLayer,
+    renderForms,
+    renderMode,
+    renderTextLayer,
+    scale: pageScale,
+    width: pageWidth,
   };
 
   return (
