@@ -431,16 +431,19 @@ const Document = forwardRef(function Document(
     delete pages.current[pageIndex];
   }
 
-  const childContext = {
-    imageResourcesPath,
-    linkService: linkService.current,
-    onItemClick,
-    pdf,
-    registerPage,
-    renderMode,
-    rotate,
-    unregisterPage,
-  };
+  const childContext = useMemo(
+    () => ({
+      imageResourcesPath,
+      linkService: linkService.current,
+      onItemClick,
+      pdf,
+      registerPage,
+      renderMode,
+      rotate,
+      unregisterPage,
+    }),
+    [imageResourcesPath, onItemClick, pdf, renderMode, rotate],
+  );
 
   const eventProps = useMemo(() => makeEventProps(otherProps, () => pdf), [otherProps, pdf]);
 

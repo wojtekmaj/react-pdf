@@ -285,35 +285,62 @@ export default function Page(props: PageProps) {
     [page, scale],
   );
 
-  const childContext =
-    // Technically there cannot be page without pageIndex, pageNumber, rotate and scale, but TypeScript doesn't know that
-    page && isProvided(pageIndex) && pageNumber && isProvided(rotate) && isProvided(scale)
-      ? {
-          _className,
-          canvasBackground,
-          customTextRenderer,
-          devicePixelRatio,
-          onGetAnnotationsError: onGetAnnotationsErrorProps,
-          onGetAnnotationsSuccess: onGetAnnotationsSuccessProps,
-          onGetStructTreeError: onGetStructTreeErrorProps,
-          onGetStructTreeSuccess: onGetStructTreeSuccessProps,
-          onGetTextError: onGetTextErrorProps,
-          onGetTextSuccess: onGetTextSuccessProps,
-          onRenderAnnotationLayerError: onRenderAnnotationLayerErrorProps,
-          onRenderAnnotationLayerSuccess: onRenderAnnotationLayerSuccessProps,
-          onRenderError: onRenderErrorProps,
-          onRenderSuccess: onRenderSuccessProps,
-          onRenderTextLayerError: onRenderTextLayerErrorProps,
-          onRenderTextLayerSuccess: onRenderTextLayerSuccessProps,
-          page,
-          pageIndex,
-          pageNumber,
-          renderForms,
-          renderTextLayer: renderTextLayerProps,
-          rotate,
-          scale,
-        }
-      : null;
+  const childContext = useMemo(
+    () =>
+      // Technically there cannot be page without pageIndex, pageNumber, rotate and scale, but TypeScript doesn't know that
+      page && isProvided(pageIndex) && pageNumber && isProvided(rotate) && isProvided(scale)
+        ? {
+            _className,
+            canvasBackground,
+            customTextRenderer,
+            devicePixelRatio,
+            onGetAnnotationsError: onGetAnnotationsErrorProps,
+            onGetAnnotationsSuccess: onGetAnnotationsSuccessProps,
+            onGetStructTreeError: onGetStructTreeErrorProps,
+            onGetStructTreeSuccess: onGetStructTreeSuccessProps,
+            onGetTextError: onGetTextErrorProps,
+            onGetTextSuccess: onGetTextSuccessProps,
+            onRenderAnnotationLayerError: onRenderAnnotationLayerErrorProps,
+            onRenderAnnotationLayerSuccess: onRenderAnnotationLayerSuccessProps,
+            onRenderError: onRenderErrorProps,
+            onRenderSuccess: onRenderSuccessProps,
+            onRenderTextLayerError: onRenderTextLayerErrorProps,
+            onRenderTextLayerSuccess: onRenderTextLayerSuccessProps,
+            page,
+            pageIndex,
+            pageNumber,
+            renderForms,
+            renderTextLayer: renderTextLayerProps,
+            rotate,
+            scale,
+          }
+        : null,
+    [
+      _className,
+      canvasBackground,
+      customTextRenderer,
+      devicePixelRatio,
+      onGetAnnotationsErrorProps,
+      onGetAnnotationsSuccessProps,
+      onGetStructTreeErrorProps,
+      onGetStructTreeSuccessProps,
+      onGetTextErrorProps,
+      onGetTextSuccessProps,
+      onRenderAnnotationLayerErrorProps,
+      onRenderAnnotationLayerSuccessProps,
+      onRenderErrorProps,
+      onRenderSuccessProps,
+      onRenderTextLayerErrorProps,
+      onRenderTextLayerSuccessProps,
+      page,
+      pageIndex,
+      pageNumber,
+      renderForms,
+      renderTextLayerProps,
+      rotate,
+      scale,
+    ],
+  );
 
   const eventProps = useMemo(
     () =>
