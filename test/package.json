@@ -6,6 +6,8 @@
   "type": "module",
   "scripts": {
     "build": "vite build",
+    "copy-cmaps": "node --experimental-import-meta-resolve --loader ts-node/esm ./scripts/copy-cmaps.ts",
+    "copy-standard-fonts": "node --experimental-import-meta-resolve --loader ts-node/esm ./scripts/copy-standard-fonts.ts",
     "dev": "vite",
     "preview": "vite preview"
   },
@@ -18,7 +20,8 @@
     "prop-types": "^15.6.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-pdf": "portal:../"
+    "react-pdf": "portal:../",
+    "ts-node": "^10.9.1"
   },
   "devDependencies": {
     "@types/babel__core": "^7.20.0",
