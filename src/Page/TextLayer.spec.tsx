@@ -17,7 +17,7 @@ import type { TextContent } from 'pdfjs-dist/types/src/display/api';
 import type { PageContextType } from '../shared/types';
 
 const pdfFile = loadPDF('./__mocks__/_pdf.pdf');
-const untaggedPdf = loadPDF('./__mocks__/_untagged.pdf');
+const untaggedPdfFile = loadPDF('./__mocks__/_untagged.pdf');
 
 function renderWithContext(children: React.ReactNode, context: Partial<PageContextType>) {
   const { rerender, ...otherResult } = render(
@@ -256,7 +256,7 @@ describe('TextLayer', () => {
 
       const customTextRenderer = () => 'Test value';
 
-      const untaggedDoc = await pdfjs.getDocument({ data: untaggedPdf.arrayBuffer }).promise;
+      const untaggedDoc = await pdfjs.getDocument({ data: untaggedPdfFile.arrayBuffer }).promise;
       const untaggedPage = await untaggedDoc.getPage(1);
 
       const { container } = renderWithContext(<TextLayer />, {
