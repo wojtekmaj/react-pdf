@@ -17,6 +17,7 @@ import type { TextContent } from 'pdfjs-dist/types/src/display/api';
 import type { PageContextType } from '../shared/types';
 
 const pdfFile = loadPDF('./__mocks__/_pdf.pdf');
+const untaggedPdfFile = loadPDF('./__mocks__/_untagged.pdf');
 
 function renderWithContext(children: React.ReactNode, context: Partial<PageContextType>) {
   const { rerender, ...otherResult } = render(
@@ -240,6 +241,28 @@ describe('TextLayer', () => {
         customTextRenderer,
         onRenderTextLayerSuccess,
         page,
+      });
+
+      expect.assertions(1);
+
+      await onRenderTextLayerSuccessPromise;
+
+      expect(container).toHaveTextContent('Test value');
+    });
+
+    it('renders text content properly given customTextRenderer and untagged document', async () => {
+      const { func: onRenderTextLayerSuccess, promise: onRenderTextLayerSuccessPromise } =
+        makeAsyncCallback();
+
+      const customTextRenderer = () => 'Test value';
+
+      const untaggedDoc = await pdfjs.getDocument({ data: untaggedPdfFile.arrayBuffer }).promise;
+      const untaggedPage = await untaggedDoc.getPage(1);
+
+      const { container } = renderWithContext(<TextLayer />, {
+        customTextRenderer,
+        onRenderTextLayerSuccess,
+        page: untaggedPage,
       });
 
       expect.assertions(1);

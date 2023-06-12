@@ -202,7 +202,11 @@ export default function TextLayer() {
         layer.append(end);
         endElement.current = end;
 
-        const layerChildrenDeep = layer.querySelectorAll('.markedContent > *:not(.markedContent');
+        const hasMarkedContent = Boolean(layer.querySelector('.markedContent'));
+
+        const layerChildren = hasMarkedContent
+          ? layer.querySelectorAll('.markedContent > *:not(.markedContent')
+          : layer.children;
 
         if (customTextRenderer) {
           let index = 0;
@@ -211,7 +215,7 @@ export default function TextLayer() {
               return;
             }
 
-            const child = layerChildrenDeep[index];
+            const child = layerChildren[index];
 
             if (!child) {
               return;
