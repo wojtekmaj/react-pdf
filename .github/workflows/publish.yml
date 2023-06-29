@@ -1,0 +1,52 @@
+name: Publish
+
+on:
+  release:
+    types: [published]
+
+permissions:
+  id-token: write
+
+jobs:
+  publish:
+    name: Publish
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Cache .yarn/cache
+        uses: actions/cache@v3
+        env:
+          cache-name: yarn-cache
+        with:
+          path: .yarn/cache
+          key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-${{ env.cache-name }}
+
+      - name: Use Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Enable Corepack
+        run: corepack enable
+
+      - name: Install dependencies
+        run: yarn --immutable
+        env:
+          HUSKY: 0
+
+      - name: Publish with latest tag
+        if: github.event.release.prelease == false
+        run: yarn npm publish --tag latest
+        env:
+          YARN_NPM_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Publish with next tag
+        if: github.event.release.prelease == true
+        run: yarn npm publish --tag next
+        env:
+          YARN_NPM_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
