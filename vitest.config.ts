@@ -9,5 +9,6 @@ export default defineConfig({
     exclude: [...configDefaults.exclude, 'src/index.test.ts'],
     setupFiles: 'vitest.setup.ts',
     threads: false,
+    watch: false,
   },
 });

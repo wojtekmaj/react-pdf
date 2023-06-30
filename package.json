@@ -22,7 +22,7 @@
     "prettier": "prettier --check . --cache",
     "test": "yarn lint && yarn tsc && yarn prettier && yarn unit",
     "tsc": "tsc --noEmit",
-    "unit": "vitest run"
+    "unit": "vitest"
   },
   "keywords": [
     "pdf",
