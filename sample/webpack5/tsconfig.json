@@ -4,12 +4,17 @@
     "esModuleInterop": true,
     "isolatedModules": true,
     "jsx": "react",
-    "module": "commonjs",
+    "module": "esnext",
     "moduleResolution": "node",
     "noUncheckedIndexedAccess": true,
     "outDir": "dist",
     "strict": true,
     "strictNullChecks": true,
     "target": "es2015"
+  },
+  "ts-node": {
+    "compilerOptions": {
+      "module": "commonjs"
+    }
   }
 }
