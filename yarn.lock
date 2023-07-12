@@ -3606,12 +3606,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"merge-refs@npm:^1.1.3":
-  version: 1.1.3
-  resolution: "merge-refs@npm:1.1.3"
+"merge-refs@npm:^1.2.1":
+  version: 1.2.1
+  resolution: "merge-refs@npm:1.2.1"
   dependencies:
     "@types/react": "*"
-  checksum: beb413608e307866fb1b44cbb3bc6b2d2b9c117a416f85513716c5ab4701abfa03f2b4ab77c6ce7ece5b724d4b88a440479591be23d06d546cd2ceddc84997af
+  checksum: 22b1177105b112f34753eb6b899a9c1f7ad06f47c06b16173d16ba3f183f37c557a2f837fea69d3997e0f8c0643d942f3068138993790c800601bae62acde070
   languageName: node
   linkType: hard
 
@@ -4495,7 +4495,7 @@ __metadata:
     jsdom: ^21.1.0
     make-cancellable-promise: ^1.3.1
     make-event-props: ^1.5.0
-    merge-refs: ^1.1.3
+    merge-refs: ^1.2.1
     pdfjs-dist: 3.6.172
     prettier: ^2.7.0
     pretty-quick: ^3.1.0
