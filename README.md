@@ -127,18 +127,6 @@ pdfjs.GlobalWorkerOptions.workerSrc = new URL(
 <details>
 <summary>See more examples</summary>
 
-##### Parcel 1
-
-For Parcel 1, you will have use the following code:
-
-```js
-import { pdfjs } from 'react-pdf';
-
-pdfjs.GlobalWorkerOptions.workerPort = new Worker(
-  'node_modules/pdfjs-dist/build/pdf.worker.entry.js',
-);
-```
-
 ##### Parcel 2
 
 For Parcel 2, you need to use a slightly different code:
