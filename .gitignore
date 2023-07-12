@@ -9,10 +9,11 @@
 !**/.yarn/sdks
 yarn-error.log
 
-# Project-generated directories
+# Project-generated files and directories
 coverage
 dist
 node_modules
+package.tgz
 
 # Other
 **/.DS_Store
