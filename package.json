@@ -51,7 +51,7 @@
     "@testing-library/user-event": "^14.4.0",
     "@types/node": "*",
     "eslint": "^8.26.0",
-    "eslint-config-wojtekmaj": "^0.8.4",
+    "eslint-config-wojtekmaj": "^0.9.0",
     "husky": "^8.0.0",
     "jsdom": "^21.1.0",
     "prettier": "^2.7.0",
