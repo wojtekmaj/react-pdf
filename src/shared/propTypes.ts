@@ -55,7 +55,7 @@ const fileTypes = [
   }),
 ];
 if (typeof Blob !== 'undefined') {
-  (fileTypes as Array<PropTypes.Validator<unknown>>).push(PropTypes.instanceOf(Blob));
+  (fileTypes as PropTypes.Validator<unknown>[]).push(PropTypes.instanceOf(Blob));
 }
 
 export const isClassName = PropTypes.oneOfType([
