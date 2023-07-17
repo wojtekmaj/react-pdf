@@ -232,17 +232,6 @@ export default function ViewOptions({
       <label htmlFor="renderMode">Render mode:</label>
       <div>
         <input
-          checked={renderMode === 'none'}
-          id="renderNone"
-          name="renderMode"
-          onChange={onRenderModeChange}
-          type="radio"
-          value="none"
-        />
-        <label htmlFor="renderNone">None</label>
-      </div>
-      <div>
-        <input
           checked={!renderMode || renderMode === 'canvas'}
           id="renderCanvas"
           name="renderMode"
@@ -251,6 +240,28 @@ export default function ViewOptions({
           value="canvas"
         />
         <label htmlFor="renderCanvas">Canvas</label>
+      </div>
+      <div>
+        <input
+          checked={renderMode === 'custom'}
+          id="renderCustom"
+          name="renderMode"
+          onChange={onRenderModeChange}
+          type="radio"
+          value="custom"
+        />
+        <label htmlFor="renderCustom">Custom</label>
+      </div>
+      <div>
+        <input
+          checked={renderMode === 'none'}
+          id="renderNone"
+          name="renderMode"
+          onChange={onRenderModeChange}
+          type="radio"
+          value="none"
+        />
+        <label htmlFor="renderNone">None</label>
       </div>
       <div>
         <input
@@ -301,7 +312,7 @@ ViewOptions.propTypes = {
   pageHeight: PropTypes.number,
   pageScale: PropTypes.number,
   pageWidth: PropTypes.number,
-  renderMode: PropTypes.oneOf(['canvas', 'none', 'svg']),
+  renderMode: PropTypes.oneOf(['canvas', 'custom', 'none', 'svg']),
   rotate: PropTypes.number,
   setCanvasBackground: PropTypes.func.isRequired,
   setDevicePixelRatio: PropTypes.func.isRequired,

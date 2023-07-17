@@ -33,6 +33,7 @@ import {
 import type { PDFDocumentProxy, PDFPageProxy } from 'pdfjs-dist';
 import type { EventProps } from 'make-event-props';
 import type {
+  CustomRenderer,
   CustomTextRenderer,
   NodeOrRenderer,
   OnGetAnnotationsError,
@@ -62,6 +63,7 @@ export type PageProps = {
   canvasRef?: React.Ref<HTMLCanvasElement>;
   children?: React.ReactNode;
   className?: string;
+  customRenderer?: CustomRenderer;
   customTextRenderer?: CustomTextRenderer;
   devicePixelRatio?: number;
   error?: NodeOrRenderer;
@@ -114,6 +116,7 @@ export default function Page(props: PageProps) {
     canvasRef,
     children,
     className,
+    customRenderer: CustomRenderer,
     customTextRenderer,
     devicePixelRatio,
     error = 'Failed to load the page.',
@@ -356,6 +359,14 @@ export default function Page(props: PageProps) {
 
   function renderMainLayer() {
     switch (renderMode) {
+      case 'custom': {
+        invariant(
+          CustomRenderer,
+          `renderMode was set to "custom", but no customRenderer was passed.`,
+        );
+
+        return <CustomRenderer key={`${pageKey}_custom`} />;
+      }
       case 'none':
         return null;
       case 'svg':
@@ -442,6 +453,7 @@ Page.propTypes = {
   canvasRef: isRef,
   children: PropTypes.node,
   className: isClassName,
+  customRenderer: PropTypes.func,
   customTextRenderer: PropTypes.func,
   devicePixelRatio: PropTypes.number,
   error: isFunctionOrNode,

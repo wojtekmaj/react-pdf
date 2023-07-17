@@ -448,6 +448,32 @@ describe('Page', () => {
       expect(pageCanvas).toBeInTheDocument();
     });
 
+    it('requests page to be rendered in custom mode when given renderMode = "custom"', async () => {
+      const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
+
+      function CustomRenderer() {
+        return <div className="custom-renderer" />;
+      }
+
+      const { container } = renderWithContext(
+        <Page
+          customRenderer={CustomRenderer}
+          onLoadSuccess={onLoadSuccess}
+          pageIndex={0}
+          renderMode="custom"
+        />,
+        { pdf },
+      );
+
+      expect.assertions(1);
+
+      await onLoadSuccessPromise;
+
+      const customRenderer = container.querySelector('.custom-renderer');
+
+      expect(customRenderer).toBeInTheDocument();
+    });
+
     it('requests page to be rendered in SVG mode when given renderMode = "svg"', async () => {
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
@@ -521,6 +547,33 @@ describe('Page', () => {
 
       const { container } = renderWithContext(
         <Page onLoadSuccess={onLoadSuccess} pageIndex={0} renderMode="canvas" renderTextLayer />,
+        { pdf },
+      );
+
+      expect.assertions(1);
+
+      await onLoadSuccessPromise;
+
+      const textLayer = container.querySelector('.react-pdf__Page__textContent');
+
+      expect(textLayer).toBeInTheDocument();
+    });
+
+    it('renders TextLayer when given renderMode = "custom"', async () => {
+      const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
+
+      function CustomRenderer() {
+        return <div className="custom-renderer" />;
+      }
+
+      const { container } = renderWithContext(
+        <Page
+          customRenderer={CustomRenderer}
+          onLoadSuccess={onLoadSuccess}
+          pageIndex={0}
+          renderMode="custom"
+          renderTextLayer
+        />,
         { pdf },
       );
 

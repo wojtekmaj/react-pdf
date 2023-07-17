@@ -13,6 +13,7 @@ import LayerOptions from './LayerOptions';
 import LoadingOptions from './LoadingOptions';
 import PassingOptions from './PassingOptions';
 import ViewOptions from './ViewOptions';
+import CustomRenderer from './CustomRenderer';
 
 import { dataURItoBlob } from './shared/utils';
 
@@ -218,6 +219,7 @@ export default function Test() {
   const pageProps = {
     canvasBackground,
     className: 'custom-classname-page',
+    customRenderer: CustomRenderer,
     customTextRenderer: useCustomTextRenderer ? customTextRenderer : undefined,
     devicePixelRatio,
     height: pageHeight,

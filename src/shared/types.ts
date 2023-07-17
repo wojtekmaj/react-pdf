@@ -49,7 +49,7 @@ export type OnLoadProgressArgs = {
 
 export type RegisterPage = (pageIndex: number, ref: HTMLDivElement) => void;
 
-export type RenderMode = 'canvas' | 'svg' | 'none';
+export type RenderMode = 'canvas' | 'custom' | 'none' | 'svg';
 
 export type ScrollPageIntoViewArgs = {
   dest?: ResolvedDest;
@@ -65,6 +65,8 @@ export type Source =
 export type UnregisterPage = (pageIndex: number) => void;
 
 /* Complex types */
+export type CustomRenderer = React.FunctionComponent | React.ComponentClass;
+
 export type CustomTextRenderer = (
   props: { pageIndex: number; pageNumber: number; itemIndex: number } & TextItem,
 ) => string;
