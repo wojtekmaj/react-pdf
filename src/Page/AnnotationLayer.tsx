@@ -39,11 +39,11 @@ export default function AnnotationLayer() {
     scale = 1,
   } = mergedProps;
 
+  invariant(page, 'Attempted to load page annotations, but no page was specified.');
+
   const [annotationsState, annotationsDispatch] = useResolver<Annotations>();
   const { value: annotations, error: annotationsError } = annotationsState;
   const layerElement = useRef<HTMLDivElement>(null);
-
-  invariant(page, 'Attempted to load page annotations, but no page was specified.');
 
   warning(
     parseInt(

@@ -29,10 +29,10 @@ export default function PageSVG() {
     scale,
   } = pageContext;
 
+  invariant(page, 'Attempted to render page SVG, but no page was specified.');
+
   const [svgState, svgDispatch] = useResolver<SVGElement>();
   const { value: svg, error: svgError } = svgState;
-
-  invariant(page, 'Attempted to render page SVG, but no page was specified.');
 
   /**
    * Called when a page is rendered successfully

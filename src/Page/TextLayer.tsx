@@ -33,12 +33,12 @@ export default function TextLayer() {
     scale,
   } = pageContext;
 
+  invariant(page, 'Attempted to load page text content, but no page was specified.');
+
   const [textContentState, textContentDispatch] = useResolver<TextContent>();
   const { value: textContent, error: textContentError } = textContentState;
   const layerElement = useRef<HTMLDivElement>(null);
   const endElement = useRef<HTMLElement>();
-
-  invariant(page, 'Attempted to load page text content, but no page was specified.');
 
   warning(
     parseInt(

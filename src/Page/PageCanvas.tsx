@@ -44,9 +44,9 @@ export default function PageCanvas(props: PageCanvasProps) {
   } = mergedProps;
   const { canvasRef } = props;
 
-  const canvasElement = useRef<HTMLCanvasElement>(null);
-
   invariant(page, 'Attempted to render page canvas, but no page was specified.');
+
+  const canvasElement = useRef<HTMLCanvasElement>(null);
 
   const devicePixelRatio = devicePixelRatioProps || getDevicePixelRatio();
 
