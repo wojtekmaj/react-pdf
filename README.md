@@ -77,15 +77,15 @@ Add React-PDF to your project by executing `npm install react-pdf` or `yarn add 
 
 Here's an example of basic usage:
 
-```js
-import React, { useState } from 'react';
+```tsx
+import { useState } from 'react';
 import { Document, Page } from 'react-pdf';
 
 function MyApp() {
-  const [numPages, setNumPages] = useState(null);
-  const [pageNumber, setPageNumber] = useState(1);
+  const [numPages, setNumPages] = useState<number>();
+  const [pageNumber, setPageNumber] = useState<number>(1);
 
-  function onDocumentLoadSuccess({ numPages }) {
+  function onDocumentLoadSuccess({ numPages }: { numPages: number }): void {
     setNumPages(numPages);
   }
 
@@ -112,7 +112,7 @@ For React-PDF to work, PDF.js worker needs to be provided. You have several opti
 
 For most cases, the following example will work:
 
-```js
+```ts
 import { pdfjs } from 'react-pdf';
 
 pdfjs.GlobalWorkerOptions.workerSrc = new URL(
@@ -147,7 +147,7 @@ You will have to make sure on your own that `pdf.worker.js` file from `pdfjs-dis
 
 For example, you could use a custom script like:
 
-```js
+```ts
 import path from 'node:path';
 import fs from 'node:fs';
 
@@ -159,7 +159,7 @@ fs.copyFileSync(pdfWorkerPath, './dist/pdf.worker.js');
 
 #### Use external CDN
 
-```js
+```ts
 import { pdfjs } from 'react-pdf';
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.js`;
@@ -188,7 +188,7 @@ or:
 
 If you want to use annotations (e.g. links) in PDFs rendered by React-PDF, then you would need to include stylesheet necessary for annotations to be correctly displayed like so:
 
-```js
+```ts
 import 'react-pdf/dist/esm/Page/AnnotationLayer.css';
 ```
 
@@ -196,7 +196,7 @@ import 'react-pdf/dist/esm/Page/AnnotationLayer.css';
 
 If you want to use text layer in PDFs rendered by React-PDF, then you would need to include stylesheet necessary for text layer to be correctly displayed like so:
 
-```js
+```ts
 import 'react-pdf/dist/esm/Page/TextLayer.css';
 ```
 
@@ -224,14 +224,14 @@ npm install copy-webpack-plugin --save-dev
 
 Now, in your Webpack config, import the plugin:
 
-```js
+```ts
 import path from 'node:path';
 import CopyWebpackPlugin from 'copy-webpack-plugin';
 ```
 
 and in `plugins` section of your config, add the following:
 
-```js
+```ts
 new CopyWebpackPlugin({
   patterns: [
     {
@@ -271,7 +271,7 @@ copyDir(cMapsDir, 'dist/cmaps/');
 
 Now that you have cMaps in your build, pass required options to Document component by using `options` prop, like so:
 
-```js
+```ts
 // Outside of React component
 const options = {
   cMapUrl: 'cmaps/',
@@ -284,7 +284,7 @@ const options = {
 
 Alternatively, you could use cMaps from external CDN:
 
-```js
+```tsx
 // Outside of React component
 import { pdfjs } from 'react-pdf';
 
@@ -315,14 +315,14 @@ npm install copy-webpack-plugin --save-dev
 
 Now, in your Webpack config, import the plugin:
 
-```js
+```ts
 import path from 'node:path';
 import CopyWebpackPlugin from 'copy-webpack-plugin';
 ```
 
 and in `plugins` section of your config, add the following:
 
-```js
+```ts
 new CopyWebpackPlugin({
   patterns: [
     {
@@ -365,7 +365,7 @@ copyDir(standardFontsDir, 'dist/standard_fonts/');
 
 Now that you have standard fonts in your build, pass required options to Document component by using `options` prop, like so:
 
-```js
+```tsx
 // Outside of React component
 const options = {
   standardFontDataUrl: 'standard_fonts/',
@@ -377,7 +377,7 @@ const options = {
 
 Alternatively, you could use standard fonts from external CDN:
 
-```js
+```tsx
 // Outside of React component
 import { pdfjs } from 'react-pdf';
 
