@@ -6,8 +6,8 @@
   "type": "module",
   "scripts": {
     "build": "vite build",
-    "copy-cmaps": "node --experimental-import-meta-resolve --loader ts-node/esm ./scripts/copy-cmaps.ts",
-    "copy-standard-fonts": "node --experimental-import-meta-resolve --loader ts-node/esm ./scripts/copy-standard-fonts.ts",
+    "copy-cmaps": "node --loader ts-node/esm ./scripts/copy-cmaps.ts",
+    "copy-standard-fonts": "node --loader ts-node/esm ./scripts/copy-standard-fonts.ts",
     "dev": "vite",
     "preview": "vite preview"
   },
