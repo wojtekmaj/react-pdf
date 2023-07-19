@@ -242,9 +242,9 @@ new CopyWebpackPlugin({
 }),
 ```
 
-##### Parcel, Browserify and others
+##### Other tools
 
-If you use Parcel, Browserify or other bundling tools, you will have to make sure on your own that cMaps are copied to your project's output folder.
+If you use other bundlers, you will have to make sure on your own that cMaps are copied to your project's output folder.
 
 For example, you could use a custom script like:
 
@@ -333,9 +333,9 @@ new CopyWebpackPlugin({
 }),
 ```
 
-##### Parcel, Browserify and others
+##### Other tools
 
-If you use Parcel, Browserify or other bundling tools, you will have to make sure on your own that standard fonts are copied to your project's output folder.
+If you use other bundlers, you will have to make sure on your own that standard fonts are copied to your project's output folder.
 
 For example, you could use a custom script like:
 
