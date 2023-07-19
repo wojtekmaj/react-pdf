@@ -25,7 +25,7 @@ export default function Sample() {
   const [file, setFile] = useState<PDFFile>(pdfFile);
   const [numPages, setNumPages] = useState<number>();
 
-  function onFileChange(event: React.ChangeEvent<HTMLInputElement>) {
+  function onFileChange(event: React.ChangeEvent<HTMLInputElement>): void {
     const { files } = event.target;
 
     if (files && files[0]) {
@@ -33,7 +33,7 @@ export default function Sample() {
     }
   }
 
-  function onDocumentLoadSuccess({ numPages: nextNumPages }: PDFDocumentProxy) {
+  function onDocumentLoadSuccess({ numPages: nextNumPages }: PDFDocumentProxy): void {
     setNumPages(nextNumPages);
   }
 

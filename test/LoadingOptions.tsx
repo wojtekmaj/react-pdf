@@ -17,7 +17,7 @@ export default function LoadingOptions({ file, setFile, setRender }: LoadingOpti
   const url = useRef<HTMLInputElement>(null);
   const fetchAndPass = useRef<HTMLInputElement>(null);
 
-  function onFileChange(event: React.ChangeEvent<HTMLInputElement>) {
+  function onFileChange(event: React.ChangeEvent<HTMLInputElement>): void {
     const { files } = event.target;
 
     if (files?.[0]) {
