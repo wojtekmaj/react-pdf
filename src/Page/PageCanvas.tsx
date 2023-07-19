@@ -33,7 +33,7 @@ export default function PageCanvas(props: PageCanvasProps) {
   const {
     _className,
     canvasBackground,
-    devicePixelRatio: devicePixelRatioProps,
+    devicePixelRatio = getDevicePixelRatio(),
     onRenderError: onRenderErrorProps,
     onRenderSuccess: onRenderSuccessProps,
     page,
@@ -47,8 +47,6 @@ export default function PageCanvas(props: PageCanvasProps) {
   invariant(page, 'Attempted to render page canvas, but no page was specified.');
 
   const canvasElement = useRef<HTMLCanvasElement>(null);
-
-  const devicePixelRatio = devicePixelRatioProps || getDevicePixelRatio();
 
   /**
    * Called when a page is rendered successfully.
