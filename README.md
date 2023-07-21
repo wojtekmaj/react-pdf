@@ -236,30 +236,26 @@ First, you need to copy cMaps from `pdfjs-dist` (React-PDF's dependency - it sho
 
 ##### Webpack
 
-Add `copy-webpack-plugin` to your project if you haven't already:
+Add `copy-webpack-plugin` by executing `npm install copy-webpack-plugin --save-dev` or `yarn add copy-webpack-plugin --dev` and add the following to your Webpack config:
 
-```
-npm install copy-webpack-plugin --save-dev
-```
+```diff
++import path from 'node:path';
++import CopyWebpackPlugin from 'copy-webpack-plugin';
 
-Now, in your Webpack config, import the plugin:
++const cMapsDir = path.join(path.dirname(require.resolve('pdfjs-dist/package.json')), 'cmaps');
 
-```ts
-import path from 'node:path';
-import CopyWebpackPlugin from 'copy-webpack-plugin';
-```
-
-and in `plugins` section of your config, add the following:
-
-```ts
-new CopyWebpackPlugin({
-  patterns: [
-    {
-      from: path.join(path.dirname(require.resolve('pdfjs-dist/package.json')), 'cmaps'),
-      to: 'cmaps/'
-    },
+module.exports = {
+  plugins: [
++   new CopyWebpackPlugin({
++     patterns: [
++       {
++         from: cMapsDir,
++         to: 'cmaps/'
++       },
++     ],
++   }),
   ],
-}),
+};
 ```
 
 ##### Other tools
@@ -327,30 +323,26 @@ First, you need to copy standard fonts from `pdfjs-dist` (React-PDF's dependency
 
 ##### Webpack
 
-Add `copy-webpack-plugin` to your project if you haven't already:
+Add `copy-webpack-plugin` by executing `npm install copy-webpack-plugin --save-dev` or `yarn add copy-webpack-plugin --dev` and add the following to your Webpack config:
 
-```
-npm install copy-webpack-plugin --save-dev
-```
+```diff
++import path from 'node:path';
++import CopyWebpackPlugin from 'copy-webpack-plugin';
 
-Now, in your Webpack config, import the plugin:
++const standardFontsDir = path.join(path.dirname(require.resolve('pdfjs-dist/package.json')), 'standard_fonts');
 
-```ts
-import path from 'node:path';
-import CopyWebpackPlugin from 'copy-webpack-plugin';
-```
-
-and in `plugins` section of your config, add the following:
-
-```ts
-new CopyWebpackPlugin({
-  patterns: [
-    {
-      from: path.join(path.dirname(require.resolve('pdfjs-dist/package.json')), 'standard_fonts'),
-      to: 'standard_fonts/'
-    },
+module.exports = {
+  plugins: [
++   new CopyWebpackPlugin({
++     patterns: [
++       {
++         from: standardFontsDir,
++         to: 'standard_fonts/'
++       },
++     ],
++   }),
   ],
-}),
+};
 ```
 
 ##### Other tools
