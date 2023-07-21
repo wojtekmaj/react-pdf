@@ -1,6 +1,6 @@
 {
   "name": "react-pdf",
-  "version": "7.1.3",
+  "version": "7.2.0",
   "description": "Display PDFs in your React app as easily as if they were images.",
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
