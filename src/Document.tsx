@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * Loads a PDF document. Passes it to all children.
  */

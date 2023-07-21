@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useCallback, useEffect, useMemo, useRef } from 'react';
 import mergeRefs from 'merge-refs';
 import invariant from 'tiny-invariant';
