@@ -73,6 +73,23 @@ React-PDF may be used with Preact.
 
 Add React-PDF to your project by executing `npm install react-pdf` or `yarn add react-pdf`.
 
+#### Next.js
+
+If you use Next.js, you will need to install `raw-loader` by executing `npm install raw-loader --save-dev` or `yarn add yarn-loader --dev` and add the following to your `next.config.js`:
+
+```diff
+module.exports = {
++ webpack: (config) => {
++   config.module.rules.push({
++     test: /\.node/,
++     use: 'raw-loader',
++   });
+
++   return config;
++ },
+}
+```
+
 ### Usage
 
 Here's an example of basic usage:
@@ -120,6 +137,9 @@ pdfjs.GlobalWorkerOptions.workerSrc = new URL(
   import.meta.url,
 ).toString();
 ```
+
+> **Note**
+> In Next.js using App Router, make sure to add `'use client';` to the top of the file.
 
 > **Note**
 > pnpm requires an `.npmrc` file with `public-hoist-pattern[]=pdfjs-dist` for this to work.
