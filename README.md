@@ -234,6 +234,30 @@ then you would also need to include cMaps in your build and tell React-PDF where
 
 First, you need to copy cMaps from `pdfjs-dist` (React-PDF's dependency - it should be in your `node_modules` if you have React-PDF installed). cMaps are located in `pdfjs-dist/cmaps`.
 
+##### Vite
+
+Add `vite-plugin-static-copy` by executing `npm install vite-plugin-static-copy --save-dev` or `yarn add vite-plugin-static-copy --dev` and add the following to your Vite config:
+
+```diff
++import path from 'node:path';
++import { viteStaticCopy } from 'vite-plugin-static-copy';
+
++const cMapsDir = path.join(path.dirname(require.resolve('pdfjs-dist/package.json')), 'cmaps');
+
+export default defineConfig({
+  plugins: [
++   viteStaticCopy({
++     targets: [
++       {
++         src: cMapsDir,
++         dest: '',
++       },
++     ],
++   }),
+  ]
+});
+```
+
 ##### Webpack
 
 Add `copy-webpack-plugin` by executing `npm install copy-webpack-plugin --save-dev` or `yarn add copy-webpack-plugin --dev` and add the following to your Webpack config:
@@ -320,6 +344,30 @@ If you want to support PDFs using standard fonts (deprecated in PDF 1.5, but sti
 #### Copying fonts
 
 First, you need to copy standard fonts from `pdfjs-dist` (React-PDF's dependency - it should be in your `node_modules` if you have React-PDF installed). Standard fonts are located in `pdfjs-dist/standard_fonts`.
+
+##### Vite
+
+Add `vite-plugin-static-copy` by executing `npm install vite-plugin-static-copy --save-dev` or `yarn add vite-plugin-static-copy --dev` and add the following to your Vite config:
+
+```diff
++import path from 'node:path';
++import { viteStaticCopy } from 'vite-plugin-static-copy';
+
++const standardFontsDir = path.join(path.dirname(require.resolve('pdfjs-dist/package.json')), 'standard_fonts');
+
+export default defineConfig({
+  plugins: [
++   viteStaticCopy({
++     targets: [
++       {
++         src: standardFontsDir,
++         dest: '',
++       },
++     ],
++   }),
+  ]
+});
+```
 
 ##### Webpack
 
