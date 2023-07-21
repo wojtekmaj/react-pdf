@@ -15,8 +15,8 @@ pdfjs.GlobalWorkerOptions.workerSrc = new URL(
 ).toString();
 
 const options = {
-  cMapUrl: 'cmaps/',
-  standardFontDataUrl: 'standard_fonts/',
+  cMapUrl: '/cmaps/',
+  standardFontDataUrl: '/standard_fonts/',
 };
 
 type PDFFile = string | File | null;
