@@ -6,8 +6,6 @@
   "type": "module",
   "scripts": {
     "build": "vite build",
-    "copy-cmaps": "node --loader ts-node/esm ./scripts/copy-cmaps.ts",
-    "copy-standard-fonts": "node --loader ts-node/esm ./scripts/copy-standard-fonts.ts",
     "dev": "vite",
     "preview": "vite preview"
   },
@@ -24,6 +22,7 @@
   "devDependencies": {
     "@vitejs/plugin-react": "^2.2.0",
     "typescript": "^5.0.0",
-    "vite": "^3.0.0"
+    "vite": "^3.0.0",
+    "vite-plugin-static-copy": "^0.17.0"
   }
 }
