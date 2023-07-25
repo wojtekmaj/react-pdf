@@ -148,12 +148,8 @@ export const isPageNumber: Validator<number> = function isPageNumber(
 };
 
 export const isPdf = PropTypes.oneOfType([
-  PropTypes.shape({
-    getDestination: PropTypes.func.isRequired,
-    getOutline: PropTypes.func.isRequired,
-    getPage: PropTypes.func.isRequired,
-    numPages: PropTypes.number.isRequired,
-  }),
+  // Ideally, this would be `PropTypes.instanceOf(PDFDocumentProxy)`, but it can't be imported.
+  PropTypes.any,
   PropTypes.oneOf([false] as const),
 ]);
 
