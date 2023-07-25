@@ -1,8 +1,5 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { isDataURI } from 'react-pdf/src/shared/utils';
-
-import { isFile } from './shared/propTypes';
 
 import type { File, PassMethod } from './shared/types';
 
@@ -94,9 +91,3 @@ export default function PassingOptions({ file, passMethod, setPassMethod }: Pass
     </fieldset>
   );
 }
-
-PassingOptions.propTypes = {
-  file: isFile,
-  passMethod: PropTypes.oneOf(['blob', 'normal', 'object', 'string'] as const),
-  setPassMethod: PropTypes.func.isRequired,
-};

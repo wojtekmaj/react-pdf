@@ -1,9 +1,6 @@
 import React, { useRef } from 'react';
-import PropTypes from 'prop-types';
 
 import samplePDF from './test.pdf';
-
-import { isFile } from './shared/propTypes';
 
 import type { File } from './shared/types';
 
@@ -102,9 +99,3 @@ export default function LoadingOptions({ file, setFile, setRender }: LoadingOpti
     </fieldset>
   );
 }
-
-LoadingOptions.propTypes = {
-  file: isFile,
-  setFile: PropTypes.func.isRequired,
-  setRender: PropTypes.func.isRequired,
-};

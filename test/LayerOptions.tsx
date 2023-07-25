@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 
 type LayerOptionsProps = {
   renderAnnotationLayer: boolean;
@@ -86,14 +85,3 @@ export default function LayerOptions({
     </fieldset>
   );
 }
-
-LayerOptions.propTypes = {
-  renderAnnotationLayer: PropTypes.bool,
-  renderForms: PropTypes.bool,
-  renderTextLayer: PropTypes.bool,
-  useCustomTextRenderer: PropTypes.bool,
-  setRenderAnnotationLayer: PropTypes.func.isRequired,
-  setRenderForms: PropTypes.func.isRequired,
-  setRenderTextLayer: PropTypes.func.isRequired,
-  setUseCustomTextRenderer: PropTypes.func.isRequired,
-};

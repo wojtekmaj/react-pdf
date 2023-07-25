@@ -1,5 +1,4 @@
 import React, { useRef } from 'react';
-import PropTypes from 'prop-types';
 
 import type { RenderMode } from './shared/types';
 
@@ -304,22 +303,3 @@ export default function ViewOptions({
     </fieldset>
   );
 }
-
-ViewOptions.propTypes = {
-  canvasBackground: PropTypes.string,
-  devicePixelRatio: PropTypes.number,
-  displayAll: PropTypes.bool.isRequired,
-  pageHeight: PropTypes.number,
-  pageScale: PropTypes.number,
-  pageWidth: PropTypes.number,
-  renderMode: PropTypes.oneOf(['canvas', 'custom', 'none', 'svg'] as const),
-  rotate: PropTypes.number,
-  setCanvasBackground: PropTypes.func.isRequired,
-  setDevicePixelRatio: PropTypes.func.isRequired,
-  setDisplayAll: PropTypes.func.isRequired,
-  setPageHeight: PropTypes.func.isRequired,
-  setPageScale: PropTypes.func.isRequired,
-  setPageWidth: PropTypes.func.isRequired,
-  setRenderMode: PropTypes.func.isRequired,
-  setRotate: PropTypes.func.isRequired,
-};

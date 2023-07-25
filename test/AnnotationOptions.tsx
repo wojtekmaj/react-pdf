@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 
 import type { ExternalLinkTarget } from './shared/types';
 
@@ -63,8 +62,3 @@ export default function AnnotationOptions({
     </fieldset>
   );
 }
-
-AnnotationOptions.propTypes = {
-  externalLinkTarget: PropTypes.oneOf(['_blank', '_self'] as const),
-  setExternalLinkTarget: PropTypes.func.isRequired,
-};

@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import invariant from 'tiny-invariant';
 
 import Ref from './Ref';
@@ -110,18 +109,3 @@ export default function OutlineItem(props: OutlineItemProps) {
     </li>
   );
 }
-
-const isDestination = PropTypes.oneOfType([PropTypes.string, PropTypes.arrayOf(PropTypes.any)]);
-
-OutlineItem.propTypes = {
-  item: PropTypes.shape({
-    dest: isDestination,
-    items: PropTypes.arrayOf(
-      PropTypes.shape({
-        dest: isDestination,
-        title: PropTypes.string,
-      }),
-    ),
-    title: PropTypes.string,
-  }).isRequired,
-};

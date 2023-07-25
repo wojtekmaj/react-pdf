@@ -16,8 +16,6 @@ import {
   makePageCallback,
 } from '../shared/utils';
 
-import { isRef } from '../shared/propTypes';
-
 import type { RenderParameters } from 'pdfjs-dist/types/src/display/api';
 
 const ANNOTATION_MODE = pdfjs.AnnotationMode;
@@ -177,7 +175,3 @@ export default function PageCanvas(props: PageCanvasProps) {
     </canvas>
   );
 }
-
-PageCanvas.propTypes = {
-  canvasRef: isRef,
-};

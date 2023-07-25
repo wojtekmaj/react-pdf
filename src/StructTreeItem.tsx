@@ -1,5 +1,4 @@
 import React, { useMemo } from 'react';
-import PropTypes from 'prop-types';
 
 import {
   getAttributes,
@@ -41,18 +40,3 @@ export default function StructTreeItem({ className, node }: StructTreeItemProps)
     </span>
   );
 }
-
-StructTreeItem.propTypes = {
-  node: PropTypes.oneOfType([
-    PropTypes.shape({
-      children: PropTypes.array.isRequired,
-      role: PropTypes.string.isRequired,
-      alt: PropTypes.string,
-      lang: PropTypes.string,
-    }),
-    PropTypes.shape({
-      id: PropTypes.string.isRequired,
-      type: PropTypes.string.isRequired,
-    }),
-  ]).isRequired,
-};
