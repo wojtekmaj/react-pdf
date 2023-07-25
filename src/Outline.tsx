@@ -33,7 +33,7 @@ export type OutlineProps = {
   pdf?: PDFDocumentProxy | false;
 } & EventProps<PDFOutline | null | false | undefined>;
 
-export default function Outline(props: OutlineProps) {
+const Outline: React.FC<OutlineProps> = function Outline(props) {
   const documentContext = useDocumentContext();
 
   invariant(
@@ -167,7 +167,7 @@ export default function Outline(props: OutlineProps) {
       <OutlineContext.Provider value={childContext}>{renderOutline()}</OutlineContext.Provider>
     </div>
   );
-}
+};
 
 Outline.propTypes = {
   ...eventProps,
@@ -178,3 +178,5 @@ Outline.propTypes = {
   onLoadSuccess: PropTypes.func,
   pdf: isPdf,
 };
+
+export default Outline;

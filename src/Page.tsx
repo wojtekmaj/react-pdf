@@ -103,7 +103,7 @@ export type PageProps = {
   width?: number;
 } & EventProps<PageCallback | false | undefined>;
 
-export default function Page(props: PageProps) {
+const Page: React.FC<PageProps> = function Page(props) {
   const documentContext = useDocumentContext();
 
   invariant(
@@ -446,7 +446,7 @@ export default function Page(props: PageProps) {
       {renderContent()}
     </div>
   );
-}
+};
 
 const isFunctionOrNode = PropTypes.oneOfType([PropTypes.func, PropTypes.node]);
 
@@ -484,3 +484,5 @@ Page.propTypes = {
   scale: PropTypes.number,
   width: PropTypes.number,
 };
+
+export default Page;

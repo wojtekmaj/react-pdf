@@ -33,7 +33,7 @@ export type ThumbnailProps = Omit<
   onItemClick?: (args: OnItemClickArgs) => void;
 };
 
-export default function Thumbnail(props: ThumbnailProps) {
+const Thumbnail: React.FC<ThumbnailProps> = function Thumbnail(props) {
   const documentContext = useDocumentContext();
 
   invariant(
@@ -89,4 +89,6 @@ export default function Thumbnail(props: ThumbnailProps) {
       />
     </a>
   );
-}
+};
+
+export default Thumbnail;
