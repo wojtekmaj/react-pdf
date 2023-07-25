@@ -67,7 +67,7 @@ export const isFile = PropTypes.oneOfType(fileTypes);
 
 export const isLinkService = PropTypes.instanceOf(LinkService);
 
-export const isLinkTarget = PropTypes.oneOf(['_self', '_blank', '_parent', '_top']);
+export const isLinkTarget = PropTypes.oneOf(['_self', '_blank', '_parent', '_top'] as const);
 
 export const isPage = PropTypes.shape({
   commonObjs: PropTypes.shape({}).isRequired,
@@ -154,7 +154,7 @@ export const isPdf = PropTypes.oneOfType([
     getPage: PropTypes.func.isRequired,
     numPages: PropTypes.number.isRequired,
   }),
-  PropTypes.bool,
+  PropTypes.oneOf([false] as const),
 ]);
 
 export const isRef = PropTypes.oneOfType([
@@ -164,6 +164,6 @@ export const isRef = PropTypes.oneOfType([
   }),
 ]);
 
-export const isRenderMode = PropTypes.oneOf(['canvas', 'custom', 'none', 'svg']);
+export const isRenderMode = PropTypes.oneOf(['canvas', 'custom', 'none', 'svg'] as const);
 
-export const isRotate = PropTypes.oneOf([0, 90, 180, 270]);
+export const isRotate = PropTypes.oneOf([0, 90, 180, 270] as const);

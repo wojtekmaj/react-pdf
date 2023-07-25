@@ -312,7 +312,7 @@ ViewOptions.propTypes = {
   pageHeight: PropTypes.number,
   pageScale: PropTypes.number,
   pageWidth: PropTypes.number,
-  renderMode: PropTypes.oneOf(['canvas', 'custom', 'none', 'svg']),
+  renderMode: PropTypes.oneOf(['canvas', 'custom', 'none', 'svg'] as const),
   rotate: PropTypes.number,
   setCanvasBackground: PropTypes.func.isRequired,
   setDevicePixelRatio: PropTypes.func.isRequired,

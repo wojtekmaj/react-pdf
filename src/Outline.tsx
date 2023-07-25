@@ -20,12 +20,12 @@ import { eventProps, isClassName, isPdf, isRef } from './shared/propTypes';
 
 import type { PDFDocumentProxy } from 'pdfjs-dist';
 import type { EventProps } from 'make-event-props';
-import type { OnItemClickArgs } from './shared/types';
+import type { ClassName, OnItemClickArgs } from './shared/types';
 
 type PDFOutline = Awaited<ReturnType<PDFDocumentProxy['getOutline']>>;
 
 export type OutlineProps = {
-  className?: string;
+  className?: ClassName;
   inputRef?: React.Ref<HTMLDivElement>;
   onItemClick?: (props: OnItemClickArgs) => void;
   onLoadError?: (error: Error) => void;

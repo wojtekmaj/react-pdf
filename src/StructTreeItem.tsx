@@ -45,12 +45,14 @@ export default function StructTreeItem({ className, node }: StructTreeItemProps)
 StructTreeItem.propTypes = {
   node: PropTypes.oneOfType([
     PropTypes.shape({
-      children: PropTypes.object,
-      role: PropTypes.string,
+      children: PropTypes.array.isRequired,
+      role: PropTypes.string.isRequired,
+      alt: PropTypes.string,
+      lang: PropTypes.string,
     }),
     PropTypes.shape({
-      id: PropTypes.string,
-      type: PropTypes.string,
+      id: PropTypes.string.isRequired,
+      type: PropTypes.string.isRequired,
     }),
   ]).isRequired,
 };

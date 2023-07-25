@@ -97,6 +97,6 @@ export default function PassingOptions({ file, passMethod, setPassMethod }: Pass
 
 PassingOptions.propTypes = {
   file: isFile,
-  passMethod: PropTypes.oneOf(['blob', 'normal', 'object', 'string']),
+  passMethod: PropTypes.oneOf(['blob', 'normal', 'object', 'string'] as const),
   setPassMethod: PropTypes.func.isRequired,
 };

@@ -35,6 +35,7 @@ import {
 import type { PDFDocumentProxy, PDFPageProxy } from 'pdfjs-dist';
 import type { EventProps } from 'make-event-props';
 import type {
+  ClassName,
   CustomRenderer,
   CustomTextRenderer,
   NodeOrRenderer,
@@ -64,7 +65,7 @@ export type PageProps = {
   canvasBackground?: string;
   canvasRef?: React.Ref<HTMLCanvasElement>;
   children?: React.ReactNode;
-  className?: string;
+  className?: ClassName;
   customRenderer?: CustomRenderer;
   customTextRenderer?: CustomTextRenderer;
   devicePixelRatio?: number;

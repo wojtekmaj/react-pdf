@@ -65,6 +65,6 @@ export default function AnnotationOptions({
 }
 
 AnnotationOptions.propTypes = {
-  externalLinkTarget: PropTypes.oneOf(['_blank', '_self']),
+  externalLinkTarget: PropTypes.oneOf(['_blank', '_self'] as const),
   setExternalLinkTarget: PropTypes.func.isRequired,
 };
