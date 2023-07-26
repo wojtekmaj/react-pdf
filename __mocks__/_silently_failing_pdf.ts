@@ -8,16 +8,10 @@ export default {
     numPages: 4,
   },
   getDestination: () =>
-    new Promise((resolve, reject) =>
-      reject(new RenderingCancelledException('Cancelled', 'cancelled')),
-    ),
+    new Promise((resolve, reject) => reject(new RenderingCancelledException('Cancelled'))),
   getOutline: () =>
-    new Promise((resolve, reject) =>
-      reject(new RenderingCancelledException('Cancelled', 'cancelled')),
-    ),
+    new Promise((resolve, reject) => reject(new RenderingCancelledException('Cancelled'))),
   getPage: () =>
-    new Promise((resolve, reject) =>
-      reject(new RenderingCancelledException('Cancelled', 'cancelled')),
-    ),
+    new Promise((resolve, reject) => reject(new RenderingCancelledException('Cancelled'))),
   numPages: 4,
 } as unknown as PDFDocumentProxy;

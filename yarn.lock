@@ -5085,17 +5085,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"pdfjs-dist@npm:3.6.172":
-  version: 3.6.172
-  resolution: "pdfjs-dist@npm:3.6.172"
+"pdfjs-dist@npm:3.8.162":
+  version: 3.8.162
+  resolution: "pdfjs-dist@npm:3.8.162"
   dependencies:
     canvas: ^2.11.2
     path2d-polyfill: ^2.0.1
-    web-streams-polyfill: ^3.2.1
   dependenciesMeta:
     canvas:
       optional: true
-  checksum: 496a98e3a65ddc92ad6a0913e2afd7d9894fa4246c40589ea98c5846ea3ee24e3f292ea58f80340990765ebeadc5951d046279b18f57ec58d1791e67fe6cf52d
+    path2d-polyfill:
+      optional: true
+  checksum: 2d6449c45e5b5be37b11ac2cac393b465255437237c7d6f2e3482b6806a43acb33cd48864e13f2fed357df7cbc40b110ca427153e5192515bfac22d8a7839df0
   languageName: node
   linkType: hard
 
@@ -5313,7 +5314,7 @@ __metadata:
     make-event-props: ^1.6.0
     merge-refs: ^1.2.1
     nodemon: ^3.0.0
-    pdfjs-dist: 3.6.172
+    pdfjs-dist: 3.8.162
     prettier: ^2.7.0
     prop-types: ^15.6.2
     react: ^18.2.0
@@ -6580,13 +6581,6 @@ __metadata:
   dependencies:
     xml-name-validator: ^4.0.0
   checksum: eba070e78deb408ae8defa4d36b429f084b2b47a4741c4a9be3f27a0a3d1845e277e3072b04391a138f7e43776842627d1334e448ff13ff90ad9fb1214ee7091
-  languageName: node
-  linkType: hard
-
-"web-streams-polyfill@npm:^3.2.1":
-  version: 3.2.1
-  resolution: "web-streams-polyfill@npm:3.2.1"
-  checksum: b119c78574b6d65935e35098c2afdcd752b84268e18746606af149e3c424e15621b6f1ff0b42b2676dc012fc4f0d313f964b41a4b5031e525faa03997457da02
   languageName: node
   linkType: hard
 
