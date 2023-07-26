@@ -341,7 +341,13 @@ const options = {
 
 ### Support for standard fonts
 
-If you want to support PDFs using standard fonts (deprecated in PDF 1.5, but still around), then you would also need to include standard fonts in your build and tell React-PDF where they are.
+If you want to support PDFs using standard fonts (deprecated in PDF 1.5, but still around), ot you have encountered the following warning:
+
+```
+The standard font "baseUrl" parameter must be specified, ensure that the "standardFontDataUrl" API parameter is provided.
+```
+
+then you would also need to include standard fonts in your build and tell React-PDF where they are.
 
 #### Copying fonts
 
