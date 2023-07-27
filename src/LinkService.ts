@@ -21,9 +21,9 @@ import type {
   ExternalLinkRel,
   ExternalLinkTarget,
   ScrollPageIntoViewArgs,
-} from './shared/types';
+} from './shared/types.js';
 
-import type { IPDFLinkService } from 'pdfjs-dist/types/web/interfaces';
+import type { IPDFLinkService } from 'pdfjs-dist/types/web/interfaces.js';
 
 const DEFAULT_LINK_REL = 'noopener noreferrer nofollow';
 

@@ -4,14 +4,14 @@ import React from 'react';
 import clsx from 'clsx';
 import invariant from 'tiny-invariant';
 
-import Page from './Page';
+import Page from './Page.js';
 
-import { isProvided } from './shared/utils';
+import { isProvided } from './shared/utils.js';
 
-import useDocumentContext from './shared/hooks/useDocumentContext';
+import useDocumentContext from './shared/hooks/useDocumentContext.js';
 
-import type { PageProps } from './Page';
-import type { ClassName, OnItemClickArgs } from './shared/types';
+import type { PageProps } from './Page.js';
+import type { ClassName, OnItemClickArgs } from './shared/types.js';
 
 export type ThumbnailProps = Omit<
   PageProps,

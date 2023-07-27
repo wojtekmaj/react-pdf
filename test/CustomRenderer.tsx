@@ -1,8 +1,8 @@
 import React, { useEffect, useMemo, useRef } from 'react';
 import invariant from 'tiny-invariant';
-import { usePageContext } from 'react-pdf/src';
+import { usePageContext } from 'react-pdf';
 
-import type { RenderParameters } from 'pdfjs-dist/types/src/display/api';
+import type { RenderParameters } from 'pdfjs-dist/types/src/display/api.js';
 
 export default function CustomRenderer() {
   const pageContext = usePageContext();

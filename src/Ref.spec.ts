@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import Ref from './Ref';
+import Ref from './Ref.js';
 
 describe('Ref', () => {
   it('returns proper reference for given num and gen', () => {

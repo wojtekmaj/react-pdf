@@ -1,8 +1,8 @@
 import React from 'react';
 
-import { isDataURI } from './shared/utils';
+import { isDataURI } from './shared/utils.js';
 
-import type { File, PassMethod } from './shared/types';
+import type { File, PassMethod } from './shared/types.js';
 
 type PassingOptionsProps = {
   file: File | null;

@@ -4,10 +4,10 @@ import {
   getAttributes,
   isStructTreeNode,
   isStructTreeNodeWithOnlyContentChild,
-} from './shared/structTreeUtils';
+} from './shared/structTreeUtils.js';
 
-import type { StructTreeContent } from 'pdfjs-dist/types/src/display/api';
-import type { StructTreeNodeWithExtraAttributes } from './shared/types';
+import type { StructTreeContent } from 'pdfjs-dist/types/src/display/api.js';
+import type { StructTreeNodeWithExtraAttributes } from './shared/types.js';
 
 type StructTreeItemProps = {
   className?: string;

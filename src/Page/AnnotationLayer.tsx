@@ -7,12 +7,12 @@ import invariant from 'tiny-invariant';
 import warning from 'tiny-warning';
 import * as pdfjs from 'pdfjs-dist';
 
-import useDocumentContext from '../shared/hooks/useDocumentContext';
-import usePageContext from '../shared/hooks/usePageContext';
-import useResolver from '../shared/hooks/useResolver';
-import { cancelRunningTask } from '../shared/utils';
+import useDocumentContext from '../shared/hooks/useDocumentContext.js';
+import usePageContext from '../shared/hooks/usePageContext.js';
+import useResolver from '../shared/hooks/useResolver.js';
+import { cancelRunningTask } from '../shared/utils.js';
 
-import type { Annotations } from '../shared/types';
+import type { Annotations } from '../shared/types.js';
 
 export default function AnnotationLayer() {
   const documentContext = useDocumentContext();

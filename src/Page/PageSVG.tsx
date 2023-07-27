@@ -4,12 +4,12 @@ import invariant from 'tiny-invariant';
 import warning from 'tiny-warning';
 import * as pdfjs from 'pdfjs-dist';
 
-import usePageContext from '../shared/hooks/usePageContext';
-import useResolver from '../shared/hooks/useResolver';
-import { cancelRunningTask, isCancelException, makePageCallback } from '../shared/utils';
+import usePageContext from '../shared/hooks/usePageContext.js';
+import useResolver from '../shared/hooks/useResolver.js';
+import { cancelRunningTask, isCancelException, makePageCallback } from '../shared/utils.js';
 
 import type { PageViewport } from 'pdfjs-dist';
-import type { PDFOperatorList } from 'pdfjs-dist/types/src/display/api';
+import type { PDFOperatorList } from 'pdfjs-dist/types/src/display/api.js';
 
 type SVGGraphics = {
   getSVG: (operatorList: PDFOperatorList, viewport: PageViewport) => Promise<SVGElement>;

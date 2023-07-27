@@ -6,17 +6,17 @@ import invariant from 'tiny-invariant';
 import warning from 'tiny-warning';
 import * as pdfjs from 'pdfjs-dist';
 
-import StructTree from '../StructTree';
+import StructTree from '../StructTree.js';
 
-import usePageContext from '../shared/hooks/usePageContext';
+import usePageContext from '../shared/hooks/usePageContext.js';
 import {
   cancelRunningTask,
   getDevicePixelRatio,
   isCancelException,
   makePageCallback,
-} from '../shared/utils';
+} from '../shared/utils.js';
 
-import type { RenderParameters } from 'pdfjs-dist/types/src/display/api';
+import type { RenderParameters } from 'pdfjs-dist/types/src/display/api.js';
 
 const ANNOTATION_MODE = pdfjs.AnnotationMode;
 

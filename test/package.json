@@ -18,6 +18,7 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-pdf": "portal:../",
+    "tiny-invariant": "^1.0.0",
     "ts-node": "^10.9.1"
   },
   "devDependencies": {

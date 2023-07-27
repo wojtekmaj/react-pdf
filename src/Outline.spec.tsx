@@ -2,17 +2,17 @@ import { beforeAll, describe, expect, it } from 'vitest';
 import React, { createRef } from 'react';
 import { render, screen } from '@testing-library/react';
 
-import { pdfjs } from './index.test';
+import { pdfjs } from './index.test.js';
 
-import Outline from './Outline';
+import Outline from './Outline.js';
 
-import failingPdf from '../__mocks__/_failing_pdf';
-import { loadPDF, makeAsyncCallback, muteConsole, restoreConsole } from '../test-utils';
+import failingPdf from '../__mocks__/_failing_pdf.js';
+import { loadPDF, makeAsyncCallback, muteConsole, restoreConsole } from '../test-utils.js';
 
-import DocumentContext from './DocumentContext';
+import DocumentContext from './DocumentContext.js';
 
 import type { PDFDocumentProxy } from 'pdfjs-dist';
-import type { DocumentContextType } from './shared/types';
+import type { DocumentContextType } from './shared/types.js';
 
 type PDFOutline = Awaited<ReturnType<PDFDocumentProxy['getOutline']>>;
 

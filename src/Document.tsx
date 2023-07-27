@@ -19,12 +19,12 @@ import invariant from 'tiny-invariant';
 import warning from 'tiny-warning';
 import * as pdfjs from 'pdfjs-dist';
 
-import DocumentContext from './DocumentContext';
+import DocumentContext from './DocumentContext.js';
 
-import Message from './Message';
+import Message from './Message.js';
 
-import LinkService from './LinkService';
-import PasswordResponses from './PasswordResponses';
+import LinkService from './LinkService.js';
+import PasswordResponses from './PasswordResponses.js';
 
 import {
   cancelRunningTask,
@@ -35,10 +35,10 @@ import {
   isBrowser,
   isDataURI,
   loadFromFile,
-} from './shared/utils';
+} from './shared/utils.js';
 
-import useResolver from './shared/hooks/useResolver';
-import { eventProps, isClassName, isFile, isRef } from './shared/propTypes';
+import useResolver from './shared/hooks/useResolver.js';
+import { eventProps, isClassName, isFile, isRef } from './shared/propTypes.js';
 
 import type { PDFDocumentProxy } from 'pdfjs-dist';
 import type { EventProps } from 'make-event-props';
@@ -61,7 +61,7 @@ import type {
   RenderMode,
   ScrollPageIntoViewArgs,
   Source,
-} from './shared/types';
+} from './shared/types.js';
 
 const { PDFDataRangeTransport } = pdfjs;
 

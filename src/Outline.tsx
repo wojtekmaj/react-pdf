@@ -8,19 +8,19 @@ import clsx from 'clsx';
 import invariant from 'tiny-invariant';
 import warning from 'tiny-warning';
 
-import OutlineContext from './OutlineContext';
+import OutlineContext from './OutlineContext.js';
 
-import OutlineItem from './OutlineItem';
+import OutlineItem from './OutlineItem.js';
 
-import { cancelRunningTask } from './shared/utils';
+import { cancelRunningTask } from './shared/utils.js';
 
-import useDocumentContext from './shared/hooks/useDocumentContext';
-import useResolver from './shared/hooks/useResolver';
-import { eventProps, isClassName, isPdf, isRef } from './shared/propTypes';
+import useDocumentContext from './shared/hooks/useDocumentContext.js';
+import useResolver from './shared/hooks/useResolver.js';
+import { eventProps, isClassName, isPdf, isRef } from './shared/propTypes.js';
 
 import type { PDFDocumentProxy } from 'pdfjs-dist';
 import type { EventProps } from 'make-event-props';
-import type { ClassName, OnItemClickArgs } from './shared/types';
+import type { ClassName, OnItemClickArgs } from './shared/types.js';
 
 type PDFOutline = Awaited<ReturnType<PDFDocumentProxy['getOutline']>>;
 
