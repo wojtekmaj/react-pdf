@@ -209,7 +209,7 @@ Check the [sample directory](https://github.com/wojtekmaj/react-pdf/tree/main/sa
 If you want to use annotations (e.g. links) in PDFs rendered by React-PDF, then you would need to include stylesheet necessary for annotations to be correctly displayed like so:
 
 ```ts
-import 'react-pdf/dist/esm/Page/AnnotationLayer.css';
+import 'react-pdf/dist/Page/AnnotationLayer.css';
 ```
 
 ### Support for text layer
@@ -217,7 +217,7 @@ import 'react-pdf/dist/esm/Page/AnnotationLayer.css';
 If you want to use text layer in PDFs rendered by React-PDF, then you would need to include stylesheet necessary for text layer to be correctly displayed like so:
 
 ```ts
-import 'react-pdf/dist/esm/Page/TextLayer.css';
+import 'react-pdf/dist/Page/TextLayer.css';
 ```
 
 ### Support for non-latin characters

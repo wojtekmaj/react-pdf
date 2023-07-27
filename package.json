@@ -15,6 +15,14 @@
       "import": "./dist/esm/index.js",
       "require": "./dist/cjs/index.js"
     },
+    "./dist/Page/AnnotationLayer.css": {
+      "import": "./dist/esm/Page/AnnotationLayer.css",
+      "require": "./dist/cjs/Page/AnnotationLayer.css"
+    },
+    "./dist/Page/TextLayer.css": {
+      "import": "./dist/esm/Page/TextLayer.css",
+      "require": "./dist/cjs/Page/TextLayer.css"
+    },
     "./dist/cjs/Page/AnnotationLayer.css": "./dist/cjs/Page/AnnotationLayer.css",
     "./dist/cjs/Page/TextLayer.css": "./dist/cjs/Page/TextLayer.css",
     "./dist/esm/Page/AnnotationLayer.css": "./dist/esm/Page/AnnotationLayer.css",
