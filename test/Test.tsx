@@ -1,22 +1,22 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { PDFDataRangeTransport } from 'pdfjs-dist';
-import { pdfjs, Document, Outline, Page, Thumbnail } from 'react-pdf/src';
-import 'react-pdf/src/Page/AnnotationLayer.css';
-import 'react-pdf/src/Page/TextLayer.css';
+import { pdfjs, Document, Outline, Page, Thumbnail } from 'react-pdf';
+import 'react-pdf/dist/esm/Page/AnnotationLayer.css';
+import 'react-pdf/dist/esm/Page/TextLayer.css';
 
 import './Test.css';
 
-import AnnotationOptions from './AnnotationOptions';
-import LayerOptions from './LayerOptions';
-import LoadingOptions from './LoadingOptions';
-import PassingOptions from './PassingOptions';
-import ViewOptions from './ViewOptions';
-import CustomRenderer from './CustomRenderer';
+import AnnotationOptions from './AnnotationOptions.js';
+import LayerOptions from './LayerOptions.js';
+import LoadingOptions from './LoadingOptions.js';
+import PassingOptions from './PassingOptions.js';
+import ViewOptions from './ViewOptions.js';
+import CustomRenderer from './CustomRenderer.js';
 
-import { isArrayBuffer, isBlob, isBrowser, loadFromFile, dataURItoBlob } from './shared/utils';
+import { isArrayBuffer, isBlob, isBrowser, loadFromFile, dataURItoBlob } from './shared/utils.js';
 
 import type { PDFDocumentProxy, PDFPageProxy } from 'pdfjs-dist';
-import type { ExternalLinkTarget, File, PassMethod, RenderMode } from './shared/types';
+import type { ExternalLinkTarget, File, PassMethod, RenderMode } from './shared/types.js';
 
 pdfjs.GlobalWorkerOptions.workerSrc = new URL(
   'pdfjs-dist/build/pdf.worker.min.js',

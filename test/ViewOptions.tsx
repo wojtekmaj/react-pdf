@@ -1,6 +1,6 @@
 import React, { useRef } from 'react';
 
-import type { RenderMode } from './shared/types';
+import type { RenderMode } from './shared/types.js';
 
 type ViewOptionsProps = {
   canvasBackground?: string;

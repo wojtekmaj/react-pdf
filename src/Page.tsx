@@ -9,18 +9,18 @@ import mergeRefs from 'merge-refs';
 import invariant from 'tiny-invariant';
 import warning from 'tiny-warning';
 
-import PageContext from './PageContext';
+import PageContext from './PageContext.js';
 
-import Message from './Message';
-import PageCanvas from './Page/PageCanvas';
-import PageSVG from './Page/PageSVG';
-import TextLayer from './Page/TextLayer';
-import AnnotationLayer from './Page/AnnotationLayer';
+import Message from './Message.js';
+import PageCanvas from './Page/PageCanvas.js';
+import PageSVG from './Page/PageSVG.js';
+import TextLayer from './Page/TextLayer.js';
+import AnnotationLayer from './Page/AnnotationLayer.js';
 
-import { cancelRunningTask, isProvided, makePageCallback } from './shared/utils';
+import { cancelRunningTask, isProvided, makePageCallback } from './shared/utils.js';
 
-import useDocumentContext from './shared/hooks/useDocumentContext';
-import useResolver from './shared/hooks/useResolver';
+import useDocumentContext from './shared/hooks/useDocumentContext.js';
+import useResolver from './shared/hooks/useResolver.js';
 import {
   eventProps,
   isClassName,
@@ -30,7 +30,7 @@ import {
   isRef,
   isRenderMode,
   isRotate,
-} from './shared/propTypes';
+} from './shared/propTypes.js';
 
 import type { PDFDocumentProxy, PDFPageProxy } from 'pdfjs-dist';
 import type { EventProps } from 'make-event-props';
@@ -55,7 +55,7 @@ import type {
   OnRenderTextLayerSuccess,
   PageCallback,
   RenderMode,
-} from './shared/types';
+} from './shared/types.js';
 
 const defaultScale = 1;
 

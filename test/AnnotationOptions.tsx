@@ -1,6 +1,6 @@
 import React from 'react';
 
-import type { ExternalLinkTarget } from './shared/types';
+import type { ExternalLinkTarget } from './shared/types.js';
 
 type AnnotationOptionsProps = {
   externalLinkTarget: ExternalLinkTarget | undefined;

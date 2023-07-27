@@ -1,14 +1,14 @@
 import React from 'react';
 import invariant from 'tiny-invariant';
 
-import Ref from './Ref';
+import Ref from './Ref.js';
 
-import useCachedValue from './shared/hooks/useCachedValue';
-import useDocumentContext from './shared/hooks/useDocumentContext';
-import useOutlineContext from './shared/hooks/useOutlineContext';
+import useCachedValue from './shared/hooks/useCachedValue.js';
+import useDocumentContext from './shared/hooks/useDocumentContext.js';
+import useOutlineContext from './shared/hooks/useOutlineContext.js';
 
 import type { PDFDocumentProxy } from 'pdfjs-dist';
-import type { RefProxy } from 'pdfjs-dist/types/src/display/api';
+import type { RefProxy } from 'pdfjs-dist/types/src/display/api.js';
 
 type PDFOutline = Awaited<ReturnType<PDFDocumentProxy['getOutline']>>;
 

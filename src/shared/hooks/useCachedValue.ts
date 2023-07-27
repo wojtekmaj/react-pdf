@@ -2,7 +2,7 @@
 
 import { useRef } from 'react';
 
-import { isDefined } from '../utils';
+import { isDefined } from '../utils.js';
 
 export default function useCachedValue<T>(getter: () => T): () => T {
   const ref = useRef<T>();

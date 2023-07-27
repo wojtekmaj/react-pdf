@@ -2,18 +2,18 @@ import { beforeAll, describe, expect, it, vi } from 'vitest';
 import React, { createRef } from 'react';
 import { fireEvent, render } from '@testing-library/react';
 
-import { pdfjs } from './index.test';
+import { pdfjs } from './index.test.js';
 
-import Page from './Page';
+import Page from './Page.js';
 
-import failingPdf from '../__mocks__/_failing_pdf';
-import silentlyFailingPdf from '../__mocks__/_silently_failing_pdf';
-import { loadPDF, makeAsyncCallback, muteConsole, restoreConsole } from '../test-utils';
+import failingPdf from '../__mocks__/_failing_pdf.js';
+import silentlyFailingPdf from '../__mocks__/_silently_failing_pdf.js';
+import { loadPDF, makeAsyncCallback, muteConsole, restoreConsole } from '../test-utils.js';
 
-import DocumentContext from './DocumentContext';
+import DocumentContext from './DocumentContext.js';
 
 import type { PDFDocumentProxy, PDFPageProxy } from 'pdfjs-dist';
-import type { DocumentContextType, PageCallback } from './shared/types';
+import type { DocumentContextType, PageCallback } from './shared/types.js';
 
 const pdfFile = loadPDF('./__mocks__/_pdf.pdf');
 const pdfFile2 = loadPDF('./__mocks__/_pdf2.pdf');

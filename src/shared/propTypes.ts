@@ -2,9 +2,9 @@ import PropTypes from 'prop-types';
 import { allEvents } from 'make-event-props';
 import { PDFDataRangeTransport } from 'pdfjs-dist';
 
-import { isDefined } from './utils';
+import { isDefined } from './utils.js';
 
-import LinkService from '../LinkService';
+import LinkService from '../LinkService.js';
 
 import type { Validator } from 'prop-types';
 

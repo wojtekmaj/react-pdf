@@ -2,7 +2,7 @@ import invariant from 'tiny-invariant';
 import warning from 'tiny-warning';
 
 import type { PDFPageProxy } from 'pdfjs-dist';
-import type { PageCallback } from './types';
+import type { PageCallback } from './types.js';
 
 /**
  * Checks if we're running in a browser environment.

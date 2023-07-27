@@ -7,11 +7,11 @@ import invariant from 'tiny-invariant';
 import warning from 'tiny-warning';
 import * as pdfjs from 'pdfjs-dist';
 
-import usePageContext from '../shared/hooks/usePageContext';
-import useResolver from '../shared/hooks/useResolver';
-import { cancelRunningTask } from '../shared/utils';
+import usePageContext from '../shared/hooks/usePageContext.js';
+import useResolver from '../shared/hooks/useResolver.js';
+import { cancelRunningTask } from '../shared/utils.js';
 
-import type { TextContent, TextItem, TextMarkedContent } from 'pdfjs-dist/types/src/display/api';
+import type { TextContent, TextItem, TextMarkedContent } from 'pdfjs-dist/types/src/display/api.js';
 
 function isTextItem(item: TextItem | TextMarkedContent): item is TextItem {
   return 'str' in item;

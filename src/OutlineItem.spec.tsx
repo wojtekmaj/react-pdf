@@ -2,16 +2,16 @@ import { beforeAll, describe, expect, it, vi } from 'vitest';
 import React from 'react';
 import { fireEvent, getAllByRole, render, screen } from '@testing-library/react';
 
-import { pdfjs } from './index.test';
-import OutlineItem from './OutlineItem';
+import { pdfjs } from './index.test.js';
+import OutlineItem from './OutlineItem.js';
 
-import { loadPDF, makeAsyncCallback } from '../test-utils';
+import { loadPDF, makeAsyncCallback } from '../test-utils.js';
 
-import DocumentContext from './DocumentContext';
-import OutlineContext from './OutlineContext';
+import DocumentContext from './DocumentContext.js';
+import OutlineContext from './OutlineContext.js';
 
 import type { PDFDocumentProxy } from 'pdfjs-dist';
-import type { DocumentContextType, OutlineContextType } from './shared/types';
+import type { DocumentContextType, OutlineContextType } from './shared/types.js';
 
 const pdfFile = loadPDF('./__mocks__/_pdf.pdf');
 

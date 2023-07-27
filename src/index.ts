@@ -1,20 +1,20 @@
 import * as pdfjs from 'pdfjs-dist';
 
-import Document from './Document';
-import Outline from './Outline';
-import Page from './Page';
-import Thumbnail from './Thumbnail';
+import Document from './Document.js';
+import Outline from './Outline.js';
+import Page from './Page.js';
+import Thumbnail from './Thumbnail.js';
 
-import useDocumentContext from './shared/hooks/useDocumentContext';
-import useOutlineContext from './shared/hooks/useOutlineContext';
-import usePageContext from './shared/hooks/usePageContext';
+import useDocumentContext from './shared/hooks/useDocumentContext.js';
+import useOutlineContext from './shared/hooks/useOutlineContext.js';
+import usePageContext from './shared/hooks/usePageContext.js';
 
-export type { DocumentProps } from './Document';
-export type { OutlineProps } from './Outline';
-export type { PageProps } from './Page';
-export type { ThumbnailProps } from './Thumbnail';
+export type { DocumentProps } from './Document.js';
+export type { OutlineProps } from './Outline.js';
+export type { PageProps } from './Page.js';
+export type { ThumbnailProps } from './Thumbnail.js';
 
-import { displayWorkerWarning } from './shared/utils';
+import { displayWorkerWarning } from './shared/utils.js';
 
 displayWorkerWarning();
 

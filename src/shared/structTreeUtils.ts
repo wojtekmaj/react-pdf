@@ -1,7 +1,7 @@
-import { HEADING_PATTERN, PDF_ROLE_TO_HTML_ROLE } from './constants';
+import { HEADING_PATTERN, PDF_ROLE_TO_HTML_ROLE } from './constants.js';
 
-import type { StructTreeContent, StructTreeNode } from 'pdfjs-dist/types/src/display/api';
-import type { StructTreeNodeWithExtraAttributes } from './types';
+import type { StructTreeContent, StructTreeNode } from 'pdfjs-dist/types/src/display/api.js';
+import type { StructTreeNodeWithExtraAttributes } from './types.js';
 
 type PdfRole = keyof typeof PDF_ROLE_TO_HTML_ROLE;
 

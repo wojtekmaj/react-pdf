@@ -1,8 +1,8 @@
 import React, { useRef } from 'react';
 
-import samplePDF from './test.pdf';
+import samplePDF from './test.pdf.js';
 
-import type { File } from './shared/types';
+import type { File } from './shared/types.js';
 
 type LoadingOptionsProps = {
   file: File | null;
