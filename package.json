@@ -22,7 +22,8 @@
     "prettier": "prettier --check . --cache",
     "test": "yarn lint && yarn tsc && yarn prettier && yarn unit",
     "tsc": "tsc --noEmit",
-    "unit": "vitest"
+    "unit": "vitest",
+    "watch": "yarn build-js-esm --watch & yarn build-js-cjs --watch & nodemon --watch src --ext css --exec \"yarn copy-styles\""
   },
   "keywords": [
     "pdf",
@@ -56,6 +57,7 @@
     "eslint-config-wojtekmaj": "^0.9.0",
     "husky": "^8.0.0",
     "jsdom": "^21.1.0",
+    "nodemon": "^3.0.0",
     "prettier": "^2.7.0",
     "pretty-quick": "^3.1.0",
     "react": "^18.2.0",
