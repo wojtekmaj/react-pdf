@@ -4,8 +4,6 @@ import { pdfjs, Document, Outline, Page, Thumbnail } from 'react-pdf/src';
 import 'react-pdf/src/Page/AnnotationLayer.css';
 import 'react-pdf/src/Page/TextLayer.css';
 
-import { isArrayBuffer, isBlob, isBrowser, loadFromFile } from 'react-pdf/src/shared/utils';
-
 import './Test.css';
 
 import AnnotationOptions from './AnnotationOptions';
@@ -15,7 +13,7 @@ import PassingOptions from './PassingOptions';
 import ViewOptions from './ViewOptions';
 import CustomRenderer from './CustomRenderer';
 
-import { dataURItoBlob } from './shared/utils';
+import { isArrayBuffer, isBlob, isBrowser, loadFromFile, dataURItoBlob } from './shared/utils';
 
 import type { PDFDocumentProxy, PDFPageProxy } from 'pdfjs-dist';
 import type { ExternalLinkTarget, File, PassMethod, RenderMode } from './shared/types';

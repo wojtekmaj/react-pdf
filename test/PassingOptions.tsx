@@ -1,5 +1,6 @@
 import React from 'react';
-import { isDataURI } from 'react-pdf/src/shared/utils';
+
+import { isDataURI } from './shared/utils';
 
 import type { File, PassMethod } from './shared/types';
 
