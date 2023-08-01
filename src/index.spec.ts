@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { pdfjs, Document, Outline, Page } from './index.js';
+import { pdfjs, Document, Outline, Page, Thumbnail } from './index.js';
 
 describe('default entry', () => {
   describe('has pdfjs exported properly', () => {
@@ -26,5 +26,9 @@ describe('default entry', () => {
 
   it('has Page exported properly', () => {
     expect(Page).toBeInstanceOf(Object);
+  });
+
+  it('has Thumbnail exported properly', () => {
+    expect(Thumbnail).toBeInstanceOf(Object);
   });
 });
