@@ -108,7 +108,10 @@ pdfjs.GlobalWorkerOptions.workerSrc = new URL(
 ```
 
 > **Note**
-> In Next.js using App Router, make sure to add `'use client';` to the top of the file.
+> In Next.js:
+>
+> - Using App Router, make sure to add `'use client';` to the top of the file.
+> - Using Pages Router, make sure to [disable SSR](https://nextjs.org/docs/pages/building-your-application/optimizing/lazy-loading#with-no-ssr) when importing the component you're using this code in.
 
 > **Note**
 > pnpm requires an `.npmrc` file with `public-hoist-pattern[]=pdfjs-dist` for this to work.
