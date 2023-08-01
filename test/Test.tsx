@@ -1,5 +1,4 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { PDFDataRangeTransport } from 'pdfjs-dist';
 import { pdfjs, Document, Outline, Page, Thumbnail } from 'react-pdf';
 import 'react-pdf/dist/esm/Page/AnnotationLayer.css';
 import 'react-pdf/dist/esm/Page/TextLayer.css';
@@ -17,6 +16,8 @@ import { isArrayBuffer, isBlob, isBrowser, loadFromFile, dataURItoBlob } from '.
 
 import type { PDFDocumentProxy, PDFPageProxy } from 'pdfjs-dist';
 import type { ExternalLinkTarget, File, PassMethod, RenderMode } from './shared/types.js';
+
+const { PDFDataRangeTransport } = pdfjs;
 
 pdfjs.GlobalWorkerOptions.workerSrc = new URL(
   'pdfjs-dist/build/pdf.worker.min.js',
