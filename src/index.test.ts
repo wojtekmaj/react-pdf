@@ -1,4 +1,4 @@
-import * as pdfjs from 'pdfjs-dist';
+import pdfjs from './pdfjs.js';
 
 import Document from './Document.js';
 import Outline from './Outline.js';

@@ -17,7 +17,7 @@ import makeCancellable from 'make-cancellable-promise';
 import clsx from 'clsx';
 import invariant from 'tiny-invariant';
 import warning from 'tiny-warning';
-import * as pdfjs from 'pdfjs-dist';
+import pdfjs from './pdfjs.js';
 
 import DocumentContext from './DocumentContext.js';
 

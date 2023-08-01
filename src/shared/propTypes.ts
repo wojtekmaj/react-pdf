@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import { allEvents } from 'make-event-props';
-import * as pdfjs from 'pdfjs-dist';
+import pdfjs from '../pdfjs.js';
 
 import { isDefined } from './utils.js';
 
