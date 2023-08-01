@@ -1,5 +1,4 @@
-import { PDFDataRangeTransport } from 'pdfjs-dist';
-
+import type { PDFDataRangeTransport } from 'pdfjs-dist';
 import type { BinaryData } from 'pdfjs-dist/types/src/display/api.js';
 
 export type Source =
