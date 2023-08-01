@@ -47,7 +47,7 @@ The following browsers are supported out of the box in React-PDF v7:
 - Safari ≥15.4
 - Firefox ≥90
 
-You may extend the list of supported browsers by providing additional polyfills (e.g. for `Array.prototype.at` or `Promise.allSettled`) and either configuring your bundler to transpile `pdfjs-dist` or using [legacy PDF.js worker](#legacy-pdfjs-worker).
+You may extend the list of supported browsers by providing additional polyfills (e.g. for `Array.prototype.at` or `Promise.allSettled`) and either configuring your bundler to transpile `pdfjs-dist` and using [legacy PDF.js worker](#legacy-pdfjs-worker).
 
 If you need to support older browsers, you will need to use React-PDF v6 or v5.
 
@@ -75,7 +75,7 @@ Add React-PDF to your project by executing `npm install react-pdf` or `yarn add 
 
 #### Next.js
 
-If you use Next.js, you will need to install `raw-loader` by executing `npm install raw-loader --save-dev` or `yarn add raw-loader --dev` and add the following to your `next.config.js`:
+If you use Next.js, you may need to install `raw-loader` by executing `npm install raw-loader --save-dev` or `yarn add raw-loader --dev` and add the following to your `next.config.js`:
 
 ```diff
 module.exports = {
