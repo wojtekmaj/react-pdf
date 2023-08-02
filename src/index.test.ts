@@ -14,7 +14,7 @@ export type { OutlineProps } from './Outline.js';
 export type { PageProps } from './Page.js';
 export type { ThumbnailProps } from './Thumbnail.js';
 
-import './pdf.worker.entry';
+import './pdf.worker.entry.js';
 
 export {
   pdfjs,
