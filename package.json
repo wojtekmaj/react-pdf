@@ -26,7 +26,9 @@
     "./dist/cjs/Page/AnnotationLayer.css": "./dist/cjs/Page/AnnotationLayer.css",
     "./dist/cjs/Page/TextLayer.css": "./dist/cjs/Page/TextLayer.css",
     "./dist/esm/Page/AnnotationLayer.css": "./dist/esm/Page/AnnotationLayer.css",
-    "./dist/esm/Page/TextLayer.css": "./dist/esm/Page/TextLayer.css"
+    "./dist/esm/Page/TextLayer.css": "./dist/esm/Page/TextLayer.css",
+    "./worker/legacy/pdf.worker.entry.js": "./node_modules/pdfjs-dist/legacy/build/pdf.worker.entry.js",
+    "./worker/pdf.worker.entry.js": "./node_modules/pdfjs-dist/build/pdf.worker.entry.js"
   },
   "scripts": {
     "build": "yarn build-js && yarn copy-styles",
