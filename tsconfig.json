@@ -8,7 +8,6 @@
     "noUncheckedIndexedAccess": true,
     "outDir": "dist",
     "strict": true,
-    "strictNullChecks": true,
     "target": "es2015"
   },
   "include": ["src"]
