@@ -69,7 +69,6 @@
     "@testing-library/dom": "^9.0.0",
     "@testing-library/jest-dom": "^5.15.0",
     "@testing-library/react": "^14.0.0",
-    "@testing-library/user-event": "^14.4.0",
     "@types/node": "*",
     "@types/react": "*",
     "cpy-cli": "^5.0.0",
