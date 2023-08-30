@@ -8,13 +8,13 @@ import Document from './Document.js';
 import DocumentContext from './DocumentContext.js';
 import Page from './Page.js';
 
-import { makeAsyncCallback, loadPDF, muteConsole, restoreConsole } from '../test-utils.js';
+import { makeAsyncCallback, loadPDF, muteConsole, restoreConsole } from '../../../test-utils.js';
 
 import type { PDFDocumentProxy } from 'pdfjs-dist';
 import type { ScrollPageIntoViewArgs } from './shared/types.js';
 
-const pdfFile = loadPDF('./__mocks__/_pdf.pdf');
-const pdfFile2 = loadPDF('./__mocks__/_pdf2.pdf');
+const pdfFile = loadPDF('./../../__mocks__/_pdf.pdf');
+const pdfFile2 = loadPDF('./../../__mocks__/_pdf2.pdf');
 
 const OK = Symbol('OK');
 

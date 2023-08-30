@@ -1,5 +1,5 @@
 {
-  "name": "react-pdf-test-page",
+  "name": "test",
   "version": "4.0.0",
   "description": "A test page for React-PDF.",
   "private": true,
@@ -7,7 +7,11 @@
   "scripts": {
     "build": "vite build",
     "dev": "vite",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
+    "prettier": "prettier --check . --cache",
+    "test": "yarn lint && yarn tsc && yarn prettier",
+    "tsc": "tsc --noEmit"
   },
   "author": {
     "name": "Wojciech Maj",
@@ -17,13 +21,17 @@
   "dependencies": {
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-pdf": "portal:../",
+    "react-pdf": "workspace:packages/react-pdf",
     "tiny-invariant": "^1.0.0",
     "ts-node": "^10.9.1"
   },
   "devDependencies": {
     "@types/babel__core": "^7.20.0",
+    "@types/react": "*",
     "@vitejs/plugin-react": "^3.0.0",
+    "eslint": "^8.26.0",
+    "eslint-config-wojtekmaj": "^0.9.0",
+    "prettier": "^2.7.0",
     "typescript": "^5.0.0",
     "vite": "^4.0.0",
     "vite-plugin-static-copy": "^0.17.0"

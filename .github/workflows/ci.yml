@@ -38,6 +38,9 @@ jobs:
         env:
           HUSKY: 0
 
+      - name: Build package
+        run: yarn build
+
       - name: Run tests
         run: yarn lint
 
@@ -71,6 +74,9 @@ jobs:
         run: yarn --immutable
         env:
           HUSKY: 0
+
+      - name: Build package
+        run: yarn build
 
       - name: Run type checking
         run: yarn tsc

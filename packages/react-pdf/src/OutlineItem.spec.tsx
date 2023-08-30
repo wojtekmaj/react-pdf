@@ -5,7 +5,7 @@ import { fireEvent, getAllByRole, render, screen } from '@testing-library/react'
 import { pdfjs } from './index.test.js';
 import OutlineItem from './OutlineItem.js';
 
-import { loadPDF, makeAsyncCallback } from '../test-utils.js';
+import { loadPDF, makeAsyncCallback } from '../../../test-utils.js';
 
 import DocumentContext from './DocumentContext.js';
 import OutlineContext from './OutlineContext.js';
@@ -13,7 +13,7 @@ import OutlineContext from './OutlineContext.js';
 import type { PDFDocumentProxy } from 'pdfjs-dist';
 import type { DocumentContextType, OutlineContextType } from './shared/types.js';
 
-const pdfFile = loadPDF('./__mocks__/_pdf.pdf');
+const pdfFile = loadPDF('./../../__mocks__/_pdf.pdf');
 
 type PDFOutline = Awaited<ReturnType<PDFDocumentProxy['getOutline']>>;
 type PDFOutlineItem = PDFOutline[number];

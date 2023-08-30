@@ -7,9 +7,9 @@ import { pdfjs } from '../index.test.js';
 import AnnotationLayer from './AnnotationLayer.js';
 import LinkService from '../LinkService.js';
 
-import failingPage from '../../__mocks__/_failing_page.js';
+import failingPage from '../../../../__mocks__/_failing_page.js';
 
-import { loadPDF, makeAsyncCallback, muteConsole, restoreConsole } from '../../test-utils.js';
+import { loadPDF, makeAsyncCallback, muteConsole, restoreConsole } from '../../../../test-utils.js';
 
 import DocumentContext from '../DocumentContext.js';
 import PageContext from '../PageContext.js';
@@ -18,8 +18,8 @@ import type { RenderResult } from '@testing-library/react';
 import type { PDFDocumentProxy, PDFPageProxy } from 'pdfjs-dist';
 import type { Annotations, DocumentContextType, PageContextType } from '../shared/types.js';
 
-const pdfFile = loadPDF('./__mocks__/_pdf.pdf');
-const annotatedPdfFile = loadPDF('./__mocks__/_pdf3.pdf');
+const pdfFile = loadPDF('./../../__mocks__/_pdf.pdf');
+const annotatedPdfFile = loadPDF('./../../__mocks__/_pdf3.pdf');
 
 function renderWithContext(
   children: React.ReactNode,

@@ -6,8 +6,8 @@ import { pdfjs } from './index.test.js';
 
 import Outline from './Outline.js';
 
-import failingPdf from '../__mocks__/_failing_pdf.js';
-import { loadPDF, makeAsyncCallback, muteConsole, restoreConsole } from '../test-utils.js';
+import failingPdf from '../../../__mocks__/_failing_pdf.js';
+import { loadPDF, makeAsyncCallback, muteConsole, restoreConsole } from '../../../test-utils.js';
 
 import DocumentContext from './DocumentContext.js';
 
@@ -16,8 +16,8 @@ import type { DocumentContextType } from './shared/types.js';
 
 type PDFOutline = Awaited<ReturnType<PDFDocumentProxy['getOutline']>>;
 
-const pdfFile = loadPDF('./__mocks__/_pdf.pdf');
-const pdfFile2 = loadPDF('./__mocks__/_pdf2.pdf');
+const pdfFile = loadPDF('./../../__mocks__/_pdf.pdf');
+const pdfFile2 = loadPDF('./../../__mocks__/_pdf2.pdf');
 
 function renderWithContext(children: React.ReactNode, context: Partial<DocumentContextType>) {
   const { rerender, ...otherResult } = render(

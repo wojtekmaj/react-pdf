@@ -6,16 +6,16 @@ import { pdfjs } from '../index.test.js';
 
 import PageCanvas from './PageCanvas.js';
 
-import failingPage from '../../__mocks__/_failing_page.js';
+import failingPage from '../../../../__mocks__/_failing_page.js';
 
-import { loadPDF, makeAsyncCallback, muteConsole, restoreConsole } from '../../test-utils.js';
+import { loadPDF, makeAsyncCallback, muteConsole, restoreConsole } from '../../../../test-utils.js';
 
 import PageContext from '../PageContext.js';
 
 import type { PDFPageProxy } from 'pdfjs-dist';
 import type { PageContextType } from '../shared/types.js';
 
-const pdfFile = loadPDF('./__mocks__/_pdf.pdf');
+const pdfFile = loadPDF('./../../__mocks__/_pdf.pdf');
 
 function renderWithContext(children: React.ReactNode, context: Partial<PageContextType>) {
   const { rerender, ...otherResult } = render(

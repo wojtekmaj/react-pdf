@@ -42,11 +42,13 @@ jobs:
       - name: Publish with latest tag
         if: github.event.release.prelease == false
         run: yarn npm publish --tag latest
+        working-directory: packages/react-pdf
         env:
           YARN_NPM_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Publish with next tag
         if: github.event.release.prelease == true
         run: yarn npm publish --tag next
+        working-directory: packages/react-pdf
         env:
           YARN_NPM_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
