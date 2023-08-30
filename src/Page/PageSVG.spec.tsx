@@ -1,3 +1,4 @@
+import { Blob } from 'node:buffer';
 import { beforeAll, describe, expect, it } from 'vitest';
 import React from 'react';
 import { render } from '@testing-library/react';
@@ -45,6 +46,9 @@ describe('PageSVG', () => {
 
   describe('loading', () => {
     it('renders a page and calls onRenderSuccess callback properly', async () => {
+      const originalBlob = globalThis.Blob;
+      globalThis.Blob = Blob as unknown as typeof globalThis.Blob;
+
       const { func: onRenderSuccess, promise: onRenderSuccessPromise } = makeAsyncCallback();
 
       muteConsole();
@@ -60,6 +64,8 @@ describe('PageSVG', () => {
       await expect(onRenderSuccessPromise).resolves.toMatchObject([{}]);
 
       restoreConsole();
+
+      globalThis.Blob = originalBlob;
     });
 
     it('calls onRenderError when failed to render canvas', async () => {

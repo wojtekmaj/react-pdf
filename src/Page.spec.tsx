@@ -1,3 +1,4 @@
+import { Blob } from 'node:buffer';
 import { beforeAll, describe, expect, it, vi } from 'vitest';
 import React, { createRef } from 'react';
 import { fireEvent, render } from '@testing-library/react';
@@ -351,6 +352,9 @@ describe('Page', () => {
     });
 
     it('requests page to be rendered with default rotation when given nothing', async () => {
+      const originalBlob = globalThis.Blob;
+      globalThis.Blob = Blob as unknown as typeof globalThis.Blob;
+
       const { func: onRenderSuccess, promise: onRenderSuccessPromise } =
         makeAsyncCallback<[PageCallback]>();
 
@@ -370,9 +374,14 @@ describe('Page', () => {
       // Expect the SVG layer not to be rotated
       expect(parseInt(width, 10)).toBe(Math.floor(viewport.width));
       expect(parseInt(height, 10)).toBe(Math.floor(viewport.height));
+
+      globalThis.Blob = originalBlob;
     });
 
     it('requests page to be rendered with given rotation when given rotate prop', async () => {
+      const originalBlob = globalThis.Blob;
+      globalThis.Blob = Blob as unknown as typeof globalThis.Blob;
+
       const { func: onRenderSuccess, promise: onRenderSuccessPromise } =
         makeAsyncCallback<[PageCallback]>();
       const rotate = 90;
@@ -393,6 +402,8 @@ describe('Page', () => {
       // Expect the SVG layer to be rotated
       expect(parseInt(width, 10)).toBe(Math.floor(viewport.width));
       expect(parseInt(height, 10)).toBe(Math.floor(viewport.height));
+
+      globalThis.Blob = originalBlob;
     });
 
     it('requests page to be rendered in canvas mode by default', async () => {
