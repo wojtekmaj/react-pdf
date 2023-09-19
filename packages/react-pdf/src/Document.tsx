@@ -27,7 +27,8 @@ import LinkService from './LinkService.js';
 import PasswordResponses from './PasswordResponses.js';
 
 import {
-  cancelRunningTask, copySource,
+  cancelRunningTask,
+  copySource,
   dataURItoByteString,
   displayCORSWarning,
   isArrayBuffer,
