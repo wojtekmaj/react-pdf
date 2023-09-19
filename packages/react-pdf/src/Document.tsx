@@ -27,7 +27,7 @@ import LinkService from './LinkService.js';
 import PasswordResponses from './PasswordResponses.js';
 
 import {
-  cancelRunningTask,
+  cancelRunningTask, copySource,
   dataURItoByteString,
   displayCORSWarning,
   isArrayBuffer,
@@ -361,7 +361,7 @@ const Document = forwardRef(function Document(
 
     const documentInitParams = options
       ? {
-          ...source,
+          ...copySource(source),
           ...options,
         }
       : source;

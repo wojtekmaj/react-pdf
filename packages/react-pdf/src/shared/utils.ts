@@ -2,7 +2,7 @@ import invariant from 'tiny-invariant';
 import warning from 'tiny-warning';
 
 import type { PDFPageProxy } from 'pdfjs-dist';
-import type { PageCallback } from './types.js';
+import type { PageCallback, Source } from './types.js';
 
 /**
  * Checks if we're running in a browser environment.
@@ -178,3 +178,11 @@ export function loadFromFile(file: Blob): Promise<ArrayBuffer> {
     reader.readAsArrayBuffer(file);
   });
 }
+
+export function copySource(source: Source): Source {
+  if('data' in  source && isArrayBuffer(source.data)) {
+    return {data: source.data.slice(0)}
+  }
+  return source;
+}
+
