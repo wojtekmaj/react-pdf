@@ -180,9 +180,8 @@ export function loadFromFile(file: Blob): Promise<ArrayBuffer> {
 }
 
 export function copySource(source: Source): Source {
-  if('data' in  source && isArrayBuffer(source.data)) {
-    return {data: source.data.slice(0)}
+  if ('data' in source && isArrayBuffer(source.data)) {
+    return { data: source.data.slice(0) };
   }
   return source;
 }
-
