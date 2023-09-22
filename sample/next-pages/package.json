@@ -1,0 +1,26 @@
+{
+  "name": "react-pdf-sample-page-next",
+  "version": "4.0.0",
+  "description": "A sample page for React-PDF.",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "next build",
+    "dev": "next dev",
+    "preview": "next preview"
+  },
+  "author": {
+    "name": "Wojciech Maj",
+    "email": "kontakt@wojtekmaj.pl"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "next": "^13.5.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-pdf": "latest"
+  },
+  "devDependencies": {
+    "null-loader": "^4.0.1"
+  }
+}
