@@ -122,12 +122,7 @@ export type OnRenderTextLayerSuccess = () => void;
 
 export type PasswordResponse = (typeof PasswordResponses)[keyof typeof PasswordResponses];
 
-export type Options = NullableObject<
-  Omit<DocumentInitParameters, KeyOfUnion<Source> | 'canvasMaxAreaInBytes'>
-> & {
-  // See https://github.com/mozilla/pdf.js/issues/16503
-  canvasMaxAreaInBytes?: number | null;
-};
+export type Options = NullableObject<Omit<DocumentInitParameters, KeyOfUnion<Source>>>;
 
 /* Context types */
 export type DocumentContextType = {

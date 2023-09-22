@@ -8,13 +8,6 @@ import usePageContext from '../shared/hooks/usePageContext.js';
 import useResolver from '../shared/hooks/useResolver.js';
 import { cancelRunningTask, isCancelException, makePageCallback } from '../shared/utils.js';
 
-import type { PageViewport } from 'pdfjs-dist';
-import type { PDFOperatorList } from 'pdfjs-dist/types/src/display/api.js';
-
-type SVGGraphics = {
-  getSVG: (operatorList: PDFOperatorList, viewport: PageViewport) => Promise<SVGElement>;
-};
-
 export default function PageSVG() {
   const pageContext = usePageContext();
 
@@ -88,11 +81,20 @@ export default function PageSVG() {
 
     cancellable.promise
       .then((operatorList) => {
-        const svgGfx: SVGGraphics = new pdfjs.SVGGraphics(page.commonObjs, page.objs);
+        if (!pdfjs.SVGGraphics) {
+          throw new Error('SVGGraphics is not supported.');
+        }
+
+        const svgGfx = new pdfjs.SVGGraphics(page.commonObjs, page.objs);
 
         svgGfx
           .getSVG(operatorList, viewport)
-          .then((nextSvg) => {
+          .then((nextSvg: unknown) => {
+            // See https://github.com/mozilla/pdf.js/issues/16745
+            if (!(nextSvg instanceof SVGElement)) {
+              throw new Error('getSVG returned unexpected result.');
+            }
+
             svgDispatch({ type: 'RESOLVE', value: nextSvg });
           })
           .catch((error) => {

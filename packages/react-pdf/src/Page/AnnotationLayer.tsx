@@ -158,7 +158,16 @@ export default function AnnotationLayer() {
 
     const clonedViewport = viewport.clone({ dontFlip: true });
 
-    const parameters = {
+    const annotationLayerParameters = {
+      accessibilityManager: null, // TODO: Implement this
+      annotationCanvasMap: null, // TODO: Implement this
+      div: layer,
+      l10n: null, // TODO: Implement this
+      page,
+      viewport: clonedViewport,
+    };
+
+    const renderParameters = {
       annotations,
       annotationStorage: pdf.annotationStorage,
       div: layer,
@@ -173,7 +182,7 @@ export default function AnnotationLayer() {
     layer.innerHTML = '';
 
     try {
-      pdfjs.AnnotationLayer.render(parameters);
+      new pdfjs.AnnotationLayer(annotationLayerParameters).render(renderParameters);
 
       // Intentional immediate callback
       onRenderSuccess();
