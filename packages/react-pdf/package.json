@@ -59,7 +59,7 @@
     "make-cancellable-promise": "^1.3.1",
     "make-event-props": "^1.6.0",
     "merge-refs": "^1.2.1",
-    "pdfjs-dist": "3.8.162",
+    "pdfjs-dist": "3.10.111",
     "prop-types": "^15.6.2",
     "tiny-invariant": "^1.0.0",
     "tiny-warning": "^1.0.0"
