@@ -1,5 +1,3 @@
-import React from 'react';
-
 import type { ExternalLinkTarget } from './shared/types.js';
 
 type AnnotationOptionsProps = {
