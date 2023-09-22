@@ -6,6 +6,7 @@ import { fireEvent, render } from '@testing-library/react';
 import { pdfjs } from './index.test.js';
 
 import Page from './Page.js';
+import LinkService from './LinkService.js';
 
 import failingPdf from '../../../__mocks__/_failing_pdf.js';
 import silentlyFailingPdf from '../../../__mocks__/_silently_failing_pdf.js';
@@ -42,6 +43,8 @@ function renderWithContext(children: React.ReactNode, context: Partial<DocumentC
 }
 
 describe('Page', () => {
+  const linkService = new LinkService();
+
   // Loaded PDF file
   let pdf: PDFDocumentProxy;
   let pdf2: PDFDocumentProxy;
@@ -83,7 +86,10 @@ describe('Page', () => {
     it('loads a page and calls onLoadSuccess callback properly', async () => {
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
-      renderWithContext(<Page onLoadSuccess={onLoadSuccess} pageIndex={0} />, { pdf });
+      renderWithContext(<Page onLoadSuccess={onLoadSuccess} pageIndex={0} />, {
+        linkService,
+        pdf,
+      });
 
       expect.assertions(1);
 
@@ -94,7 +100,10 @@ describe('Page', () => {
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } =
         makeAsyncCallback<[PageCallback]>();
 
-      renderWithContext(<Page onLoadSuccess={onLoadSuccess} pageIndex={0} />, { pdf });
+      renderWithContext(<Page onLoadSuccess={onLoadSuccess} pageIndex={0} />, {
+        linkService,
+        pdf,
+      });
 
       expect.assertions(5);
 
@@ -113,7 +122,10 @@ describe('Page', () => {
 
       muteConsole();
 
-      renderWithContext(<Page onLoadError={onLoadError} pageIndex={0} />, { pdf: failingPdf });
+      renderWithContext(<Page onLoadError={onLoadError} pageIndex={0} />, {
+        linkService,
+        pdf: failingPdf,
+      });
 
       expect.assertions(1);
 
@@ -125,7 +137,10 @@ describe('Page', () => {
     it('loads page when given pageIndex', async () => {
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
-      renderWithContext(<Page onLoadSuccess={onLoadSuccess} pageIndex={0} />, { pdf });
+      renderWithContext(<Page onLoadSuccess={onLoadSuccess} pageIndex={0} />, {
+        linkService,
+        pdf,
+      });
 
       expect.assertions(1);
 
@@ -137,7 +152,10 @@ describe('Page', () => {
     it('loads page when given pageNumber', async () => {
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
-      renderWithContext(<Page onLoadSuccess={onLoadSuccess} pageNumber={1} />, { pdf });
+      renderWithContext(<Page onLoadSuccess={onLoadSuccess} pageNumber={1} />, {
+        linkService,
+        pdf,
+      });
 
       expect.assertions(1);
 
@@ -195,7 +213,10 @@ describe('Page', () => {
 
       const { func: onLoadSuccess2, promise: onLoadSuccessPromise2 } = makeAsyncCallback();
 
-      rerender(<Page onLoadSuccess={onLoadSuccess2} pageIndex={0} />, { pdf: pdf2 });
+      rerender(<Page onLoadSuccess={onLoadSuccess2} pageIndex={0} />, {
+        linkService,
+        pdf: pdf2,
+      });
 
       await expect(onLoadSuccessPromise2).resolves.toMatchObject([desiredLoadedPage3]);
     });
@@ -213,7 +234,10 @@ describe('Page', () => {
 
       const { func: onLoadSuccess2, promise: onLoadSuccessPromise2 } = makeAsyncCallback();
 
-      rerender(<Page onLoadSuccess={onLoadSuccess2} pageIndex={1} />, { pdf });
+      rerender(<Page onLoadSuccess={onLoadSuccess2} pageIndex={1} />, {
+        linkService,
+        pdf,
+      });
 
       await expect(onLoadSuccessPromise2).resolves.toMatchObject([desiredLoadedPage2]);
     });
@@ -244,6 +268,7 @@ describe('Page', () => {
       const inputRef = createRef<HTMLDivElement>();
 
       renderWithContext(<Page inputRef={inputRef} pageIndex={1} />, {
+        linkService,
         pdf: silentlyFailingPdf,
       });
 
@@ -257,7 +282,10 @@ describe('Page', () => {
 
       const { container } = renderWithContext(
         <Page canvasRef={canvasRef} onLoadSuccess={onLoadSuccess} pageIndex={0} />,
-        { pdf },
+        {
+          linkService,
+          pdf,
+        },
       );
 
       expect.assertions(1);
@@ -272,7 +300,10 @@ describe('Page', () => {
     it('renders "No page specified." when given neither pageIndex nor pageNumber', () => {
       muteConsole();
 
-      const { container } = renderWithContext(<Page />, { pdf });
+      const { container } = renderWithContext(<Page />, {
+        linkService,
+        pdf,
+      });
 
       const noData = container.querySelector('.react-pdf__message');
 
@@ -285,7 +316,10 @@ describe('Page', () => {
     it('renders custom no data message when given nothing and noData is given', () => {
       muteConsole();
 
-      const { container } = renderWithContext(<Page noData="Nothing here" />, { pdf });
+      const { container } = renderWithContext(<Page noData="Nothing here" />, {
+        linkService,
+        pdf,
+      });
 
       const noData = container.querySelector('.react-pdf__message');
 
@@ -298,7 +332,10 @@ describe('Page', () => {
     it('renders custom no data message when given nothing and noData is given as a function', () => {
       muteConsole();
 
-      const { container } = renderWithContext(<Page noData={() => 'Nothing here'} />, { pdf });
+      const { container } = renderWithContext(<Page noData={() => 'Nothing here'} />, {
+        linkService,
+        pdf,
+      });
 
       const noData = container.querySelector('.react-pdf__message');
 
@@ -309,7 +346,10 @@ describe('Page', () => {
     });
 
     it('renders "Loading page…" when loading a page', async () => {
-      const { container } = renderWithContext(<Page pageIndex={0} />, { pdf });
+      const { container } = renderWithContext(<Page pageIndex={0} />, {
+        linkService,
+        pdf,
+      });
 
       const loading = container.querySelector('.react-pdf__message');
 
@@ -318,7 +358,10 @@ describe('Page', () => {
     });
 
     it('renders custom loading message when loading a page and loading prop is given', async () => {
-      const { container } = renderWithContext(<Page loading="Loading" pageIndex={0} />, { pdf });
+      const { container } = renderWithContext(<Page loading="Loading" pageIndex={0} />, {
+        linkService,
+        pdf,
+      });
 
       const loading = container.querySelector('.react-pdf__message');
 
@@ -360,7 +403,10 @@ describe('Page', () => {
 
       const { container } = renderWithContext(
         <Page onRenderSuccess={onRenderSuccess} pageIndex={0} renderMode="svg" />,
-        { pdf },
+        {
+          linkService,
+          pdf,
+        },
       );
 
       const [page] = await onRenderSuccessPromise;
@@ -388,7 +434,10 @@ describe('Page', () => {
 
       const { container } = renderWithContext(
         <Page onRenderSuccess={onRenderSuccess} pageIndex={0} renderMode="svg" rotate={rotate} />,
-        { pdf },
+        {
+          linkService,
+          pdf,
+        },
       );
 
       const [page] = await onRenderSuccessPromise;
@@ -411,7 +460,10 @@ describe('Page', () => {
 
       const { container } = renderWithContext(
         <Page onLoadSuccess={onLoadSuccess} pageIndex={0} />,
-        { pdf },
+        {
+          linkService,
+          pdf,
+        },
       );
 
       expect.assertions(1);
@@ -428,7 +480,10 @@ describe('Page', () => {
 
       const { container } = renderWithContext(
         <Page onLoadSuccess={onLoadSuccess} pageIndex={0} renderMode="none" />,
-        { pdf },
+        {
+          linkService,
+          pdf,
+        },
       );
 
       expect.assertions(2);
@@ -447,7 +502,10 @@ describe('Page', () => {
 
       const { container } = renderWithContext(
         <Page onLoadSuccess={onLoadSuccess} pageIndex={0} renderMode="canvas" />,
-        { pdf },
+        {
+          linkService,
+          pdf,
+        },
       );
 
       expect.assertions(1);
@@ -473,7 +531,10 @@ describe('Page', () => {
           pageIndex={0}
           renderMode="custom"
         />,
-        { pdf },
+        {
+          linkService,
+          pdf,
+        },
       );
 
       expect.assertions(1);
@@ -490,7 +551,10 @@ describe('Page', () => {
 
       const { container } = renderWithContext(
         <Page onLoadSuccess={onLoadSuccess} pageIndex={0} renderMode="svg" />,
-        { pdf },
+        {
+          linkService,
+          pdf,
+        },
       );
 
       expect.assertions(1);
@@ -507,7 +571,10 @@ describe('Page', () => {
 
       const { container } = renderWithContext(
         <Page onLoadSuccess={onLoadSuccess} pageIndex={0} />,
-        { pdf },
+        {
+          linkService,
+          pdf,
+        },
       );
 
       expect.assertions(1);
@@ -524,7 +591,10 @@ describe('Page', () => {
 
       const { container } = renderWithContext(
         <Page onLoadSuccess={onLoadSuccess} pageIndex={0} renderTextLayer />,
-        { pdf },
+        {
+          linkService,
+          pdf,
+        },
       );
 
       expect.assertions(1);
@@ -541,7 +611,10 @@ describe('Page', () => {
 
       const { container } = renderWithContext(
         <Page onLoadSuccess={onLoadSuccess} pageIndex={0} renderTextLayer={false} />,
-        { pdf },
+        {
+          linkService,
+          pdf,
+        },
       );
 
       expect.assertions(1);
@@ -558,7 +631,10 @@ describe('Page', () => {
 
       const { container } = renderWithContext(
         <Page onLoadSuccess={onLoadSuccess} pageIndex={0} renderMode="canvas" renderTextLayer />,
-        { pdf },
+        {
+          linkService,
+          pdf,
+        },
       );
 
       expect.assertions(1);
@@ -585,7 +661,10 @@ describe('Page', () => {
           renderMode="custom"
           renderTextLayer
         />,
-        { pdf },
+        {
+          linkService,
+          pdf,
+        },
       );
 
       expect.assertions(1);
@@ -602,7 +681,10 @@ describe('Page', () => {
 
       const { container } = renderWithContext(
         <Page onLoadSuccess={onLoadSuccess} pageIndex={0} renderMode="svg" renderTextLayer />,
-        { pdf },
+        {
+          linkService,
+          pdf,
+        },
       );
 
       expect.assertions(1);
@@ -619,7 +701,10 @@ describe('Page', () => {
 
       const { container } = renderWithContext(
         <Page onLoadSuccess={onLoadSuccess} pageIndex={0} />,
-        { pdf },
+        {
+          linkService,
+          pdf,
+        },
       );
 
       expect.assertions(1);
@@ -636,7 +721,10 @@ describe('Page', () => {
 
       const { container } = renderWithContext(
         <Page onLoadSuccess={onLoadSuccess} pageIndex={0} renderAnnotationLayer />,
-        { pdf },
+        {
+          linkService,
+          pdf,
+        },
       );
 
       expect.assertions(1);
@@ -653,7 +741,10 @@ describe('Page', () => {
 
       const { container } = renderWithContext(
         <Page onLoadSuccess={onLoadSuccess} pageIndex={0} renderAnnotationLayer={false} />,
-        { pdf },
+        {
+          linkService,
+          pdf,
+        },
       );
 
       expect.assertions(1);
@@ -676,7 +767,10 @@ describe('Page', () => {
         pageIndex={0}
         renderMode="none"
       />,
-      { pdf: pdf4 },
+      {
+        linkService,
+        pdf: pdf4,
+      },
     );
 
     expect.assertions(1);
@@ -699,7 +793,10 @@ describe('Page', () => {
         renderForms
         renderMode="none"
       />,
-      { pdf: pdf4 },
+      {
+        linkService,
+        pdf: pdf4,
+      },
     );
 
     expect.assertions(1);
@@ -715,7 +812,10 @@ describe('Page', () => {
     const { func: onLoadSuccess, promise: onLoadSuccessPromise } =
       makeAsyncCallback<[PageCallback]>();
 
-    renderWithContext(<Page onLoadSuccess={onLoadSuccess} pageIndex={0} />, { pdf });
+    renderWithContext(<Page onLoadSuccess={onLoadSuccess} pageIndex={0} />, {
+      linkService,
+      pdf,
+    });
 
     expect.assertions(1);
 
@@ -729,7 +829,10 @@ describe('Page', () => {
       makeAsyncCallback<[PageCallback]>();
     const scale = 1.5;
 
-    renderWithContext(<Page onLoadSuccess={onLoadSuccess} pageIndex={0} scale={scale} />, { pdf });
+    renderWithContext(<Page onLoadSuccess={onLoadSuccess} pageIndex={0} scale={scale} />, {
+      linkService,
+      pdf,
+    });
 
     expect.assertions(1);
 
@@ -743,7 +846,10 @@ describe('Page', () => {
       makeAsyncCallback<[PageCallback]>();
     const width = 600;
 
-    renderWithContext(<Page onLoadSuccess={onLoadSuccess} pageIndex={0} width={width} />, { pdf });
+    renderWithContext(<Page onLoadSuccess={onLoadSuccess} pageIndex={0} width={width} />, {
+      linkService,
+      pdf,
+    });
 
     expect.assertions(1);
 
@@ -845,7 +951,10 @@ describe('Page', () => {
         scale={scale}
         width={width}
       />,
-      { pdf },
+      {
+        linkService,
+        pdf,
+      },
     );
 
     expect.assertions(2);
@@ -860,7 +969,10 @@ describe('Page', () => {
   it('calls onClick callback when clicked a page (sample of mouse events family)', () => {
     const onClick = vi.fn();
 
-    const { container } = renderWithContext(<Page onClick={onClick} />, { pdf });
+    const { container } = renderWithContext(<Page onClick={onClick} />, {
+      linkService,
+      pdf,
+    });
 
     const page = container.querySelector('.react-pdf__Page') as HTMLDivElement;
     fireEvent.click(page);
@@ -871,7 +983,10 @@ describe('Page', () => {
   it('calls onTouchStart callback when touched a page (sample of touch events family)', () => {
     const onTouchStart = vi.fn();
 
-    const { container } = renderWithContext(<Page onTouchStart={onTouchStart} />, { pdf });
+    const { container } = renderWithContext(<Page onTouchStart={onTouchStart} />, {
+      linkService,
+      pdf,
+    });
 
     const page = container.querySelector('.react-pdf__Page') as HTMLDivElement;
     fireEvent.touchStart(page);
