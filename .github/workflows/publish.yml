@@ -4,6 +4,9 @@ on:
   release:
     types: [published]
 
+env:
+  HUSKY: 0
+
 permissions:
   id-token: write
 
@@ -36,8 +39,6 @@ jobs:
 
       - name: Install dependencies
         run: yarn --immutable
-        env:
-          HUSKY: 0
 
       - name: Publish with latest tag
         if: github.event.release.prelease == false
