@@ -12,6 +12,7 @@ import usePageContext from '../shared/hooks/usePageContext.js';
 import useResolver from '../shared/hooks/useResolver.js';
 import { cancelRunningTask } from '../shared/utils.js';
 
+import type { IDownloadManager } from 'pdfjs-dist/types/web/interfaces.js';
 import type { Annotations } from '../shared/types.js';
 
 export default function AnnotationLayer() {
@@ -171,7 +172,8 @@ export default function AnnotationLayer() {
       annotations,
       annotationStorage: pdf.annotationStorage,
       div: layer,
-      downloadManager: null,
+      // See https://github.com/mozilla/pdf.js/issues/17029
+      downloadManager: null as unknown as IDownloadManager,
       imageResourcesPath,
       linkService,
       page,
