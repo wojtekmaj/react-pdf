@@ -81,10 +81,6 @@ export default function PageSVG() {
 
     cancellable.promise
       .then((operatorList) => {
-        if (!pdfjs.SVGGraphics) {
-          throw new Error('SVGGraphics is not supported.');
-        }
-
         const svgGfx = new pdfjs.SVGGraphics(page.commonObjs, page.objs);
 
         svgGfx
