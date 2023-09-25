@@ -25,9 +25,8 @@
     "tiny-invariant": "^1.0.0"
   },
   "devDependencies": {
-    "@types/babel__core": "^7.20.0",
     "@types/react": "*",
-    "@vitejs/plugin-react": "^3.0.0",
+    "@vitejs/plugin-react": "^4.1.0",
     "eslint": "^8.26.0",
     "eslint-config-wojtekmaj": "^0.9.0",
     "prettier": "^3.0.0",
