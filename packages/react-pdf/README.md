@@ -299,17 +299,7 @@ import fs from 'node:fs';
 
 const cMapsDir = path.join(path.dirname(require.resolve('pdfjs-dist/package.json')), 'cmaps');
 
-function copyDir(from: string, to: string) {
-  // Ensure target directory exists
-  fs.mkdirSync(to, { recursive: true });
-
-  const files = fs.readdirSync(from);
-  files.forEach((file) => {
-    fs.copyFileSync(path.join(from, file), path.join(to, file));
-  });
-}
-
-copyDir(cMapsDir, 'dist/cmaps/');
+fs.cpSync(cMapsDir, 'dist/cmaps/', { recursive: true });
 ```
 
 #### Setting up React-PDF
@@ -419,17 +409,7 @@ const standardFontsDir = path.join(
   'standard_fonts',
 );
 
-function copyDir(from: string, to: string) {
-  // Ensure target directory exists
-  fs.mkdirSync(to, { recursive: true });
-
-  const files = fs.readdirSync(from);
-  files.forEach((file) => {
-    fs.copyFileSync(path.join(from, file), path.join(to, file));
-  });
-}
-
-copyDir(standardFontsDir, 'dist/standard_fonts/');
+fs.cpSync(standardFontsDir, 'dist/standard_fonts/', { recursive: true });
 ```
 
 #### Setting up React-PDF
