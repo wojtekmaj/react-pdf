@@ -3,11 +3,13 @@
   "version": "4.0.0",
   "description": "A sample page for React-PDF.",
   "private": true,
+  "type": "module",
   "scripts": {
-    "build": "parcel build index.html --public-url ./",
+    "build": "yarn copy && parcel build index.html --public-url ./",
+    "copy": "yarn copy-cmaps && yarn copy-standard-fonts",
     "copy-cmaps": "node --loader ts-node/esm ./scripts/copy-cmaps.ts",
     "copy-standard-fonts": "node --loader ts-node/esm ./scripts/copy-standard-fonts.ts",
-    "dev": "parcel index.html"
+    "dev": "yarn copy && parcel index.html"
   },
   "author": {
     "name": "Wojciech Maj",

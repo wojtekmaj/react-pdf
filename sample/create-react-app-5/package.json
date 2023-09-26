@@ -3,13 +3,15 @@
   "version": "4.0.0",
   "description": "A sample page for React-PDF.",
   "private": true,
+  "type": "module",
   "main": "src/index.tsx",
   "scripts": {
-    "build": "react-scripts build",
+    "build": "yarn copy && react-scripts build",
+    "copy": "yarn copy-cmaps && yarn copy-standard-fonts && yarn copy-worker",
     "copy-cmaps": "node --loader ts-node/esm ./scripts/copy-cmaps.ts",
     "copy-standard-fonts": "node --loader ts-node/esm ./scripts/copy-standard-fonts.ts",
     "copy-worker": "node --loader ts-node/esm ./scripts/copy-worker.ts",
-    "dev": "react-scripts start",
+    "dev": "yarn copy && react-scripts start",
     "eject": "react-scripts eject",
     "test": "react-scripts test"
   },

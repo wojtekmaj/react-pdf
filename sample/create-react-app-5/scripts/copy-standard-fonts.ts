@@ -1,5 +1,8 @@
 import fs from 'node:fs';
 import path from 'node:path';
+import { createRequire } from 'node:module';
+
+const require = createRequire(import.meta.url);
 
 function copyDir(from: string, to: string) {
   // Ensure target directory exists
@@ -15,6 +18,6 @@ const standardFontsDir = path.join(
   path.dirname(require.resolve('pdfjs-dist/package.json')),
   'standard_fonts',
 );
-const targetDir = path.join('dist', 'standard_fonts');
+const targetDir = path.join('public', 'standard_fonts');
 
 copyDir(standardFontsDir, targetDir);
