@@ -5,10 +5,7 @@ const nextConfig = {
      * Critical: prevents " ⨯ ./node_modules/canvas/build/Release/canvas.node
      * Module parse failed: Unexpected character '�' (1:0)" error
      */
-    config.module.rules.push({
-      test: /\.node/,
-      use: 'raw-loader',
-    });
+    config.resolve.alias.canvas = false;
 
     // You may not need this, it's just to support moduleResolution: 'node16'
     config.resolve.extensionAlias = {

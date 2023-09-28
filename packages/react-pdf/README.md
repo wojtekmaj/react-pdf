@@ -75,15 +75,12 @@ Add React-PDF to your project by executing `npm install react-pdf` or `yarn add 
 
 #### Next.js
 
-If you use Next.js, you may need to install `raw-loader` by executing `npm install raw-loader --save-dev` or `yarn add raw-loader --dev` and add the following to your `next.config.js`:
+If you use Next.js, you may need to add the following to your `next.config.js`:
 
 ```diff
 module.exports = {
 + webpack: (config) => {
-+   config.module.rules.push({
-+     test: /\.node/,
-+     use: 'raw-loader',
-+   });
++   config.resolve.alias.canvas = false;
 
 +   return config;
 + },
