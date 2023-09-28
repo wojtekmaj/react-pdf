@@ -19,8 +19,5 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-pdf": "latest"
-  },
-  "devDependencies": {
-    "raw-loader": "^4.0.0"
   }
 }

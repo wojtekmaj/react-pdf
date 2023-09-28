@@ -1,18 +1,17 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   webpack: (config) => {
-
-    // This part is creating error when using firebase together
-    // config.module.rules.push({
-    //   test: /\.node/,
-    //   use: "raw-loader",
-    // });
-
-    // @FIX
-    // This is to suspend unwanted error because canvas cannot be found because (Server Side Rendering)
-    // because when trying to use other library like firebase it does not make Re-export error
+    /**
+     * Critical: prevents " ⨯ ./node_modules/canvas/build/Release/canvas.node
+     * Module parse failed: Unexpected character '�' (1:0)" error
+     */
     config.resolve.alias.canvas = false;
-    
+
+    // You may not need this, it's just to support moduleResolution: 'node16'
+    config.resolve.extensionAlias = {
+      '.js': ['.js', '.ts', '.tsx'],
+    };
+
     return config;
   },
 };
