@@ -9,6 +9,8 @@ import useDocumentContext from './shared/hooks/useDocumentContext.js';
 import useOutlineContext from './shared/hooks/useOutlineContext.js';
 import usePageContext from './shared/hooks/usePageContext.js';
 
+import PasswordResponses from './PasswordResponses.js';
+
 export type { DocumentProps } from './Document.js';
 export type { OutlineProps } from './Outline.js';
 export type { PageProps } from './Page.js';
@@ -29,4 +31,5 @@ export {
   useDocumentContext,
   useOutlineContext,
   usePageContext,
+  PasswordResponses,
 };
