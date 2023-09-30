@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
 import invariant from 'tiny-invariant';
 import { usePageContext } from 'react-pdf';
 
