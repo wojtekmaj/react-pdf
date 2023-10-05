@@ -204,11 +204,7 @@ export default function TextLayer() {
         layer.append(end);
         endElement.current = end;
 
-        const hasMarkedContent = Boolean(layer.querySelector('.markedContent'));
-
-        const layerChildren = hasMarkedContent
-          ? layer.querySelectorAll('.markedContent > *:not(.markedContent')
-          : layer.children;
+        const layerChildren = layer.querySelectorAll('[role="presentation"]');
 
         if (customTextRenderer) {
           let index = 0;
