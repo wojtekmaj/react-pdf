@@ -38,7 +38,7 @@ function renderWithContext(children: React.ReactNode, context: Partial<PageConte
 function getTextItems(container: HTMLElement) {
   const wrapper = container.firstElementChild as HTMLDivElement;
 
-  return wrapper.querySelectorAll('.markedContent > *:not(.markedContent');
+  return wrapper.querySelectorAll('[role="presentation"]');
 }
 
 describe('TextLayer', () => {
