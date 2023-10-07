@@ -31,8 +31,8 @@
   "scripts": {
     "build": "yarn build-js && yarn copy-styles",
     "build-js": "yarn build-js-esm && yarn build-js-cjs && yarn build-js-cjs-package",
-    "build-js-esm": "tsc --project tsconfig.build.json --outDir dist/esm --module esnext",
-    "build-js-cjs": "tsc --project tsconfig.build.json --outDir dist/cjs --module commonjs",
+    "build-js-esm": "tsc --project tsconfig.build.json --outDir dist/esm",
+    "build-js-cjs": "tsc --project tsconfig.build.json --outDir dist/cjs --module commonjs --verbatimModuleSyntax false",
     "build-js-cjs-package": "echo '{\n  \"type\": \"commonjs\"\n}' > dist/cjs/package.json",
     "clean": "rimraf dist",
     "copy-styles": "cpy 'src/**/*.css' dist/esm && cpy 'src/**/*.css' dist/cjs",

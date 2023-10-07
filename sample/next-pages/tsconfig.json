@@ -16,7 +16,8 @@
     "resolveJsonModule": true,
     "skipLibCheck": true,
     "strict": true,
-    "target": "es2015"
+    "target": "es2015",
+    "verbatimModuleSyntax": true
   },
   "include": [".", ".next/types/**/*.ts"],
   "exclude": ["node_modules"]

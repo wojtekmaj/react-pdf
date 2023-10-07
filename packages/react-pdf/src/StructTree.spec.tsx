@@ -13,7 +13,7 @@ import PageContext from './PageContext.js';
 
 import type { PDFPageProxy } from 'pdfjs-dist';
 import type { PageContextType } from './shared/types.js';
-import { StructTreeNode } from 'pdfjs-dist/types/src/display/api.js';
+import type { StructTreeNode } from 'pdfjs-dist/types/src/display/api.js';
 
 const pdfFile = loadPDF('./../../__mocks__/_pdf.pdf');
 

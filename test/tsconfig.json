@@ -9,6 +9,7 @@
     "noUncheckedIndexedAccess": true,
     "outDir": "dist",
     "strict": true,
-    "target": "es2015"
+    "target": "esnext",
+    "verbatimModuleSyntax": true
   }
 }
