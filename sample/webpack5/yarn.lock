@@ -2032,6 +2032,19 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@wojtekmaj/react-hooks@npm:^1.18.0":
+  version: 1.18.0
+  resolution: "@wojtekmaj/react-hooks@npm:1.18.0"
+  peerDependencies:
+    "@types/react": ^16.8.0 || ^17.0.0 || ^18.0.0
+    react: ^16.8.0 || ^17.0.0 || ^18.0.0
+  peerDependenciesMeta:
+    "@types/react":
+      optional: true
+  checksum: 968a776fff04334153feea85b9ca498f791b15a356bae65da01d3bb1541720d8c8b4252daab01536d638c43bf32d0aa7a14cc3713ceadf582c2937e2bf8670f6
+  languageName: node
+  linkType: hard
+
 "@xtuc/ieee754@npm:^1.2.0":
   version: 1.2.0
   resolution: "@xtuc/ieee754@npm:1.2.0"
@@ -5038,6 +5051,7 @@ __metadata:
     "@babel/preset-react": ^7.22.0
     "@babel/preset-typescript": ^7.23.0
     "@types/node": "*"
+    "@wojtekmaj/react-hooks": ^1.18.0
     babel-loader: ^9.0.1
     copy-webpack-plugin: ^11.0.0
     css-loader: ^6.0.0

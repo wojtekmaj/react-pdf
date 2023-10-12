@@ -1,7 +1,10 @@
 body {
   margin: 0;
   background-color: #525659;
-  font-family: Segoe UI, Tahoma, sans-serif;
+  font-family:
+    Segoe UI,
+    Tahoma,
+    sans-serif;
 }
 
 .Example input,
@@ -35,6 +38,8 @@ body {
 }
 
 .Example__container__document {
+  width: 100%;
+  max-width: calc(100% - 2em);
   margin: 1em 0;
 }
 
@@ -45,14 +50,8 @@ body {
 }
 
 .Example__container__document .react-pdf__Page {
-  max-width: calc(100% - 2em);
+  margin: 1em 0;
   box-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
-  margin: 1em;
-}
-
-.Example__container__document .react-pdf__Page canvas {
-  max-width: 100%;
-  height: auto !important;
 }
 
 .Example__container__document .react-pdf__message {
