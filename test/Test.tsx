@@ -233,12 +233,12 @@ export default function Test() {
   };
 
   return (
-    <div className="Test">
+    <>
       <header>
         <h1>react-pdf test page</h1>
       </header>
-      <div className="Test__container">
-        <aside className="Test__container__options">
+      <div className="container">
+        <aside>
           <LoadingOptions file={file} setFile={setFile} setRender={setRender} />
           <PassingOptions file={file} passMethod={passMethod} setPassMethod={setPassMethod} />
           <LayerOptions
@@ -274,7 +274,7 @@ export default function Test() {
             setExternalLinkTarget={setExternalLinkTarget}
           />
         </aside>
-        <main className="Test__container__content">
+        <main className="document">
           <Document
             {...documentProps}
             className="custom-classname-document"
@@ -288,10 +288,12 @@ export default function Test() {
             onLoadSuccess={onDocumentLoadSuccess}
             onSourceError={onDocumentLoadError}
           >
-            <div className="Test__container__content__toc">
+            <div className="toc">
+              <h2>Table of Contents</h2>
               {render ? <Outline className="custom-classname-outline" /> : null}
             </div>
-            <div className="Test__container__content__document">
+            <div className="pages">
+              <h2>Pages</h2>
               {render ? (
                 displayAll ? (
                   Array.from(new Array(numPages), (el, index) => (
@@ -310,7 +312,7 @@ export default function Test() {
               ) : null}
             </div>
             {displayAll || (
-              <div className="Test__container__content__controls">
+              <div className="controls">
                 <button disabled={(pageNumber || 0) <= 1} onClick={previousPage} type="button">
                   Previous
                 </button>
@@ -324,19 +326,22 @@ export default function Test() {
                 </button>
               </div>
             )}
-            <div className="Test__container__content__thumbnails">
-              {Array.from(new Array(numPages), (el, index) => (
-                <Thumbnail
-                  key={`thumbnail_${index + 1}`}
-                  className="custom-classname-thumbnail"
-                  pageNumber={index + 1}
-                  width={100}
-                />
-              ))}
+            <div className="thumbnails">
+              <h2>Thumbnails</h2>
+              <div className="thumbnails-list">
+                {Array.from(new Array(numPages), (el, index) => (
+                  <Thumbnail
+                    key={`thumbnail_${index + 1}`}
+                    className="custom-classname-thumbnail"
+                    pageNumber={index + 1}
+                    width={100}
+                  />
+                ))}
+              </div>
             </div>
           </Document>
         </main>
       </div>
-    </div>
+    </>
   );
 }

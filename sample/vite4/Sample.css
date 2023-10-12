@@ -1,60 +1,128 @@
-body {
-  margin: 0;
-  background-color: #525659;
-  font-family:
-    Segoe UI,
-    Tahoma,
-    sans-serif;
+:root {
+  --border-color: #d0d7de;
+  --border-radius: 6px;
+  --border-radius-small: 4px;
+  --background-primary: #fff;
+  --background-secondary: #f6f8fa;
+  --text-color: #1f2328;
 }
 
-.Example input,
-.Example button {
+@media (prefers-color-scheme: dark) {
+  :root {
+    --border-color: #30363d;
+    --background-primary: #0d1116;
+    --background-secondary: #02040a;
+    --text-color: #e6edf3;
+  }
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background-color: var(--background-primary);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial,
+    sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji';
+  font-size: 0.875rem;
+  color: var(--text-color);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  display: block;
+  width: 100%;
+  margin: 0;
+  margin-block-end: 0.5rem;
+  font-weight: 600;
+}
+
+h1 {
+  font-size: 0.875rem;
+}
+
+h2 {
+  font-size: 1rem;
+  font-weight: 400;
+}
+
+a {
+  color: #096bda;
+  text-decoration: none;
+}
+
+a:hover,
+a:focus {
+  text-decoration: underline;
+}
+
+input,
+button {
   font: inherit;
 }
 
-.Example header {
-  background-color: #323639;
-  box-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
-  padding: 20px;
-  color: white;
+label {
+  display: block;
+  font-weight: 600;
+  margin-block-end: 0.5rem;
 }
 
-.Example header h1 {
-  font-size: inherit;
+header {
+  background-color: var(--background-secondary);
+  border-bottom: 1px solid var(--border-color);
+  padding: 1rem;
+}
+
+header h1 {
   margin: 0;
 }
 
-.Example__container {
+aside,
+main {
+  padding: 2rem 1rem;
+}
+
+.container {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+main {
+  flex: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin: 10px 0;
-  padding: 10px;
+  gap: 2rem;
 }
 
-.Example__container__load {
-  margin-top: 1em;
-  color: white;
+.load {
 }
 
-.Example__container__document {
+.document {
   width: 100%;
-  max-width: calc(100% - 2em);
-  margin: 1em 0;
+  max-width: 100%;
 }
 
-.Example__container__document .react-pdf__Document {
+.document .react-pdf__Document {
   display: flex;
   flex-direction: column;
   align-items: center;
+  gap: 2rem;
 }
 
-.Example__container__document .react-pdf__Page {
-  margin: 1em 0;
-  box-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
+.document .react-pdf__Page {
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  overflow: hidden;
 }
 
-.Example__container__document .react-pdf__message {
-  padding: 20px;
-  color: white;
+.document .react-pdf__message {
+  padding: 1rem;
 }

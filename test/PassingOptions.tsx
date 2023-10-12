@@ -42,7 +42,6 @@ export default function PassingOptions({ file, passMethod, setPassMethod }: Pass
   return (
     <fieldset>
       <legend>Passing options</legend>
-
       <div>
         <input
           checked={passMethod === undefined}

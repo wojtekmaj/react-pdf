@@ -64,18 +64,20 @@ export default function LoadingOptions({ file, setFile, setRender }: LoadingOpti
     <fieldset>
       <legend>Load file</legend>
 
-      <label htmlFor="file">Load from file:</label>
-      <input id="file" onChange={onFileChange} type="file" />
+      <div>
+        <label htmlFor="file">Load from file</label>
+        <input id="file" onChange={onFileChange} type="file" />
+      </div>
 
       <form onSubmit={onURLChange}>
-        <label htmlFor="url">Load from URL:</label>
-        <input id="url" type="text" />
+        <label htmlFor="url">Load from URL</label>
+        <input id="url" type="url" />
         <button type="submit">Apply</button>
       </form>
 
       <form onSubmit={onRequestChange}>
-        <label htmlFor="fetchAndPass">Fetch and pass:</label>
-        <input id="fetchAndPass" type="text" />
+        <label htmlFor="fetchAndPass">Fetch and pass</label>
+        <input id="fetchAndPass" type="url" />
         <button type="submit">Apply</button>
       </form>
 

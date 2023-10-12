@@ -23,40 +23,42 @@ export default function AnnotationOptions({
     <fieldset>
       <legend>Annotation options</legend>
 
-      <label htmlFor="externalLinkTarget">External link target</label>
-      <div>
-        <input
-          checked={externalLinkTarget === undefined}
-          id="targetUnset"
-          name="externalLinkTarget"
-          onChange={onExternalLinkTargetChange}
-          type="radio"
-          value="undefined"
-        />
-        <label htmlFor="targetUnset">Unset</label>
-      </div>
-      <div>
-        <input
-          checked={externalLinkTarget === '_self'}
-          id="targetSelf"
-          name="externalLinkTarget"
-          onChange={onExternalLinkTargetChange}
-          type="radio"
-          value="_self"
-        />
-        <label htmlFor="targetSelf">_self</label>
-      </div>
-      <div>
-        <input
-          checked={externalLinkTarget === '_blank'}
-          id="targetBlank"
-          name="externalLinkTarget"
-          onChange={onExternalLinkTargetChange}
-          type="radio"
-          value="_blank"
-        />
-        <label htmlFor="targetBlank">_blank</label>
-      </div>
+      <fieldset>
+        <legend>External link target</legend>
+        <div>
+          <input
+            checked={externalLinkTarget === undefined}
+            id="targetUnset"
+            name="externalLinkTarget"
+            onChange={onExternalLinkTargetChange}
+            type="radio"
+            value="undefined"
+          />
+          <label htmlFor="targetUnset">Unset</label>
+        </div>
+        <div>
+          <input
+            checked={externalLinkTarget === '_self'}
+            id="targetSelf"
+            name="externalLinkTarget"
+            onChange={onExternalLinkTargetChange}
+            type="radio"
+            value="_self"
+          />
+          <label htmlFor="targetSelf">_self</label>
+        </div>
+        <div>
+          <input
+            checked={externalLinkTarget === '_blank'}
+            id="targetBlank"
+            name="externalLinkTarget"
+            onChange={onExternalLinkTargetChange}
+            type="radio"
+            value="_blank"
+          />
+          <label htmlFor="targetBlank">_blank</label>
+        </div>
+      </fieldset>
     </fieldset>
   );
 }

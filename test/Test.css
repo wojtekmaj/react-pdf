@@ -1,165 +1,207 @@
+:root {
+  --border-color: #d0d7de;
+  --border-radius: 6px;
+  --border-radius-small: 4px;
+  --background-primary: #fff;
+  --background-secondary: #f6f8fa;
+  --text-color: #1f2328;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --border-color: #30363d;
+    --background-primary: #0d1116;
+    --background-secondary: #02040a;
+    --text-color: #e6edf3;
+  }
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
 body {
   margin: 0;
-  font-family:
-    Segoe UI,
-    Tahoma,
-    sans-serif;
+  background-color: var(--background-primary);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial,
+    sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji';
+  font-size: 0.875rem;
+  color: var(--text-color);
 }
 
-.Test header {
-  background-color: #323639;
-  box-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
-  padding: 20px;
-  color: white;
-}
-
-.Test header h1 {
-  font-size: inherit;
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  display: block;
+  width: 100%;
   margin: 0;
+  margin-block-end: 0.5rem;
+  font-weight: 600;
 }
 
-.Test__container {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  align-items: flex-start;
-  margin: 10px 0;
-  padding: 10px;
+h1 {
+  font-size: 0.875rem;
 }
 
-.Test__container > * > * {
-  margin: 10px;
+h2 {
+  font-size: 1rem;
+  font-weight: 400;
 }
 
-.Test__container__options {
-  display: flex;
-  flex-basis: 400px;
-  flex-grow: 1;
-  flex-wrap: wrap;
-  margin: 0;
+a {
+  color: #096bda;
+  text-decoration: none;
 }
 
-.Test__container__options input,
-.Test__container__options button {
+a:hover,
+a:focus {
+  text-decoration: underline;
+}
+
+input,
+button {
   font: inherit;
 }
 
-.Test__container__options fieldset {
-  border: 1px solid black;
-  flex-grow: 1;
-  position: relative;
-  top: -10px;
-}
-
-.Test__container__options fieldset legend {
-  font-weight: 600;
-}
-
-.Test__container__options fieldset legend + * {
-  margin-top: 0 !important;
-}
-
-.Test__container__options fieldset label {
-  font-weight: 600;
+label {
   display: block;
+  font-weight: 600;
+  margin-block-end: 0.5rem;
 }
 
-.Test__container__options fieldset label:not(:first-of-type) {
-  margin-top: 1em;
-}
-
-.Test__container__options fieldset input[type='checkbox'] + label,
-.Test__container__options fieldset input[type='radio'] + label {
-  font-weight: normal;
+input[type='checkbox'] + label,
+input[type='radio'] + label {
   display: inline-block;
+  font-weight: normal;
+  margin-block: 0;
+  margin-inline-start: 0.25rem;
+}
+
+header {
+  background-color: var(--background-secondary);
+  border-bottom: 1px solid var(--border-color);
+  padding: 1rem;
+}
+
+header h1 {
   margin: 0;
 }
 
-.Test__container__options fieldset form:not(:first-child),
-.Test__container__options fieldset div:not(:first-child) {
-  margin-top: 1em;
+aside,
+main {
+  padding: 2rem 1rem;
 }
 
-.Test__container__options fieldset form:not(:last-child),
-.Test__container__options fieldset div:not(:last-child) {
-  margin-bottom: 1em;
-}
-
-.Test__container__content {
+.container {
   display: flex;
-  max-width: 100%;
-  flex-basis: 420px;
+  flex-wrap: wrap;
+}
+
+aside {
+  flex-basis: 300px;
+  border-right: 1px solid var(--border-color);
+  display: flex;
   flex-direction: column;
-  flex-grow: 100;
-  align-items: stretch;
+  gap: 2rem;
 }
 
-.Test__container__content__toc {
-  max-width: 100%;
-  max-height: 16vh;
-  margin-bottom: 20px;
-  border: 1px solid black;
-  overflow: auto;
+aside fieldset {
+  margin: 0;
+  padding: 0;
+  border: none;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 }
 
-.Test__container__content__toc .react-pdf__message {
-  padding: 20px;
+aside fieldset legend {
+  width: 100%;
+  padding: 0;
+  font-size: 1.1rem;
+  font-weight: 500;
+  float: left;
 }
 
-.Test__container__content__document {
-  max-width: 100%;
-  max-height: 55vh;
+aside fieldset fieldset {
+  gap: 1rem;
+}
+
+aside fieldset fieldset legend {
+  display: block;
+  font-size: inherit;
+  font-weight: 600;
+  margin-block-end: -0.5rem;
+}
+
+main {
+  flex: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
-  border: 1px solid black;
-  background-color: #525659;
-  overflow: auto;
+  gap: 2rem;
 }
 
-.Test__container__content__document .react-pdf__Page {
-  max-width: calc(100% - 2em);
-  box-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
-  margin: 1em;
+.document {
 }
 
-.Test__container__content__document .react-pdf__Page__textContent mark {
+.document .react-pdf__Document {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+}
+
+.document .react-pdf__Page {
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  overflow: hidden;
+}
+
+.document .react-pdf__Thumbnail {
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-small);
+  overflow: hidden;
+}
+
+.document .react-pdf__message {
+  padding: 1rem;
+}
+
+.document .react-pdf__Page__textContent mark {
   opacity: 0.5;
-  background: #ff0;
-  box-shadow: 0px 2px 10px #ff0;
+  background: #ffff00;
   color: transparent;
   white-space: pre;
 }
 
-.Test__container__content__document .react-pdf__message {
-  padding: 20px;
-  color: white;
+.toc {
+  width: 100%;
 }
 
-.Test__container__content__controls {
-  max-width: 100%;
+.pages {
+  width: 100%;
   display: flex;
-  margin-top: 1em;
-  align-self: center;
+  flex-direction: column;
+  align-items: center;
 }
 
-.Test__container__content__controls span {
-  flex-grow: 1;
-  margin: 0 1em;
-  text-align: center;
-}
-
-.Test__container__content__controls button {
-  width: 80px;
-}
-
-.Test__container__content__thumbnails {
+.controls {
   display: flex;
-  margin-top: 1em;
-  gap: 1em;
-  overflow: auto;
+  align-items: center;
+  gap: 1rem;
 }
 
-.Test__container__content__thumbnails .react-pdf__Thumbnail {
-  border: 1px solid black;
+.thumbnails {
+  width: 100%;
+}
+
+.thumbnails-list {
+  display: flex;
+  gap: 1rem;
 }
