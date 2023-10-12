@@ -569,20 +569,18 @@ The MIT License.
 
 <table>
   <tr>
-    <td>
-      <img src="https://github.com/wojtekmaj.png?s=100" width="100">
+    <td >
+      <img src="https://avatars.githubusercontent.com/u/5426427?v=4&s=128" width="64" height="64" alt="Wojciech Maj">
     </td>
     <td>
-      Wojciech Maj<br />
-      <a href="mailto:kontakt@wojtekmaj.pl">kontakt@wojtekmaj.pl</a><br />
-      <a href="https://wojtekmaj.pl">https://wojtekmaj.pl</a>
+      <a href="https://github.com/wojtekmaj">Wojciech Maj</a>
     </td>
   </tr>
 </table>
 
 ## Thank you
 
-This project wouldn't be possible without the awesome work of Niklas Närhinen <niklas@narhinen.net> who created its original version and without Mozilla, author of [pdf.js](http://mozilla.github.io/pdf.js). Thank you!
+This project wouldn't be possible without the awesome work of [Niklas Närhinen](https://github.com/nnarhinen) who created its original version and without Mozilla, author of [pdf.js](http://mozilla.github.io/pdf.js). Thank you!
 
 ### Sponsors
 
