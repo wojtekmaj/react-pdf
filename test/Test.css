@@ -64,8 +64,44 @@ a:focus {
 }
 
 input,
-button {
+button,
+input[type='file']::file-selector-button {
   font: inherit;
+}
+
+input[type='email'],
+input[type='number'],
+input[type='text'],
+input[type='url'] {
+  padding: 5px 16px;
+  border: 1px solid rgb(166, 173, 180);
+  border-radius: var(--border-radius);
+}
+
+button,
+input[type='file']::file-selector-button {
+  padding: 5px 16px;
+  background-color: rgb(246, 248, 250);
+  border: 1px solid rgba(31, 35, 40, 0.15);
+  border-radius: var(--border-radius);
+  box-shadow:
+    rgba(31, 35, 40, 0.04) 0px 1px 0px 0px,
+    rgba(255, 255, 255, 0.25) 0px 1px 0px 0px inset;
+}
+
+button:hover,
+input[type='file']::file-selector-button:hover {
+  background-color: rgb(245, 246, 248);
+}
+
+button:active,
+input[type='file']::file-selector-button:active {
+  background-color: rgb(235, 236, 240);
+}
+
+input:has(+ button),
+button:has(+ button) {
+  margin-inline-end: 0.5rem;
 }
 
 label {
