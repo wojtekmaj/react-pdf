@@ -33,6 +33,7 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '20'
+          registry-url: 'https://registry.npmjs.org'
 
       - name: Enable Corepack
         run: corepack enable
@@ -40,16 +41,19 @@ jobs:
       - name: Install dependencies
         run: yarn --immutable
 
+      - name: Generate archive
+        run: yarn pack
+
       - name: Publish with latest tag
         if: github.event.release.prelease == false
-        run: yarn npm publish --tag latest
+        run: npm publish package.tgz --tag latest --provenance
         working-directory: packages/react-pdf
         env:
-          YARN_NPM_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Publish with next tag
         if: github.event.release.prelease == true
-        run: yarn npm publish --tag next
+        run: npm publish package.tgz --tag next --provenance
         working-directory: packages/react-pdf
         env:
-          YARN_NPM_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
