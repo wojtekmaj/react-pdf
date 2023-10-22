@@ -10,17 +10,17 @@
   "scripts": {
     "build": "yarn workspace react-pdf build",
     "dev": "yarn workspace react-pdf watch & yarn workspace test dev",
-    "lint": "yarn workspaces foreach run lint",
+    "lint": "yarn workspaces foreach --all run lint",
     "postinstall": "husky install",
-    "prettier": "yarn workspaces foreach run prettier",
-    "test": "yarn workspaces foreach run test",
-    "tsc": "yarn workspaces foreach run tsc",
-    "unit": "yarn workspaces foreach run unit"
+    "prettier": "yarn workspaces foreach --all run prettier",
+    "test": "yarn workspaces foreach --all run test",
+    "tsc": "yarn workspaces foreach --all run tsc",
+    "unit": "yarn workspaces foreach --all run unit"
   },
   "devDependencies": {
     "husky": "^8.0.0",
     "lint-staged": "^14.0.0",
     "prettier": "^3.0.0"
   },
-  "packageManager": "yarn@3.1.0"
+  "packageManager": "yarn@4.0.0"
 }

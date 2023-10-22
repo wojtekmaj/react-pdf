@@ -18,12 +18,12 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Cache .yarn/cache
+      - name: Cache Yarn cache
         uses: actions/cache@v3
         env:
           cache-name: yarn-cache
         with:
-          path: .yarn/cache
+          path: ~/.yarn/berry/cache
           key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('**/yarn.lock') }}
           restore-keys: |
             ${{ runner.os }}-${{ env.cache-name }}
@@ -53,12 +53,12 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Cache .yarn/cache
+      - name: Cache Yarn cache
         uses: actions/cache@v3
         env:
           cache-name: yarn-cache
         with:
-          path: .yarn/cache
+          path: ~/.yarn/berry/cache
           key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('**/yarn.lock') }}
           restore-keys: |
             ${{ runner.os }}-${{ env.cache-name }}
@@ -88,12 +88,12 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Cache .yarn/cache
+      - name: Cache Yarn cache
         uses: actions/cache@v3
         env:
           cache-name: yarn-cache
         with:
-          path: .yarn/cache
+          path: ~/.yarn/berry/cache
           key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('**/yarn.lock') }}
           restore-keys: |
             ${{ runner.os }}-${{ env.cache-name }}
@@ -120,12 +120,12 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Cache .yarn/cache
+      - name: Cache Yarn cache
         uses: actions/cache@v3
         env:
           cache-name: yarn-cache
         with:
-          path: .yarn/cache
+          path: ~/.yarn/berry/cache
           key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('**/yarn.lock') }}
           restore-keys: |
             ${{ runner.os }}-${{ env.cache-name }}
