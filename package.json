@@ -22,5 +22,8 @@
     "lint-staged": "^14.0.0",
     "prettier": "^3.0.0"
   },
+  "resolutions": {
+    "eslint-plugin-import": "npm:eslint-plugin-i@^2.28.0"
+  },
   "packageManager": "yarn@4.0.0"
 }
