@@ -6,7 +6,7 @@ Display PDFs in your React app as easily as if they were images.
 
 ## Lost?
 
-This package is used to _display_ existing PDFs. If you wish to _create_ PDFs using React, you may be looking for [@react-pdf/renderer](https://github.com/diegomura/react-pdf).
+This package is used to _display_ existing PDFs. If you wish to _create_ PDFs using React, you may be looking for [@react-pdf/renderer](https://www.npmjs.com/package/@react-pdf/renderer).
 
 ## tl;dr
 
@@ -19,7 +19,7 @@ This package is used to _display_ existing PDFs. If you wish to _create_ PDFs us
 
 A minimal demo page can be found in `sample` directory.
 
-[Online demo](http://projects.wojtekmaj.pl/react-pdf/) is also available!
+[Online demo](https://projects.wojtekmaj.pl/react-pdf/) is also available!
 
 ## Before you continue
 
@@ -236,7 +236,7 @@ First, you need to copy cMaps from `pdfjs-dist` (React-PDF's dependency - it sho
 
 ##### Vite
 
-Add `vite-plugin-static-copy` by executing `npm install vite-plugin-static-copy --save-dev` or `yarn add vite-plugin-static-copy --dev` and add the following to your Vite config:
+Add [`vite-plugin-static-copy`](https://www.npmjs.com/package/vite-plugin-static-copy) by executing `npm install vite-plugin-static-copy --save-dev` or `yarn add vite-plugin-static-copy --dev` and add the following to your Vite config:
 
 ```diff
 +import path from 'node:path';
@@ -262,7 +262,7 @@ export default defineConfig({
 
 ##### Webpack
 
-Add `copy-webpack-plugin` by executing `npm install copy-webpack-plugin --save-dev` or `yarn add copy-webpack-plugin --dev` and add the following to your Webpack config:
+Add [`copy-webpack-plugin`](https://www.npmjs.com/package/copy-webpack-plugin) by executing `npm install copy-webpack-plugin --save-dev` or `yarn add copy-webpack-plugin --dev` and add the following to your Webpack config:
 
 ```diff
 +import path from 'node:path';
@@ -346,7 +346,7 @@ First, you need to copy standard fonts from `pdfjs-dist` (React-PDF's dependency
 
 ##### Vite
 
-Add `vite-plugin-static-copy` by executing `npm install vite-plugin-static-copy --save-dev` or `yarn add vite-plugin-static-copy --dev` and add the following to your Vite config:
+Add [`vite-plugin-static-copy`](https://www.npmjs.com/package/vite-plugin-static-copy) by executing `npm install vite-plugin-static-copy --save-dev` or `yarn add vite-plugin-static-copy --dev` and add the following to your Vite config:
 
 ```diff
 +import path from 'node:path';
@@ -372,7 +372,7 @@ export default defineConfig({
 
 ##### Webpack
 
-Add `copy-webpack-plugin` by executing `npm install copy-webpack-plugin --save-dev` or `yarn add copy-webpack-plugin --dev` and add the following to your Webpack config:
+Add [`copy-webpack-plugin`](https://www.npmjs.com/package/copy-webpack-plugin) by executing `npm install copy-webpack-plugin --save-dev` or `yarn add copy-webpack-plugin --dev` and add the following to your Webpack config:
 
 ```diff
 +import path from 'node:path';
