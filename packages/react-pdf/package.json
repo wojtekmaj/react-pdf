@@ -40,7 +40,7 @@
     "prepack": "yarn clean && yarn build",
     "prettier": "prettier --check . --cache",
     "test": "yarn lint && yarn tsc && yarn prettier && yarn unit",
-    "tsc": "tsc --noEmit",
+    "tsc": "tsc",
     "unit": "vitest",
     "watch": "yarn build-js-esm --watch & yarn build-js-cjs --watch & nodemon --watch src --ext css --exec \"yarn copy-styles\""
   },

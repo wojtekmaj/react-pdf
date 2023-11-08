@@ -6,6 +6,7 @@
     "jsx": "react-jsx",
     "module": "esnext",
     "moduleResolution": "bundler",
+    "noEmit": true,
     "noUncheckedIndexedAccess": true,
     "outDir": "dist",
     "strict": true,

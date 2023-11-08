@@ -11,7 +11,7 @@
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
     "prettier": "prettier --check . --cache",
     "test": "yarn lint && yarn tsc && yarn prettier",
-    "tsc": "tsc --noEmit"
+    "tsc": "tsc"
   },
   "author": {
     "name": "Wojciech Maj",
