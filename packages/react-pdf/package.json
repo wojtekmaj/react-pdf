@@ -80,7 +80,7 @@
     "react-dom": "^18.2.0",
     "rimraf": "^3.0.0",
     "typescript": "^5.0.0",
-    "vitest": "^0.34.0",
+    "vitest": "^0.34.6",
     "vitest-canvas-mock": "^0.2.2"
   },
   "peerDependencies": {

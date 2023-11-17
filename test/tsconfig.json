@@ -9,6 +9,7 @@
     "noEmit": true,
     "noUncheckedIndexedAccess": true,
     "outDir": "dist",
+    "skipLibCheck": true,
     "strict": true,
     "target": "esnext",
     "verbatimModuleSyntax": true
