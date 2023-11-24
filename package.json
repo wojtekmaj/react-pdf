@@ -25,5 +25,5 @@
   "resolutions": {
     "eslint-plugin-import": "npm:eslint-plugin-i@^2.28.0"
   },
-  "packageManager": "yarn@4.0.0"
+  "packageManager": "yarn@4.0.2"
 }
