@@ -23,6 +23,7 @@ export default function TextLayer() {
   invariant(pageContext, 'Unable to find Page context.');
 
   const {
+    customTextLayerRenderer,
     customTextRenderer,
     onGetTextError,
     onGetTextSuccess,
@@ -206,7 +207,15 @@ export default function TextLayer() {
 
         const layerChildren = layer.querySelectorAll('[role="presentation"]');
 
-        if (customTextRenderer) {
+        if (customTextLayerRenderer) {
+          customTextLayerRenderer({
+            layerChildren,
+            layerElement: layer,
+            pageIndex,
+            pageNumber,
+            textContentItems: textContent.items,
+          });
+        } else if (customTextRenderer) {
           let index = 0;
           textContent.items.forEach((item, itemIndex) => {
             if (!isTextItem(item)) {
@@ -240,6 +249,7 @@ export default function TextLayer() {
   }
 
   useLayoutEffect(renderTextLayer, [
+    customTextLayerRenderer,
     customTextRenderer,
     onRenderError,
     onRenderSuccess,

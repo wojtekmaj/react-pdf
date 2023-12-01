@@ -67,6 +67,14 @@ export type UnregisterPage = (pageIndex: number) => void;
 /* Complex types */
 export type CustomRenderer = React.FunctionComponent | React.ComponentClass;
 
+export type CustomTextLayerRenderer = (props: {
+  layerChildren: NodeListOf<Element>;
+  layerElement: HTMLDivElement;
+  pageIndex: number;
+  pageNumber: number;
+  textContentItems: TextContent['items'];
+}) => void;
+
 export type CustomTextRenderer = (
   props: { pageIndex: number; pageNumber: number; itemIndex: number } & TextItem,
 ) => string;
@@ -139,6 +147,7 @@ export type DocumentContextType = {
 export type PageContextType = {
   _className?: string;
   canvasBackground?: string;
+  customTextLayerRenderer?: CustomTextLayerRenderer;
   customTextRenderer?: CustomTextRenderer;
   devicePixelRatio?: number;
   onGetAnnotationsError?: OnGetAnnotationsError;
