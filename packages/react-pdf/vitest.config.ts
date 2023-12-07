@@ -4,13 +4,13 @@ export default defineConfig({
   test: {
     environment: 'jsdom',
     exclude: [...configDefaults.exclude, 'src/index.test.ts'],
+    pool: 'forks',
     server: {
       deps: {
         inline: ['vitest-canvas-mock'],
       },
     },
     setupFiles: 'vitest.setup.ts',
-    threads: false,
     watch: false,
   },
 });
