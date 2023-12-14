@@ -3954,10 +3954,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"isarray@npm:~1.0.0":
-  version: 1.0.0
-  resolution: "isarray@npm:1.0.0"
-  checksum: 18b5be6669be53425f0b84098732670ed4e727e3af33bc7f948aac01782110eb9a18b3b329c5323bcdd3acdaae547ee077d3951317e7f133bff7105264b3003d
+"isarray@npm:@nolyfill/isarray@latest":
+  version: 1.0.25
+  resolution: "@nolyfill/isarray@npm:1.0.25"
+  checksum: 459678ac2ef3bedd9de99d006a0deb2a781c1d88d78c06b625ca1b211bc9e8ef48d09353f09fd349957132dd98ffe02c620ebcc96da4876318c1964f426cbe9b
   languageName: node
   linkType: hard
 
