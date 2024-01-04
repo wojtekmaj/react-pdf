@@ -353,7 +353,7 @@ describe('Document', () => {
           file={pdfFile.file}
           loading="Loading"
           onLoadSuccess={onLoadSuccess}
-          renderMode="svg"
+          renderMode="custom"
         >
           <Child />
         </Document>,
@@ -365,7 +365,7 @@ describe('Document', () => {
 
       const child = getByTestId(container, 'child');
 
-      expect(child.dataset.rendermode).toBe('svg');
+      expect(child.dataset.rendermode).toBe('custom');
     });
 
     it('passes rotate prop to its children', async () => {
@@ -394,9 +394,9 @@ describe('Document', () => {
           file={pdfFile.file}
           loading="Loading"
           onLoadSuccess={onLoadSuccess}
-          renderMode="svg"
+          renderMode="canvas"
         >
-          <Child renderMode="canvas" />
+          <Child renderMode="custom" />
         </Document>,
       );
 
@@ -406,7 +406,7 @@ describe('Document', () => {
 
       const child = getByTestId(container, 'child');
 
-      expect(child.dataset.rendermode).toBe('canvas');
+      expect(child.dataset.rendermode).toBe('custom');
     });
 
     it('does not overwrite rotate prop in its children when given rotate prop to both Document and its children', async () => {
