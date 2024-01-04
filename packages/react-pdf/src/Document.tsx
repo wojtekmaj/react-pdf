@@ -201,10 +201,10 @@ export type DocumentProps = {
   /**
    * Rendering mode of the document. Can be `"canvas"`, `"custom"`, `"none"` or `"svg"`. If set to `"custom"`, `customRenderer` must also be provided.
    *
-   * **Warning**: SVG render mode is no longer maintained and may be removed in the future.
+   * **Warning**: SVG render mode is deprecated and will be removed in the future.
    *
    * @default 'canvas'
-   * @example 'svg'
+   * @example 'custom'
    */
   renderMode?: RenderMode;
   /**
