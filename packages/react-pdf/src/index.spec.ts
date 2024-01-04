@@ -3,10 +3,6 @@ import { pdfjs, Document, Outline, Page, Thumbnail } from './index.js';
 
 describe('default entry', () => {
   describe('has pdfjs exported properly', () => {
-    it('has pdfjs exported properly', () => {
-      expect(pdfjs).toBeInstanceOf(Object);
-    });
-
     it('has pdfjs.version exported properly', () => {
       expect(typeof pdfjs.version).toBe('string');
     });
