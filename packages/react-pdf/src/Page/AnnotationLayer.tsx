@@ -4,7 +4,7 @@ import React, { useEffect, useMemo, useRef } from 'react';
 import makeCancellable from 'make-cancellable-promise';
 import clsx from 'clsx';
 import invariant from 'tiny-invariant';
-import warning from 'tiny-warning';
+import warning from 'warning';
 import pdfjs from '../pdfjs.js';
 
 import useDocumentContext from '../shared/hooks/useDocumentContext.js';

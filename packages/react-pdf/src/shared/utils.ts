@@ -1,5 +1,5 @@
 import invariant from 'tiny-invariant';
-import warning from 'tiny-warning';
+import warning from 'warning';
 
 import type { PDFPageProxy } from 'pdfjs-dist';
 import type { PageCallback } from './types.js';

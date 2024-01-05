@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import makeCancellable from 'make-cancellable-promise';
 import invariant from 'tiny-invariant';
-import warning from 'tiny-warning';
+import warning from 'warning';
 
 import StructTreeItem from './StructTreeItem.js';
 

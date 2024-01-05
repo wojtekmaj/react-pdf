@@ -7,7 +7,7 @@ import makeEventProps from 'make-event-props';
 import clsx from 'clsx';
 import mergeRefs from 'merge-refs';
 import invariant from 'tiny-invariant';
-import warning from 'tiny-warning';
+import warning from 'warning';
 
 import PageContext from './PageContext.js';
 

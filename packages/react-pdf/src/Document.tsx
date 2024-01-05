@@ -13,7 +13,7 @@ import makeEventProps from 'make-event-props';
 import makeCancellable from 'make-cancellable-promise';
 import clsx from 'clsx';
 import invariant from 'tiny-invariant';
-import warning from 'tiny-warning';
+import warning from 'warning';
 import pdfjs from './pdfjs.js';
 
 import DocumentContext from './DocumentContext.js';

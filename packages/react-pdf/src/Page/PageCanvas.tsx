@@ -3,7 +3,7 @@
 import React, { useCallback, useEffect, useMemo, useRef } from 'react';
 import mergeRefs from 'merge-refs';
 import invariant from 'tiny-invariant';
-import warning from 'tiny-warning';
+import warning from 'warning';
 import pdfjs from '../pdfjs.js';
 
 import StructTree from '../StructTree.js';
