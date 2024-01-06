@@ -1,4 +1,3 @@
-import { Blob } from 'node:buffer';
 import { beforeAll, describe, expect, it, vi } from 'vitest';
 import React, { createRef } from 'react';
 import { fireEvent, render } from '@testing-library/react';
@@ -330,63 +329,52 @@ describe('Thumbnail', () => {
     });
 
     it('requests page to be rendered with default rotation when given nothing', async () => {
-      const originalBlob = globalThis.Blob;
-      globalThis.Blob = Blob as unknown as typeof globalThis.Blob;
-
       const { func: onRenderSuccess, promise: onRenderSuccessPromise } =
         makeAsyncCallback<[PageCallback]>();
 
       const { container } = renderWithContext(
-        <Thumbnail onRenderSuccess={onRenderSuccess} pageIndex={0} renderMode="svg" />,
+        <Thumbnail onRenderSuccess={onRenderSuccess} pageIndex={0} />,
         { pdf },
       );
 
       const [page] = await onRenderSuccessPromise;
 
-      const pageSvg = container.querySelector('.react-pdf__Thumbnail__page__svg') as SVGElement;
+      const pageCanvas = container.querySelector(
+        '.react-pdf__Thumbnail__page__canvas',
+      ) as HTMLCanvasElement;
 
-      const { width, height } = window.getComputedStyle(pageSvg);
+      const { width, height } = window.getComputedStyle(pageCanvas);
 
       const viewport = page.getViewport({ scale: 1 });
 
-      // Expect the SVG layer not to be rotated
+      // Expect the canvas layer not to be rotated
       expect(parseInt(width, 10)).toBe(Math.floor(viewport.width));
       expect(parseInt(height, 10)).toBe(Math.floor(viewport.height));
-
-      globalThis.Blob = originalBlob;
     });
 
     it('requests page to be rendered with given rotation when given rotate prop', async () => {
-      const originalBlob = globalThis.Blob;
-      globalThis.Blob = Blob as unknown as typeof globalThis.Blob;
-
       const { func: onRenderSuccess, promise: onRenderSuccessPromise } =
         makeAsyncCallback<[PageCallback]>();
       const rotate = 90;
 
       const { container } = renderWithContext(
-        <Thumbnail
-          onRenderSuccess={onRenderSuccess}
-          pageIndex={0}
-          renderMode="svg"
-          rotate={rotate}
-        />,
+        <Thumbnail onRenderSuccess={onRenderSuccess} pageIndex={0} rotate={rotate} />,
         { pdf },
       );
 
       const [page] = await onRenderSuccessPromise;
 
-      const pageSvg = container.querySelector('.react-pdf__Thumbnail__page__svg') as SVGElement;
+      const pageCanvas = container.querySelector(
+        '.react-pdf__Thumbnail__page__canvas',
+      ) as HTMLCanvasElement;
 
-      const { width, height } = window.getComputedStyle(pageSvg);
+      const { width, height } = window.getComputedStyle(pageCanvas);
 
       const viewport = page.getViewport({ scale: 1, rotation: rotate });
 
-      // Expect the SVG layer to be rotated
+      // Expect the canvas layer to be rotated
       expect(parseInt(width, 10)).toBe(Math.floor(viewport.width));
       expect(parseInt(height, 10)).toBe(Math.floor(viewport.height));
-
-      globalThis.Blob = originalBlob;
     });
 
     it('requests page to be rendered in canvas mode by default', async () => {
