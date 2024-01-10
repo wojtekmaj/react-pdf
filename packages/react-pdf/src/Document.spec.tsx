@@ -547,41 +547,41 @@ describe('Document', () => {
         expect(link.target).toBe(target);
       },
     );
+
+    it.each`
+      externalLinkRel | rel
+      ${null}         | ${'noopener noreferrer nofollow'}
+      ${'noopener'}   | ${'noopener'}
+      ${'noreferrer'} | ${'noreferrer'}
+      ${'nofollow'}   | ${'nofollow'}
+    `(
+      'returns externalLinkRel = $rel given externalLinkRel prop = $externalLinkRel',
+      async ({ externalLinkRel, rel }) => {
+        const {
+          func: onRenderAnnotationLayerSuccess,
+          promise: onRenderAnnotationLayerSuccessPromise,
+        } = makeAsyncCallback();
+
+        const { container } = render(
+          <Document externalLinkRel={externalLinkRel} file={pdfFile.file}>
+            <Page
+              onRenderAnnotationLayerSuccess={onRenderAnnotationLayerSuccess}
+              renderMode="none"
+              pageNumber={1}
+            />
+          </Document>,
+        );
+
+        expect.assertions(1);
+
+        await onRenderAnnotationLayerSuccessPromise;
+
+        const link = container.querySelector('a') as HTMLAnchorElement;
+
+        expect(link.rel).toBe(rel);
+      },
+    );
   });
-
-  it.each`
-    externalLinkRel | rel
-    ${null}         | ${'noopener noreferrer nofollow'}
-    ${'noopener'}   | ${'noopener'}
-    ${'noreferrer'} | ${'noreferrer'}
-    ${'nofollow'}   | ${'nofollow'}
-  `(
-    'returns externalLinkRel = $rel given externalLinkRel prop = $externalLinkRel',
-    async ({ externalLinkRel, rel }) => {
-      const {
-        func: onRenderAnnotationLayerSuccess,
-        promise: onRenderAnnotationLayerSuccessPromise,
-      } = makeAsyncCallback();
-
-      const { container } = render(
-        <Document externalLinkRel={externalLinkRel} file={pdfFile.file}>
-          <Page
-            onRenderAnnotationLayerSuccess={onRenderAnnotationLayerSuccess}
-            renderMode="none"
-            pageNumber={1}
-          />
-        </Document>,
-      );
-
-      expect.assertions(1);
-
-      await onRenderAnnotationLayerSuccessPromise;
-
-      const link = container.querySelector('a') as HTMLAnchorElement;
-
-      expect(link.rel).toBe(rel);
-    },
-  );
 
   it('calls onClick callback when clicked a page (sample of mouse events family)', () => {
     const onClick = vi.fn();
