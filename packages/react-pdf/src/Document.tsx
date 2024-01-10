@@ -14,6 +14,7 @@ import makeCancellable from 'make-cancellable-promise';
 import clsx from 'clsx';
 import invariant from 'tiny-invariant';
 import warning from 'warning';
+import { dequal } from 'dequal';
 import pdfjs from './pdfjs.js';
 
 import DocumentContext from './DocumentContext.js';
@@ -233,6 +234,14 @@ const defaultOnPassword: OnPassword = (callback, reason) => {
   }
 };
 
+function isParameterObject(file: File): file is Source {
+  return (
+    typeof file === 'object' &&
+    file !== null &&
+    ('data' in file || 'range' in file || 'url' in file)
+  );
+}
+
 /**
  * Loads a document passed using `file` prop.
  */
@@ -270,6 +279,32 @@ const Document = forwardRef(function Document(
   const linkService = useRef(new LinkService());
 
   const pages = useRef<HTMLDivElement[]>([]);
+
+  const prevFile = useRef<File>();
+  const prevOptions = useRef<Options>();
+
+  useEffect(() => {
+    if (file && file !== prevFile.current && isParameterObject(file)) {
+      warning(
+        !dequal(file, prevFile.current),
+        `File prop passed to <Document /> changed, but it's equal to previous one. This might result in unnecessary reloads. Consider memoizing the value passed to "file" prop.`,
+      );
+
+      prevFile.current = file;
+    }
+  }, [file]);
+
+  // Detect non-memoized changes in options prop
+  useEffect(() => {
+    if (options && options !== prevOptions.current) {
+      warning(
+        !dequal(options, prevOptions.current),
+        `Options prop passed to <Document /> changed, but it's equal to previous one. This might result in unnecessary reloads. Consider memoizing the value passed to "options" prop.`,
+      );
+
+      prevOptions.current = options;
+    }
+  }, [options]);
 
   const viewer = useRef({
     // Handling jumping to internal links target
@@ -385,7 +420,7 @@ const Document = forwardRef(function Document(
     );
 
     invariant(
-      'data' in file || 'range' in file || 'url' in file,
+      isParameterObject(file),
       'Invalid parameter object: need either .data, .range or .url',
     );
 

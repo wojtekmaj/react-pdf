@@ -604,4 +604,92 @@ describe('Document', () => {
 
     expect(onTouchStart).toHaveBeenCalled();
   });
+
+  it('does not warn if file prop was memoized', () => {
+    const spy = vi.spyOn(global.console, 'error').mockImplementation(() => {
+      // Intentionally empty
+    });
+
+    const file = { data: pdfFile.arrayBuffer };
+
+    const { rerender } = render(<Document file={file} />);
+
+    rerender(<Document file={file} />);
+
+    expect(spy).not.toHaveBeenCalled();
+
+    vi.mocked(global.console.error).mockRestore();
+  });
+
+  it('warns if file prop was not memoized', () => {
+    const spy = vi.spyOn(global.console, 'error').mockImplementation(() => {
+      // Intentionally empty
+    });
+
+    const { rerender } = render(<Document file={{ data: pdfFile.arrayBuffer }} />);
+
+    rerender(<Document file={{ data: pdfFile.arrayBuffer }} />);
+
+    expect(spy).toHaveBeenCalledTimes(1);
+
+    vi.mocked(global.console.error).mockRestore();
+  });
+
+  it('does not warn if file prop was not memoized, but was changed', () => {
+    const spy = vi.spyOn(global.console, 'error').mockImplementation(() => {
+      // Intentionally empty
+    });
+
+    const { rerender } = render(<Document file={{ data: pdfFile.arrayBuffer }} />);
+
+    rerender(<Document file={{ data: pdfFile2.arrayBuffer }} />);
+
+    expect(spy).not.toHaveBeenCalled();
+
+    vi.mocked(global.console.error).mockRestore();
+  });
+
+  it('does not warn if options prop was memoized', () => {
+    const spy = vi.spyOn(global.console, 'error').mockImplementation(() => {
+      // Intentionally empty
+    });
+
+    const options = {};
+
+    const { rerender } = render(<Document file={pdfFile.blob} options={options} />);
+
+    rerender(<Document file={pdfFile.blob} options={options} />);
+
+    expect(spy).not.toHaveBeenCalled();
+
+    vi.mocked(global.console.error).mockRestore();
+  });
+
+  it('warns if options prop was not memoized', () => {
+    const spy = vi.spyOn(global.console, 'error').mockImplementation(() => {
+      // Intentionally empty
+    });
+
+    const { rerender } = render(<Document file={pdfFile.blob} options={{}} />);
+
+    rerender(<Document file={pdfFile.blob} options={{}} />);
+
+    expect(spy).toHaveBeenCalledTimes(1);
+
+    vi.mocked(global.console.error).mockRestore();
+  });
+
+  it('does not warn if options prop was not memoized, but was changed', () => {
+    const spy = vi.spyOn(global.console, 'error').mockImplementation(() => {
+      // Intentionally empty
+    });
+
+    const { rerender } = render(<Document file={pdfFile.blob} options={{}} />);
+
+    rerender(<Document file={pdfFile.blob} options={{ maxImageSize: 100 }} />);
+
+    expect(spy).not.toHaveBeenCalled();
+
+    vi.mocked(global.console.error).mockRestore();
+  });
 });
