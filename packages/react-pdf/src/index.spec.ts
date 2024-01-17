@@ -8,7 +8,7 @@ describe('default entry', () => {
     });
 
     it('has GlobalWorkerOptions exported properly', () => {
-      expect(typeof pdfjs.GlobalWorkerOptions).toBe('object');
+      expect(typeof pdfjs.GlobalWorkerOptions).toBe('function');
     });
   });
 
