@@ -161,6 +161,7 @@ export default function AnnotationLayer() {
     const annotationLayerParameters = {
       accessibilityManager: null, // TODO: Implement this
       annotationCanvasMap: null, // TODO: Implement this
+      annotationEditorUIManager: null, // TODO: Implement this
       div: layer,
       l10n: null, // TODO: Implement this
       page,
