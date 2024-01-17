@@ -1,4 +1,4 @@
-import pdfjs from './pdfjs.js';
+import * as pdfjs from 'pdfjs-dist';
 
 import Document from './Document.js';
 import Outline from './Outline.js';
@@ -20,7 +20,7 @@ import { displayWorkerWarning } from './shared/utils.js';
 
 displayWorkerWarning();
 
-pdfjs.GlobalWorkerOptions.workerSrc = 'pdf.worker.js';
+pdfjs.GlobalWorkerOptions.workerSrc = 'pdf.worker.mjs';
 
 export {
   pdfjs,

@@ -7,7 +7,7 @@ import clsx from 'clsx';
 import invariant from 'tiny-invariant';
 import warning from 'warning';
 import { dequal } from 'dequal';
-import pdfjs from './pdfjs.js';
+import * as pdfjs from 'pdfjs-dist';
 
 import DocumentContext from './DocumentContext.js';
 
@@ -193,9 +193,7 @@ export type DocumentProps = {
    */
   options?: Options;
   /**
-   * Rendering mode of the document. Can be `"canvas"`, `"custom"`, `"none"` or `"svg"`. If set to `"custom"`, `customRenderer` must also be provided.
-   *
-   * **Warning**: SVG render mode is deprecated and will be removed in the future.
+   * Rendering mode of the document. Can be `"canvas"`, `"custom"` or `"none"``. If set to `"custom"`, `customRenderer` must also be provided.
    *
    * @default 'canvas'
    * @example 'custom'
