@@ -241,10 +241,15 @@ Add [`vite-plugin-static-copy`](https://www.npmjs.com/package/vite-plugin-static
 ```diff
 +import path from 'node:path';
 +import { createRequire } from 'node:module';
+
+-import { defineConfig } from 'vite';
++import { defineConfig, normalizePath } from 'vite';
 +import { viteStaticCopy } from 'vite-plugin-static-copy';
 
 +const require = createRequire(import.meta.url);
-+const cMapsDir = path.join(path.dirname(require.resolve('pdfjs-dist/package.json')), 'cmaps');
++const cMapsDir = normalizePath(
++  path.join(path.dirname(require.resolve('pdfjs-dist/package.json')), 'cmaps')
++);
 
 export default defineConfig({
   plugins: [
@@ -351,10 +356,15 @@ Add [`vite-plugin-static-copy`](https://www.npmjs.com/package/vite-plugin-static
 ```diff
 +import path from 'node:path';
 +import { createRequire } from 'node:module';
+
+-import { defineConfig } from 'vite';
++import { defineConfig, normalizePath } from 'vite';
 +import { viteStaticCopy } from 'vite-plugin-static-copy';
 
 +const require = createRequire(import.meta.url);
-+const standardFontsDir = path.join(path.dirname(require.resolve('pdfjs-dist/package.json')), 'standard_fonts');
++const standardFontsDir = normalizePath(
++  path.join(path.dirname(require.resolve('pdfjs-dist/package.json')), 'standard_fonts')
++);
 
 export default defineConfig({
   plugins: [
