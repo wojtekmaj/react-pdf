@@ -11,7 +11,7 @@ import type { PDFDocumentProxy } from 'pdfjs-dist';
 const pdfFile = new URL('./sample.pdf', import.meta.url).toString();
 
 pdfjs.GlobalWorkerOptions.workerSrc = new URL(
-  'npm:pdfjs-dist/build/pdf.worker.min.js',
+  'npm:pdfjs-dist/build/pdf.worker.min.mjs',
   import.meta.url,
 ).toString();
 

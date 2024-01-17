@@ -4,7 +4,7 @@ import { useCallback, useEffect, useMemo, useRef } from 'react';
 import mergeRefs from 'merge-refs';
 import invariant from 'tiny-invariant';
 import warning from 'warning';
-import pdfjs from '../pdfjs.js';
+import * as pdfjs from 'pdfjs-dist';
 
 import StructTree from '../StructTree.js';
 
@@ -20,11 +20,11 @@ import type { RenderParameters } from 'pdfjs-dist/types/src/display/api.js';
 
 const ANNOTATION_MODE = pdfjs.AnnotationMode;
 
-type PageCanvasProps = {
+type CanvasProps = {
   canvasRef?: React.Ref<HTMLCanvasElement>;
 };
 
-export default function PageCanvas(props: PageCanvasProps) {
+export default function Canvas(props: CanvasProps) {
   const pageContext = usePageContext();
 
   invariant(pageContext, 'Unable to find Page context.');
