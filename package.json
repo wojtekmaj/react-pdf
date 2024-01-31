@@ -11,14 +11,14 @@
     "build": "yarn workspace react-pdf build",
     "dev": "yarn workspace react-pdf watch & yarn workspace test dev",
     "lint": "yarn workspaces foreach --all run lint",
-    "postinstall": "husky install",
+    "postinstall": "husky",
     "prettier": "yarn workspaces foreach --all run prettier",
     "test": "yarn workspaces foreach --all run test",
     "tsc": "yarn workspaces foreach --all run tsc",
     "unit": "yarn workspaces foreach --all run unit"
   },
   "devDependencies": {
-    "husky": "^8.0.0",
+    "husky": "^9.0.0",
     "lint-staged": "^15.0.0",
     "prettier": "^3.0.0"
   },
