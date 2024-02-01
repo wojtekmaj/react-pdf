@@ -167,6 +167,7 @@ describe('Page', () => {
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
       renderWithContext(<Page onLoadSuccess={onLoadSuccess} pageIndex={1} pageNumber={1} />, {
+        linkService,
         pdf,
       });
 
@@ -180,7 +181,11 @@ describe('Page', () => {
     it('calls registerPage when loaded a page', async () => {
       const { func: registerPage, promise: registerPagePromise } = makeAsyncCallback();
 
-      renderWithContext(<Page pageIndex={0} />, { pdf, registerPage });
+      renderWithContext(<Page pageIndex={0} />, {
+        linkService,
+        pdf,
+        registerPage,
+      });
 
       expect.assertions(1);
 
@@ -190,7 +195,11 @@ describe('Page', () => {
     it('calls unregisterPage on unmount', async () => {
       const { func: unregisterPage, promise: nuregisterPagePromise } = makeAsyncCallback();
 
-      const { unmount } = renderWithContext(<Page pageIndex={0} />, { pdf, unregisterPage });
+      const { unmount } = renderWithContext(<Page pageIndex={0} />, {
+        linkService,
+        pdf,
+        unregisterPage,
+      });
 
       unmount();
 
@@ -203,6 +212,7 @@ describe('Page', () => {
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
       const { rerender } = renderWithContext(<Page onLoadSuccess={onLoadSuccess} pageIndex={0} />, {
+        linkService,
         pdf,
       });
 
@@ -224,6 +234,7 @@ describe('Page', () => {
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
       const { rerender } = renderWithContext(<Page onLoadSuccess={onLoadSuccess} pageIndex={0} />, {
+        linkService,
         pdf,
       });
 
@@ -255,6 +266,7 @@ describe('Page', () => {
       const className = 'testClassName';
 
       const { container } = renderWithContext(<Page className={className} pageIndex={0} />, {
+        linkService,
         pdf,
       });
 
@@ -370,6 +382,7 @@ describe('Page', () => {
 
     it('renders custom loading message when loading a page and loading prop is given as a function', async () => {
       const { container } = renderWithContext(<Page loading={() => 'Loading'} pageIndex={0} />, {
+        linkService,
         pdf,
       });
 
@@ -383,6 +396,7 @@ describe('Page', () => {
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
       renderWithContext(<Page onLoadSuccess={onLoadSuccess} pageIndex={1} pageNumber={1} />, {
+        linkService,
         pdf,
       });
 
@@ -856,6 +870,7 @@ describe('Page', () => {
     renderWithContext(
       <Page onLoadSuccess={onLoadSuccess} pageIndex={0} scale={scale} width={width} />,
       {
+        linkService,
         pdf,
       },
     );
@@ -873,6 +888,7 @@ describe('Page', () => {
     const height = 850;
 
     renderWithContext(<Page height={height} onLoadSuccess={onLoadSuccess} pageIndex={0} />, {
+      linkService,
       pdf,
     });
 
@@ -892,6 +908,7 @@ describe('Page', () => {
     renderWithContext(
       <Page height={height} onLoadSuccess={onLoadSuccess} pageIndex={0} scale={scale} />,
       {
+        linkService,
         pdf,
       },
     );
@@ -912,6 +929,7 @@ describe('Page', () => {
     renderWithContext(
       <Page height={height} onLoadSuccess={onLoadSuccess} pageIndex={0} width={width} />,
       {
+        linkService,
         pdf,
       },
     );
