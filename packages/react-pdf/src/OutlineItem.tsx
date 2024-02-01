@@ -16,15 +16,11 @@ type PDFOutlineItem = PDFOutline[number];
 
 type OutlineItemProps = {
   item: PDFOutlineItem;
+  pdf?: PDFDocumentProxy | false;
 };
 
 export default function OutlineItem(props: OutlineItemProps) {
   const documentContext = useDocumentContext();
-
-  invariant(
-    documentContext,
-    'Unable to find Document context. Did you wrap <Outline /> in <Document />?',
-  );
 
   const outlineContext = useOutlineContext();
 
@@ -33,7 +29,10 @@ export default function OutlineItem(props: OutlineItemProps) {
   const mergedProps = { ...documentContext, ...outlineContext, ...props };
   const { item, linkService, onItemClick, pdf, ...otherProps } = mergedProps;
 
-  invariant(pdf, 'Attempted to load an outline, but no document was specified.');
+  invariant(
+    pdf,
+    'Attempted to load an outline, but no document was specified. Wrap <Outline /> in a <Document /> or pass explicit `pdf` prop.',
+  );
 
   const getDestination = useCachedValue(() => {
     if (typeof item.dest === 'string') {
@@ -64,6 +63,11 @@ export default function OutlineItem(props: OutlineItemProps) {
   function onClick(event: React.MouseEvent<HTMLAnchorElement>) {
     event.preventDefault();
 
+    invariant(
+      onItemClick || linkService,
+      'Either onItemClick callback or linkService must be defined in order to navigate to an outline item.',
+    );
+
     if (onItemClick) {
       Promise.all([getDestination(), getPageIndex(), getPageNumber()]).then(
         ([dest, pageIndex, pageNumber]) => {
@@ -74,7 +78,7 @@ export default function OutlineItem(props: OutlineItemProps) {
           });
         },
       );
-    } else {
+    } else if (linkService) {
       linkService.goToDestination(item.dest);
     }
   }
@@ -92,6 +96,7 @@ export default function OutlineItem(props: OutlineItemProps) {
           <OutlineItem
             key={typeof subitem.dest === 'string' ? subitem.dest : subitemIndex}
             item={subitem}
+            pdf={pdf}
             {...otherProps}
           />
         ))}

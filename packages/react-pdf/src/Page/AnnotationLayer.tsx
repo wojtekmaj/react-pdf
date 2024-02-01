@@ -17,12 +17,6 @@ import type { Annotations } from '../shared/types.js';
 
 export default function AnnotationLayer() {
   const documentContext = useDocumentContext();
-
-  invariant(
-    documentContext,
-    'Unable to find Document context. Did you wrap <Page /> in <Document />?',
-  );
-
   const pageContext = usePageContext();
 
   invariant(pageContext, 'Unable to find Page context.');
@@ -42,7 +36,12 @@ export default function AnnotationLayer() {
     scale = 1,
   } = mergedProps;
 
+  invariant(
+    pdf,
+    'Attempted to load page annotations, but no document was specified. Wrap <Page /> in a <Document /> or pass explicit `pdf` prop.',
+  );
   invariant(page, 'Attempted to load page annotations, but no page was specified.');
+  invariant(linkService, 'Attempted to load page annotations, but no linkService was specified.');
 
   const [annotationsState, annotationsDispatch] = useResolver<Annotations>();
   const { value: annotations, error: annotationsError } = annotationsState;
@@ -147,7 +146,7 @@ export default function AnnotationLayer() {
   );
 
   function renderAnnotationLayer() {
-    if (!pdf || !page || !annotations) {
+    if (!pdf || !page || !linkService || !annotations) {
       return;
     }
 

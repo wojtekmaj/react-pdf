@@ -52,11 +52,6 @@ export type ThumbnailProps = Omit<
 const Thumbnail: React.FC<ThumbnailProps> = function Thumbnail(props) {
   const documentContext = useDocumentContext();
 
-  invariant(
-    documentContext,
-    'Unable to find Document context. Did you wrap <Page /> in <Document />?',
-  );
-
   const mergedProps = { ...documentContext, ...props };
   const {
     className,
@@ -64,7 +59,13 @@ const Thumbnail: React.FC<ThumbnailProps> = function Thumbnail(props) {
     onItemClick,
     pageIndex: pageIndexProps,
     pageNumber: pageNumberProps,
+    pdf,
   } = mergedProps;
+
+  invariant(
+    pdf,
+    'Attempted to load a thumbnail, but no document was specified. Wrap <Thumbnail /> in a <Document /> or pass explicit `pdf` prop.',
+  );
 
   const pageIndex = isProvided(pageNumberProps) ? pageNumberProps - 1 : pageIndexProps ?? null;
 
@@ -77,12 +78,17 @@ const Thumbnail: React.FC<ThumbnailProps> = function Thumbnail(props) {
       return;
     }
 
+    invariant(
+      onItemClick || linkService,
+      'Either onItemClick callback or linkService must be defined in order to navigate to an outline item.',
+    );
+
     if (onItemClick) {
       onItemClick({
         pageIndex,
         pageNumber,
       });
-    } else {
+    } else if (linkService) {
       linkService.goToPage(pageNumber);
     }
   }

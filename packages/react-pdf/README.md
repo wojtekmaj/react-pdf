@@ -485,7 +485,7 @@ Loads a document passed using `file` prop.
 
 ### Page
 
-Displays a page. Should be placed inside `<Document />`. Alternatively, it can have `pdf` prop passed, which can be obtained from `<Document />`'s `onLoadSuccess` callback function, however some advanced functions like linking between pages inside a document may not be working correctly.
+Displays a page. Should be placed inside `<Document />`. Alternatively, it can have `pdf` prop passed, which can be obtained from `<Document />`'s `onLoadSuccess` callback function, however some advanced functions like rendering annotations and linking between pages inside a document may not be working correctly.
 
 #### Props
 

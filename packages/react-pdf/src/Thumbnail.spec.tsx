@@ -68,10 +68,20 @@ describe('Thumbnail', () => {
   });
 
   describe('loading', () => {
-    it('loads a page and calls onLoadSuccess callback properly', async () => {
+    it('loads a page and calls onLoadSuccess callback properly when placed inside Document', async () => {
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
       renderWithContext(<Thumbnail onLoadSuccess={onLoadSuccess} pageIndex={0} />, { pdf });
+
+      expect.assertions(1);
+
+      await expect(onLoadSuccessPromise).resolves.toMatchObject([desiredLoadedThumbnail]);
+    });
+
+    it('loads a page and calls onLoadSuccess callback properly when pdf prop is passed', async () => {
+      const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
+
+      render(<Thumbnail onLoadSuccess={onLoadSuccess} pageIndex={0} pdf={pdf} />);
 
       expect.assertions(1);
 
@@ -190,7 +200,7 @@ describe('Thumbnail', () => {
       await expect(onLoadSuccessPromise2).resolves.toMatchObject([desiredLoadedThumbnail2]);
     });
 
-    it('throws an error when placed outside Document', () => {
+    it('throws an error when placed outside Document without pdf prop passed', () => {
       muteConsole();
 
       expect(() => render(<Thumbnail pageIndex={0} />)).toThrow();

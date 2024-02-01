@@ -58,10 +58,20 @@ describe('Outline', () => {
   });
 
   describe('loading', () => {
-    it('loads an outline and calls onLoadSuccess callback properly', async () => {
+    it('loads an outline and calls onLoadSuccess callback properly when placed inside Document', async () => {
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
       renderWithContext(<Outline onLoadSuccess={onLoadSuccess} />, { pdf });
+
+      expect.assertions(1);
+
+      await expect(onLoadSuccessPromise).resolves.toMatchObject([desiredLoadedOutline]);
+    });
+
+    it('loads an outline and calls onLoadSuccess callback properly when pdf prop is passed', async () => {
+      const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
+
+      render(<Outline onLoadSuccess={onLoadSuccess} pdf={pdf} />);
 
       expect.assertions(1);
 
@@ -99,7 +109,7 @@ describe('Outline', () => {
       await expect(onLoadSuccessPromise2).resolves.toMatchObject([desiredLoadedOutline2]);
     });
 
-    it('throws an error when placed outside Document', () => {
+    it('throws an error when placed outside Document without pdf prop passed', () => {
       muteConsole();
 
       expect(() => render(<Outline />)).toThrow();

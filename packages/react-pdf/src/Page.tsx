@@ -317,11 +317,6 @@ export type PageProps = {
 const Page: React.FC<PageProps> = function Page(props) {
   const documentContext = useDocumentContext();
 
-  invariant(
-    documentContext,
-    'Unable to find Document context. Did you wrap <Page /> in <Document />?',
-  );
-
   const mergedProps = { ...documentContext, ...props };
   const {
     _className = 'react-pdf__Page',
@@ -371,7 +366,10 @@ const Page: React.FC<PageProps> = function Page(props) {
   const { value: page, error: pageError } = pageState;
   const pageElement = useRef<HTMLDivElement>(null);
 
-  invariant(pdf, 'Attempted to load a page, but no document was specified.');
+  invariant(
+    pdf,
+    'Attempted to load a page, but no document was specified. Wrap <Page /> in a <Document /> or pass explicit `pdf` prop.',
+  );
 
   const pageIndex = isProvided(pageNumberProps) ? pageNumberProps - 1 : pageIndexProps ?? null;
 

@@ -69,11 +69,6 @@ export type OutlineProps = {
 const Outline: React.FC<OutlineProps> = function Outline(props) {
   const documentContext = useDocumentContext();
 
-  invariant(
-    documentContext,
-    'Unable to find Document context. Did you wrap <Outline /> in <Document />?',
-  );
-
   const mergedProps = { ...documentContext, ...props };
   const {
     className,
@@ -85,7 +80,10 @@ const Outline: React.FC<OutlineProps> = function Outline(props) {
     ...otherProps
   } = mergedProps;
 
-  invariant(pdf, 'Attempted to load an outline, but no document was specified.');
+  invariant(
+    pdf,
+    'Attempted to load an outline, but no document was specified. Wrap <Outline /> in a <Document /> or pass explicit `pdf` prop.',
+  );
 
   const [outlineState, outlineDispatch] = useResolver<PDFOutline | null>();
   const { value: outline, error: outlineError } = outlineState;
@@ -189,7 +187,11 @@ const Outline: React.FC<OutlineProps> = function Outline(props) {
     return (
       <ul>
         {outline.map((item, itemIndex) => (
-          <OutlineItem key={typeof item.dest === 'string' ? item.dest : itemIndex} item={item} />
+          <OutlineItem
+            key={typeof item.dest === 'string' ? item.dest : itemIndex}
+            item={item}
+            pdf={pdf}
+          />
         ))}
       </ul>
     );

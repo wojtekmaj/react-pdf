@@ -82,13 +82,30 @@ describe('Page', () => {
   });
 
   describe('loading', () => {
-    it('loads a page and calls onLoadSuccess callback properly', async () => {
+    it('loads a page and calls onLoadSuccess callback properly when placed inside Document', async () => {
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
       renderWithContext(<Page onLoadSuccess={onLoadSuccess} pageIndex={0} />, {
         linkService,
         pdf,
       });
+
+      expect.assertions(1);
+
+      await expect(onLoadSuccessPromise).resolves.toMatchObject([desiredLoadedPage]);
+    });
+
+    it('loads a page and calls onLoadSuccess callback properly when pdf prop is passed', async () => {
+      const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
+
+      render(
+        <Page
+          onLoadSuccess={onLoadSuccess}
+          pageIndex={0}
+          pdf={pdf}
+          renderAnnotationLayer={false}
+        />,
+      );
 
       expect.assertions(1);
 
@@ -252,7 +269,7 @@ describe('Page', () => {
       await expect(onLoadSuccessPromise2).resolves.toMatchObject([desiredLoadedPage2]);
     });
 
-    it('throws an error when placed outside Document', () => {
+    it('throws an error when placed outside Document without pdf prop passed', () => {
       muteConsole();
 
       expect(() => render(<Page pageIndex={0} />)).toThrow();
