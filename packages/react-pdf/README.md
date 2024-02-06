@@ -99,7 +99,7 @@ For most cases, the following example will work:
 import { pdfjs } from 'react-pdf';
 
 pdfjs.GlobalWorkerOptions.workerSrc = new URL(
-  'pdfjs-dist/build/pdf.worker.min.js',
+  'pdfjs-dist/build/pdf.worker.min.mjs',
   import.meta.url,
 ).toString();
 ```
@@ -122,8 +122,8 @@ For Parcel 2, you need to use a slightly different code:
 
 ```diff
  pdfjs.GlobalWorkerOptions.workerSrc = new URL(
--  'pdfjs-dist/build/pdf.worker.min.js',
-+  'npm:pdfjs-dist/build/pdf.worker.min.js',
+-  'pdfjs-dist/build/pdf.worker.min.mjs',
++  'npm:pdfjs-dist/build/pdf.worker.min.mjs',
    import.meta.url,
  ).toString();
 ```
@@ -132,7 +132,7 @@ For Parcel 2, you need to use a slightly different code:
 
 #### Copy worker to public directory
 
-You will have to make sure on your own that `pdf.worker.js` file from `pdfjs-dist/build` is copied to your project's output folder.
+You will have to make sure on your own that `pdf.worker.mjs` file from `pdfjs-dist/build` is copied to your project's output folder.
 
 For example, you could use a custom script like:
 
@@ -141,9 +141,9 @@ import path from 'node:path';
 import fs from 'node:fs';
 
 const pdfjsDistPath = path.dirname(require.resolve('pdfjs-dist/package.json'));
-const pdfWorkerPath = path.join(pdfjsDistPath, 'build', 'pdf.worker.js');
+const pdfWorkerPath = path.join(pdfjsDistPath, 'build', 'pdf.worker.mjs');
 
-fs.copyFileSync(pdfWorkerPath, './dist/pdf.worker.js');
+fs.copyFileSync(pdfWorkerPath, './dist/pdf.worker.mjs');
 ```
 
 #### Use external CDN
@@ -151,7 +151,7 @@ fs.copyFileSync(pdfWorkerPath, './dist/pdf.worker.js');
 ```ts
 import { pdfjs } from 'react-pdf';
 
-pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.js`;
+pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
 ```
 
 #### Legacy PDF.js worker
@@ -160,8 +160,8 @@ If you need to support older browsers, you may use legacy PDF.js worker. To do s
 
 ```diff
  pdfjs.GlobalWorkerOptions.workerSrc = new URL(
--  'pdfjs-dist/build/pdf.worker.min.js',
-+  'pdfjs-dist/legacy/build/pdf.worker.min.js',
+-  'pdfjs-dist/build/pdf.worker.min.mjs',
++  'pdfjs-dist/legacy/build/pdf.worker.min.mjs',
    import.meta.url,
  ).toString();
 ```
@@ -169,8 +169,8 @@ If you need to support older browsers, you may use legacy PDF.js worker. To do s
 or:
 
 ```diff
--pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.js`;
-+pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/legacy/build/pdf.worker.min.js`;
+-pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
++pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/legacy/build/pdf.worker.min.mjs`;
 ```
 
 ### Usage
@@ -480,7 +480,7 @@ Loads a document passed using `file` prop.
 | onSourceError      | Function called in case of an error while retrieving document source from `file` prop.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            | n/a                                                   | `(error) => alert('Error while retrieving document source! ' + error.message)`                                                                                                                                                                                               |
 | onSourceSuccess    | Function called when document source is successfully retrieved from `file` prop.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  | n/a                                                   | `() => alert('Document source retrieved!')`                                                                                                                                                                                                                                  |
 | options            | An object in which additional parameters to be passed to PDF.js can be defined. Most notably:<ul><li>`cMapUrl`;</li><li>`httpHeaders` - custom request headers, e.g. for authorization);</li><li>`withCredentials` - a boolean to indicate whether or not to include cookies in the request (defaults to `false`)</li></ul>For a full list of possible parameters, check [PDF.js documentation on DocumentInitParameters](https://mozilla.github.io/pdf.js/api/draft/module-pdfjsLib.html#~DocumentInitParameters). **Note**: Make sure to define options object outside of your React component, and use `useMemo` if you can't. | n/a                                                   | `{ cMapUrl: '/cmaps/' }`                                                                                                                                                                                                                                                     |
-| renderMode         | Rendering mode of the document. Can be `"canvas"`, `"custom"`, `"none"` or `"svg"`. If set to `"custom"`, `customRenderer` must also be provided.<br />**Warning**: SVG render mode is deprecated and will be removed in the future.                                                                                                                                                                                                                                                                                                                                                                                              | `"canvas"`                                            | `"custom"`                                                                                                                                                                                                                                                                   |
+| renderMode         | Rendering mode of the document. Can be `"canvas"`, `"custom"` or `"none"`. If set to `"custom"`, `customRenderer` must also be provided.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          | `"canvas"`                                            | `"custom"`                                                                                                                                                                                                                                                                   |
 | rotate             | Rotation of the document in degrees. If provided, will change rotation globally, even for the pages which were given `rotate` prop of their own. `90` = rotated to the right, `180` = upside down, `270` = rotated to the left.                                                                                                                                                                                                                                                                                                                                                                                                   | n/a                                                   | `90`                                                                                                                                                                                                                                                                         |
 
 ### Page
@@ -491,8 +491,8 @@ Displays a page. Should be placed inside `<Document />`. Alternatively, it can h
 
 | Prop name                      | Description                                                                                                                                                                                                                                                                                      | Default value                                       | Example values                                                                                                                                                                                                                                                             |
 | ------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | --------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| canvasBackground               | Canvas background color. Any valid `canvas.fillStyle` can be used. If you set `renderMode` to `"svg"` this prop will be ignored.                                                                                                                                                                 | n/a                                                 | `"transparent"`                                                                                                                                                                                                                                                            |
-| canvasRef                      | A prop that behaves like [ref](https://reactjs.org/docs/refs-and-the-dom.html), but it's passed to `<canvas>` rendered by `<PageCanvas>` component. If you set `renderMode` to `"svg"` this prop will be ignored.                                                                                | n/a                                                 | <ul><li>Function:<br />`(ref) => { this.myCanvas = ref; }`</li><li>Ref created using `createRef`:<br />`this.ref = createRef();`<br />…<br />`inputRef={this.ref}`</li><li>Ref created using `useRef`:<br />`const ref = useRef();`<br />…<br />`inputRef={ref}`</li></ul> |
+| canvasBackground               | Canvas background color. Any valid `canvas.fillStyle` can be used.                                                                                                                                                                                                                               | n/a                                                 | `"transparent"`                                                                                                                                                                                                                                                            |
+| canvasRef                      | A prop that behaves like [ref](https://reactjs.org/docs/refs-and-the-dom.html), but it's passed to `<canvas>` rendered by `<Canvas>` component.                                                                                                                                                  | n/a                                                 | <ul><li>Function:<br />`(ref) => { this.myCanvas = ref; }`</li><li>Ref created using `createRef`:<br />`this.ref = createRef();`<br />…<br />`inputRef={this.ref}`</li><li>Ref created using `useRef`:<br />`const ref = useRef();`<br />…<br />`inputRef={ref}`</li></ul> |
 | className                      | Class name(s) that will be added to rendered element along with the default `react-pdf__Page`.                                                                                                                                                                                                   | n/a                                                 | <ul><li>String:<br />`"custom-class-name-1 custom-class-name-2"`</li><li>Array of strings:<br />`["custom-class-name-1", "custom-class-name-2"]`</li></ul>                                                                                                                 |
 | customRenderer                 | Function that customizes how a page is rendered. You must set `renderMode` to `"custom"` to use this prop.                                                                                                                                                                                       | n/a                                                 | `MyCustomRenderer`                                                                                                                                                                                                                                                         |
 | customTextRenderer             | Function that customizes how a text layer is rendered.                                                                                                                                                                                                                                           | n/a                                                 | ``({ str, itemIndex }) => str.replace(/ipsum/g, value => `<mark>${value}</mark>`)``                                                                                                                                                                                        |
@@ -522,7 +522,7 @@ Displays a page. Should be placed inside `<Document />`. Alternatively, it can h
 | pdf                            | pdf object obtained from `<Document />`'s `onLoadSuccess` callback function.                                                                                                                                                                                                                     | (automatically obtained from parent `<Document />`) | `pdf`                                                                                                                                                                                                                                                                      |
 | renderAnnotationLayer          | Whether annotations (e.g. links) should be rendered.                                                                                                                                                                                                                                             | `true`                                              | `false`                                                                                                                                                                                                                                                                    |
 | renderForms                    | Whether forms should be rendered. `renderAnnotationLayer` prop must be set to `true`.                                                                                                                                                                                                            | `false`                                             | `true`                                                                                                                                                                                                                                                                     |
-| renderMode                     | Rendering mode of the document. Can be `"canvas"`, `"custom"`, `"none"` or `"svg"`. If set to `"custom"`, `customRenderer` must also be provided.<br />**Warning**: SVG render mode is deprecated and will be removed in the future.                                                             | `"canvas"`                                          | `"custom"`                                                                                                                                                                                                                                                                 |
+| renderMode                     | Rendering mode of the document. Can be `"canvas"`, `"custom"` or `"none"`. If set to `"custom"`, `customRenderer` must also be provided.                                                                                                                                                         | `"canvas"`                                          | `"custom"`                                                                                                                                                                                                                                                                 |
 | renderTextLayer                | Whether a text layer should be rendered.                                                                                                                                                                                                                                                         | `true`                                              | `false`                                                                                                                                                                                                                                                                    |
 | rotate                         | Rotation of the page in degrees. `90` = rotated to the right, `180` = upside down, `270` = rotated to the left.                                                                                                                                                                                  | Page's default setting, usually `0`                 | `90`                                                                                                                                                                                                                                                                       |
 | scale                          | Page scale.                                                                                                                                                                                                                                                                                      | `1`                                                 | `0.5`                                                                                                                                                                                                                                                                      |

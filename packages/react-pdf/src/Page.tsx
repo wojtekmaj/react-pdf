@@ -12,8 +12,7 @@ import warning from 'warning';
 import PageContext from './PageContext.js';
 
 import Message from './Message.js';
-import PageCanvas from './Page/PageCanvas.js';
-import PageSVG from './Page/PageSVG.js';
+import Canvas from './Page/Canvas.js';
 import TextLayer from './Page/TextLayer.js';
 import AnnotationLayer from './Page/AnnotationLayer.js';
 
@@ -63,13 +62,13 @@ export type PageProps = {
   _className?: string;
   _enableRegisterUnregisterPage?: boolean;
   /**
-   * Canvas background color. Any valid `canvas.fillStyle` can be used. If you set `renderMode` to `"svg"` this prop will be ignored.
+   * Canvas background color. Any valid `canvas.fillStyle` can be used.
    *
    * @example 'transparent'
    */
   canvasBackground?: string;
   /**
-   * A prop that behaves like [ref](https://reactjs.org/docs/refs-and-the-dom.html), but it's passed to `<canvas>` rendered by `<PageCanvas>` component. If you set `renderMode` to `"svg"` this prop will be ignored.
+   * A prop that behaves like [ref](https://reactjs.org/docs/refs-and-the-dom.html), but it's passed to `<canvas>` rendered by `<PageCanvas>` component.
    *
    * @example (ref) => { this.myCanvas = ref; }
    * @example this.ref
@@ -271,9 +270,7 @@ export type PageProps = {
    */
   renderForms?: boolean;
   /**
-   * Rendering mode of the document. Can be `"canvas"`, `"custom"`, `"none"` or `"svg"`. If set to `"custom"`, `customRenderer` must also be provided.
-   *
-   * **Warning**: SVG render mode is deprecated and will be removed in the future.
+   * Rendering mode of the document. Can be `"canvas"`, `"custom"` or `"none"`. If set to `"custom"`, `customRenderer` must also be provided.
    *
    * @default 'canvas'
    * @example 'custom'
@@ -567,8 +564,6 @@ const Page: React.FC<PageProps> = function Page(props) {
 
   const pageKey = `${pageIndex}@${scale}/${rotate}`;
 
-  const pageKeyNoScale = `${pageIndex}/${rotate}`;
-
   function renderMainLayer() {
     switch (renderMode) {
       case 'custom': {
@@ -581,11 +576,9 @@ const Page: React.FC<PageProps> = function Page(props) {
       }
       case 'none':
         return null;
-      case 'svg':
-        return <PageSVG key={`${pageKeyNoScale}_svg`} />;
       case 'canvas':
       default:
-        return <PageCanvas key={`${pageKey}_canvas`} canvasRef={canvasRef} />;
+        return <Canvas key={`${pageKey}_canvas`} canvasRef={canvasRef} />;
     }
   }
 

@@ -262,17 +262,6 @@ export default function ViewOptions({
         />
         <label htmlFor="renderNone">None</label>
       </div>
-      <div>
-        <input
-          checked={renderMode === 'svg'}
-          id="renderSVG"
-          name="renderMode"
-          onChange={onRenderModeChange}
-          type="radio"
-          value="svg"
-        />
-        <label htmlFor="renderSVG">SVG</label>
-      </div>
 
       <div>
         <label htmlFor="rotation">Rotation:</label>

@@ -5,7 +5,7 @@ import makeCancellable from 'make-cancellable-promise';
 import clsx from 'clsx';
 import invariant from 'tiny-invariant';
 import warning from 'warning';
-import pdfjs from '../pdfjs.js';
+import * as pdfjs from 'pdfjs-dist';
 
 import usePageContext from '../shared/hooks/usePageContext.js';
 import useResolver from '../shared/hooks/useResolver.js';

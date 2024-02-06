@@ -303,7 +303,7 @@ describe('Page', () => {
       expect(inputRef.current).toBeInstanceOf(HTMLDivElement);
     });
 
-    it('passes canvas element to PageCanvas properly', async () => {
+    it('passes canvas element to Canvas properly', async () => {
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
       const canvasRef = createRef<HTMLCanvasElement>();
@@ -506,15 +506,13 @@ describe('Page', () => {
         },
       );
 
-      expect.assertions(2);
+      expect.assertions(1);
 
       await onLoadSuccessPromise;
 
       const pageCanvas = container.querySelector('.react-pdf__Page__canvas');
-      const pageSVG = container.querySelector('.react-pdf__Page__svg');
 
       expect(pageCanvas).not.toBeInTheDocument();
-      expect(pageSVG).not.toBeInTheDocument();
     });
 
     it('requests page to be rendered in canvas mode when given renderMode = "canvas"', async () => {
@@ -564,26 +562,6 @@ describe('Page', () => {
       const customRenderer = container.querySelector('.custom-renderer');
 
       expect(customRenderer).toBeInTheDocument();
-    });
-
-    it('requests page to be rendered in SVG mode when given renderMode = "svg"', async () => {
-      const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
-
-      const { container } = renderWithContext(
-        <Page onLoadSuccess={onLoadSuccess} pageIndex={0} renderMode="svg" />,
-        {
-          linkService,
-          pdf,
-        },
-      );
-
-      expect.assertions(1);
-
-      await onLoadSuccessPromise;
-
-      const pageSVG = container.querySelector('.react-pdf__Page__svg');
-
-      expect(pageSVG).toBeInTheDocument();
     });
 
     it('requests text content to be rendered by default', async () => {
@@ -681,26 +659,6 @@ describe('Page', () => {
           renderMode="custom"
           renderTextLayer
         />,
-        {
-          linkService,
-          pdf,
-        },
-      );
-
-      expect.assertions(1);
-
-      await onLoadSuccessPromise;
-
-      const textLayer = container.querySelector('.react-pdf__Page__textContent');
-
-      expect(textLayer).toBeInTheDocument();
-    });
-
-    it('renders TextLayer when given renderMode = "svg"', async () => {
-      const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
-
-      const { container } = renderWithContext(
-        <Page onLoadSuccess={onLoadSuccess} pageIndex={0} renderMode="svg" renderTextLayer />,
         {
           linkService,
           pdf,

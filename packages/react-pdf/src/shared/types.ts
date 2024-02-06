@@ -49,7 +49,7 @@ export type OnLoadProgressArgs = {
 
 export type RegisterPage = (pageIndex: number, ref: HTMLDivElement) => void;
 
-export type RenderMode = 'canvas' | 'custom' | 'none' | 'svg';
+export type RenderMode = 'canvas' | 'custom' | 'none';
 
 export type ScrollPageIntoViewArgs = {
   dest?: ResolvedDest;

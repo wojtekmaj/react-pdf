@@ -8,4 +8,8 @@
 (
   (typeof window !== 'undefined' ? window : {}) as Window &
     typeof globalThis & { pdfjsWorker: unknown }
-).pdfjsWorker = require('pdfjs-dist/build/pdf.worker');
+).pdfjsWorker =
+  // @ts-expect-error - pdfjs-dist does not ship with types
+  await import('pdfjs-dist/build/pdf.worker.mjs');
+
+export {};

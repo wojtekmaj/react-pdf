@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import { allEvents } from 'make-event-props';
-import pdfjs from '../pdfjs.js';
+import * as pdfjs from 'pdfjs-dist';
 
 import { isDefined } from './utils.js';
 
@@ -162,6 +162,6 @@ export const isRef = PropTypes.oneOfType([
   }),
 ]);
 
-export const isRenderMode = PropTypes.oneOf(['canvas', 'custom', 'none', 'svg'] as const);
+export const isRenderMode = PropTypes.oneOf(['canvas', 'custom', 'none'] as const);
 
 export const isRotate = PropTypes.oneOf([0, 90, 180, 270] as const);

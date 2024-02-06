@@ -12,4 +12,4 @@ export type File = string | ArrayBuffer | Blob | Source | null;
 
 export type PassMethod = 'blob' | 'normal' | 'object' | 'string';
 
-export type RenderMode = 'canvas' | 'custom' | 'none' | 'svg';
+export type RenderMode = 'canvas' | 'custom' | 'none';
