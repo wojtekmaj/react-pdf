@@ -2,7 +2,7 @@ import { configDefaults, defineConfig } from 'vitest/config';
 
 export default defineConfig({
   test: {
-    environment: 'jsdom',
+    environment: 'happy-dom',
     exclude: [...configDefaults.exclude, 'src/index.test.ts'],
     pool: 'forks',
     setupFiles: 'vitest.setup.ts',
