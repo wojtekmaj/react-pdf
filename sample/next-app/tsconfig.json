@@ -1,7 +1,6 @@
 {
   "compilerOptions": {
     "allowJs": true,
-    "declaration": true,
     "esModuleInterop": true,
     "incremental": true,
     "isolatedModules": true,
@@ -11,7 +10,6 @@
     "moduleResolution": "bundler",
     "noEmit": true,
     "noUncheckedIndexedAccess": true,
-    "outDir": "dist",
     "plugins": [{ "name": "next" }],
     "resolveJsonModule": true,
     "skipLibCheck": true,
