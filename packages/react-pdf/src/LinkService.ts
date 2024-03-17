@@ -172,6 +172,9 @@ export default class LinkService implements IPDFLinkService {
     link.href = url;
     link.rel = this.externalLinkRel || DEFAULT_LINK_REL;
     link.target = newWindow ? '_blank' : this.externalLinkTarget || '';
+    //This is a temporary solve for the arialabel issue
+    //pdfjs might need to make the change to make it more modular 
+    link.ariaLabel = url; 
   }
 
   getDestinationHash() {
