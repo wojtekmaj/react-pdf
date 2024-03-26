@@ -78,7 +78,7 @@
     "eslint-config-wojtekmaj": "^0.11.0",
     "jsdom": "^24.0.0",
     "nodemon": "^3.0.0",
-    "prettier": "^3.0.0",
+    "prettier": "^3.2.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "rimraf": "^3.0.0",
