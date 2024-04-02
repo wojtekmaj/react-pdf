@@ -5,7 +5,6 @@
     "isolatedModules": true,
     "jsx": "react",
     "module": "nodenext",
-    "moduleResolution": "nodenext",
     "noEmit": true,
     "noUncheckedIndexedAccess": true,
     "outDir": "dist",
