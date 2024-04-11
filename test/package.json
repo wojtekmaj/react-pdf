@@ -28,7 +28,7 @@
     "@types/react": "*",
     "@vitejs/plugin-react": "^4.2.0",
     "eslint": "^8.56.0",
-    "eslint-config-wojtekmaj": "^0.11.0",
+    "eslint-config-wojtekmaj": "^1.0.0",
     "prettier": "^3.2.0",
     "typescript": "^5.4.2",
     "vite": "^5.0.0",
