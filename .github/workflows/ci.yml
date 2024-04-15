@@ -80,8 +80,8 @@ jobs:
       - name: Run type checking
         run: yarn tsc
 
-  prettier:
-    name: Prettier
+  format:
+    name: Formatting
     runs-on: ubuntu-latest
 
     steps:
@@ -109,8 +109,8 @@ jobs:
       - name: Install dependencies
         run: yarn --immutable
 
-      - name: Prettier
-        run: yarn prettier
+      - name: Run formatting
+        run: yarn format
 
   unit:
     name: Unit tests

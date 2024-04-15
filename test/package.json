@@ -7,10 +7,10 @@
   "scripts": {
     "build": "vite build",
     "dev": "vite",
-    "preview": "vite preview",
+    "format": "prettier --check . --cache",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
-    "prettier": "prettier --check . --cache",
-    "test": "yarn lint && yarn tsc && yarn prettier",
+    "preview": "vite preview",
+    "test": "yarn lint && yarn tsc && yarn format",
     "tsc": "tsc"
   },
   "author": {

@@ -36,10 +36,10 @@
     "build-js-cjs-package": "echo '{\n  \"type\": \"commonjs\"\n}' > dist/cjs/package.json",
     "clean": "rimraf dist",
     "copy-styles": "cpy 'src/**/*.css' dist/esm && cpy 'src/**/*.css' dist/cjs",
+    "format": "prettier --check . --cache",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
     "prepack": "yarn clean && yarn build",
-    "prettier": "prettier --check . --cache",
-    "test": "yarn lint && yarn tsc && yarn prettier && yarn unit",
+    "test": "yarn lint && yarn tsc && yarn format && yarn unit",
     "tsc": "tsc",
     "unit": "vitest",
     "watch": "yarn build-js-esm --watch & yarn build-js-cjs --watch & nodemon --watch src --ext css --exec \"yarn copy-styles\""
