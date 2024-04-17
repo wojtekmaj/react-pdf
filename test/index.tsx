@@ -3,7 +3,13 @@ import { createRoot } from 'react-dom/client';
 
 import Test from './Test.js';
 
-createRoot(document.getElementById('react-root')!).render(
+const root = document.getElementById('root');
+
+if (!root) {
+  throw new Error('Could not find root element');
+}
+
+createRoot(root).render(
   <StrictMode>
     <Test />
   </StrictMode>,
