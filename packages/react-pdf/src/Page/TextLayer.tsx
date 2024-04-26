@@ -40,7 +40,7 @@ export default function TextLayer() {
   const [textContentState, textContentDispatch] = useResolver<TextContent>();
   const { value: textContent, error: textContentError } = textContentState;
   const layerElement = useRef<HTMLDivElement>(null);
-  const endElement = useRef<HTMLElement>();
+  const endElement = useRef<HTMLElement | undefined>(undefined);
 
   warning(
     parseInt(

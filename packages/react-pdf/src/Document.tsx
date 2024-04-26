@@ -271,8 +271,8 @@ const Document = forwardRef(function Document(
 
   const pages = useRef<HTMLDivElement[]>([]);
 
-  const prevFile = useRef<File>();
-  const prevOptions = useRef<Options>();
+  const prevFile = useRef<File | undefined>(undefined);
+  const prevOptions = useRef<Options | undefined>(undefined);
 
   useEffect(() => {
     if (file && file !== prevFile.current && isParameterObject(file)) {
