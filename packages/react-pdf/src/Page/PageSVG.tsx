@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import makeCancellable from 'make-cancellable-promise';
 import invariant from 'tiny-invariant';
 import warning from 'warning';

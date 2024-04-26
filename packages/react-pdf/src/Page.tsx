@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useMemo, useRef } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
 import PropTypes from 'prop-types';
 import makeCancellable from 'make-cancellable-promise';
 import makeEventProps from 'make-event-props';

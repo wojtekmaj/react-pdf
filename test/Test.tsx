@@ -296,8 +296,8 @@ export default function Test() {
                 displayAll ? (
                   Array.from(new Array(numPages), (el, index) => (
                     <Page
-                      {...pageProps}
                       key={`page_${index + 1}`}
+                      {...pageProps}
                       inputRef={
                         pageNumber === index + 1 ? (ref) => ref && ref.scrollIntoView() : null
                       }

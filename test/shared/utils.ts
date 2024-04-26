@@ -40,7 +40,7 @@ export function isBlob(variable: unknown): variable is Blob {
  * @param {*} variable String to check
  */
 export function isDataURI(variable: unknown): variable is `data:${string}` {
-  return isString(variable) && /^data:/.test(variable);
+  return isString(variable) && variable.startsWith('data:');
 }
 
 export function dataURItoByteString(dataURI: unknown): string {

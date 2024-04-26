@@ -1,13 +1,6 @@
 'use client';
 
-import React, {
-  forwardRef,
-  useCallback,
-  useEffect,
-  useImperativeHandle,
-  useMemo,
-  useRef,
-} from 'react';
+import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useRef } from 'react';
 import PropTypes from 'prop-types';
 import makeEventProps from 'make-event-props';
 import makeCancellable from 'make-cancellable-promise';

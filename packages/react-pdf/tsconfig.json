@@ -3,7 +3,7 @@
     "declaration": true,
     "esModuleInterop": true,
     "isolatedModules": true,
-    "jsx": "react",
+    "jsx": "react-jsx",
     "module": "nodenext",
     "noEmit": true,
     "noUncheckedIndexedAccess": true,

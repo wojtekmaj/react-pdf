@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useCallback, useEffect, useLayoutEffect, useMemo, useRef } from 'react';
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef } from 'react';
 import makeCancellable from 'make-cancellable-promise';
 import clsx from 'clsx';
 import invariant from 'tiny-invariant';

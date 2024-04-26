@@ -1,6 +1,5 @@
 import { Blob } from 'node:buffer';
 import { beforeAll, describe, expect, it } from 'vitest';
-import React from 'react';
 import { render } from '@testing-library/react';
 
 import { pdfjs } from '../index.test.js';

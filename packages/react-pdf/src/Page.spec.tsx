@@ -1,5 +1,5 @@
 import { beforeAll, describe, expect, it, vi } from 'vitest';
-import React, { createRef } from 'react';
+import { createRef } from 'react';
 import { fireEvent, render } from '@testing-library/react';
 
 import { pdfjs } from './index.test.js';

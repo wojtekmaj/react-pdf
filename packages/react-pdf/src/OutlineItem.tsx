@@ -1,4 +1,3 @@
-import React from 'react';
 import invariant from 'tiny-invariant';
 
 import Ref from './Ref.js';
