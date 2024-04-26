@@ -48,7 +48,7 @@ export type ThumbnailProps = Omit<
  *
  * Should be placed inside `<Document />`. Alternatively, it can have `pdf` prop passed, which can be obtained from `<Document />`'s `onLoadSuccess` callback function.
  */
-const Thumbnail: React.FC<ThumbnailProps> = function Thumbnail(props) {
+export default function Thumbnail(props: ThumbnailProps) {
   const documentContext = useDocumentContext();
 
   const mergedProps = { ...documentContext, ...props };
@@ -111,6 +111,4 @@ const Thumbnail: React.FC<ThumbnailProps> = function Thumbnail(props) {
       />
     </a>
   );
-};
-
-export default Thumbnail;
+}
