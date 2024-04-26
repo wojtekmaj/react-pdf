@@ -178,16 +178,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@wojtekmaj/react-hooks@npm:^1.18.0":
-  version: 1.18.0
-  resolution: "@wojtekmaj/react-hooks@npm:1.18.0"
+"@wojtekmaj/react-hooks@npm:^1.20.0":
+  version: 1.20.0
+  resolution: "@wojtekmaj/react-hooks@npm:1.20.0"
   peerDependencies:
-    "@types/react": ^16.8.0 || ^17.0.0 || ^18.0.0
-    react: ^16.8.0 || ^17.0.0 || ^18.0.0
+    "@types/react": ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
+    react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
   peerDependenciesMeta:
     "@types/react":
       optional: true
-  checksum: 10c0/2fef5e702495eb380e2de4ca752b8bc0002d136ed9899faf649979fead3da85216c8b62c8c40b76581ac4d3b2a700c8f68e3de0670898520be1869b9f3c8e112
+  checksum: 10c0/4d19e20f71870212cd34147bd62fff3be54b85950e17fd66e3d8edb7b548bf96fac42618293e0734167fbd0245c54598123c2f008c53443391e6e321612c2c14
   languageName: node
   linkType: hard
 
@@ -1344,7 +1344,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "react-pdf-sample-page-next@workspace:."
   dependencies:
-    "@wojtekmaj/react-hooks": "npm:^1.18.0"
+    "@wojtekmaj/react-hooks": "npm:^1.20.0"
     next: "npm:^13.5.4"
     null-loader: "npm:^4.0.1"
     react: "npm:^18.2.0"
