@@ -1,7 +1,6 @@
 'use client';
 
 import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useRef } from 'react';
-import PropTypes from 'prop-types';
 import makeEventProps from 'make-event-props';
 import makeCancellable from 'make-cancellable-promise';
 import clsx from 'clsx';
@@ -29,7 +28,6 @@ import {
 } from './shared/utils.js';
 
 import useResolver from './shared/hooks/useResolver.js';
-import { eventProps, isClassName, isFile, isRef } from './shared/propTypes.js';
 
 import type { PDFDocumentProxy } from 'pdfjs-dist';
 import type { EventProps } from 'make-event-props';
@@ -634,61 +632,5 @@ const Document = forwardRef(function Document(
     </div>
   );
 });
-
-const isFunctionOrNode = PropTypes.oneOfType([PropTypes.func, PropTypes.node]);
-
-Document.propTypes = {
-  ...eventProps,
-  children: PropTypes.node,
-  className: isClassName,
-  error: isFunctionOrNode,
-  externalLinkRel: PropTypes.string,
-  externalLinkTarget: PropTypes.oneOf(['_self', '_blank', '_parent', '_top'] as const),
-  file: isFile,
-  imageResourcesPath: PropTypes.string,
-  inputRef: isRef,
-  loading: isFunctionOrNode,
-  noData: isFunctionOrNode,
-  onItemClick: PropTypes.func,
-  onLoadError: PropTypes.func,
-  onLoadProgress: PropTypes.func,
-  onLoadSuccess: PropTypes.func,
-  onPassword: PropTypes.func,
-  onSourceError: PropTypes.func,
-  onSourceSuccess: PropTypes.func,
-  options: PropTypes.shape({
-    canvasFactory: PropTypes.any,
-    canvasMaxAreaInBytes: PropTypes.number,
-    cMapPacked: PropTypes.bool,
-    CMapReaderFactory: PropTypes.any,
-    cMapUrl: PropTypes.string,
-    disableAutoFetch: PropTypes.bool,
-    disableFontFace: PropTypes.bool,
-    disableRange: PropTypes.bool,
-    disableStream: PropTypes.bool,
-    docBaseUrl: PropTypes.string,
-    enableXfa: PropTypes.bool,
-    filterFactory: PropTypes.any,
-    fontExtraProperties: PropTypes.bool,
-    httpHeaders: PropTypes.object,
-    isEvalSupported: PropTypes.bool,
-    isOffscreenCanvasSupported: PropTypes.bool,
-    length: PropTypes.number,
-    maxImageSize: PropTypes.number,
-    ownerDocument: PropTypes.any,
-    password: PropTypes.string,
-    pdfBug: PropTypes.bool,
-    rangeChunkSize: PropTypes.number,
-    StandardFontDataFactory: PropTypes.any,
-    standardFontDataUrl: PropTypes.string,
-    stopAtErrors: PropTypes.bool,
-    useSystemFonts: PropTypes.bool,
-    useWorkerFetch: PropTypes.bool,
-    verbosity: PropTypes.number,
-    withCredentials: PropTypes.bool,
-    worker: PropTypes.any,
-  }),
-  rotate: PropTypes.number,
-};
 
 export default Document;

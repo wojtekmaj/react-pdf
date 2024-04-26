@@ -4402,7 +4402,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prop-types@npm:^15.6.2, prop-types@npm:^15.8.1":
+"prop-types@npm:^15.8.1":
   version: 15.8.1
   resolution: "prop-types@npm:15.8.1"
   dependencies:
@@ -4521,7 +4521,6 @@ __metadata:
     nodemon: "npm:^3.0.0"
     pdfjs-dist: "npm:3.11.174"
     prettier: "npm:^3.2.0"
-    prop-types: "npm:^15.6.2"
     react: "npm:^18.2.0"
     react-dom: "npm:^18.2.0"
     rimraf: "npm:^3.0.0"

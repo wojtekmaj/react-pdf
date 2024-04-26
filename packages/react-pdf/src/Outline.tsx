@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, useMemo } from 'react';
-import PropTypes from 'prop-types';
 import makeCancellable from 'make-cancellable-promise';
 import makeEventProps from 'make-event-props';
 import clsx from 'clsx';
@@ -16,7 +15,6 @@ import { cancelRunningTask } from './shared/utils.js';
 
 import useDocumentContext from './shared/hooks/useDocumentContext.js';
 import useResolver from './shared/hooks/useResolver.js';
-import { eventProps, isClassName, isPdf, isRef } from './shared/propTypes.js';
 
 import type { PDFDocumentProxy } from 'pdfjs-dist';
 import type { EventProps } from 'make-event-props';
@@ -202,16 +200,6 @@ const Outline: React.FC<OutlineProps> = function Outline(props) {
       <OutlineContext.Provider value={childContext}>{renderOutline()}</OutlineContext.Provider>
     </div>
   );
-};
-
-Outline.propTypes = {
-  ...eventProps,
-  className: isClassName,
-  inputRef: isRef,
-  onItemClick: PropTypes.func,
-  onLoadError: PropTypes.func,
-  onLoadSuccess: PropTypes.func,
-  pdf: isPdf,
 };
 
 export default Outline;

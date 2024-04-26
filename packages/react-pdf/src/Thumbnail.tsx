@@ -92,6 +92,7 @@ const Thumbnail: React.FC<ThumbnailProps> = function Thumbnail(props) {
     }
   }
 
+  // eslint-disable-next-line react/prop-types
   const { className: classNameProps, onItemClick: onItemClickProps, ...pageProps } = props;
 
   return (

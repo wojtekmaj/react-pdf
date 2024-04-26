@@ -18,7 +18,6 @@ const pdfFile2 = loadPDF('./../../__mocks__/_pdf2.pdf');
 
 const OK = Symbol('OK');
 
-// eslint-disable-next-line react/prop-types
 function ChildInternal({
   renderMode,
   rotate,
