@@ -1,3 +1,4 @@
 .parcel-cache
+.tsimp
 dist
 node_modules

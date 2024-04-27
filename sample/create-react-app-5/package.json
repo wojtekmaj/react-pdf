@@ -8,9 +8,9 @@
   "scripts": {
     "build": "yarn copy && react-scripts build",
     "copy": "yarn copy-cmaps && yarn copy-standard-fonts && yarn copy-worker",
-    "copy-cmaps": "node --loader ts-node/esm ./scripts/copy-cmaps.ts",
-    "copy-standard-fonts": "node --loader ts-node/esm ./scripts/copy-standard-fonts.ts",
-    "copy-worker": "node --loader ts-node/esm ./scripts/copy-worker.ts",
+    "copy-cmaps": "node --import tsimp/import ./scripts/copy-cmaps.ts",
+    "copy-standard-fonts": "node --import tsimp/import ./scripts/copy-standard-fonts.ts",
+    "copy-worker": "node --import tsimp/import ./scripts/copy-worker.ts",
     "dev": "yarn copy && react-scripts start",
     "eject": "react-scripts eject",
     "test": "react-scripts test"
@@ -29,7 +29,7 @@
   },
   "devDependencies": {
     "@types/node": "*",
-    "ts-node": "^10.9.1",
+    "tsimp": "^2.0.11",
     "typescript": "^5.0.0"
   },
   "resolutions": {
