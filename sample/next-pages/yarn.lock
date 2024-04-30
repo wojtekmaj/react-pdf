@@ -153,31 +153,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/prop-types@npm:*":
-  version: 15.7.5
-  resolution: "@types/prop-types@npm:15.7.5"
-  checksum: 10c0/648aae41423821c61c83823ae36116c8d0f68258f8b609bdbc257752dcd616438d6343d554262aa9a7edaee5a19aca2e028a74fa2d0f40fffaf2816bc7056857
-  languageName: node
-  linkType: hard
-
-"@types/react@npm:*":
-  version: 18.0.31
-  resolution: "@types/react@npm:18.0.31"
-  dependencies:
-    "@types/prop-types": "npm:*"
-    "@types/scheduler": "npm:*"
-    csstype: "npm:^3.0.2"
-  checksum: 10c0/608b7fe96cbbc16458a1874c79843da8e6732d79894eca60368ded6f28a5a659e935933f2ed99ec1b7331834ca23ac22be37aed2f49f6ad3081dfe00f34a7d80
-  languageName: node
-  linkType: hard
-
-"@types/scheduler@npm:*":
-  version: 0.16.3
-  resolution: "@types/scheduler@npm:0.16.3"
-  checksum: 10c0/c249d4b96fa05165ac22c214f94a045ee0af8beedefdbc54b769febd0044cab3a874e55419841a0dcc76439e379a63e257f3253c87168e3261e7bc783d623302
-  languageName: node
-  linkType: hard
-
 "@wojtekmaj/react-hooks@npm:^1.20.0":
   version: 1.20.0
   resolution: "@wojtekmaj/react-hooks@npm:1.20.0"
@@ -403,10 +378,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"clsx@npm:^1.2.1":
-  version: 1.2.1
-  resolution: "clsx@npm:1.2.1"
-  checksum: 10c0/34dead8bee24f5e96f6e7937d711978380647e936a22e76380290e35486afd8634966ce300fc4b74a32f3762c7d4c0303f442c3e259f4ce02374eb0c82834f27
+"clsx@npm:^2.0.0":
+  version: 2.1.1
+  resolution: "clsx@npm:2.1.1"
+  checksum: 10c0/c4c8eb865f8c82baab07e71bfa8897c73454881c4f99d6bc81585aecd7c441746c1399d08363dc096c550cceaf97bd4ce1e8854e1771e9998d9f94c4fe075839
   languageName: node
   linkType: hard
 
@@ -460,13 +435,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"csstype@npm:^3.0.2":
-  version: 3.1.1
-  resolution: "csstype@npm:3.1.1"
-  checksum: 10c0/7c8b8c5923049d84132581c13bae6e1faf999746fe3998ba5f3819a8e1cdc7512ace87b7d0a4a69f0f4b8ba11daf835d4f1390af23e09fc4f0baad52c084753a
-  languageName: node
-  linkType: hard
-
 "debug@npm:4, debug@npm:^4.3.4":
   version: 4.3.4
   resolution: "debug@npm:4.3.4"
@@ -492,6 +460,13 @@ __metadata:
   version: 1.0.0
   resolution: "delegates@npm:1.0.0"
   checksum: 10c0/ba05874b91148e1db4bf254750c042bf2215febd23a6d3cda2e64896aef79745fbd4b9996488bd3cafb39ce19dbce0fd6e3b6665275638befffe1c9b312b91b5
+  languageName: node
+  linkType: hard
+
+"dequal@npm:^2.0.3":
+  version: 2.0.3
+  resolution: "dequal@npm:2.0.3"
+  checksum: 10c0/f98860cdf58b64991ae10205137c0e97d384c3a4edc7f807603887b7c4b850af1224a33d88012009f150861cbee4fa2d322c4cc04b9313bee312e47f6ecaa888
   languageName: node
   linkType: hard
 
@@ -835,7 +810,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"loose-envify@npm:^1.1.0, loose-envify@npm:^1.4.0":
+"loose-envify@npm:^1.0.0, loose-envify@npm:^1.1.0":
   version: 1.4.0
   resolution: "loose-envify@npm:1.4.0"
   dependencies:
@@ -862,10 +837,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"make-cancellable-promise@npm:^1.0.0":
-  version: 1.2.1
-  resolution: "make-cancellable-promise@npm:1.2.1"
-  checksum: 10c0/ed36f178047bb69a1142e9d46299230729d57e5cf01e1a556236cb294d3cf1b5514744bfb9ef70cfc9ec9e0697151f8fa57307df6cf626e393f31c6b8776c5a5
+"make-cancellable-promise@npm:^1.3.1":
+  version: 1.3.2
+  resolution: "make-cancellable-promise@npm:1.3.2"
+  checksum: 10c0/10aa0450c743dcf20b55414c433ca45926b775b22eb6d25fa386fc499a8f3fc64c70eb575d99bdd16667d300068f51702822c293bc4e72da7ff4f82d0ea48184
   languageName: node
   linkType: hard
 
@@ -878,10 +853,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"make-event-props@npm:^1.5.0":
-  version: 1.6.1
-  resolution: "make-event-props@npm:1.6.1"
-  checksum: 10c0/ae36b066cbaf948a03cb91bb1dc67f10f89f5ca391724a467ec67d26d0bbb6f8bd7bc58facefc0673f714ffe46dc89a55a4f71e008da1b8b1945c754b8966da7
+"make-event-props@npm:^1.6.0":
+  version: 1.6.2
+  resolution: "make-event-props@npm:1.6.2"
+  checksum: 10c0/ecf0b742e43a392c07e2267baca2397e750d38cc14ef3cb72ef8bfe4a8c8b0fd99a03a2eeab84a26c2b204f7c231da6af31fa26321fbfd413ded43ba1825e867
   languageName: node
   linkType: hard
 
@@ -904,12 +879,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"merge-refs@npm:^1.1.3":
-  version: 1.2.1
-  resolution: "merge-refs@npm:1.2.1"
-  dependencies:
-    "@types/react": "npm:*"
-  checksum: 10c0/38c0e2723272e0e9ac1790aeb36937245d68ec130339585c66c36acdf8f8d1c3f8beaa697229e7eb2b5653737d6214605a71c2b73cefe37cd704e1ab804ce6aa
+"merge-refs@npm:^1.2.1":
+  version: 1.3.0
+  resolution: "merge-refs@npm:1.3.0"
+  peerDependencies:
+    "@types/react": ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
+  peerDependenciesMeta:
+    "@types/react":
+      optional: true
+  checksum: 10c0/403d20d283a595565a6bef813415df509dad12a5ad157f0ae04861b3aee4a3691971ccae7079e20497d9f367a478ad60e5b63a2ca9ffb2cc3d511284b49b4bd6
   languageName: node
   linkType: hard
 
@@ -1254,17 +1232,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"pdfjs-dist@npm:3.6.172":
-  version: 3.6.172
-  resolution: "pdfjs-dist@npm:3.6.172"
+"pdfjs-dist@npm:3.11.174":
+  version: 3.11.174
+  resolution: "pdfjs-dist@npm:3.11.174"
   dependencies:
     canvas: "npm:^2.11.2"
     path2d-polyfill: "npm:^2.0.1"
-    web-streams-polyfill: "npm:^3.2.1"
   dependenciesMeta:
     canvas:
       optional: true
-  checksum: 10c0/033645f827bb87222f40f25a0fb454047a18dab62ef6a37f2fed962e9fb8037f2f4c53d5c9848dd8bb1f72d5f33e9d8d2f122a36c1f5a9e56402c3bd2b35e046
+    path2d-polyfill:
+      optional: true
+  checksum: 10c0/0cb26561fd9bea90f2c1c8029d4cf972d338838de0f7f7aa3f369b2e555b99a2d8bbf1b81cc682fb26331241201a432726ae356a7ad3a930d86a308ca941d29c
   languageName: node
   linkType: hard
 
@@ -1303,17 +1282,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prop-types@npm:^15.6.2":
-  version: 15.8.1
-  resolution: "prop-types@npm:15.8.1"
-  dependencies:
-    loose-envify: "npm:^1.4.0"
-    object-assign: "npm:^4.1.1"
-    react-is: "npm:^16.13.1"
-  checksum: 10c0/59ece7ca2fb9838031d73a48d4becb9a7cc1ed10e610517c7d8f19a1e02fa47f7c27d557d8a5702bec3cfeccddc853579832b43f449e54635803f277b1c78077
-  languageName: node
-  linkType: hard
-
 "punycode@npm:^2.1.0":
   version: 2.3.0
   resolution: "punycode@npm:2.3.0"
@@ -1333,13 +1301,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-is@npm:^16.13.1":
-  version: 16.13.1
-  resolution: "react-is@npm:16.13.1"
-  checksum: 10c0/33977da7a5f1a287936a0c85639fec6ca74f4f15ef1e59a6bc20338fc73dc69555381e211f7a3529b8150a1f71e4225525b41b60b52965bda53ce7d47377ada1
-  languageName: node
-  linkType: hard
-
 "react-pdf-sample-page-next@workspace:.":
   version: 0.0.0-use.local
   resolution: "react-pdf-sample-page-next@workspace:."
@@ -1354,21 +1315,25 @@ __metadata:
   linkType: soft
 
 "react-pdf@npm:latest":
-  version: 7.1.2
-  resolution: "react-pdf@npm:7.1.2"
+  version: 8.0.0
+  resolution: "react-pdf@npm:8.0.0"
   dependencies:
-    clsx: "npm:^1.2.1"
-    make-cancellable-promise: "npm:^1.0.0"
-    make-event-props: "npm:^1.5.0"
-    merge-refs: "npm:^1.1.3"
-    pdfjs-dist: "npm:3.6.172"
-    prop-types: "npm:^15.6.2"
+    clsx: "npm:^2.0.0"
+    dequal: "npm:^2.0.3"
+    make-cancellable-promise: "npm:^1.3.1"
+    make-event-props: "npm:^1.6.0"
+    merge-refs: "npm:^1.2.1"
+    pdfjs-dist: "npm:3.11.174"
     tiny-invariant: "npm:^1.0.0"
-    tiny-warning: "npm:^1.0.0"
+    warning: "npm:^4.0.0"
   peerDependencies:
-    react: ^16.8.0 || ^17.0.0 || ^18.0.0
-    react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0
-  checksum: 10c0/65a44dbce86e317169e3d7f0f3d69eb69c4319541520eddc789318d467147b9b62617cc6c08997f9bd427f0b39a28f65664107a60acd9934c370d6fa5131eb04
+    "@types/react": ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
+    react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
+    react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
+  peerDependenciesMeta:
+    "@types/react":
+      optional: true
+  checksum: 10c0/8db04836604accf2fbdfbe2aa9f9b8f0deb9ce39e38498589acee0f677720bb7e2f1806cfc715bf3786ab65ec7a244a1554e6d4ee44b39db3f2f34a68c1aa3f0
   languageName: node
   linkType: hard
 
@@ -1656,13 +1621,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tiny-warning@npm:^1.0.0":
-  version: 1.0.3
-  resolution: "tiny-warning@npm:1.0.3"
-  checksum: 10c0/ef8531f581b30342f29670cb41ca248001c6fd7975ce22122bd59b8d62b4fc84ad4207ee7faa95cde982fa3357cd8f4be650142abc22805538c3b1392d7084fa
-  languageName: node
-  linkType: hard
-
 "tr46@npm:~0.0.3":
   version: 0.0.3
   resolution: "tr46@npm:0.0.3"
@@ -1711,6 +1669,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"warning@npm:^4.0.0":
+  version: 4.0.3
+  resolution: "warning@npm:4.0.3"
+  dependencies:
+    loose-envify: "npm:^1.0.0"
+  checksum: 10c0/aebab445129f3e104c271f1637fa38e55eb25f968593e3825bd2f7a12bd58dc3738bb70dc8ec85826621d80b4acfed5a29ebc9da17397c6125864d72301b937e
+  languageName: node
+  linkType: hard
+
 "watchpack@npm:2.4.0":
   version: 2.4.0
   resolution: "watchpack@npm:2.4.0"
@@ -1718,13 +1685,6 @@ __metadata:
     glob-to-regexp: "npm:^0.4.1"
     graceful-fs: "npm:^4.1.2"
   checksum: 10c0/c5e35f9fb9338d31d2141d9835643c0f49b5f9c521440bb648181059e5940d93dd8ed856aa8a33fbcdd4e121dad63c7e8c15c063cf485429cd9d427be197fe62
-  languageName: node
-  linkType: hard
-
-"web-streams-polyfill@npm:^3.2.1":
-  version: 3.2.1
-  resolution: "web-streams-polyfill@npm:3.2.1"
-  checksum: 10c0/70ed6b5708e14afa2ab699221ea197d7c68ec0c8274bbe0181aecc5ba636ca27cbd383d2049f0eb9d529e738f5c088825502b317f3df24d18a278e4cc9a10e8b
   languageName: node
   linkType: hard
 
