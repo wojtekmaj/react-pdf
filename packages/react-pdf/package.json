@@ -72,6 +72,7 @@
     "@types/react": "*",
     "@types/warning": "^3.0.0",
     "canvas": "^2.11.2",
+    "core-js": "^3.37.0",
     "cpy-cli": "^5.0.0",
     "eslint": "^8.56.0",
     "eslint-config-wojtekmaj": "^1.0.0",
