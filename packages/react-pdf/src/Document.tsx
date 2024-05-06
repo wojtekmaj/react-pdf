@@ -274,28 +274,24 @@ const Document = forwardRef(function Document(
   const prevFile = useRef<File | undefined>(undefined);
   const prevOptions = useRef<Options | undefined>(undefined);
 
-  useEffect(() => {
-    if (file && file !== prevFile.current && isParameterObject(file)) {
-      warning(
-        !dequal(file, prevFile.current),
-        `File prop passed to <Document /> changed, but it's equal to previous one. This might result in unnecessary reloads. Consider memoizing the value passed to "file" prop.`,
-      );
+  if (file && file !== prevFile.current && isParameterObject(file)) {
+    warning(
+      !dequal(file, prevFile.current),
+      `File prop passed to <Document /> changed, but it's equal to previous one. This might result in unnecessary reloads. Consider memoizing the value passed to "file" prop.`,
+    );
 
-      prevFile.current = file;
-    }
-  }, [file]);
+    prevFile.current = file;
+  }
 
   // Detect non-memoized changes in options prop
-  useEffect(() => {
-    if (options && options !== prevOptions.current) {
-      warning(
-        !dequal(options, prevOptions.current),
-        `Options prop passed to <Document /> changed, but it's equal to previous one. This might result in unnecessary reloads. Consider memoizing the value passed to "options" prop.`,
-      );
+  if (options && options !== prevOptions.current) {
+    warning(
+      !dequal(options, prevOptions.current),
+      `Options prop passed to <Document /> changed, but it's equal to previous one. This might result in unnecessary reloads. Consider memoizing the value passed to "options" prop.`,
+    );
 
-      prevOptions.current = options;
-    }
-  }, [options]);
+    prevOptions.current = options;
+  }
 
   const viewer = useRef({
     // Handling jumping to internal links target
