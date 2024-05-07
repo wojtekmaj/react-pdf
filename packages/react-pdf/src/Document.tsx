@@ -187,6 +187,8 @@ export type DocumentProps = {
    *
    * **Note**: Make sure to define options object outside of your React component, and use `useMemo` if you can't.
    *
+   * **Note**: `isEvalSupported` is forced to `false` to prevent [arbitrary JavaScript execution upon opening a malicious PDF file](https://github.com/mozilla/pdf.js/security/advisories/GHSA-wgrm-67xf-hhpq).
+   *
    * @example { cMapUrl: '/cmaps/' }
    */
   options?: Options;
@@ -503,12 +505,12 @@ const Document = forwardRef(function Document(
       return;
     }
 
-    const documentInitParams = options
-      ? {
-          ...source,
-          ...options,
-        }
-      : source;
+    const optionsWithModifiedIsEvalSupported: Options = { ...options, isEvalSupported: true };
+
+    const documentInitParams: Source = {
+      ...source,
+      ...optionsWithModifiedIsEvalSupported,
+    };
 
     const destroyable = pdfjs.getDocument(documentInitParams);
     if (onLoadProgress) {
