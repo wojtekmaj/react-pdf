@@ -505,7 +505,7 @@ const Document = forwardRef(function Document(
       return;
     }
 
-    const optionsWithModifiedIsEvalSupported: Options = { ...options, isEvalSupported: true };
+    const optionsWithModifiedIsEvalSupported: Options = { ...options, isEvalSupported: false };
 
     const documentInitParams: Source = {
       ...source,
