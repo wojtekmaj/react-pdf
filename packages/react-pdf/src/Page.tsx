@@ -121,7 +121,7 @@ export type PageProps = {
    * @example this.ref
    * @example ref
    */
-  inputRef?: React.Ref<HTMLDivElement>;
+  inputRef?: React.Ref<HTMLDivElement | null>;
   /**
    * What the component should display while loading.
    *
@@ -631,7 +631,8 @@ export default function Page(props: PageProps) {
     <div
       className={clsx(_className, className)}
       data-page-number={pageNumber}
-      ref={mergeRefs(inputRef, pageElement)}
+      // Assertion is needed for React 18 compatibility
+      ref={mergeRefs(inputRef as React.Ref<HTMLDivElement>, pageElement)}
       style={{
         ['--scale-factor' as string]: `${scale}`,
         backgroundColor: canvasBackground || 'white',

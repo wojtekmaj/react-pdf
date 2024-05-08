@@ -146,7 +146,9 @@ export default function PageSVG() {
     <div
       className={`${_className}__svg`}
       // Note: This cannot be shortened, as we need this function to be called with each render.
-      ref={(ref) => drawPageOnContainer(ref)}
+      ref={(ref) => {
+        drawPageOnContainer(ref);
+      }}
       style={{
         display: 'block',
         backgroundColor: 'white',

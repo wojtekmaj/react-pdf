@@ -299,7 +299,11 @@ export default function Test() {
                       key={`page_${index + 1}`}
                       {...pageProps}
                       inputRef={
-                        pageNumber === index + 1 ? (ref) => ref && ref.scrollIntoView() : null
+                        pageNumber === index + 1
+                          ? (ref) => {
+                              ref && ref.scrollIntoView();
+                            }
+                          : null
                       }
                       pageNumber={index + 1}
                     />

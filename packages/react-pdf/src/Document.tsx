@@ -116,7 +116,7 @@ export type DocumentProps = {
    * @example this.ref
    * @example ref
    */
-  inputRef?: React.Ref<HTMLDivElement>;
+  inputRef?: React.Ref<HTMLDivElement | null>;
   /**
    * What the component should display while loading.
    *
@@ -620,7 +620,8 @@ const Document = forwardRef(function Document(
   return (
     <div
       className={clsx('react-pdf__Document', className)}
-      ref={inputRef}
+      // Assertion is needed for React 18 compatibility
+      ref={inputRef as React.Ref<HTMLDivElement>}
       style={{
         ['--scale-factor' as string]: '1',
       }}
