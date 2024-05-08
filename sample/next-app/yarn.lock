@@ -1212,14 +1212,14 @@ __metadata:
   linkType: soft
 
 "react-pdf@npm:latest":
-  version: 8.0.0
-  resolution: "react-pdf@npm:8.0.0"
+  version: 8.0.2
+  resolution: "react-pdf@npm:8.0.2"
   dependencies:
     clsx: "npm:^2.0.0"
     dequal: "npm:^2.0.3"
     make-cancellable-promise: "npm:^1.3.1"
     make-event-props: "npm:^1.6.0"
-    merge-refs: "npm:^1.2.1"
+    merge-refs: "npm:^1.3.0"
     pdfjs-dist: "npm:3.11.174"
     tiny-invariant: "npm:^1.0.0"
     warning: "npm:^4.0.0"
@@ -1230,7 +1230,7 @@ __metadata:
   peerDependenciesMeta:
     "@types/react":
       optional: true
-  checksum: 10c0/8db04836604accf2fbdfbe2aa9f9b8f0deb9ce39e38498589acee0f677720bb7e2f1806cfc715bf3786ab65ec7a244a1554e6d4ee44b39db3f2f34a68c1aa3f0
+  checksum: 10c0/83064e77030207bf4a7c80e24968c8957c9dedccadbf6f8e28b1a28166d9b7aa6cc473dc31bddcc57660d636756db763a39c0fdf1bc0d4cea49ffc3bb0f5d1d1
   languageName: node
   linkType: hard
 
