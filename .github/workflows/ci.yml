@@ -46,8 +46,11 @@ jobs:
         run: yarn lint
 
   typescript:
-    name: Type checking
+    name: Type checking (React ${{ matrix.react }})
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        react: [18, 19]
 
     steps:
       - name: Checkout
@@ -74,10 +77,18 @@ jobs:
       - name: Install dependencies
         run: yarn --immutable
 
+      - name: Override React version
+        if: ${{ matrix.react == 19 }}
+        run: |
+          npm pkg set resolutions.'@types/react'='npm:types-react@beta'
+          npm pkg set resolutions.'@types/react-dom'='npm:types-react-dom@beta'
+          yarn config set enableImmutableInstalls false
+          yarn up react@beta react-dom@beta
+
       - name: Build package
         run: yarn build
 
-      - name: Run type checking
+      - name: Run type checking (React ${{ matrix.react }})
         run: yarn tsc
 
   format:
@@ -113,8 +124,11 @@ jobs:
         run: yarn format
 
   unit:
-    name: Unit tests
+    name: Unit tests (React ${{ matrix.react }})
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        react: [18, 19]
 
     steps:
       - name: Checkout
@@ -141,5 +155,13 @@ jobs:
       - name: Install dependencies
         run: yarn --immutable
 
-      - name: Run tests
+      - name: Override React version
+        if: ${{ matrix.react == 19 }}
+        run: |
+          npm pkg set resolutions.'@types/react'='npm:types-react@beta'
+          npm pkg set resolutions.'@types/react-dom'='npm:types-react-dom@beta'
+          yarn config set enableImmutableInstalls false
+          yarn up react@beta react-dom@beta
+
+      - name: Run tests (React ${{ matrix.react }})
         run: yarn unit
