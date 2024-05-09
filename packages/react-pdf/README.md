@@ -50,9 +50,7 @@ The following browsers are supported out of the box in React-PDF v8 and v7:
 
 You may extend the list of supported browsers by providing additional polyfills (e.g. for `Array.prototype.at` or `Promise.allSettled`) and either configuring your bundler to transpile `pdfjs-dist` and using [legacy PDF.js worker](#legacy-pdfjs-worker).
 
-If you need to support older browsers, you will need to use React-PDF v6 or v5.
-
-If you need to support Internet Explorer 11, you will need to use React-PDF v4.
+If you need to support older browsers, you will need to use React-PDF v6 or earlier.
 
 #### React
 
