@@ -25,6 +25,7 @@ A minimal demo page can be found in `sample` directory.
 
 React-PDF is under constant development. This documentation is written for React-PDF 7.x branch. If you want to see documentation for other versions of React-PDF, use dropdown on top of GitHub page to switch to an appropriate tag. Here are quick links to the newest docs from each branch:
 
+- [v7.x](https://github.com/wojtekmaj/react-pdf/blob/v7.x/packages/react-pdf/README.md)
 - [v6.x](https://github.com/wojtekmaj/react-pdf/blob/v6.x/README.md)
 - [v5.x](https://github.com/wojtekmaj/react-pdf/blob/v5.x/README.md)
 - [v4.x](https://github.com/wojtekmaj/react-pdf/blob/v4.x/README.md)
@@ -40,7 +41,7 @@ React-PDF is under constant development. This documentation is written for React
 
 React-PDF supports all modern browsers. It is tested with the latest versions of Chrome, Edge, Safari, Firefox, and Opera.
 
-The following browsers are supported out of the box in React-PDF v7:
+The following browsers are supported out of the box in React-PDF v8 and v7:
 
 - Chrome ≥92
 - Edge ≥92
