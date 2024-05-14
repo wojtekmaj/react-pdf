@@ -41,8 +41,10 @@ export default function Sample() {
   function onFileChange(event: React.ChangeEvent<HTMLInputElement>): void {
     const { files } = event.target;
 
-    if (files && files[0]) {
-      setFile(files[0] || null);
+    const nextFile = files?.[0];
+
+    if (nextFile) {
+      setFile(nextFile);
     }
   }
 
