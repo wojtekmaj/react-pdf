@@ -74,7 +74,7 @@ Add React-PDF to your project by executing `npm install react-pdf` or `yarn add 
 
 #### Next.js
 
-If you use Next.js, you may need to add the following to your `next.config.js`:
+If you use Next.js without Turbopack enabled, add the following to your `next.config.js`:
 
 ```diff
 module.exports = {
@@ -84,6 +84,26 @@ module.exports = {
 +   return config;
 + },
 }
+```
+
+If you use Next.js with Turbopack enabled, add `empty-module.ts` file:
+
+```ts
+export default {};
+```
+
+and add the following to your `next.config.js`:
+
+```diff
+module.exports = {
++ experimental: {
++   turbo: {
++     resolveAlias: {
++       canvas: './empty-module.ts',
++     },
++   },
++ },
+};
 ```
 
 ### Configure PDF.js worker
