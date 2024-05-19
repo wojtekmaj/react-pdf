@@ -605,7 +605,7 @@ describe('Document', () => {
   });
 
   it('does not warn if file prop was memoized', () => {
-    const spy = vi.spyOn(global.console, 'error').mockImplementation(() => {
+    const spy = vi.spyOn(globalThis.console, 'error').mockImplementation(() => {
       // Intentionally empty
     });
 
@@ -617,11 +617,11 @@ describe('Document', () => {
 
     expect(spy).not.toHaveBeenCalled();
 
-    vi.mocked(global.console.error).mockRestore();
+    vi.mocked(globalThis.console.error).mockRestore();
   });
 
   it('warns if file prop was not memoized', () => {
-    const spy = vi.spyOn(global.console, 'error').mockImplementation(() => {
+    const spy = vi.spyOn(globalThis.console, 'error').mockImplementation(() => {
       // Intentionally empty
     });
 
@@ -631,11 +631,11 @@ describe('Document', () => {
 
     expect(spy).toHaveBeenCalledTimes(1);
 
-    vi.mocked(global.console.error).mockRestore();
+    vi.mocked(globalThis.console.error).mockRestore();
   });
 
   it('does not warn if file prop was not memoized, but was changed', () => {
-    const spy = vi.spyOn(global.console, 'error').mockImplementation(() => {
+    const spy = vi.spyOn(globalThis.console, 'error').mockImplementation(() => {
       // Intentionally empty
     });
 
@@ -645,11 +645,11 @@ describe('Document', () => {
 
     expect(spy).not.toHaveBeenCalled();
 
-    vi.mocked(global.console.error).mockRestore();
+    vi.mocked(globalThis.console.error).mockRestore();
   });
 
   it('does not warn if options prop was memoized', () => {
-    const spy = vi.spyOn(global.console, 'error').mockImplementation(() => {
+    const spy = vi.spyOn(globalThis.console, 'error').mockImplementation(() => {
       // Intentionally empty
     });
 
@@ -661,11 +661,11 @@ describe('Document', () => {
 
     expect(spy).not.toHaveBeenCalled();
 
-    vi.mocked(global.console.error).mockRestore();
+    vi.mocked(globalThis.console.error).mockRestore();
   });
 
   it('warns if options prop was not memoized', () => {
-    const spy = vi.spyOn(global.console, 'error').mockImplementation(() => {
+    const spy = vi.spyOn(globalThis.console, 'error').mockImplementation(() => {
       // Intentionally empty
     });
 
@@ -675,11 +675,11 @@ describe('Document', () => {
 
     expect(spy).toHaveBeenCalledTimes(1);
 
-    vi.mocked(global.console.error).mockRestore();
+    vi.mocked(globalThis.console.error).mockRestore();
   });
 
   it('does not warn if options prop was not memoized, but was changed', () => {
-    const spy = vi.spyOn(global.console, 'error').mockImplementation(() => {
+    const spy = vi.spyOn(globalThis.console, 'error').mockImplementation(() => {
       // Intentionally empty
     });
 
@@ -689,6 +689,6 @@ describe('Document', () => {
 
     expect(spy).not.toHaveBeenCalled();
 
-    vi.mocked(global.console.error).mockRestore();
+    vi.mocked(globalThis.console.error).mockRestore();
   });
 });
