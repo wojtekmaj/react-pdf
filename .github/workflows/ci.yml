@@ -83,7 +83,7 @@ jobs:
           npm pkg set resolutions.'@types/react'='npm:types-react@beta'
           npm pkg set resolutions.'@types/react-dom'='npm:types-react-dom@beta'
           yarn config set enableImmutableInstalls false
-          yarn up react@beta react-dom@beta
+          yarn up react@rc react-dom@rc
 
       - name: Build package
         run: yarn build
