@@ -115,7 +115,7 @@ export default class Document extends PureComponent {
 
         const { options, onLoadProgress, onPassword } = this.props;
 
-        this.loadingTask = pdfjs.getDocument({ ...source, ...options });
+        this.loadingTask = pdfjs.getDocument({ ...source, ...options, isEvalSupported: false });
         this.loadingTask.onPassword = onPassword;
         if (onLoadProgress) {
           this.loadingTask.onProgress = onLoadProgress;
