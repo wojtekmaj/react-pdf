@@ -4297,9 +4297,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"pdfjs-dist@npm:4.2.67":
-  version: 4.2.67
-  resolution: "pdfjs-dist@npm:4.2.67"
+"pdfjs-dist@npm:4.3.136":
+  version: 4.3.136
+  resolution: "pdfjs-dist@npm:4.3.136"
   dependencies:
     canvas: "npm:^2.11.2"
     path2d: "npm:^0.2.0"
@@ -4308,7 +4308,7 @@ __metadata:
       optional: true
     path2d:
       optional: true
-  checksum: 10c0/1d6d427a2253b2c15cbb168d7f95fc26428134ff61113359653c36f92475a4abd8552913b1492489933304ccc4285328b5cbcff36825ae533b8cd4c279881348
+  checksum: 10c0/4cb88d737f56100d45d2c9c0c6e8dc2f3dfd856362a55e47801ae32c52b2f12b3e74819c3cafb995a1e84c43eb580598a69c6710a78b1a11cdb52ef24bf8a633
   languageName: node
   linkType: hard
 
@@ -4530,7 +4530,7 @@ __metadata:
     make-event-props: "npm:^1.6.0"
     merge-refs: "npm:^1.3.0"
     nodemon: "npm:^3.0.0"
-    pdfjs-dist: "npm:4.2.67"
+    pdfjs-dist: "npm:4.3.136"
     prettier: "npm:^3.2.0"
     react: "npm:^18.2.0"
     react-dom: "npm:^18.2.0"

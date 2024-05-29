@@ -194,10 +194,11 @@ export default function TextLayer() {
       viewport,
     };
 
-    const cancellable = pdfjs.renderTextLayer(parameters);
+    const cancellable = new pdfjs.TextLayer(parameters);
     const runningTask = cancellable;
 
-    cancellable.promise
+    cancellable
+      .render()
       .then(() => {
         const end = document.createElement('div');
         end.className = 'endOfContent';
