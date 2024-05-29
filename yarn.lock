@@ -4312,6 +4312,21 @@ __metadata:
   languageName: node
   linkType: hard
 
+"pdfjs-dist@patch:pdfjs-dist@npm:4.3.136#.yarn/patches/pdfjs-dist-npm-4.3.136-35a0e70ced.patch::locator=react-pdf-monorepo%40workspace%3A.":
+  version: 4.3.136
+  resolution: "pdfjs-dist@patch:pdfjs-dist@npm%3A4.3.136#.yarn/patches/pdfjs-dist-npm-4.3.136-35a0e70ced.patch::version=4.3.136&hash=d78cd3&locator=react-pdf-monorepo%40workspace%3A."
+  dependencies:
+    canvas: "npm:^2.11.2"
+    path2d: "npm:^0.2.0"
+  dependenciesMeta:
+    canvas:
+      optional: true
+    path2d:
+      optional: true
+  checksum: 10c0/df1b908fa225e5b5a58382b43d0e5462d0de9dc8a7a396f354236b44892cc648c13e1cc90c5e34c1177801c9eb5a6e794dbc67f1a3185b224a4f0846cf20c8de
+  languageName: node
+  linkType: hard
+
 "picocolors@npm:^1.0.0":
   version: 1.0.0
   resolution: "picocolors@npm:1.0.0"

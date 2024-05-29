@@ -1,0 +1,16 @@
+diff --git a/build/pdf.mjs b/build/pdf.mjs
+index 003035596c3797888692cafd43f9466f96607d55..e69bc909492626f188ccff66b24a8d586fd96a30 100644
+--- a/build/pdf.mjs
++++ b/build/pdf.mjs
+@@ -5303,8 +5303,9 @@ if (isNodeJS) {
+     const fs = await import( /*webpackIgnore: true*/"fs"),
+       http = await import( /*webpackIgnore: true*/"http"),
+       https = await import( /*webpackIgnore: true*/"https"),
+-      url = await import( /*webpackIgnore: true*/"url");
+-    let canvas, path2d;
++      url = await import( /*webpackIgnore: true*/"url"),
++      canvas = await import( /*webpackIgnore: true*/"canvas");
++    let path2d;
+     return new Map(Object.entries({
+       fs,
+       http,
