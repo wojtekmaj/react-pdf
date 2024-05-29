@@ -41,14 +41,14 @@ React-PDF is under constant development. This documentation is written for React
 
 React-PDF supports all modern browsers. It is tested with the latest versions of Chrome, Edge, Safari, Firefox, and Opera.
 
-The following browsers are supported out of the box in React-PDF v8 and v7:
+The following browsers are supported out of the box in React-PDF v9:
 
-- Chrome ≥92
-- Edge ≥92
-- Safari ≥15.4
-- Firefox ≥90
+- Chrome ≥119
+- Edge ≥119
+- Safari ≥17.4
+- Firefox ≥121
 
-You may extend the list of supported browsers by providing additional polyfills (e.g. for `Array.prototype.at` or `Promise.allSettled`) and either configuring your bundler to transpile `pdfjs-dist` and using [legacy PDF.js worker](#legacy-pdfjs-worker).
+You may extend the list of supported browsers by providing additional polyfills (e.g. for `Array.prototype.at`, `Promise.allSettled` or `Promise.withResolvers`) and either configuring your bundler to transpile `pdfjs-dist` and using [legacy PDF.js worker](#legacy-pdfjs-worker).
 
 If you need to support older browsers, you will need to use React-PDF v6 or earlier.
 
