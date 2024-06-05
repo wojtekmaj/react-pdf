@@ -68,8 +68,6 @@ export function readAsDataURL(file: Blob): Promise<string> {
   });
 }
 
-/* eslint-disable no-console */
-
 export default function Test() {
   const [canvasBackground, setCanvasBackground] = useState<string>();
   const [devicePixelRatio, setDevicePixelRatio] = useState<number>();
@@ -301,7 +299,7 @@ export default function Test() {
                       inputRef={
                         pageNumber === index + 1
                           ? (ref) => {
-                              ref && ref.scrollIntoView();
+                              ref?.scrollIntoView();
                             }
                           : null
                       }

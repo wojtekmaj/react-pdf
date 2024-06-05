@@ -238,7 +238,9 @@ describe('AnnotationLayer', () => {
           .map((item) => item.firstChild as HTMLElement)
           .filter((item) => item.tagName === 'A');
 
-        annotationLinkItems.forEach((link) => expect(link.getAttribute('target')).toBe(target));
+        for (const link of annotationLinkItems) {
+          expect(link.getAttribute('target')).toBe(target);
+        }
       },
     );
 
@@ -280,7 +282,9 @@ describe('AnnotationLayer', () => {
           .map((item) => item.firstChild as HTMLElement)
           .filter((item) => item.tagName === 'A');
 
-        annotationLinkItems.forEach((link) => expect(link.getAttribute('rel')).toBe(rel));
+        for (const link of annotationLinkItems) {
+          expect(link.getAttribute('rel')).toBe(rel);
+        }
       },
     );
 

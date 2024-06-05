@@ -135,15 +135,7 @@ export default function Canvas(props: CanvasProps) {
     drawPageOnCanvas,
     // Ommitted callbacks so they are not called every time they change
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [
-      canvasBackground,
-      canvasElement,
-      devicePixelRatio,
-      page,
-      renderForms,
-      renderViewport,
-      viewport,
-    ],
+    [canvasBackground, page, renderForms, renderViewport, viewport],
   );
 
   const cleanup = useCallback(() => {

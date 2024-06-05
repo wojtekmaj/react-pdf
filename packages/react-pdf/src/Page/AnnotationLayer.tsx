@@ -47,7 +47,7 @@ export default function AnnotationLayer() {
   const layerElement = useRef<HTMLDivElement>(null);
 
   warning(
-    parseInt(
+    Number.parseInt(
       window.getComputedStyle(document.body).getPropertyValue('--react-pdf-annotation-layer'),
       10,
     ) === 1,

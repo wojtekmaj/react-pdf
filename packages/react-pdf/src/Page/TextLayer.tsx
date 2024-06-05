@@ -43,7 +43,7 @@ export default function TextLayer() {
   const endElement = useRef<HTMLElement | undefined>(undefined);
 
   warning(
-    parseInt(
+    Number.parseInt(
       window.getComputedStyle(document.body).getPropertyValue('--react-pdf-text-layer'),
       10,
     ) === 1,

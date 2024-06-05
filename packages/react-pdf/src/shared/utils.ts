@@ -105,7 +105,7 @@ export function displayWorkerWarning() {
 }
 
 export function cancelRunningTask(runningTask?: { cancel?: () => void } | null) {
-  if (runningTask && runningTask.cancel) runningTask.cancel();
+  if (runningTask?.cancel) runningTask.cancel();
 }
 
 export function makePageCallback(page: PDFPageProxy, scale: number): PageCallback {

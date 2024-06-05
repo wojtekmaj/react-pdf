@@ -48,7 +48,7 @@ export default function CustomRenderer() {
     };
   }
 
-  useEffect(drawPageOnCanvas, [canvasElement, page, viewport]);
+  useEffect(drawPageOnCanvas, [page, viewport]);
 
   return (
     <canvas
