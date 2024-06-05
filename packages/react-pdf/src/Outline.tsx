@@ -119,6 +119,7 @@ export default function Outline(props: OutlineProps) {
     outlineDispatch({ type: 'RESET' });
   }
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: See https://github.com/biomejs/biome/issues/3080
   useEffect(resetOutline, [outlineDispatch, pdf]);
 
   function loadOutline() {
@@ -141,25 +142,22 @@ export default function Outline(props: OutlineProps) {
     return () => cancelRunningTask(runningTask);
   }
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: See https://github.com/biomejs/biome/issues/3080
   useEffect(loadOutline, [outlineDispatch, pdf]);
 
-  useEffect(
-    () => {
-      if (outline === undefined) {
-        return;
-      }
+  // biome-ignore lint/correctness/useExhaustiveDependencies: Ommitted callbacks so they are not called every time they change
+  useEffect(() => {
+    if (outline === undefined) {
+      return;
+    }
 
-      if (outline === false) {
-        onLoadError();
-        return;
-      }
+    if (outline === false) {
+      onLoadError();
+      return;
+    }
 
-      onLoadSuccess();
-    },
-    // Ommitted callbacks so they are not called every time they change
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [outline],
-  );
+    onLoadSuccess();
+  }, [outline]);
 
   const childContext = useMemo(
     () => ({
@@ -170,6 +168,7 @@ export default function Outline(props: OutlineProps) {
 
   const eventProps = useMemo(
     () => makeEventProps(otherProps, () => outline),
+    // biome-ignore lint/correctness/useExhaustiveDependencies: FIXME
     [otherProps, outline],
   );
 

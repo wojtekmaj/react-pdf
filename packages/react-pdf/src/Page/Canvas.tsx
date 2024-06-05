@@ -131,12 +131,8 @@ export default function Canvas(props: CanvasProps) {
     return () => cancelRunningTask(runningTask);
   }
 
-  useEffect(
-    drawPageOnCanvas,
-    // Ommitted callbacks so they are not called every time they change
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [canvasBackground, page, renderForms, renderViewport, viewport],
-  );
+  // biome-ignore lint/correctness/useExhaustiveDependencies: See https://github.com/biomejs/biome/issues/3080
+  useEffect(drawPageOnCanvas, [canvasBackground, page, renderForms, renderViewport, viewport]);
 
   const cleanup = useCallback(() => {
     const { current: canvas } = canvasElement;
@@ -149,7 +145,7 @@ export default function Canvas(props: CanvasProps) {
       canvas.width = 0;
       canvas.height = 0;
     }
-  }, [canvasElement]);
+  }, []);
 
   useEffect(() => cleanup, [cleanup]);
 

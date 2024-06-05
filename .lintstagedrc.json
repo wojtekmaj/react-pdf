@@ -1,3 +1,0 @@
-{
-  "*.{css,html,js,json,jsx,md,ts,tsx,yml}": "yarn format --write"
-}

@@ -18,32 +18,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Cache Yarn cache
-        uses: actions/cache@v4
-        env:
-          cache-name: yarn-cache
-        with:
-          path: ~/.yarn/berry/cache
-          key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-${{ env.cache-name }}
-
-      - name: Use Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-
-      - name: Enable Corepack
-        run: corepack enable
-
-      - name: Install dependencies
-        run: yarn --immutable
-
-      - name: Build package
-        run: yarn build
+      - name: Setup Biome
+        uses: biomejs/setup-biome@v2
 
       - name: Run tests
-        run: yarn lint
+        run: biome lint
 
   typescript:
     name: Type checking (React ${{ matrix.react }})
@@ -99,29 +78,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Cache Yarn cache
-        uses: actions/cache@v4
-        env:
-          cache-name: yarn-cache
-        with:
-          path: ~/.yarn/berry/cache
-          key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-${{ env.cache-name }}
-
-      - name: Use Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-
-      - name: Enable Corepack
-        run: corepack enable
-
-      - name: Install dependencies
-        run: yarn --immutable
+      - name: Setup Biome
+        uses: biomejs/setup-biome@v2
 
       - name: Run formatting
-        run: yarn format
+        run: biome format
 
   unit:
     name: Unit tests (React ${{ matrix.react }})

@@ -82,6 +82,7 @@ export default function AnnotationLayer() {
     annotationsDispatch({ type: 'RESET' });
   }
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: See https://github.com/biomejs/biome/issues/3080
   useEffect(resetAnnotations, [annotationsDispatch, page]);
 
   function loadAnnotations() {
@@ -105,25 +106,22 @@ export default function AnnotationLayer() {
     };
   }
 
-  useEffect(loadAnnotations, [annotationsDispatch, page, renderForms]);
+  // biome-ignore lint/correctness/useExhaustiveDependencies: See https://github.com/biomejs/biome/issues/3080
+  useEffect(loadAnnotations, [annotationsDispatch, page]);
 
-  useEffect(
-    () => {
-      if (annotations === undefined) {
-        return;
-      }
+  // biome-ignore lint/correctness/useExhaustiveDependencies: Ommitted callbacks so they are not called every time they change
+  useEffect(() => {
+    if (annotations === undefined) {
+      return;
+    }
 
-      if (annotations === false) {
-        onLoadError();
-        return;
-      }
+    if (annotations === false) {
+      onLoadError();
+      return;
+    }
 
-      onLoadSuccess();
-    },
-    // Ommitted callbacks so they are not called every time they change
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [annotations],
-  );
+    onLoadSuccess();
+  }, [annotations]);
 
   function onRenderSuccess() {
     if (onRenderAnnotationLayerSuccessProps) {
@@ -194,12 +192,15 @@ export default function AnnotationLayer() {
     };
   }
 
-  useEffect(
-    renderAnnotationLayer,
-    // Ommitted callbacks so they are not called every time they change
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [annotations, imageResourcesPath, linkService, page, renderForms, viewport],
-  );
+  // biome-ignore lint/correctness/useExhaustiveDependencies: See https://github.com/biomejs/biome/issues/3080
+  useEffect(renderAnnotationLayer, [
+    annotations,
+    imageResourcesPath,
+    linkService,
+    page,
+    renderForms,
+    viewport,
+  ]);
 
   return (
     <div className={clsx('react-pdf__Page__annotations', 'annotationLayer')} ref={layerElement} />

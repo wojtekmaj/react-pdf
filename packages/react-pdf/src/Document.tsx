@@ -208,13 +208,11 @@ export type DocumentProps = {
 const defaultOnPassword: OnPassword = (callback, reason) => {
   switch (reason) {
     case PasswordResponses.NEED_PASSWORD: {
-      // eslint-disable-next-line no-alert
       const password = prompt('Enter the password to open this PDF file.');
       callback(password);
       break;
     }
     case PasswordResponses.INCORRECT_PASSWORD: {
-      // eslint-disable-next-line no-alert
       const password = prompt('Invalid password. Please try again.');
       callback(password);
       break;
@@ -357,6 +355,7 @@ const Document = forwardRef(function Document(
     sourceDispatch({ type: 'RESET' });
   }
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: See https://github.com/biomejs/biome/issues/3080
   useEffect(resetSource, [file, sourceDispatch]);
 
   const findDocumentSource = useCallback(async (): Promise<Source | null> => {
@@ -439,23 +438,19 @@ const Document = forwardRef(function Document(
     };
   }, [findDocumentSource, sourceDispatch]);
 
-  useEffect(
-    () => {
-      if (typeof source === 'undefined') {
-        return;
-      }
+  // biome-ignore lint/correctness/useExhaustiveDependencies: Ommitted callbacks so they are not called every time they change
+  useEffect(() => {
+    if (typeof source === 'undefined') {
+      return;
+    }
 
-      if (source === false) {
-        onSourceError();
-        return;
-      }
+    if (source === false) {
+      onSourceError();
+      return;
+    }
 
-      onSourceSuccess();
-    },
-    // Ommitted callbacks so they are not called every time they change
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [source],
-  );
+    onSourceSuccess();
+  }, [source]);
 
   /**
    * Called when a document is read successfully
@@ -494,6 +489,7 @@ const Document = forwardRef(function Document(
     pdfDispatch({ type: 'RESET' });
   }
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: See https://github.com/biomejs/biome/issues/3080
   useEffect(resetDocument, [pdfDispatch, source]);
 
   function loadDocument() {
@@ -532,30 +528,22 @@ const Document = forwardRef(function Document(
     };
   }
 
-  useEffect(
-    loadDocument,
-    // Ommitted callbacks so they are not called every time they change
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [options, pdfDispatch, source],
-  );
+  // biome-ignore lint/correctness/useExhaustiveDependencies: See https://github.com/biomejs/biome/issues/3080
+  useEffect(loadDocument, [options, pdfDispatch, source]);
 
-  useEffect(
-    () => {
-      if (typeof pdf === 'undefined') {
-        return;
-      }
+  // biome-ignore lint/correctness/useExhaustiveDependencies: Ommitted callbacks so they are not called every time they change
+  useEffect(() => {
+    if (typeof pdf === 'undefined') {
+      return;
+    }
 
-      if (pdf === false) {
-        onLoadError();
-        return;
-      }
+    if (pdf === false) {
+      onLoadError();
+      return;
+    }
 
-      onLoadSuccess();
-    },
-    // Ommitted callbacks so they are not called every time they change
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [pdf],
-  );
+    onLoadSuccess();
+  }, [pdf]);
 
   function setupLinkService() {
     linkService.current.setViewer(viewer.current);
@@ -563,15 +551,16 @@ const Document = forwardRef(function Document(
     linkService.current.setExternalLinkTarget(externalLinkTarget);
   }
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: See https://github.com/biomejs/biome/issues/3080
   useEffect(setupLinkService, [externalLinkRel, externalLinkTarget]);
 
-  function registerPage(pageIndex: number, ref: HTMLDivElement) {
+  const registerPage = useCallback((pageIndex: number, ref: HTMLDivElement) => {
     pages.current[pageIndex] = ref;
-  }
+  }, []);
 
-  function unregisterPage(pageIndex: number) {
+  const unregisterPage = useCallback((pageIndex: number) => {
     delete pages.current[pageIndex];
-  }
+  }, []);
 
   const childContext = useMemo(
     () => ({
@@ -584,10 +573,14 @@ const Document = forwardRef(function Document(
       rotate,
       unregisterPage,
     }),
-    [imageResourcesPath, onItemClick, pdf, renderMode, rotate],
+    [imageResourcesPath, onItemClick, pdf, registerPage, renderMode, rotate, unregisterPage],
   );
 
-  const eventProps = useMemo(() => makeEventProps(otherProps, () => pdf), [otherProps, pdf]);
+  const eventProps = useMemo(
+    () => makeEventProps(otherProps, () => pdf),
+    // biome-ignore lint/correctness/useExhaustiveDependencies: FIXME
+    [otherProps, pdf],
+  );
 
   function renderChildren() {
     return <DocumentContext.Provider value={childContext}>{children}</DocumentContext.Provider>;

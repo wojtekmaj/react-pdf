@@ -400,6 +400,7 @@ export default function Page(props: PageProps) {
     };
   }
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: See https://github.com/biomejs/biome/issues/3080
   useEffect(hook, [_enableRegisterUnregisterPage, pdf, pageIndex, unregisterPage]);
 
   /**
@@ -445,6 +446,7 @@ export default function Page(props: PageProps) {
     pageDispatch({ type: 'RESET' });
   }
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: See https://github.com/biomejs/biome/issues/3080
   useEffect(resetPage, [pageDispatch, pdf, pageIndex]);
 
   function loadPage() {
@@ -466,25 +468,22 @@ export default function Page(props: PageProps) {
     return () => cancelRunningTask(runningTask);
   }
 
-  useEffect(loadPage, [pageDispatch, pdf, pageIndex, pageNumber, registerPage]);
+  // biome-ignore lint/correctness/useExhaustiveDependencies: See https://github.com/biomejs/biome/issues/3080
+  useEffect(loadPage, [pageDispatch, pdf, pageNumber]);
 
-  useEffect(
-    () => {
-      if (page === undefined) {
-        return;
-      }
+  // biome-ignore lint/correctness/useExhaustiveDependencies: Ommitted callbacks so they are not called every time they change
+  useEffect(() => {
+    if (page === undefined) {
+      return;
+    }
 
-      if (page === false) {
-        onLoadError();
-        return;
-      }
+    if (page === false) {
+      onLoadError();
+      return;
+    }
 
-      onLoadSuccess();
-    },
-    // Ommitted callbacks so they are not called every time they change
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [page, scale],
-  );
+    onLoadSuccess();
+  }, [page, scale]);
 
   const childContext = useMemo(
     () =>
@@ -548,6 +547,7 @@ export default function Page(props: PageProps) {
       makeEventProps(otherProps, () =>
         page ? (scale ? makePageCallback(page, scale) : undefined) : page,
       ),
+    // biome-ignore lint/correctness/useExhaustiveDependencies: FIXME
     [otherProps, page, scale],
   );
 

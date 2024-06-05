@@ -48,6 +48,7 @@ export default function CustomRenderer() {
     };
   }
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: See https://github.com/biomejs/biome/issues/3080
   useEffect(drawPageOnCanvas, [page, viewport]);
 
   return (

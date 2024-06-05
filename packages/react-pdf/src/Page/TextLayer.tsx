@@ -84,6 +84,7 @@ export default function TextLayer() {
     textContentDispatch({ type: 'RESET' });
   }
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: See https://github.com/biomejs/biome/issues/3080
   useEffect(resetTextContent, [page, textContentDispatch]);
 
   function loadTextContent() {
@@ -105,25 +106,22 @@ export default function TextLayer() {
     return () => cancelRunningTask(runningTask);
   }
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: See https://github.com/biomejs/biome/issues/3080
   useEffect(loadTextContent, [page, textContentDispatch]);
 
-  useEffect(
-    () => {
-      if (textContent === undefined) {
-        return;
-      }
+  // biome-ignore lint/correctness/useExhaustiveDependencies: Ommitted callbacks so they are not called every time they change
+  useEffect(() => {
+    if (textContent === undefined) {
+      return;
+    }
 
-      if (textContent === false) {
-        onLoadError();
-        return;
-      }
+    if (textContent === false) {
+      onLoadError();
+      return;
+    }
 
-      onLoadSuccess();
-    },
-    // Ommitted callbacks so they are not called every time they change
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [textContent],
-  );
+    onLoadSuccess();
+  }, [textContent]);
 
   /**
    * Called when a text layer is rendered successfully
@@ -240,6 +238,7 @@ export default function TextLayer() {
     return () => cancelRunningTask(runningTask);
   }
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: See https://github.com/biomejs/biome/issues/3080
   useLayoutEffect(renderTextLayer, [
     customTextRenderer,
     onRenderError,
@@ -252,7 +251,6 @@ export default function TextLayer() {
   ]);
 
   return (
-    // eslint-disable-next-line jsx-a11y/no-static-element-interactions
     <div
       className={clsx('react-pdf__Page__textContent', 'textLayer')}
       onMouseUp={onMouseUp}

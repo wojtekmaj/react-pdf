@@ -54,6 +54,7 @@ export default function StructTree() {
     structTreeDispatch({ type: 'RESET' });
   }
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: See https://github.com/biomejs/biome/issues/3080
   useEffect(resetAnnotations, [structTreeDispatch, page]);
 
   function loadStructTree() {
@@ -80,25 +81,22 @@ export default function StructTree() {
     return () => cancelRunningTask(runningTask);
   }
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: See https://github.com/biomejs/biome/issues/3080
   useEffect(loadStructTree, [customTextRenderer, page, structTreeDispatch]);
 
-  useEffect(
-    () => {
-      if (structTree === undefined) {
-        return;
-      }
+  // biome-ignore lint/correctness/useExhaustiveDependencies: Ommitted callbacks so they are not called every time they change
+  useEffect(() => {
+    if (structTree === undefined) {
+      return;
+    }
 
-      if (structTree === false) {
-        onLoadError();
-        return;
-      }
+    if (structTree === false) {
+      onLoadError();
+      return;
+    }
 
-      onLoadSuccess();
-    },
-    // Ommitted callbacks so they are not called every time they change
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [structTree],
-  );
+    onLoadSuccess();
+  }, [structTree]);
 
   if (!structTree) {
     return null;
