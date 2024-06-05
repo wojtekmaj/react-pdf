@@ -92,11 +92,9 @@ export default function Thumbnail(props: ThumbnailProps) {
     }
   }
 
-  // eslint-disable-next-line react/prop-types
   const { className: classNameProps, onItemClick: onItemClickProps, ...pageProps } = props;
 
   return (
-    /* eslint-disable-next-line jsx-a11y/anchor-is-valid */
     <a
       className={clsx('react-pdf__Thumbnail', className)}
       href={pageNumber ? '#' : undefined}

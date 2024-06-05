@@ -115,51 +115,50 @@ export default function Outline(props: OutlineProps) {
     }
   }
 
-  function resetOutline() {
-    outlineDispatch({ type: 'RESET' });
-  }
+  // biome-ignore lint/correctness/useExhaustiveDependencies: useEffect intentionally triggered on pdf change
+  useEffect(
+    function resetOutline() {
+      outlineDispatch({ type: 'RESET' });
+    },
+    [outlineDispatch, pdf],
+  );
 
-  useEffect(resetOutline, [outlineDispatch, pdf]);
+  useEffect(
+    function loadOutline() {
+      if (!pdf) {
+        // Impossible, but TypeScript doesn't know that
+        return;
+      }
 
-  function loadOutline() {
-    if (!pdf) {
-      // Impossible, but TypeScript doesn't know that
+      const cancellable = makeCancellable(pdf.getOutline());
+      const runningTask = cancellable;
+
+      cancellable.promise
+        .then((nextOutline) => {
+          outlineDispatch({ type: 'RESOLVE', value: nextOutline });
+        })
+        .catch((error) => {
+          outlineDispatch({ type: 'REJECT', error });
+        });
+
+      return () => cancelRunningTask(runningTask);
+    },
+    [outlineDispatch, pdf],
+  );
+
+  // biome-ignore lint/correctness/useExhaustiveDependencies: Ommitted callbacks so they are not called every time they change
+  useEffect(() => {
+    if (outline === undefined) {
       return;
     }
 
-    const cancellable = makeCancellable(pdf.getOutline());
-    const runningTask = cancellable;
+    if (outline === false) {
+      onLoadError();
+      return;
+    }
 
-    cancellable.promise
-      .then((nextOutline) => {
-        outlineDispatch({ type: 'RESOLVE', value: nextOutline });
-      })
-      .catch((error) => {
-        outlineDispatch({ type: 'REJECT', error });
-      });
-
-    return () => cancelRunningTask(runningTask);
-  }
-
-  useEffect(loadOutline, [outlineDispatch, pdf]);
-
-  useEffect(
-    () => {
-      if (outline === undefined) {
-        return;
-      }
-
-      if (outline === false) {
-        onLoadError();
-        return;
-      }
-
-      onLoadSuccess();
-    },
-    // Ommitted callbacks so they are not called every time they change
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [outline],
-  );
+    onLoadSuccess();
+  }, [outline]);
 
   const childContext = useMemo(
     () => ({
@@ -170,6 +169,7 @@ export default function Outline(props: OutlineProps) {
 
   const eventProps = useMemo(
     () => makeEventProps(otherProps, () => outline),
+    // biome-ignore lint/correctness/useExhaustiveDependencies: FIXME
     [otherProps, outline],
   );
 

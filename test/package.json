@@ -7,8 +7,8 @@
   "scripts": {
     "build": "vite build",
     "dev": "vite",
-    "format": "prettier --check . --cache",
-    "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
+    "format": "biome format",
+    "lint": "biome lint",
     "preview": "vite preview",
     "test": "yarn lint && yarn tsc && yarn format",
     "tsc": "tsc"
@@ -25,11 +25,9 @@
     "tiny-invariant": "^1.0.0"
   },
   "devDependencies": {
+    "@biomejs/biome": "^1.8.0",
     "@types/react": "*",
     "@vitejs/plugin-react": "^4.2.0",
-    "eslint": "^8.56.0",
-    "eslint-config-wojtekmaj": "^1.0.0",
-    "prettier": "^3.2.0",
     "typescript": "^5.4.2",
     "vite": "^5.0.0",
     "vite-plugin-static-copy": "^1.0.0"

@@ -387,20 +387,22 @@ export default function Page(props: PageProps) {
     return scaleWithDefault * pageScale;
   }, [height, page, rotate, scaleProps, width]);
 
-  function hook() {
-    return () => {
-      if (!isProvided(pageIndex)) {
-        // Impossible, but TypeScript doesn't know that
-        return;
-      }
+  // biome-ignore lint/correctness/useExhaustiveDependencies: useEffect intentionally triggered on pdf change
+  useEffect(
+    function hook() {
+      return () => {
+        if (!isProvided(pageIndex)) {
+          // Impossible, but TypeScript doesn't know that
+          return;
+        }
 
-      if (_enableRegisterUnregisterPage && unregisterPage) {
-        unregisterPage(pageIndex);
-      }
-    };
-  }
-
-  useEffect(hook, [_enableRegisterUnregisterPage, pdf, pageIndex, unregisterPage]);
+        if (_enableRegisterUnregisterPage && unregisterPage) {
+          unregisterPage(pageIndex);
+        }
+      };
+    },
+    [_enableRegisterUnregisterPage, pdf, pageIndex, unregisterPage],
+  );
 
   /**
    * Called when a page is loaded successfully
@@ -441,50 +443,49 @@ export default function Page(props: PageProps) {
     }
   }
 
-  function resetPage() {
-    pageDispatch({ type: 'RESET' });
-  }
+  // biome-ignore lint/correctness/useExhaustiveDependencies: useEffect intentionally triggered on pdf change
+  useEffect(
+    function resetPage() {
+      pageDispatch({ type: 'RESET' });
+    },
+    [pageDispatch, pdf, pageIndex],
+  );
 
-  useEffect(resetPage, [pageDispatch, pdf, pageIndex]);
+  useEffect(
+    function loadPage() {
+      if (!pdf || !pageNumber) {
+        return;
+      }
 
-  function loadPage() {
-    if (!pdf || !pageNumber) {
+      const cancellable = makeCancellable(pdf.getPage(pageNumber));
+      const runningTask = cancellable;
+
+      cancellable.promise
+        .then((nextPage) => {
+          pageDispatch({ type: 'RESOLVE', value: nextPage });
+        })
+        .catch((error) => {
+          pageDispatch({ type: 'REJECT', error });
+        });
+
+      return () => cancelRunningTask(runningTask);
+    },
+    [pageDispatch, pdf, pageNumber],
+  );
+
+  // biome-ignore lint/correctness/useExhaustiveDependencies: Ommitted callbacks so they are not called every time they change
+  useEffect(() => {
+    if (page === undefined) {
       return;
     }
 
-    const cancellable = makeCancellable(pdf.getPage(pageNumber));
-    const runningTask = cancellable;
+    if (page === false) {
+      onLoadError();
+      return;
+    }
 
-    cancellable.promise
-      .then((nextPage) => {
-        pageDispatch({ type: 'RESOLVE', value: nextPage });
-      })
-      .catch((error) => {
-        pageDispatch({ type: 'REJECT', error });
-      });
-
-    return () => cancelRunningTask(runningTask);
-  }
-
-  useEffect(loadPage, [pageDispatch, pdf, pageIndex, pageNumber, registerPage]);
-
-  useEffect(
-    () => {
-      if (page === undefined) {
-        return;
-      }
-
-      if (page === false) {
-        onLoadError();
-        return;
-      }
-
-      onLoadSuccess();
-    },
-    // Ommitted callbacks so they are not called every time they change
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [page, scale],
-  );
+    onLoadSuccess();
+  }, [page, scale]);
 
   const childContext = useMemo(
     () =>
@@ -548,6 +549,7 @@ export default function Page(props: PageProps) {
       makeEventProps(otherProps, () =>
         page ? (scale ? makePageCallback(page, scale) : undefined) : page,
       ),
+    // biome-ignore lint/correctness/useExhaustiveDependencies: FIXME
     [otherProps, page, scale],
   );
 

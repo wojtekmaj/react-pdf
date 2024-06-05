@@ -87,66 +87,55 @@ export default function Canvas(props: CanvasProps) {
     [page, rotate, scale],
   );
 
-  function drawPageOnCanvas() {
-    if (!page) {
-      return;
-    }
-
-    // Ensures the canvas will be re-rendered from scratch. Otherwise all form data will stay.
-    page.cleanup();
-
-    const { current: canvas } = canvasElement;
-
-    if (!canvas) {
-      return;
-    }
-
-    canvas.width = renderViewport.width;
-    canvas.height = renderViewport.height;
-
-    canvas.style.width = `${Math.floor(viewport.width)}px`;
-    canvas.style.height = `${Math.floor(viewport.height)}px`;
-    canvas.style.visibility = 'hidden';
-
-    const renderContext: RenderParameters = {
-      annotationMode: renderForms ? ANNOTATION_MODE.ENABLE_FORMS : ANNOTATION_MODE.ENABLE,
-      canvasContext: canvas.getContext('2d', { alpha: false }) as CanvasRenderingContext2D,
-      viewport: renderViewport,
-    };
-    if (canvasBackground) {
-      renderContext.background = canvasBackground;
-    }
-
-    const cancellable = page.render(renderContext);
-    const runningTask = cancellable;
-
-    cancellable.promise
-      .then(() => {
-        canvas.style.visibility = '';
-
-        onRenderSuccess();
-      })
-      .catch(onRenderError);
-
-    return () => cancelRunningTask(runningTask);
-  }
-
+  // biome-ignore lint/correctness/useExhaustiveDependencies: Ommitted callbacks so they are not called every time they change
   useEffect(
-    drawPageOnCanvas,
-    // Ommitted callbacks so they are not called every time they change
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [
-      canvasBackground,
-      canvasElement,
-      devicePixelRatio,
-      page,
-      renderForms,
-      renderViewport,
-      viewport,
-    ],
+    function drawPageOnCanvas() {
+      if (!page) {
+        return;
+      }
+
+      // Ensures the canvas will be re-rendered from scratch. Otherwise all form data will stay.
+      page.cleanup();
+
+      const { current: canvas } = canvasElement;
+
+      if (!canvas) {
+        return;
+      }
+
+      canvas.width = renderViewport.width;
+      canvas.height = renderViewport.height;
+
+      canvas.style.width = `${Math.floor(viewport.width)}px`;
+      canvas.style.height = `${Math.floor(viewport.height)}px`;
+      canvas.style.visibility = 'hidden';
+
+      const renderContext: RenderParameters = {
+        annotationMode: renderForms ? ANNOTATION_MODE.ENABLE_FORMS : ANNOTATION_MODE.ENABLE,
+        canvasContext: canvas.getContext('2d', { alpha: false }) as CanvasRenderingContext2D,
+        viewport: renderViewport,
+      };
+      if (canvasBackground) {
+        renderContext.background = canvasBackground;
+      }
+
+      const cancellable = page.render(renderContext);
+      const runningTask = cancellable;
+
+      cancellable.promise
+        .then(() => {
+          canvas.style.visibility = '';
+
+          onRenderSuccess();
+        })
+        .catch(onRenderError);
+
+      return () => cancelRunningTask(runningTask);
+    },
+    [canvasBackground, page, renderForms, renderViewport, viewport],
   );
 
-  const cleanup = useCallback(() => {
+  useEffect(function cleanup() {
     const { current: canvas } = canvasElement;
 
     /**
@@ -157,9 +146,7 @@ export default function Canvas(props: CanvasProps) {
       canvas.width = 0;
       canvas.height = 0;
     }
-  }, [canvasElement]);
-
-  useEffect(() => cleanup, [cleanup]);
+  }, []);
 
   return (
     <canvas

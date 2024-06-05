@@ -1,0 +1,43 @@
+{
+  "$schema": "https://biomejs.dev/schemas/1.8.0/schema.json",
+  "files": {
+    "ignore": [".tsimp", "coverage", "dist", ".pnp.cjs", ".pnp.loader.mjs"]
+  },
+  "formatter": {
+    "lineWidth": 100,
+    "indentStyle": "space"
+  },
+  "linter": {
+    "rules": {
+      "complexity": {
+        "noUselessSwitchCase": "off"
+      },
+      "suspicious": {
+        "noConsoleLog": "warn"
+      }
+    }
+  },
+  "javascript": {
+    "formatter": {
+      "quoteStyle": "single"
+    }
+  },
+  "overrides": [
+    {
+      "include": ["**/package.json"],
+      "formatter": {
+        "lineWidth": 1
+      }
+    },
+    {
+      "include": ["**/vite.config.ts"],
+      "linter": {
+        "rules": {
+          "suspicious": {
+            "noConsoleLog": "off"
+          }
+        }
+      }
+    }
+  ]
+}

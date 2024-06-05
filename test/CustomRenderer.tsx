@@ -20,7 +20,7 @@ export default function CustomRenderer() {
     [page, rotate, scale],
   );
 
-  function drawPageOnCanvas() {
+  useEffect(() => {
     if (!page) {
       return;
     }
@@ -46,9 +46,7 @@ export default function CustomRenderer() {
     return () => {
       runningTask.cancel();
     };
-  }
-
-  useEffect(drawPageOnCanvas, [canvasElement, page, viewport]);
+  }, [page, viewport]);
 
   return (
     <canvas

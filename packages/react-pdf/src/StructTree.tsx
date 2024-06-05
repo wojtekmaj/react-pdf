@@ -50,55 +50,54 @@ export default function StructTree() {
     }
   }
 
-  function resetAnnotations() {
-    structTreeDispatch({ type: 'RESET' });
-  }
-
-  useEffect(resetAnnotations, [structTreeDispatch, page]);
-
-  function loadStructTree() {
-    if (customTextRenderer) {
-      // TODO: Document why this is necessary
-      return;
-    }
-
-    if (!page) {
-      return;
-    }
-
-    const cancellable = makeCancellable(page.getStructTree());
-    const runningTask = cancellable;
-
-    cancellable.promise
-      .then((nextStructTree) => {
-        structTreeDispatch({ type: 'RESOLVE', value: nextStructTree });
-      })
-      .catch((error) => {
-        structTreeDispatch({ type: 'REJECT', error });
-      });
-
-    return () => cancelRunningTask(runningTask);
-  }
-
-  useEffect(loadStructTree, [customTextRenderer, page, structTreeDispatch]);
+  // biome-ignore lint/correctness/useExhaustiveDependencies: useEffect intentionally triggered on page change
+  useEffect(
+    function resetAnnotations() {
+      structTreeDispatch({ type: 'RESET' });
+    },
+    [structTreeDispatch, page],
+  );
 
   useEffect(
-    () => {
-      if (structTree === undefined) {
+    function loadStructTree() {
+      if (customTextRenderer) {
+        // TODO: Document why this is necessary
         return;
       }
 
-      if (structTree === false) {
-        onLoadError();
+      if (!page) {
         return;
       }
 
-      onLoadSuccess();
+      const cancellable = makeCancellable(page.getStructTree());
+      const runningTask = cancellable;
+
+      cancellable.promise
+        .then((nextStructTree) => {
+          structTreeDispatch({ type: 'RESOLVE', value: nextStructTree });
+        })
+        .catch((error) => {
+          structTreeDispatch({ type: 'REJECT', error });
+        });
+
+      return () => cancelRunningTask(runningTask);
     },
-    // Ommitted callbacks so they are not called every time they change
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [structTree],
+    [customTextRenderer, page, structTreeDispatch],
   );
+
+  // biome-ignore lint/correctness/useExhaustiveDependencies: Ommitted callbacks so they are not called every time they change
+  useEffect(() => {
+    if (structTree === undefined) {
+      return;
+    }
+
+    if (structTree === false) {
+      onLoadError();
+      return;
+    }
+
+    onLoadSuccess();
+  }, [structTree]);
 
   if (!structTree) {
     return null;

@@ -47,7 +47,7 @@ export default function AnnotationLayer() {
   const layerElement = useRef<HTMLDivElement>(null);
 
   warning(
-    parseInt(
+    Number.parseInt(
       window.getComputedStyle(document.body).getPropertyValue('--react-pdf-annotation-layer'),
       10,
     ) === 1,
@@ -78,52 +78,51 @@ export default function AnnotationLayer() {
     }
   }
 
-  function resetAnnotations() {
-    annotationsDispatch({ type: 'RESET' });
-  }
+  // biome-ignore lint/correctness/useExhaustiveDependencies: useEffect intentionally triggered on page change
+  useEffect(
+    function resetAnnotations() {
+      annotationsDispatch({ type: 'RESET' });
+    },
+    [annotationsDispatch, page],
+  );
 
-  useEffect(resetAnnotations, [annotationsDispatch, page]);
+  useEffect(
+    function loadAnnotations() {
+      if (!page) {
+        return;
+      }
 
-  function loadAnnotations() {
-    if (!page) {
+      const cancellable = makeCancellable(page.getAnnotations());
+      const runningTask = cancellable;
+
+      cancellable.promise
+        .then((nextAnnotations) => {
+          annotationsDispatch({ type: 'RESOLVE', value: nextAnnotations });
+        })
+        .catch((error) => {
+          annotationsDispatch({ type: 'REJECT', error });
+        });
+
+      return () => {
+        cancelRunningTask(runningTask);
+      };
+    },
+    [annotationsDispatch, page],
+  );
+
+  // biome-ignore lint/correctness/useExhaustiveDependencies: Ommitted callbacks so they are not called every time they change
+  useEffect(() => {
+    if (annotations === undefined) {
       return;
     }
 
-    const cancellable = makeCancellable(page.getAnnotations());
-    const runningTask = cancellable;
+    if (annotations === false) {
+      onLoadError();
+      return;
+    }
 
-    cancellable.promise
-      .then((nextAnnotations) => {
-        annotationsDispatch({ type: 'RESOLVE', value: nextAnnotations });
-      })
-      .catch((error) => {
-        annotationsDispatch({ type: 'REJECT', error });
-      });
-
-    return () => {
-      cancelRunningTask(runningTask);
-    };
-  }
-
-  useEffect(loadAnnotations, [annotationsDispatch, page, renderForms]);
-
-  useEffect(
-    () => {
-      if (annotations === undefined) {
-        return;
-      }
-
-      if (annotations === false) {
-        onLoadError();
-        return;
-      }
-
-      onLoadSuccess();
-    },
-    // Ommitted callbacks so they are not called every time they change
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [annotations],
-  );
+    onLoadSuccess();
+  }, [annotations]);
 
   function onRenderSuccess() {
     if (onRenderAnnotationLayerSuccessProps) {
@@ -144,60 +143,57 @@ export default function AnnotationLayer() {
     [page, rotate, scale],
   );
 
-  function renderAnnotationLayer() {
-    if (!pdf || !page || !linkService || !annotations) {
-      return;
-    }
-
-    const { current: layer } = layerElement;
-
-    if (!layer) {
-      return;
-    }
-
-    const clonedViewport = viewport.clone({ dontFlip: true });
-
-    const annotationLayerParameters = {
-      accessibilityManager: null, // TODO: Implement this
-      annotationCanvasMap: null, // TODO: Implement this
-      annotationEditorUIManager: null, // TODO: Implement this
-      div: layer,
-      l10n: null, // TODO: Implement this
-      page,
-      viewport: clonedViewport,
-    };
-
-    const renderParameters = {
-      annotations,
-      annotationStorage: pdf.annotationStorage,
-      div: layer,
-      imageResourcesPath,
-      linkService,
-      page,
-      renderForms,
-      viewport: clonedViewport,
-    };
-
-    layer.innerHTML = '';
-
-    try {
-      new pdfjs.AnnotationLayer(annotationLayerParameters).render(renderParameters);
-
-      // Intentional immediate callback
-      onRenderSuccess();
-    } catch (error) {
-      onRenderError(error);
-    }
-
-    return () => {
-      // TODO: Cancel running task?
-    };
-  }
-
+  // biome-ignore lint/correctness/useExhaustiveDependencies: Ommitted callbacks so they are not called every time they change
   useEffect(
-    renderAnnotationLayer,
-    // Ommitted callbacks so they are not called every time they change
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    function renderAnnotationLayer() {
+      if (!pdf || !page || !linkService || !annotations) {
+        return;
+      }
+
+      const { current: layer } = layerElement;
+
+      if (!layer) {
+        return;
+      }
+
+      const clonedViewport = viewport.clone({ dontFlip: true });
+
+      const annotationLayerParameters = {
+        accessibilityManager: null, // TODO: Implement this
+        annotationCanvasMap: null, // TODO: Implement this
+        annotationEditorUIManager: null, // TODO: Implement this
+        div: layer,
+        l10n: null, // TODO: Implement this
+        page,
+        viewport: clonedViewport,
+      };
+
+      const renderParameters = {
+        annotations,
+        annotationStorage: pdf.annotationStorage,
+        div: layer,
+        imageResourcesPath,
+        linkService,
+        page,
+        renderForms,
+        viewport: clonedViewport,
+      };
+
+      layer.innerHTML = '';
+
+      try {
+        new pdfjs.AnnotationLayer(annotationLayerParameters).render(renderParameters);
+
+        // Intentional immediate callback
+        onRenderSuccess();
+      } catch (error) {
+        onRenderError(error);
+      }
+
+      return () => {
+        // TODO: Cancel running task?
+      };
+    },
     [annotations, imageResourcesPath, linkService, page, renderForms, viewport],
   );
 

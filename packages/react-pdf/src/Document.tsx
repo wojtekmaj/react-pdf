@@ -208,13 +208,11 @@ export type DocumentProps = {
 const defaultOnPassword: OnPassword = (callback, reason) => {
   switch (reason) {
     case PasswordResponses.NEED_PASSWORD: {
-      // eslint-disable-next-line no-alert
       const password = prompt('Enter the password to open this PDF file.');
       callback(password);
       break;
     }
     case PasswordResponses.INCORRECT_PASSWORD: {
-      // eslint-disable-next-line no-alert
       const password = prompt('Invalid password. Please try again.');
       callback(password);
       break;
@@ -353,11 +351,13 @@ const Document = forwardRef(function Document(
     }
   }
 
-  function resetSource() {
-    sourceDispatch({ type: 'RESET' });
-  }
-
-  useEffect(resetSource, [file, sourceDispatch]);
+  // biome-ignore lint/correctness/useExhaustiveDependencies: useEffect intentionally triggered on file change
+  useEffect(
+    function resetSource() {
+      sourceDispatch({ type: 'RESET' });
+    },
+    [file, sourceDispatch],
+  );
 
   const findDocumentSource = useCallback(async (): Promise<Source | null> => {
     if (!file) {
@@ -439,23 +439,19 @@ const Document = forwardRef(function Document(
     };
   }, [findDocumentSource, sourceDispatch]);
 
-  useEffect(
-    () => {
-      if (typeof source === 'undefined') {
-        return;
-      }
+  // biome-ignore lint/correctness/useExhaustiveDependencies: Ommitted callbacks so they are not called every time they change
+  useEffect(() => {
+    if (typeof source === 'undefined') {
+      return;
+    }
 
-      if (source === false) {
-        onSourceError();
-        return;
-      }
+    if (source === false) {
+      onSourceError();
+      return;
+    }
 
-      onSourceSuccess();
-    },
-    // Ommitted callbacks so they are not called every time they change
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [source],
-  );
+    onSourceSuccess();
+  }, [source]);
 
   /**
    * Called when a document is read successfully
@@ -490,11 +486,13 @@ const Document = forwardRef(function Document(
     }
   }
 
-  function resetDocument() {
-    pdfDispatch({ type: 'RESET' });
-  }
-
-  useEffect(resetDocument, [pdfDispatch, source]);
+  // biome-ignore lint/correctness/useExhaustiveDependencies: useEffect intentionally triggered on source change
+  useEffect(
+    function resetDocument() {
+      pdfDispatch({ type: 'RESET' });
+    },
+    [pdfDispatch, source],
+  );
 
   function loadDocument() {
     if (!source) {
@@ -532,46 +530,39 @@ const Document = forwardRef(function Document(
     };
   }
 
-  useEffect(
-    loadDocument,
-    // Ommitted callbacks so they are not called every time they change
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [options, pdfDispatch, source],
-  );
+  // biome-ignore lint/correctness/useExhaustiveDependencies: Ommitted callbacks so they are not called every time they change
+  useEffect(loadDocument, [options, pdfDispatch, source]);
+
+  // biome-ignore lint/correctness/useExhaustiveDependencies: Ommitted callbacks so they are not called every time they change
+  useEffect(() => {
+    if (typeof pdf === 'undefined') {
+      return;
+    }
+
+    if (pdf === false) {
+      onLoadError();
+      return;
+    }
+
+    onLoadSuccess();
+  }, [pdf]);
 
   useEffect(
-    () => {
-      if (typeof pdf === 'undefined') {
-        return;
-      }
-
-      if (pdf === false) {
-        onLoadError();
-        return;
-      }
-
-      onLoadSuccess();
+    function setupLinkService() {
+      linkService.current.setViewer(viewer.current);
+      linkService.current.setExternalLinkRel(externalLinkRel);
+      linkService.current.setExternalLinkTarget(externalLinkTarget);
     },
-    // Ommitted callbacks so they are not called every time they change
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [pdf],
+    [externalLinkRel, externalLinkTarget],
   );
 
-  function setupLinkService() {
-    linkService.current.setViewer(viewer.current);
-    linkService.current.setExternalLinkRel(externalLinkRel);
-    linkService.current.setExternalLinkTarget(externalLinkTarget);
-  }
-
-  useEffect(setupLinkService, [externalLinkRel, externalLinkTarget]);
-
-  function registerPage(pageIndex: number, ref: HTMLDivElement) {
+  const registerPage = useCallback((pageIndex: number, ref: HTMLDivElement) => {
     pages.current[pageIndex] = ref;
-  }
+  }, []);
 
-  function unregisterPage(pageIndex: number) {
+  const unregisterPage = useCallback((pageIndex: number) => {
     delete pages.current[pageIndex];
-  }
+  }, []);
 
   const childContext = useMemo(
     () => ({
@@ -584,10 +575,14 @@ const Document = forwardRef(function Document(
       rotate,
       unregisterPage,
     }),
-    [imageResourcesPath, onItemClick, pdf, renderMode, rotate],
+    [imageResourcesPath, onItemClick, pdf, registerPage, renderMode, rotate, unregisterPage],
   );
 
-  const eventProps = useMemo(() => makeEventProps(otherProps, () => pdf), [otherProps, pdf]);
+  const eventProps = useMemo(
+    () => makeEventProps(otherProps, () => pdf),
+    // biome-ignore lint/correctness/useExhaustiveDependencies: FIXME
+    [otherProps, pdf],
+  );
 
   function renderChildren() {
     return <DocumentContext.Provider value={childContext}>{children}</DocumentContext.Provider>;
