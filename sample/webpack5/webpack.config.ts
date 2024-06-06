@@ -17,6 +17,10 @@ const standardFontsDir = path.join(
 
 const config = {
   mode: isProduction ? 'production' : 'development',
+  /**
+   * Critical: prevents "Uncaught TypeError: Object.defineProperty called on non-object" error
+   */
+  devtool: 'cheap-source-map',
   bail: isProduction,
   context: path.join(__dirname),
   entry: {
