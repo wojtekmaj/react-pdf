@@ -7,8 +7,8 @@
   "scripts": {
     "build": "yarn copy && parcel build index.html --public-url ./",
     "copy": "yarn copy-cmaps && yarn copy-standard-fonts",
-    "copy-cmaps": "node --loader ts-node/esm ./scripts/copy-cmaps.ts",
-    "copy-standard-fonts": "node --loader ts-node/esm ./scripts/copy-standard-fonts.ts",
+    "copy-cmaps": "node --import tsimp/import ./scripts/copy-cmaps.ts",
+    "copy-standard-fonts": "node --import tsimp/import ./scripts/copy-standard-fonts.ts",
     "dev": "yarn copy && parcel index.html"
   },
   "author": {
