@@ -1,6 +1,10 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   experimental: {
+    /**
+     * Critical: prevents "ESM packages (pdfjs-dist/build/pdf.worker.min.mjs) need to be imported." error
+     */
+    esmExternals: 'loose',
     turbo: {
       resolveAlias: {
         // Turbopack does not support standard ESM import paths yet
