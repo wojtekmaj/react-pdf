@@ -387,21 +387,22 @@ export default function Page(props: PageProps) {
     return scaleWithDefault * pageScale;
   }, [height, page, rotate, scaleProps, width]);
 
-  function hook() {
-    return () => {
-      if (!isProvided(pageIndex)) {
-        // Impossible, but TypeScript doesn't know that
-        return;
-      }
+  // biome-ignore lint/correctness/useExhaustiveDependencies: useEffect intentionally triggered on pdf change
+  useEffect(
+    function hook() {
+      return () => {
+        if (!isProvided(pageIndex)) {
+          // Impossible, but TypeScript doesn't know that
+          return;
+        }
 
-      if (_enableRegisterUnregisterPage && unregisterPage) {
-        unregisterPage(pageIndex);
-      }
-    };
-  }
-
-  // biome-ignore lint/correctness/useExhaustiveDependencies: See https://github.com/biomejs/biome/issues/3080
-  useEffect(hook, [_enableRegisterUnregisterPage, pdf, pageIndex, unregisterPage]);
+        if (_enableRegisterUnregisterPage && unregisterPage) {
+          unregisterPage(pageIndex);
+        }
+      };
+    },
+    [_enableRegisterUnregisterPage, pdf, pageIndex, unregisterPage],
+  );
 
   /**
    * Called when a page is loaded successfully
@@ -442,34 +443,35 @@ export default function Page(props: PageProps) {
     }
   }
 
-  function resetPage() {
-    pageDispatch({ type: 'RESET' });
-  }
+  // biome-ignore lint/correctness/useExhaustiveDependencies: useEffect intentionally triggered on pdf and pageIndex change
+  useEffect(
+    function resetPage() {
+      pageDispatch({ type: 'RESET' });
+    },
+    [pageDispatch, pdf, pageIndex],
+  );
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: See https://github.com/biomejs/biome/issues/3080
-  useEffect(resetPage, [pageDispatch, pdf, pageIndex]);
+  useEffect(
+    function loadPage() {
+      if (!pdf || !pageNumber) {
+        return;
+      }
 
-  function loadPage() {
-    if (!pdf || !pageNumber) {
-      return;
-    }
+      const cancellable = makeCancellable(pdf.getPage(pageNumber));
+      const runningTask = cancellable;
 
-    const cancellable = makeCancellable(pdf.getPage(pageNumber));
-    const runningTask = cancellable;
+      cancellable.promise
+        .then((nextPage) => {
+          pageDispatch({ type: 'RESOLVE', value: nextPage });
+        })
+        .catch((error) => {
+          pageDispatch({ type: 'REJECT', error });
+        });
 
-    cancellable.promise
-      .then((nextPage) => {
-        pageDispatch({ type: 'RESOLVE', value: nextPage });
-      })
-      .catch((error) => {
-        pageDispatch({ type: 'REJECT', error });
-      });
-
-    return () => cancelRunningTask(runningTask);
-  }
-
-  // biome-ignore lint/correctness/useExhaustiveDependencies: See https://github.com/biomejs/biome/issues/3080
-  useEffect(loadPage, [pageDispatch, pdf, pageNumber]);
+      return () => cancelRunningTask(runningTask);
+    },
+    [pageDispatch, pdf, pageNumber],
+  );
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: Ommitted callbacks so they are not called every time they change
   useEffect(() => {

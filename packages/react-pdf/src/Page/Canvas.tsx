@@ -87,52 +87,53 @@ export default function Canvas(props: CanvasProps) {
     [page, rotate, scale],
   );
 
-  function drawPageOnCanvas() {
-    if (!page) {
-      return;
-    }
+  // biome-ignore lint/correctness/useExhaustiveDependencies: Ommitted callbacks so they are not called every time they change
+  useEffect(
+    function drawPageOnCanvas() {
+      if (!page) {
+        return;
+      }
 
-    // Ensures the canvas will be re-rendered from scratch. Otherwise all form data will stay.
-    page.cleanup();
+      // Ensures the canvas will be re-rendered from scratch. Otherwise all form data will stay.
+      page.cleanup();
 
-    const { current: canvas } = canvasElement;
+      const { current: canvas } = canvasElement;
 
-    if (!canvas) {
-      return;
-    }
+      if (!canvas) {
+        return;
+      }
 
-    canvas.width = renderViewport.width;
-    canvas.height = renderViewport.height;
+      canvas.width = renderViewport.width;
+      canvas.height = renderViewport.height;
 
-    canvas.style.width = `${Math.floor(viewport.width)}px`;
-    canvas.style.height = `${Math.floor(viewport.height)}px`;
-    canvas.style.visibility = 'hidden';
+      canvas.style.width = `${Math.floor(viewport.width)}px`;
+      canvas.style.height = `${Math.floor(viewport.height)}px`;
+      canvas.style.visibility = 'hidden';
 
-    const renderContext: RenderParameters = {
-      annotationMode: renderForms ? ANNOTATION_MODE.ENABLE_FORMS : ANNOTATION_MODE.ENABLE,
-      canvasContext: canvas.getContext('2d', { alpha: false }) as CanvasRenderingContext2D,
-      viewport: renderViewport,
-    };
-    if (canvasBackground) {
-      renderContext.background = canvasBackground;
-    }
+      const renderContext: RenderParameters = {
+        annotationMode: renderForms ? ANNOTATION_MODE.ENABLE_FORMS : ANNOTATION_MODE.ENABLE,
+        canvasContext: canvas.getContext('2d', { alpha: false }) as CanvasRenderingContext2D,
+        viewport: renderViewport,
+      };
+      if (canvasBackground) {
+        renderContext.background = canvasBackground;
+      }
 
-    const cancellable = page.render(renderContext);
-    const runningTask = cancellable;
+      const cancellable = page.render(renderContext);
+      const runningTask = cancellable;
 
-    cancellable.promise
-      .then(() => {
-        canvas.style.visibility = '';
+      cancellable.promise
+        .then(() => {
+          canvas.style.visibility = '';
 
-        onRenderSuccess();
-      })
-      .catch(onRenderError);
+          onRenderSuccess();
+        })
+        .catch(onRenderError);
 
-    return () => cancelRunningTask(runningTask);
-  }
-
-  // biome-ignore lint/correctness/useExhaustiveDependencies: See https://github.com/biomejs/biome/issues/3080
-  useEffect(drawPageOnCanvas, [canvasBackground, page, renderForms, renderViewport, viewport]);
+      return () => cancelRunningTask(runningTask);
+    },
+    [canvasBackground, page, renderForms, renderViewport, viewport],
+  );
 
   const cleanup = useCallback(() => {
     const { current: canvas } = canvasElement;

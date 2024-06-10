@@ -50,39 +50,40 @@ export default function StructTree() {
     }
   }
 
-  function resetStructTree() {
-    structTreeDispatch({ type: 'RESET' });
-  }
+  // biome-ignore lint/correctness/useExhaustiveDependencies: useEffect intentionally triggered on page change
+  useEffect(
+    function resetStructTree() {
+      structTreeDispatch({ type: 'RESET' });
+    },
+    [structTreeDispatch, page],
+  );
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: See https://github.com/biomejs/biome/issues/3080
-  useEffect(resetStructTree, [structTreeDispatch, page]);
+  useEffect(
+    function loadStructTree() {
+      if (customTextRenderer) {
+        // TODO: Document why this is necessary
+        return;
+      }
 
-  function loadStructTree() {
-    if (customTextRenderer) {
-      // TODO: Document why this is necessary
-      return;
-    }
+      if (!page) {
+        return;
+      }
 
-    if (!page) {
-      return;
-    }
+      const cancellable = makeCancellable(page.getStructTree());
+      const runningTask = cancellable;
 
-    const cancellable = makeCancellable(page.getStructTree());
-    const runningTask = cancellable;
+      cancellable.promise
+        .then((nextStructTree) => {
+          structTreeDispatch({ type: 'RESOLVE', value: nextStructTree });
+        })
+        .catch((error) => {
+          structTreeDispatch({ type: 'REJECT', error });
+        });
 
-    cancellable.promise
-      .then((nextStructTree) => {
-        structTreeDispatch({ type: 'RESOLVE', value: nextStructTree });
-      })
-      .catch((error) => {
-        structTreeDispatch({ type: 'REJECT', error });
-      });
-
-    return () => cancelRunningTask(runningTask);
-  }
-
-  // biome-ignore lint/correctness/useExhaustiveDependencies: See https://github.com/biomejs/biome/issues/3080
-  useEffect(loadStructTree, [customTextRenderer, page, structTreeDispatch]);
+      return () => cancelRunningTask(runningTask);
+    },
+    [customTextRenderer, page, structTreeDispatch],
+  );
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: Ommitted callbacks so they are not called every time they change
   useEffect(() => {

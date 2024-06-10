@@ -20,36 +20,36 @@ export default function CustomRenderer() {
     [page, rotate, scale],
   );
 
-  function drawPageOnCanvas() {
-    if (!page) {
-      return;
-    }
+  useEffect(
+    function drawPageOnCanvas() {
+      if (!page) {
+        return;
+      }
 
-    const { current: canvas } = canvasElement;
+      const { current: canvas } = canvasElement;
 
-    if (!canvas) {
-      return;
-    }
+      if (!canvas) {
+        return;
+      }
 
-    const renderContext: RenderParameters = {
-      canvasContext: canvas.getContext('2d', { alpha: false }) as CanvasRenderingContext2D,
-      viewport,
-    };
+      const renderContext: RenderParameters = {
+        canvasContext: canvas.getContext('2d', { alpha: false }) as CanvasRenderingContext2D,
+        viewport,
+      };
 
-    const cancellable = page.render(renderContext);
-    const runningTask = cancellable;
+      const cancellable = page.render(renderContext);
+      const runningTask = cancellable;
 
-    cancellable.promise.catch(() => {
-      // Intentionally empty
-    });
+      cancellable.promise.catch(() => {
+        // Intentionally empty
+      });
 
-    return () => {
-      runningTask.cancel();
-    };
-  }
-
-  // biome-ignore lint/correctness/useExhaustiveDependencies: See https://github.com/biomejs/biome/issues/3080
-  useEffect(drawPageOnCanvas, [page, viewport]);
+      return () => {
+        runningTask.cancel();
+      };
+    },
+    [page, viewport],
+  );
 
   return (
     <canvas

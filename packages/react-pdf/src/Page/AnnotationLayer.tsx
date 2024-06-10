@@ -78,36 +78,37 @@ export default function AnnotationLayer() {
     }
   }
 
-  function resetAnnotations() {
-    annotationsDispatch({ type: 'RESET' });
-  }
+  // biome-ignore lint/correctness/useExhaustiveDependencies: useEffect intentionally triggered on page change
+  useEffect(
+    function resetAnnotations() {
+      annotationsDispatch({ type: 'RESET' });
+    },
+    [annotationsDispatch, page],
+  );
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: See https://github.com/biomejs/biome/issues/3080
-  useEffect(resetAnnotations, [annotationsDispatch, page]);
+  useEffect(
+    function loadAnnotations() {
+      if (!page) {
+        return;
+      }
 
-  function loadAnnotations() {
-    if (!page) {
-      return;
-    }
+      const cancellable = makeCancellable(page.getAnnotations());
+      const runningTask = cancellable;
 
-    const cancellable = makeCancellable(page.getAnnotations());
-    const runningTask = cancellable;
+      cancellable.promise
+        .then((nextAnnotations) => {
+          annotationsDispatch({ type: 'RESOLVE', value: nextAnnotations });
+        })
+        .catch((error) => {
+          annotationsDispatch({ type: 'REJECT', error });
+        });
 
-    cancellable.promise
-      .then((nextAnnotations) => {
-        annotationsDispatch({ type: 'RESOLVE', value: nextAnnotations });
-      })
-      .catch((error) => {
-        annotationsDispatch({ type: 'REJECT', error });
-      });
-
-    return () => {
-      cancelRunningTask(runningTask);
-    };
-  }
-
-  // biome-ignore lint/correctness/useExhaustiveDependencies: See https://github.com/biomejs/biome/issues/3080
-  useEffect(loadAnnotations, [annotationsDispatch, page]);
+      return () => {
+        cancelRunningTask(runningTask);
+      };
+    },
+    [annotationsDispatch, page],
+  );
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: Ommitted callbacks so they are not called every time they change
   useEffect(() => {
@@ -142,66 +143,59 @@ export default function AnnotationLayer() {
     [page, rotate, scale],
   );
 
-  function renderAnnotationLayer() {
-    if (!pdf || !page || !linkService || !annotations) {
-      return;
-    }
+  // biome-ignore lint/correctness/useExhaustiveDependencies: Ommitted callbacks so they are not called every time they change
+  useEffect(
+    function renderAnnotationLayer() {
+      if (!pdf || !page || !linkService || !annotations) {
+        return;
+      }
 
-    const { current: layer } = layerElement;
+      const { current: layer } = layerElement;
 
-    if (!layer) {
-      return;
-    }
+      if (!layer) {
+        return;
+      }
 
-    const clonedViewport = viewport.clone({ dontFlip: true });
+      const clonedViewport = viewport.clone({ dontFlip: true });
 
-    const annotationLayerParameters = {
-      accessibilityManager: null, // TODO: Implement this
-      annotationCanvasMap: null, // TODO: Implement this
-      annotationEditorUIManager: null, // TODO: Implement this
-      div: layer,
-      l10n: null, // TODO: Implement this
-      page,
-      viewport: clonedViewport,
-    };
+      const annotationLayerParameters = {
+        accessibilityManager: null, // TODO: Implement this
+        annotationCanvasMap: null, // TODO: Implement this
+        annotationEditorUIManager: null, // TODO: Implement this
+        div: layer,
+        l10n: null, // TODO: Implement this
+        page,
+        viewport: clonedViewport,
+      };
 
-    const renderParameters = {
-      annotations,
-      annotationStorage: pdf.annotationStorage,
-      div: layer,
-      imageResourcesPath,
-      linkService,
-      page,
-      renderForms,
-      viewport: clonedViewport,
-    };
+      const renderParameters = {
+        annotations,
+        annotationStorage: pdf.annotationStorage,
+        div: layer,
+        imageResourcesPath,
+        linkService,
+        page,
+        renderForms,
+        viewport: clonedViewport,
+      };
 
-    layer.innerHTML = '';
+      layer.innerHTML = '';
 
-    try {
-      new pdfjs.AnnotationLayer(annotationLayerParameters).render(renderParameters);
+      try {
+        new pdfjs.AnnotationLayer(annotationLayerParameters).render(renderParameters);
 
-      // Intentional immediate callback
-      onRenderSuccess();
-    } catch (error) {
-      onRenderError(error);
-    }
+        // Intentional immediate callback
+        onRenderSuccess();
+      } catch (error) {
+        onRenderError(error);
+      }
 
-    return () => {
-      // TODO: Cancel running task?
-    };
-  }
-
-  // biome-ignore lint/correctness/useExhaustiveDependencies: See https://github.com/biomejs/biome/issues/3080
-  useEffect(renderAnnotationLayer, [
-    annotations,
-    imageResourcesPath,
-    linkService,
-    page,
-    pdf,
-    renderForms,
-    viewport,
-  ]);
+      return () => {
+        // TODO: Cancel running task?
+      };
+    },
+    [annotations, imageResourcesPath, linkService, page, pdf, renderForms, viewport],
+  );
 
   return (
     <div className={clsx('react-pdf__Page__annotations', 'annotationLayer')} ref={layerElement} />

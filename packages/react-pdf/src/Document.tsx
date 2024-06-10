@@ -485,51 +485,53 @@ const Document = forwardRef(function Document(
     }
   }
 
-  function resetDocument() {
-    pdfDispatch({ type: 'RESET' });
-  }
+  // biome-ignore lint/correctness/useExhaustiveDependencies: useEffect intentionally triggered on source change
+  useEffect(
+    function resetDocument() {
+      pdfDispatch({ type: 'RESET' });
+    },
+    [pdfDispatch, source],
+  );
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: See https://github.com/biomejs/biome/issues/3080
-  useEffect(resetDocument, [pdfDispatch, source]);
+  // biome-ignore lint/correctness/useExhaustiveDependencies: Ommitted callbacks so they are not called every time they change
+  useEffect(
+    function loadDocument() {
+      if (!source) {
+        return;
+      }
 
-  function loadDocument() {
-    if (!source) {
-      return;
-    }
+      const documentInitParams: Source = {
+        ...source,
+        ...options,
+      };
 
-    const documentInitParams: Source = {
-      ...source,
-      ...options,
-    };
+      const destroyable = pdfjs.getDocument(documentInitParams);
+      if (onLoadProgress) {
+        destroyable.onProgress = onLoadProgress;
+      }
+      if (onPassword) {
+        destroyable.onPassword = onPassword;
+      }
+      const loadingTask = destroyable;
 
-    const destroyable = pdfjs.getDocument(documentInitParams);
-    if (onLoadProgress) {
-      destroyable.onProgress = onLoadProgress;
-    }
-    if (onPassword) {
-      destroyable.onPassword = onPassword;
-    }
-    const loadingTask = destroyable;
+      loadingTask.promise
+        .then((nextPdf) => {
+          pdfDispatch({ type: 'RESOLVE', value: nextPdf });
+        })
+        .catch((error) => {
+          if (loadingTask.destroyed) {
+            return;
+          }
 
-    loadingTask.promise
-      .then((nextPdf) => {
-        pdfDispatch({ type: 'RESOLVE', value: nextPdf });
-      })
-      .catch((error) => {
-        if (loadingTask.destroyed) {
-          return;
-        }
+          pdfDispatch({ type: 'REJECT', error });
+        });
 
-        pdfDispatch({ type: 'REJECT', error });
-      });
-
-    return () => {
-      loadingTask.destroy();
-    };
-  }
-
-  // biome-ignore lint/correctness/useExhaustiveDependencies: See https://github.com/biomejs/biome/issues/3080
-  useEffect(loadDocument, [options, pdfDispatch, source]);
+      return () => {
+        loadingTask.destroy();
+      };
+    },
+    [options, pdfDispatch, source],
+  );
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: Ommitted callbacks so they are not called every time they change
   useEffect(() => {
@@ -545,14 +547,14 @@ const Document = forwardRef(function Document(
     onLoadSuccess();
   }, [pdf]);
 
-  function setupLinkService() {
-    linkService.current.setViewer(viewer.current);
-    linkService.current.setExternalLinkRel(externalLinkRel);
-    linkService.current.setExternalLinkTarget(externalLinkTarget);
-  }
-
-  // biome-ignore lint/correctness/useExhaustiveDependencies: See https://github.com/biomejs/biome/issues/3080
-  useEffect(setupLinkService, [externalLinkRel, externalLinkTarget]);
+  useEffect(
+    function setupLinkService() {
+      linkService.current.setViewer(viewer.current);
+      linkService.current.setExternalLinkRel(externalLinkRel);
+      linkService.current.setExternalLinkTarget(externalLinkTarget);
+    },
+    [externalLinkRel, externalLinkTarget],
+  );
 
   const registerPage = useCallback((pageIndex: number, ref: HTMLDivElement) => {
     pages.current[pageIndex] = ref;
