@@ -50,12 +50,12 @@ export default function StructTree() {
     }
   }
 
-  function resetAnnotations() {
+  function resetStructTree() {
     structTreeDispatch({ type: 'RESET' });
   }
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: See https://github.com/biomejs/biome/issues/3080
-  useEffect(resetAnnotations, [structTreeDispatch, page]);
+  useEffect(resetStructTree, [structTreeDispatch, page]);
 
   function loadStructTree() {
     if (customTextRenderer) {
