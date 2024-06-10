@@ -198,6 +198,7 @@ export default function AnnotationLayer() {
     imageResourcesPath,
     linkService,
     page,
+    pdf,
     renderForms,
     viewport,
   ]);
