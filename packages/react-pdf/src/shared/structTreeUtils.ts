@@ -83,7 +83,9 @@ export function getBaseAttributes(
   return attributes;
 }
 
-export function getAttributes(node: StructTreeNodeWithExtraAttributes | StructTreeContent) {
+export function getAttributes(
+  node: StructTreeNodeWithExtraAttributes | StructTreeContent,
+): Attributes | null {
   if (!node) {
     return null;
   }
