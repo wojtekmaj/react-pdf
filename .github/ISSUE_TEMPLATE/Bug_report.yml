@@ -24,7 +24,7 @@ body:
     attributes:
       label: Steps to reproduce
       description: |
-        Steps to reproduce the behavior.
+        Steps to reproduce the behavior or, if applicable, a minimal code snippet to reproduce the behavior.
 
         Example:
           1. Go to '…'
@@ -55,11 +55,11 @@ body:
       description: |
         Example:
           - **Browser (if applicable)**: Chrome 96, Firefox 94
-          - **React-PDF version**: 5.5.0
-          - **React version**: 17.0.0
-          - **Webpack version (if applicable)**: 5.50.0
+          - **React-PDF version**: 9.0.0
+          - **React version**: 18.2.0
+          - **Bundler name and version (if applicable)**: Vite 5.2.0
       value: |
           - **Browser (if applicable)**:
           - **React-PDF version**:
           - **React version**:
-          - **Webpack version (if applicable)**:
+          - **Bundler name and version (if applicable)**:
