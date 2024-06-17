@@ -42,7 +42,7 @@
     "test": "yarn lint && yarn tsc && yarn format && yarn unit",
     "tsc": "tsc",
     "unit": "vitest",
-    "watch": "yarn build-js-esm --watch & yarn build-js-cjs --watch & nodemon --watch src --ext css --exec \"yarn copy-styles\""
+    "watch": "yarn build-js-esm --watch & yarn build-js-cjs --watch & node --eval \"fs.watch('src', () => child_process.exec('yarn copy-styles'))\""
   },
   "keywords": [
     "pdf",
@@ -76,7 +76,6 @@
     "core-js": "^3.37.0",
     "cpy-cli": "^5.0.0",
     "jsdom": "^24.0.0",
-    "nodemon": "^3.0.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "rimraf": "^3.0.0",
