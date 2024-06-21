@@ -23,5 +23,5 @@
   "resolutions": {
     "pdfjs-dist": "patch:pdfjs-dist@npm:4.3.136#.yarn/patches/pdfjs-dist-npm-4.3.136-35a0e70ced.patch"
   },
-  "packageManager": "yarn@4.1.1"
+  "packageManager": "yarn@4.3.1"
 }
