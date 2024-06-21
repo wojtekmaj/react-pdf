@@ -3454,7 +3454,7 @@ __metadata:
     react-dom: "npm:^18.2.0"
     rimraf: "npm:^3.0.0"
     tiny-invariant: "npm:^1.0.0"
-    typescript: "npm:^5.4.2"
+    typescript: "npm:^5.5.2"
     vitest: "npm:^1.0.2"
     warning: "npm:^4.0.0"
   peerDependencies:
@@ -3994,7 +3994,7 @@ __metadata:
     react-dom: "npm:^18.2.0"
     react-pdf: "workspace:packages/react-pdf"
     tiny-invariant: "npm:^1.0.0"
-    typescript: "npm:^5.4.2"
+    typescript: "npm:^5.5.2"
     vite: "npm:^5.0.0"
     vite-plugin-static-copy: "npm:^1.0.0"
   languageName: unknown
@@ -4100,23 +4100,23 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript@npm:^5.4.2":
-  version: 5.4.2
-  resolution: "typescript@npm:5.4.2"
+"typescript@npm:^5.5.2":
+  version: 5.5.2
+  resolution: "typescript@npm:5.5.2"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: 10c0/583ff68cafb0c076695f72d61df6feee71689568179fb0d3a4834dac343df6b6ed7cf7b6f6c801fa52d43cd1d324e2f2d8ae4497b09f9e6cfe3d80a6d6c9ca52
+  checksum: 10c0/8ca39b27b5f9bd7f32db795045933ab5247897660627251e8254180b792a395bf061ea7231947d5d7ffa5cb4cc771970fd4ef543275f9b559f08c9325cccfce3
   languageName: node
   linkType: hard
 
-"typescript@patch:typescript@npm%3A^5.4.2#optional!builtin<compat/typescript>":
-  version: 5.4.2
-  resolution: "typescript@patch:typescript@npm%3A5.4.2#optional!builtin<compat/typescript>::version=5.4.2&hash=5adc0c"
+"typescript@patch:typescript@npm%3A^5.5.2#optional!builtin<compat/typescript>":
+  version: 5.5.2
+  resolution: "typescript@patch:typescript@npm%3A5.5.2#optional!builtin<compat/typescript>::version=5.5.2&hash=379a07"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: 10c0/fcf6658073d07283910d9a0e04b1d5d0ebc822c04dbb7abdd74c3151c7aa92fcddbac7d799404e358197222006ccdc4c0db219d223d2ee4ccd9e2b01333b49be
+  checksum: 10c0/a7b7ede75dc7fc32a76d0d0af6b91f5fbd8620890d84c906f663d8783bf3de6d7bd50f0430b8bb55eac88a38934af847ff709e7156e5138b95ae94cbd5f73e5b
   languageName: node
   linkType: hard
 

@@ -28,7 +28,7 @@
     "@biomejs/biome": "^1.8.0",
     "@types/react": "*",
     "@vitejs/plugin-react": "^4.2.0",
-    "typescript": "^5.4.2",
+    "typescript": "^5.5.2",
     "vite": "^5.0.0",
     "vite-plugin-static-copy": "^1.0.0"
   }
