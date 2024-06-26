@@ -6811,12 +6811,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"is-core-module@npm:^2.11.0, is-core-module@npm:^2.12.0, is-core-module@npm:^2.9.0":
-  version: 2.12.0
-  resolution: "is-core-module@npm:2.12.0"
-  dependencies:
-    has: "npm:^1.0.3"
-  checksum: 10c0/21f78f05de2f261339c10da0a68a25f7671a1864bc4e19fbfb7aeb9486a8ced98f5192f3226af8f696c6c1b545029307df850e384799a574953d6676ae20fefc
+"is-core-module@npm:@nolyfill/is-core-module@latest":
+  version: 1.0.32
+  resolution: "@nolyfill/is-core-module@npm:1.0.32"
+  checksum: 10c0/1388a7d88112ea6481c18f3edd70222e8009108cb81a99d115873dd23ad2e9922483c28f482c2cc770b98bb4671ab1efe2aff80ac3a14b9707b795707b326b7e
   languageName: node
   linkType: hard
 

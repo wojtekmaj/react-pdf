@@ -1585,13 +1585,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nolyfill/shared@npm:1.0.21":
-  version: 1.0.21
-  resolution: "@nolyfill/shared@npm:1.0.21"
-  checksum: 10c0/f71fa2d93bc76ba7cece7cca141de6687f5412d82e51320350dc76817ae11ade20b22251fbe74cb89d1b25f99fc3cd39498b04ecd94819d5a1204f3ba7c3ea66
-  languageName: node
-  linkType: hard
-
 "@npmcli/agent@npm:^2.0.0":
   version: 2.2.1
   resolution: "@npmcli/agent@npm:2.2.1"
@@ -3586,15 +3579,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"has@npm:@nolyfill/has@latest":
-  version: 1.0.21
-  resolution: "@nolyfill/has@npm:1.0.21"
-  dependencies:
-    "@nolyfill/shared": "npm:1.0.21"
-  checksum: 10c0/00fdf46be1ff5b64350cbe952262251c45635765bbced9afdde55a391d20a4d011b8cc063704dd6d912734f8baf147edee507fa482241a842b1007f4f7c5f50b
-  languageName: node
-  linkType: hard
-
 "he@npm:^1.2.0":
   version: 1.2.0
   resolution: "he@npm:1.2.0"
@@ -3903,12 +3887,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"is-core-module@npm:^2.9.0":
-  version: 2.11.0
-  resolution: "is-core-module@npm:2.11.0"
-  dependencies:
-    has: "npm:^1.0.3"
-  checksum: 10c0/fd8f78ef4e243c295deafa809f89381d89aff5aaf38bb63266b17ee6e34b6a051baa5bdc2365456863336d56af6a59a4c1df1256b4eff7d6b4afac618586b004
+"is-core-module@npm:@nolyfill/is-core-module@latest":
+  version: 1.0.32
+  resolution: "@nolyfill/is-core-module@npm:1.0.32"
+  checksum: 10c0/1388a7d88112ea6481c18f3edd70222e8009108cb81a99d115873dd23ad2e9922483c28f482c2cc770b98bb4671ab1efe2aff80ac3a14b9707b795707b326b7e
   languageName: node
   linkType: hard
 
