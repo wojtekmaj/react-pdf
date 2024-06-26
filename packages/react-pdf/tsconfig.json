@@ -2,6 +2,7 @@
   "compilerOptions": {
     "declaration": true,
     "esModuleInterop": true,
+    "isolatedDeclarations": true,
     "isolatedModules": true,
     "jsx": "react-jsx",
     "module": "nodenext",
