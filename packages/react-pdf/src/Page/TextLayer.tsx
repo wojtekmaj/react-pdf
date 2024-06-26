@@ -17,7 +17,7 @@ function isTextItem(item: TextItem | TextMarkedContent): item is TextItem {
   return 'str' in item;
 }
 
-export default function TextLayer() {
+export default function TextLayer(): React.ReactElement {
   const pageContext = usePageContext();
 
   invariant(pageContext, 'Unable to find Page context.');

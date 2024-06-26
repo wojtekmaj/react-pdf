@@ -23,6 +23,6 @@ function reducer<T>(state: State<T>, action: Action<T>): State<T> {
   }
 }
 
-export default function useResolver<T>() {
+export default function useResolver<T>(): [State<T>, React.Dispatch<Action<T>>] {
   return useReducer(reducer<T>, { value: undefined, error: undefined });
 }

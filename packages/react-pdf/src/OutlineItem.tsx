@@ -18,7 +18,7 @@ type OutlineItemProps = {
   pdf?: PDFDocumentProxy | false;
 };
 
-export default function OutlineItem(props: OutlineItemProps) {
+export default function OutlineItem(props: OutlineItemProps): React.ReactElement {
   const documentContext = useDocumentContext();
 
   const outlineContext = useOutlineContext();

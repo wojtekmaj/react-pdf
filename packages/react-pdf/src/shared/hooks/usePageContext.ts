@@ -2,6 +2,8 @@ import { useContext } from 'react';
 
 import PageContext from '../../PageContext.js';
 
-export default function usePageContext() {
+import type { PageContextType } from '../types.js';
+
+export default function usePageContext(): PageContextType {
   return useContext(PageContext);
 }

@@ -14,7 +14,7 @@ import { cancelRunningTask } from '../shared/utils.js';
 
 import type { Annotations } from '../shared/types.js';
 
-export default function AnnotationLayer() {
+export default function AnnotationLayer(): React.ReactElement {
   const documentContext = useDocumentContext();
   const pageContext = usePageContext();
 

@@ -11,7 +11,7 @@ import { cancelRunningTask } from './shared/utils.js';
 
 import type { StructTreeNodeWithExtraAttributes } from './shared/types.js';
 
-export default function StructTree() {
+export default function StructTree(): React.ReactElement | null {
   const pageContext = usePageContext();
 
   invariant(pageContext, 'Unable to find Page context.');

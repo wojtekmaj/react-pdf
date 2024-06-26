@@ -14,7 +14,10 @@ type StructTreeItemProps = {
   node: StructTreeNodeWithExtraAttributes | StructTreeContent;
 };
 
-export default function StructTreeItem({ className, node }: StructTreeItemProps) {
+export default function StructTreeItem({
+  className,
+  node,
+}: StructTreeItemProps): React.ReactElement {
   const attributes = useMemo(() => getAttributes(node), [node]);
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: Looks like a Biome error

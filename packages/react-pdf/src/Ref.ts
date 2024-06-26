@@ -7,7 +7,7 @@ export default class Ref {
     this.gen = gen;
   }
 
-  toString() {
+  toString(): string {
     let str = `${this.num}R`;
     if (this.gen !== 0) {
       str += this.gen;

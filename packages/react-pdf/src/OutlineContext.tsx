@@ -4,4 +4,6 @@ import { createContext } from 'react';
 
 import type { OutlineContextType } from './shared/types.js';
 
-export default createContext<OutlineContextType>(null);
+const outlineContext: React.Context<OutlineContextType> = createContext<OutlineContextType>(null);
+
+export default outlineContext;

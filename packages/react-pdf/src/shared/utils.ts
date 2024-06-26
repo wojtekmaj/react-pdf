@@ -7,12 +7,12 @@ import type { PageCallback } from './types.js';
 /**
  * Checks if we're running in a browser environment.
  */
-export const isBrowser = typeof document !== 'undefined';
+export const isBrowser: boolean = typeof document !== 'undefined';
 
 /**
  * Checks whether we're running from a local file system.
  */
-export const isLocalFileSystem = isBrowser && window.location.protocol === 'file:';
+export const isLocalFileSystem: boolean = isBrowser && window.location.protocol === 'file:';
 
 /**
  * Checks whether a variable is defined.
@@ -83,28 +83,28 @@ export function dataURItoByteString(dataURI: unknown): string {
   return unescape(dataString);
 }
 
-export function getDevicePixelRatio() {
+export function getDevicePixelRatio(): number {
   return (isBrowser && window.devicePixelRatio) || 1;
 }
 
 const allowFileAccessFromFilesTip =
   'On Chromium based browsers, you can use --allow-file-access-from-files flag for debugging purposes.';
 
-export function displayCORSWarning() {
+export function displayCORSWarning(): void {
   warning(
     !isLocalFileSystem,
     `Loading PDF as base64 strings/URLs may not work on protocols other than HTTP/HTTPS. ${allowFileAccessFromFilesTip}`,
   );
 }
 
-export function displayWorkerWarning() {
+export function displayWorkerWarning(): void {
   warning(
     !isLocalFileSystem,
     `Loading PDF.js worker may not work on protocols other than HTTP/HTTPS. ${allowFileAccessFromFilesTip}`,
   );
 }
 
-export function cancelRunningTask(runningTask?: { cancel?: () => void } | null) {
+export function cancelRunningTask(runningTask?: { cancel?: () => void } | null): void {
   if (runningTask?.cancel) runningTask.cancel();
 }
 

@@ -24,7 +24,7 @@ type CanvasProps = {
   canvasRef?: React.Ref<HTMLCanvasElement>;
 };
 
-export default function Canvas(props: CanvasProps) {
+export default function Canvas(props: CanvasProps): React.ReactElement {
   const pageContext = usePageContext();
 
   invariant(pageContext, 'Unable to find Page context.');

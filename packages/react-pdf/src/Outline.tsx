@@ -64,7 +64,7 @@ export type OutlineProps = {
  *
  * Should be placed inside `<Document />`. Alternatively, it can have `pdf` prop passed, which can be obtained from `<Document />`'s `onLoadSuccess` callback function.
  */
-export default function Outline(props: OutlineProps) {
+export default function Outline(props: OutlineProps): React.ReactElement | null {
   const documentContext = useDocumentContext();
 
   const mergedProps = { ...documentContext, ...props };

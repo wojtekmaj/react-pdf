@@ -4,4 +4,6 @@ import { createContext } from 'react';
 
 import type { PageContextType } from './shared/types.js';
 
-export default createContext<PageContextType>(null);
+const pageContext: React.Context<PageContextType> = createContext<PageContextType>(null);
+
+export default pageContext;

@@ -48,7 +48,7 @@ export type ThumbnailProps = Omit<
  *
  * Should be placed inside `<Document />`. Alternatively, it can have `pdf` prop passed, which can be obtained from `<Document />`'s `onLoadSuccess` callback function.
  */
-export default function Thumbnail(props: ThumbnailProps) {
+export default function Thumbnail(props: ThumbnailProps): React.ReactElement {
   const documentContext = useDocumentContext();
 
   const mergedProps = { ...documentContext, ...props };

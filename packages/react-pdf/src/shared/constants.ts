@@ -56,4 +56,4 @@ export const PDF_ROLE_TO_HTML_ROLE = {
   Artifact: null,
 };
 
-export const HEADING_PATTERN = /^H(\d+)$/;
+export const HEADING_PATTERN: RegExp = /^H(\d+)$/;

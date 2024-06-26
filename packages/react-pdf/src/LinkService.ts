@@ -49,31 +49,31 @@ export default class LinkService implements IPDFLinkService {
     this.pdfViewer = undefined;
   }
 
-  setDocument(pdfDocument: PDFDocumentProxy) {
+  setDocument(pdfDocument: PDFDocumentProxy): void {
     this.pdfDocument = pdfDocument;
   }
 
-  setViewer(pdfViewer: PDFViewer) {
+  setViewer(pdfViewer: PDFViewer): void {
     this.pdfViewer = pdfViewer;
   }
 
-  setExternalLinkRel(externalLinkRel?: ExternalLinkRel) {
+  setExternalLinkRel(externalLinkRel?: ExternalLinkRel): void {
     this.externalLinkRel = externalLinkRel;
   }
 
-  setExternalLinkTarget(externalLinkTarget?: ExternalLinkTarget) {
+  setExternalLinkTarget(externalLinkTarget?: ExternalLinkTarget): void {
     this.externalLinkTarget = externalLinkTarget;
   }
 
-  setHistory() {
+  setHistory(): void {
     // Intentionally empty
   }
 
-  get pagesCount() {
+  get pagesCount(): number {
     return this.pdfDocument ? this.pdfDocument.numPages : 0;
   }
 
-  get page() {
+  get page(): number {
     invariant(this.pdfViewer, 'PDF viewer is not initialized.');
 
     return this.pdfViewer.currentPageNumber || 0;
@@ -85,7 +85,7 @@ export default class LinkService implements IPDFLinkService {
     this.pdfViewer.currentPageNumber = value;
   }
 
-  get rotation() {
+  get rotation(): number {
     return 0;
   }
 
@@ -147,11 +147,11 @@ export default class LinkService implements IPDFLinkService {
     });
   }
 
-  navigateTo(dest: Dest) {
+  navigateTo(dest: Dest): void {
     this.goToDestination(dest);
   }
 
-  goToPage(pageNumber: number) {
+  goToPage(pageNumber: number): void {
     const pageIndex = pageNumber - 1;
 
     invariant(this.pdfViewer, 'PDF viewer is not initialized.');
@@ -167,41 +167,41 @@ export default class LinkService implements IPDFLinkService {
     });
   }
 
-  addLinkAttributes(link: HTMLAnchorElement, url: string, newWindow: boolean) {
+  addLinkAttributes(link: HTMLAnchorElement, url: string, newWindow: boolean): void {
     link.href = url;
     link.rel = this.externalLinkRel || DEFAULT_LINK_REL;
     link.target = newWindow ? '_blank' : this.externalLinkTarget || '';
   }
 
-  getDestinationHash() {
+  getDestinationHash(): string {
     return '#';
   }
 
-  getAnchorUrl() {
+  getAnchorUrl(): string {
     return '#';
   }
 
-  setHash() {
+  setHash(): void {
     // Intentionally empty
   }
 
-  executeNamedAction() {
+  executeNamedAction(): void {
     // Intentionally empty
   }
 
-  cachePageRef() {
+  cachePageRef(): void {
     // Intentionally empty
   }
 
-  isPageVisible() {
+  isPageVisible(): boolean {
     return true;
   }
 
-  isPageCached() {
+  isPageCached(): boolean {
     return true;
   }
 
-  executeSetOCGState() {
+  executeSetOCGState(): void {
     // Intentionally empty
   }
 }

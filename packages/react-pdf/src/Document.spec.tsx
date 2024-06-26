@@ -12,6 +12,7 @@ import { makeAsyncCallback, loadPDF, muteConsole, restoreConsole } from '../../.
 
 import type { PDFDocumentProxy } from 'pdfjs-dist';
 import type { ScrollPageIntoViewArgs } from './shared/types.js';
+import type LinkService from './LinkService.js';
 
 const pdfFile = loadPDF('./../../__mocks__/_pdf.pdf');
 const pdfFile2 = loadPDF('./../../__mocks__/_pdf2.pdf');
@@ -433,7 +434,8 @@ describe('Document', () => {
 
       const onItemClick = vi.fn();
       const instance = createRef<{
-        pages: React.RefObject<Record<string, unknown>[]>;
+        linkService: React.RefObject<LinkService>;
+        pages: React.RefObject<HTMLDivElement[]>;
         viewer: React.RefObject<{ scrollPageIntoView: (args: ScrollPageIntoViewArgs) => void }>;
       }>();
 
@@ -473,7 +475,9 @@ describe('Document', () => {
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
       const instance = createRef<{
-        pages: React.RefObject<Record<string, unknown>[]>;
+        linkService: React.RefObject<LinkService>;
+        // biome-ignore lint/suspicious/noExplicitAny: Intentional use to simplify the test
+        pages: React.RefObject<any[]>;
         viewer: React.RefObject<{ scrollPageIntoView: (args: ScrollPageIntoViewArgs) => void }>;
       }>();
 

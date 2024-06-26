@@ -232,7 +232,14 @@ function isParameterObject(file: File): file is Source {
 /**
  * Loads a document passed using `file` prop.
  */
-const Document = forwardRef(function Document(
+const Document: React.ForwardRefExoticComponent<
+  DocumentProps &
+    React.RefAttributes<{
+      linkService: React.RefObject<LinkService>;
+      pages: React.RefObject<HTMLDivElement[]>;
+      viewer: React.RefObject<{ scrollPageIntoView: (args: ScrollPageIntoViewArgs) => void }>;
+    }>
+> = forwardRef(function Document(
   {
     children,
     className,
@@ -255,7 +262,7 @@ const Document = forwardRef(function Document(
     renderMode,
     rotate,
     ...otherProps
-  }: DocumentProps,
+  },
   ref,
 ) {
   const [sourceState, sourceDispatch] = useResolver<Source | null>();
