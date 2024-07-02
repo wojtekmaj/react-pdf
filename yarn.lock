@@ -2997,9 +2997,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"pdfjs-dist@npm:4.3.136":
-  version: 4.3.136
-  resolution: "pdfjs-dist@npm:4.3.136"
+"pdfjs-dist@npm:4.4.168":
+  version: 4.4.168
+  resolution: "pdfjs-dist@npm:4.4.168"
   dependencies:
     canvas: "npm:^2.11.2"
     path2d: "npm:^0.2.0"
@@ -3008,13 +3008,13 @@ __metadata:
       optional: true
     path2d:
       optional: true
-  checksum: 10c0/4cb88d737f56100d45d2c9c0c6e8dc2f3dfd856362a55e47801ae32c52b2f12b3e74819c3cafb995a1e84c43eb580598a69c6710a78b1a11cdb52ef24bf8a633
+  checksum: 10c0/61bad19fe0aae8261631d425bd96368cf0b8803c3a4446615456dddd867ef3e5ba15c11a1caabb8033bce9538e3ad8262c24a56fa68b150c6ee0eb9e26a9f3a7
   languageName: node
   linkType: hard
 
-"pdfjs-dist@patch:pdfjs-dist@npm:4.3.136#.yarn/patches/pdfjs-dist-npm-4.3.136-35a0e70ced.patch::locator=react-pdf-monorepo%40workspace%3A.":
-  version: 4.3.136
-  resolution: "pdfjs-dist@patch:pdfjs-dist@npm%3A4.3.136#.yarn/patches/pdfjs-dist-npm-4.3.136-35a0e70ced.patch::version=4.3.136&hash=d78cd3&locator=react-pdf-monorepo%40workspace%3A."
+"pdfjs-dist@patch:pdfjs-dist@npm:4.4.168#.yarn/patches/pdfjs-dist-npm-4.4.168-35a0e70ced.patch::locator=react-pdf-monorepo%40workspace%3A.":
+  version: 4.4.168
+  resolution: "pdfjs-dist@patch:pdfjs-dist@npm%3A4.4.168#.yarn/patches/pdfjs-dist-npm-4.4.168-35a0e70ced.patch::version=4.4.168&hash=d78cd3&locator=react-pdf-monorepo%40workspace%3A."
   dependencies:
     canvas: "npm:^2.11.2"
     path2d: "npm:^0.2.0"
@@ -3023,7 +3023,7 @@ __metadata:
       optional: true
     path2d:
       optional: true
-  checksum: 10c0/df1b908fa225e5b5a58382b43d0e5462d0de9dc8a7a396f354236b44892cc648c13e1cc90c5e34c1177801c9eb5a6e794dbc67f1a3185b224a4f0846cf20c8de
+  checksum: 10c0/4c861fe771e3901cd4c277c67f170cbfc62b631507c295dbaa3fa7caa040fb48441b3318b7654767956cd8fdda74c13a7db171426e097088a5bb01fb821376a2
   languageName: node
   linkType: hard
 
@@ -3185,7 +3185,7 @@ __metadata:
     make-cancellable-promise: "npm:^1.3.1"
     make-event-props: "npm:^1.6.0"
     merge-refs: "npm:^1.3.0"
-    pdfjs-dist: "npm:4.3.136"
+    pdfjs-dist: "npm:4.4.168"
     react: "npm:^18.2.0"
     react-dom: "npm:^18.2.0"
     rimraf: "npm:^3.0.0"
