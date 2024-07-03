@@ -10,8 +10,4 @@ const pdfWorkerPath = path.join(pdfjsDistPath, 'build', 'pdf.worker.mjs');
 const targetDir = 'public';
 const targetPath = path.join(targetDir, 'pdf.worker.mjs');
 
-// Ensure target directory exists
-fs.mkdirSync(targetDir, { recursive: true });
-
-// Copy file
-fs.copyFileSync(pdfWorkerPath, targetPath);
+fs.cpSync(pdfWorkerPath, targetPath, { recursive: true });
