@@ -163,7 +163,7 @@ import fs from 'node:fs';
 const pdfjsDistPath = path.dirname(require.resolve('pdfjs-dist/package.json'));
 const pdfWorkerPath = path.join(pdfjsDistPath, 'build', 'pdf.worker.mjs');
 
-fs.copyFileSync(pdfWorkerPath, './dist/pdf.worker.mjs');
+fs.cpSync(pdfWorkerPath, './dist/pdf.worker.mjs', { recursive: true });
 ```
 
 #### Use external CDN
@@ -267,9 +267,9 @@ Add [`vite-plugin-static-copy`](https://www.npmjs.com/package/vite-plugin-static
 +import { viteStaticCopy } from 'vite-plugin-static-copy';
 
 +const require = createRequire(import.meta.url);
-+const cMapsDir = normalizePath(
-+  path.join(path.dirname(require.resolve('pdfjs-dist/package.json')), 'cmaps')
-+);
++
++const pdfjsDistPath = path.dirname(require.resolve('pdfjs-dist/package.json'));
++const cMapsDir = normalizePath(path.join(pdfjsDistPath, 'cmaps'));
 
 export default defineConfig({
   plugins: [
@@ -293,7 +293,8 @@ Add [`copy-webpack-plugin`](https://www.npmjs.com/package/copy-webpack-plugin) b
 +import path from 'node:path';
 +import CopyWebpackPlugin from 'copy-webpack-plugin';
 
-+const cMapsDir = path.join(path.dirname(require.resolve('pdfjs-dist/package.json')), 'cmaps');
++const pdfjsDistPath = path.dirname(require.resolve('pdfjs-dist/package.json'));
++const cMapsDir = path.join(pdfjsDistPath, 'cmaps');
 
 module.exports = {
   plugins: [
@@ -319,7 +320,8 @@ For example, you could use a custom script like:
 import path from 'node:path';
 import fs from 'node:fs';
 
-const cMapsDir = path.join(path.dirname(require.resolve('pdfjs-dist/package.json')), 'cmaps');
+const pdfjsDistPath = path.dirname(require.resolve('pdfjs-dist/package.json'));
+const cMapsDir = path.join(pdfjsDistPath, 'cmaps');
 
 fs.cpSync(cMapsDir, 'dist/cmaps/', { recursive: true });
 ```
@@ -434,10 +436,8 @@ For example, you could use a custom script like:
 import path from 'node:path';
 import fs from 'node:fs';
 
-const standardFontsDir = path.join(
-  path.dirname(require.resolve('pdfjs-dist/package.json')),
-  'standard_fonts',
-);
+const pdfjsDistPath = path.dirname(require.resolve('pdfjs-dist/package.json'));
+const standardFontsDir = path.join(pdfjsDistPath, 'standard_fonts');
 
 fs.cpSync(standardFontsDir, 'dist/standard_fonts/', { recursive: true });
 ```
