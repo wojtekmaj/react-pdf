@@ -8,6 +8,7 @@ import warning from 'warning';
 import * as pdfjs from 'pdfjs-dist';
 
 import usePageContext from '../shared/hooks/usePageContext.js';
+import useDocumentContext from '../shared/hooks/useDocumentContext.js';
 import useResolver from '../shared/hooks/useResolver.js';
 import { cancelRunningTask } from '../shared/utils.js';
 
@@ -19,8 +20,10 @@ function isTextItem(item: TextItem | TextMarkedContent): item is TextItem {
 
 export default function TextLayer(): React.ReactElement {
   const pageContext = usePageContext();
+  const documentContext = useDocumentContext();
 
   invariant(pageContext, 'Unable to find Page context.');
+  invariant(documentContext, 'Unable to find Document context.');
 
   const {
     customTextRenderer,
@@ -34,6 +37,8 @@ export default function TextLayer(): React.ReactElement {
     rotate,
     scale,
   } = pageContext;
+
+  const { textLayers } = documentContext;
 
   invariant(page, 'Attempted to load page text content, but no page was specified.');
 
@@ -202,6 +207,8 @@ export default function TextLayer(): React.ReactElement {
           const end = document.createElement('div');
           end.className = 'endOfContent';
           layer.append(end);
+
+          textLayers.set(layer, end);
 
           const layerChildren = layer.querySelectorAll('[role="presentation"]');
 

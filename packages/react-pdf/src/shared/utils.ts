@@ -178,3 +178,89 @@ export function loadFromFile(file: Blob): Promise<ArrayBuffer> {
     reader.readAsArrayBuffer(file);
   });
 }
+
+// Get current browser
+export function getBrowser() {
+  var userAgent = navigator.userAgent;
+  var browserName;
+
+  if (userAgent.indexOf('Firefox') > -1) {
+    browserName = 'Firefox';
+  } else if (userAgent.indexOf('SamsungBrowser') > -1) {
+    browserName = 'Samsung';
+  } else if (userAgent.indexOf('Opera') > -1 || userAgent.indexOf('OPR') > -1) {
+    browserName = 'Opera';
+  } else if (userAgent.indexOf('Trident') > -1) {
+    browserName = 'IE';
+  } else if (userAgent.indexOf('Edge') > -1) {
+    browserName = 'Edge';
+  } else if (userAgent.indexOf('Chrome') > -1) {
+    browserName = 'Chrome';
+  } else if (userAgent.indexOf('Safari') > -1) {
+    browserName = 'Safari';
+  } else {
+    browserName = 'Unknown';
+  }
+
+  return browserName;
+}
+
+// reset text layer
+export const resetTextLayer = (end: HTMLElement, textLayer: HTMLElement) => {
+  if (getBrowser() === 'Firefox') {
+    textLayer.append(end);
+    end.style.width = '';
+    end.style.height = '';
+  }
+  end.classList.remove('active');
+};
+
+// move .endOfContent to right after selection range
+export const moveEndElementToSelectionEnd = (
+  textLayers: Map<HTMLElement, HTMLElement>,
+  prevRange?: Range,
+) => {
+  const selection = document.getSelection()!;
+
+  const activeTextLayers = new Set();
+  for (let i = 0; i < selection.rangeCount; i++) {
+    const range = selection.getRangeAt(i);
+    for (const textLayerDiv of textLayers.keys()) {
+      if (!activeTextLayers.has(textLayerDiv) && range.intersectsNode(textLayerDiv)) {
+        activeTextLayers.add(textLayerDiv);
+      }
+    }
+  }
+
+  for (const [textLayerDiv, endDiv] of textLayers) {
+    if (activeTextLayers.has(textLayerDiv)) {
+      endDiv.classList.add('active');
+    } else {
+      resetTextLayer(endDiv, textLayerDiv);
+    }
+  }
+
+  if (getBrowser() === 'Firefox') {
+    return;
+  }
+
+  const range = selection.getRangeAt(0);
+  const modifyStart =
+    prevRange &&
+    (range.compareBoundaryPoints(Range.END_TO_END, prevRange) === 0 ||
+      range.compareBoundaryPoints(Range.START_TO_END, prevRange) === 0);
+  let anchor = modifyStart ? range.startContainer : range.endContainer;
+  if (anchor.nodeType === Node.TEXT_NODE) {
+    anchor = anchor.parentNode!;
+  }
+
+  const parentTextLayer = anchor.parentElement!.closest('.textLayer') as HTMLDivElement;
+  const endDiv = textLayers.get(parentTextLayer);
+  if (endDiv && parentTextLayer) {
+    endDiv.style.width = parentTextLayer.style.width;
+    endDiv.style.height = parentTextLayer.style.height;
+    anchor.parentElement!.insertBefore(endDiv, modifyStart ? anchor : anchor.nextSibling);
+  }
+
+  return range.cloneRange();
+};
