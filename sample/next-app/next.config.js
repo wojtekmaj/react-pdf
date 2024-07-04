@@ -1,6 +1,10 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   experimental: {
+    // You may not need this, it's just to support moduleResolution: 'node16'
+    extensionAlias: {
+      '.js': ['.tsx', '.ts', '.jsx', '.js'],
+    },
     turbo: {
       resolveAlias: {
         // Turbopack does not support standard ESM import paths yet
@@ -18,14 +22,6 @@ const nextConfig = {
    * See https://github.com/vercel/next.js/pull/66817
    */
   swcMinify: false,
-  webpack: (config) => {
-    // You may not need this, it's just to support moduleResolution: 'node16'
-    config.resolve.extensionAlias = {
-      '.js': ['.js', '.ts', '.tsx'],
-    };
-
-    return config;
-  },
 };
 
 export default nextConfig;
