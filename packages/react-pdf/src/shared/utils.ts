@@ -7,7 +7,7 @@ import type { PageCallback } from './types.js';
 /**
  * Checks if we're running in a browser environment.
  */
-export const isBrowser: boolean = typeof document !== 'undefined';
+export const isBrowser: boolean = typeof window !== 'undefined';
 
 /**
  * Checks whether we're running from a local file system.

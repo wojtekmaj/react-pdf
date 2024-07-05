@@ -3,7 +3,7 @@ import invariant from 'tiny-invariant';
 /**
  * Checks if we're running in a browser environment.
  */
-export const isBrowser = typeof document !== 'undefined';
+export const isBrowser = typeof window !== 'undefined';
 
 /**
  * Checks whether a variable provided is a string.
