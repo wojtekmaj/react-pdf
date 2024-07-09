@@ -25,7 +25,7 @@
     "tiny-invariant": "^1.0.0"
   },
   "devDependencies": {
-    "@biomejs/biome": "^1.8.0",
+    "@biomejs/biome": "^1.8.3",
     "@types/react": "*",
     "@vitejs/plugin-react": "^4.2.0",
     "typescript": "^5.5.2",
