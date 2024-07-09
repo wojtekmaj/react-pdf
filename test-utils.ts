@@ -7,7 +7,7 @@ function makeAsyncCallbackWithoutValue<T extends unknown[]>() {
     promiseResolve = resolve;
   });
   type Func = (...args: T) => void;
-  const func: Func = vi.fn((...args) => promiseResolve(args));
+  const func: Func = vi.fn((...args: T) => promiseResolve(args));
 
   return { func, promise };
 }

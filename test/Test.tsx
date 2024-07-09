@@ -298,7 +298,7 @@ export default function Test() {
                       {...pageProps}
                       inputRef={
                         pageNumber === index + 1
-                          ? (ref) => {
+                          ? (ref: HTMLDivElement) => {
                               ref?.scrollIntoView();
                             }
                           : null
