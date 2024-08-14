@@ -20,7 +20,6 @@ export default function StructTreeItem({
 }: StructTreeItemProps): React.ReactElement {
   const attributes = useMemo(() => getAttributes(node), [node]);
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: Looks like a Biome error
   const children = useMemo(() => {
     if (!isStructTreeNode(node)) {
       return null;

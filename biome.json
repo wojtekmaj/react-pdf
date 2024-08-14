@@ -12,6 +12,10 @@
       "complexity": {
         "noUselessSwitchCase": "off"
       },
+      "correctness": {
+        "noUnusedImports": "warn",
+        "noUnusedVariables": "warn"
+      },
       "suspicious": {
         "noConsoleLog": "warn"
       }

@@ -89,7 +89,7 @@ export default class LinkService implements IPDFLinkService {
     return 0;
   }
 
-  set rotation(value) {
+  set rotation(_value) {
     // Intentionally empty
   }
 

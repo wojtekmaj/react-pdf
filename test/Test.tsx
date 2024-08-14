@@ -292,7 +292,7 @@ export default function Test() {
             <div className="Test__container__content__document">
               {render ? (
                 displayAll ? (
-                  Array.from(new Array(numPages), (el, index) => (
+                  Array.from(new Array(numPages), (_el, index) => (
                     <Page
                       key={`page_${index + 1}`}
                       {...pageProps}
@@ -327,7 +327,7 @@ export default function Test() {
               </div>
             )}
             <div className="Test__container__content__thumbnails">
-              {Array.from(new Array(numPages), (el, index) => (
+              {Array.from(new Array(numPages), (_el, index) => (
                 <Thumbnail
                   key={`thumbnail_${index + 1}`}
                   className="custom-classname-thumbnail"
