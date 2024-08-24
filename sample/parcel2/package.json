@@ -7,8 +7,8 @@
   "scripts": {
     "build": "yarn copy && parcel build index.html --public-url ./",
     "copy": "yarn copy-cmaps && yarn copy-standard-fonts",
-    "copy-cmaps": "node --import tsimp/import ./scripts/copy-cmaps.ts",
-    "copy-standard-fonts": "node --import tsimp/import ./scripts/copy-standard-fonts.ts",
+    "copy-cmaps": "node --experimental-strip-types ./scripts/copy-cmaps.ts",
+    "copy-standard-fonts": "node --experimental-strip-types ./scripts/copy-standard-fonts.ts",
     "dev": "yarn copy && parcel index.html"
   },
   "author": {
@@ -27,7 +27,6 @@
     "buffer": "^5.5.0",
     "parcel": "^2.0.0",
     "process": "^0.11.10",
-    "tsimp": "^2.0.11",
     "typescript": "^5.0.0"
   }
 }
