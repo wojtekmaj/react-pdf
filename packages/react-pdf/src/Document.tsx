@@ -8,6 +8,7 @@ import invariant from 'tiny-invariant';
 import warning from 'warning';
 import { dequal } from 'dequal';
 import * as pdfjs from 'pdfjs-dist';
+import type { DocumentInitParameters } from 'pdfjs-dist/types/src/display/api.js';
 
 import DocumentContext from './DocumentContext.js';
 
@@ -507,10 +508,9 @@ const Document: React.ForwardRefExoticComponent<
         return;
       }
 
-      const documentInitParams: Source = {
-        ...source,
-        ...options,
-      };
+      const documentInitParams: DocumentInitParameters = options
+        ? { ...source, ...options }
+        : source;
 
       const destroyable = pdfjs.getDocument(documentInitParams);
       if (onLoadProgress) {
@@ -521,7 +521,7 @@ const Document: React.ForwardRefExoticComponent<
       }
       const loadingTask = destroyable;
 
-      loadingTask.promise
+      const loadingPromise = loadingTask.promise
         .then((nextPdf) => {
           pdfDispatch({ type: 'RESOLVE', value: nextPdf });
         })
@@ -534,7 +534,7 @@ const Document: React.ForwardRefExoticComponent<
         });
 
       return () => {
-        loadingTask.destroy();
+        loadingPromise.finally(() => loadingTask.destroy());
       };
     },
     [options, pdfDispatch, source],
