@@ -586,10 +586,6 @@ export default function Page(props: PageProps): React.ReactElement {
       return null;
     }
 
-    /**
-     * As of now, PDF.js 2.0.943 returns warnings on unimplemented annotations in SVG mode.
-     * Therefore, as a fallback, we render "traditional" AnnotationLayer component.
-     */
     return <AnnotationLayer key={`${pageKey}_annotations`} />;
   }
 
