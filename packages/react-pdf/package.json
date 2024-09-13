@@ -23,10 +23,7 @@
       "import": "./dist/esm/Page/TextLayer.css",
       "require": "./dist/cjs/Page/TextLayer.css"
     },
-    "./dist/cjs/Page/AnnotationLayer.css": "./dist/cjs/Page/AnnotationLayer.css",
-    "./dist/cjs/Page/TextLayer.css": "./dist/cjs/Page/TextLayer.css",
-    "./dist/esm/Page/AnnotationLayer.css": "./dist/esm/Page/AnnotationLayer.css",
-    "./dist/esm/Page/TextLayer.css": "./dist/esm/Page/TextLayer.css"
+    "./*": "./*"
   },
   "scripts": {
     "build": "yarn build-js && yarn copy-styles",
