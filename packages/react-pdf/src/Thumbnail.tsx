@@ -66,7 +66,7 @@ export default function Thumbnail(props: ThumbnailProps): React.ReactElement {
     'Attempted to load a thumbnail, but no document was specified. Wrap <Thumbnail /> in a <Document /> or pass explicit `pdf` prop.',
   );
 
-  const pageIndex = isProvided(pageNumberProps) ? pageNumberProps - 1 : pageIndexProps ?? null;
+  const pageIndex = isProvided(pageNumberProps) ? pageNumberProps - 1 : (pageIndexProps ?? null);
 
   const pageNumber = pageNumberProps ?? (isProvided(pageIndexProps) ? pageIndexProps + 1 : null);
 
