@@ -1,6 +1,6 @@
 {
   "name": "react-pdf",
-  "version": "9.1.0",
+  "version": "9.1.1",
   "description": "Display PDFs in your React app as easily as if they were images.",
   "type": "module",
   "sideEffects": [
