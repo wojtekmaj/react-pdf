@@ -40,7 +40,6 @@ export default function TextLayer(): React.ReactElement {
   const [textContentState, textContentDispatch] = useResolver<TextContent>();
   const { value: textContent, error: textContentError } = textContentState;
   const layerElement = useRef<HTMLDivElement>(null);
-  const endElement = useRef<HTMLElement | undefined>(undefined);
 
   warning(
     Number.parseInt(
@@ -148,23 +147,23 @@ export default function TextLayer(): React.ReactElement {
   );
 
   function onMouseDown() {
-    const end = endElement.current;
+    const layer = layerElement.current;
 
-    if (!end) {
+    if (!layer) {
       return;
     }
 
-    end.classList.add('active');
+    layer.classList.add('selecting');
   }
 
   function onMouseUp() {
-    const end = endElement.current;
+    const layer = layerElement.current;
 
-    if (!end) {
+    if (!layer) {
       return;
     }
 
-    end.classList.remove('active');
+    layer.classList.remove('selecting');
   }
 
   const viewport = useMemo(
@@ -203,7 +202,6 @@ export default function TextLayer(): React.ReactElement {
           const end = document.createElement('div');
           end.className = 'endOfContent';
           layer.append(end);
-          endElement.current = end;
 
           const layerChildren = layer.querySelectorAll('[role="presentation"]');
 

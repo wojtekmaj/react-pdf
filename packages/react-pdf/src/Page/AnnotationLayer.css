@@ -81,6 +81,10 @@
   outline: var(--link-outline);
 }
 
+.textLayer.selecting ~ .annotationLayer section {
+  pointer-events: none;
+}
+
 .annotationLayer :is(.linkAnnotation, .buttonWidgetAnnotation.pushButton) > a {
   position: absolute;
   font-size: 1em;
