@@ -624,6 +624,18 @@ describe('Document', () => {
     vi.mocked(globalThis.console.error).mockRestore();
   });
 
+  it('does not throw an error on unmount if loading has not yet finished', async () => {
+    const { func: onLoadProgress, promise: onLoadProgressPromise } = makeAsyncCallback();
+
+    const { unmount } = render(
+      <Document file={pdfFile} onLoadProgress={onLoadProgress} options={{ stopAtErrors: true }} />,
+    );
+
+    await onLoadProgressPromise;
+
+    expect(unmount).not.toThrowError();
+  });
+
   it('warns if file prop was not memoized', () => {
     const spy = vi.spyOn(globalThis.console, 'error').mockImplementation(() => {
       // Intentionally empty
