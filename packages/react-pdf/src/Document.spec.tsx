@@ -696,12 +696,10 @@ describe('Document', () => {
     vi.mocked(globalThis.console.error).mockRestore();
   });
 
-  it('does not throw an error on unmount if loading has not yet finished', async () => {
+  it('does not throw an error on unmount', async () => {
     const { func: onLoadProgress, promise: onLoadProgressPromise } = makeAsyncCallback();
 
-    const { unmount } = render(
-      <Document file={pdfFile} onLoadProgress={onLoadProgress} options={{ stopAtErrors: true }} />,
-    );
+    const { unmount } = render(<Document file={pdfFile} onLoadProgress={onLoadProgress} />);
 
     await onLoadProgressPromise;
 
