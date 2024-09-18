@@ -12,5 +12,4 @@
   // @ts-expect-error - pdfjs-dist does not ship with types
   await import('pdfjs-dist/build/pdf.worker.mjs');
 
-// biome-ignore lint/style/useExportType: This export is necessary for the file to be a module
 export {};
