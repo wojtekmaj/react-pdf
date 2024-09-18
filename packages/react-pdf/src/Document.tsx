@@ -8,7 +8,6 @@ import invariant from 'tiny-invariant';
 import warning from 'warning';
 import { dequal } from 'dequal';
 import * as pdfjs from 'pdfjs-dist';
-import type { DocumentInitParameters } from 'pdfjs-dist/types/src/display/api.js';
 
 import DocumentContext from './DocumentContext.js';
 
@@ -31,6 +30,7 @@ import {
 import useResolver from './shared/hooks/useResolver.js';
 
 import type { PDFDocumentProxy } from 'pdfjs-dist';
+import type { DocumentInitParameters } from 'pdfjs-dist/types/src/display/api.js';
 import type { EventProps } from 'make-event-props';
 import type {
   ClassName,
