@@ -3021,10 +3021,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"path2d@npm:^0.2.0":
-  version: 0.2.0
-  resolution: "path2d@npm:0.2.0"
-  checksum: 10c0/fcf95e10a28ef9277a8e60c1df2b5279facb5894efa6a6c5225ec86b502aead1ea8fa90a3b21a7b5864e7a0ffb1405b360dc757c88794c5965bd43aa51b3c4f1
+"path2d@npm:^0.2.1":
+  version: 0.2.1
+  resolution: "path2d@npm:0.2.1"
+  checksum: 10c0/6fc743b24af146fd140339af717c2f874651377dc0cb215d5e761b5bdc5528cb9458f473fff896de54e23f0374dc6819d43740daf7cfed5fd430fc82791510a6
   languageName: node
   linkType: hard
 
@@ -3042,33 +3042,33 @@ __metadata:
   languageName: node
   linkType: hard
 
-"pdfjs-dist@npm:4.4.168":
-  version: 4.4.168
-  resolution: "pdfjs-dist@npm:4.4.168"
+"pdfjs-dist@npm:4.6.82":
+  version: 4.6.82
+  resolution: "pdfjs-dist@npm:4.6.82"
   dependencies:
     canvas: "npm:^2.11.2"
-    path2d: "npm:^0.2.0"
+    path2d: "npm:^0.2.1"
   dependenciesMeta:
     canvas:
       optional: true
     path2d:
       optional: true
-  checksum: 10c0/61bad19fe0aae8261631d425bd96368cf0b8803c3a4446615456dddd867ef3e5ba15c11a1caabb8033bce9538e3ad8262c24a56fa68b150c6ee0eb9e26a9f3a7
+  checksum: 10c0/8dc12c88757e24054f1dbcf491f2a87d285694a76690e7c319af9009fa49e604bdee67e199aa150e71cd797edd2c9447095b7e23727ccaef29da67e51a914529
   languageName: node
   linkType: hard
 
-"pdfjs-dist@patch:pdfjs-dist@npm:4.4.168#.yarn/patches/pdfjs-dist-npm-4.4.168-35a0e70ced.patch::locator=react-pdf-monorepo%40workspace%3A.":
-  version: 4.4.168
-  resolution: "pdfjs-dist@patch:pdfjs-dist@npm%3A4.4.168#.yarn/patches/pdfjs-dist-npm-4.4.168-35a0e70ced.patch::version=4.4.168&hash=d78cd3&locator=react-pdf-monorepo%40workspace%3A."
+"pdfjs-dist@patch:pdfjs-dist@npm:4.6.82#.yarn/patches/pdfjs-dist-npm-4.6.82-35a0e70ced.patch::locator=react-pdf-monorepo%40workspace%3A.":
+  version: 4.6.82
+  resolution: "pdfjs-dist@patch:pdfjs-dist@npm%3A4.6.82#.yarn/patches/pdfjs-dist-npm-4.6.82-35a0e70ced.patch::version=4.6.82&hash=d78cd3&locator=react-pdf-monorepo%40workspace%3A."
   dependencies:
     canvas: "npm:^2.11.2"
-    path2d: "npm:^0.2.0"
+    path2d: "npm:^0.2.1"
   dependenciesMeta:
     canvas:
       optional: true
     path2d:
       optional: true
-  checksum: 10c0/4c861fe771e3901cd4c277c67f170cbfc62b631507c295dbaa3fa7caa040fb48441b3318b7654767956cd8fdda74c13a7db171426e097088a5bb01fb821376a2
+  checksum: 10c0/56cdfd26c62c0700e6d9ce7895e433cdeb5917eb1d277c7f72643ded93370875f49c9e40d48c85be9d29d3db626defb524371017f3a7eff31077b70a84d47c9e
   languageName: node
   linkType: hard
 
@@ -3201,7 +3201,7 @@ __metadata:
     make-cancellable-promise: "npm:^1.3.1"
     make-event-props: "npm:^1.6.0"
     merge-refs: "npm:^1.3.0"
-    pdfjs-dist: "npm:4.4.168"
+    pdfjs-dist: "npm:4.6.82"
     react: "npm:^18.2.0"
     react-dom: "npm:^18.2.0"
     rimraf: "npm:^6.0.0"
