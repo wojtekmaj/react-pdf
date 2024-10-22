@@ -107,6 +107,14 @@ module.exports = {
 };
 ```
 
+If you use Next.js prior to v15 (v15.0.0-canary.53, specifically), you may need to add the following to your `next.config.js`:
+
+```diff
+module.exports = {
++ swcMinify: false,
+}
+```
+
 ### Configure PDF.js worker
 
 For React-PDF to work, PDF.js worker needs to be provided. You have several options.
