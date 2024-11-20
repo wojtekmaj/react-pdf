@@ -136,6 +136,7 @@ export type DocumentContextType = {
   renderMode?: RenderMode;
   rotate?: number | null;
   unregisterPage: UnregisterPage;
+  textLayers: Map<HTMLElement, HTMLElement>;
 } | null;
 
 export type PageContextType = {
