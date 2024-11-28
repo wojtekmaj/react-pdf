@@ -60,7 +60,15 @@ export var PageInternal = /*#__PURE__*/function (_PureComponent) {
           onLoadSuccess = _this$props.onLoadSuccess,
           registerPage = _this$props.registerPage;
       var page = _this.state.page;
-      if (onLoadSuccess) onLoadSuccess(makePageCallback(page, _this.scale));
+
+      if (onLoadSuccess) {
+        if (!page || !_this.scale) {
+          return;
+        }
+
+        onLoadSuccess(makePageCallback(page, _this.scale));
+      }
+
       if (registerPage) registerPage(_this.pageIndex, _this.pageElement.current);
     });
 
