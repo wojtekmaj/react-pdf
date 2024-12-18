@@ -144,6 +144,21 @@ pdfjs.GlobalWorkerOptions.workerSrc = new URL(
 <details>
 <summary>See more examples</summary>
 
+##### Vite
+
+For Vite, you can use a [query suffix](https://vite.dev/guide/assets#importing-script-as-a-worker) to import [web-workers](https://vite.dev/guide/features.html#web-workers) and bundle as needed:
+
+```diff
+import { pdfjs } from 'react-pdf';
++ import src from 'pdfjs-dist/build/pdf.worker.min.mjs?worker&url';
+
+- pdfjs.GlobalWorkerOptions.workerSrc = new URL(
+-   'pdfjs-dist/build/pdf.worker.min.mjs',
+-   import.meta.url,
+- ).toString();
++ pdfjs.GlobalWorkerOptions.workerSrc = src;
+```
+
 ##### Parcel 2
 
 For Parcel 2, you need to use a slightly different code:
