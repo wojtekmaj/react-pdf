@@ -43,6 +43,7 @@ jobs:
 
       - name: Generate archive
         run: yarn pack
+        working-directory: packages/react-pdf
 
       - name: Publish with latest tag
         if: github.event.release.prelease == false
