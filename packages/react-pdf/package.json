@@ -57,7 +57,7 @@
     "make-cancellable-promise": "^1.3.1",
     "make-event-props": "^1.6.0",
     "merge-refs": "^1.3.0",
-    "pdfjs-dist": "4.6.82",
+    "pdfjs-dist": "4.8.69",
     "tiny-invariant": "^1.0.0",
     "warning": "^4.0.0"
   },
@@ -70,7 +70,7 @@
     "@types/react": "*",
     "@types/react-dom": "*",
     "@types/warning": "^3.0.0",
-    "canvas": "^2.11.2",
+    "canvas": "^3.0.0-rc2",
     "core-js": "^3.37.0",
     "cpy-cli": "^5.0.0",
     "jsdom": "^24.0.0",
