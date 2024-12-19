@@ -165,8 +165,8 @@ export default function AnnotationLayer(): React.ReactElement {
         div: layer,
         l10n: null, // TODO: Implement this
         page,
-        viewport: clonedViewport,
         structTreeLayer: null, // TODO: Implement this
+        viewport: clonedViewport,
       };
 
       const renderParameters = {
