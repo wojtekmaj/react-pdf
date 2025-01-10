@@ -70,7 +70,7 @@
     "@types/react": "*",
     "@types/react-dom": "*",
     "@types/warning": "^3.0.0",
-    "canvas": "^3.0.0-rc2",
+    "canvas": "^3.0.0",
     "core-js": "^3.37.0",
     "cpy-cli": "^5.0.0",
     "jsdom": "^24.0.0",

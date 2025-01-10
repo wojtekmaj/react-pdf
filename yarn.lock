@@ -1285,15 +1285,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"canvas@npm:^3.0.0-rc2":
-  version: 3.0.0-rc3
-  resolution: "canvas@npm:3.0.0-rc3"
+"canvas@npm:^3.0.0, canvas@npm:^3.0.0-rc2":
+  version: 3.0.1
+  resolution: "canvas@npm:3.0.1"
   dependencies:
     node-addon-api: "npm:^7.0.0"
     node-gyp: "npm:latest"
     prebuild-install: "npm:^7.1.1"
     simple-get: "npm:^3.0.3"
-  checksum: 10c0/d12626082829b7da297b50b82ddd357434f9ffa99f9b5571316edee6853ae757a28747d187bfd7d2e7538a40c9b4f2ad1d1a7356806112f0ff0ad430f034cb75
+  checksum: 10c0/467e801cd7a7fa172ba4cc45a61bb62cd16e145772a895e7fc4ffb9e643246a64461aa21f85450bf08abbf99d92994485fbdadaa6c2c11942da838362c2d6cfb
   languageName: node
   linkType: hard
 
@@ -3134,7 +3134,7 @@ __metadata:
     "@types/react": "npm:*"
     "@types/react-dom": "npm:*"
     "@types/warning": "npm:^3.0.0"
-    canvas: "npm:^3.0.0-rc2"
+    canvas: "npm:^3.0.0"
     clsx: "npm:^2.0.0"
     core-js: "npm:^3.37.0"
     cpy-cli: "npm:^5.0.0"
