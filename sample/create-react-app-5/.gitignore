@@ -1,6 +1,0 @@
-.tsimp
-build
-node_modules
-public/cmaps
-public/standard_fonts
-public/pdf.worker.mjs
