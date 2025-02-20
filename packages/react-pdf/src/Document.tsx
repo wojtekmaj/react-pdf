@@ -186,7 +186,7 @@ export type DocumentProps = {
    *
    * For a full list of possible parameters, check [PDF.js documentation on DocumentInitParameters](https://mozilla.github.io/pdf.js/api/draft/module-pdfjsLib.html#~DocumentInitParameters).
    *
-   * **Note**: Make sure to define options object outside of your React component, and use `useMemo` if you can't.
+   * **Note**: Make sure to define options object outside of your React component or use `useMemo` if you can't.
    *
    * @example { cMapUrl: '/cmaps/' }
    */
