@@ -20,8 +20,5 @@
   "devDependencies": {
     "husky": "^9.0.0"
   },
-  "resolutions": {
-    "pdfjs-dist": "patch:pdfjs-dist@npm:4.8.69#.yarn/patches/pdfjs-dist-npm-4.8.69-789befba80.patch"
-  },
   "packageManager": "yarn@4.3.1"
 }

@@ -55,6 +55,8 @@ jobs:
 
       - name: Install dependencies
         run: yarn --immutable
+        env:
+          PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: true
 
       - name: Override React version
         if: ${{ matrix.react == 19 }}
@@ -105,6 +107,15 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-${{ env.cache-name }}
 
+      - name: Cache ~/.cache/ms-playwright
+        id: playwright-cache
+        uses: actions/cache@v4
+        env:
+          cache-name: playwright-cache
+        with:
+          path: ~/.cache/ms-playwright
+          key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('**/yarn.lock') }}
+
       - name: Use Node.js
         uses: actions/setup-node@v4
         with:
@@ -124,5 +135,9 @@ jobs:
           yarn config set enableImmutableInstalls false
           yarn up react@beta react-dom@beta
 
-      - name: Run tests (React ${{ matrix.react }})
+      - name: Install Playwright browsers
+        if: steps.playwright-cache.outputs.cache-hit != 'true'
+        run: yarn workspace react-pdf playwright install chromium-headless-shell
+
+      - name: Run unit tests (React ${{ matrix.react }})
         run: yarn unit

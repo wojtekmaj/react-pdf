@@ -16,8 +16,8 @@ import type { DocumentContextType } from './shared/types.js';
 
 type PDFOutline = Awaited<ReturnType<PDFDocumentProxy['getOutline']>>;
 
-const pdfFile = loadPDF('./../../__mocks__/_pdf.pdf');
-const pdfFile2 = loadPDF('./../../__mocks__/_pdf2.pdf');
+const pdfFile = await loadPDF('../../../__mocks__/_pdf.pdf');
+const pdfFile2 = await loadPDF('../../../__mocks__/_pdf2.pdf');
 
 function renderWithContext(children: React.ReactNode, context: Partial<DocumentContextType>) {
   const { rerender, ...otherResult } = render(

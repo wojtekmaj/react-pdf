@@ -1,5 +1,7 @@
-import fs from 'node:fs';
 import { vi } from 'vitest';
+import { server } from '@vitest/browser/context';
+
+const { readFile } = server.commands;
 
 function makeAsyncCallbackWithoutValue<T extends unknown[]>() {
   let promiseResolve: (args: T) => void;
@@ -33,23 +35,28 @@ export function makeAsyncCallback<T>(value?: T) {
   return makeAsyncCallbackWithValue<T>(value);
 }
 
-export function loadPDF(path: string) {
-  const raw = fs.readFileSync(path);
-  const arrayBuffer = raw.buffer;
+export async function loadPDF(path: string) {
+  const raw = await readFile(path, 'binary');
+
+  // Convert binary read as string to ArrayBuffer
+  const arrayBuffer = new Uint8Array(raw.length);
+  for (let i = 0; i < raw.length; i += 1) {
+    arrayBuffer[i] = raw.charCodeAt(i) & 0xff;
+  }
 
   return {
     raw,
     get arrayBuffer() {
-      return new Uint8Array(raw).buffer;
+      return arrayBuffer.buffer.slice(0);
     },
     get blob() {
       return new Blob([arrayBuffer], { type: 'application/pdf' });
     },
     get data() {
-      return new Uint8Array(raw);
+      return new Uint8Array(arrayBuffer);
     },
     get dataURI() {
-      return `data:application/pdf;base64,${raw.toString('base64')}`;
+      return `data:application/pdf;base64,${btoa(raw)}`;
     },
     get file() {
       return new File([arrayBuffer], 'test.pdf', { type: 'application/pdf' });

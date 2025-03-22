@@ -14,8 +14,8 @@ import type { PDFDocumentProxy } from 'pdfjs-dist';
 import type { ScrollPageIntoViewArgs } from './shared/types.js';
 import type LinkService from './LinkService.js';
 
-const pdfFile = loadPDF('./../../__mocks__/_pdf.pdf');
-const pdfFile2 = loadPDF('./../../__mocks__/_pdf2.pdf');
+const pdfFile = await loadPDF('../../../__mocks__/_pdf.pdf');
+const pdfFile2 = await loadPDF('../../../__mocks__/_pdf2.pdf');
 
 const OK = Symbol('OK');
 
@@ -93,8 +93,7 @@ describe('Document', () => {
       await expect(onLoadSuccessPromise).resolves.toMatchObject([desiredLoadedPdf]);
     });
 
-    // FIXME: In Jest, it used to be worked around as described in https://github.com/facebook/jest/issues/7780
-    it.skip('loads a file and calls onSourceSuccess and onLoadSuccess callbacks via ArrayBuffer properly', async () => {
+    it('loads a file and calls onSourceSuccess and onLoadSuccess callbacks via ArrayBuffer properly', async () => {
       const { func: onSourceSuccess, promise: onSourceSuccessPromise } = makeAsyncCallback(OK);
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 

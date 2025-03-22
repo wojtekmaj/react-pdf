@@ -1,11 +1,20 @@
 import { configDefaults, defineConfig } from 'vitest/config';
 
-export default defineConfig({
+import type { ViteUserConfig } from 'vitest/config';
+
+const config: ViteUserConfig = defineConfig({
   test: {
-    environment: 'jsdom',
+    browser: {
+      enabled: true,
+      headless: true,
+      instances: [{ browser: 'chromium' }],
+      provider: 'playwright',
+    },
     exclude: [...configDefaults.exclude, 'src/index.test.ts'],
     pool: 'forks',
     setupFiles: 'vitest.setup.ts',
     watch: false,
   },
 });
+
+export default config;

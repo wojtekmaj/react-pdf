@@ -18,6 +18,7 @@
 !**/.yarn/versions
 
 # Project-generated directories and files
+__screenshots__
 coverage
 dist
 node_modules
