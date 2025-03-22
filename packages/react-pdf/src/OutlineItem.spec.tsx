@@ -12,7 +12,7 @@ import OutlineContext from './OutlineContext.js';
 import type { PDFDocumentProxy } from 'pdfjs-dist';
 import type { DocumentContextType, OutlineContextType } from './shared/types.js';
 
-const pdfFile = loadPDF('./../../__mocks__/_pdf.pdf');
+const pdfFile = await loadPDF('../../../__mocks__/_pdf.pdf');
 
 type PDFOutline = Awaited<ReturnType<PDFDocumentProxy['getOutline']>>;
 type PDFOutlineItem = PDFOutline[number];

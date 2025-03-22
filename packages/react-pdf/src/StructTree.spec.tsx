@@ -14,7 +14,7 @@ import type { PDFPageProxy } from 'pdfjs-dist';
 import type { PageContextType } from './shared/types.js';
 import type { StructTreeNode } from 'pdfjs-dist/types/src/display/api.js';
 
-const pdfFile = loadPDF('./../../__mocks__/_pdf.pdf');
+const pdfFile = await loadPDF('../../../__mocks__/_pdf.pdf');
 
 function renderWithContext(children: React.ReactNode, context: Partial<PageContextType>) {
   const { rerender, ...otherResult } = render(

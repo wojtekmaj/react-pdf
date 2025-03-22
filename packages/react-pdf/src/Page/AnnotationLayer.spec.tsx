@@ -17,8 +17,8 @@ import type { RenderResult } from '@testing-library/react';
 import type { PDFDocumentProxy, PDFPageProxy } from 'pdfjs-dist';
 import type { Annotations, DocumentContextType, PageContextType } from '../shared/types.js';
 
-const pdfFile = loadPDF('./../../__mocks__/_pdf.pdf');
-const annotatedPdfFile = loadPDF('./../../__mocks__/_pdf3.pdf');
+const pdfFile = await loadPDF('../../../../__mocks__/_pdf.pdf');
+const annotatedPdfFile = await loadPDF('../../../../__mocks__/_pdf3.pdf');
 
 function renderWithContext(
   children: React.ReactNode,

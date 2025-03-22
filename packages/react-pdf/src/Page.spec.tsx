@@ -16,9 +16,9 @@ import DocumentContext from './DocumentContext.js';
 import type { PDFDocumentProxy, PDFPageProxy } from 'pdfjs-dist';
 import type { DocumentContextType, PageCallback } from './shared/types.js';
 
-const pdfFile = loadPDF('./../../__mocks__/_pdf.pdf');
-const pdfFile2 = loadPDF('./../../__mocks__/_pdf2.pdf');
-const pdfFile4 = loadPDF('./../../__mocks__/_pdf4.pdf');
+const pdfFile = await loadPDF('../../../__mocks__/_pdf.pdf');
+const pdfFile2 = await loadPDF('../../../__mocks__/_pdf2.pdf');
+const pdfFile4 = await loadPDF('../../../__mocks__/_pdf4.pdf');
 
 function renderWithContext(children: React.ReactNode, context: Partial<DocumentContextType>) {
   const { rerender, ...otherResult } = render(
