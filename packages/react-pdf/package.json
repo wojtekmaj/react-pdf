@@ -31,7 +31,7 @@
     "build-js-esm": "tsc --project tsconfig.build.json --outDir dist/esm",
     "build-js-cjs": "tsc --project tsconfig.build.json --outDir dist/cjs --module commonjs --moduleResolution node --verbatimModuleSyntax false",
     "build-js-cjs-package": "echo '{\n  \"type\": \"commonjs\"\n}' > dist/cjs/package.json",
-    "clean": "rimraf dist",
+    "clean": "node -e \"fs.rmSync('./dist', { recursive: true, force: true })\"",
     "copy-styles": "cpy 'src/**/*.css' dist/esm && cpy 'src/**/*.css' dist/cjs",
     "format": "biome format",
     "lint": "biome lint",
@@ -75,7 +75,6 @@
     "playwright": "^1.51.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "rimraf": "^6.0.0",
     "typescript": "^5.5.2",
     "vitest": "^3.0.5",
     "vitest-browser-react": "^0.1.1"
