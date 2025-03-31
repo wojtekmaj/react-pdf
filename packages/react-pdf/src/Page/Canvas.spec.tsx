@@ -66,7 +66,14 @@ describe('Canvas', () => {
 
       expect.assertions(1);
 
-      await expect(onRenderSuccessPromise).resolves.toMatchObject([{}]);
+      await expect(onRenderSuccessPromise).resolves.toMatchObject([
+        {},
+        {
+          annotationMode: 1,
+          canvasContext: expect.any(Object),
+          viewport: page.getViewport({ scale: 1, rotation: 0 }),
+        },
+      ]);
 
       restoreConsole();
     });

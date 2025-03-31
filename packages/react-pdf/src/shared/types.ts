@@ -11,6 +11,7 @@ import type {
   StructTreeNode,
   TextContent,
   TextItem,
+  RenderParameters,
 } from 'pdfjs-dist/types/src/display/api.js';
 import type { AnnotationLayerParameters } from 'pdfjs-dist/types/src/display/annotation_layer.js';
 import type LinkService from '../LinkService.js';
@@ -116,7 +117,7 @@ export type OnRenderAnnotationLayerSuccess = () => void;
 
 export type OnRenderError = OnError;
 
-export type OnRenderSuccess = (page: PageCallback) => void;
+export type OnRenderSuccess = (page: PageCallback, renderContext: RenderParameters) => void;
 
 export type OnRenderTextLayerError = OnError;
 
