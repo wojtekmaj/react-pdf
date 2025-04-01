@@ -474,7 +474,7 @@ Alternatively, you could use standard fonts from external CDN:
 import { pdfjs } from 'react-pdf';
 
 const options = {
-  standardFontDataUrl: `https://unpkg.com/pdfjs-dist@${pdfjs.version}/standard_fonts`,
+  standardFontDataUrl: `https://unpkg.com/pdfjs-dist@${pdfjs.version}/standard_fonts/`,
 };
 
 // Inside of React component
