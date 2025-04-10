@@ -51,7 +51,7 @@ jobs:
           node-version: '22'
 
       - name: Enable Corepack
-        run: corepack enable
+        run: npm i -g corepack
 
       - name: Install dependencies
         run: yarn --immutable
@@ -122,7 +122,7 @@ jobs:
           node-version: '22'
 
       - name: Enable Corepack
-        run: corepack enable
+        run: npm i -g corepack
 
       - name: Install dependencies
         run: yarn --immutable

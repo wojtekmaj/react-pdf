@@ -36,7 +36,7 @@ jobs:
           registry-url: 'https://registry.npmjs.org'
 
       - name: Enable Corepack
-        run: corepack enable
+        run: npm i -g corepack
 
       - name: Install dependencies
         run: yarn --immutable
