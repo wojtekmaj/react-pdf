@@ -2384,10 +2384,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"make-cancellable-promise@npm:^1.3.1":
-  version: 1.3.1
-  resolution: "make-cancellable-promise@npm:1.3.1"
-  checksum: 10c0/82d0c81640f0f66f3fb1e2f448f6e05643d6f2e44b2772be75d79e9dd79ee21dfa803ebddcf4452e7852515a16c9da8ef3e1b6161e0458ed2069146cde586add
+"make-cancellable-promise@npm:^2.0.0":
+  version: 2.0.0
+  resolution: "make-cancellable-promise@npm:2.0.0"
+  checksum: 10c0/e9d76281ea0005001c3de95d26ea6cd508f44ffd8fa2e19193b92d1e8bc03cf75f87750baec6de3dd032b12f8b747ba88fef3328309fe005dbbdd56ce70617c6
   languageName: node
   linkType: hard
 
@@ -3063,7 +3063,7 @@ __metadata:
     clsx: "npm:^2.0.0"
     cpy-cli: "npm:^5.0.0"
     dequal: "npm:^2.0.3"
-    make-cancellable-promise: "npm:^1.3.1"
+    make-cancellable-promise: "npm:^2.0.0"
     make-event-props: "npm:^1.6.0"
     merge-refs: "npm:^1.3.0"
     pdfjs-dist: "npm:4.8.69"
