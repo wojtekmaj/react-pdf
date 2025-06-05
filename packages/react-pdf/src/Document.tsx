@@ -25,6 +25,8 @@ import {
   isBrowser,
   isDataURI,
   loadFromFile,
+  moveEndElementToSelectionEnd,
+  resetTextLayer,
 } from './shared/utils.js';
 
 import useResolver from './shared/hooks/useResolver.js';
@@ -275,6 +277,8 @@ const Document: React.ForwardRefExoticComponent<
 
   const pages = useRef<HTMLDivElement[]>([]);
 
+  // the selection range
+  const prevRangeRef = useRef<Range>();
   const prevFile = useRef<File | undefined>(undefined);
   const prevOptions = useRef<Options | undefined>(undefined);
 
@@ -571,6 +575,8 @@ const Document: React.ForwardRefExoticComponent<
     delete pages.current[pageIndex];
   }, []);
 
+  const textLayers = useMemo(() => new Map(), [pdf]);
+
   const childContext = useMemo(
     () => ({
       imageResourcesPath,
@@ -581,9 +587,56 @@ const Document: React.ForwardRefExoticComponent<
       renderMode,
       rotate,
       unregisterPage,
+      textLayers,
     }),
-    [imageResourcesPath, onItemClick, pdf, registerPage, renderMode, rotate, unregisterPage],
+    [
+      imageResourcesPath,
+      textLayers,
+      onItemClick,
+      pdf,
+      registerPage,
+      renderMode,
+      rotate,
+      unregisterPage,
+    ],
   );
+
+  /**
+   * In non-Firefox browsers, when hovering over an empty space,
+   * the selection will expand to cover all the text between the
+   * current selection and .endOfContent.By moving .endOfContent to right after
+   * limit the selection jump to at most cover the enteirety of the <span> where
+   * the selection is being modified.
+   */
+  useEffect(() => {
+    const handlePointerup = () => {
+      textLayers.forEach(resetTextLayer);
+    };
+
+    const handleSelectionChange = () => {
+      const selection = document.getSelection()!;
+      if (selection.rangeCount === 0) {
+        textLayers.forEach((end: HTMLElement, textlayer: HTMLElement) => {
+          if (textlayer.isConnected) {
+            resetTextLayer(end, textlayer);
+          } else {
+            textLayers.delete(textlayer);
+          }
+        });
+        return;
+      }
+      const clonedRange = moveEndElementToSelectionEnd(textLayers, prevRangeRef.current);
+
+      prevRangeRef.current = clonedRange;
+    };
+    document.addEventListener('pointerup', handlePointerup);
+    document.addEventListener('selectionchange', handleSelectionChange);
+
+    return () => {
+      document.removeEventListener('selectionchange', handleSelectionChange);
+      document.removeEventListener('pointerup', handlePointerup);
+    };
+  }, [textLayers]);
 
   const eventProps = useMemo(
     () => makeEventProps(otherProps, () => pdf),
