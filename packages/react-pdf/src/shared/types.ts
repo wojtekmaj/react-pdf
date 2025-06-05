@@ -15,6 +15,8 @@ import type {
 import type { AnnotationLayerParameters } from 'pdfjs-dist/types/src/display/annotation_layer.js';
 import type LinkService from '../LinkService.js';
 
+export type { PasswordResponses, StructTreeNode, TextContent };
+
 type NullableObject<T extends object> = { [P in keyof T]: T[P] | null };
 
 type KeyOfUnion<T> = T extends unknown ? keyof T : never;
