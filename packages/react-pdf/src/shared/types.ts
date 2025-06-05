@@ -11,9 +11,12 @@ import type {
   StructTreeNode,
   TextContent,
   TextItem,
+  TextMarkedContent,
 } from 'pdfjs-dist/types/src/display/api.js';
 import type { AnnotationLayerParameters } from 'pdfjs-dist/types/src/display/annotation_layer.js';
 import type LinkService from '../LinkService.js';
+
+export type { PasswordResponses, StructTreeNode, TextContent, TextItem, TextMarkedContent };
 
 type NullableObject<T extends object> = { [P in keyof T]: T[P] | null };
 
