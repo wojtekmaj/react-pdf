@@ -14,8 +14,8 @@ import type { PDFDocumentProxy } from 'pdfjs-dist';
 import type { ScrollPageIntoViewArgs } from './shared/types.js';
 import type LinkService from './LinkService.js';
 
-const pdfFile = await loadPDF('../../../__mocks__/_pdf.pdf');
-const pdfFile2 = await loadPDF('../../../__mocks__/_pdf2.pdf');
+const pdfFile = await loadPDF('../../__mocks__/_pdf.pdf');
+const pdfFile2 = await loadPDF('../../__mocks__/_pdf2.pdf');
 
 const OK = Symbol('OK');
 
