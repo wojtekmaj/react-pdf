@@ -2840,7 +2840,7 @@ __metadata:
     tiny-invariant: "npm:^1.0.0"
     typescript: "npm:^5.5.2"
     vitest: "npm:^3.2.3"
-    vitest-browser-react: "npm:^0.1.1"
+    vitest-browser-react: "npm:^0.2.0"
     warning: "npm:^4.0.0"
   peerDependencies:
     "@types/react": ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
@@ -3552,9 +3552,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"vitest-browser-react@npm:^0.1.1":
-  version: 0.1.1
-  resolution: "vitest-browser-react@npm:0.1.1"
+"vitest-browser-react@npm:^0.2.0":
+  version: 0.2.0
+  resolution: "vitest-browser-react@npm:0.2.0"
   peerDependencies:
     "@types/react": ">18.0.0"
     "@types/react-dom": ">18.0.0"
@@ -3567,7 +3567,7 @@ __metadata:
       optional: true
     "@types/react-dom":
       optional: true
-  checksum: 10c0/41a6e5c5584df8cdf3626cbbff1df901d01431eea84182e9351ac931a3ee496dc27a6eb7badcbe3d786e6195f5c6e1f2ce198c789ab2a3cbfe46ac68a961637d
+  checksum: 10c0/873a786a863d98a347750430dac8392e3defa311b906b0c36a93355814c111fdd5c7b928781b7b4e8c0d2e0777deabdb4f9b0549097edf2865be11e892d4a6f0
   languageName: node
   linkType: hard
 
