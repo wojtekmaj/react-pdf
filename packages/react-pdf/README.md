@@ -75,38 +75,6 @@ Add React-PDF to your project by executing `npm install react-pdf` or `yarn add 
 
 #### Next.js
 
-If you use Next.js without Turbopack enabled, add the following to your `next.config.js`:
-
-```diff
-module.exports = {
-+ webpack: (config) => {
-+   config.resolve.alias.canvas = false;
-
-+   return config;
-+ },
-}
-```
-
-If you use Next.js with Turbopack enabled, add `empty-module.ts` file:
-
-```ts
-export default {};
-```
-
-and add the following to your `next.config.js`:
-
-```diff
-module.exports = {
-+ experimental: {
-+   turbo: {
-+     resolveAlias: {
-+       canvas: './empty-module.ts',
-+     },
-+   },
-+ },
-};
-```
-
 If you use Next.js prior to v15 (v15.0.0-canary.53, specifically), you may need to add the following to your `next.config.js`:
 
 ```diff
