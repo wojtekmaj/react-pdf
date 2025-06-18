@@ -1,3 +1,5 @@
+import { useId } from 'react';
+
 type LayerOptionsProps = {
   renderAnnotationLayer: boolean;
   renderForms: boolean;
@@ -19,6 +21,11 @@ export default function LayerOptions({
   setRenderTextLayer,
   setUseCustomTextRenderer,
 }: LayerOptionsProps) {
+  const renderTextLayerId = useId();
+  const useCustomTextRendererId = useId();
+  const renderAnnotationLayerId = useId();
+  const renderFormsId = useId();
+
   function onRenderAnnotationLayerChange(event: React.ChangeEvent<HTMLInputElement>) {
     setRenderAnnotationLayer(event.target.checked);
   }
@@ -42,43 +49,43 @@ export default function LayerOptions({
       <div>
         <input
           checked={renderTextLayer}
-          id="renderTextLayer"
+          id={renderTextLayerId}
           onChange={onRenderTextLayersChange}
           type="checkbox"
         />
-        <label htmlFor="renderTextLayer">Render text layer</label>
+        <label htmlFor={renderTextLayerId}>Render text layer</label>
       </div>
 
       <div>
         <input
           checked={renderTextLayer ? useCustomTextRenderer : false}
           disabled={!renderTextLayer}
-          id="useCustomTextRenderer"
+          id={useCustomTextRendererId}
           onChange={onUseCustomTextRendererChange}
           type="checkbox"
         />
-        <label htmlFor="useCustomTextRenderer">Use custom text renderer</label>
+        <label htmlFor={useCustomTextRendererId}>Use custom text renderer</label>
       </div>
 
       <div>
         <input
           checked={renderAnnotationLayer}
-          id="renderAnnotationLayer"
+          id={renderAnnotationLayerId}
           onChange={onRenderAnnotationLayerChange}
           type="checkbox"
         />
-        <label htmlFor="renderAnnotationLayer">Render annotation layer</label>
+        <label htmlFor={renderAnnotationLayerId}>Render annotation layer</label>
       </div>
 
       <div>
         <input
           checked={renderAnnotationLayer ? renderForms : false}
           disabled={!renderAnnotationLayer}
-          id="renderForms"
+          id={renderFormsId}
           onChange={onRenderFormsChange}
           type="checkbox"
         />
-        <label htmlFor="renderForms">Render forms</label>
+        <label htmlFor={renderFormsId}>Render forms</label>
       </div>
     </fieldset>
   );

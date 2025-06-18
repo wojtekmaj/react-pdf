@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useId, useState } from 'react';
 import { useResizeObserver } from '@wojtekmaj/react-hooks';
 import { pdfjs, Document, Page } from 'react-pdf';
 import 'react-pdf/dist/esm/Page/AnnotationLayer.css';
@@ -23,6 +23,7 @@ const maxWidth = 800;
 type PDFFile = string | File | null;
 
 export default function Sample() {
+  const fileId = useId();
   const [file, setFile] = useState<PDFFile>('./sample.pdf');
   const [numPages, setNumPages] = useState<number>();
   const [containerRef, setContainerRef] = useState<HTMLElement | null>(null);
@@ -59,8 +60,8 @@ export default function Sample() {
       </header>
       <div className="Example__container">
         <div className="Example__container__load">
-          <label htmlFor="file">Load from file:</label>{' '}
-          <input onChange={onFileChange} type="file" />
+          <label htmlFor={fileId}>Load from file:</label>{' '}
+          <input id={fileId} onChange={onFileChange} type="file" />
         </div>
         <div className="Example__container__document" ref={setContainerRef}>
           <Document file={file} onLoadSuccess={onDocumentLoadSuccess} options={options}>

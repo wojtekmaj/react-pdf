@@ -1,3 +1,5 @@
+import { useId } from 'react';
+
 import type { ExternalLinkTarget } from './shared/types.js';
 
 type AnnotationOptionsProps = {
@@ -9,6 +11,10 @@ export default function AnnotationOptions({
   externalLinkTarget,
   setExternalLinkTarget,
 }: AnnotationOptionsProps) {
+  const targetUnsetId = useId();
+  const targetSelfId = useId();
+  const targetBlankId = useId();
+
   function onExternalLinkTargetChange(event: React.ChangeEvent<HTMLInputElement>) {
     const { value } = event.target;
 
@@ -23,39 +29,39 @@ export default function AnnotationOptions({
     <fieldset>
       <legend>Annotation options</legend>
 
-      <label htmlFor="externalLinkTarget">External link target</label>
+      <label htmlFor={targetUnsetId}>External link target</label>
       <div>
         <input
           checked={externalLinkTarget === undefined}
-          id="targetUnset"
+          id={targetUnsetId}
           name="externalLinkTarget"
           onChange={onExternalLinkTargetChange}
           type="radio"
           value="undefined"
         />
-        <label htmlFor="targetUnset">Unset</label>
+        <label htmlFor={targetUnsetId}>Unset</label>
       </div>
       <div>
         <input
           checked={externalLinkTarget === '_self'}
-          id="targetSelf"
+          id={targetSelfId}
           name="externalLinkTarget"
           onChange={onExternalLinkTargetChange}
           type="radio"
           value="_self"
         />
-        <label htmlFor="targetSelf">_self</label>
+        <label htmlFor={targetSelfId}>_self</label>
       </div>
       <div>
         <input
           checked={externalLinkTarget === '_blank'}
-          id="targetBlank"
+          id={targetBlankId}
           name="externalLinkTarget"
           onChange={onExternalLinkTargetChange}
           type="radio"
           value="_blank"
         />
-        <label htmlFor="targetBlank">_blank</label>
+        <label htmlFor={targetBlankId}>_blank</label>
       </div>
     </fieldset>
   );

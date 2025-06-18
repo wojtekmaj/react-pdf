@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useId, useRef } from 'react';
 
 import samplePDF from './test.pdf';
 
@@ -13,6 +13,9 @@ type LoadingOptionsProps = {
 export default function LoadingOptions({ file, setFile, setRender }: LoadingOptionsProps) {
   const url = useRef<HTMLInputElement>(null);
   const fetchAndPass = useRef<HTMLInputElement>(null);
+  const fileId = useId();
+  const urlId = useId();
+  const fetchAndPassId = useId();
 
   function onFileChange(event: React.ChangeEvent<HTMLInputElement>): void {
     const { files } = event.target;
@@ -64,18 +67,18 @@ export default function LoadingOptions({ file, setFile, setRender }: LoadingOpti
     <fieldset>
       <legend>Load file</legend>
 
-      <label htmlFor="file">Load from file:</label>
-      <input id="file" onChange={onFileChange} type="file" />
+      <label htmlFor={fileId}>Load from file:</label>
+      <input id={fileId} onChange={onFileChange} type="file" />
 
       <form onSubmit={onURLChange}>
-        <label htmlFor="url">Load from URL:</label>
-        <input id="url" type="text" />
+        <label htmlFor={urlId}>Load from URL:</label>
+        <input id={urlId} type="text" />
         <button type="submit">Apply</button>
       </form>
 
       <form onSubmit={onRequestChange}>
-        <label htmlFor="fetchAndPass">Fetch and pass:</label>
-        <input id="fetchAndPass" type="text" />
+        <label htmlFor={fetchAndPassId}>Fetch and pass:</label>
+        <input id={fetchAndPassId} type="text" />
         <button type="submit">Apply</button>
       </form>
 

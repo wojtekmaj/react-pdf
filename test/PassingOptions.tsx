@@ -1,4 +1,5 @@
 import { isDataURI } from './shared/utils.js';
+import { useId } from 'react';
 
 import type { File, PassMethod } from './shared/types.js';
 
@@ -9,6 +10,11 @@ type PassingOptionsProps = {
 };
 
 export default function PassingOptions({ file, passMethod, setPassMethod }: PassingOptionsProps) {
+  const passNormalId = useId();
+  const passObjectId = useId();
+  const passStringId = useId();
+  const passBlobId = useId();
+
   const sourceType = (() => {
     if (file === null) {
       return 'null';
@@ -46,46 +52,46 @@ export default function PassingOptions({ file, passMethod, setPassMethod }: Pass
       <div>
         <input
           checked={passMethod === undefined}
-          id="passNormal"
+          id={passNormalId}
           name="passMethod"
           onChange={onPassMethodChange}
           type="radio"
           value="undefined"
         />
-        <label htmlFor="passNormal">Pass as is ({sourceType})</label>
+        <label htmlFor={passNormalId}>Pass as is ({sourceType})</label>
       </div>
       <div>
         <input
           checked={passMethod === 'object'}
-          id="passObject"
+          id={passObjectId}
           name="passMethod"
           onChange={onPassMethodChange}
           type="radio"
           value="object"
         />
-        <label htmlFor="passObject">Pass as a parameter object</label>
+        <label htmlFor={passObjectId}>Pass as a parameter object</label>
       </div>
       <div>
         <input
           checked={passMethod === 'string'}
-          id="passString"
+          id={passStringId}
           name="passMethod"
           onChange={onPassMethodChange}
           type="radio"
           value="string"
         />
-        <label htmlFor="passString">Pass as a string/data URI</label>
+        <label htmlFor={passStringId}>Pass as a string/data URI</label>
       </div>
       <div>
         <input
           checked={passMethod === 'blob'}
-          id="passBlob"
+          id={passBlobId}
           name="passMethod"
           onChange={onPassMethodChange}
           type="radio"
           value="blob"
         />
-        <label htmlFor="passBlob">Pass as a File/Blob</label>
+        <label htmlFor={passBlobId}>Pass as a File/Blob</label>
       </div>
     </fieldset>
   );

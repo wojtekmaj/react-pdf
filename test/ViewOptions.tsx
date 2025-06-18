@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useId, useRef } from 'react';
 
 import type { RenderMode } from './shared/types.js';
 
@@ -43,6 +43,17 @@ export default function ViewOptions({
   const pageHeightInput = useRef<HTMLInputElement>(null);
   const pageWidthInput = useRef<HTMLInputElement>(null);
   const pageScaleInput = useRef<HTMLInputElement>(null);
+
+  const canvasBackgroundId = useId();
+  const pageWidthId = useId();
+  const pageHeightId = useId();
+  const pageScaleId = useId();
+  const devicePixelRatioId = useId();
+  const renderCanvasId = useId();
+  const renderCustomId = useId();
+  const renderNoneId = useId();
+  const rotationId = useId();
+  const displayAllId = useId();
 
   function onCanvasBackgroundChange(event: React.ChangeEvent<HTMLInputElement>) {
     setCanvasBackground(event.target.value);
@@ -136,20 +147,20 @@ export default function ViewOptions({
     <fieldset>
       <legend>View options</legend>
 
-      <label htmlFor="canvasBackground">Canvas background:</label>
+      <label htmlFor={canvasBackgroundId}>Canvas background:</label>
       <input
         defaultValue={canvasBackground || '#ffffff'}
-        id="canvasBackground"
+        id={canvasBackgroundId}
         onChange={onCanvasBackgroundChange}
         type="color"
       />
 
       <form onSubmit={onPageWidthChange}>
-        <label htmlFor="pageWidth">Page width:</label>
+        <label htmlFor={pageWidthId}>Page width:</label>
         &nbsp;
         <input
           defaultValue={pageWidth ? `${pageWidth}` : ''}
-          id="pageWidth"
+          id={pageWidthId}
           min={0}
           name="pageWidth"
           ref={pageWidthInput}
@@ -165,11 +176,11 @@ export default function ViewOptions({
       </form>
 
       <form onSubmit={onPageHeightChange}>
-        <label htmlFor="pageHeight">Page height:</label>
+        <label htmlFor={pageHeightId}>Page height:</label>
         &nbsp;
         <input
           defaultValue={pageHeight ? `${pageHeight}` : ''}
-          id="pageHeight"
+          id={pageHeightId}
           min={0}
           name="pageHeight"
           ref={pageHeightInput}
@@ -185,11 +196,11 @@ export default function ViewOptions({
       </form>
 
       <form onSubmit={onPageScaleChange}>
-        <label htmlFor="pageScale">Page scale:</label>
+        <label htmlFor={pageScaleId}>Page scale:</label>
         &nbsp;
         <input
           defaultValue={pageScale ? `${pageScale}` : ''}
-          id="pageScale"
+          id={pageScaleId}
           max={2}
           min={0}
           name="pageScale"
@@ -207,11 +218,11 @@ export default function ViewOptions({
       </form>
 
       <form onSubmit={onDevicePixelRatioChange}>
-        <label htmlFor="devicePixelRatio">Device pixel ratio:</label>
+        <label htmlFor={devicePixelRatioId}>Device pixel ratio:</label>
         &nbsp;
         <input
           defaultValue={devicePixelRatio ? `${devicePixelRatio}` : ''}
-          id="devicePixelRatio"
+          id={devicePixelRatioId}
           max={3}
           min={1}
           name="devicePixelRatio"
@@ -228,45 +239,45 @@ export default function ViewOptions({
         </button>
       </form>
 
-      <label htmlFor="renderMode">Render mode:</label>
+      <label htmlFor={renderCanvasId}>Render mode:</label>
       <div>
         <input
           checked={!renderMode || renderMode === 'canvas'}
-          id="renderCanvas"
+          id={renderCanvasId}
           name="renderMode"
           onChange={onRenderModeChange}
           type="radio"
           value="canvas"
         />
-        <label htmlFor="renderCanvas">Canvas</label>
+        <label htmlFor={renderCanvasId}>Canvas</label>
       </div>
       <div>
         <input
           checked={renderMode === 'custom'}
-          id="renderCustom"
+          id={renderCustomId}
           name="renderMode"
           onChange={onRenderModeChange}
           type="radio"
           value="custom"
         />
-        <label htmlFor="renderCustom">Custom</label>
+        <label htmlFor={renderCustomId}>Custom</label>
       </div>
       <div>
         <input
           checked={renderMode === 'none'}
-          id="renderNone"
+          id={renderNoneId}
           name="renderMode"
           onChange={onRenderModeChange}
           type="radio"
           value="none"
         />
-        <label htmlFor="renderNone">None</label>
+        <label htmlFor={renderNoneId}>None</label>
       </div>
 
       <div>
-        <label htmlFor="rotation">Rotation:</label>
+        <label htmlFor={rotationId}>Rotation:</label>
         <input
-          id="rotation"
+          id={rotationId}
           onChange={onChangeRotate}
           step="90"
           style={{ width: '42px' }}
@@ -287,8 +298,8 @@ export default function ViewOptions({
         </button>
       </div>
 
-      <input checked={displayAll} id="displayAll" onChange={onDisplayAllChange} type="checkbox" />
-      <label htmlFor="displayAll">View all pages</label>
+      <input checked={displayAll} id={displayAllId} onChange={onDisplayAllChange} type="checkbox" />
+      <label htmlFor={displayAllId}>View all pages</label>
     </fieldset>
   );
 }
