@@ -250,6 +250,7 @@ export default function TextLayer(): React.ReactElement {
   );
 
   return (
+    // biome-ignore lint/a11y/noStaticElementInteractions: False positive caused by non interactive wrapper listening for bubbling events
     <div
       className={clsx('react-pdf__Page__textContent', 'textLayer')}
       onMouseUp={onMouseUp}
