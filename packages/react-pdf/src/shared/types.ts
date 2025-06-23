@@ -14,6 +14,7 @@ import type {
   TextMarkedContent,
 } from 'pdfjs-dist/types/src/display/api.js';
 import type { AnnotationLayerParameters } from 'pdfjs-dist/types/src/display/annotation_layer.js';
+import type { OptionalContentConfig } from 'pdfjs-dist/types/src/display/optional_content_config.js';
 import type LinkService from '../LinkService.js';
 
 export type { PasswordResponses, StructTreeNode, TextContent, TextItem, TextMarkedContent };
@@ -165,6 +166,7 @@ export type PageContextType = {
   renderTextLayer: boolean;
   rotate: number;
   scale: number;
+  optionalContentConfig?: OptionalContentConfig | null;
 } | null;
 
 export type OutlineContextType = {

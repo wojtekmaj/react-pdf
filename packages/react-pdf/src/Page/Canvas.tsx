@@ -14,6 +14,7 @@ import {
   getDevicePixelRatio,
   isCancelException,
   makePageCallback,
+  isProvided,
 } from '../shared/utils.js';
 
 import type { RenderParameters } from 'pdfjs-dist/types/src/display/api.js';
@@ -41,6 +42,7 @@ export default function Canvas(props: CanvasProps): React.ReactElement {
     renderTextLayer,
     rotate,
     scale,
+    optionalContentConfig,
   } = mergedProps;
   const { canvasRef } = props;
 
@@ -114,6 +116,8 @@ export default function Canvas(props: CanvasProps): React.ReactElement {
         annotationMode: renderForms ? ANNOTATION_MODE.ENABLE_FORMS : ANNOTATION_MODE.ENABLE,
         canvasContext: canvas.getContext('2d', { alpha: false }) as CanvasRenderingContext2D,
         viewport: renderViewport,
+        optionalContentConfigPromise: isProvided(optionalContentConfig) ?
+            Promise.resolve(optionalContentConfig) : undefined,
       };
       if (canvasBackground) {
         renderContext.background = canvasBackground;
@@ -132,7 +136,7 @@ export default function Canvas(props: CanvasProps): React.ReactElement {
 
       return () => cancelRunningTask(runningTask);
     },
-    [canvasBackground, page, renderForms, renderViewport, viewport],
+    [canvasBackground, page, renderForms, renderViewport, viewport, optionalContentConfig],
   );
 
   const cleanup = useCallback(() => {
