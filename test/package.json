@@ -27,7 +27,7 @@
   "devDependencies": {
     "@biomejs/biome": "2.0.0",
     "@types/react": "*",
-    "@vitejs/plugin-react": "^4.3.4",
+    "@vitejs/plugin-react": "^4.6.0",
     "typescript": "^5.5.2",
     "vite": "^6.3.5",
     "vite-plugin-static-copy": "^2.2.0"
