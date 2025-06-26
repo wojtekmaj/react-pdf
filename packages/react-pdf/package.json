@@ -6,40 +6,25 @@
   "sideEffects": [
     "*.css"
   ],
-  "main": "./dist/cjs/index.js",
-  "module": "./dist/esm/index.js",
+  "main": "./dist/index.js",
   "source": "./src/index.ts",
-  "types": "./dist/cjs/index.d.ts",
+  "types": "./dist/index.d.ts",
   "exports": {
-    ".": {
-      "import": "./dist/esm/index.js",
-      "require": "./dist/cjs/index.js"
-    },
-    "./dist/Page/AnnotationLayer.css": {
-      "import": "./dist/esm/Page/AnnotationLayer.css",
-      "require": "./dist/cjs/Page/AnnotationLayer.css"
-    },
-    "./dist/Page/TextLayer.css": {
-      "import": "./dist/esm/Page/TextLayer.css",
-      "require": "./dist/cjs/Page/TextLayer.css"
-    },
+    ".": "./dist/index.js",
     "./*": "./*"
   },
   "scripts": {
     "build": "yarn build-js && yarn copy-styles",
-    "build-js": "yarn build-js-esm && yarn build-js-cjs && yarn build-js-cjs-package",
-    "build-js-esm": "tsc --project tsconfig.build.json --outDir dist/esm",
-    "build-js-cjs": "tsc --project tsconfig.build.json --outDir dist/cjs --module commonjs --moduleResolution node --verbatimModuleSyntax false",
-    "build-js-cjs-package": "echo '{\n  \"type\": \"commonjs\"\n}' > dist/cjs/package.json",
+    "build-js": "tsc --project tsconfig.build.json",
     "clean": "node -e \"fs.rmSync('./dist', { recursive: true, force: true })\"",
-    "copy-styles": "cpy 'src/**/*.css' dist/esm && cpy 'src/**/*.css' dist/cjs",
+    "copy-styles": "cpy 'src/**/*.css' dist",
     "format": "biome format",
     "lint": "biome lint",
     "prepack": "yarn clean && yarn build",
     "test": "yarn lint && yarn tsc && yarn format && yarn unit",
     "tsc": "tsc",
     "unit": "vitest",
-    "watch": "yarn build-js-esm --watch & yarn build-js-cjs --watch & node --eval \"fs.watch('src', () => child_process.exec('yarn copy-styles'))\""
+    "watch": "yarn build-js --watch & node --eval \"fs.watch('src', () => child_process.exec('yarn copy-styles'))\""
   },
   "keywords": [
     "pdf",
