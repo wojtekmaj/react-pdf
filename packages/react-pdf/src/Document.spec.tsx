@@ -22,11 +22,15 @@ const OK = Symbol('OK');
 function ChildInternal({
   renderMode,
   rotate,
+  scale,
 }: {
   renderMode?: string | null;
   rotate?: number | null;
+  scale?: number | null;
 }) {
-  return <div data-testid="child" data-rendermode={renderMode} data-rotate={rotate} />;
+  return (
+    <div data-testid="child" data-rendermode={renderMode} data-rotate={rotate} data-scale={scale} />
+  );
 }
 
 function Child(props: React.ComponentProps<typeof ChildInternal>) {
@@ -385,6 +389,24 @@ describe('Document', () => {
       expect(child.dataset.rotate).toBe('90');
     });
 
+    it('passes scale prop to its children', async () => {
+      const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
+
+      const { container } = render(
+        <Document file={pdfFile.file} loading="Loading" onLoadSuccess={onLoadSuccess} scale={1.5}>
+          <Child />
+        </Document>,
+      );
+
+      expect.assertions(1);
+
+      await onLoadSuccessPromise;
+
+      const child = getByTestId(container, 'child');
+
+      expect(child.dataset.scale).toBe('1.5');
+    });
+
     it('does not overwrite renderMode prop in its children when given renderMode prop to both Document and its children', async () => {
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
@@ -424,6 +446,24 @@ describe('Document', () => {
       const child = getByTestId(container, 'child');
 
       expect(child.dataset.rotate).toBe('180');
+    });
+
+    it('does not overwrite scale prop in its children when given scale prop to both Document and its children', async () => {
+      const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
+
+      const { container } = render(
+        <Document file={pdfFile.file} loading="Loading" onLoadSuccess={onLoadSuccess} scale={1.5}>
+          <Child scale={2} />
+        </Document>,
+      );
+
+      expect.assertions(1);
+
+      await onLoadSuccessPromise;
+
+      const child = getByTestId(container, 'child');
+
+      expect(child.dataset.scale).toBe('2');
     });
   });
 

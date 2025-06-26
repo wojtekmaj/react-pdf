@@ -204,6 +204,13 @@ export type DocumentProps = {
    * @example 90
    */
   rotate?: number | null;
+  /**
+   * Document scale.
+   *
+   * @default 1
+   * @example 0.5
+   */
+  scale?: number;
 } & EventProps<DocumentCallback | false | undefined>;
 
 const defaultOnPassword: OnPassword = (callback, reason) => {
@@ -262,6 +269,7 @@ const Document: React.ForwardRefExoticComponent<
     options,
     renderMode,
     rotate,
+    scale,
     ...otherProps
   },
   ref,
@@ -580,9 +588,10 @@ const Document: React.ForwardRefExoticComponent<
       registerPage,
       renderMode,
       rotate,
+      scale,
       unregisterPage,
     }),
-    [imageResourcesPath, onItemClick, pdf, registerPage, renderMode, rotate, unregisterPage],
+    [imageResourcesPath, onItemClick, pdf, registerPage, renderMode, rotate, scale, unregisterPage],
   );
 
   const eventProps = useMemo(
