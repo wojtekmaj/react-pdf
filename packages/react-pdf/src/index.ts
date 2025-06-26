@@ -15,6 +15,13 @@ export type { DocumentProps } from './Document.js';
 export type { OutlineProps } from './Outline.js';
 export type { PageProps } from './Page.js';
 export type { ThumbnailProps } from './Thumbnail.js';
+export type {
+  PasswordResponses as PasswordResponsesType,
+  StructTreeNode,
+  TextContent,
+  TextItem,
+  TextMarkedContent,
+} from './shared/types.js';
 
 import { displayWorkerWarning } from './shared/utils.js';
 
