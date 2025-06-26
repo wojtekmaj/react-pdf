@@ -14,6 +14,7 @@ import type {
   TextMarkedContent,
 } from 'pdfjs-dist/types/src/display/api.js';
 import type { AnnotationLayerParameters } from 'pdfjs-dist/types/src/display/annotation_layer.js';
+import type AnnotationMode from '../AnnotationMode.js';
 import type LinkService from '../LinkService.js';
 
 export type { PasswordResponses, StructTreeNode, TextContent, TextItem, TextMarkedContent };
@@ -143,6 +144,7 @@ export type DocumentContextType = {
 
 export type PageContextType = {
   _className?: string;
+  annotationMode?: (typeof AnnotationMode)[keyof typeof AnnotationMode];
   canvasBackground?: string;
   customTextRenderer?: CustomTextRenderer;
   devicePixelRatio?: number;

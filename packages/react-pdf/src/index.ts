@@ -9,6 +9,7 @@ import useDocumentContext from './shared/hooks/useDocumentContext.js';
 import useOutlineContext from './shared/hooks/useOutlineContext.js';
 import usePageContext from './shared/hooks/usePageContext.js';
 
+import AnnotationMode from './AnnotationMode.js';
 import PasswordResponses from './PasswordResponses.js';
 
 export type { DocumentProps } from './Document.js';
@@ -38,5 +39,6 @@ export {
   useDocumentContext,
   useOutlineContext,
   usePageContext,
+  AnnotationMode,
   PasswordResponses,
 };

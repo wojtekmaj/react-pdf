@@ -14,6 +14,7 @@ import CustomRenderer from './CustomRenderer.js';
 
 import { isArrayBuffer, isBlob, isBrowser, loadFromFile, dataURItoBlob } from './shared/utils.js';
 
+import type { AnnotationMode } from 'react-pdf';
 import type { PDFDocumentProxy, PDFPageProxy } from 'pdfjs-dist';
 import type { ExternalLinkTarget, File, PassMethod, RenderMode } from './shared/types.js';
 
@@ -69,6 +70,7 @@ export function readAsDataURL(file: Blob): Promise<string> {
 }
 
 export default function Test() {
+  const [annotationMode, setAnnotationMode] = useState<keyof typeof AnnotationMode>();
   const [canvasBackground, setCanvasBackground] = useState<string>();
   const [devicePixelRatio, setDevicePixelRatio] = useState<number>();
   const [displayAll, setDisplayAll] = useState(false);
@@ -83,7 +85,6 @@ export default function Test() {
   const [passMethod, setPassMethod] = useState<PassMethod>();
   const [render, setRender] = useState(true);
   const [renderAnnotationLayer, setRenderAnnotationLayer] = useState(true);
-  const [renderForms, setRenderForms] = useState(true);
   const [renderMode, setRenderMode] = useState<RenderMode | undefined>('canvas');
   const [renderTextLayer, setRenderTextLayer] = useState(true);
   const [useCustomTextRenderer, setUseCustomTextRenderer] = useState(true);
@@ -214,6 +215,7 @@ export default function Test() {
   };
 
   const pageProps = {
+    annotationMode,
     canvasBackground,
     className: 'custom-classname-page',
     customRenderer: CustomRenderer,
@@ -223,7 +225,6 @@ export default function Test() {
     onClick: onPageClick,
     onRenderSuccess: onPageRenderSuccess,
     renderAnnotationLayer,
-    renderForms,
     renderMode,
     renderTextLayer,
     scale: pageScale,
@@ -240,12 +241,12 @@ export default function Test() {
           <LoadingOptions file={file} setFile={setFile} setRender={setRender} />
           <PassingOptions file={file} passMethod={passMethod} setPassMethod={setPassMethod} />
           <LayerOptions
+            annotationMode={annotationMode}
             renderAnnotationLayer={renderAnnotationLayer}
-            renderForms={renderForms}
             renderTextLayer={renderTextLayer}
             useCustomTextRenderer={useCustomTextRenderer}
+            setAnnotationMode={setAnnotationMode}
             setRenderAnnotationLayer={setRenderAnnotationLayer}
-            setRenderForms={setRenderForms}
             setRenderTextLayer={setRenderTextLayer}
             setUseCustomTextRenderer={setUseCustomTextRenderer}
           />
