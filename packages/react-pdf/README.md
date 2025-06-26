@@ -58,14 +58,6 @@ If you need to support older browsers, you will need to use React-PDF v6 or earl
 
 To use the latest version of React-PDF, your project needs to use React 16.8 or later.
 
-If you use an older version of React, please refer to the table below to a find suitable React-PDF version.
-
-| React version | Newest compatible React-PDF version |
-| ------------- | ----------------------------------- |
-| ≥16.8         | latest                              |
-| ≥16.3         | 5.x                                 |
-| ≥15.5         | 4.x                                 |
-
 #### Preact
 
 React-PDF may be used with Preact.
