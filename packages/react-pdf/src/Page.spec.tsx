@@ -5,6 +5,7 @@ import { fireEvent, render } from '@testing-library/react';
 import { pdfjs } from './index.test.js';
 
 import Page from './Page.js';
+import AnnotationMode from './AnnotationMode.js';
 import LinkService from './LinkService.js';
 
 import failingPdf from '../../../__mocks__/_failing_pdf.js';
@@ -758,6 +759,32 @@ describe('Page', () => {
     const textWidgetAnnotation = container.querySelector('.textWidgetAnnotation');
 
     expect(textWidgetAnnotation).toBeFalsy();
+  });
+
+  it('requests page to be rendered with forms when given annotationMode = AnnotationMode.ENABLE_FORMS', async () => {
+    const { func: onRenderAnnotationLayerSuccess, promise: onRenderAnnotationLayerSuccessPromise } =
+      makeAsyncCallback();
+
+    const { container } = renderWithContext(
+      <Page
+        annotationMode={AnnotationMode.ENABLE_FORMS}
+        onRenderAnnotationLayerSuccess={onRenderAnnotationLayerSuccess}
+        pageIndex={0}
+        renderMode="none"
+      />,
+      {
+        linkService,
+        pdf: pdf4,
+      },
+    );
+
+    expect.assertions(1);
+
+    await onRenderAnnotationLayerSuccessPromise;
+
+    const textWidgetAnnotation = container.querySelector('.textWidgetAnnotation');
+
+    expect(textWidgetAnnotation).toBeTruthy();
   });
 
   it('requests page to be rendered with forms given renderForms = true', async () => {
