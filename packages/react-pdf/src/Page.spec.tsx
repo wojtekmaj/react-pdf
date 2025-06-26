@@ -3,6 +3,7 @@ import { page, userEvent } from 'vitest/browser';
 import { render } from 'vitest-browser-react';
 import { createRef } from 'react';
 
+import AnnotationMode from './AnnotationMode.js';
 import DocumentContext from './DocumentContext.js';
 import { pdfjs } from './index.test.js';
 import LinkService from './LinkService.js';
@@ -780,6 +781,59 @@ describe('Page', () => {
       <Page
         onRenderAnnotationLayerSuccess={onRenderAnnotationLayerSuccess}
         pageIndex={0}
+        renderMode="none"
+      />,
+      {
+        linkService,
+        pdf: pdf4,
+      },
+    );
+
+    expect.assertions(1);
+
+    await onRenderAnnotationLayerSuccessPromise;
+
+    const textWidgetAnnotation = container.querySelector('.textWidgetAnnotation');
+
+    expect(textWidgetAnnotation).toBeFalsy();
+  });
+
+  it('requests page to be rendered with forms given annotationMode = AnnotationMode.ENABLE_FORMS', async () => {
+    const { func: onRenderAnnotationLayerSuccess, promise: onRenderAnnotationLayerSuccessPromise } =
+      makeAsyncCallback();
+
+    const { container } = await renderWithContext(
+      <Page
+        annotationMode={AnnotationMode.ENABLE_FORMS}
+        onRenderAnnotationLayerSuccess={onRenderAnnotationLayerSuccess}
+        pageIndex={0}
+        renderMode="none"
+      />,
+      {
+        linkService,
+        pdf: pdf4,
+      },
+    );
+
+    expect.assertions(1);
+
+    await onRenderAnnotationLayerSuccessPromise;
+
+    const textWidgetAnnotation = container.querySelector('.textWidgetAnnotation');
+
+    expect(textWidgetAnnotation).toBeTruthy();
+  });
+
+  it('prefers annotationMode over renderForms', async () => {
+    const { func: onRenderAnnotationLayerSuccess, promise: onRenderAnnotationLayerSuccessPromise } =
+      makeAsyncCallback();
+
+    const { container } = await renderWithContext(
+      <Page
+        annotationMode={AnnotationMode.ENABLE}
+        onRenderAnnotationLayerSuccess={onRenderAnnotationLayerSuccess}
+        pageIndex={0}
+        renderForms
         renderMode="none"
       />,
       {

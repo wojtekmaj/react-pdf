@@ -1,6 +1,7 @@
 import { beforeAll, describe, expect, it, vi } from 'vitest';
 import { render } from 'vitest-browser-react';
 
+import AnnotationMode from '../AnnotationMode.js';
 import { pdfjs } from '../index.test.js';
 import PageContext from '../PageContext.js';
 import Canvas from './Canvas.js';
@@ -44,12 +45,12 @@ describe('Canvas', () => {
     page = await pdf.getPage(1);
 
     pageWithRendererMocked = Object.assign(page, {
-      render: () => ({
+      render: vi.fn(() => ({
         promise: new Promise<void>((resolve) => resolve()),
         cancel: () => {
           // Intentionally empty
         },
-      }),
+      })),
     });
   });
 
@@ -92,6 +93,41 @@ describe('Canvas', () => {
   });
 
   describe('rendering', () => {
+    it('passes annotationMode to the PDF.js renderer', async () => {
+      const { func: onRenderSuccess, promise: onRenderSuccessPromise } = makeAsyncCallback();
+
+      await renderWithContext(<Canvas />, {
+        annotationMode: AnnotationMode.DISABLE,
+        onRenderSuccess,
+        page: pageWithRendererMocked,
+        renderForms: true,
+        scale: 1,
+      });
+
+      await onRenderSuccessPromise;
+
+      expect(pageWithRendererMocked.render).toHaveBeenCalledWith(
+        expect.objectContaining({ annotationMode: AnnotationMode.DISABLE }),
+      );
+    });
+
+    it('maps the legacy renderForms prop to AnnotationMode.ENABLE_FORMS', async () => {
+      const { func: onRenderSuccess, promise: onRenderSuccessPromise } = makeAsyncCallback();
+
+      await renderWithContext(<Canvas />, {
+        onRenderSuccess,
+        page: pageWithRendererMocked,
+        renderForms: true,
+        scale: 1,
+      });
+
+      await onRenderSuccessPromise;
+
+      expect(pageWithRendererMocked.render).toHaveBeenCalledWith(
+        expect.objectContaining({ annotationMode: AnnotationMode.ENABLE_FORMS }),
+      );
+    });
+
     it('passes canvas element to canvasRef properly', async () => {
       const canvasRef = vi.fn();
 

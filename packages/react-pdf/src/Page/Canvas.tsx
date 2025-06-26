@@ -2,10 +2,10 @@
 
 import { useCallback, useEffect, useMemo, useRef } from 'react';
 import mergeRefs from 'merge-refs';
-import * as pdfjs from 'pdfjs-dist';
 import invariant from 'tiny-invariant';
 import warning from 'warning';
 
+import AnnotationMode from '../AnnotationMode.js';
 import StructTree from '../StructTree.js';
 
 import usePageContext from '../shared/hooks/usePageContext.js';
@@ -19,8 +19,6 @@ import {
 
 import type { RenderParameters } from 'pdfjs-dist/types/src/display/api.js';
 
-const ANNOTATION_MODE = pdfjs.AnnotationMode;
-
 type CanvasProps = {
   canvasRef?: React.Ref<HTMLCanvasElement>;
 };
@@ -33,6 +31,7 @@ export default function Canvas(props: CanvasProps): React.ReactElement {
   const mergedProps = { ...pageContext, ...props };
   const {
     _className,
+    annotationMode,
     canvasBackground,
     devicePixelRatio = getDevicePixelRatio(),
     onRenderError: onRenderErrorProps,
@@ -113,7 +112,8 @@ export default function Canvas(props: CanvasProps): React.ReactElement {
       canvas.style.visibility = 'hidden';
 
       const renderContext: RenderParameters = {
-        annotationMode: renderForms ? ANNOTATION_MODE.ENABLE_FORMS : ANNOTATION_MODE.ENABLE,
+        annotationMode:
+          annotationMode ?? (renderForms ? AnnotationMode.ENABLE_FORMS : AnnotationMode.ENABLE),
         canvas,
         canvasContext: canvas.getContext('2d', { alpha: false }) as CanvasRenderingContext2D,
         pageColors,
@@ -136,7 +136,7 @@ export default function Canvas(props: CanvasProps): React.ReactElement {
 
       return () => cancelRunningTask(runningTask);
     },
-    [canvasBackground, page, pageColors, renderForms, renderViewport, viewport],
+    [annotationMode, canvasBackground, page, pageColors, renderForms, renderViewport, viewport],
   );
 
   const cleanup = useCallback(() => {
