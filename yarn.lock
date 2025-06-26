@@ -627,7 +627,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@napi-rs/canvas@npm:^0.1.65":
+"@napi-rs/canvas@npm:^0.1.67":
   version: 0.1.72
   resolution: "@napi-rs/canvas@npm:0.1.72"
   dependencies:
@@ -2553,15 +2553,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"pdfjs-dist@npm:4.10.38":
-  version: 4.10.38
-  resolution: "pdfjs-dist@npm:4.10.38"
+"pdfjs-dist@npm:5.0.375":
+  version: 5.0.375
+  resolution: "pdfjs-dist@npm:5.0.375"
   dependencies:
-    "@napi-rs/canvas": "npm:^0.1.65"
+    "@napi-rs/canvas": "npm:^0.1.67"
   dependenciesMeta:
     "@napi-rs/canvas":
       optional: true
-  checksum: 10c0/77b022109be7aac00372750a53decea3979409e6ef1cf93bf554351569cd4d1fafc70afae4a9a3e4b4de3facf59d3acd54d324b0fcff781374bcb00493d449ce
+  checksum: 10c0/65938e2e57c80f254e4236305f9bf6a30adda0578c1d14b8db83fac820340d9665e431e154d66d6e51c4e9e4735cc2a90779f72f4de1a11732817322e61f2598
   languageName: node
   linkType: hard
 
@@ -2702,7 +2702,7 @@ __metadata:
     make-cancellable-promise: "npm:^2.0.0"
     make-event-props: "npm:^1.6.0"
     merge-refs: "npm:^1.3.0"
-    pdfjs-dist: "npm:4.10.38"
+    pdfjs-dist: "npm:5.0.375"
     playwright: "npm:^1.51.1"
     react: "npm:^18.2.0"
     react-dom: "npm:^18.2.0"

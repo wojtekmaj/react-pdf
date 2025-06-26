@@ -624,13 +624,15 @@ export default function Page(props: PageProps): React.ReactElement {
       data-page-number={pageNumber}
       // Assertion is needed for React 18 compatibility
       ref={mergeRefs(inputRef as React.Ref<HTMLDivElement>, pageElement)}
-      style={{
-        ['--scale-factor' as string]: `${scale}`,
-        backgroundColor: canvasBackground || 'white',
-        position: 'relative',
-        minWidth: 'min-content',
-        minHeight: 'min-content',
-      }}
+      style={
+        {
+          '--scale-factor': `${scale}`,
+          backgroundColor: canvasBackground || 'white',
+          position: 'relative',
+          minWidth: 'min-content',
+          minHeight: 'min-content',
+        } as React.CSSProperties
+      }
       {...eventProps}
     >
       {renderContent()}
