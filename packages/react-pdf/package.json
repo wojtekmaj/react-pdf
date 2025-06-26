@@ -55,7 +55,7 @@
     "clsx": "^2.0.0",
     "dequal": "^2.0.3",
     "make-cancellable-promise": "^2.0.0",
-    "make-event-props": "^1.6.0",
+    "make-event-props": "^2.0.0",
     "merge-refs": "^1.3.0",
     "pdfjs-dist": "5.3.31",
     "tiny-invariant": "^1.0.0",
