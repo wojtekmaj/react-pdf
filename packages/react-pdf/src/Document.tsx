@@ -618,9 +618,6 @@ const Document: React.ForwardRefExoticComponent<
       className={clsx('react-pdf__Document', className)}
       // Assertion is needed for React 18 compatibility
       ref={inputRef as React.Ref<HTMLDivElement>}
-      style={{
-        ['--scale-factor' as string]: '1',
-      }}
       {...eventProps}
     >
       {renderContent()}
