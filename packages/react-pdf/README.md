@@ -14,6 +14,7 @@ This package is used to _display_ existing PDFs. If you wish to _create_ PDFs us
 - Import by adding `import { Document } from 'react-pdf'`.
 - Use by adding `<Document file="..." />`. `file` can be a URL, base64 content, Uint8Array, and more.
 - Put `<Page />` components inside `<Document />` to render pages.
+- Import stylesheets for [annotations](#support-for-annotations) and [text layer](#support-for-text-layer) if applicable.
 
 ## Demo
 
