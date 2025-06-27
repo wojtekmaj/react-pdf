@@ -15,7 +15,6 @@ import DocumentContext from './DocumentContext.js';
 
 import type { PDFDocumentProxy, PDFPageProxy } from 'pdfjs-dist';
 import type { DocumentContextType, PageCallback } from './shared/types.js';
-import type { OptionalContentConfig } from 'pdfjs-dist/types/src/display/optional_content_config.js';
 
 const pdfFile = await loadPDF('../../__mocks__/_pdf.pdf');
 const pdfFile2 = await loadPDF('../../__mocks__/_pdf2.pdf');
@@ -739,7 +738,7 @@ describe('Page', () => {
       expect(annotationLayer).not.toBeInTheDocument();
     });
 
-    it('requests page to be rendered with default visibility for optionalContentConfig', async () => {
+    it('requests page to be rendered with default visibility given no optionalContentConfig', async () => {
       const { func: onRenderSuccess, promise: onRenderSuccessPromise } =
         makeAsyncCallback<[PageCallback]>();
 
@@ -754,25 +753,30 @@ describe('Page', () => {
       await onRenderSuccessPromise;
 
       const pageCanvas = container.querySelector('.react-pdf__Page__canvas') as HTMLCanvasElement;
-      const context: CanvasRenderingContext2D = pageCanvas.getContext('2d')!;
-      const imageData: ImageData = context.getImageData(100, 100, 1, 1);
+      const context = pageCanvas.getContext('2d');
 
-      // should render green pixel because the layer is visible
+      if (!context) {
+        throw new Error('CanvasRenderingContext2D is not available');
+      }
+
+      const imageData = context.getImageData(100, 100, 1, 1);
+
+      // Should render green pixel because the layer is visible
       expect(imageData.data).toStrictEqual(new Uint8ClampedArray([191, 255, 191, 255]));
     });
 
     it('requests page to be rendered with given optionalContentConfig', async () => {
       const { func: onRenderSuccess, promise: onRenderSuccessPromise } =
         makeAsyncCallback<[PageCallback]>();
-      const optionalContentConfig: OptionalContentConfig = await pdf5.getOptionalContentConfig();
 
+      const optionalContentConfig = await pdf5.getOptionalContentConfig();
       optionalContentConfig.setVisibility('1R', false);
 
       const { container } = renderWithContext(
         <Page onRenderSuccess={onRenderSuccess} pageIndex={0} />,
         {
-          optionalContentConfig,
           linkService,
+          optionalContentConfig,
           pdf: pdf5,
         },
       );
@@ -780,10 +784,15 @@ describe('Page', () => {
       await onRenderSuccessPromise;
 
       const pageCanvas = container.querySelector('.react-pdf__Page__canvas') as HTMLCanvasElement;
-      const context: CanvasRenderingContext2D = pageCanvas.getContext('2d')!;
-      const imageData: ImageData = context.getImageData(100, 100, 1, 1);
+      const context = pageCanvas.getContext('2d');
 
-      // should render white pixel because the layer is hidden
+      if (!context) {
+        throw new Error('CanvasRenderingContext2D is not available');
+      }
+
+      const imageData = context.getImageData(100, 100, 1, 1);
+
+      // Should render white pixel because the layer is hidden
       expect(imageData.data).toStrictEqual(new Uint8ClampedArray([255, 255, 255, 255]));
     });
   });

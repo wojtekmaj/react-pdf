@@ -13,8 +13,8 @@ import {
   cancelRunningTask,
   getDevicePixelRatio,
   isCancelException,
-  makePageCallback,
   isProvided,
+  makePageCallback,
 } from '../shared/utils.js';
 
 import type { RenderParameters } from 'pdfjs-dist/types/src/display/api.js';
@@ -37,12 +37,12 @@ export default function Canvas(props: CanvasProps): React.ReactElement {
     devicePixelRatio = getDevicePixelRatio(),
     onRenderError: onRenderErrorProps,
     onRenderSuccess: onRenderSuccessProps,
+    optionalContentConfig,
     page,
     renderForms,
     renderTextLayer,
     rotate,
     scale,
-    optionalContentConfig,
   } = mergedProps;
   const { canvasRef } = props;
 
@@ -137,7 +137,7 @@ export default function Canvas(props: CanvasProps): React.ReactElement {
 
       return () => cancelRunningTask(runningTask);
     },
-    [canvasBackground, page, renderForms, renderViewport, viewport, optionalContentConfig],
+    [canvasBackground, optionalContentConfig, page, renderForms, renderViewport, viewport],
   );
 
   const cleanup = useCallback(() => {

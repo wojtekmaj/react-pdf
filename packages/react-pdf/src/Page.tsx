@@ -333,6 +333,7 @@ export default function Page(props: PageProps): React.ReactElement {
     onRenderSuccess: onRenderSuccessProps,
     onRenderTextLayerError: onRenderTextLayerErrorProps,
     onRenderTextLayerSuccess: onRenderTextLayerSuccessProps,
+    optionalContentConfig,
     pageIndex: pageIndexProps,
     pageNumber: pageNumberProps,
     pdf,
@@ -345,7 +346,6 @@ export default function Page(props: PageProps): React.ReactElement {
     scale: scaleProps = defaultScale,
     unregisterPage,
     width,
-    optionalContentConfig,
     ...otherProps
   } = mergedProps;
 
@@ -509,6 +509,7 @@ export default function Page(props: PageProps): React.ReactElement {
             onRenderSuccess: onRenderSuccessProps,
             onRenderTextLayerError: onRenderTextLayerErrorProps,
             onRenderTextLayerSuccess: onRenderTextLayerSuccessProps,
+            optionalContentConfig,
             page,
             pageIndex,
             pageNumber,
@@ -516,7 +517,6 @@ export default function Page(props: PageProps): React.ReactElement {
             renderTextLayer: renderTextLayerProps,
             rotate,
             scale,
-            optionalContentConfig,
           }
         : null,
     [
@@ -536,6 +536,7 @@ export default function Page(props: PageProps): React.ReactElement {
       onRenderSuccessProps,
       onRenderTextLayerErrorProps,
       onRenderTextLayerSuccessProps,
+      optionalContentConfig,
       page,
       pageIndex,
       pageNumber,
@@ -543,7 +544,6 @@ export default function Page(props: PageProps): React.ReactElement {
       renderTextLayerProps,
       rotate,
       scale,
-      optionalContentConfig,
     ],
   );
 

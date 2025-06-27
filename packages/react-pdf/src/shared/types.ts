@@ -17,7 +17,14 @@ import type { AnnotationLayerParameters } from 'pdfjs-dist/types/src/display/ann
 import type { OptionalContentConfig } from 'pdfjs-dist/types/src/display/optional_content_config.js';
 import type LinkService from '../LinkService.js';
 
-export type { PasswordResponses, StructTreeNode, TextContent, TextItem, TextMarkedContent };
+export type {
+  OptionalContentConfig,
+  PasswordResponses,
+  StructTreeNode,
+  TextContent,
+  TextItem,
+  TextMarkedContent,
+};
 
 type NullableObject<T extends object> = { [P in keyof T]: T[P] | null };
 
@@ -135,12 +142,12 @@ export type DocumentContextType = {
   imageResourcesPath?: ImageResourcesPath;
   linkService: LinkService;
   onItemClick?: (args: OnItemClickArgs) => void;
+  optionalContentConfig?: OptionalContentConfig | null;
   pdf?: PDFDocumentProxy | false;
   registerPage: RegisterPage;
   renderMode?: RenderMode;
   rotate?: number | null;
   unregisterPage: UnregisterPage;
-  optionalContentConfig?: OptionalContentConfig | null;
 } | null;
 
 export type PageContextType = {
@@ -160,6 +167,7 @@ export type PageContextType = {
   onRenderSuccess?: OnRenderSuccess;
   onRenderTextLayerError?: OnRenderTextLayerError;
   onRenderTextLayerSuccess?: OnRenderTextLayerSuccess;
+  optionalContentConfig?: OptionalContentConfig | null;
   page: PDFPageProxy | false | undefined;
   pageIndex: number;
   pageNumber: number;
@@ -167,7 +175,6 @@ export type PageContextType = {
   renderTextLayer: boolean;
   rotate: number;
   scale: number;
-  optionalContentConfig?: OptionalContentConfig | null;
 } | null;
 
 export type OutlineContextType = {

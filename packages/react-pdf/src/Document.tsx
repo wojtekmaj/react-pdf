@@ -180,6 +180,13 @@ export type DocumentProps = {
    */
   onSourceSuccess?: OnSourceSuccess;
   /**
+   * An {@link OptionalContentConfig} created from {@link PDFDocumentProxy.getOptionalContentConfig}.
+   * If `null`, the configuration will be fetched automatically with the default visibility states set.
+   *
+   * @example pdfDocument.getOptionalContentConfig().then(optionalContentConfig => optionalContentConfig.setVisibility('1R', false));
+   */
+  optionalContentConfig?: OptionalContentConfig | null;
+  /**
    * An object in which additional parameters to be passed to PDF.js can be defined. Most notably:
    * - `cMapUrl`;
    * - `httpHeaders` - custom request headers, e.g. for authorization);
@@ -205,18 +212,13 @@ export type DocumentProps = {
    * @example 90
    */
   rotate?: number | null;
-  /*
+  /**
    * Document scale.
    *
    * @default 1
    * @example 0.5
    */
   scale?: number;
-  /**
-   * An {@link OptionalContentConfig} created from {@link PDFDocumentProxy.getOptionalContentConfig}.
-   * If `null`, the configuration will be fetched automatically with the default visibility states set.
-   */
-  optionalContentConfig?: OptionalContentConfig | null;
 } & EventProps<DocumentCallback | false | undefined>;
 
 const defaultOnPassword: OnPassword = (callback, reason) => {
@@ -272,11 +274,11 @@ const Document: React.ForwardRefExoticComponent<
     onPassword = defaultOnPassword,
     onSourceError: onSourceErrorProps,
     onSourceSuccess: onSourceSuccessProps,
+    optionalContentConfig,
     options,
     renderMode,
     rotate,
     scale,
-    optionalContentConfig,
     ...otherProps
   },
   ref,
@@ -591,24 +593,24 @@ const Document: React.ForwardRefExoticComponent<
       imageResourcesPath,
       linkService: linkService.current,
       onItemClick,
+      optionalContentConfig,
       pdf,
       registerPage,
       renderMode,
       rotate,
       scale,
       unregisterPage,
-      optionalContentConfig,
     }),
     [
       imageResourcesPath,
       onItemClick,
+      optionalContentConfig,
       pdf,
       registerPage,
       renderMode,
       rotate,
       scale,
       unregisterPage,
-      optionalContentConfig,
     ],
   );
 
