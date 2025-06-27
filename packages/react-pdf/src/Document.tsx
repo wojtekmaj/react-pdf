@@ -31,6 +31,7 @@ import useResolver from './shared/hooks/useResolver.js';
 
 import type { PDFDocumentProxy } from 'pdfjs-dist';
 import type { DocumentInitParameters } from 'pdfjs-dist/types/src/display/api.js';
+import type { OptionalContentConfig } from 'pdfjs-dist/types/src/display/optional_content_config.js';
 import type { EventProps } from 'make-event-props';
 import type {
   ClassName,
@@ -179,6 +180,14 @@ export type DocumentProps = {
    */
   onSourceSuccess?: OnSourceSuccess;
   /**
+   * An `OptionalContentConfig` object that can be used to control the visibility of optional content groups (OCGs) in the PDF document. This is useful for PDFs that contain layers, such as maps or technical drawings, where you may want to toggle the visibility of certain layers.
+   *
+   * @example
+   * const optionalContentConfig = await pdfDocument.getOptionalContentConfig()
+   * optionalContentConfig.setVisibility('1R', false)
+   */
+  optionalContentConfig?: OptionalContentConfig | null;
+  /**
    * An object in which additional parameters to be passed to PDF.js can be defined. Most notably:
    * - `cMapUrl`;
    * - `httpHeaders` - custom request headers, e.g. for authorization);
@@ -266,6 +275,7 @@ const Document: React.ForwardRefExoticComponent<
     onPassword = defaultOnPassword,
     onSourceError: onSourceErrorProps,
     onSourceSuccess: onSourceSuccessProps,
+    optionalContentConfig,
     options,
     renderMode,
     rotate,
@@ -584,6 +594,7 @@ const Document: React.ForwardRefExoticComponent<
       imageResourcesPath,
       linkService: linkService.current,
       onItemClick,
+      optionalContentConfig,
       pdf,
       registerPage,
       renderMode,
@@ -591,7 +602,17 @@ const Document: React.ForwardRefExoticComponent<
       scale,
       unregisterPage,
     }),
-    [imageResourcesPath, onItemClick, pdf, registerPage, renderMode, rotate, scale, unregisterPage],
+    [
+      imageResourcesPath,
+      onItemClick,
+      optionalContentConfig,
+      pdf,
+      registerPage,
+      renderMode,
+      rotate,
+      scale,
+      unregisterPage,
+    ],
   );
 
   const eventProps = useMemo(

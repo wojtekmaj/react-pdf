@@ -13,6 +13,7 @@ import {
   cancelRunningTask,
   getDevicePixelRatio,
   isCancelException,
+  isProvided,
   makePageCallback,
 } from '../shared/utils.js';
 
@@ -36,6 +37,7 @@ export default function Canvas(props: CanvasProps): React.ReactElement {
     devicePixelRatio = getDevicePixelRatio(),
     onRenderError: onRenderErrorProps,
     onRenderSuccess: onRenderSuccessProps,
+    optionalContentConfig,
     page,
     renderForms,
     renderTextLayer,
@@ -114,6 +116,9 @@ export default function Canvas(props: CanvasProps): React.ReactElement {
         annotationMode: renderForms ? ANNOTATION_MODE.ENABLE_FORMS : ANNOTATION_MODE.ENABLE,
         canvasContext: canvas.getContext('2d', { alpha: false }) as CanvasRenderingContext2D,
         viewport: renderViewport,
+        optionalContentConfigPromise: isProvided(optionalContentConfig)
+          ? Promise.resolve(optionalContentConfig)
+          : undefined,
       };
       if (canvasBackground) {
         renderContext.background = canvasBackground;
@@ -132,7 +137,7 @@ export default function Canvas(props: CanvasProps): React.ReactElement {
 
       return () => cancelRunningTask(runningTask);
     },
-    [canvasBackground, page, renderForms, renderViewport, viewport],
+    [canvasBackground, optionalContentConfig, page, renderForms, renderViewport, viewport],
   );
 
   const cleanup = useCallback(() => {
