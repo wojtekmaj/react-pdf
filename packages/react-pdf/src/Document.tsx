@@ -180,10 +180,11 @@ export type DocumentProps = {
    */
   onSourceSuccess?: OnSourceSuccess;
   /**
-   * An {@link OptionalContentConfig} created from {@link PDFDocumentProxy.getOptionalContentConfig}.
-   * If `null`, the configuration will be fetched automatically with the default visibility states set.
+   * An `OptionalContentConfig` object that can be used to control the visibility of optional content groups (OCGs) in the PDF document. This is useful for PDFs that contain layers, such as maps or technical drawings, where you may want to toggle the visibility of certain layers.
    *
-   * @example pdfDocument.getOptionalContentConfig().then(optionalContentConfig => optionalContentConfig.setVisibility('1R', false));
+   * @example
+   * const optionalContentConfig = await pdfDocument.getOptionalContentConfig()
+   * optionalContentConfig.setVisibility('1R', false)
    */
   optionalContentConfig?: OptionalContentConfig | null;
   /**
