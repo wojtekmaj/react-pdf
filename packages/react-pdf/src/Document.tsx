@@ -205,6 +205,7 @@ export type DocumentProps = {
    * @example 90
    */
   rotate?: number | null;
+  /*
    * Document scale.
    *
    * @default 1
