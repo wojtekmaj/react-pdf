@@ -16,6 +16,7 @@ export type { OutlineProps } from './Outline.js';
 export type { PageProps } from './Page.js';
 export type { ThumbnailProps } from './Thumbnail.js';
 export type {
+  OptionalContentConfig,
   PasswordResponses as PasswordResponsesType,
   StructTreeNode,
   TextContent,
