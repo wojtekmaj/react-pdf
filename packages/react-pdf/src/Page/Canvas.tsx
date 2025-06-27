@@ -116,8 +116,9 @@ export default function Canvas(props: CanvasProps): React.ReactElement {
         annotationMode: renderForms ? ANNOTATION_MODE.ENABLE_FORMS : ANNOTATION_MODE.ENABLE,
         canvasContext: canvas.getContext('2d', { alpha: false }) as CanvasRenderingContext2D,
         viewport: renderViewport,
-        optionalContentConfigPromise: isProvided(optionalContentConfig) ?
-            Promise.resolve(optionalContentConfig) : undefined,
+        optionalContentConfigPromise: isProvided(optionalContentConfig)
+          ? Promise.resolve(optionalContentConfig)
+          : undefined,
       };
       if (canvasBackground) {
         renderContext.background = canvasBackground;

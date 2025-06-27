@@ -31,6 +31,7 @@ import useResolver from './shared/hooks/useResolver.js';
 
 import type { PDFDocumentProxy } from 'pdfjs-dist';
 import type { DocumentInitParameters } from 'pdfjs-dist/types/src/display/api.js';
+import type { OptionalContentConfig } from 'pdfjs-dist/types/src/display/optional_content_config.js';
 import type { EventProps } from 'make-event-props';
 import type {
   ClassName,
@@ -204,6 +205,11 @@ export type DocumentProps = {
    * @example 90
    */
   rotate?: number | null;
+  /**
+   * An {@link OptionalContentConfig} created from {@link PDFDocumentProxy.getOptionalContentConfig}.
+   * If `null`, the configuration will be fetched automatically with the default visibility states set.
+   */
+  optionalContentConfig?: OptionalContentConfig | null;
 } & EventProps<DocumentCallback | false | undefined>;
 
 const defaultOnPassword: OnPassword = (callback, reason) => {
@@ -262,6 +268,7 @@ const Document: React.ForwardRefExoticComponent<
     options,
     renderMode,
     rotate,
+    optionalContentConfig,
     ...otherProps
   },
   ref,
@@ -581,8 +588,18 @@ const Document: React.ForwardRefExoticComponent<
       renderMode,
       rotate,
       unregisterPage,
+      optionalContentConfig,
     }),
-    [imageResourcesPath, onItemClick, pdf, registerPage, renderMode, rotate, unregisterPage],
+    [
+      imageResourcesPath,
+      onItemClick,
+      pdf,
+      registerPage,
+      renderMode,
+      rotate,
+      unregisterPage,
+      optionalContentConfig,
+    ],
   );
 
   const eventProps = useMemo(

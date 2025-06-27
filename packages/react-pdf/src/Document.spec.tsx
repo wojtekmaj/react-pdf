@@ -11,11 +11,13 @@ import Page from './Page.js';
 import { makeAsyncCallback, loadPDF, muteConsole, restoreConsole } from '../../../test-utils.js';
 
 import type { PDFDocumentProxy } from 'pdfjs-dist';
-import type { ScrollPageIntoViewArgs } from './shared/types.js';
+import type { DocumentContextType, ScrollPageIntoViewArgs } from './shared/types.js';
 import type LinkService from './LinkService.js';
+import type { OptionalContentConfig } from 'pdfjs-dist/types/src/display/optional_content_config.js';
 
 const pdfFile = await loadPDF('../../__mocks__/_pdf.pdf');
 const pdfFile2 = await loadPDF('../../__mocks__/_pdf2.pdf');
+const pdfFile5 = await loadPDF('../../__mocks__/_pdf5.pdf');
 
 const OK = Symbol('OK');
 
@@ -44,6 +46,9 @@ async function waitForAsync() {
 }
 
 describe('Document', () => {
+  // Loaded PDF file
+  let pdf5: PDFDocumentProxy;
+
   // Object with basic loaded PDF information that shall match after successful loading
   const desiredLoadedPdf: Partial<PDFDocumentProxy> = {};
   const desiredLoadedPdf2: Partial<PDFDocumentProxy> = {};
@@ -54,6 +59,8 @@ describe('Document', () => {
 
     const pdf2 = await pdfjs.getDocument({ data: pdfFile2.arrayBuffer }).promise;
     desiredLoadedPdf2._pdfInfo = pdf2._pdfInfo;
+
+    pdf5 = await pdfjs.getDocument({ data: pdfFile5.arrayBuffer }).promise;
   });
 
   describe('loading', () => {
@@ -424,6 +431,37 @@ describe('Document', () => {
       const child = getByTestId(container, 'child');
 
       expect(child.dataset.rotate).toBe('180');
+    });
+
+    it('passes optionalContentConfig prop to its children', async () => {
+      const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
+      const optionalContentConfig: OptionalContentConfig = await pdf5.getOptionalContentConfig();
+
+      expect(optionalContentConfig.getGroup('1R').visible).toBe(true);
+
+      optionalContentConfig.setVisibility('1R', false);
+
+      let documentContext: DocumentContextType | undefined;
+
+      render(
+        <Document
+          file={pdfFile5.file}
+          onLoadSuccess={onLoadSuccess}
+          optionalContentConfig={optionalContentConfig}
+        >
+          <DocumentContext.Consumer>
+            {(context) => {
+              documentContext = context;
+              return null;
+            }}
+          </DocumentContext.Consumer>
+        </Document>,
+      );
+
+      await onLoadSuccessPromise;
+
+      expect(documentContext?.optionalContentConfig).toBeDefined();
+      expect(documentContext!.optionalContentConfig!.getGroup('1R').visible).toBe(false);
     });
   });
 

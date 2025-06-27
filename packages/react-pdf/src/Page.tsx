@@ -21,7 +21,6 @@ import useDocumentContext from './shared/hooks/useDocumentContext.js';
 import useResolver from './shared/hooks/useResolver.js';
 
 import type { PDFDocumentProxy, PDFPageProxy } from 'pdfjs-dist';
-import type { OptionalContentConfig } from 'pdfjs-dist/types/src/display/optional_content_config.js';
 import type { EventProps } from 'make-event-props';
 import type {
   ClassName,
@@ -294,11 +293,6 @@ export type PageProps = {
    * @example 300
    */
   width?: number;
-  /**
-   * An {@link OptionalContentConfig} created from {@link PDFDocumentProxy.getOptionalContentConfig}.
-   * If `null`, the configuration will be fetched automatically with the default visibility states set.
-   */
-  optionalContentConfig?: OptionalContentConfig | null;
 } & EventProps<PageCallback | false | undefined>;
 
 /**
@@ -522,7 +516,7 @@ export default function Page(props: PageProps): React.ReactElement {
             renderTextLayer: renderTextLayerProps,
             rotate,
             scale,
-            optionalContentConfig
+            optionalContentConfig,
           }
         : null,
     [
@@ -549,7 +543,7 @@ export default function Page(props: PageProps): React.ReactElement {
       renderTextLayerProps,
       rotate,
       scale,
-      optionalContentConfig
+      optionalContentConfig,
     ],
   );
 

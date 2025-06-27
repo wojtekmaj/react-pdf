@@ -15,10 +15,12 @@ import DocumentContext from './DocumentContext.js';
 
 import type { PDFDocumentProxy, PDFPageProxy } from 'pdfjs-dist';
 import type { DocumentContextType, PageCallback } from './shared/types.js';
+import type { OptionalContentConfig } from 'pdfjs-dist/types/src/display/optional_content_config.js';
 
 const pdfFile = await loadPDF('../../__mocks__/_pdf.pdf');
 const pdfFile2 = await loadPDF('../../__mocks__/_pdf2.pdf');
 const pdfFile4 = await loadPDF('../../__mocks__/_pdf4.pdf');
+const pdfFile5 = await loadPDF('../../__mocks__/_pdf5.pdf');
 
 function renderWithContext(children: React.ReactNode, context: Partial<DocumentContextType>) {
   const { rerender, ...otherResult } = render(
@@ -48,6 +50,7 @@ describe('Page', () => {
   let pdf: PDFDocumentProxy;
   let pdf2: PDFDocumentProxy;
   let pdf4: PDFDocumentProxy;
+  let pdf5: PDFDocumentProxy;
 
   // Object with basic loaded page information that shall match after successful loading
   const desiredLoadedPage: Partial<PDFPageProxy> = {};
@@ -79,6 +82,8 @@ describe('Page', () => {
     unregisterPageArguments = [page._pageIndex];
 
     pdf4 = await pdfjs.getDocument({ data: pdfFile4.arrayBuffer }).promise;
+
+    pdf5 = await pdfjs.getDocument({ data: pdfFile5.arrayBuffer }).promise;
   });
 
   describe('loading', () => {
@@ -732,6 +737,54 @@ describe('Page', () => {
       const annotationLayer = container.querySelector('.react-pdf__Page__annotations');
 
       expect(annotationLayer).not.toBeInTheDocument();
+    });
+
+    it('requests page to be rendered with default visibility for optionalContentConfig', async () => {
+      const { func: onRenderSuccess, promise: onRenderSuccessPromise } =
+        makeAsyncCallback<[PageCallback]>();
+
+      const { container } = renderWithContext(
+        <Page onRenderSuccess={onRenderSuccess} pageIndex={0} />,
+        {
+          linkService,
+          pdf: pdf5,
+        },
+      );
+
+      await onRenderSuccessPromise;
+
+      const pageCanvas = container.querySelector('.react-pdf__Page__canvas') as HTMLCanvasElement;
+      const context: CanvasRenderingContext2D = pageCanvas.getContext('2d')!;
+      const imageData: ImageData = context.getImageData(100, 100, 1, 1);
+
+      // should render green pixel because the layer is visible
+      expect(imageData.data).toStrictEqual(new Uint8ClampedArray([191, 255, 191, 255]));
+    });
+
+    it('requests page to be rendered with given optionalContentConfig', async () => {
+      const { func: onRenderSuccess, promise: onRenderSuccessPromise } =
+        makeAsyncCallback<[PageCallback]>();
+      const optionalContentConfig: OptionalContentConfig = await pdf5.getOptionalContentConfig();
+
+      optionalContentConfig.setVisibility('1R', false);
+
+      const { container } = renderWithContext(
+        <Page onRenderSuccess={onRenderSuccess} pageIndex={0} />,
+        {
+          optionalContentConfig,
+          linkService,
+          pdf: pdf5,
+        },
+      );
+
+      await onRenderSuccessPromise;
+
+      const pageCanvas = container.querySelector('.react-pdf__Page__canvas') as HTMLCanvasElement;
+      const context: CanvasRenderingContext2D = pageCanvas.getContext('2d')!;
+      const imageData: ImageData = context.getImageData(100, 100, 1, 1);
+
+      // should render white pixel because the layer is hidden
+      expect(imageData.data).toStrictEqual(new Uint8ClampedArray([255, 255, 255, 255]));
     });
   });
 

@@ -140,6 +140,7 @@ export type DocumentContextType = {
   renderMode?: RenderMode;
   rotate?: number | null;
   unregisterPage: UnregisterPage;
+  optionalContentConfig?: OptionalContentConfig | null;
 } | null;
 
 export type PageContextType = {
