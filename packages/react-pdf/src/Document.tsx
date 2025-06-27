@@ -205,6 +205,12 @@ export type DocumentProps = {
    * @example 90
    */
   rotate?: number | null;
+   * Document scale.
+   *
+   * @default 1
+   * @example 0.5
+   */
+  scale?: number;
   /**
    * An {@link OptionalContentConfig} created from {@link PDFDocumentProxy.getOptionalContentConfig}.
    * If `null`, the configuration will be fetched automatically with the default visibility states set.
@@ -268,6 +274,7 @@ const Document: React.ForwardRefExoticComponent<
     options,
     renderMode,
     rotate,
+    scale,
     optionalContentConfig,
     ...otherProps
   },
@@ -587,6 +594,7 @@ const Document: React.ForwardRefExoticComponent<
       registerPage,
       renderMode,
       rotate,
+      scale,
       unregisterPage,
       optionalContentConfig,
     }),
@@ -597,6 +605,7 @@ const Document: React.ForwardRefExoticComponent<
       registerPage,
       renderMode,
       rotate,
+      scale,
       unregisterPage,
       optionalContentConfig,
     ],
@@ -635,9 +644,6 @@ const Document: React.ForwardRefExoticComponent<
       className={clsx('react-pdf__Document', className)}
       // Assertion is needed for React 18 compatibility
       ref={inputRef as React.Ref<HTMLDivElement>}
-      style={{
-        ['--scale-factor' as string]: '1',
-      }}
       {...eventProps}
     >
       {renderContent()}

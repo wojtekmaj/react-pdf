@@ -115,7 +115,7 @@
   background-image: var(--annotation-unfocused-field-background);
   border: 2px solid var(--input-unfocused-border-color);
   box-sizing: border-box;
-  font: calc(9px * var(--scale-factor)) sans-serif;
+  font: calc(9px * var(--total-scale-factor)) sans-serif;
   height: 100%;
   margin: 0;
   vertical-align: top;
@@ -246,21 +246,21 @@
 
 .annotationLayer .popupWrapper {
   position: absolute;
-  font-size: calc(9px * var(--scale-factor));
+  font-size: calc(9px * var(--total-scale-factor));
   width: 100%;
-  min-width: calc(180px * var(--scale-factor));
+  min-width: calc(180px * var(--total-scale-factor));
   pointer-events: none;
 }
 
 .annotationLayer .popup {
   position: absolute;
-  max-width: calc(180px * var(--scale-factor));
+  max-width: calc(180px * var(--total-scale-factor));
   background-color: rgba(255, 255, 153, 1);
-  box-shadow: 0 calc(2px * var(--scale-factor)) calc(5px * var(--scale-factor))
+  box-shadow: 0 calc(2px * var(--total-scale-factor)) calc(5px * var(--total-scale-factor))
     rgba(136, 136, 136, 1);
-  border-radius: calc(2px * var(--scale-factor));
-  padding: calc(6px * var(--scale-factor));
-  margin-left: calc(5px * var(--scale-factor));
+  border-radius: calc(2px * var(--total-scale-factor));
+  padding: calc(6px * var(--total-scale-factor));
+  margin-left: calc(5px * var(--total-scale-factor));
   cursor: pointer;
   font: message-box;
   white-space: normal;
@@ -269,7 +269,7 @@
 }
 
 .annotationLayer .popup > * {
-  font-size: calc(9px * var(--scale-factor));
+  font-size: calc(9px * var(--total-scale-factor));
 }
 
 .annotationLayer .popup h1 {
@@ -278,18 +278,18 @@
 
 .annotationLayer .popupDate {
   display: inline-block;
-  margin-left: calc(5px * var(--scale-factor));
+  margin-left: calc(5px * var(--total-scale-factor));
 }
 
 .annotationLayer .popupContent {
   border-top: 1px solid rgba(51, 51, 51, 1);
-  margin-top: calc(2px * var(--scale-factor));
-  padding-top: calc(2px * var(--scale-factor));
+  margin-top: calc(2px * var(--total-scale-factor));
+  padding-top: calc(2px * var(--total-scale-factor));
 }
 
 .annotationLayer .richText > * {
   white-space: pre-wrap;
-  font-size: calc(9px * var(--scale-factor));
+  font-size: calc(9px * var(--total-scale-factor));
 }
 
 .annotationLayer .highlightAnnotation,

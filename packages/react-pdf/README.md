@@ -14,6 +14,7 @@ This package is used to _display_ existing PDFs. If you wish to _create_ PDFs us
 - Import by adding `import { Document } from 'react-pdf'`.
 - Use by adding `<Document file="..." />`. `file` can be a URL, base64 content, Uint8Array, and more.
 - Put `<Page />` components inside `<Document />` to render pages.
+- Import stylesheets for [annotations](#support-for-annotations) and [text layer](#support-for-text-layer) if applicable.
 
 ## Demo
 
@@ -25,6 +26,7 @@ A minimal demo page can be found in `sample` directory.
 
 React-PDF is under constant development. This documentation is written for React-PDF 9.x branch. If you want to see documentation for other versions of React-PDF, use dropdown on top of GitHub page to switch to an appropriate tag. Here are quick links to the newest docs from each branch:
 
+- [v9.x](https://github.com/wojtekmaj/react-pdf/blob/v9.x/packages/react-pdf/README.md)
 - [v8.x](https://github.com/wojtekmaj/react-pdf/blob/v8.x/packages/react-pdf/README.md)
 - [v7.x](https://github.com/wojtekmaj/react-pdf/blob/v7.x/packages/react-pdf/README.md)
 - [v6.x](https://github.com/wojtekmaj/react-pdf/blob/v6.x/README.md)
@@ -40,30 +42,15 @@ React-PDF is under constant development. This documentation is written for React
 
 #### Browser support
 
-React-PDF supports all modern browsers. It is tested with the latest versions of Chrome, Edge, Safari, Firefox, and Opera.
+React-PDF supports the latest versions of all major modern browsers.
 
-The following browsers are supported out of the box in React-PDF v9:
+Browser compatibility for React-PDF primarily depends on PDF.js support. For details, refer to the [PDF.js documentation](https://github.com/mozilla/pdf.js/wiki/Frequently-Asked-Questions#faq-support).
 
-- Chrome ≥119
-- Edge ≥119
-- Safari ≥17.4
-- Firefox ≥121
-
-You may extend the list of supported browsers by providing additional polyfills (e.g. for `Array.prototype.at`, `Promise.allSettled` or `Promise.withResolvers`) and either configuring your bundler to transpile `pdfjs-dist` or using [legacy PDF.js worker](#legacy-pdfjs-worker).
-
-If you need to support older browsers, you will need to use React-PDF v6 or earlier.
+You may extend the list of supported browsers by providing additional polyfills (e.g. `Array.prototype.at`, `Promise.allSettled` or `Promise.withResolvers`) and configuring your bundler to transpile `pdfjs-dist`.
 
 #### React
 
 To use the latest version of React-PDF, your project needs to use React 16.8 or later.
-
-If you use an older version of React, please refer to the table below to a find suitable React-PDF version.
-
-| React version | Newest compatible React-PDF version |
-| ------------- | ----------------------------------- |
-| ≥16.8         | latest                              |
-| ≥16.3         | 5.x                                 |
-| ≥15.5         | 4.x                                 |
 
 #### Preact
 
@@ -101,10 +88,7 @@ pdfjs.GlobalWorkerOptions.workerSrc = new URL(
 ```
 
 > [!NOTE]
-> In Next.js:
->
-> - Using App Router, make sure to add `'use client';` to the top of the file.
-> - Using Pages Router, make sure to [disable SSR](https://nextjs.org/docs/pages/building-your-application/optimizing/lazy-loading#with-no-ssr) when importing the component you're using this code in.
+> In Next.js, make sure to skip SSR when importing the module you're using this code in. Here's how to do this in [Pages Router](https://nextjs.org/docs/pages/guides/lazy-loading#with-no-ssr) and [App Router](https://nextjs.org/docs/app/guides/lazy-loading#skipping-ssr).
 
 > [!NOTE]
 > pnpm requires an `.npmrc` file with `public-hoist-pattern[]=pdfjs-dist` for this to work.
@@ -148,25 +132,6 @@ fs.cpSync(pdfWorkerPath, './dist/pdf.worker.mjs', { recursive: true });
 import { pdfjs } from 'react-pdf';
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
-```
-
-#### Legacy PDF.js worker
-
-If you need to support older browsers, you may use legacy PDF.js worker. To do so, follow the instructions above, but replace `/build/` with `legacy/build/` in PDF.js worker import path, for example:
-
-```diff
- pdfjs.GlobalWorkerOptions.workerSrc = new URL(
--  'pdfjs-dist/build/pdf.worker.min.mjs',
-+  'pdfjs-dist/legacy/build/pdf.worker.min.mjs',
-   import.meta.url,
- ).toString();
-```
-
-or:
-
-```diff
--pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
-+pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/legacy/build/pdf.worker.min.mjs`;
 ```
 
 ### Usage
@@ -466,7 +431,7 @@ Loads a document passed using `file` prop.
 | file               | What PDF should be displayed.<br />Its value can be an URL, a file (imported using `import … from …` or from file input form element), or an object with parameters (`url` - URL; `data` - data, preferably Uint8Array; `range` - PDFDataRangeTransport.<br />**Warning**: Since equality check (`===`) is used to determine if `file` object has changed, it must be memoized by setting it in component's state, `useMemo` or other similar technique.                                                                                                                                                                                     | n/a                                                   | <ul><li>URL:<br />`"https://example.com/sample.pdf"`</li><li>File:<br />`import importedPdf from '../static/sample.pdf'` and then<br />`sample`</li><li>Parameter object:<br />`{ url: 'https://example.com/sample.pdf' }`</ul>                                              |
 | imageResourcesPath | The path used to prefix the src attributes of annotation SVGs.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               | n/a (pdf.js will fallback to an empty string)         | `"/public/images/"`                                                                                                                                                                                                                                                          |
 | inputRef           | A prop that behaves like [ref](https://reactjs.org/docs/refs-and-the-dom.html), but it's passed to main `<div>` rendered by `<Document>` component.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          | n/a                                                   | <ul><li>Function:<br />`(ref) => { this.myDocument = ref; }`</li><li>Ref created using `createRef`:<br />`this.ref = createRef();`<br />…<br />`inputRef={this.ref}`</li><li>Ref created using `useRef`:<br />`const ref = useRef();`<br />…<br />`inputRef={ref}`</li></ul> |
-| loading            | What the component should display while loading.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             | `"Loading PDF…"`                                      | <ul><li>String:<br />`"Please wait!"`</li><li>React element:<br />`<p>Please wait!</p>`</li><li>Function:<br />`this.renderLoader`</li></ul>                                                                                                                                 |
+| loading            | What the component should display while loading.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             | `"Loading PDF…"`                                      | <ul><li>String:<br />`"Please wait!"`</li><li>React element:<br />`<p>Please wait!</p>`</li><li>Function:<br />`this.renderLoader`</li></ul>                                                                                                                               |
 | noData             | What the component should display in case of no data.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        | `"No PDF file specified."`                            | <ul><li>String:<br />`"Please select a file."`</li><li>React element:<br />`<p>Please select a file.</p>`</li><li>Function:<br />`this.renderNoData`</li></ul>                                                                                                               |
 | onItemClick        | Function called when an outline item or a thumbnail has been clicked. Usually, you would like to use this callback to move the user wherever they requested to.                                                                                                                                                                                                                                                                                                                                                                                                                                                                              | n/a                                                   | `({ dest, pageIndex, pageNumber }) => alert('Clicked an item from page ' + pageNumber + '!')`                                                                                                                                                                                |
 | onLoadError        | Function called in case of an error while loading a document.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                | n/a                                                   | `(error) => alert('Error while loading document! ' + error.message)`                                                                                                                                                                                                         |
@@ -478,6 +443,7 @@ Loads a document passed using `file` prop.
 | options            | An object in which additional parameters to be passed to PDF.js can be defined. Most notably:<ul><li>`cMapUrl`;</li><li>`httpHeaders` - custom request headers, e.g. for authorization);</li><li>`withCredentials` - a boolean to indicate whether or not to include cookies in the request (defaults to `false`)</li></ul>For a full list of possible parameters, check [PDF.js documentation on DocumentInitParameters](https://mozilla.github.io/pdf.js/api/draft/module-pdfjsLib.html#~DocumentInitParameters).<br /><br />**Note**: Make sure to define options object outside of your React component or use `useMemo` if you can't. | n/a                                                   | `{ cMapUrl: '/cmaps/' }`                                                                                                                                                                                                                                                     |
 | renderMode         | Rendering mode of the document. Can be `"canvas"`, `"custom"` or `"none"`. If set to `"custom"`, `customRenderer` must also be provided.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     | `"canvas"`                                            | `"custom"`                                                                                                                                                                                                                                                                   |
 | rotate             | Rotation of the document in degrees. If provided, will change rotation globally, even for the pages which were given `rotate` prop of their own. `90` = rotated to the right, `180` = upside down, `270` = rotated to the left.                                                                                                                                                                                                                                                                                                                                                                                                              | n/a                                                   | `90`                                                                                                                                                                                                                                                                         |
+| scale              | Document scale.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              | `1`                                                   | `0.5`                                                                                                                                                                                                                                                                        |
 
 ### Page
 
