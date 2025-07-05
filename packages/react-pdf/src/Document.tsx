@@ -454,7 +454,7 @@ const Document: React.ForwardRefExoticComponent<
     };
   }, [findDocumentSource, sourceDispatch]);
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: Ommitted callbacks so they are not called every time they change
+  // biome-ignore lint/correctness/useExhaustiveDependencies: Omitted callbacks so they are not called every time they change
   useEffect(() => {
     if (typeof source === 'undefined') {
       return;
@@ -509,7 +509,7 @@ const Document: React.ForwardRefExoticComponent<
     [pdfDispatch, source],
   );
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: Ommitted callbacks so they are not called every time they change
+  // biome-ignore lint/correctness/useExhaustiveDependencies: Omitted callbacks so they are not called every time they change
   useEffect(
     function loadDocument() {
       if (!source) {
@@ -548,7 +548,7 @@ const Document: React.ForwardRefExoticComponent<
     [options, pdfDispatch, source],
   );
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: Ommitted callbacks so they are not called every time they change
+  // biome-ignore lint/correctness/useExhaustiveDependencies: Omitted callbacks so they are not called every time they change
   useEffect(() => {
     if (typeof pdf === 'undefined') {
       return;

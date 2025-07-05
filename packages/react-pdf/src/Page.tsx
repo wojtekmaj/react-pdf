@@ -473,7 +473,7 @@ export default function Page(props: PageProps): React.ReactElement {
     [pageDispatch, pdf, pageNumber],
   );
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: Ommitted callbacks so they are not called every time they change
+  // biome-ignore lint/correctness/useExhaustiveDependencies: Omitted callbacks so they are not called every time they change
   useEffect(() => {
     if (page === undefined) {
       return;

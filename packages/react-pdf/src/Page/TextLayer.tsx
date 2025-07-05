@@ -109,7 +109,7 @@ export default function TextLayer(): React.ReactElement {
     [page, textContentDispatch],
   );
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: Ommitted callbacks so they are not called every time they change
+  // biome-ignore lint/correctness/useExhaustiveDependencies: Omitted callbacks so they are not called every time they change
   useEffect(() => {
     if (textContent === undefined) {
       return;
