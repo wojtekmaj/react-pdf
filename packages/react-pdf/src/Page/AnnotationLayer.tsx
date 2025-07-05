@@ -110,7 +110,7 @@ export default function AnnotationLayer(): React.ReactElement {
     [annotationsDispatch, page],
   );
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: Ommitted callbacks so they are not called every time they change
+  // biome-ignore lint/correctness/useExhaustiveDependencies: Omitted callbacks so they are not called every time they change
   useEffect(() => {
     if (annotations === undefined) {
       return;
@@ -143,7 +143,7 @@ export default function AnnotationLayer(): React.ReactElement {
     [page, rotate, scale],
   );
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: Ommitted callbacks so they are not called every time they change
+  // biome-ignore lint/correctness/useExhaustiveDependencies: Omitted callbacks so they are not called every time they change
   useEffect(
     function renderAnnotationLayer() {
       if (!pdf || !page || !linkService || !annotations) {
