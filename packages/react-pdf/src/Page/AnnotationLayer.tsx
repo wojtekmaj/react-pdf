@@ -12,6 +12,7 @@ import usePageContext from '../shared/hooks/usePageContext.js';
 import useResolver from '../shared/hooks/useResolver.js';
 import { cancelRunningTask } from '../shared/utils.js';
 
+import type { AnnotationLayerParameters } from 'pdfjs-dist/types/src/display/annotation_layer.js';
 import type { Annotations } from '../shared/types.js';
 
 export default function AnnotationLayer(): React.ReactElement {
@@ -169,7 +170,7 @@ export default function AnnotationLayer(): React.ReactElement {
         viewport: clonedViewport,
       };
 
-      const renderParameters = {
+      const renderParameters: AnnotationLayerParameters = {
         annotations,
         annotationStorage: pdf.annotationStorage,
         div: layer,
