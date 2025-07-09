@@ -52,6 +52,7 @@ import type {
   ScrollPageIntoViewArgs,
   Source,
 } from './shared/types.js';
+import EventBus from './EventBus.js';
 
 const { PDFDataRangeTransport } = pdfjs;
 
@@ -280,6 +281,7 @@ const Document: React.ForwardRefExoticComponent<
   const [pdfState, pdfDispatch] = useResolver<PDFDocumentProxy>();
   const { value: pdf, error: pdfError } = pdfState;
 
+  const eventBus = useRef(new EventBus());
   const linkService = useRef(new LinkService());
 
   const pages = useRef<HTMLDivElement[]>([]);
@@ -336,6 +338,7 @@ const Document: React.ForwardRefExoticComponent<
   useImperativeHandle(
     ref,
     () => ({
+      eventBus,
       linkService,
       pages,
       viewer,
