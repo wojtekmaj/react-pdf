@@ -9,6 +9,7 @@
     "copy": "yarn copy-cmaps && yarn copy-standard-fonts",
     "copy-cmaps": "node --experimental-strip-types ./scripts/copy-cmaps.ts",
     "copy-standard-fonts": "node --experimental-strip-types ./scripts/copy-standard-fonts.ts",
+    "copy-wasm": "node --experimental-strip-types ./scripts/copy-wasm.ts",
     "dev": "yarn copy && parcel index.html"
   },
   "author": {

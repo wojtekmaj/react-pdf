@@ -11,6 +11,8 @@ import usePageContext from './shared/hooks/usePageContext.js';
 
 import PasswordResponses from './PasswordResponses.js';
 
+import type LinkService from './LinkService.js';
+
 export type { DocumentProps } from './Document.js';
 export type { OutlineProps } from './Outline.js';
 export type { PageProps } from './Page.js';
@@ -23,6 +25,7 @@ export type {
   TextItem,
   TextMarkedContent,
 } from './shared/types.js';
+export type { LinkService };
 
 import { displayWorkerWarning } from './shared/utils.js';
 

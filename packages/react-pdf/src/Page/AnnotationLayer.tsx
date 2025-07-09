@@ -12,6 +12,7 @@ import usePageContext from '../shared/hooks/usePageContext.js';
 import useResolver from '../shared/hooks/useResolver.js';
 import { cancelRunningTask } from '../shared/utils.js';
 
+import type { AnnotationLayerParameters } from 'pdfjs-dist/types/src/display/annotation_layer.js';
 import type { Annotations } from '../shared/types.js';
 
 export default function AnnotationLayer(): React.ReactElement {
@@ -110,7 +111,7 @@ export default function AnnotationLayer(): React.ReactElement {
     [annotationsDispatch, page],
   );
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: Ommitted callbacks so they are not called every time they change
+  // biome-ignore lint/correctness/useExhaustiveDependencies: Omitted callbacks so they are not called every time they change
   useEffect(() => {
     if (annotations === undefined) {
       return;
@@ -143,7 +144,7 @@ export default function AnnotationLayer(): React.ReactElement {
     [page, rotate, scale],
   );
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: Ommitted callbacks so they are not called every time they change
+  // biome-ignore lint/correctness/useExhaustiveDependencies: Omitted callbacks so they are not called every time they change
   useEffect(
     function renderAnnotationLayer() {
       if (!pdf || !page || !linkService || !annotations) {
@@ -169,7 +170,7 @@ export default function AnnotationLayer(): React.ReactElement {
         viewport: clonedViewport,
       };
 
-      const renderParameters = {
+      const renderParameters: AnnotationLayerParameters = {
         annotations,
         annotationStorage: pdf.annotationStorage,
         div: layer,

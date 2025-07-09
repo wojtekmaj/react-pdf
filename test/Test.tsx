@@ -28,6 +28,7 @@ pdfjs.GlobalWorkerOptions.workerSrc = new URL(
 const options = {
   cMapUrl: '/cmaps/',
   standardFontDataUrl: '/standard_fonts/',
+  wasmUrl: '/wasm/',
 };
 
 export function readAsDataURL(file: Blob): Promise<string> {
@@ -94,10 +95,7 @@ export default function Test() {
   const [rotate, setRotate] = useState<number>();
 
   const onDocumentLoadProgress = useCallback((progressData: { loaded: number; total: number }) => {
-    console.log(
-      'Loading a document',
-      progressData.total ? progressData.loaded / progressData.total : '(unknown progress)',
-    );
+    console.log('Loading a document: ' + (progressData.loaded / progressData.total) * 100 + '%');
   }, []);
 
   const onDocumentLoadSuccess = useCallback((document: PDFDocumentProxy) => {

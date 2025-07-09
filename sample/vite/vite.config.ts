@@ -11,6 +11,9 @@ const cMapsDir = normalizePath(
 const standardFontsDir = normalizePath(
   path.join(path.dirname(require.resolve('pdfjs-dist/package.json')), 'standard_fonts'),
 );
+const wasmDir = normalizePath(
+  path.join(path.dirname(require.resolve('pdfjs-dist/package.json')), 'wasm'),
+);
 
 export default defineConfig({
   plugins: [
@@ -18,6 +21,7 @@ export default defineConfig({
       targets: [
         { src: cMapsDir, dest: '' },
         { src: standardFontsDir, dest: '' },
+        { src: wasmDir, dest: '' },
       ],
     }),
   ],
