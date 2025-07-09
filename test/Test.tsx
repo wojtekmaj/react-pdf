@@ -91,10 +91,7 @@ export default function Test() {
   const [rotate, setRotate] = useState<number>();
 
   const onDocumentLoadProgress = useCallback((progressData: { loaded: number; total: number }) => {
-    console.log(
-      'Loading a document',
-      progressData.total ? progressData.loaded / progressData.total : '(unknown progress)',
-    );
+    console.log('Loading a document: ' + (progressData.loaded / progressData.total) * 100 + '%');
   }, []);
 
   const onDocumentLoadSuccess = useCallback((document: PDFDocumentProxy) => {
