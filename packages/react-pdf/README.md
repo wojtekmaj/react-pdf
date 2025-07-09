@@ -298,6 +298,123 @@ const options = {
 <Document options={options} />;
 ```
 
+### Support for JPEG 2000
+
+If you want to ensure that JPEG 2000 images in PDFs will render, or you have encountered the following warning:
+
+```
+Warning: Unable to decode image "img_p0_1": "JpxError: OpenJPEG failed to initialize".
+```
+
+then you would also need to include wasm directory in your build and tell React-PDF where it is.
+
+#### Copying wasm directory
+
+First, you need to copy wasm from `pdfjs-dist` (React-PDF's dependency - it should be in your `node_modules` if you have React-PDF installed). cMaps are located in `pdfjs-dist/wasm`.
+
+##### Vite
+
+Add [`vite-plugin-static-copy`](https://www.npmjs.com/package/vite-plugin-static-copy) by executing `npm install vite-plugin-static-copy --save-dev` or `yarn add vite-plugin-static-copy --dev` and add the following to your Vite config:
+
+```diff
++import path from 'node:path';
++import { createRequire } from 'node:module';
+
+-import { defineConfig } from 'vite';
++import { defineConfig, normalizePath } from 'vite';
++import { viteStaticCopy } from 'vite-plugin-static-copy';
+
++const require = createRequire(import.meta.url);
++
++const pdfjsDistPath = path.dirname(require.resolve('pdfjs-dist/package.json'));
++const wasmDir = normalizePath(path.join(pdfjsDistPath, 'wasm'));
+
+export default defineConfig({
+  plugins: [
++   viteStaticCopy({
++     targets: [
++       {
++         src: wasmDir,
++         dest: '',
++       },
++     ],
++   }),
+  ]
+});
+```
+
+##### Webpack
+
+Add [`copy-webpack-plugin`](https://www.npmjs.com/package/copy-webpack-plugin) by executing `npm install copy-webpack-plugin --save-dev` or `yarn add copy-webpack-plugin --dev` and add the following to your Webpack config:
+
+```diff
++import path from 'node:path';
++import CopyWebpackPlugin from 'copy-webpack-plugin';
+
++const pdfjsDistPath = path.dirname(require.resolve('pdfjs-dist/package.json'));
++const wasmDir = path.join(pdfjsDistPath, 'wasm');
+
+module.exports = {
+  plugins: [
++   new CopyWebpackPlugin({
++     patterns: [
++       {
++         from: wasmDir,
++         to: 'wasm/'
++       },
++     ],
++   }),
+  ],
+};
+```
+
+##### Other tools
+
+If you use other bundlers, you will have to make sure on your own that wasm directory is copied to your project's output folder.
+
+For example, you could use a custom script like:
+
+```ts
+import path from 'node:path';
+import fs from 'node:fs';
+
+const pdfjsDistPath = path.dirname(require.resolve('pdfjs-dist/package.json'));
+const wasmDir = path.join(pdfjsDistPath, 'wasm');
+
+fs.cpSync(wasmDir, 'dist/wasm/', { recursive: true });
+```
+
+#### Setting up React-PDF
+
+Now that you have wasm directory in your build, pass required options to Document component by using `options` prop, like so:
+
+```ts
+// Outside of React component
+const options = {
+  wasmUrl: '/wasm/',
+};
+
+// Inside of React component
+<Document options={options} />;
+```
+
+> [!NOTE]
+> Make sure to define `options` object outside of your React component or use `useMemo` if you can't.
+
+Alternatively, you could use wasm directory from external CDN:
+
+```tsx
+// Outside of React component
+import { pdfjs } from 'react-pdf';
+
+const options = {
+  wasmUrl: `https://unpkg.com/pdfjs-dist@${pdfjs.version}/wasm/`,
+};
+
+// Inside of React component
+<Document options={options} />;
+```
+
 ### Support for standard fonts
 
 If you want to support PDFs using standard fonts (deprecated in PDF 1.5, but still around), ot you have encountered the following warning:

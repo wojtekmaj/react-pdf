@@ -182,13 +182,14 @@ export type DocumentProps = {
    * An object in which additional parameters to be passed to PDF.js can be defined. Most notably:
    * - `cMapUrl`;
    * - `httpHeaders` - custom request headers, e.g. for authorization);
+   * - `wasmUrl`;
    * - `withCredentials` - a boolean to indicate whether or not to include cookies in the request (defaults to `false`)
    *
    * For a full list of possible parameters, check [PDF.js documentation on DocumentInitParameters](https://mozilla.github.io/pdf.js/api/draft/module-pdfjsLib.html#~DocumentInitParameters).
    *
    * **Note**: Make sure to define options object outside of your React component or use `useMemo` if you can't.
    *
-   * @example { cMapUrl: '/cmaps/' }
+   * @example { cMapUrl: '/cmaps/', wasmUrl: '/wasm/' }
    */
   options?: Options;
   /**

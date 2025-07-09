@@ -14,6 +14,7 @@ const standardFontsDir = path.join(
   path.dirname(require.resolve('pdfjs-dist/package.json')),
   'standard_fonts',
 );
+const wasmDir = path.join(path.dirname(require.resolve('pdfjs-dist/package.json')), 'wasm');
 
 const config = {
   mode: isProduction ? 'production' : 'development',
@@ -58,6 +59,7 @@ const config = {
         { from: './sample.pdf' },
         { from: cMapsDir, to: 'cmaps/' },
         { from: standardFontsDir, to: 'standard_fonts/' },
+        { from: wasmDir, to: 'wasm/' },
       ],
     }),
   ],
