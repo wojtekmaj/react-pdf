@@ -13,7 +13,7 @@ import DocumentContext from './DocumentContext.js';
 
 import Message from './Message.js';
 
-import OptionalContentService from "./OptionalContentService.js";
+import OptionalContentService from './OptionalContentService.js';
 import LinkService from './LinkService.js';
 import PasswordResponses from './PasswordResponses.js';
 
@@ -244,12 +244,12 @@ function isParameterObject(file: File): file is Source {
  */
 const Document: React.ForwardRefExoticComponent<
   DocumentProps &
-  React.RefAttributes<{
-    linkService: React.RefObject<LinkService>;
-    optionalContentService: React.RefObject<OptionalContentService>;
-    pages: React.RefObject<HTMLDivElement[]>;
-    viewer: React.RefObject<{ scrollPageIntoView: (args: ScrollPageIntoViewArgs) => void }>;
-  }>
+    React.RefAttributes<{
+      linkService: React.RefObject<LinkService>;
+      optionalContentService: React.RefObject<OptionalContentService>;
+      pages: React.RefObject<HTMLDivElement[]>;
+      viewer: React.RefObject<{ scrollPageIntoView: (args: ScrollPageIntoViewArgs) => void }>;
+    }>
 > = forwardRef(function Document(
   {
     children,
@@ -600,16 +600,7 @@ const Document: React.ForwardRefExoticComponent<
       scale,
       unregisterPage,
     }),
-    [
-      imageResourcesPath,
-      onItemClick,
-      pdf,
-      registerPage,
-      renderMode,
-      rotate,
-      scale,
-      unregisterPage,
-    ],
+    [imageResourcesPath, onItemClick, pdf, registerPage, renderMode, rotate, scale, unregisterPage],
   );
 
   const eventProps = useMemo(

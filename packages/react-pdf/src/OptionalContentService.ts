@@ -1,5 +1,5 @@
-import type { PDFDocumentProxy } from "pdfjs-dist";
-import type { OptionalContentConfig } from "pdfjs-dist/types/src/display/optional_content_config.js";
+import type { PDFDocumentProxy } from 'pdfjs-dist';
+import type { OptionalContentConfig } from 'pdfjs-dist/types/src/display/optional_content_config.js';
 
 /**
  * A service responsible for managing the optional content configuration (OCC) of a PDF document
@@ -34,13 +34,13 @@ export default class OptionalContentService {
    */
   public async loadOptionalContentConfig(): Promise<OptionalContentConfig> {
     if (!this.pdfDocument) {
-      throw new Error("The PDF document is not set. Call setDocument() first.");
+      throw new Error('The PDF document is not set. Call setDocument() first.');
     }
 
     this.optionalContentConfig = await this.pdfDocument.getOptionalContentConfig();
 
     if (!this.optionalContentConfig) {
-      throw new Error("The optional content configuration could not be loaded.");
+      throw new Error('The optional content configuration could not be loaded.');
     }
 
     return this.optionalContentConfig;
@@ -54,7 +54,9 @@ export default class OptionalContentService {
    */
   public getOptionalContentConfig(): OptionalContentConfig {
     if (!this.optionalContentConfig) {
-      throw new Error("The optional content configuration is not loaded. Call loadOptionalContentConfig() first.");
+      throw new Error(
+        'The optional content configuration is not loaded. Call loadOptionalContentConfig() first.',
+      );
     }
 
     return this.optionalContentConfig;
@@ -69,7 +71,9 @@ export default class OptionalContentService {
    */
   public setVisibility(id: string, visible?: boolean, preserveRB?: boolean): void {
     if (!this.optionalContentConfig) {
-      throw new Error("The optional content configuration is not loaded. Call loadOptionalContentConfig() first.");
+      throw new Error(
+        'The optional content configuration is not loaded. Call loadOptionalContentConfig() first.',
+      );
     }
 
     this.optionalContentConfig.setVisibility(id, visible, preserveRB);
@@ -90,7 +94,9 @@ export default class OptionalContentService {
    */
   public isVisible(id: string): boolean {
     if (!this.optionalContentConfig) {
-      throw new Error("The optional content configuration is not loaded. Call loadOptionalContentConfig() first.");
+      throw new Error(
+        'The optional content configuration is not loaded. Call loadOptionalContentConfig() first.',
+      );
     }
 
     return this.optionalContentConfig.getGroup(id).visible;

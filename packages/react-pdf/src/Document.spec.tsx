@@ -13,7 +13,7 @@ import { makeAsyncCallback, loadPDF, muteConsole, restoreConsole } from '../../.
 import type { PDFDocumentProxy } from 'pdfjs-dist';
 import type { DocumentContextType, ScrollPageIntoViewArgs } from './shared/types.js';
 import type LinkService from './LinkService.js';
-import type OptionalContentService from "./OptionalContentService.js";
+import type OptionalContentService from './OptionalContentService.js';
 
 const pdfFile = await loadPDF('../../__mocks__/_pdf.pdf');
 const pdfFile2 = await loadPDF('../../__mocks__/_pdf2.pdf');
@@ -481,11 +481,7 @@ describe('Document', () => {
       let documentContext: DocumentContextType | undefined;
 
       render(
-        <Document
-          file={pdfFile5.file}
-          onLoadSuccess={onLoadSuccess}
-          ref={instance}
-        >
+        <Document file={pdfFile5.file} onLoadSuccess={onLoadSuccess} ref={instance}>
           <DocumentContext.Consumer>
             {(context) => {
               documentContext = context;

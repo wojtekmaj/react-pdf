@@ -15,7 +15,7 @@ import DocumentContext from './DocumentContext.js';
 
 import type { PDFDocumentProxy, PDFPageProxy } from 'pdfjs-dist';
 import type { DocumentContextType, PageCallback } from './shared/types.js';
-import OptionalContentService from "./OptionalContentService.js";
+import OptionalContentService from './OptionalContentService.js';
 
 const pdfFile = await loadPDF('../../__mocks__/_pdf.pdf');
 const pdfFile2 = await loadPDF('../../__mocks__/_pdf2.pdf');
@@ -740,7 +740,8 @@ describe('Page', () => {
     });
 
     it('requests page to be rendered with default visibility given no optionalContentConfig', async () => {
-      const { func: onRenderSuccess, promise: onRenderSuccessPromise } = makeAsyncCallback<[PageCallback]>();
+      const { func: onRenderSuccess, promise: onRenderSuccessPromise } =
+        makeAsyncCallback<[PageCallback]>();
 
       const { container } = renderWithContext(
         <Page onRenderSuccess={onRenderSuccess} pageIndex={0} />,
@@ -767,22 +768,27 @@ describe('Page', () => {
 
     it('requests page to be changed when updating with optionalContentService', async () => {
       let isFirstRender: boolean = true;
-      const { func: onRenderSuccess, promise: onRenderSuccessPromise } = makeAsyncCallback<[PageCallback]>();
-      const { func: onRerenderSuccess, promise: onRerenderSuccessPromise } = makeAsyncCallback<[PageCallback]>();
+      const { func: onRenderSuccess, promise: onRenderSuccessPromise } =
+        makeAsyncCallback<[PageCallback]>();
+      const { func: onRerenderSuccess, promise: onRerenderSuccessPromise } =
+        makeAsyncCallback<[PageCallback]>();
 
       const optionalContentService = new OptionalContentService();
       optionalContentService.setDocument(pdf5);
       await optionalContentService.loadOptionalContentConfig();
 
       const { container } = renderWithContext(
-        <Page onRenderSuccess={(page: PageCallback) => {
-          if (isFirstRender) {
-            isFirstRender = false;
-            onRenderSuccess(page);
-          } else {
-            onRerenderSuccess(page);
-          }
-        }} pageIndex={0} />,
+        <Page
+          onRenderSuccess={(page: PageCallback) => {
+            if (isFirstRender) {
+              isFirstRender = false;
+              onRenderSuccess(page);
+            } else {
+              onRerenderSuccess(page);
+            }
+          }}
+          pageIndex={0}
+        />,
         {
           linkService,
           optionalContentService,

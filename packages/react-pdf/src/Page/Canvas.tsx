@@ -50,7 +50,9 @@ export default function Canvas(props: CanvasProps): React.ReactElement {
 
   const canvasElement = useRef<HTMLCanvasElement>(null);
 
-  const [optionalContentConfigLastUpdate, setOptionalContentConfigLastUpdate] = useState<Date>(new Date());
+  const [optionalContentConfigLastUpdate, setOptionalContentConfigLastUpdate] = useState<Date>(
+    new Date(),
+  );
 
   const onLayerVisibilityChange = useCallback((): void => {
     if (!optionalContentService) {

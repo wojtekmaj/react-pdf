@@ -16,7 +16,7 @@ import type {
 import type { AnnotationLayerParameters } from 'pdfjs-dist/types/src/display/annotation_layer.js';
 import type { OptionalContentConfig } from 'pdfjs-dist/types/src/display/optional_content_config.js';
 import type LinkService from '../LinkService.js';
-import type OptionalContentService from "../OptionalContentService.js";
+import type OptionalContentService from '../OptionalContentService.js';
 
 export type {
   OptionalContentConfig,
