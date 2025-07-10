@@ -13,6 +13,7 @@ import DocumentContext from './DocumentContext.js';
 
 import Message from './Message.js';
 
+import OptionalContentService from "./OptionalContentService.js";
 import LinkService from './LinkService.js';
 import PasswordResponses from './PasswordResponses.js';
 
@@ -31,7 +32,6 @@ import useResolver from './shared/hooks/useResolver.js';
 
 import type { PDFDocumentProxy } from 'pdfjs-dist';
 import type { DocumentInitParameters } from 'pdfjs-dist/types/src/display/api.js';
-import type { OptionalContentConfig } from 'pdfjs-dist/types/src/display/optional_content_config.js';
 import type { EventProps } from 'make-event-props';
 import type {
   ClassName,
@@ -180,14 +180,6 @@ export type DocumentProps = {
    */
   onSourceSuccess?: OnSourceSuccess;
   /**
-   * An `OptionalContentConfig` object that can be used to control the visibility of optional content groups (OCGs) in the PDF document. This is useful for PDFs that contain layers, such as maps or technical drawings, where you may want to toggle the visibility of certain layers.
-   *
-   * @example
-   * const optionalContentConfig = await pdfDocument.getOptionalContentConfig()
-   * optionalContentConfig.setVisibility('1R', false)
-   */
-  optionalContentConfig?: OptionalContentConfig | null;
-  /**
    * An object in which additional parameters to be passed to PDF.js can be defined. Most notably:
    * - `cMapUrl`;
    * - `httpHeaders` - custom request headers, e.g. for authorization);
@@ -252,11 +244,12 @@ function isParameterObject(file: File): file is Source {
  */
 const Document: React.ForwardRefExoticComponent<
   DocumentProps &
-    React.RefAttributes<{
-      linkService: React.RefObject<LinkService>;
-      pages: React.RefObject<HTMLDivElement[]>;
-      viewer: React.RefObject<{ scrollPageIntoView: (args: ScrollPageIntoViewArgs) => void }>;
-    }>
+  React.RefAttributes<{
+    linkService: React.RefObject<LinkService>;
+    optionalContentService: React.RefObject<OptionalContentService>;
+    pages: React.RefObject<HTMLDivElement[]>;
+    viewer: React.RefObject<{ scrollPageIntoView: (args: ScrollPageIntoViewArgs) => void }>;
+  }>
 > = forwardRef(function Document(
   {
     children,
@@ -276,7 +269,6 @@ const Document: React.ForwardRefExoticComponent<
     onPassword = defaultOnPassword,
     onSourceError: onSourceErrorProps,
     onSourceSuccess: onSourceSuccessProps,
-    optionalContentConfig,
     options,
     renderMode,
     rotate,
@@ -291,6 +283,8 @@ const Document: React.ForwardRefExoticComponent<
   const { value: pdf, error: pdfError } = pdfState;
 
   const linkService = useRef(new LinkService());
+
+  const optionalContentService = useRef(new OptionalContentService());
 
   const pages = useRef<HTMLDivElement[]>([]);
 
@@ -347,6 +341,7 @@ const Document: React.ForwardRefExoticComponent<
     ref,
     () => ({
       linkService,
+      optionalContentService,
       pages,
       viewer,
     }),
@@ -541,7 +536,9 @@ const Document: React.ForwardRefExoticComponent<
       const loadingTask = destroyable;
 
       const loadingPromise = loadingTask.promise
-        .then((nextPdf) => {
+        .then(async (nextPdf) => {
+          optionalContentService.current.setDocument(nextPdf);
+          await optionalContentService.current.loadOptionalContentConfig();
           pdfDispatch({ type: 'RESOLVE', value: nextPdf });
         })
         .catch((error) => {
@@ -595,7 +592,7 @@ const Document: React.ForwardRefExoticComponent<
       imageResourcesPath,
       linkService: linkService.current,
       onItemClick,
-      optionalContentConfig,
+      optionalContentService: optionalContentService.current,
       pdf,
       registerPage,
       renderMode,
@@ -606,7 +603,6 @@ const Document: React.ForwardRefExoticComponent<
     [
       imageResourcesPath,
       onItemClick,
-      optionalContentConfig,
       pdf,
       registerPage,
       renderMode,

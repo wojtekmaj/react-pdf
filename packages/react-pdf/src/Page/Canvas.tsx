@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect, useMemo, useRef } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import mergeRefs from 'merge-refs';
 import invariant from 'tiny-invariant';
 import warning from 'warning';
@@ -37,7 +37,7 @@ export default function Canvas(props: CanvasProps): React.ReactElement {
     devicePixelRatio = getDevicePixelRatio(),
     onRenderError: onRenderErrorProps,
     onRenderSuccess: onRenderSuccessProps,
-    optionalContentConfig,
+    optionalContentService,
     page,
     renderForms,
     renderTextLayer,
@@ -49,6 +49,28 @@ export default function Canvas(props: CanvasProps): React.ReactElement {
   invariant(page, 'Attempted to render page canvas, but no page was specified.');
 
   const canvasElement = useRef<HTMLCanvasElement>(null);
+
+  const [optionalContentConfigLastUpdate, setOptionalContentConfigLastUpdate] = useState<Date>(new Date());
+
+  const onLayerVisibilityChange = useCallback((): void => {
+    if (!optionalContentService) {
+      return;
+    }
+
+    setOptionalContentConfigLastUpdate(new Date());
+  }, [optionalContentService]);
+
+  useEffect(() => {
+    if (!optionalContentService) {
+      return;
+    }
+
+    optionalContentService.addVisibilityChangeListener(onLayerVisibilityChange);
+
+    return () => {
+      optionalContentService.removeVisibilityChangeListener(onLayerVisibilityChange);
+    };
+  }, [optionalContentService, onLayerVisibilityChange]);
 
   /**
    * Called when a page is rendered successfully.
@@ -116,8 +138,8 @@ export default function Canvas(props: CanvasProps): React.ReactElement {
         annotationMode: renderForms ? ANNOTATION_MODE.ENABLE_FORMS : ANNOTATION_MODE.ENABLE,
         canvasContext: canvas.getContext('2d', { alpha: false }) as CanvasRenderingContext2D,
         viewport: renderViewport,
-        optionalContentConfigPromise: isProvided(optionalContentConfig)
-          ? Promise.resolve(optionalContentConfig)
+        optionalContentConfigPromise: isProvided(optionalContentService)
+          ? Promise.resolve(optionalContentService.getOptionalContentConfig())
           : undefined,
       };
       if (canvasBackground) {
@@ -137,7 +159,15 @@ export default function Canvas(props: CanvasProps): React.ReactElement {
 
       return () => cancelRunningTask(runningTask);
     },
-    [canvasBackground, optionalContentConfig, page, renderForms, renderViewport, viewport],
+    [
+      canvasBackground,
+      optionalContentConfigLastUpdate,
+      optionalContentService,
+      page,
+      renderForms,
+      renderViewport,
+      viewport,
+    ],
   );
 
   const cleanup = useCallback(() => {

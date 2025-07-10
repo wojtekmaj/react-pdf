@@ -16,6 +16,7 @@ import type {
 import type { AnnotationLayerParameters } from 'pdfjs-dist/types/src/display/annotation_layer.js';
 import type { OptionalContentConfig } from 'pdfjs-dist/types/src/display/optional_content_config.js';
 import type LinkService from '../LinkService.js';
+import type OptionalContentService from "../OptionalContentService.js";
 
 export type {
   OptionalContentConfig,
@@ -142,7 +143,7 @@ export type DocumentContextType = {
   imageResourcesPath?: ImageResourcesPath;
   linkService: LinkService;
   onItemClick?: (args: OnItemClickArgs) => void;
-  optionalContentConfig?: OptionalContentConfig | null;
+  optionalContentService?: OptionalContentService;
   pdf?: PDFDocumentProxy | false;
   registerPage: RegisterPage;
   renderMode?: RenderMode;
@@ -167,7 +168,7 @@ export type PageContextType = {
   onRenderSuccess?: OnRenderSuccess;
   onRenderTextLayerError?: OnRenderTextLayerError;
   onRenderTextLayerSuccess?: OnRenderTextLayerSuccess;
-  optionalContentConfig?: OptionalContentConfig | null;
+  optionalContentService?: OptionalContentService;
   page: PDFPageProxy | false | undefined;
   pageIndex: number;
   pageNumber: number;

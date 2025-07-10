@@ -13,6 +13,7 @@ import { makeAsyncCallback, loadPDF, muteConsole, restoreConsole } from '../../.
 import type { PDFDocumentProxy } from 'pdfjs-dist';
 import type { DocumentContextType, ScrollPageIntoViewArgs } from './shared/types.js';
 import type LinkService from './LinkService.js';
+import type OptionalContentService from "./OptionalContentService.js";
 
 const pdfFile = await loadPDF('../../__mocks__/_pdf.pdf');
 const pdfFile2 = await loadPDF('../../__mocks__/_pdf2.pdf');
@@ -53,17 +54,12 @@ describe('Document', () => {
   const desiredLoadedPdf: Partial<PDFDocumentProxy> = {};
   const desiredLoadedPdf2: Partial<PDFDocumentProxy> = {};
 
-  // Loaded PDF file
-  let pdf5: PDFDocumentProxy;
-
   beforeAll(async () => {
     const pdf = await pdfjs.getDocument({ data: pdfFile.arrayBuffer }).promise;
     desiredLoadedPdf._pdfInfo = pdf._pdfInfo;
 
     const pdf2 = await pdfjs.getDocument({ data: pdfFile2.arrayBuffer }).promise;
     desiredLoadedPdf2._pdfInfo = pdf2._pdfInfo;
-
-    pdf5 = await pdfjs.getDocument({ data: pdfFile5.arrayBuffer }).promise;
   });
 
   describe('loading', () => {
@@ -472,11 +468,15 @@ describe('Document', () => {
       expect(child.dataset.scale).toBe('2');
     });
 
-    it('passes optionalContentConfig prop to its children', async () => {
+    it('passes optionalContentService prop to its children', async () => {
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
-      const optionalContentConfig = await pdf5.getOptionalContentConfig();
-      optionalContentConfig.setVisibility('1R', false);
+      const instance = createRef<{
+        linkService: React.RefObject<LinkService>;
+        pages: React.RefObject<HTMLDivElement[]>;
+        optionalContentService: React.RefObject<OptionalContentService>;
+        viewer: React.RefObject<{ scrollPageIntoView: (args: ScrollPageIntoViewArgs) => void }>;
+      }>();
 
       let documentContext: DocumentContextType | undefined;
 
@@ -484,7 +484,7 @@ describe('Document', () => {
         <Document
           file={pdfFile5.file}
           onLoadSuccess={onLoadSuccess}
-          optionalContentConfig={optionalContentConfig}
+          ref={instance}
         >
           <DocumentContext.Consumer>
             {(context) => {
@@ -495,19 +495,26 @@ describe('Document', () => {
         </Document>,
       );
 
+      if (!instance.current) {
+        throw new Error('Document ref is not set');
+      }
+
       await onLoadSuccessPromise;
+
+      const optionalContentService = instance.current.optionalContentService.current;
+      optionalContentService.setVisibility('1R', false);
 
       if (!documentContext) {
         throw new Error('Document context is not set');
       }
 
-      expect(documentContext.optionalContentConfig).toBeDefined();
+      expect(documentContext.optionalContentService).toBeDefined();
 
-      if (!documentContext.optionalContentConfig) {
+      if (!documentContext.optionalContentService) {
         throw new Error('Optional content config is not set');
       }
 
-      expect(documentContext.optionalContentConfig.getGroup('1R').visible).toBe(false);
+      expect(documentContext.optionalContentService.isVisible('1R')).toBe(false);
     });
   });
 
@@ -519,6 +526,7 @@ describe('Document', () => {
       const instance = createRef<{
         linkService: React.RefObject<LinkService>;
         pages: React.RefObject<HTMLDivElement[]>;
+        optionalContentService: React.RefObject<OptionalContentService>;
         viewer: React.RefObject<{ scrollPageIntoView: (args: ScrollPageIntoViewArgs) => void }>;
       }>();
 
@@ -561,6 +569,7 @@ describe('Document', () => {
         linkService: React.RefObject<LinkService>;
         // biome-ignore lint/suspicious/noExplicitAny: Intentional use to simplify the test
         pages: React.RefObject<any[]>;
+        optionalContentService: React.RefObject<OptionalContentService>;
         viewer: React.RefObject<{ scrollPageIntoView: (args: ScrollPageIntoViewArgs) => void }>;
       }>();
 

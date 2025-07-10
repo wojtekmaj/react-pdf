@@ -15,6 +15,7 @@ import DocumentContext from './DocumentContext.js';
 
 import type { PDFDocumentProxy, PDFPageProxy } from 'pdfjs-dist';
 import type { DocumentContextType, PageCallback } from './shared/types.js';
+import OptionalContentService from "./OptionalContentService.js";
 
 const pdfFile = await loadPDF('../../__mocks__/_pdf.pdf');
 const pdfFile2 = await loadPDF('../../__mocks__/_pdf2.pdf');
@@ -739,8 +740,7 @@ describe('Page', () => {
     });
 
     it('requests page to be rendered with default visibility given no optionalContentConfig', async () => {
-      const { func: onRenderSuccess, promise: onRenderSuccessPromise } =
-        makeAsyncCallback<[PageCallback]>();
+      const { func: onRenderSuccess, promise: onRenderSuccessPromise } = makeAsyncCallback<[PageCallback]>();
 
       const { container } = renderWithContext(
         <Page onRenderSuccess={onRenderSuccess} pageIndex={0} />,
@@ -765,18 +765,27 @@ describe('Page', () => {
       expect(imageData.data).toStrictEqual(new Uint8ClampedArray([191, 255, 191, 255]));
     });
 
-    it('requests page to be rendered with given optionalContentConfig', async () => {
-      const { func: onRenderSuccess, promise: onRenderSuccessPromise } =
-        makeAsyncCallback<[PageCallback]>();
+    it('requests page to be changed when updating with optionalContentService', async () => {
+      let isFirstRender: boolean = true;
+      const { func: onRenderSuccess, promise: onRenderSuccessPromise } = makeAsyncCallback<[PageCallback]>();
+      const { func: onRerenderSuccess, promise: onRerenderSuccessPromise } = makeAsyncCallback<[PageCallback]>();
 
-      const optionalContentConfig = await pdf5.getOptionalContentConfig();
-      optionalContentConfig.setVisibility('1R', false);
+      const optionalContentService = new OptionalContentService();
+      optionalContentService.setDocument(pdf5);
+      await optionalContentService.loadOptionalContentConfig();
 
       const { container } = renderWithContext(
-        <Page onRenderSuccess={onRenderSuccess} pageIndex={0} />,
+        <Page onRenderSuccess={(page: PageCallback) => {
+          if (isFirstRender) {
+            isFirstRender = false;
+            onRenderSuccess(page);
+          } else {
+            onRerenderSuccess(page);
+          }
+        }} pageIndex={0} />,
         {
           linkService,
-          optionalContentConfig,
+          optionalContentService,
           pdf: pdf5,
         },
       );
@@ -790,7 +799,16 @@ describe('Page', () => {
         throw new Error('CanvasRenderingContext2D is not available');
       }
 
-      const imageData = context.getImageData(100, 100, 1, 1);
+      let imageData = context.getImageData(100, 100, 1, 1);
+
+      // Should render green pixel because the layer is visible
+      expect(imageData.data).toStrictEqual(new Uint8ClampedArray([191, 255, 191, 255]));
+
+      optionalContentService.setVisibility('1R', false);
+
+      await onRerenderSuccessPromise;
+
+      imageData = context.getImageData(100, 100, 1, 1);
 
       // Should render white pixel because the layer is hidden
       expect(imageData.data).toStrictEqual(new Uint8ClampedArray([255, 255, 255, 255]));
