@@ -1,10 +1,14 @@
 import { useId } from 'react';
 
+import type { AnnotationMode } from 'react-pdf';
+
 type LayerOptionsProps = {
+  annotationMode?: keyof typeof AnnotationMode;
   renderAnnotationLayer: boolean;
   renderForms: boolean;
   renderTextLayer: boolean;
   useCustomTextRenderer: boolean;
+  setAnnotationMode: (value: keyof typeof AnnotationMode | undefined) => void;
   setRenderAnnotationLayer: (value: boolean) => void;
   setRenderForms: (value: boolean) => void;
   setRenderTextLayer: (value: boolean) => void;
@@ -12,19 +16,28 @@ type LayerOptionsProps = {
 };
 
 export default function LayerOptions({
+  annotationMode,
   renderAnnotationLayer,
   renderForms,
   renderTextLayer,
   useCustomTextRenderer,
+  setAnnotationMode,
   setRenderAnnotationLayer,
   setRenderForms,
   setRenderTextLayer,
   setUseCustomTextRenderer,
 }: LayerOptionsProps) {
+  const annotationModeId = useId();
   const renderTextLayerId = useId();
   const useCustomTextRendererId = useId();
   const renderAnnotationLayerId = useId();
   const renderFormsId = useId();
+
+  function onAnnotationModeChange(event: React.ChangeEvent<HTMLInputElement>) {
+    const { value } = event.target;
+
+    setAnnotationMode(value as keyof typeof AnnotationMode);
+  }
 
   function onRenderAnnotationLayerChange(event: React.ChangeEvent<HTMLInputElement>) {
     setRenderAnnotationLayer(event.target.checked);
@@ -45,6 +58,48 @@ export default function LayerOptions({
   return (
     <fieldset>
       <legend>Layer options</legend>
+
+      <label htmlFor={annotationModeId}>Annotation mode:</label>
+      <div>
+        <input
+          checked={annotationMode === 'DISABLE'}
+          id={annotationModeId}
+          onChange={onAnnotationModeChange}
+          type="radio"
+          value="DISABLE"
+        />
+        <label htmlFor={annotationModeId}>DISABLE</label>
+      </div>
+      <div>
+        <input
+          checked={annotationMode === 'ENABLE'}
+          id={annotationModeId}
+          onChange={onAnnotationModeChange}
+          type="radio"
+          value="ENABLE"
+        />
+        <label htmlFor={annotationModeId}>ENABLE</label>
+      </div>
+      <div>
+        <input
+          checked={annotationMode === 'ENABLE_FORMS'}
+          id={annotationModeId}
+          onChange={onAnnotationModeChange}
+          type="radio"
+          value="ENABLE_FORMS"
+        />
+        <label htmlFor={annotationModeId}>ENABLE_FORMS</label>
+      </div>
+      <div>
+        <input
+          checked={annotationMode === 'ENABLE_STORAGE'}
+          id={annotationModeId}
+          onChange={onAnnotationModeChange}
+          type="radio"
+          value="EDIT"
+        />
+        <label htmlFor={annotationModeId}>EDIT</label>
+      </div>
 
       <div>
         <input

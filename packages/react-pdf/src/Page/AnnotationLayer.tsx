@@ -7,6 +7,8 @@ import invariant from 'tiny-invariant';
 import warning from 'warning';
 import * as pdfjs from 'pdfjs-dist';
 
+import AnnotationMode from '../AnnotationMode.js';
+
 import useDocumentContext from '../shared/hooks/useDocumentContext.js';
 import usePageContext from '../shared/hooks/usePageContext.js';
 import useResolver from '../shared/hooks/useResolver.js';
@@ -23,6 +25,7 @@ export default function AnnotationLayer(): React.ReactElement {
 
   const mergedProps = { ...documentContext, ...pageContext };
   const {
+    annotationMode,
     imageResourcesPath,
     linkService,
     onGetAnnotationsError: onGetAnnotationsErrorProps,
@@ -177,7 +180,7 @@ export default function AnnotationLayer(): React.ReactElement {
         imageResourcesPath,
         linkService,
         page,
-        renderForms,
+        renderForms: annotationMode === AnnotationMode.ENABLE_FORMS ? renderForms : false,
         viewport: clonedViewport,
       };
 
@@ -196,7 +199,16 @@ export default function AnnotationLayer(): React.ReactElement {
         // TODO: Cancel running task?
       };
     },
-    [annotations, imageResourcesPath, linkService, page, pdf, renderForms, viewport],
+    [
+      annotationMode,
+      annotations,
+      imageResourcesPath,
+      linkService,
+      page,
+      pdf,
+      renderForms,
+      viewport,
+    ],
   );
 
   return (
