@@ -498,6 +498,11 @@ describe('Document', () => {
       await onLoadSuccessPromise;
 
       const optionalContentService = instance.current.optionalContentService.current;
+
+      if (!optionalContentService) {
+        throw new Error('optional content service is not initialized');
+      }
+
       optionalContentService.setVisibility('1R', false);
 
       if (!documentContext) {
