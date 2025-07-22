@@ -8,6 +8,7 @@ import type {
   TypedArray,
   DocumentInitParameters,
   RefProxy,
+  RenderParameters,
   StructTreeNode,
   TextContent,
   TextItem,
@@ -119,7 +120,7 @@ export type OnRenderAnnotationLayerSuccess = () => void;
 
 export type OnRenderError = OnError;
 
-export type OnRenderSuccess = (page: PageCallback) => void;
+export type OnRenderSuccess = (page: PageCallback, renderContext: RenderParameters) => void;
 
 export type OnRenderTextLayerError = OnError;
 
