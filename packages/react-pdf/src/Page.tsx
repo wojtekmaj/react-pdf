@@ -8,6 +8,7 @@ import mergeRefs from 'merge-refs';
 import invariant from 'tiny-invariant';
 import warning from 'warning';
 
+import AnnotationMode from './AnnotationMode.js';
 import PageContext from './PageContext.js';
 
 import Message from './Message.js';
@@ -50,6 +51,13 @@ const defaultScale = 1;
 export type PageProps = {
   _className?: string;
   _enableRegisterUnregisterPage?: boolean;
+  /**
+   * Annotation mode.
+   *
+   * @default AnnotationMode.ENABLE
+   * @example AnnotationMode.ENABLE_FORMS
+   */
+  annotationMode?: (typeof AnnotationMode)[keyof typeof AnnotationMode];
   /**
    * Canvas background color. Any valid `canvas.fillStyle` can be used.
    *
@@ -307,6 +315,7 @@ export default function Page(props: PageProps): React.ReactElement {
   const {
     _className = 'react-pdf__Page',
     _enableRegisterUnregisterPage = true,
+    annotationMode = AnnotationMode.ENABLE,
     canvasBackground,
     canvasRef,
     children,
@@ -493,6 +502,7 @@ export default function Page(props: PageProps): React.ReactElement {
       page && isProvided(pageIndex) && pageNumber && isProvided(rotate) && isProvided(scale)
         ? {
             _className,
+            annotationMode,
             canvasBackground,
             customTextRenderer,
             devicePixelRatio,
@@ -519,6 +529,7 @@ export default function Page(props: PageProps): React.ReactElement {
         : null,
     [
       _className,
+      annotationMode,
       canvasBackground,
       customTextRenderer,
       devicePixelRatio,
