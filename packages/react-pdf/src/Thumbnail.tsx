@@ -12,6 +12,7 @@ import { isProvided } from './shared/utils.js';
 import type { PageProps } from './Page.js';
 import type { ClassName, OnItemClickArgs } from './shared/types.js';
 
+
 export type ThumbnailProps = Omit<
   PageProps,
   | 'className'
@@ -70,7 +71,7 @@ export default function Thumbnail(props: ThumbnailProps): React.ReactElement {
 
   const pageNumber = pageNumberProps ?? (isProvided(pageIndexProps) ? pageIndexProps + 1 : null);
 
-  function onClick(event: React.MouseEvent<HTMLAnchorElement>) {
+  function onClick(event: React.MouseEvent<HTMLButtonElement>) {
     event.preventDefault();
 
     if (!isProvided(pageIndex) || !pageNumber) {
@@ -95,11 +96,7 @@ export default function Thumbnail(props: ThumbnailProps): React.ReactElement {
   const { className: classNameProps, onItemClick: onItemClickProps, ...pageProps } = props;
 
   return (
-    <a
-      className={clsx('react-pdf__Thumbnail', className)}
-      href={pageNumber ? '#' : undefined}
-      onClick={onClick}
-    >
+    <button type="button" className={clsx('react-pdf__Thumbnail', className)} onClick={onClick}>
       <Page
         {...pageProps}
         _className="react-pdf__Thumbnail__page"
@@ -107,6 +104,6 @@ export default function Thumbnail(props: ThumbnailProps): React.ReactElement {
         renderAnnotationLayer={false}
         renderTextLayer={false}
       />
-    </a>
+    </button>
   );
 }
