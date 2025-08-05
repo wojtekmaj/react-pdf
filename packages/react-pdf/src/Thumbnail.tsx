@@ -5,9 +5,9 @@ import invariant from 'tiny-invariant';
 
 import Page from './Page.js';
 
-import { isProvided } from './shared/utils.js';
-
 import useDocumentContext from './shared/hooks/useDocumentContext.js';
+
+import { isProvided } from './shared/utils.js';
 
 import type { PageProps } from './Page.js';
 import type { ClassName, OnItemClickArgs } from './shared/types.js';

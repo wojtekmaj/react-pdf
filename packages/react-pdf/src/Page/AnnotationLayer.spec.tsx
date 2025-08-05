@@ -1,17 +1,15 @@
 import { beforeAll, describe, expect, it } from 'vitest';
 import { render } from '@testing-library/react';
 
+import DocumentContext from '../DocumentContext.js';
 import { pdfjs } from '../index.test.js';
-
-import AnnotationLayer from './AnnotationLayer.js';
 import LinkService from '../LinkService.js';
+import PageContext from '../PageContext.js';
+import AnnotationLayer from './AnnotationLayer.js';
 
 import failingPage from '../../../../__mocks__/_failing_page.js';
 
 import { loadPDF, makeAsyncCallback, muteConsole, restoreConsole } from '../../../../test-utils.js';
-
-import DocumentContext from '../DocumentContext.js';
-import PageContext from '../PageContext.js';
 
 import type { RenderResult } from '@testing-library/react';
 import type { PDFDocumentProxy, PDFPageProxy } from 'pdfjs-dist';

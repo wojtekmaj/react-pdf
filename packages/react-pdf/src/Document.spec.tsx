@@ -1,18 +1,17 @@
 import { beforeAll, describe, expect, it, vi } from 'vitest';
-import { createRef } from 'react';
 import { fireEvent, getByTestId, render } from '@testing-library/react';
-
-import { pdfjs } from './index.test.js';
+import { createRef } from 'react';
 
 import Document from './Document.js';
 import DocumentContext from './DocumentContext.js';
+import { pdfjs } from './index.test.js';
 import Page from './Page.js';
 
-import { makeAsyncCallback, loadPDF, muteConsole, restoreConsole } from '../../../test-utils.js';
+import { loadPDF, makeAsyncCallback, muteConsole, restoreConsole } from '../../../test-utils.js';
 
 import type { PDFDocumentProxy } from 'pdfjs-dist';
-import type { ScrollPageIntoViewArgs } from './shared/types.js';
 import type LinkService from './LinkService.js';
+import type { ScrollPageIntoViewArgs } from './shared/types.js';
 
 const pdfFile = await loadPDF('../../__mocks__/_pdf.pdf');
 const pdfFile2 = await loadPDF('../../__mocks__/_pdf2.pdf');

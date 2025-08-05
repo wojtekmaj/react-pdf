@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { isDataURI, dataURItoByteString } from './utils.js';
+
+import { dataURItoByteString, isDataURI } from './utils.js';
 
 describe('isDataURI()', () => {
   it.each`

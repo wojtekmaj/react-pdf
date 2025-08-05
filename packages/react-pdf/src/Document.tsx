@@ -1,20 +1,20 @@
 'use client';
 
 import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useRef } from 'react';
-import makeEventProps from 'make-event-props';
-import makeCancellable from 'make-cancellable-promise';
 import clsx from 'clsx';
+import { dequal } from 'dequal';
+import makeCancellable from 'make-cancellable-promise';
+import makeEventProps from 'make-event-props';
+import * as pdfjs from 'pdfjs-dist';
 import invariant from 'tiny-invariant';
 import warning from 'warning';
-import { dequal } from 'dequal';
-import * as pdfjs from 'pdfjs-dist';
 
 import DocumentContext from './DocumentContext.js';
-
-import Message from './Message.js';
-
 import LinkService from './LinkService.js';
+import Message from './Message.js';
 import PasswordResponses from './PasswordResponses.js';
+
+import useResolver from './shared/hooks/useResolver.js';
 
 import {
   cancelRunningTask,
@@ -27,11 +27,9 @@ import {
   loadFromFile,
 } from './shared/utils.js';
 
-import useResolver from './shared/hooks/useResolver.js';
-
+import type { EventProps } from 'make-event-props';
 import type { PDFDocumentProxy } from 'pdfjs-dist';
 import type { DocumentInitParameters } from 'pdfjs-dist/types/src/display/api.js';
-import type { EventProps } from 'make-event-props';
 import type {
   ClassName,
   DocumentCallback,

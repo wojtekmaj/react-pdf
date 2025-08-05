@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+
 import Ref from './Ref.js';
 
 describe('Ref', () => {

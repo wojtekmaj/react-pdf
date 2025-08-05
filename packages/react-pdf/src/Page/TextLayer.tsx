@@ -1,14 +1,15 @@
 'use client';
 
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef } from 'react';
-import makeCancellable from 'make-cancellable-promise';
 import clsx from 'clsx';
+import makeCancellable from 'make-cancellable-promise';
+import * as pdfjs from 'pdfjs-dist';
 import invariant from 'tiny-invariant';
 import warning from 'warning';
-import * as pdfjs from 'pdfjs-dist';
 
 import usePageContext from '../shared/hooks/usePageContext.js';
 import useResolver from '../shared/hooks/useResolver.js';
+
 import { cancelRunningTask } from '../shared/utils.js';
 
 import type { TextContent, TextItem, TextMarkedContent } from 'pdfjs-dist/types/src/display/api.js';

@@ -1,19 +1,19 @@
 import type {
+  PasswordResponses,
   PDFDataRangeTransport,
   PDFDocumentProxy,
   PDFPageProxy,
-  PasswordResponses,
 } from 'pdfjs-dist';
+import type { AnnotationLayerParameters } from 'pdfjs-dist/types/src/display/annotation_layer.js';
 import type {
-  TypedArray,
   DocumentInitParameters,
   RefProxy,
   StructTreeNode,
   TextContent,
   TextItem,
   TextMarkedContent,
+  TypedArray,
 } from 'pdfjs-dist/types/src/display/api.js';
-import type { AnnotationLayerParameters } from 'pdfjs-dist/types/src/display/annotation_layer.js';
 import type LinkService from '../LinkService.js';
 
 export type { PasswordResponses, StructTreeNode, TextContent, TextItem, TextMarkedContent };

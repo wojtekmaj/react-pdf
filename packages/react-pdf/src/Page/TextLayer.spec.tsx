@@ -2,14 +2,12 @@ import { beforeAll, describe, expect, it, vi } from 'vitest';
 import { render } from '@testing-library/react';
 
 import { pdfjs } from '../index.test.js';
-
+import PageContext from '../PageContext.js';
 import TextLayer from './TextLayer.js';
 
 import failingPage from '../../../../__mocks__/_failing_page.js';
 
 import { loadPDF, makeAsyncCallback, muteConsole, restoreConsole } from '../../../../test-utils.js';
-
-import PageContext from '../PageContext.js';
 
 import type { PDFPageProxy } from 'pdfjs-dist';
 import type { TextContent } from 'pdfjs-dist/types/src/display/api.js';
