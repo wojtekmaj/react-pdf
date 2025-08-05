@@ -159,4 +159,6 @@ body {
 
 .Test__container__content__thumbnails .react-pdf__Thumbnail {
   border: 1px solid black;
+  padding: 0;
+  cursor: pointer;
 }
