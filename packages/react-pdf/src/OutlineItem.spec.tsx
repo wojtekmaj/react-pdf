@@ -88,8 +88,8 @@ describe('OutlineItem', () => {
       renderWithContext(<OutlineItem item={outlineItem} />, { pdf }, { onItemClick });
 
       const item = screen.getAllByRole('listitem')[0] as HTMLElement;
-      const link = getAllByRole(item, 'link')[0] as HTMLAnchorElement;
-      fireEvent.click(link);
+      const button = getAllByRole(item, 'button')[0] as HTMLButtonElement;
+      fireEvent.click(button);
 
       await onItemClickPromise;
 
@@ -106,8 +106,8 @@ describe('OutlineItem', () => {
       );
 
       const item = screen.getAllByRole('listitem')[0] as HTMLElement;
-      const link = getAllByRole(item, 'link')[0] as HTMLAnchorElement;
-      fireEvent.click(link);
+      const button = getAllByRole(item, 'button')[0] as HTMLButtonElement;
+      fireEvent.click(button);
 
       await onItemClickPromise;
 
@@ -117,7 +117,7 @@ describe('OutlineItem', () => {
 
       rerender(<OutlineItem item={outlineItem} />, { pdf }, { onItemClick: onItemClick2 });
 
-      fireEvent.click(link);
+      fireEvent.click(button);
 
       await onItemClickPromise2;
 

@@ -1,13 +1,10 @@
+import type { PDFDocumentProxy } from 'pdfjs-dist';
+import type { RefProxy } from 'pdfjs-dist/types/src/display/api.js';
 import invariant from 'tiny-invariant';
-
 import Ref from './Ref.js';
-
 import useCachedValue from './shared/hooks/useCachedValue.js';
 import useDocumentContext from './shared/hooks/useDocumentContext.js';
 import useOutlineContext from './shared/hooks/useOutlineContext.js';
-
-import type { PDFDocumentProxy } from 'pdfjs-dist';
-import type { RefProxy } from 'pdfjs-dist/types/src/display/api.js';
 
 type PDFOutline = Awaited<ReturnType<PDFDocumentProxy['getOutline']>>;
 
@@ -59,7 +56,7 @@ export default function OutlineItem(props: OutlineItemProps): React.ReactElement
     return pageIndex + 1;
   });
 
-  function onClick(event: React.MouseEvent<HTMLAnchorElement>) {
+  function onClick(event: React.MouseEvent<HTMLButtonElement>) {
     event.preventDefault();
 
     invariant(
@@ -105,10 +102,9 @@ export default function OutlineItem(props: OutlineItemProps): React.ReactElement
 
   return (
     <li>
-      {/* biome-ignore lint/a11y/useValidAnchor: We can't provide real href here */}
-      <a href="#" onClick={onClick}>
+      <button type="button" onClick={onClick}>
         {item.title}
-      </a>
+      </button>
       {renderSubitems()}
     </li>
   );
