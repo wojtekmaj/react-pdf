@@ -625,7 +625,7 @@ describe('Document', () => {
     );
   });
 
-  it('calls onClick callback when clicked a page (sample of mouse events family)', () => {
+  it('calls onClick callback when clicked a document (sample of mouse events family)', () => {
     const onClick = vi.fn();
 
     const { container } = render(<Document onClick={onClick} />);
@@ -636,7 +636,7 @@ describe('Document', () => {
     expect(onClick).toHaveBeenCalled();
   });
 
-  it('calls onTouchStart callback when touched a page (sample of touch events family)', () => {
+  it('calls onTouchStart callback when touched a document (sample of touch events family)', () => {
     const onTouchStart = vi.fn();
 
     const { container } = render(<Document onTouchStart={onTouchStart} />);
