@@ -12,7 +12,6 @@ import { isProvided } from './shared/utils.js';
 import type { PageProps } from './Page.js';
 import type { ClassName, OnItemClickArgs } from './shared/types.js';
 
-
 export type ThumbnailProps = Omit<
   PageProps,
   | 'className'
