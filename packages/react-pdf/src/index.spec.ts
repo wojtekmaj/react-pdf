@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { pdfjs, Document, Outline, Page, Thumbnail } from './index.js';
+
+import { Document, Outline, Page, pdfjs, Thumbnail } from './index.js';
 
 describe('default entry', () => {
   describe('has pdfjs exported properly', () => {

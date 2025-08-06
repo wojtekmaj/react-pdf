@@ -1,16 +1,16 @@
 import { beforeAll, describe, expect, it, vi } from 'vitest';
-import { createRef } from 'react';
 import { fireEvent, render } from '@testing-library/react';
+import { createRef } from 'react';
 
+import DocumentContext from './DocumentContext.js';
 import { pdfjs } from './index.test.js';
-
+import LinkService from './LinkService.js';
 import Thumbnail from './Thumbnail.js';
 
 import failingPdf from '../../../__mocks__/_failing_pdf.js';
 import silentlyFailingPdf from '../../../__mocks__/_silently_failing_pdf.js';
-import { loadPDF, makeAsyncCallback, muteConsole, restoreConsole } from '../../../test-utils.js';
 
-import DocumentContext from './DocumentContext.js';
+import { loadPDF, makeAsyncCallback, muteConsole, restoreConsole } from '../../../test-utils.js';
 
 import type { PDFDocumentProxy, PDFPageProxy } from 'pdfjs-dist';
 import type { DocumentContextType, PageCallback } from './shared/types.js';
@@ -48,6 +48,8 @@ describe('Thumbnail', () => {
   const desiredLoadedThumbnail: Partial<PDFPageProxy> = {};
   const desiredLoadedThumbnail2: Partial<PDFPageProxy> = {};
   const desiredLoadedThumbnail3: Partial<PDFPageProxy> = {};
+
+  const linkService = new LinkService();
 
   beforeAll(async () => {
     pdf = await pdfjs.getDocument({ data: pdfFile.arrayBuffer }).promise;
@@ -615,10 +617,27 @@ describe('Thumbnail', () => {
     expect(page.height).toEqual(page.originalHeight * (page.width / page.originalWidth));
   });
 
+  it('calls onClick callback when clicked a page (sample of mouse events family)', () => {
+    const onClick = vi.fn();
+
+    const { container } = renderWithContext(<Thumbnail onClick={onClick} />, {
+      linkService,
+      pdf,
+    });
+
+    const page = container.querySelector('.react-pdf__Thumbnail__page') as HTMLDivElement;
+    fireEvent.click(page);
+
+    expect(onClick).toHaveBeenCalled();
+  });
+
   it('calls onTouchStart callback when touched a page (sample of touch events family)', () => {
     const onTouchStart = vi.fn();
 
-    const { container } = renderWithContext(<Thumbnail onTouchStart={onTouchStart} />, { pdf });
+    const { container } = renderWithContext(<Thumbnail onTouchStart={onTouchStart} />, {
+      linkService,
+      pdf,
+    });
 
     const page = container.querySelector('.react-pdf__Thumbnail__page') as HTMLDivElement;
     fireEvent.touchStart(page);

@@ -1,15 +1,16 @@
 'use client';
 
 import { useEffect, useMemo, useRef } from 'react';
-import makeCancellable from 'make-cancellable-promise';
 import clsx from 'clsx';
+import makeCancellable from 'make-cancellable-promise';
+import * as pdfjs from 'pdfjs-dist';
 import invariant from 'tiny-invariant';
 import warning from 'warning';
-import * as pdfjs from 'pdfjs-dist';
 
 import useDocumentContext from '../shared/hooks/useDocumentContext.js';
 import usePageContext from '../shared/hooks/usePageContext.js';
 import useResolver from '../shared/hooks/useResolver.js';
+
 import { cancelRunningTask } from '../shared/utils.js';
 
 import type { AnnotationLayerParameters } from 'pdfjs-dist/types/src/display/annotation_layer.js';

@@ -1,15 +1,14 @@
 import { beforeAll, describe, expect, it } from 'vitest';
-import { createRef } from 'react';
 import { render, screen } from '@testing-library/react';
+import { createRef } from 'react';
 
+import DocumentContext from './DocumentContext.js';
 import { pdfjs } from './index.test.js';
-
 import Outline from './Outline.js';
 
 import failingPdf from '../../../__mocks__/_failing_pdf.js';
-import { loadPDF, makeAsyncCallback, muteConsole, restoreConsole } from '../../../test-utils.js';
 
-import DocumentContext from './DocumentContext.js';
+import { loadPDF, makeAsyncCallback, muteConsole, restoreConsole } from '../../../test-utils.js';
 
 import type { PDFDocumentProxy } from 'pdfjs-dist';
 import type { DocumentContextType } from './shared/types.js';

@@ -12,7 +12,7 @@
     "outDir": "dist",
     "skipLibCheck": true,
     "strict": true,
-    "target": "es2017",
+    "target": "es2018",
     "verbatimModuleSyntax": true
   },
   "exclude": ["dist"]

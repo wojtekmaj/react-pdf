@@ -9,7 +9,7 @@
     "noUncheckedIndexedAccess": true,
     "skipLibCheck": true,
     "strict": true,
-    "target": "es2015",
+    "target": "es2018",
     "verbatimModuleSyntax": true
   },
   "ts-node": {

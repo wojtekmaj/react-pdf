@@ -1,14 +1,13 @@
 import { beforeAll, describe, expect, it, vi } from 'vitest';
-import { createRef } from 'react';
 import { fireEvent, getByTestId, render } from '@testing-library/react';
-
-import { pdfjs } from './index.test.js';
+import { createRef } from 'react';
 
 import Document from './Document.js';
 import DocumentContext from './DocumentContext.js';
+import { pdfjs } from './index.test.js';
 import Page from './Page.js';
 
-import { makeAsyncCallback, loadPDF, muteConsole, restoreConsole } from '../../../test-utils.js';
+import { loadPDF, makeAsyncCallback, muteConsole, restoreConsole } from '../../../test-utils.js';
 
 import type { PDFDocumentProxy } from 'pdfjs-dist';
 import type { DocumentContextType, ScrollPageIntoViewArgs } from './shared/types.js';
@@ -679,7 +678,7 @@ describe('Document', () => {
     );
   });
 
-  it('calls onClick callback when clicked a page (sample of mouse events family)', () => {
+  it('calls onClick callback when clicked a document (sample of mouse events family)', () => {
     const onClick = vi.fn();
 
     const { container } = render(<Document onClick={onClick} />);
@@ -690,7 +689,7 @@ describe('Document', () => {
     expect(onClick).toHaveBeenCalled();
   });
 
-  it('calls onTouchStart callback when touched a page (sample of touch events family)', () => {
+  it('calls onTouchStart callback when touched a document (sample of touch events family)', () => {
     const onTouchStart = vi.fn();
 
     const { container } = render(<Document onTouchStart={onTouchStart} />);

@@ -2,13 +2,14 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import mergeRefs from 'merge-refs';
+import * as pdfjs from 'pdfjs-dist';
 import invariant from 'tiny-invariant';
 import warning from 'warning';
-import * as pdfjs from 'pdfjs-dist';
 
 import StructTree from '../StructTree.js';
 
 import usePageContext from '../shared/hooks/usePageContext.js';
+
 import {
   cancelRunningTask,
   getDevicePixelRatio,

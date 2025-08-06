@@ -1,23 +1,22 @@
 'use client';
 
 import { useEffect, useMemo } from 'react';
+import clsx from 'clsx';
 import makeCancellable from 'make-cancellable-promise';
 import makeEventProps from 'make-event-props';
-import clsx from 'clsx';
 import invariant from 'tiny-invariant';
 import warning from 'warning';
 
 import OutlineContext from './OutlineContext.js';
-
 import OutlineItem from './OutlineItem.js';
-
-import { cancelRunningTask } from './shared/utils.js';
 
 import useDocumentContext from './shared/hooks/useDocumentContext.js';
 import useResolver from './shared/hooks/useResolver.js';
 
-import type { PDFDocumentProxy } from 'pdfjs-dist';
+import { cancelRunningTask } from './shared/utils.js';
+
 import type { EventProps } from 'make-event-props';
+import type { PDFDocumentProxy } from 'pdfjs-dist';
 import type { ClassName, OnItemClickArgs } from './shared/types.js';
 
 type PDFOutline = Awaited<ReturnType<PDFDocumentProxy['getOutline']>>;

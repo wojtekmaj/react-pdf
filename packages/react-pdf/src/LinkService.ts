@@ -15,15 +15,14 @@
 import invariant from 'tiny-invariant';
 
 import type { PDFDocumentProxy } from 'pdfjs-dist';
+import type { IPDFLinkService } from 'pdfjs-dist/types/web/interfaces.js';
 import type {
   Dest,
-  ResolvedDest,
   ExternalLinkRel,
   ExternalLinkTarget,
+  ResolvedDest,
   ScrollPageIntoViewArgs,
 } from './shared/types.js';
-
-import type { IPDFLinkService } from 'pdfjs-dist/types/web/interfaces.js';
 
 const DEFAULT_LINK_REL = 'noopener noreferrer nofollow';
 

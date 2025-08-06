@@ -7,6 +7,7 @@ import StructTreeItem from './StructTreeItem.js';
 
 import usePageContext from './shared/hooks/usePageContext.js';
 import useResolver from './shared/hooks/useResolver.js';
+
 import { cancelRunningTask } from './shared/utils.js';
 
 import type { StructTreeNodeWithExtraAttributes } from './shared/types.js';

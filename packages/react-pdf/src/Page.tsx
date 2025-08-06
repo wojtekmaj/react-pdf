@@ -1,27 +1,26 @@
 'use client';
 
 import { useEffect, useMemo, useRef } from 'react';
+import clsx from 'clsx';
 import makeCancellable from 'make-cancellable-promise';
 import makeEventProps from 'make-event-props';
-import clsx from 'clsx';
 import mergeRefs from 'merge-refs';
 import invariant from 'tiny-invariant';
 import warning from 'warning';
 
-import PageContext from './PageContext.js';
-
 import Message from './Message.js';
+import AnnotationLayer from './Page/AnnotationLayer.js';
 import Canvas from './Page/Canvas.js';
 import TextLayer from './Page/TextLayer.js';
-import AnnotationLayer from './Page/AnnotationLayer.js';
-
-import { cancelRunningTask, isProvided, makePageCallback } from './shared/utils.js';
+import PageContext from './PageContext.js';
 
 import useDocumentContext from './shared/hooks/useDocumentContext.js';
 import useResolver from './shared/hooks/useResolver.js';
 
-import type { PDFDocumentProxy, PDFPageProxy } from 'pdfjs-dist';
+import { cancelRunningTask, isProvided, makePageCallback } from './shared/utils.js';
+
 import type { EventProps } from 'make-event-props';
+import type { PDFDocumentProxy, PDFPageProxy } from 'pdfjs-dist';
 import type {
   ClassName,
   CustomRenderer,
