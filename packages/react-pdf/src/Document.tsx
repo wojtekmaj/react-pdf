@@ -33,6 +33,7 @@ import type { DocumentInitParameters } from 'pdfjs-dist/types/src/display/api.js
 import type {
   ClassName,
   DocumentCallback,
+  DocumentContextType,
   ExternalLinkRel,
   ExternalLinkTarget,
   File,
@@ -46,6 +47,7 @@ import type {
   OnPasswordCallback,
   Options,
   PasswordResponse,
+  DocumentRenderProps,
   RenderMode,
   ScrollPageIntoViewArgs,
   Source,
@@ -62,7 +64,7 @@ type OnSourceError = OnError;
 type OnSourceSuccess = () => void;
 
 export type DocumentProps = {
-  children?: React.ReactNode;
+  children?: React.ReactNode | ((props: DocumentRenderProps) => React.ReactNode);
   /**
    * Class name(s) that will be added to rendered element along with the default `react-pdf__Document`.
    *
@@ -600,7 +602,20 @@ const Document: React.ForwardRefExoticComponent<
   );
 
   function renderChildren() {
-    return <DocumentContext.Provider value={childContext}>{children}</DocumentContext.Provider>;
+    function isFulfilledContext(context: DocumentContextType): context is DocumentRenderProps {
+      return Boolean(context?.pdf);
+    }
+
+    if (!isFulfilledContext(childContext)) {
+      // Impossible, but TypeScript doesn't know that
+      throw new Error('pdf is undefined');
+    }
+
+    const resolvedChildren = typeof children === 'function' ? children(childContext) : children;
+
+    return (
+      <DocumentContext.Provider value={childContext}>{resolvedChildren}</DocumentContext.Provider>
+    );
   }
 
   function renderContent() {

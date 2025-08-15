@@ -1,5 +1,5 @@
 import { beforeAll, describe, expect, it, vi } from 'vitest';
-import { fireEvent, getByTestId, render } from '@testing-library/react';
+import { fireEvent, getByTestId, getByText, render } from '@testing-library/react';
 import { createRef } from 'react';
 
 import Document from './Document.js';
@@ -463,6 +463,24 @@ describe('Document', () => {
       const child = getByTestId(container, 'child');
 
       expect(child.dataset.scale).toBe('2');
+    });
+
+    it('supports function as children', async () => {
+      const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
+
+      const { container } = render(
+        <Document file={pdfFile.file} loading="Loading" onLoadSuccess={onLoadSuccess}>
+          {({ pdf }) => <p>{`This PDF has ${pdf.numPages} pages`}</p>}
+        </Document>,
+      );
+
+      expect.assertions(1);
+
+      await onLoadSuccessPromise;
+
+      const child = getByText(container, 'This PDF has 4 pages');
+
+      expect(child).toBeInTheDocument();
     });
   });
 

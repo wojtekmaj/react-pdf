@@ -1,5 +1,5 @@
 import { beforeAll, describe, expect, it, vi } from 'vitest';
-import { fireEvent, render } from '@testing-library/react';
+import { fireEvent, getByText, render } from '@testing-library/react';
 import { createRef } from 'react';
 
 import DocumentContext from './DocumentContext.js';
@@ -731,6 +731,28 @@ describe('Page', () => {
       const annotationLayer = container.querySelector('.react-pdf__Page__annotations');
 
       expect(annotationLayer).not.toBeInTheDocument();
+    });
+
+    it('supports function as children', async () => {
+      const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
+
+      const { container } = renderWithContext(
+        <Page onLoadSuccess={onLoadSuccess} pageIndex={0}>
+          {({ page }) => <p>{`Page ${page.pageNumber}`}</p>}
+        </Page>,
+        {
+          linkService,
+          pdf,
+        },
+      );
+
+      expect.assertions(1);
+
+      await onLoadSuccessPromise;
+
+      const child = getByText(container, 'Page 1');
+
+      expect(child).toBeInTheDocument();
     });
   });
 
