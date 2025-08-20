@@ -41,6 +41,8 @@ import type {
   OnRenderTextLayerError,
   OnRenderTextLayerSuccess,
   PageCallback,
+  PageContextType,
+  PageRenderProps,
   RenderMode,
 } from './shared/types.js';
 
@@ -63,7 +65,7 @@ export type PageProps = {
    * @example ref
    */
   canvasRef?: React.Ref<HTMLCanvasElement>;
-  children?: React.ReactNode;
+  children?: React.ReactNode | ((props: PageRenderProps) => React.ReactNode);
   /**
    * Class name(s) that will be added to rendered element along with the default `react-pdf__Page`.
    *
@@ -490,7 +492,7 @@ export default function Page(props: PageProps): React.ReactElement {
   const childContext = useMemo(
     () =>
       // Technically there cannot be page without pageIndex, pageNumber, rotate and scale, but TypeScript doesn't know that
-      page && isProvided(pageIndex) && pageNumber && isProvided(rotate) && isProvided(scale)
+      isProvided(pageIndex) && pageNumber && isProvided(rotate) && isProvided(scale)
         ? {
             _className,
             canvasBackground,
@@ -592,12 +594,23 @@ export default function Page(props: PageProps): React.ReactElement {
   }
 
   function renderChildren() {
+    function isFulfilledContext(context: PageContextType): context is PageRenderProps {
+      return Boolean(context?.page);
+    }
+
+    if (!isFulfilledContext(childContext)) {
+      // Impossible, but TypeScript doesn't know that
+      throw new Error('page is undefined');
+    }
+
+    const resolvedChildren = typeof children === 'function' ? children(childContext) : children;
+
     return (
       <PageContext.Provider value={childContext}>
         {renderMainLayer()}
         {renderTextLayer()}
         {renderAnnotationLayer()}
-        {children}
+        {resolvedChildren}
       </PageContext.Provider>
     );
   }

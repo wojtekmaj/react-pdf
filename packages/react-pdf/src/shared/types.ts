@@ -186,3 +186,11 @@ export type StructTreeNodeWithExtraAttributes = StructTreeNode & {
   alt?: string;
   lang?: string;
 };
+
+export type DocumentRenderProps = Omit<NonNullable<DocumentContextType>, 'pdf'> & {
+  pdf: PDFDocumentProxy;
+};
+
+export type PageRenderProps = Omit<NonNullable<PageContextType>, 'page'> & {
+  page: PDFPageProxy;
+};

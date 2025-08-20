@@ -18,7 +18,7 @@
   },
   "license": "MIT",
   "dependencies": {
-    "@wojtekmaj/react-hooks": "^1.20.0",
+    "@wojtekmaj/react-hooks": "^2.0.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-pdf": "latest"
