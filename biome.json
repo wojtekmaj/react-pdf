@@ -3,7 +3,6 @@
   "files": {
     "includes": [
       "**",
-      "!**/.tsimp",
       "!**/.yarn",
       "!**/coverage",
       "!**/dist",
