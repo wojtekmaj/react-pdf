@@ -6,6 +6,7 @@ type ViewOptionsProps = {
   canvasBackground?: string;
   devicePixelRatio?: number;
   displayAll: boolean;
+  optionalContentConfigLayerVisible?: boolean;
   pageHeight?: number;
   pageScale?: number;
   pageWidth?: number;
@@ -14,6 +15,7 @@ type ViewOptionsProps = {
   setCanvasBackground: (value: string | undefined) => void;
   setDevicePixelRatio: (value: number | undefined) => void;
   setDisplayAll: (value: boolean) => void;
+  setOptionalContentConfigLayerVisible: (value: boolean) => void;
   setPageHeight: (value: number | undefined) => void;
   setPageScale: (value: number | undefined) => void;
   setPageWidth: (value: number | undefined) => void;
@@ -25,6 +27,7 @@ export default function ViewOptions({
   canvasBackground,
   devicePixelRatio,
   displayAll,
+  optionalContentConfigLayerVisible,
   pageHeight,
   pageScale,
   pageWidth,
@@ -33,6 +36,7 @@ export default function ViewOptions({
   setCanvasBackground,
   setDevicePixelRatio,
   setDisplayAll,
+  setOptionalContentConfigLayerVisible,
   setPageHeight,
   setPageScale,
   setPageWidth,
@@ -53,6 +57,7 @@ export default function ViewOptions({
   const renderCustomId = useId();
   const renderNoneId = useId();
   const rotationId = useId();
+  const optionalContentConfigLayerVisibleId = useId();
   const displayAllId = useId();
 
   function onCanvasBackgroundChange(event: React.ChangeEvent<HTMLInputElement>) {
@@ -66,6 +71,10 @@ export default function ViewOptions({
     const { valueAsNumber: devicePixelRatio } = input as HTMLInputElement;
 
     setDevicePixelRatio(devicePixelRatio);
+  }
+
+  function onOptionalContentConfigLayerVisibleChange(event: React.ChangeEvent<HTMLInputElement>) {
+    setOptionalContentConfigLayerVisible(event.target.checked);
   }
 
   function onDisplayAllChange(event: React.ChangeEvent<HTMLInputElement>) {
@@ -298,8 +307,25 @@ export default function ViewOptions({
         </button>
       </div>
 
-      <input checked={displayAll} id={displayAllId} onChange={onDisplayAllChange} type="checkbox" />
-      <label htmlFor={displayAllId}>View all pages</label>
+      <div>
+        <input
+          checked={optionalContentConfigLayerVisible}
+          id={optionalContentConfigLayerVisibleId}
+          onChange={onOptionalContentConfigLayerVisibleChange}
+          type="checkbox"
+        />
+        <label htmlFor={optionalContentConfigLayerVisibleId}>1R layer visible</label>
+      </div>
+
+      <div>
+        <input
+          checked={displayAll}
+          id={displayAllId}
+          onChange={onDisplayAllChange}
+          type="checkbox"
+        />
+        <label htmlFor={displayAllId}>View all pages</label>
+      </div>
     </fieldset>
   );
 }

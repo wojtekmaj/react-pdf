@@ -12,6 +12,7 @@ import warning from 'warning';
 import DocumentContext from './DocumentContext.js';
 import LinkService from './LinkService.js';
 import Message from './Message.js';
+import OptionalContentService from './OptionalContentService.js';
 import PasswordResponses from './PasswordResponses.js';
 
 import useResolver from './shared/hooks/useResolver.js';
@@ -245,6 +246,7 @@ const Document: React.ForwardRefExoticComponent<
   DocumentProps &
     React.RefAttributes<{
       linkService: React.RefObject<LinkService>;
+      optionalContentService: React.RefObject<OptionalContentService>;
       pages: React.RefObject<HTMLDivElement[]>;
       viewer: React.RefObject<{ scrollPageIntoView: (args: ScrollPageIntoViewArgs) => void }>;
     }>
@@ -281,6 +283,8 @@ const Document: React.ForwardRefExoticComponent<
   const { value: pdf, error: pdfError } = pdfState;
 
   const linkService = useRef(new LinkService());
+
+  const optionalContentService = useRef(new OptionalContentService());
 
   const pages = useRef<HTMLDivElement[]>([]);
 
@@ -337,6 +341,7 @@ const Document: React.ForwardRefExoticComponent<
     ref,
     () => ({
       linkService,
+      optionalContentService,
       pages,
       viewer,
     }),
@@ -531,7 +536,9 @@ const Document: React.ForwardRefExoticComponent<
       const loadingTask = destroyable;
 
       const loadingPromise = loadingTask.promise
-        .then((nextPdf) => {
+        .then(async (nextPdf) => {
+          optionalContentService.current.setDocument(nextPdf);
+          await optionalContentService.current.loadOptionalContentConfig();
           pdfDispatch({ type: 'RESOLVE', value: nextPdf });
         })
         .catch((error) => {
@@ -585,6 +592,7 @@ const Document: React.ForwardRefExoticComponent<
       imageResourcesPath,
       linkService: linkService.current,
       onItemClick,
+      optionalContentService: optionalContentService.current,
       pdf,
       registerPage,
       renderMode,
