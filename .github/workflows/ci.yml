@@ -12,7 +12,7 @@ env:
 jobs:
   lint:
     name: Static code analysis
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04-arm
 
     steps:
       - name: Checkout
@@ -26,7 +26,7 @@ jobs:
 
   typescript:
     name: Type checking (React ${{ matrix.react }})
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04-arm
     strategy:
       matrix:
         react: [18, 19]
@@ -74,7 +74,7 @@ jobs:
 
   format:
     name: Formatting
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04-arm
 
     steps:
       - name: Checkout
