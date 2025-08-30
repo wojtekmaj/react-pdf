@@ -417,7 +417,7 @@ const options = {
 
 ### Support for standard fonts
 
-If you want to support PDFs using standard fonts (deprecated in PDF 1.5, but still around), ot you have encountered the following warning:
+If you want to support PDFs using standard fonts (deprecated in PDF 1.5, but still around), or you have encountered the following warning:
 
 ```
 The standard font "baseUrl" parameter must be specified, ensure that the "standardFontDataUrl" API parameter is provided.
