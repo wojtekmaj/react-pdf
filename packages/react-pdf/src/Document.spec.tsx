@@ -10,11 +10,13 @@ import Page from './Page.js';
 import { loadPDF, makeAsyncCallback, muteConsole, restoreConsole } from '../../../test-utils.js';
 
 import type { PDFDocumentProxy } from 'pdfjs-dist';
+import type { DocumentContextType, ScrollPageIntoViewArgs } from './shared/types.js';
 import type LinkService from './LinkService.js';
-import type { ScrollPageIntoViewArgs } from './shared/types.js';
+import type OptionalContentService from './OptionalContentService.js';
 
 const pdfFile = await loadPDF('../../__mocks__/_pdf.pdf');
 const pdfFile2 = await loadPDF('../../__mocks__/_pdf2.pdf');
+const pdfFile5 = await loadPDF('../../__mocks__/_pdf5.pdf');
 
 const OK = Symbol('OK');
 
@@ -482,6 +484,56 @@ describe('Document', () => {
 
       expect(child).toBeInTheDocument();
     });
+
+    it('passes optionalContentService prop to its children', async () => {
+      const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
+
+      const instance = createRef<{
+        linkService: React.RefObject<LinkService>;
+        pages: React.RefObject<HTMLDivElement[]>;
+        optionalContentService: React.RefObject<OptionalContentService>;
+        viewer: React.RefObject<{ scrollPageIntoView: (args: ScrollPageIntoViewArgs) => void }>;
+      }>();
+
+      let documentContext: DocumentContextType | undefined;
+
+      render(
+        <Document file={pdfFile5.file} onLoadSuccess={onLoadSuccess} ref={instance}>
+          <DocumentContext.Consumer>
+            {(context) => {
+              documentContext = context;
+              return null;
+            }}
+          </DocumentContext.Consumer>
+        </Document>,
+      );
+
+      if (!instance.current) {
+        throw new Error('Document ref is not set');
+      }
+
+      await onLoadSuccessPromise;
+
+      const optionalContentService = instance.current.optionalContentService.current;
+
+      if (!optionalContentService) {
+        throw new Error('optional content service is not initialized');
+      }
+
+      optionalContentService.setVisibility('1R', false);
+
+      if (!documentContext) {
+        throw new Error('Document context is not set');
+      }
+
+      expect(documentContext.optionalContentService).toBeDefined();
+
+      if (!documentContext.optionalContentService) {
+        throw new Error('Optional content config is not set');
+      }
+
+      expect(documentContext.optionalContentService.isVisible('1R')).toBe(false);
+    });
   });
 
   describe('viewer', () => {
@@ -492,6 +544,7 @@ describe('Document', () => {
       const instance = createRef<{
         linkService: React.RefObject<LinkService>;
         pages: React.RefObject<HTMLDivElement[]>;
+        optionalContentService: React.RefObject<OptionalContentService>;
         viewer: React.RefObject<{ scrollPageIntoView: (args: ScrollPageIntoViewArgs) => void }>;
       }>();
 
@@ -534,6 +587,7 @@ describe('Document', () => {
         linkService: React.RefObject<LinkService>;
         // biome-ignore lint/suspicious/noExplicitAny: Intentional use to simplify the test
         pages: React.RefObject<any[]>;
+        optionalContentService: React.RefObject<OptionalContentService>;
         viewer: React.RefObject<{ scrollPageIntoView: (args: ScrollPageIntoViewArgs) => void }>;
       }>();
 
