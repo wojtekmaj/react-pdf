@@ -52,14 +52,14 @@ export default function Canvas(props: CanvasProps): React.ReactElement {
   /**
    * Called when a page is rendered successfully.
    */
-  function onRenderSuccess() {
+  function onRenderSuccess(renderContext: RenderParameters) {
     if (!page) {
       // Impossible, but TypeScript doesn't know that
       return;
     }
 
     if (onRenderSuccessProps) {
-      onRenderSuccessProps(makePageCallback(page, scale));
+      onRenderSuccessProps(makePageCallback(page, scale), renderContext);
     }
   }
 
@@ -127,7 +127,7 @@ export default function Canvas(props: CanvasProps): React.ReactElement {
         .then(() => {
           canvas.style.visibility = '';
 
-          onRenderSuccess();
+          onRenderSuccess(renderContext);
         })
         .catch(onRenderError);
 
