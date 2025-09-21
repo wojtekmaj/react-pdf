@@ -74,10 +74,8 @@ export function getBaseAttributes(
         };
       }
     }
-  } else {
-    if ('id' in node) {
-      attributes['aria-owns'] = node.id;
-    }
+  } else if ('id' in node) {
+    attributes['aria-owns'] = node.id;
   }
 
   return attributes;
