@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef } from 'react';
-import invariant from 'tiny-invariant';
 import { usePageContext } from 'react-pdf';
+import invariant from 'tiny-invariant';
 
 import type { RenderParameters } from 'pdfjs-dist/types/src/display/api.js';
 
