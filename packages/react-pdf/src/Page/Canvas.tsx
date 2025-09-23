@@ -113,6 +113,7 @@ export default function Canvas(props: CanvasProps): React.ReactElement {
 
       const renderContext: RenderParameters = {
         annotationMode: renderForms ? ANNOTATION_MODE.ENABLE_FORMS : ANNOTATION_MODE.ENABLE,
+        canvas,
         canvasContext: canvas.getContext('2d', { alpha: false }) as CanvasRenderingContext2D,
         viewport: renderViewport,
       };
