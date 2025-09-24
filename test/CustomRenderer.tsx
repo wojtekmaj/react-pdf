@@ -33,6 +33,7 @@ export default function CustomRenderer() {
       }
 
       const renderContext: RenderParameters = {
+        canvas,
         canvasContext: canvas.getContext('2d', { alpha: false }) as CanvasRenderingContext2D,
         viewport,
       };

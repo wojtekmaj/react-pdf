@@ -64,6 +64,10 @@ export default class LinkService implements IPDFLinkService {
     this.externalLinkTarget = externalLinkTarget;
   }
 
+  setHash(): void {
+    // Intentionally empty
+  }
+
   setHistory(): void {
     // Intentionally empty
   }
@@ -90,6 +94,12 @@ export default class LinkService implements IPDFLinkService {
 
   set rotation(_value) {
     // Intentionally empty
+  }
+
+  addLinkAttributes(link: HTMLAnchorElement, url: string, newWindow: boolean): void {
+    link.href = url;
+    link.rel = this.externalLinkRel || DEFAULT_LINK_REL;
+    link.target = newWindow ? '_blank' : this.externalLinkTarget || '';
   }
 
   goToDestination(dest: Dest): Promise<void> {
@@ -146,10 +156,6 @@ export default class LinkService implements IPDFLinkService {
     });
   }
 
-  navigateTo(dest: Dest): void {
-    this.goToDestination(dest);
-  }
-
   goToPage(pageNumber: number): void {
     const pageIndex = pageNumber - 1;
 
@@ -166,10 +172,12 @@ export default class LinkService implements IPDFLinkService {
     });
   }
 
-  addLinkAttributes(link: HTMLAnchorElement, url: string, newWindow: boolean): void {
-    link.href = url;
-    link.rel = this.externalLinkRel || DEFAULT_LINK_REL;
-    link.target = newWindow ? '_blank' : this.externalLinkTarget || '';
+  goToXY(): void {
+    // Intentionally empty
+  }
+
+  cachePageRef(): void {
+    // Intentionally empty
   }
 
   getDestinationHash(): string {
@@ -180,15 +188,11 @@ export default class LinkService implements IPDFLinkService {
     return '#';
   }
 
-  setHash(): void {
-    // Intentionally empty
-  }
-
   executeNamedAction(): void {
     // Intentionally empty
   }
 
-  cachePageRef(): void {
+  executeSetOCGState(): void {
     // Intentionally empty
   }
 
@@ -200,7 +204,7 @@ export default class LinkService implements IPDFLinkService {
     return true;
   }
 
-  executeSetOCGState(): void {
-    // Intentionally empty
+  navigateTo(dest: Dest): void {
+    this.goToDestination(dest);
   }
 }
