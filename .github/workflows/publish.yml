@@ -42,11 +42,11 @@ jobs:
         run: yarn --immutable
 
       - name: Publish with latest tag
-        if: github.event.release.prelease == false
+        if: github.event.release.prerelease == false
         run: yarn npm publish --tag latest --provenance
         working-directory: packages/react-pdf
 
       - name: Publish with next tag
-        if: github.event.release.prelease == true
+        if: github.event.release.prerelease == true
         run: yarn npm publish --tag next --provenance
         working-directory: packages/react-pdf
