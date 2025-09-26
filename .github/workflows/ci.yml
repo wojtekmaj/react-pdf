@@ -59,12 +59,12 @@ jobs:
           PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: true
 
       - name: Override React version
-        if: ${{ matrix.react == 19 }}
+        if: ${{ matrix.react == 18 }}
         run: |
-          npm pkg set resolutions.'@types/react'='npm:^19.0.0'
-          npm pkg set resolutions.'@types/react-dom'='npm:^19.0.0'
+          npm pkg set resolutions.'@types/react'='npm:^18.0.0'
+          npm pkg set resolutions.'@types/react-dom'='npm:^18.0.0'
           yarn config set enableImmutableInstalls false
-          yarn up react@^19.0.0 react-dom@^19.0.0
+          yarn up react@^18.0.0 react-dom@^18.0.0
 
       - name: Build package
         run: yarn build
@@ -128,12 +128,12 @@ jobs:
         run: yarn --immutable
 
       - name: Override React version
-        if: ${{ matrix.react == 19 }}
+        if: ${{ matrix.react == 18 }}
         run: |
-          npm pkg set resolutions.'@types/react'='npm:^19.0.0'
-          npm pkg set resolutions.'@types/react-dom'='npm:^19.0.0'
+          npm pkg set resolutions.'@types/react'='npm:^18.0.0'
+          npm pkg set resolutions.'@types/react-dom'='npm:^18.0.0'
           yarn config set enableImmutableInstalls false
-          yarn up react@^19.0.0 react-dom@^19.0.0
+          yarn up react@^18.0.0 react-dom@^18.0.0
 
       - name: Install Playwright browsers
         if: steps.playwright-cache.outputs.cache-hit != 'true'

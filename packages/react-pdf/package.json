@@ -58,8 +58,8 @@
     "@vitest/browser": "^3.2.3",
     "cpy-cli": "^5.0.0",
     "playwright": "^1.51.1",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
     "typescript": "^5.9.2",
     "vitest": "^3.2.3",
     "vitest-browser-react": "^0.2.0"
