@@ -3,23 +3,30 @@ import { server } from '@vitest/browser/context';
 
 const { readFile } = server.commands;
 
-function makeAsyncCallbackWithoutValue<T extends unknown[]>() {
+type Func<T extends unknown[]> = (...args: T) => void;
+
+function makeAsyncCallbackWithoutValue<T extends unknown[]>(): {
+  func: Func<T>;
+  promise: Promise<T>;
+} {
   let promiseResolve: (args: T) => void;
   const promise = new Promise<T>((resolve) => {
     promiseResolve = resolve;
   });
-  type Func = (...args: T) => void;
-  const func: Func = vi.fn((...args: T) => promiseResolve(args));
+  const func: Func<T> = vi.fn((...args: T) => promiseResolve(args));
 
   return { func, promise };
 }
 
-function makeAsyncCallbackWithValue<T>(value: T) {
+function makeAsyncCallbackWithValue<T>(value: T): {
+  func: Func<never[]>;
+  promise: Promise<T>;
+} {
   let promiseResolve: (arg: T) => void;
   const promise = new Promise<T>((resolve) => {
     promiseResolve = resolve;
   });
-  const func = vi.fn(() => promiseResolve(value));
+  const func: Func<never[]> = vi.fn(() => promiseResolve(value));
 
   return { func, promise };
 }
@@ -35,7 +42,14 @@ export function makeAsyncCallback<T>(value?: T) {
   return makeAsyncCallbackWithValue<T>(value);
 }
 
-export async function loadPDF(path: string) {
+export async function loadPDF(path: string): Promise<{
+  raw: string;
+  readonly arrayBuffer: ArrayBuffer;
+  readonly blob: Blob;
+  readonly data: Uint8Array<ArrayBuffer>;
+  readonly dataURI: string;
+  readonly file: File;
+}> {
   const raw = await readFile(path, 'binary');
 
   // Convert binary read as string to ArrayBuffer
@@ -64,7 +78,7 @@ export async function loadPDF(path: string) {
   };
 }
 
-export function muteConsole() {
+export function muteConsole(): void {
   vi.spyOn(globalThis.console, 'log').mockImplementation(() => {
     // Intentionally empty
   });
@@ -76,7 +90,7 @@ export function muteConsole() {
   });
 }
 
-export function restoreConsole() {
+export function restoreConsole(): void {
   vi.mocked(globalThis.console.log).mockRestore();
   vi.mocked(globalThis.console.error).mockRestore();
   vi.mocked(globalThis.console.warn).mockRestore();
