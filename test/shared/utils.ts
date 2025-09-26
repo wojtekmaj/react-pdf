@@ -43,42 +43,6 @@ export function isDataURI(variable: unknown): variable is `data:${string}` {
   return isString(variable) && variable.startsWith('data:');
 }
 
-export function dataURItoByteString(dataURI: unknown): string {
-  invariant(isDataURI(dataURI), 'Invalid data URI.');
-
-  const [headersString = '', dataString = ''] = dataURI.split(',');
-  const headers = headersString.split(';');
-
-  if (headers.indexOf('base64') !== -1) {
-    return atob(dataString);
-  }
-
-  return unescape(dataString);
-}
-
-function dataURItoUint8Array(dataURI: string): Uint8Array {
-  const byteString = dataURItoByteString(dataURI);
-
-  const ia = new Uint8Array(byteString.length);
-  for (let i = 0; i < byteString.length; i += 1) {
-    ia[i] = byteString.charCodeAt(i);
-  }
-
-  return ia;
-}
-
-/**
- * Parses data URI to Blob.
- *
- * @param {string} dataURI
- */
-export function dataURItoBlob(dataURI: string): Blob {
-  const ia = dataURItoUint8Array(dataURI);
-  const [header = ''] = dataURI.split(';');
-  const mimeString = header.split(':')[1];
-  return new Blob([ia], { type: mimeString });
-}
-
 export function loadFromFile(file: Blob): Promise<ArrayBuffer> {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();

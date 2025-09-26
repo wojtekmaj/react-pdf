@@ -12,7 +12,7 @@ import PassingOptions from './PassingOptions.js';
 import ViewOptions from './ViewOptions.js';
 import CustomRenderer from './CustomRenderer.js';
 
-import { isArrayBuffer, isBlob, isBrowser, loadFromFile, dataURItoBlob } from './shared/utils.js';
+import { isArrayBuffer, isBlob, isBrowser, loadFromFile } from './shared/utils.js';
 
 import type { PDFDocumentProxy, PDFPageProxy } from 'pdfjs-dist';
 import type { ExternalLinkTarget, File, PassMethod, RenderMode } from './shared/types.js';
@@ -135,18 +135,6 @@ export default function Test() {
         }
 
         switch (passMethod) {
-          case 'blob': {
-            if (typeof file === 'string') {
-              return dataURItoBlob(file);
-            }
-
-            if (file instanceof File || file instanceof Blob) {
-              return file;
-            }
-
-            return file;
-          }
-
           case 'string': {
             if (typeof file === 'string') {
               return file;

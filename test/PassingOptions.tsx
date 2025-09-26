@@ -82,17 +82,6 @@ export default function PassingOptions({ file, passMethod, setPassMethod }: Pass
         />
         <label htmlFor={passStringId}>Pass as a string/data URI</label>
       </div>
-      <div>
-        <input
-          checked={passMethod === 'blob'}
-          id={passBlobId}
-          name="passMethod"
-          onChange={onPassMethodChange}
-          type="radio"
-          value="blob"
-        />
-        <label htmlFor={passBlobId}>Pass as a File/Blob</label>
-      </div>
     </fieldset>
   );
 }
