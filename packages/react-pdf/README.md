@@ -87,6 +87,9 @@ pdfjs.GlobalWorkerOptions.workerSrc = new URL(
 ).toString();
 ```
 
+> [!WARNING]
+> The `workerSrc` must be set in the **same module** where you use React-PDF components (e.g., `<Document>`, `<Page>`). Setting it in a separate file like `main.tsx` and then importing React-PDF in another component may cause the default value to overwrite your custom setting due to module execution order. Always configure the worker in the file where you render the PDF components.
+
 > [!NOTE]
 > In Next.js, make sure to skip SSR when importing the module you're using this code in. Here's how to do this in [Pages Router](https://nextjs.org/docs/pages/guides/lazy-loading#with-no-ssr) and [App Router](https://nextjs.org/docs/app/guides/lazy-loading#skipping-ssr).
 
@@ -133,6 +136,9 @@ import { pdfjs } from 'react-pdf';
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
 ```
+
+> [!WARNING]
+> The `workerSrc` must be set in the **same module** where you use React-PDF components (e.g., `<Document>`, `<Page>`). Setting it in a separate file like `main.tsx` and then importing React-PDF in another component may cause the default value to overwrite your custom setting due to module execution order. Always configure the worker in the file where you render the PDF components.
 
 ### Usage
 
