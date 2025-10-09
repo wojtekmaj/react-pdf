@@ -164,8 +164,11 @@ export default function AnnotationLayer(): React.ReactElement {
         accessibilityManager: null, // TODO: Implement this
         annotationCanvasMap: null, // TODO: Implement this
         annotationEditorUIManager: null, // TODO: Implement this
+        annotationStorage: pdf.annotationStorage,
+        commentManager: null, // TODO: Implement this
         div: layer,
         l10n: null, // TODO: Implement this
+        linkService,
         page,
         structTreeLayer: null, // TODO: Implement this
         viewport: clonedViewport,
