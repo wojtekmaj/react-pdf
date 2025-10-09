@@ -14,9 +14,18 @@ import type {
   TextMarkedContent,
   TypedArray,
 } from 'pdfjs-dist/types/src/display/api.js';
+import type { OptionalContentConfig } from 'pdfjs-dist/types/src/display/optional_content_config.js';
 import type LinkService from '../LinkService.js';
+import type OptionalContentService from '../OptionalContentService.js';
 
-export type { PasswordResponses, StructTreeNode, TextContent, TextItem, TextMarkedContent };
+export type {
+  OptionalContentConfig,
+  PasswordResponses,
+  StructTreeNode,
+  TextContent,
+  TextItem,
+  TextMarkedContent,
+};
 
 type NullableObject<T extends object> = { [P in keyof T]: T[P] | null };
 
@@ -134,6 +143,7 @@ export type DocumentContextType = {
   imageResourcesPath?: ImageResourcesPath;
   linkService: LinkService;
   onItemClick?: (args: OnItemClickArgs) => void;
+  optionalContentService?: OptionalContentService;
   pdf?: PDFDocumentProxy | false;
   registerPage: RegisterPage;
   renderMode?: RenderMode;
@@ -158,6 +168,7 @@ export type PageContextType = {
   onRenderSuccess?: OnRenderSuccess;
   onRenderTextLayerError?: OnRenderTextLayerError;
   onRenderTextLayerSuccess?: OnRenderTextLayerSuccess;
+  optionalContentService?: OptionalContentService;
   page: PDFPageProxy | false | undefined;
   pageIndex: number;
   pageNumber: number;

@@ -16,6 +16,7 @@ import { isArrayBuffer, isBlob, isBrowser, loadFromFile } from './shared/utils.j
 
 import type { PDFDocumentProxy, PDFPageProxy } from 'pdfjs-dist';
 import type { ExternalLinkTarget, File, PassMethod, RenderMode } from './shared/types.js';
+import type { OptionalContentConfig } from 'react-pdf';
 
 const { PDFDataRangeTransport } = pdfjs;
 
@@ -77,6 +78,9 @@ export default function Test() {
   const [file, setFile] = useState<File>(null);
   const [fileForProps, setFileForProps] = useState<File>();
   const [numPages, setNumPages] = useState<number>();
+  const [optionalContentConfigLayerVisible, setOptionalContentConfigLayerVisible] =
+    useState<boolean>(true);
+  const [optionalContentConfig, setOptionalContentConfig] = useState<OptionalContentConfig>();
   const [pageHeight, setPageHeight] = useState<number>();
   const [pageNumber, setPageNumber] = useState<number>();
   const [pageScale, setPageScale] = useState<number>();
@@ -99,6 +103,10 @@ export default function Test() {
     const { numPages: nextNumPages } = document;
     setNumPages(nextNumPages);
     setPageNumber(1);
+
+    document.getOptionalContentConfig({ intent: 'display' }).then((nextOptionalContentConfig) => {
+      setOptionalContentConfig(nextOptionalContentConfig);
+    });
   }, []);
 
   const onDocumentLoadError = useCallback((error: Error) => {
@@ -126,6 +134,14 @@ export default function Test() {
     ({ str }: { str: string }) => str.replace(/ipsum/g, (value) => `<mark>${value}</mark>`),
     [],
   );
+
+  if (optionalContentConfig) {
+    if (optionalContentConfig.isVisible('1R') !== optionalContentConfigLayerVisible) {
+      optionalContentConfig.setVisibility('1R', optionalContentConfigLayerVisible);
+
+      // FIXME: This should somehow trigger a re-render of the document
+    }
+  }
 
   useEffect(() => {
     (async () => {
@@ -195,6 +211,7 @@ export default function Test() {
   const documentProps = {
     externalLinkTarget,
     file: fileForProps,
+    optionalContentConfig,
     options,
     rotate,
   };
@@ -239,6 +256,7 @@ export default function Test() {
             canvasBackground={canvasBackground}
             devicePixelRatio={devicePixelRatio}
             displayAll={displayAll}
+            optionalContentConfigLayerVisible={optionalContentConfigLayerVisible}
             pageHeight={pageHeight}
             pageScale={pageScale}
             pageWidth={pageWidth}
@@ -247,6 +265,7 @@ export default function Test() {
             setCanvasBackground={setCanvasBackground}
             setDevicePixelRatio={setDevicePixelRatio}
             setDisplayAll={setDisplayAll}
+            setOptionalContentConfigLayerVisible={setOptionalContentConfigLayerVisible}
             setPageHeight={setPageHeight}
             setPageScale={setPageScale}
             setPageWidth={setPageWidth}
