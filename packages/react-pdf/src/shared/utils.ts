@@ -111,25 +111,25 @@ export function cancelRunningTask(runningTask?: { cancel?: () => void } | null):
 export function makePageCallback(page: PDFPageProxy, scale: number): PageCallback {
   Object.defineProperty(page, 'width', {
     get() {
-      return this.view[2] * scale;
+      return this.getViewport({ scale }).width;
     },
     configurable: true,
   });
   Object.defineProperty(page, 'height', {
     get() {
-      return this.view[3] * scale;
+      return this.getViewport({ scale }).height;
     },
     configurable: true,
   });
   Object.defineProperty(page, 'originalWidth', {
     get() {
-      return this.view[2];
+      return this.getViewport({ scale: 1 }).width;
     },
     configurable: true,
   });
   Object.defineProperty(page, 'originalHeight', {
     get() {
-      return this.view[3];
+      return this.getViewport({ scale: 1 }).height;
     },
     configurable: true,
   });
