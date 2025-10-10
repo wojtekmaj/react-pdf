@@ -18,6 +18,7 @@ import type { DocumentContextType, PageCallback } from './shared/types.js';
 const pdfFile = await loadPDF('../../__mocks__/_pdf.pdf');
 const pdfFile2 = await loadPDF('../../__mocks__/_pdf2.pdf');
 const pdfFile4 = await loadPDF('../../__mocks__/_pdf4.pdf');
+const pdfFile5 = await loadPDF('../../__mocks__/_pdf5.pdf');
 
 function renderWithContext(children: React.ReactNode, context: Partial<DocumentContextType>) {
   const { rerender, ...otherResult } = render(
@@ -47,6 +48,7 @@ describe('Page', () => {
   let pdf: PDFDocumentProxy;
   let pdf2: PDFDocumentProxy;
   let pdf4: PDFDocumentProxy;
+  let pdf5: PDFDocumentProxy;
 
   // Object with basic loaded page information that shall match after successful loading
   const desiredLoadedPage: Partial<PDFPageProxy> = {};
@@ -78,6 +80,8 @@ describe('Page', () => {
     unregisterPageArguments = [page._pageIndex];
 
     pdf4 = await pdfjs.getDocument({ data: pdfFile4.arrayBuffer }).promise;
+
+    pdf5 = await pdfjs.getDocument({ data: pdfFile5.arrayBuffer }).promise;
   });
 
   describe('loading', () => {
@@ -995,5 +999,29 @@ describe('Page', () => {
     fireEvent.touchStart(page);
 
     expect(onTouchStart).toHaveBeenCalled();
+  });
+
+  it('handles rotated page dimensions correctly in onLoadPage callback', async () => {
+    const { func: onLoadSuccess, promise: onLoadSuccessPromise } =
+      makeAsyncCallback<[PageCallback]>();
+
+    const { func: onLoadSuccess2, promise: onLoadSuccessPromise2 } =
+      makeAsyncCallback<[PageCallback]>();
+
+    renderWithContext(<Page onLoadSuccess={onLoadSuccess} pageIndex={0} />, {
+      linkService,
+      pdf: pdf5,
+    });
+
+    renderWithContext(<Page onLoadSuccess={onLoadSuccess2} pageIndex={1} />, {
+      linkService,
+      pdf: pdf5,
+    });
+
+    const [page1] = await onLoadSuccessPromise;
+    const [page2] = await onLoadSuccessPromise2;
+
+    expect(page1.width).toEqual(page2.height);
+    expect(page1.height).toEqual(page2.width);
   });
 });
