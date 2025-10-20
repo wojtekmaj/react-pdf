@@ -2593,27 +2593,27 @@ __metadata:
   languageName: node
   linkType: hard
 
-"playwright-core@npm:1.51.1":
-  version: 1.51.1
-  resolution: "playwright-core@npm:1.51.1"
+"playwright-core@npm:1.56.1":
+  version: 1.56.1
+  resolution: "playwright-core@npm:1.56.1"
   bin:
     playwright-core: cli.js
-  checksum: 10c0/4f004d9dea5ecbd76b84c858fa4880ed955600b6cda972a3e8093ea47e150ce20bf2ea806e73e740497d34f4b61b080c208339a661fc75ad04d8f00bedcc21e0
+  checksum: 10c0/ffd40142b99c68678b387445d5b42f1fee4ab0b65d983058c37f342e5629f9cdbdac0506ea80a0dfd41a8f9f13345bad54e9a8c35826ef66dc765f4eb3db8da7
   languageName: node
   linkType: hard
 
-"playwright@npm:^1.51.1":
-  version: 1.51.1
-  resolution: "playwright@npm:1.51.1"
+"playwright@npm:^1.55.1":
+  version: 1.56.1
+  resolution: "playwright@npm:1.56.1"
   dependencies:
     fsevents: "npm:2.3.2"
-    playwright-core: "npm:1.51.1"
+    playwright-core: "npm:1.56.1"
   dependenciesMeta:
     fsevents:
       optional: true
   bin:
     playwright: cli.js
-  checksum: 10c0/2aea553b8b1086ee419e72c9d4f4117686e6bdb5e09e0f47dfe563ce0f0bd79c4ee79dd9c8a0f023a2fb7803b81d4fdc552887410d16c036be07f21ab72b3f46
+  checksum: 10c0/8e9965aede86df0f4722063385748498977b219630a40a10d1b82b8bd8d4d4e9b6b65ecbfa024331a30800163161aca292fb6dd7446c531a1ad25f4155625ab4
   languageName: node
   linkType: hard
 
@@ -2709,7 +2709,7 @@ __metadata:
     make-event-props: "npm:^2.0.0"
     merge-refs: "npm:^2.0.0"
     pdfjs-dist: "npm:5.4.296"
-    playwright: "npm:^1.51.1"
+    playwright: "npm:^1.55.1"
     react: "npm:^19.0.0"
     react-dom: "npm:^19.0.0"
     tiny-invariant: "npm:^1.0.0"
