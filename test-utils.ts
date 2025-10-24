@@ -1,5 +1,5 @@
 import { vi } from 'vitest';
-import { server } from '@vitest/browser/context';
+import { server } from 'vitest/browser';
 
 const { readFile } = server.commands;
 
