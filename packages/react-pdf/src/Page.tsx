@@ -25,6 +25,7 @@ import type {
   ClassName,
   CustomRenderer,
   CustomTextRenderer,
+  FilterAnnotations,
   NodeOrRenderer,
   OnGetAnnotationsError,
   OnGetAnnotationsSuccess,
@@ -101,6 +102,12 @@ export type PageProps = {
    * @example this.renderError
    */
   error?: NodeOrRenderer;
+  /**
+   * Function to filter annotations before they are rendered.
+   *
+   * @example ({ annotations }) => annotations.filter(annotation => annotation.subtype === 'Text')
+   */
+  filterAnnotations?: FilterAnnotations;
   /**
    * Page height. If neither `height` nor `width` are defined, page will be rendered at the size defined in PDF. If you define `width` and `height` at the same time, `height` will be ignored. If you define `height` and `scale` at the same time, the height will be multiplied by a given factor.
    *
@@ -316,6 +323,7 @@ export default function Page(props: PageProps): React.ReactElement {
     customTextRenderer,
     devicePixelRatio,
     error = 'Failed to load the page.',
+    filterAnnotations,
     height,
     inputRef,
     loading = 'Loading page…',
@@ -497,6 +505,7 @@ export default function Page(props: PageProps): React.ReactElement {
             canvasBackground,
             customTextRenderer,
             devicePixelRatio,
+            filterAnnotations,
             onGetAnnotationsError: onGetAnnotationsErrorProps,
             onGetAnnotationsSuccess: onGetAnnotationsSuccessProps,
             onGetStructTreeError: onGetStructTreeErrorProps,
@@ -523,6 +532,7 @@ export default function Page(props: PageProps): React.ReactElement {
       canvasBackground,
       customTextRenderer,
       devicePixelRatio,
+      filterAnnotations,
       onGetAnnotationsErrorProps,
       onGetAnnotationsSuccessProps,
       onGetStructTreeErrorProps,

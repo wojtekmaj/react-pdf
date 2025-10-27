@@ -24,6 +24,7 @@ export default function AnnotationLayer(): React.ReactElement {
 
   const mergedProps = { ...documentContext, ...pageContext };
   const {
+    filterAnnotations,
     imageResourcesPath,
     linkService,
     onGetAnnotationsError: onGetAnnotationsErrorProps,
@@ -175,7 +176,7 @@ export default function AnnotationLayer(): React.ReactElement {
       };
 
       const renderParameters: AnnotationLayerParameters = {
-        annotations,
+        annotations: filterAnnotations ? filterAnnotations({ annotations }) : annotations,
         annotationStorage: pdf.annotationStorage,
         div: layer,
         imageResourcesPath,
@@ -200,7 +201,16 @@ export default function AnnotationLayer(): React.ReactElement {
         // TODO: Cancel running task?
       };
     },
-    [annotations, imageResourcesPath, linkService, page, pdf, renderForms, viewport],
+    [
+      annotations,
+      filterAnnotations,
+      imageResourcesPath,
+      linkService,
+      page,
+      pdf,
+      renderForms,
+      viewport,
+    ],
   );
 
   return (

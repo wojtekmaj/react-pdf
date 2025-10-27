@@ -35,6 +35,10 @@ export type ExternalLinkRel = string;
 
 export type ExternalLinkTarget = '_self' | '_blank' | '_parent' | '_top';
 
+export type FilterAnnotationsArgs = {
+  annotations: Annotations;
+};
+
 export type ImageResourcesPath = string;
 
 export type OnError = (error: Error) => void;
@@ -88,6 +92,8 @@ export type PageCallback = PDFPageProxy & {
 };
 
 export type NodeOrRenderer = React.ReactNode | (() => React.ReactNode);
+
+export type FilterAnnotations = (args: FilterAnnotationsArgs) => Annotations;
 
 export type OnDocumentLoadError = OnError;
 
@@ -146,6 +152,7 @@ export type PageContextType = {
   canvasBackground?: string;
   customTextRenderer?: CustomTextRenderer;
   devicePixelRatio?: number;
+  filterAnnotations?: FilterAnnotations;
   onGetAnnotationsError?: OnGetAnnotationsError;
   onGetAnnotationsSuccess?: OnGetAnnotationsSuccess;
   onGetStructTreeError?: OnGetStructTreeError;
