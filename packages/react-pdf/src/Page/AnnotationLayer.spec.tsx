@@ -1,5 +1,5 @@
 import { beforeAll, describe, expect, it } from 'vitest';
-import { render } from '@testing-library/react';
+import { render } from 'vitest-browser-react';
 
 import DocumentContext from '../DocumentContext.js';
 import { pdfjs } from '../index.test.js';
@@ -11,30 +11,30 @@ import failingPage from '../../../../__mocks__/_failing_page.js';
 
 import { loadPDF, makeAsyncCallback, muteConsole, restoreConsole } from '../../../../test-utils.js';
 
-import type { RenderResult } from '@testing-library/react';
 import type { PDFDocumentProxy, PDFPageProxy } from 'pdfjs-dist';
+import type { RenderResult } from 'vitest-browser-react';
 import type { Annotations, DocumentContextType, PageContextType } from '../shared/types.js';
 
 const pdfFile = await loadPDF('../../__mocks__/_pdf.pdf');
 const annotatedPdfFile = await loadPDF('../../__mocks__/_pdf3.pdf');
 
-function renderWithContext(
+async function renderWithContext(
   children: React.ReactNode,
   documentContext: Partial<DocumentContextType>,
   pageContext: Partial<PageContextType>,
 ) {
-  const { rerender, ...otherResult } = render(
+  const { rerender, ...otherResult } = await render(
     <DocumentContext.Provider value={documentContext as DocumentContextType}>
       <PageContext.Provider value={pageContext as PageContextType}>{children}</PageContext.Provider>
     </DocumentContext.Provider>,
   );
 
-  const customRerender = (
+  const customRerender = async (
     nextChildren: React.ReactNode,
     nextDocumentContext: Partial<DocumentContextType> = documentContext,
     nextPageContext: Partial<PageContextType> = pageContext,
   ) =>
-    rerender(
+    await rerender(
       <DocumentContext.Provider value={nextDocumentContext as DocumentContextType}>
         <PageContext.Provider value={nextPageContext as PageContextType}>
           {nextChildren}
@@ -77,7 +77,7 @@ describe('AnnotationLayer', () => {
       const { func: onGetAnnotationsSuccess, promise: onGetAnnotationsSuccessPromise } =
         makeAsyncCallback();
 
-      renderWithContext(
+      await renderWithContext(
         <AnnotationLayer />,
         {
           linkService,
@@ -100,7 +100,7 @@ describe('AnnotationLayer', () => {
 
       muteConsole();
 
-      renderWithContext(
+      await renderWithContext(
         <AnnotationLayer />,
         {
           linkService,
@@ -123,7 +123,7 @@ describe('AnnotationLayer', () => {
       const { func: onGetAnnotationsSuccess, promise: onGetAnnotationsSuccessPromise } =
         makeAsyncCallback();
 
-      const { rerender } = renderWithContext(
+      const { rerender } = await renderWithContext(
         <AnnotationLayer />,
         {
           linkService,
@@ -142,7 +142,7 @@ describe('AnnotationLayer', () => {
       const { func: onGetAnnotationsSuccess2, promise: onGetAnnotationsSuccessPromise2 } =
         makeAsyncCallback();
 
-      rerender(
+      await rerender(
         <AnnotationLayer />,
         {
           linkService,
@@ -157,10 +157,12 @@ describe('AnnotationLayer', () => {
       await expect(onGetAnnotationsSuccessPromise2).resolves.toMatchObject([desiredAnnotations2]);
     });
 
-    it('throws an error when placed outside Page', () => {
+    it('throws an error when placed outside Page', async () => {
       muteConsole();
 
-      expect(() => render(<AnnotationLayer />)).toThrow();
+      await expect(render(<AnnotationLayer />)).rejects.toThrowError(
+        'Invariant failed: Unable to find Page context.',
+      );
 
       restoreConsole();
     });
@@ -173,7 +175,7 @@ describe('AnnotationLayer', () => {
         promise: onRenderAnnotationLayerSuccessPromise,
       } = makeAsyncCallback();
 
-      const { container } = renderWithContext(
+      const { container } = await renderWithContext(
         <AnnotationLayer />,
         {
           linkService,
@@ -214,7 +216,7 @@ describe('AnnotationLayer', () => {
           customLinkService.setExternalLinkTarget(externalLinkTarget);
         }
 
-        const { container } = renderWithContext(
+        const { container } = await renderWithContext(
           <AnnotationLayer />,
           {
             linkService: customLinkService,
@@ -258,7 +260,7 @@ describe('AnnotationLayer', () => {
           customLinkService.setExternalLinkRel(externalLinkRel);
         }
 
-        const { container } = renderWithContext(
+        const { container } = await renderWithContext(
           <AnnotationLayer />,
           {
             linkService: customLinkService,
@@ -299,7 +301,7 @@ describe('AnnotationLayer', () => {
         `<img[^>]+src="${imageResourcesPath}annotation-note.svg"`,
       );
 
-      const { container } = renderWithContext(
+      const { container } = await renderWithContext(
         <AnnotationLayer />,
         {
           linkService,
@@ -333,7 +335,7 @@ describe('AnnotationLayer', () => {
         `<img[^>]+src="${imageResourcesPath}annotation-note.svg"`,
       );
 
-      const { container } = renderWithContext(
+      const { container } = await renderWithContext(
         <AnnotationLayer />,
         {
           imageResourcesPath,

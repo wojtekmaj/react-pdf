@@ -1,5 +1,5 @@
 import { beforeAll, describe, expect, it, vi } from 'vitest';
-import { render } from '@testing-library/react';
+import { render } from 'vitest-browser-react';
 
 import { pdfjs } from '../index.test.js';
 import PageContext from '../PageContext.js';
@@ -16,15 +16,18 @@ import type { PageContextType } from '../shared/types.js';
 const pdfFile = await loadPDF('../../__mocks__/_pdf.pdf');
 const untaggedPdfFile = await loadPDF('../../__mocks__/_untagged.pdf');
 
-function renderWithContext(children: React.ReactNode, context: Partial<PageContextType>) {
-  const { rerender, ...otherResult } = render(
+async function renderWithContext(children: React.ReactNode, context: Partial<PageContextType>) {
+  const { rerender, ...otherResult } = await render(
     <PageContext.Provider value={context as PageContextType}>{children}</PageContext.Provider>,
   );
 
   return {
     ...otherResult,
-    rerender: (nextChildren: React.ReactNode, nextContext: Partial<PageContextType> = context) =>
-      rerender(
+    rerender: async (
+      nextChildren: React.ReactNode,
+      nextContext: Partial<PageContextType> = context,
+    ) =>
+      await rerender(
         <PageContext.Provider value={nextContext as PageContextType}>
           {nextChildren}
         </PageContext.Provider>,
@@ -63,7 +66,7 @@ describe('TextLayer', () => {
     it('loads text content and calls onGetTextSuccess callback properly', async () => {
       const { func: onGetTextSuccess, promise: onGetTextSuccessPromise } = makeAsyncCallback();
 
-      renderWithContext(<TextLayer />, {
+      await renderWithContext(<TextLayer />, {
         onGetTextSuccess,
         page,
       });
@@ -78,7 +81,7 @@ describe('TextLayer', () => {
 
       muteConsole();
 
-      renderWithContext(<TextLayer />, {
+      await renderWithContext(<TextLayer />, {
         onGetTextError,
         page: failingPage,
       });
@@ -93,7 +96,7 @@ describe('TextLayer', () => {
     it('replaces text content properly', async () => {
       const { func: onGetTextSuccess, promise: onGetTextSuccessPromise } = makeAsyncCallback();
 
-      const { rerender } = renderWithContext(<TextLayer />, {
+      const { rerender } = await renderWithContext(<TextLayer />, {
         onGetTextSuccess,
         page,
       });
@@ -108,7 +111,7 @@ describe('TextLayer', () => {
 
       const { func: onGetTextSuccess2, promise: onGetTextSuccessPromise2 } = makeAsyncCallback();
 
-      rerender(<TextLayer />, {
+      await rerender(<TextLayer />, {
         onGetTextSuccess: onGetTextSuccess2,
         page: page2,
       });
@@ -120,10 +123,12 @@ describe('TextLayer', () => {
       ]);
     });
 
-    it('throws an error when placed outside Page', () => {
+    it('throws an error when placed outside Page', async () => {
       muteConsole();
 
-      expect(() => render(<TextLayer />)).toThrow();
+      await expect(render(<TextLayer />)).rejects.toThrowError(
+        'Invariant failed: Unable to find Page context.',
+      );
 
       restoreConsole();
     });
@@ -134,7 +139,10 @@ describe('TextLayer', () => {
       const { func: onRenderTextLayerSuccess, promise: onRenderTextLayerSuccessPromise } =
         makeAsyncCallback();
 
-      const { container } = renderWithContext(<TextLayer />, { onRenderTextLayerSuccess, page });
+      const { container } = await renderWithContext(<TextLayer />, {
+        onRenderTextLayerSuccess,
+        page,
+      });
 
       expect.assertions(1);
 
@@ -151,7 +159,7 @@ describe('TextLayer', () => {
 
       const customTextRenderer = vi.fn();
 
-      const { container } = renderWithContext(<TextLayer />, {
+      const { container } = await renderWithContext(<TextLayer />, {
         customTextRenderer,
         onRenderTextLayerSuccess,
         page,
@@ -170,7 +178,7 @@ describe('TextLayer', () => {
       const { func: onRenderTextLayerSuccess, promise: onRenderTextLayerSuccessPromise } =
         makeAsyncCallback();
 
-      const { container, rerender } = renderWithContext(<TextLayer />, {
+      const { container, rerender } = await renderWithContext(<TextLayer />, {
         onRenderTextLayerSuccess,
         page,
       });
@@ -186,7 +194,7 @@ describe('TextLayer', () => {
 
       const customTextRenderer = (item: { str: string }) => item.str;
 
-      rerender(<TextLayer />, {
+      await rerender(<TextLayer />, {
         customTextRenderer,
         onRenderTextLayerSuccess: onRenderTextLayerSuccess2,
         page,
@@ -205,7 +213,7 @@ describe('TextLayer', () => {
 
       const customTextRenderer = vi.fn();
 
-      const { container } = renderWithContext(<TextLayer />, {
+      const { container } = await renderWithContext(<TextLayer />, {
         customTextRenderer,
         onRenderTextLayerSuccess,
         page,
@@ -234,7 +242,7 @@ describe('TextLayer', () => {
 
       const customTextRenderer = () => 'Test value';
 
-      const { container } = renderWithContext(<TextLayer />, {
+      const { container } = await renderWithContext(<TextLayer />, {
         customTextRenderer,
         onRenderTextLayerSuccess,
         page,
@@ -256,7 +264,7 @@ describe('TextLayer', () => {
       const untaggedDoc = await pdfjs.getDocument({ data: untaggedPdfFile.arrayBuffer }).promise;
       const untaggedPage = await untaggedDoc.getPage(1);
 
-      const { container } = renderWithContext(<TextLayer />, {
+      const { container } = await renderWithContext(<TextLayer />, {
         customTextRenderer,
         onRenderTextLayerSuccess,
         page: untaggedPage,

@@ -1,5 +1,6 @@
 import { beforeAll, describe, expect, it, vi } from 'vitest';
-import { fireEvent, getByTestId, getByText, render } from '@testing-library/react';
+import { page, userEvent } from 'vitest/browser';
+import { render } from 'vitest-browser-react';
 import { createRef } from 'react';
 
 import Document from './Document.js';
@@ -64,7 +65,7 @@ describe('Document', () => {
       const { func: onSourceSuccess, promise: onSourceSuccessPromise } = makeAsyncCallback(OK);
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
-      render(
+      await render(
         <Document
           file={pdfFile.dataURI}
           onLoadSuccess={onLoadSuccess}
@@ -82,7 +83,7 @@ describe('Document', () => {
       const { func: onSourceSuccess, promise: onSourceSuccessPromise } = makeAsyncCallback(OK);
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
-      render(
+      await render(
         <Document
           file={{ url: pdfFile.dataURI }}
           onLoadSuccess={onLoadSuccess}
@@ -100,7 +101,7 @@ describe('Document', () => {
       const { func: onSourceSuccess, promise: onSourceSuccessPromise } = makeAsyncCallback(OK);
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
-      render(
+      await render(
         <Document
           file={pdfFile.arrayBuffer}
           onLoadSuccess={onLoadSuccess}
@@ -118,7 +119,7 @@ describe('Document', () => {
       const { func: onSourceSuccess, promise: onSourceSuccessPromise } = makeAsyncCallback(OK);
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
-      render(
+      await render(
         <Document
           file={pdfFile.blob}
           onLoadSuccess={onLoadSuccess}
@@ -136,7 +137,7 @@ describe('Document', () => {
       const { func: onSourceSuccess, promise: onSourceSuccessPromise } = makeAsyncCallback(OK);
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
-      render(
+      await render(
         <Document
           file={pdfFile.file}
           onLoadSuccess={onLoadSuccess}
@@ -156,7 +157,7 @@ describe('Document', () => {
       muteConsole();
 
       // @ts-expect-error-next-line
-      render(<Document file={() => null} onSourceError={onSourceError} />);
+      await render(<Document file={() => null} onSourceError={onSourceError} />);
 
       expect.assertions(1);
 
@@ -171,7 +172,7 @@ describe('Document', () => {
       const { func: onSourceSuccess, promise: onSourceSuccessPromise } = makeAsyncCallback(OK);
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
-      const { rerender } = render(
+      const { rerender } = await render(
         <Document
           file={pdfFile.file}
           onLoadSuccess={onLoadSuccess}
@@ -187,7 +188,7 @@ describe('Document', () => {
       const { func: onSourceSuccess2, promise: onSourceSuccessPromise2 } = makeAsyncCallback(OK);
       const { func: onLoadSuccess2, promise: onLoadSuccessPromise2 } = makeAsyncCallback();
 
-      rerender(
+      await rerender(
         <Document
           file={pdfFile2.file}
           onLoadSuccess={onLoadSuccess2}
@@ -201,26 +202,26 @@ describe('Document', () => {
   });
 
   describe('rendering', () => {
-    it('applies className to its wrapper when given a string', () => {
+    it('applies className to its wrapper when given a string', async () => {
       const className = 'testClassName';
 
-      const { container } = render(<Document className={className} />);
+      const { container } = await render(<Document className={className} />);
 
       const wrapper = container.querySelector('.react-pdf__Document');
 
       expect(wrapper).toHaveClass(className);
     });
 
-    it('passes container element to inputRef properly', () => {
+    it('passes container element to inputRef properly', async () => {
       const inputRef = createRef<HTMLDivElement>();
 
-      render(<Document inputRef={inputRef} />);
+      await render(<Document inputRef={inputRef} />);
 
       expect(inputRef.current).toBeInstanceOf(HTMLDivElement);
     });
 
-    it('renders "No PDF file specified." when given nothing', () => {
-      const { container } = render(<Document />);
+    it('renders "No PDF file specified." when given nothing', async () => {
+      const { container } = await render(<Document />);
 
       const noData = container.querySelector('.react-pdf__message');
 
@@ -228,8 +229,8 @@ describe('Document', () => {
       expect(noData).toHaveTextContent('No PDF file specified.');
     });
 
-    it('renders custom no data message when given nothing and noData prop is given', () => {
-      const { container } = render(<Document noData="Nothing here" />);
+    it('renders custom no data message when given nothing and noData prop is given', async () => {
+      const { container } = await render(<Document noData="Nothing here" />);
 
       const noData = container.querySelector('.react-pdf__message');
 
@@ -237,8 +238,8 @@ describe('Document', () => {
       expect(noData).toHaveTextContent('Nothing here');
     });
 
-    it('renders custom no data message when given nothing and noData prop is given as a function', () => {
-      const { container } = render(<Document noData={() => 'Nothing here'} />);
+    it('renders custom no data message when given nothing and noData prop is given as a function', async () => {
+      const { container } = await render(<Document noData={() => 'Nothing here'} />);
 
       const noData = container.querySelector('.react-pdf__message');
 
@@ -247,32 +248,32 @@ describe('Document', () => {
     });
 
     it('renders "Loading PDF…" when loading a file', async () => {
-      const { container, findByText } = render(<Document file={pdfFile.file} />);
+      const { container } = await render(<Document file={pdfFile.file} />);
 
       const loading = container.querySelector('.react-pdf__message');
 
       expect(loading).toBeInTheDocument();
-      expect(await findByText('Loading PDF…')).toBeInTheDocument();
+      await expect.element(page.getByText('Loading PDF…')).toBeInTheDocument();
     });
 
     it('renders custom loading message when loading a file and loading prop is given', async () => {
-      const { container, findByText } = render(<Document file={pdfFile.file} loading="Loading" />);
+      const { container } = await render(<Document file={pdfFile.file} loading="Loading" />);
 
       const loading = container.querySelector('.react-pdf__message');
 
       expect(loading).toBeInTheDocument();
-      expect(await findByText('Loading')).toBeInTheDocument();
+      await expect.element(page.getByText('Loading')).toBeInTheDocument();
     });
 
     it('renders custom loading message when loading a file and loading prop is given as a function', async () => {
-      const { container, findByText } = render(
+      const { container } = await render(
         <Document file={pdfFile.file} loading={() => 'Loading'} />,
       );
 
       const loading = container.querySelector('.react-pdf__message');
 
       expect(loading).toBeInTheDocument();
-      expect(await findByText('Loading')).toBeInTheDocument();
+      await expect.element(page.getByText('Loading')).toBeInTheDocument();
     });
 
     it('renders "Failed to load PDF file." when failed to load a document', async () => {
@@ -281,9 +282,7 @@ describe('Document', () => {
 
       muteConsole();
 
-      const { container, findByText } = render(
-        <Document file={failingPdf} onLoadError={onLoadError} />,
-      );
+      const { container } = await render(<Document file={failingPdf} onLoadError={onLoadError} />);
 
       expect.assertions(2);
 
@@ -294,7 +293,7 @@ describe('Document', () => {
       const error = container.querySelector('.react-pdf__message');
 
       expect(error).toBeInTheDocument();
-      expect(await findByText('Failed to load PDF file.')).toBeInTheDocument();
+      await expect.element(page.getByText('Failed to load PDF file.')).toBeInTheDocument();
 
       restoreConsole();
     });
@@ -305,7 +304,7 @@ describe('Document', () => {
 
       muteConsole();
 
-      const { container, findByText } = render(
+      const { container } = await render(
         <Document error="Error" file={failingPdf} onLoadError={onLoadError} />,
       );
 
@@ -318,7 +317,8 @@ describe('Document', () => {
       const error = container.querySelector('.react-pdf__message');
 
       expect(error).toBeInTheDocument();
-      expect(await findByText('Error')).toBeInTheDocument();
+
+      await expect.element(page.getByText('Error', { exact: true })).toBeInTheDocument();
 
       restoreConsole();
     });
@@ -329,7 +329,7 @@ describe('Document', () => {
 
       muteConsole();
 
-      const { container, findByText } = render(
+      const { container } = await render(
         <Document error="Error" file={failingPdf} onLoadError={onLoadError} />,
       );
 
@@ -342,7 +342,8 @@ describe('Document', () => {
       const error = container.querySelector('.react-pdf__message');
 
       expect(error).toBeInTheDocument();
-      expect(await findByText('Error')).toBeInTheDocument();
+
+      await expect.element(page.getByText('Error', { exact: true })).toBeInTheDocument();
 
       restoreConsole();
     });
@@ -350,7 +351,7 @@ describe('Document', () => {
     it('passes renderMode prop to its children', async () => {
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
-      const { container } = render(
+      await render(
         <Document
           file={pdfFile.file}
           loading="Loading"
@@ -365,7 +366,7 @@ describe('Document', () => {
 
       await onLoadSuccessPromise;
 
-      const child = getByTestId(container, 'child');
+      const child = page.getByTestId('child').element();
 
       expect(child.dataset.rendermode).toBe('custom');
     });
@@ -373,7 +374,7 @@ describe('Document', () => {
     it('passes rotate prop to its children', async () => {
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
-      const { container } = render(
+      await render(
         <Document file={pdfFile.file} loading="Loading" onLoadSuccess={onLoadSuccess} rotate={90}>
           <Child />
         </Document>,
@@ -383,7 +384,7 @@ describe('Document', () => {
 
       await onLoadSuccessPromise;
 
-      const child = getByTestId(container, 'child');
+      const child = page.getByTestId('child').element();
 
       expect(child.dataset.rotate).toBe('90');
     });
@@ -391,7 +392,7 @@ describe('Document', () => {
     it('passes scale prop to its children', async () => {
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
-      const { container } = render(
+      await render(
         <Document file={pdfFile.file} loading="Loading" onLoadSuccess={onLoadSuccess} scale={1.5}>
           <Child />
         </Document>,
@@ -401,7 +402,7 @@ describe('Document', () => {
 
       await onLoadSuccessPromise;
 
-      const child = getByTestId(container, 'child');
+      const child = page.getByTestId('child').element();
 
       expect(child.dataset.scale).toBe('1.5');
     });
@@ -409,7 +410,7 @@ describe('Document', () => {
     it('does not overwrite renderMode prop in its children when given renderMode prop to both Document and its children', async () => {
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
-      const { container } = render(
+      await render(
         <Document
           file={pdfFile.file}
           loading="Loading"
@@ -424,7 +425,7 @@ describe('Document', () => {
 
       await onLoadSuccessPromise;
 
-      const child = getByTestId(container, 'child');
+      const child = page.getByTestId('child').element();
 
       expect(child.dataset.rendermode).toBe('custom');
     });
@@ -432,7 +433,7 @@ describe('Document', () => {
     it('does not overwrite rotate prop in its children when given rotate prop to both Document and its children', async () => {
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
-      const { container } = render(
+      await render(
         <Document file={pdfFile.file} loading="Loading" onLoadSuccess={onLoadSuccess} rotate={90}>
           <Child rotate={180} />
         </Document>,
@@ -442,7 +443,7 @@ describe('Document', () => {
 
       await onLoadSuccessPromise;
 
-      const child = getByTestId(container, 'child');
+      const child = page.getByTestId('child').element();
 
       expect(child.dataset.rotate).toBe('180');
     });
@@ -450,7 +451,7 @@ describe('Document', () => {
     it('does not overwrite scale prop in its children when given scale prop to both Document and its children', async () => {
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
-      const { container } = render(
+      await render(
         <Document file={pdfFile.file} loading="Loading" onLoadSuccess={onLoadSuccess} scale={1.5}>
           <Child scale={2} />
         </Document>,
@@ -460,7 +461,7 @@ describe('Document', () => {
 
       await onLoadSuccessPromise;
 
-      const child = getByTestId(container, 'child');
+      const child = page.getByTestId('child').element();
 
       expect(child.dataset.scale).toBe('2');
     });
@@ -468,7 +469,7 @@ describe('Document', () => {
     it('supports function as children', async () => {
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
-      const { container } = render(
+      await render(
         <Document file={pdfFile.file} loading="Loading" onLoadSuccess={onLoadSuccess}>
           {({ pdf }) => <p>{`This PDF has ${pdf.numPages} pages`}</p>}
         </Document>,
@@ -478,7 +479,7 @@ describe('Document', () => {
 
       await onLoadSuccessPromise;
 
-      const child = getByText(container, 'This PDF has 4 pages');
+      const child = page.getByText('This PDF has 4 pages');
 
       expect(child).toBeInTheDocument();
     });
@@ -495,7 +496,7 @@ describe('Document', () => {
         viewer: React.RefObject<{ scrollPageIntoView: (args: ScrollPageIntoViewArgs) => void }>;
       }>();
 
-      render(
+      await render(
         <Document
           file={pdfFile.file}
           onItemClick={onItemClick}
@@ -537,7 +538,7 @@ describe('Document', () => {
         viewer: React.RefObject<{ scrollPageIntoView: (args: ScrollPageIntoViewArgs) => void }>;
       }>();
 
-      render(<Document file={pdfFile.file} onLoadSuccess={onLoadSuccess} ref={instance} />);
+      await render(<Document file={pdfFile.file} onLoadSuccess={onLoadSuccess} ref={instance} />);
 
       if (!instance.current) {
         throw new Error('Document ref is not set');
@@ -587,7 +588,7 @@ describe('Document', () => {
           promise: onRenderAnnotationLayerSuccessPromise,
         } = makeAsyncCallback();
 
-        const { container } = render(
+        const { container } = await render(
           <Document externalLinkTarget={externalLinkTarget} file={pdfFile.file}>
             <Page
               onRenderAnnotationLayerSuccess={onRenderAnnotationLayerSuccess}
@@ -621,7 +622,7 @@ describe('Document', () => {
           promise: onRenderAnnotationLayerSuccessPromise,
         } = makeAsyncCallback();
 
-        const { container } = render(
+        const { container } = await render(
           <Document externalLinkRel={externalLinkRel} file={pdfFile.file}>
             <Page
               onRenderAnnotationLayerSuccess={onRenderAnnotationLayerSuccess}
@@ -642,110 +643,114 @@ describe('Document', () => {
     );
   });
 
-  it('calls onClick callback when clicked a document (sample of mouse events family)', () => {
+  it('calls onClick callback when clicked a document (sample of mouse events family)', async () => {
     const onClick = vi.fn();
 
-    const { container } = render(<Document onClick={onClick} />);
+    const { container } = await render(<Document onClick={onClick} />);
 
     const document = container.querySelector('.react-pdf__Document') as HTMLDivElement;
-    fireEvent.click(document);
+    await userEvent.click(document);
 
     expect(onClick).toHaveBeenCalled();
   });
 
-  it('calls onTouchStart callback when touched a document (sample of touch events family)', () => {
+  function triggerTouchStart(element: HTMLElement) {
+    element.dispatchEvent(new TouchEvent('touchstart', { bubbles: true, cancelable: true }));
+  }
+
+  it('calls onTouchStart callback when touched a document (sample of touch events family)', async () => {
     const onTouchStart = vi.fn();
 
-    const { container } = render(<Document onTouchStart={onTouchStart} />);
+    const { container } = await render(<Document onTouchStart={onTouchStart} />);
 
     const document = container.querySelector('.react-pdf__Document') as HTMLDivElement;
-    fireEvent.touchStart(document);
+    triggerTouchStart(document);
 
     expect(onTouchStart).toHaveBeenCalled();
   });
 
-  it('does not warn if file prop was memoized', () => {
+  it('does not warn if file prop was memoized', async () => {
     const spy = vi.spyOn(globalThis.console, 'error').mockImplementation(() => {
       // Intentionally empty
     });
 
-    const file = { data: pdfFile.arrayBuffer };
+    const file = { url: pdfFile.dataURI };
 
-    const { rerender } = render(<Document file={file} />);
+    const { rerender } = await render(<Document file={file} />);
 
-    rerender(<Document file={file} />);
+    await rerender(<Document file={file} />);
 
     expect(spy).not.toHaveBeenCalled();
 
-    vi.mocked(globalThis.console.error).mockRestore();
+    vi.mocked(globalThis.console.error).mockReset();
   });
 
-  it('warns if file prop was not memoized', () => {
+  it('warns if file prop was not memoized', async () => {
     const spy = vi.spyOn(globalThis.console, 'error').mockImplementation(() => {
       // Intentionally empty
     });
 
-    const { rerender } = render(<Document file={{ data: pdfFile.arrayBuffer }} />);
+    const { rerender } = await render(<Document file={{ url: pdfFile.dataURI }} />);
 
-    rerender(<Document file={{ data: pdfFile.arrayBuffer }} />);
+    await rerender(<Document file={{ url: pdfFile.dataURI }} />);
 
     expect(spy).toHaveBeenCalledTimes(1);
 
-    vi.mocked(globalThis.console.error).mockRestore();
+    vi.mocked(globalThis.console.error).mockReset();
   });
 
-  it('does not warn if file prop was not memoized, but was changed', () => {
+  it('does not warn if file prop was not memoized, but was changed', async () => {
     const spy = vi.spyOn(globalThis.console, 'error').mockImplementation(() => {
       // Intentionally empty
     });
 
-    const { rerender } = render(<Document file={{ data: pdfFile.arrayBuffer }} />);
+    const { rerender } = await render(<Document file={{ url: pdfFile.dataURI }} />);
 
-    rerender(<Document file={{ data: pdfFile2.arrayBuffer }} />);
+    await rerender(<Document file={{ url: pdfFile2.dataURI }} />);
 
     expect(spy).not.toHaveBeenCalled();
 
     vi.mocked(globalThis.console.error).mockRestore();
   });
 
-  it('does not warn if options prop was memoized', () => {
+  it('does not warn if options prop was memoized', async () => {
     const spy = vi.spyOn(globalThis.console, 'error').mockImplementation(() => {
       // Intentionally empty
     });
 
     const options = {};
 
-    const { rerender } = render(<Document file={pdfFile.blob} options={options} />);
+    const { rerender } = await render(<Document file={pdfFile.blob} options={options} />);
 
-    rerender(<Document file={pdfFile.blob} options={options} />);
+    await rerender(<Document file={pdfFile.blob} options={options} />);
 
     expect(spy).not.toHaveBeenCalled();
 
     vi.mocked(globalThis.console.error).mockRestore();
   });
 
-  it('warns if options prop was not memoized', () => {
+  it('warns if options prop was not memoized', async () => {
     const spy = vi.spyOn(globalThis.console, 'error').mockImplementation(() => {
       // Intentionally empty
     });
 
-    const { rerender } = render(<Document file={pdfFile.blob} options={{}} />);
+    const { rerender } = await render(<Document file={pdfFile.blob} options={{}} />);
 
-    rerender(<Document file={pdfFile.blob} options={{}} />);
+    await rerender(<Document file={pdfFile.blob} options={{}} />);
 
     expect(spy).toHaveBeenCalledTimes(1);
 
     vi.mocked(globalThis.console.error).mockRestore();
   });
 
-  it('does not warn if options prop was not memoized, but was changed', () => {
+  it('does not warn if options prop was not memoized, but was changed', async () => {
     const spy = vi.spyOn(globalThis.console, 'error').mockImplementation(() => {
       // Intentionally empty
     });
 
-    const { rerender } = render(<Document file={pdfFile.blob} options={{}} />);
+    const { rerender } = await render(<Document file={pdfFile.blob} options={{}} />);
 
-    rerender(<Document file={pdfFile.blob} options={{ maxImageSize: 100 }} />);
+    await rerender(<Document file={pdfFile.blob} options={{ maxImageSize: 100 }} />);
 
     expect(spy).not.toHaveBeenCalled();
 
@@ -755,7 +760,7 @@ describe('Document', () => {
   it('does not throw an error on unmount', async () => {
     const { func: onLoadProgress, promise: onLoadProgressPromise } = makeAsyncCallback();
 
-    const { unmount } = render(<Document file={pdfFile} onLoadProgress={onLoadProgress} />);
+    const { unmount } = await render(<Document file={pdfFile} onLoadProgress={onLoadProgress} />);
 
     await onLoadProgressPromise;
 

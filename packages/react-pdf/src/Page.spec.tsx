@@ -1,5 +1,6 @@
 import { beforeAll, describe, expect, it, vi } from 'vitest';
-import { fireEvent, getByText, render } from '@testing-library/react';
+import { page, userEvent } from 'vitest/browser';
+import { render } from 'vitest-browser-react';
 import { createRef } from 'react';
 
 import DocumentContext from './DocumentContext.js';
@@ -20,8 +21,8 @@ const pdfFile2 = await loadPDF('../../__mocks__/_pdf2.pdf');
 const pdfFile4 = await loadPDF('../../__mocks__/_pdf4.pdf');
 const pdfFile5 = await loadPDF('../../__mocks__/_pdf5.pdf');
 
-function renderWithContext(children: React.ReactNode, context: Partial<DocumentContextType>) {
-  const { rerender, ...otherResult } = render(
+async function renderWithContext(children: React.ReactNode, context: Partial<DocumentContextType>) {
+  const { rerender, ...otherResult } = await render(
     <DocumentContext.Provider value={context as DocumentContextType}>
       {children}
     </DocumentContext.Provider>,
@@ -29,11 +30,11 @@ function renderWithContext(children: React.ReactNode, context: Partial<DocumentC
 
   return {
     ...otherResult,
-    rerender: (
+    rerender: async (
       nextChildren: React.ReactNode,
       nextContext: Partial<DocumentContextType> = context,
     ) =>
-      rerender(
+      await rerender(
         <DocumentContext.Provider value={nextContext as DocumentContextType}>
           {nextChildren}
         </DocumentContext.Provider>,
@@ -88,7 +89,7 @@ describe('Page', () => {
     it('loads a page and calls onLoadSuccess callback properly when placed inside Document', async () => {
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
-      renderWithContext(<Page onLoadSuccess={onLoadSuccess} pageIndex={0} />, {
+      await renderWithContext(<Page onLoadSuccess={onLoadSuccess} pageIndex={0} />, {
         linkService,
         pdf,
       });
@@ -101,7 +102,7 @@ describe('Page', () => {
     it('loads a page and calls onLoadSuccess callback properly when pdf prop is passed', async () => {
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
-      render(
+      await render(
         <Page
           onLoadSuccess={onLoadSuccess}
           pageIndex={0}
@@ -119,7 +120,7 @@ describe('Page', () => {
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } =
         makeAsyncCallback<[PageCallback]>();
 
-      renderWithContext(<Page onLoadSuccess={onLoadSuccess} pageIndex={0} />, {
+      await renderWithContext(<Page onLoadSuccess={onLoadSuccess} pageIndex={0} />, {
         linkService,
         pdf,
       });
@@ -141,7 +142,7 @@ describe('Page', () => {
 
       muteConsole();
 
-      renderWithContext(<Page onLoadError={onLoadError} pageIndex={0} />, {
+      await renderWithContext(<Page onLoadError={onLoadError} pageIndex={0} />, {
         linkService,
         pdf: failingPdf,
       });
@@ -156,7 +157,7 @@ describe('Page', () => {
     it('loads page when given pageIndex', async () => {
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
-      renderWithContext(<Page onLoadSuccess={onLoadSuccess} pageIndex={0} />, {
+      await renderWithContext(<Page onLoadSuccess={onLoadSuccess} pageIndex={0} />, {
         linkService,
         pdf,
       });
@@ -171,7 +172,7 @@ describe('Page', () => {
     it('loads page when given pageNumber', async () => {
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
-      renderWithContext(<Page onLoadSuccess={onLoadSuccess} pageNumber={1} />, {
+      await renderWithContext(<Page onLoadSuccess={onLoadSuccess} pageNumber={1} />, {
         linkService,
         pdf,
       });
@@ -186,7 +187,7 @@ describe('Page', () => {
     it('loads page of a given number when given conflicting pageNumber and pageIndex', async () => {
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
-      renderWithContext(<Page onLoadSuccess={onLoadSuccess} pageIndex={1} pageNumber={1} />, {
+      await renderWithContext(<Page onLoadSuccess={onLoadSuccess} pageIndex={1} pageNumber={1} />, {
         linkService,
         pdf,
       });
@@ -201,7 +202,7 @@ describe('Page', () => {
     it('calls registerPage when loaded a page', async () => {
       const { func: registerPage, promise: registerPagePromise } = makeAsyncCallback();
 
-      renderWithContext(<Page pageIndex={0} />, {
+      await renderWithContext(<Page pageIndex={0} />, {
         linkService,
         pdf,
         registerPage,
@@ -215,13 +216,13 @@ describe('Page', () => {
     it('calls unregisterPage on unmount', async () => {
       const { func: unregisterPage, promise: nuregisterPagePromise } = makeAsyncCallback();
 
-      const { unmount } = renderWithContext(<Page pageIndex={0} />, {
+      const { unmount } = await renderWithContext(<Page pageIndex={0} />, {
         linkService,
         pdf,
         unregisterPage,
       });
 
-      unmount();
+      await unmount();
 
       expect.assertions(1);
 
@@ -231,10 +232,13 @@ describe('Page', () => {
     it('replaces a page properly when pdf is changed', async () => {
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
-      const { rerender } = renderWithContext(<Page onLoadSuccess={onLoadSuccess} pageIndex={0} />, {
-        linkService,
-        pdf,
-      });
+      const { rerender } = await renderWithContext(
+        <Page onLoadSuccess={onLoadSuccess} pageIndex={0} />,
+        {
+          linkService,
+          pdf,
+        },
+      );
 
       expect.assertions(2);
 
@@ -242,7 +246,7 @@ describe('Page', () => {
 
       const { func: onLoadSuccess2, promise: onLoadSuccessPromise2 } = makeAsyncCallback();
 
-      rerender(<Page onLoadSuccess={onLoadSuccess2} pageIndex={0} />, {
+      await rerender(<Page onLoadSuccess={onLoadSuccess2} pageIndex={0} />, {
         linkService,
         pdf: pdf2,
       });
@@ -253,10 +257,13 @@ describe('Page', () => {
     it('replaces a page properly when pageNumber is changed', async () => {
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
-      const { rerender } = renderWithContext(<Page onLoadSuccess={onLoadSuccess} pageIndex={0} />, {
-        linkService,
-        pdf,
-      });
+      const { rerender } = await renderWithContext(
+        <Page onLoadSuccess={onLoadSuccess} pageIndex={0} />,
+        {
+          linkService,
+          pdf,
+        },
+      );
 
       expect.assertions(2);
 
@@ -264,7 +271,7 @@ describe('Page', () => {
 
       const { func: onLoadSuccess2, promise: onLoadSuccessPromise2 } = makeAsyncCallback();
 
-      rerender(<Page onLoadSuccess={onLoadSuccess2} pageIndex={1} />, {
+      await rerender(<Page onLoadSuccess={onLoadSuccess2} pageIndex={1} />, {
         linkService,
         pdf,
       });
@@ -272,20 +279,22 @@ describe('Page', () => {
       await expect(onLoadSuccessPromise2).resolves.toMatchObject([desiredLoadedPage2]);
     });
 
-    it('throws an error when placed outside Document without pdf prop passed', () => {
+    it('throws an error when placed outside Document without pdf prop passed', async () => {
       muteConsole();
 
-      expect(() => render(<Page pageIndex={0} />)).toThrow();
+      await expect(render(<Page pageIndex={0} />)).rejects.toThrowError(
+        'Invariant failed: Attempted to load a page, but no document was specified. Wrap <Page /> in a <Document /> or pass explicit `pdf` prop.',
+      );
 
       restoreConsole();
     });
   });
 
   describe('rendering', () => {
-    it('applies className to its wrapper when given a string', () => {
+    it('applies className to its wrapper when given a string', async () => {
       const className = 'testClassName';
 
-      const { container } = renderWithContext(<Page className={className} pageIndex={0} />, {
+      const { container } = await renderWithContext(<Page className={className} pageIndex={0} />, {
         linkService,
         pdf,
       });
@@ -295,10 +304,10 @@ describe('Page', () => {
       expect(wrapper).toHaveClass(className);
     });
 
-    it('passes container element to inputRef properly', () => {
+    it('passes container element to inputRef properly', async () => {
       const inputRef = createRef<HTMLDivElement>();
 
-      renderWithContext(<Page inputRef={inputRef} pageIndex={1} />, {
+      await renderWithContext(<Page inputRef={inputRef} pageIndex={1} />, {
         linkService,
         pdf: silentlyFailingPdf,
       });
@@ -311,7 +320,7 @@ describe('Page', () => {
 
       const canvasRef = createRef<HTMLCanvasElement>();
 
-      const { container } = renderWithContext(
+      const { container } = await renderWithContext(
         <Page canvasRef={canvasRef} onLoadSuccess={onLoadSuccess} pageIndex={0} />,
         {
           linkService,
@@ -328,10 +337,10 @@ describe('Page', () => {
       expect(canvasRef.current).toBe(pageCanvas);
     });
 
-    it('renders "No page specified." when given neither pageIndex nor pageNumber', () => {
+    it('renders "No page specified." when given neither pageIndex nor pageNumber', async () => {
       muteConsole();
 
-      const { container } = renderWithContext(<Page />, {
+      const { container } = await renderWithContext(<Page />, {
         linkService,
         pdf,
       });
@@ -344,10 +353,10 @@ describe('Page', () => {
       restoreConsole();
     });
 
-    it('renders custom no data message when given nothing and noData is given', () => {
+    it('renders custom no data message when given nothing and noData is given', async () => {
       muteConsole();
 
-      const { container } = renderWithContext(<Page noData="Nothing here" />, {
+      const { container } = await renderWithContext(<Page noData="Nothing here" />, {
         linkService,
         pdf,
       });
@@ -360,10 +369,10 @@ describe('Page', () => {
       restoreConsole();
     });
 
-    it('renders custom no data message when given nothing and noData is given as a function', () => {
+    it('renders custom no data message when given nothing and noData is given as a function', async () => {
       muteConsole();
 
-      const { container } = renderWithContext(<Page noData={() => 'Nothing here'} />, {
+      const { container } = await renderWithContext(<Page noData={() => 'Nothing here'} />, {
         linkService,
         pdf,
       });
@@ -376,46 +385,43 @@ describe('Page', () => {
       restoreConsole();
     });
 
-    it('renders "Loading page…" when loading a page', async () => {
-      const { container } = renderWithContext(<Page pageIndex={0} />, {
+    it('renders "Loading page…" when loading a page', () => {
+      renderWithContext(<Page pageIndex={0} />, {
         linkService,
         pdf,
       });
 
-      const loading = container.querySelector('.react-pdf__message');
+      const loading = page.getByText('Loading page…');
 
       expect(loading).toBeInTheDocument();
-      expect(loading).toHaveTextContent('Loading page…');
     });
 
-    it('renders custom loading message when loading a page and loading prop is given', async () => {
-      const { container } = renderWithContext(<Page loading="Loading" pageIndex={0} />, {
+    it('renders custom loading message when loading a page and loading prop is given', () => {
+      renderWithContext(<Page loading="Loading" pageIndex={0} />, {
         linkService,
         pdf,
       });
 
-      const loading = container.querySelector('.react-pdf__message');
+      const loading = page.getByText('Loading', { exact: true });
 
       expect(loading).toBeInTheDocument();
-      expect(loading).toHaveTextContent('Loading');
     });
 
-    it('renders custom loading message when loading a page and loading prop is given as a function', async () => {
-      const { container } = renderWithContext(<Page loading={() => 'Loading'} pageIndex={0} />, {
+    it('renders custom loading message when loading a page and loading prop is given as a function', () => {
+      renderWithContext(<Page loading={() => 'Loading'} pageIndex={0} />, {
         linkService,
         pdf,
       });
 
-      const loading = container.querySelector('.react-pdf__message');
+      const loading = page.getByText('Loading', { exact: true });
 
       expect(loading).toBeInTheDocument();
-      expect(loading).toHaveTextContent('Loading');
     });
 
     it('ignores pageIndex when given pageIndex and pageNumber', async () => {
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
-      renderWithContext(<Page onLoadSuccess={onLoadSuccess} pageIndex={1} pageNumber={1} />, {
+      await renderWithContext(<Page onLoadSuccess={onLoadSuccess} pageIndex={1} pageNumber={1} />, {
         linkService,
         pdf,
       });
@@ -431,7 +437,7 @@ describe('Page', () => {
       const { func: onRenderSuccess, promise: onRenderSuccessPromise } =
         makeAsyncCallback<[PageCallback]>();
 
-      const { container } = renderWithContext(
+      const { container } = await renderWithContext(
         <Page onRenderSuccess={onRenderSuccess} pageIndex={0} />,
         {
           linkService,
@@ -457,7 +463,7 @@ describe('Page', () => {
         makeAsyncCallback<[PageCallback]>();
       const rotate = 90;
 
-      const { container } = renderWithContext(
+      const { container } = await renderWithContext(
         <Page onRenderSuccess={onRenderSuccess} pageIndex={0} rotate={rotate} />,
         {
           linkService,
@@ -481,7 +487,7 @@ describe('Page', () => {
     it('requests page to be rendered in canvas mode by default', async () => {
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
-      const { container } = renderWithContext(
+      const { container } = await renderWithContext(
         <Page onLoadSuccess={onLoadSuccess} pageIndex={0} />,
         {
           linkService,
@@ -501,7 +507,7 @@ describe('Page', () => {
     it('requests page not to be rendered when given renderMode = "none"', async () => {
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
-      const { container } = renderWithContext(
+      const { container } = await renderWithContext(
         <Page onLoadSuccess={onLoadSuccess} pageIndex={0} renderMode="none" />,
         {
           linkService,
@@ -521,7 +527,7 @@ describe('Page', () => {
     it('requests page to be rendered in canvas mode when given renderMode = "canvas"', async () => {
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
-      const { container } = renderWithContext(
+      const { container } = await renderWithContext(
         <Page onLoadSuccess={onLoadSuccess} pageIndex={0} renderMode="canvas" />,
         {
           linkService,
@@ -545,7 +551,7 @@ describe('Page', () => {
         return <div className="custom-renderer" />;
       }
 
-      const { container } = renderWithContext(
+      const { container } = await renderWithContext(
         <Page
           customRenderer={CustomRenderer}
           onLoadSuccess={onLoadSuccess}
@@ -570,7 +576,7 @@ describe('Page', () => {
     it('requests text content to be rendered by default', async () => {
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
-      const { container } = renderWithContext(
+      const { container } = await renderWithContext(
         <Page onLoadSuccess={onLoadSuccess} pageIndex={0} />,
         {
           linkService,
@@ -590,7 +596,7 @@ describe('Page', () => {
     it('requests text content to be rendered when given renderTextLayer = true', async () => {
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
-      const { container } = renderWithContext(
+      const { container } = await renderWithContext(
         <Page onLoadSuccess={onLoadSuccess} pageIndex={0} renderTextLayer />,
         {
           linkService,
@@ -610,7 +616,7 @@ describe('Page', () => {
     it('does not request text content to be rendered when given renderTextLayer = false', async () => {
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
-      const { container } = renderWithContext(
+      const { container } = await renderWithContext(
         <Page onLoadSuccess={onLoadSuccess} pageIndex={0} renderTextLayer={false} />,
         {
           linkService,
@@ -630,7 +636,7 @@ describe('Page', () => {
     it('renders TextLayer when given renderMode = "canvas"', async () => {
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
-      const { container } = renderWithContext(
+      const { container } = await renderWithContext(
         <Page onLoadSuccess={onLoadSuccess} pageIndex={0} renderMode="canvas" renderTextLayer />,
         {
           linkService,
@@ -654,7 +660,7 @@ describe('Page', () => {
         return <div className="custom-renderer" />;
       }
 
-      const { container } = renderWithContext(
+      const { container } = await renderWithContext(
         <Page
           customRenderer={CustomRenderer}
           onLoadSuccess={onLoadSuccess}
@@ -680,7 +686,7 @@ describe('Page', () => {
     it('requests annotations to be rendered by default', async () => {
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
-      const { container } = renderWithContext(
+      const { container } = await renderWithContext(
         <Page onLoadSuccess={onLoadSuccess} pageIndex={0} />,
         {
           linkService,
@@ -700,7 +706,7 @@ describe('Page', () => {
     it('requests annotations to be rendered when given renderAnnotationLayer = true', async () => {
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
-      const { container } = renderWithContext(
+      const { container } = await renderWithContext(
         <Page onLoadSuccess={onLoadSuccess} pageIndex={0} renderAnnotationLayer />,
         {
           linkService,
@@ -720,7 +726,7 @@ describe('Page', () => {
     it('does not request annotations to be rendered when given renderAnnotationLayer = false', async () => {
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
-      const { container } = renderWithContext(
+      const { container } = await renderWithContext(
         <Page onLoadSuccess={onLoadSuccess} pageIndex={0} renderAnnotationLayer={false} />,
         {
           linkService,
@@ -740,7 +746,7 @@ describe('Page', () => {
     it('supports function as children', async () => {
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
-      const { container } = renderWithContext(
+      await renderWithContext(
         <Page onLoadSuccess={onLoadSuccess} pageIndex={0}>
           {({ page }) => <p>{`Page ${page.pageNumber}`}</p>}
         </Page>,
@@ -754,7 +760,7 @@ describe('Page', () => {
 
       await onLoadSuccessPromise;
 
-      const child = getByText(container, 'Page 1');
+      const child = page.getByText('Page 1');
 
       expect(child).toBeInTheDocument();
     });
@@ -764,7 +770,7 @@ describe('Page', () => {
     const { func: onRenderAnnotationLayerSuccess, promise: onRenderAnnotationLayerSuccessPromise } =
       makeAsyncCallback();
 
-    const { container } = renderWithContext(
+    const { container } = await renderWithContext(
       <Page
         onRenderAnnotationLayerSuccess={onRenderAnnotationLayerSuccess}
         pageIndex={0}
@@ -789,7 +795,7 @@ describe('Page', () => {
     const { func: onRenderAnnotationLayerSuccess, promise: onRenderAnnotationLayerSuccessPromise } =
       makeAsyncCallback();
 
-    const { container } = renderWithContext(
+    const { container } = await renderWithContext(
       <Page
         onRenderAnnotationLayerSuccess={onRenderAnnotationLayerSuccess}
         pageIndex={0}
@@ -815,7 +821,7 @@ describe('Page', () => {
     const { func: onLoadSuccess, promise: onLoadSuccessPromise } =
       makeAsyncCallback<[PageCallback]>();
 
-    renderWithContext(<Page onLoadSuccess={onLoadSuccess} pageIndex={0} />, {
+    await renderWithContext(<Page onLoadSuccess={onLoadSuccess} pageIndex={0} />, {
       linkService,
       pdf,
     });
@@ -832,7 +838,7 @@ describe('Page', () => {
       makeAsyncCallback<[PageCallback]>();
     const scale = 1.5;
 
-    renderWithContext(<Page onLoadSuccess={onLoadSuccess} pageIndex={0} scale={scale} />, {
+    await renderWithContext(<Page onLoadSuccess={onLoadSuccess} pageIndex={0} scale={scale} />, {
       linkService,
       pdf,
     });
@@ -849,7 +855,7 @@ describe('Page', () => {
       makeAsyncCallback<[PageCallback]>();
     const width = 600;
 
-    renderWithContext(<Page onLoadSuccess={onLoadSuccess} pageIndex={0} width={width} />, {
+    await renderWithContext(<Page onLoadSuccess={onLoadSuccess} pageIndex={0} width={width} />, {
       linkService,
       pdf,
     });
@@ -867,7 +873,7 @@ describe('Page', () => {
     const width = 600;
     const scale = 1.5;
 
-    renderWithContext(
+    await renderWithContext(
       <Page onLoadSuccess={onLoadSuccess} pageIndex={0} scale={scale} width={width} />,
       {
         linkService,
@@ -887,7 +893,7 @@ describe('Page', () => {
       makeAsyncCallback<[PageCallback]>();
     const height = 850;
 
-    renderWithContext(<Page height={height} onLoadSuccess={onLoadSuccess} pageIndex={0} />, {
+    await renderWithContext(<Page height={height} onLoadSuccess={onLoadSuccess} pageIndex={0} />, {
       linkService,
       pdf,
     });
@@ -905,7 +911,7 @@ describe('Page', () => {
     const height = 850;
     const scale = 1.5;
 
-    renderWithContext(
+    await renderWithContext(
       <Page height={height} onLoadSuccess={onLoadSuccess} pageIndex={0} scale={scale} />,
       {
         linkService,
@@ -926,7 +932,7 @@ describe('Page', () => {
     const width = 600;
     const height = 100;
 
-    renderWithContext(
+    await renderWithContext(
       <Page height={height} onLoadSuccess={onLoadSuccess} pageIndex={0} width={width} />,
       {
         linkService,
@@ -950,7 +956,7 @@ describe('Page', () => {
     const height = 100;
     const scale = 1.5;
 
-    renderWithContext(
+    await renderWithContext(
       <Page
         height={height}
         onLoadSuccess={onLoadSuccess}
@@ -973,30 +979,34 @@ describe('Page', () => {
     expect(page.height).toEqual(page.originalHeight * (page.width / page.originalWidth));
   });
 
-  it('calls onClick callback when clicked a page (sample of mouse events family)', () => {
+  it('calls onClick callback when clicked a page (sample of mouse events family)', async () => {
     const onClick = vi.fn();
 
-    const { container } = renderWithContext(<Page onClick={onClick} />, {
+    const { container } = await renderWithContext(<Page onClick={onClick} />, {
       linkService,
       pdf,
     });
 
     const page = container.querySelector('.react-pdf__Page') as HTMLDivElement;
-    fireEvent.click(page);
+    await userEvent.click(page);
 
     expect(onClick).toHaveBeenCalled();
   });
 
-  it('calls onTouchStart callback when touched a page (sample of touch events family)', () => {
+  function triggerTouchStart(element: HTMLElement) {
+    element.dispatchEvent(new TouchEvent('touchstart', { bubbles: true, cancelable: true }));
+  }
+
+  it('calls onTouchStart callback when touched a page (sample of touch events family)', async () => {
     const onTouchStart = vi.fn();
 
-    const { container } = renderWithContext(<Page onTouchStart={onTouchStart} />, {
+    const { container } = await renderWithContext(<Page onTouchStart={onTouchStart} />, {
       linkService,
       pdf,
     });
 
     const page = container.querySelector('.react-pdf__Page') as HTMLDivElement;
-    fireEvent.touchStart(page);
+    triggerTouchStart(page);
 
     expect(onTouchStart).toHaveBeenCalled();
   });
@@ -1008,12 +1018,12 @@ describe('Page', () => {
     const { func: onLoadSuccess2, promise: onLoadSuccessPromise2 } =
       makeAsyncCallback<[PageCallback]>();
 
-    renderWithContext(<Page onLoadSuccess={onLoadSuccess} pageIndex={0} />, {
+    await renderWithContext(<Page onLoadSuccess={onLoadSuccess} pageIndex={0} />, {
       linkService,
       pdf: pdf5,
     });
 
-    renderWithContext(<Page onLoadSuccess={onLoadSuccess2} pageIndex={1} />, {
+    await renderWithContext(<Page onLoadSuccess={onLoadSuccess2} pageIndex={1} />, {
       linkService,
       pdf: pdf5,
     });

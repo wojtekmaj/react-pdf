@@ -1,5 +1,5 @@
 import { beforeAll, describe, expect, it } from 'vitest';
-import { render } from '@testing-library/react';
+import { render } from 'vitest-browser-react';
 
 import { pdfjs } from './index.test.js';
 import PageContext from './PageContext.js';
@@ -15,15 +15,18 @@ import type { PageContextType } from './shared/types.js';
 
 const pdfFile = await loadPDF('../../__mocks__/_pdf.pdf');
 
-function renderWithContext(children: React.ReactNode, context: Partial<PageContextType>) {
-  const { rerender, ...otherResult } = render(
+async function renderWithContext(children: React.ReactNode, context: Partial<PageContextType>) {
+  const { rerender, ...otherResult } = await render(
     <PageContext.Provider value={context as PageContextType}>{children}</PageContext.Provider>,
   );
 
   return {
     ...otherResult,
-    rerender: (nextChildren: React.ReactNode, nextContext: Partial<PageContextType> = context) =>
-      rerender(
+    rerender: async (
+      nextChildren: React.ReactNode,
+      nextContext: Partial<PageContextType> = context,
+    ) =>
+      await rerender(
         <PageContext.Provider value={nextContext as PageContextType}>
           {nextChildren}
         </PageContext.Provider>,
@@ -55,7 +58,7 @@ describe('StructTree', () => {
       const { func: onGetStructTreeSuccess, promise: onGetStructTreeSuccessPromise } =
         makeAsyncCallback();
 
-      renderWithContext(<StructTree />, {
+      await renderWithContext(<StructTree />, {
         onGetStructTreeSuccess,
         page,
       });
@@ -71,7 +74,7 @@ describe('StructTree', () => {
 
       muteConsole();
 
-      renderWithContext(<StructTree />, {
+      await renderWithContext(<StructTree />, {
         onGetStructTreeError,
         page: failingPage,
       });
@@ -87,7 +90,7 @@ describe('StructTree', () => {
       const { func: onGetStructTreeSuccess, promise: onGetStructTreeSuccessPromise } =
         makeAsyncCallback();
 
-      const { rerender } = renderWithContext(<StructTree />, {
+      const { rerender } = await renderWithContext(<StructTree />, {
         onGetStructTreeSuccess,
         page,
       });
@@ -99,7 +102,7 @@ describe('StructTree', () => {
       const { func: onGetStructTreeSuccess2, promise: onGetStructTreeSuccessPromise2 } =
         makeAsyncCallback();
 
-      rerender(<StructTree />, {
+      await rerender(<StructTree />, {
         onGetStructTreeSuccess: onGetStructTreeSuccess2,
         page: page2,
       });
@@ -107,10 +110,12 @@ describe('StructTree', () => {
       await expect(onGetStructTreeSuccessPromise2).resolves.toMatchObject([desiredStructTree2]);
     });
 
-    it('throws an error when placed outside Page', () => {
+    it('throws an error when placed outside Page', async () => {
       muteConsole();
 
-      expect(() => render(<StructTree />)).toThrow();
+      await expect(render(<StructTree />)).rejects.toThrowError(
+        'Invariant failed: Unable to find Page context.',
+      );
 
       restoreConsole();
     });
@@ -121,7 +126,7 @@ describe('StructTree', () => {
       const { func: onGetStructTreeSuccess, promise: onGetStructTreeSuccessPromise } =
         makeAsyncCallback();
 
-      const { container } = renderWithContext(<StructTree />, {
+      const { container } = await renderWithContext(<StructTree />, {
         onGetStructTreeSuccess,
         page,
       });

@@ -1,5 +1,6 @@
 import { beforeAll, describe, expect, it, vi } from 'vitest';
-import { fireEvent, getAllByRole, render, screen } from '@testing-library/react';
+import { page, userEvent } from 'vitest/browser';
+import { render } from 'vitest-browser-react';
 
 import DocumentContext from './DocumentContext.js';
 import { pdfjs } from './index.test.js';
@@ -16,12 +17,12 @@ const pdfFile = await loadPDF('../../__mocks__/_pdf.pdf');
 type PDFOutline = Awaited<ReturnType<PDFDocumentProxy['getOutline']>>;
 type PDFOutlineItem = PDFOutline[number];
 
-function renderWithContext(
+async function renderWithContext(
   children: React.ReactNode,
   documentContext: Partial<DocumentContextType>,
   outlineContext: Partial<OutlineContextType>,
 ) {
-  const { rerender, ...otherResult } = render(
+  const { rerender, ...otherResult } = await render(
     <DocumentContext.Provider value={documentContext as DocumentContextType}>
       <OutlineContext.Provider value={outlineContext as OutlineContextType}>
         {children}
@@ -31,12 +32,12 @@ function renderWithContext(
 
   return {
     ...otherResult,
-    rerender: (
+    rerender: async (
       nextChildren: React.ReactNode,
       nextDocumentContext: Partial<DocumentContextType> = documentContext,
       nextOutlineContext: Partial<OutlineContextType> = outlineContext,
     ) =>
-      rerender(
+      await rerender(
         <DocumentContext.Provider value={nextDocumentContext as DocumentContextType}>
           <OutlineContext.Provider value={nextOutlineContext as OutlineContextType}>
             {nextChildren}
@@ -61,23 +62,23 @@ describe('OutlineItem', () => {
   });
 
   describe('rendering', () => {
-    it('renders an item properly', () => {
+    it('renders an item properly', async () => {
       const onItemClick = vi.fn();
 
-      renderWithContext(<OutlineItem item={outlineItem} />, { pdf }, { onItemClick });
+      await renderWithContext(<OutlineItem item={outlineItem} />, { pdf }, { onItemClick });
 
-      const item = screen.getAllByRole('listitem')[0];
+      const item = page.getByRole('listitem').first();
 
       expect(item).toHaveTextContent(outlineItem.title);
     });
 
-    it("renders item's subitems properly", () => {
+    it("renders item's subitems properly", async () => {
       const onItemClick = vi.fn();
 
-      renderWithContext(<OutlineItem item={outlineItem} />, { pdf }, { onItemClick });
+      await renderWithContext(<OutlineItem item={outlineItem} />, { pdf }, { onItemClick });
 
-      const item = screen.getAllByRole('listitem')[0] as HTMLElement;
-      const subitems = getAllByRole(item, 'listitem');
+      const item = page.getByRole('listitem').first();
+      const subitems = item.getByRole('listitem');
 
       expect(subitems).toHaveLength(outlineItem.items.length);
     });
@@ -85,11 +86,11 @@ describe('OutlineItem', () => {
     it('calls onItemClick with proper arguments when clicked a link', async () => {
       const { func: onItemClick, promise: onItemClickPromise } = makeAsyncCallback();
 
-      renderWithContext(<OutlineItem item={outlineItem} />, { pdf }, { onItemClick });
+      await renderWithContext(<OutlineItem item={outlineItem} />, { pdf }, { onItemClick });
 
-      const item = screen.getAllByRole('listitem')[0] as HTMLElement;
-      const link = getAllByRole(item, 'link')[0] as HTMLAnchorElement;
-      fireEvent.click(link);
+      const item = page.getByRole('listitem').first();
+      const link = item.getByRole('link').first();
+      await userEvent.click(link);
 
       await onItemClickPromise;
 
@@ -99,15 +100,15 @@ describe('OutlineItem', () => {
     it('calls onItemClick with proper arguments multiple times when clicked a link multiple times', async () => {
       const { func: onItemClick, promise: onItemClickPromise } = makeAsyncCallback();
 
-      const { rerender } = renderWithContext(
+      const { rerender } = await renderWithContext(
         <OutlineItem item={outlineItem} />,
         { pdf },
         { onItemClick },
       );
 
-      const item = screen.getAllByRole('listitem')[0] as HTMLElement;
-      const link = getAllByRole(item, 'link')[0] as HTMLAnchorElement;
-      fireEvent.click(link);
+      const item = page.getByRole('listitem').first();
+      const link = item.getByRole('link').first();
+      await userEvent.click(link);
 
       await onItemClickPromise;
 
@@ -115,9 +116,9 @@ describe('OutlineItem', () => {
 
       const { func: onItemClick2, promise: onItemClickPromise2 } = makeAsyncCallback();
 
-      rerender(<OutlineItem item={outlineItem} />, { pdf }, { onItemClick: onItemClick2 });
+      await rerender(<OutlineItem item={outlineItem} />, { pdf }, { onItemClick: onItemClick2 });
 
-      fireEvent.click(link);
+      await userEvent.click(link);
 
       await onItemClickPromise2;
 

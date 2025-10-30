@@ -1,5 +1,5 @@
 import { beforeAll, describe, expect, it, vi } from 'vitest';
-import { render } from '@testing-library/react';
+import { render } from 'vitest-browser-react';
 
 import { pdfjs } from '../index.test.js';
 import PageContext from '../PageContext.js';
@@ -14,15 +14,18 @@ import type { PageContextType } from '../shared/types.js';
 
 const pdfFile = await loadPDF('../../__mocks__/_pdf.pdf');
 
-function renderWithContext(children: React.ReactNode, context: Partial<PageContextType>) {
-  const { rerender, ...otherResult } = render(
+async function renderWithContext(children: React.ReactNode, context: Partial<PageContextType>) {
+  const { rerender, ...otherResult } = await render(
     <PageContext.Provider value={context as PageContextType}>{children}</PageContext.Provider>,
   );
 
   return {
     ...otherResult,
-    rerender: (nextChildren: React.ReactNode, nextContext: Partial<PageContextType> = context) =>
-      rerender(
+    rerender: async (
+      nextChildren: React.ReactNode,
+      nextContext: Partial<PageContextType> = context,
+    ) =>
+      await rerender(
         <PageContext.Provider value={nextContext as PageContextType}>
           {nextChildren}
         </PageContext.Provider>,
@@ -56,7 +59,7 @@ describe('Canvas', () => {
 
       muteConsole();
 
-      renderWithContext(<Canvas />, {
+      await renderWithContext(<Canvas />, {
         onRenderSuccess,
         page: pageWithRendererMocked,
         scale: 1,
@@ -74,7 +77,7 @@ describe('Canvas', () => {
 
       muteConsole();
 
-      renderWithContext(<Canvas />, {
+      await renderWithContext(<Canvas />, {
         onRenderError,
         page: failingPage,
         scale: 1,
@@ -89,10 +92,10 @@ describe('Canvas', () => {
   });
 
   describe('rendering', () => {
-    it('passes canvas element to canvasRef properly', () => {
+    it('passes canvas element to canvasRef properly', async () => {
       const canvasRef = vi.fn();
 
-      renderWithContext(<Canvas canvasRef={canvasRef} />, {
+      await renderWithContext(<Canvas canvasRef={canvasRef} />, {
         page: pageWithRendererMocked,
         scale: 1,
       });
@@ -104,7 +107,7 @@ describe('Canvas', () => {
     it('does not request structure tree to be rendered when renderTextLayer = false', async () => {
       const { func: onRenderSuccess, promise: onRenderSuccessPromise } = makeAsyncCallback();
 
-      const { container } = renderWithContext(<Canvas />, {
+      const { container } = await renderWithContext(<Canvas />, {
         onRenderSuccess,
         page: pageWithRendererMocked,
         renderTextLayer: false,
@@ -121,7 +124,7 @@ describe('Canvas', () => {
       const { func: onGetStructTreeSuccess, promise: onGetStructTreeSuccessPromise } =
         makeAsyncCallback();
 
-      const { container } = renderWithContext(<Canvas />, {
+      const { container } = await renderWithContext(<Canvas />, {
         onGetStructTreeSuccess,
         page: pageWithRendererMocked,
         renderTextLayer: true,
