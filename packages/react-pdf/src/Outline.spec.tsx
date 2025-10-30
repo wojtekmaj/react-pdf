@@ -1,5 +1,6 @@
 import { beforeAll, describe, expect, it } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { page } from 'vitest/browser';
+import { render } from 'vitest-browser-react';
 import { createRef } from 'react';
 
 import DocumentContext from './DocumentContext.js';
@@ -18,8 +19,8 @@ type PDFOutline = Awaited<ReturnType<PDFDocumentProxy['getOutline']>>;
 const pdfFile = await loadPDF('../../__mocks__/_pdf.pdf');
 const pdfFile2 = await loadPDF('../../__mocks__/_pdf2.pdf');
 
-function renderWithContext(children: React.ReactNode, context: Partial<DocumentContextType>) {
-  const { rerender, ...otherResult } = render(
+async function renderWithContext(children: React.ReactNode, context: Partial<DocumentContextType>) {
+  const { rerender, ...otherResult } = await render(
     <DocumentContext.Provider value={context as DocumentContextType}>
       {children}
     </DocumentContext.Provider>,
@@ -27,11 +28,11 @@ function renderWithContext(children: React.ReactNode, context: Partial<DocumentC
 
   return {
     ...otherResult,
-    rerender: (
+    rerender: async (
       nextChildren: React.ReactNode,
       nextContext: Partial<DocumentContextType> = context,
     ) =>
-      rerender(
+      await rerender(
         <DocumentContext.Provider value={nextContext as DocumentContextType}>
           {nextChildren}
         </DocumentContext.Provider>,
@@ -94,7 +95,9 @@ describe('Outline', () => {
     it('replaces an outline properly when pdf is changed', async () => {
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
-      const { rerender } = renderWithContext(<Outline onLoadSuccess={onLoadSuccess} />, { pdf });
+      const { rerender } = await renderWithContext(<Outline onLoadSuccess={onLoadSuccess} />, {
+        pdf,
+      });
 
       expect.assertions(2);
 
@@ -102,16 +105,18 @@ describe('Outline', () => {
 
       const { func: onLoadSuccess2, promise: onLoadSuccessPromise2 } = makeAsyncCallback();
 
-      rerender(<Outline onLoadSuccess={onLoadSuccess2} />, { pdf: pdf2 });
+      await rerender(<Outline onLoadSuccess={onLoadSuccess2} />, { pdf: pdf2 });
 
       // It would have been .toMatchObject if not for the fact _pdf2.pdf has no outline
       await expect(onLoadSuccessPromise2).resolves.toMatchObject([desiredLoadedOutline2]);
     });
 
-    it('throws an error when placed outside Document without pdf prop passed', () => {
+    it('throws an error when placed outside Document without pdf prop passed', async () => {
       muteConsole();
 
-      expect(() => render(<Outline />)).toThrow();
+      await expect(render(<Outline />)).rejects.toThrowError(
+        'Invariant failed: Attempted to load an outline, but no document was specified. Wrap <Outline /> in a <Document /> or pass explicit `pdf` prop.',
+      );
 
       restoreConsole();
     });
@@ -123,7 +128,7 @@ describe('Outline', () => {
 
       const className = 'testClassName';
 
-      const { container } = renderWithContext(
+      const { container } = await renderWithContext(
         <Outline className={className} onLoadSuccess={onLoadSuccess} />,
         { pdf },
       );
@@ -160,7 +165,7 @@ describe('Outline', () => {
 
       await onLoadSuccessPromise;
 
-      const items = screen.getAllByRole('listitem');
+      const items = page.getByRole('listitem');
 
       expect(items).toHaveLength(5);
     });

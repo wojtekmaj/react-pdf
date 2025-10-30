@@ -1,5 +1,6 @@
 import { beforeAll, describe, expect, it, vi } from 'vitest';
-import { fireEvent, render } from '@testing-library/react';
+import { page, userEvent } from 'vitest/browser';
+import { render } from 'vitest-browser-react';
 import { createRef } from 'react';
 
 import DocumentContext from './DocumentContext.js';
@@ -18,8 +19,8 @@ import type { DocumentContextType, PageCallback } from './shared/types.js';
 const pdfFile = await loadPDF('../../__mocks__/_pdf.pdf');
 const pdfFile2 = await loadPDF('../../__mocks__/_pdf2.pdf');
 
-function renderWithContext(children: React.ReactNode, context: Partial<DocumentContextType>) {
-  const { rerender, ...otherResult } = render(
+async function renderWithContext(children: React.ReactNode, context: Partial<DocumentContextType>) {
+  const { rerender, ...otherResult } = await render(
     <DocumentContext.Provider value={context as DocumentContextType}>
       {children}
     </DocumentContext.Provider>,
@@ -27,11 +28,11 @@ function renderWithContext(children: React.ReactNode, context: Partial<DocumentC
 
   return {
     ...otherResult,
-    rerender: (
+    rerender: async (
       nextChildren: React.ReactNode,
       nextContext: Partial<DocumentContextType> = context,
     ) =>
-      rerender(
+      await rerender(
         <DocumentContext.Provider value={nextContext as DocumentContextType}>
           {nextChildren}
         </DocumentContext.Provider>,
@@ -163,7 +164,7 @@ describe('Thumbnail', () => {
     it('replaces a page properly when pdf is changed', async () => {
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
-      const { rerender } = renderWithContext(
+      const { rerender } = await renderWithContext(
         <Thumbnail onLoadSuccess={onLoadSuccess} pageIndex={0} />,
         {
           pdf,
@@ -176,7 +177,7 @@ describe('Thumbnail', () => {
 
       const { func: onLoadSuccess2, promise: onLoadSuccessPromise2 } = makeAsyncCallback();
 
-      rerender(<Thumbnail onLoadSuccess={onLoadSuccess2} pageIndex={0} />, { pdf: pdf2 });
+      await rerender(<Thumbnail onLoadSuccess={onLoadSuccess2} pageIndex={0} />, { pdf: pdf2 });
 
       await expect(onLoadSuccessPromise2).resolves.toMatchObject([desiredLoadedThumbnail3]);
     });
@@ -184,7 +185,7 @@ describe('Thumbnail', () => {
     it('replaces a page properly when pageNumber is changed', async () => {
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
-      const { rerender } = renderWithContext(
+      const { rerender } = await renderWithContext(
         <Thumbnail onLoadSuccess={onLoadSuccess} pageIndex={0} />,
         {
           pdf,
@@ -197,27 +198,32 @@ describe('Thumbnail', () => {
 
       const { func: onLoadSuccess2, promise: onLoadSuccessPromise2 } = makeAsyncCallback();
 
-      rerender(<Thumbnail onLoadSuccess={onLoadSuccess2} pageIndex={1} />, { pdf });
+      await rerender(<Thumbnail onLoadSuccess={onLoadSuccess2} pageIndex={1} />, { pdf });
 
       await expect(onLoadSuccessPromise2).resolves.toMatchObject([desiredLoadedThumbnail2]);
     });
 
-    it('throws an error when placed outside Document without pdf prop passed', () => {
+    it('throws an error when placed outside Document without pdf prop passed', async () => {
       muteConsole();
 
-      expect(() => render(<Thumbnail pageIndex={0} />)).toThrow();
+      await expect(render(<Thumbnail pageIndex={0} />)).rejects.toThrowError(
+        'Invariant failed: Attempted to load a thumbnail, but no document was specified. Wrap <Thumbnail /> in a <Document /> or pass explicit `pdf` prop.',
+      );
 
       restoreConsole();
     });
   });
 
   describe('rendering', () => {
-    it('applies className to its wrapper when given a string', () => {
+    it('applies className to its wrapper when given a string', async () => {
       const className = 'testClassName';
 
-      const { container } = renderWithContext(<Thumbnail className={className} pageIndex={0} />, {
-        pdf,
-      });
+      const { container } = await renderWithContext(
+        <Thumbnail className={className} pageIndex={0} />,
+        {
+          pdf,
+        },
+      );
 
       const wrapper = container.querySelector('.react-pdf__Thumbnail');
 
@@ -239,7 +245,7 @@ describe('Thumbnail', () => {
 
       const canvasRef = createRef<HTMLCanvasElement>();
 
-      const { container } = renderWithContext(
+      const { container } = await renderWithContext(
         <Thumbnail canvasRef={canvasRef} onLoadSuccess={onLoadSuccess} pageIndex={0} />,
         { pdf },
       );
@@ -253,10 +259,10 @@ describe('Thumbnail', () => {
       expect(canvasRef.current).toBe(pageCanvas);
     });
 
-    it('renders "No page specified." when given neither pageIndex nor pageNumber', () => {
+    it('renders "No page specified." when given neither pageIndex nor pageNumber', async () => {
       muteConsole();
 
-      const { container } = renderWithContext(<Thumbnail />, { pdf });
+      const { container } = await renderWithContext(<Thumbnail />, { pdf });
 
       const noData = container.querySelector('.react-pdf__message');
 
@@ -266,10 +272,10 @@ describe('Thumbnail', () => {
       restoreConsole();
     });
 
-    it('renders custom no data message when given nothing and noData is given', () => {
+    it('renders custom no data message when given nothing and noData is given', async () => {
       muteConsole();
 
-      const { container } = renderWithContext(<Thumbnail noData="Nothing here" />, { pdf });
+      const { container } = await renderWithContext(<Thumbnail noData="Nothing here" />, { pdf });
 
       const noData = container.querySelector('.react-pdf__message');
 
@@ -279,51 +285,43 @@ describe('Thumbnail', () => {
       restoreConsole();
     });
 
-    it('renders custom no data message when given nothing and noData is given as a function', () => {
+    it('renders custom no data message when given nothing and noData is given as a function', async () => {
       muteConsole();
 
-      const { container } = renderWithContext(<Thumbnail noData={() => 'Nothing here'} />, { pdf });
-
-      const noData = container.querySelector('.react-pdf__message');
-
-      expect(noData).toBeInTheDocument();
-      expect(noData).toHaveTextContent('Nothing here');
-
-      restoreConsole();
-    });
-
-    it('renders "Loading page…" when loading a page', async () => {
-      const { container } = renderWithContext(<Thumbnail pageIndex={0} />, { pdf });
-
-      const loading = container.querySelector('.react-pdf__message');
-
-      expect(loading).toBeInTheDocument();
-      expect(loading).toHaveTextContent('Loading page…');
-    });
-
-    it('renders custom loading message when loading a page and loading prop is given', async () => {
-      const { container } = renderWithContext(<Thumbnail loading="Loading" pageIndex={0} />, {
+      const { container } = await renderWithContext(<Thumbnail noData={() => 'Nothing here'} />, {
         pdf,
       });
 
-      const loading = container.querySelector('.react-pdf__message');
+      const noData = container.querySelector('.react-pdf__message');
 
-      expect(loading).toBeInTheDocument();
-      expect(loading).toHaveTextContent('Loading');
+      expect(noData).toBeInTheDocument();
+      expect(noData).toHaveTextContent('Nothing here');
+
+      restoreConsole();
     });
 
-    it('renders custom loading message when loading a page and loading prop is given as a function', async () => {
-      const { container } = renderWithContext(
-        <Thumbnail loading={() => 'Loading'} pageIndex={0} />,
-        {
-          pdf,
-        },
-      );
+    it('renders "Loading page…" when loading a page', () => {
+      renderWithContext(<Thumbnail pageIndex={0} />, { pdf });
 
-      const loading = container.querySelector('.react-pdf__message');
+      const loading = page.getByText('Loading page…');
 
       expect(loading).toBeInTheDocument();
-      expect(loading).toHaveTextContent('Loading');
+    });
+
+    it('renders custom loading message when loading a page and loading prop is given', () => {
+      renderWithContext(<Thumbnail loading="Loading" pageIndex={0} />, { pdf });
+
+      const loading = page.getByText('Loading', { exact: true });
+
+      expect(loading).toBeInTheDocument();
+    });
+
+    it('renders custom loading message when loading a page and loading prop is given as a function', () => {
+      renderWithContext(<Thumbnail loading={() => 'Loading'} pageIndex={0} />, { pdf });
+
+      const loading = page.getByText('Loading', { exact: true });
+
+      expect(loading).toBeInTheDocument();
     });
 
     it('ignores pageIndex when given pageIndex and pageNumber', async () => {
@@ -344,7 +342,7 @@ describe('Thumbnail', () => {
       const { func: onRenderSuccess, promise: onRenderSuccessPromise } =
         makeAsyncCallback<[PageCallback]>();
 
-      const { container } = renderWithContext(
+      const { container } = await renderWithContext(
         <Thumbnail onRenderSuccess={onRenderSuccess} pageIndex={0} />,
         { pdf },
       );
@@ -369,7 +367,7 @@ describe('Thumbnail', () => {
         makeAsyncCallback<[PageCallback]>();
       const rotate = 90;
 
-      const { container } = renderWithContext(
+      const { container } = await renderWithContext(
         <Thumbnail onRenderSuccess={onRenderSuccess} pageIndex={0} rotate={rotate} />,
         { pdf },
       );
@@ -392,7 +390,7 @@ describe('Thumbnail', () => {
     it('requests page to be rendered in canvas mode by default', async () => {
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
-      const { container } = renderWithContext(
+      const { container } = await renderWithContext(
         <Thumbnail onLoadSuccess={onLoadSuccess} pageIndex={0} />,
         { pdf },
       );
@@ -409,7 +407,7 @@ describe('Thumbnail', () => {
     it('requests page not to be rendered when given renderMode = "none"', async () => {
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
-      const { container } = renderWithContext(
+      const { container } = await renderWithContext(
         <Thumbnail onLoadSuccess={onLoadSuccess} pageIndex={0} renderMode="none" />,
         { pdf },
       );
@@ -426,7 +424,7 @@ describe('Thumbnail', () => {
     it('requests page to be rendered in canvas mode when given renderMode = "canvas"', async () => {
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
-      const { container } = renderWithContext(
+      const { container } = await renderWithContext(
         <Thumbnail onLoadSuccess={onLoadSuccess} pageIndex={0} renderMode="canvas" />,
         { pdf },
       );
@@ -447,7 +445,7 @@ describe('Thumbnail', () => {
         return <div className="custom-renderer" />;
       }
 
-      const { container } = renderWithContext(
+      const { container } = await renderWithContext(
         <Thumbnail
           customRenderer={CustomRenderer}
           onLoadSuccess={onLoadSuccess}
@@ -617,30 +615,34 @@ describe('Thumbnail', () => {
     expect(page.height).toEqual(page.originalHeight * (page.width / page.originalWidth));
   });
 
-  it('calls onClick callback when clicked a page (sample of mouse events family)', () => {
+  it('calls onClick callback when clicked a page (sample of mouse events family)', async () => {
     const onClick = vi.fn();
 
-    const { container } = renderWithContext(<Thumbnail onClick={onClick} />, {
+    const { container } = await renderWithContext(<Thumbnail onClick={onClick} />, {
       linkService,
       pdf,
     });
 
     const page = container.querySelector('.react-pdf__Thumbnail__page') as HTMLDivElement;
-    fireEvent.click(page);
+    await userEvent.click(page);
 
     expect(onClick).toHaveBeenCalled();
   });
 
-  it('calls onTouchStart callback when touched a page (sample of touch events family)', () => {
+  function triggerTouchStart(element: HTMLElement) {
+    element.dispatchEvent(new Event('touchstart', { bubbles: true, cancelable: true }));
+  }
+
+  it('calls onTouchStart callback when touched a page (sample of touch events family)', async () => {
     const onTouchStart = vi.fn();
 
-    const { container } = renderWithContext(<Thumbnail onTouchStart={onTouchStart} />, {
+    const { container } = await renderWithContext(<Thumbnail onTouchStart={onTouchStart} />, {
       linkService,
       pdf,
     });
 
     const page = container.querySelector('.react-pdf__Thumbnail__page') as HTMLDivElement;
-    fireEvent.touchStart(page);
+    triggerTouchStart(page);
 
     expect(onTouchStart).toHaveBeenCalled();
   });
