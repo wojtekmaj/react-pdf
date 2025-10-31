@@ -19,7 +19,6 @@
             "groups": [
               { "type": false, "source": ":NODE:" },
               { "type": false, "source": ["vitest", "vitest/**", "@vitest/**", "vitest-*"] },
-              { "type": false, "source": "@testing-library/**" },
               { "type": false, "source": ["react", "react-dom", "react-dom/**", "react-native"] },
               { "type": false, "source": [":PACKAGE:"] },
               ":BLANK_LINE:",
