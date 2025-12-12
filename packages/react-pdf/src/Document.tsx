@@ -521,16 +521,18 @@ const Document: React.ForwardRefExoticComponent<
         ? { ...source, ...options }
         : source;
 
-      const destroyable = pdfjs.getDocument(documentInitParams);
+      const loadingTask = pdfjs.getDocument(documentInitParams);
       if (onLoadProgress) {
-        destroyable.onProgress = onLoadProgress;
+        loadingTask.onProgress = onLoadProgress;
       }
       if (onPassword) {
-        destroyable.onPassword = onPassword;
+        loadingTask.onPassword = onPassword;
       }
-      const loadingTask = destroyable;
 
-      const loadingPromise = loadingTask.promise
+      const loadingPromise = loadingTask.promise;
+      const cancellable = makeCancellable(loadingPromise);
+
+      cancellable.promise
         .then((nextPdf) => {
           pdfDispatch({ type: 'RESOLVE', value: nextPdf });
         })
@@ -543,7 +545,10 @@ const Document: React.ForwardRefExoticComponent<
         });
 
       return () => {
-        loadingPromise.finally(() => loadingTask.destroy());
+        cancelRunningTask(cancellable);
+        loadingPromise
+          .catch(() => {}) // Errors are handled above
+          .finally(() => loadingTask.destroy());
       };
     },
     [options, pdfDispatch, source],
