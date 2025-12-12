@@ -16,7 +16,7 @@
   "license": "MIT",
   "dependencies": {
     "@wojtekmaj/react-hooks": "^2.0.0",
-    "next": "^16.0.0",
+    "next": "^16.0.10",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-pdf": "latest"
