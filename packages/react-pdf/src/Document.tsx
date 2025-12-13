@@ -530,8 +530,12 @@ const Document: React.ForwardRefExoticComponent<
       }
       const loadingTask = destroyable;
 
-      const loadingPromise = loadingTask.promise
+      loadingTask.promise
         .then((nextPdf) => {
+          if (loadingTask.destroyed) {
+            return;
+          }
+
           pdfDispatch({ type: 'RESOLVE', value: nextPdf });
         })
         .catch((error) => {
@@ -543,7 +547,7 @@ const Document: React.ForwardRefExoticComponent<
         });
 
       return () => {
-        loadingPromise.finally(() => loadingTask.destroy());
+        loadingTask.destroy();
       };
     },
     [options, pdfDispatch, source],

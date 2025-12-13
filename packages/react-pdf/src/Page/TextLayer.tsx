@@ -10,7 +10,7 @@ import warning from 'warning';
 import usePageContext from '../shared/hooks/usePageContext.js';
 import useResolver from '../shared/hooks/useResolver.js';
 
-import { cancelRunningTask } from '../shared/utils.js';
+import { cancelRunningTask, isAbortException } from '../shared/utils.js';
 
 import type { TextContent, TextItem, TextMarkedContent } from 'pdfjs-dist/types/src/display/api.js';
 
@@ -138,6 +138,10 @@ export default function TextLayer(): React.ReactElement {
    */
   const onRenderError = useCallback(
     (error: Error) => {
+      if (isAbortException(error)) {
+        return;
+      }
+
       warning(false, error.toString());
 
       if (onRenderTextLayerError) {

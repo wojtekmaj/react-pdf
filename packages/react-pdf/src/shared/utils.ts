@@ -136,8 +136,8 @@ export function makePageCallback(page: PDFPageProxy, scale: number): PageCallbac
   return page as PageCallback;
 }
 
-export function isCancelException(error: Error): boolean {
-  return error.name === 'RenderingCancelledException';
+export function isAbortException(error: Error): boolean {
+  return error.name === 'AbortException' || error.name === 'RenderingCancelledException';
 }
 
 export function loadFromFile(file: Blob): Promise<ArrayBuffer> {

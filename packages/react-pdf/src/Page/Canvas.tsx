@@ -13,7 +13,7 @@ import usePageContext from '../shared/hooks/usePageContext.js';
 import {
   cancelRunningTask,
   getDevicePixelRatio,
-  isCancelException,
+  isAbortException,
   makePageCallback,
 } from '../shared/utils.js';
 
@@ -67,7 +67,7 @@ export default function Canvas(props: CanvasProps): React.ReactElement {
    * Called when a page fails to render.
    */
   function onRenderError(error: Error) {
-    if (isCancelException(error)) {
+    if (isAbortException(error)) {
       return;
     }
 

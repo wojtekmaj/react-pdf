@@ -1,4 +1,5 @@
 import { useId, useRef } from 'react';
+import { flushSync } from 'react-dom';
 
 import samplePDF from './test.pdf';
 
@@ -54,9 +55,9 @@ export default function LoadingOptions({ file, setFile, setRender }: LoadingOpti
   function onImportAndUnmount() {
     setFile(samplePDF);
 
-    setTimeout(() => setRender(false), 20);
+    flushSync(() => setRender(false));
 
-    setTimeout(() => setRender(true), 1000);
+    flushSync(() => setRender(true));
   }
 
   function unloadFile() {
