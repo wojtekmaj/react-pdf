@@ -16,7 +16,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Setup Biome
         uses: biomejs/setup-biome@v2
@@ -33,10 +33,10 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Cache Yarn cache
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         env:
           cache-name: yarn-cache
         with:
@@ -46,7 +46,7 @@ jobs:
             ${{ runner.os }}-${{ env.cache-name }}
 
       - name: Use Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: '24'
 
@@ -78,7 +78,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Setup Biome
         uses: biomejs/setup-biome@v2
@@ -95,10 +95,10 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Cache Yarn cache
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         env:
           cache-name: yarn-cache
         with:
@@ -109,7 +109,7 @@ jobs:
 
       - name: Cache ~/.cache/ms-playwright
         id: playwright-cache
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         env:
           cache-name: playwright-cache
         with:
@@ -117,7 +117,7 @@ jobs:
           key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('**/yarn.lock') }}
 
       - name: Use Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: '24'
 
