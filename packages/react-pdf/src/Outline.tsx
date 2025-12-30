@@ -124,11 +124,6 @@ export default function Outline(props: OutlineProps): React.ReactElement | null 
 
   useEffect(
     function loadOutline() {
-      if (!pdf) {
-        // Impossible, but TypeScript doesn't know that
-        return;
-      }
-
       const cancellable = makeCancellable(pdf.getOutline());
       const runningTask = cancellable;
 
