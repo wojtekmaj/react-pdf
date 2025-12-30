@@ -239,7 +239,7 @@ describe('AnnotationLayer', () => {
           .filter((item) => item.tagName === 'A');
 
         for (const link of annotationLinkItems) {
-          expect(link.getAttribute('target')).toBe(target);
+          expect(link).toHaveAttribute('target', target);
         }
       },
     );
@@ -283,7 +283,7 @@ describe('AnnotationLayer', () => {
           .filter((item) => item.tagName === 'A');
 
         for (const link of annotationLinkItems) {
-          expect(link.getAttribute('rel')).toBe(rel);
+          expect(link).toHaveAttribute('rel', rel);
         }
       },
     );
