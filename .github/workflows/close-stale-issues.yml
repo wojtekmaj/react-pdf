@@ -8,7 +8,7 @@ on:
 jobs:
   close-issues:
     name: Close stale issues
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04-arm
 
     steps:
       - name: Close stale issues
