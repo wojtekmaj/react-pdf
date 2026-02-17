@@ -29,5 +29,6 @@
     "parcel": "^2.16.3",
     "process": "^0.11.10",
     "typescript": "^5.9.2"
-  }
+  },
+  "packageManager": "yarn@4.10.3"
 }
