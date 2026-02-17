@@ -19,14 +19,14 @@
   },
   "license": "MIT",
   "dependencies": {
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
     "react-pdf": "workspace:packages/react-pdf",
     "tiny-invariant": "^1.0.0"
   },
   "devDependencies": {
     "@biomejs/biome": "2.2.2",
-    "@types/react": "*",
+    "@types/react": "^19.2.0",
     "@vitejs/plugin-react": "^4.6.0",
     "typescript": "^5.9.2",
     "vite": "^7.1.11",
