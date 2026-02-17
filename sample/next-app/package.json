@@ -20,5 +20,6 @@
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-pdf": "latest"
-  }
+  },
+  "packageManager": "yarn@4.10.3"
 }
