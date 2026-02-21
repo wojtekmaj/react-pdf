@@ -1,16 +1,16 @@
 import { useCallback, useEffect, useState } from 'react';
-import { pdfjs, Document, Outline, Page, Thumbnail } from 'react-pdf';
+import { Document, Outline, Page, pdfjs, Thumbnail } from 'react-pdf';
 import 'react-pdf/dist/Page/AnnotationLayer.css';
 import 'react-pdf/dist/Page/TextLayer.css';
 
 import './Test.css';
 
 import AnnotationOptions from './AnnotationOptions.js';
+import CustomRenderer from './CustomRenderer.js';
 import LayerOptions from './LayerOptions.js';
 import LoadingOptions from './LoadingOptions.js';
 import PassingOptions from './PassingOptions.js';
 import ViewOptions from './ViewOptions.js';
-import CustomRenderer from './CustomRenderer.js';
 
 import { isArrayBuffer, isBlob, isBrowser, loadFromFile } from './shared/utils.js';
 
