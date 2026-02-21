@@ -135,6 +135,11 @@ export type PasswordResponse = (typeof PasswordResponses)[keyof typeof PasswordR
 
 export type Options = NullableObject<Omit<DocumentInitParameters, KeyOfUnion<Source>>>;
 
+export type PageColors = {
+  background: string;
+  foreground: string;
+};
+
 /* Context types */
 export type DocumentContextType = {
   imageResourcesPath?: ImageResourcesPath;
@@ -166,6 +171,7 @@ export type PageContextType = {
   onRenderTextLayerError?: OnRenderTextLayerError;
   onRenderTextLayerSuccess?: OnRenderTextLayerSuccess;
   page: PDFPageProxy | false | undefined;
+  pageColors?: PageColors;
   pageIndex: number;
   pageNumber: number;
   renderForms: boolean;

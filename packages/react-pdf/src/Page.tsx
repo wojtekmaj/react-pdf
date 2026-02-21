@@ -42,6 +42,7 @@ import type {
   OnRenderTextLayerError,
   OnRenderTextLayerSuccess,
   PageCallback,
+  PageColors,
   PageContextType,
   PageRenderProps,
   RenderMode,
@@ -232,6 +233,12 @@ export type PageProps = {
    */
   onRenderTextLayerSuccess?: OnRenderTextLayerSuccess;
   /**
+   * Colors used to render the page. If not provided, the default colors from PDF will be used.
+   *
+   * @example { background: 'transparent', foreground: '#ff0000' }
+   */
+  pageColors?: PageColors;
+  /**
    * Which page from PDF file should be displayed, by page index. Ignored if `pageNumber` prop is provided.
    *
    * @default 0
@@ -342,6 +349,7 @@ export default function Page(props: PageProps): React.ReactElement {
     onRenderSuccess: onRenderSuccessProps,
     onRenderTextLayerError: onRenderTextLayerErrorProps,
     onRenderTextLayerSuccess: onRenderTextLayerSuccessProps,
+    pageColors,
     pageIndex: pageIndexProps,
     pageNumber: pageNumberProps,
     pdf,
@@ -519,6 +527,7 @@ export default function Page(props: PageProps): React.ReactElement {
             onRenderTextLayerError: onRenderTextLayerErrorProps,
             onRenderTextLayerSuccess: onRenderTextLayerSuccessProps,
             page,
+            pageColors,
             pageIndex,
             pageNumber,
             renderForms,
@@ -546,6 +555,7 @@ export default function Page(props: PageProps): React.ReactElement {
       onRenderTextLayerErrorProps,
       onRenderTextLayerSuccessProps,
       page,
+      pageColors,
       pageIndex,
       pageNumber,
       renderForms,

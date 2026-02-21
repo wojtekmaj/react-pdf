@@ -9,6 +9,7 @@ type ViewOptionsProps = {
   pageHeight?: number;
   pageScale?: number;
   pageWidth?: number;
+  renderHighContrast: boolean;
   renderMode?: RenderMode;
   rotate?: number;
   setCanvasBackground: (value: string | undefined) => void;
@@ -17,6 +18,7 @@ type ViewOptionsProps = {
   setPageHeight: (value: number | undefined) => void;
   setPageScale: (value: number | undefined) => void;
   setPageWidth: (value: number | undefined) => void;
+  setRenderHighContrast: (value: boolean) => void;
   setRenderMode: (value: RenderMode | undefined) => void;
   setRotate: React.Dispatch<React.SetStateAction<number | undefined>>;
 };
@@ -28,6 +30,7 @@ export default function ViewOptions({
   pageHeight,
   pageScale,
   pageWidth,
+  renderHighContrast,
   renderMode,
   rotate,
   setCanvasBackground,
@@ -36,6 +39,7 @@ export default function ViewOptions({
   setPageHeight,
   setPageScale,
   setPageWidth,
+  setRenderHighContrast,
   setRenderMode,
   setRotate,
 }: ViewOptionsProps) {
@@ -54,6 +58,7 @@ export default function ViewOptions({
   const renderNoneId = useId();
   const rotationId = useId();
   const displayAllId = useId();
+  const renderHighContrastId = useId();
 
   function onCanvasBackgroundChange(event: React.ChangeEvent<HTMLInputElement>) {
     setCanvasBackground(event.target.value);
@@ -70,6 +75,10 @@ export default function ViewOptions({
 
   function onDisplayAllChange(event: React.ChangeEvent<HTMLInputElement>) {
     setDisplayAll(event.target.checked);
+  }
+
+  function onRenderHighContrastChange(event: React.ChangeEvent<HTMLInputElement>) {
+    setRenderHighContrast(event.target.checked);
   }
 
   function onPageHeightChange(event: React.FormEvent<HTMLFormElement>) {
@@ -298,8 +307,25 @@ export default function ViewOptions({
         </button>
       </div>
 
-      <input checked={displayAll} id={displayAllId} onChange={onDisplayAllChange} type="checkbox" />
-      <label htmlFor={displayAllId}>View all pages</label>
+      <div>
+        <input
+          checked={renderHighContrast}
+          id={renderHighContrastId}
+          onChange={onRenderHighContrastChange}
+          type="checkbox"
+        />
+        <label htmlFor={renderHighContrastId}>Use black/yellow page colors</label>
+      </div>
+
+      <div>
+        <input
+          checked={displayAll}
+          id={displayAllId}
+          onChange={onDisplayAllChange}
+          type="checkbox"
+        />
+        <label htmlFor={displayAllId}>View all pages</label>
+      </div>
     </fieldset>
   );
 }

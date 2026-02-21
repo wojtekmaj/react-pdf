@@ -82,6 +82,7 @@ export default function Test() {
   const [pageScale, setPageScale] = useState<number>();
   const [pageWidth, setPageWidth] = useState<number>();
   const [passMethod, setPassMethod] = useState<PassMethod>();
+  const [renderHighContrast, setRenderHighContrast] = useState(false);
   const [render, setRender] = useState(true);
   const [renderAnnotationLayer, setRenderAnnotationLayer] = useState(true);
   const [renderForms, setRenderForms] = useState(true);
@@ -208,6 +209,12 @@ export default function Test() {
     height: pageHeight,
     onClick: onPageClick,
     onRenderSuccess: onPageRenderSuccess,
+    pageColors: renderHighContrast
+      ? {
+          background: 'black',
+          foreground: '#ffff00',
+        }
+      : undefined,
     renderAnnotationLayer,
     renderForms,
     renderMode,
@@ -242,6 +249,7 @@ export default function Test() {
             pageHeight={pageHeight}
             pageScale={pageScale}
             pageWidth={pageWidth}
+            renderHighContrast={renderHighContrast}
             renderMode={renderMode}
             rotate={rotate}
             setCanvasBackground={setCanvasBackground}
@@ -250,6 +258,7 @@ export default function Test() {
             setPageHeight={setPageHeight}
             setPageScale={setPageScale}
             setPageWidth={setPageWidth}
+            setRenderHighContrast={setRenderHighContrast}
             setRenderMode={setRenderMode}
             setRotate={setRotate}
           />

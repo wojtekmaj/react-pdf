@@ -40,6 +40,7 @@ export default function Canvas(props: CanvasProps): React.ReactElement {
     page,
     renderForms,
     renderTextLayer,
+    pageColors,
     rotate,
     scale,
   } = mergedProps;
@@ -115,6 +116,7 @@ export default function Canvas(props: CanvasProps): React.ReactElement {
         annotationMode: renderForms ? ANNOTATION_MODE.ENABLE_FORMS : ANNOTATION_MODE.ENABLE,
         canvas,
         canvasContext: canvas.getContext('2d', { alpha: false }) as CanvasRenderingContext2D,
+        pageColors,
         viewport: renderViewport,
       };
       if (canvasBackground) {
@@ -134,7 +136,7 @@ export default function Canvas(props: CanvasProps): React.ReactElement {
 
       return () => cancelRunningTask(runningTask);
     },
-    [canvasBackground, page, renderForms, renderViewport, viewport],
+    [canvasBackground, page, pageColors, renderForms, renderViewport, viewport],
   );
 
   const cleanup = useCallback(() => {
