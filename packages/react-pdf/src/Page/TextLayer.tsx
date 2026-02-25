@@ -18,6 +18,93 @@ function isTextItem(item: TextItem | TextMarkedContent): item is TextItem {
   return 'str' in item;
 }
 
+const BLOCKED_CUSTOM_TEXT_TAGS = new Set([
+  'base',
+  'embed',
+  'iframe',
+  'link',
+  'meta',
+  'object',
+  'script',
+  'style',
+  'template',
+]);
+
+const URL_ATTRIBUTES = new Set(['action', 'formaction', 'href', 'poster', 'src', 'xlink:href']);
+
+function isDangerousUrl(value: string): boolean {
+  let normalizedValue = '';
+
+  for (const char of value) {
+    const charCode = char.charCodeAt(0);
+
+    if (charCode <= 32 || charCode === 127) {
+      continue;
+    }
+
+    normalizedValue += char.toLowerCase();
+  }
+
+  return normalizedValue.startsWith('javascript:') || normalizedValue.startsWith('vbscript:');
+}
+
+function isElementNode(node: Node): node is Element {
+  return node.nodeType === Node.ELEMENT_NODE;
+}
+
+function isHtmlElement(node: Node): node is HTMLElement {
+  return isElementNode(node) && node instanceof HTMLElement;
+}
+
+function isBlockedCustomTextElement(node: Node): boolean {
+  return isHtmlElement(node) && BLOCKED_CUSTOM_TEXT_TAGS.has(node.tagName.toLowerCase());
+}
+
+function sanitizeCustomHtmlElement(element: HTMLElement): HTMLElement {
+  const sanitizedElement = document.createElement(element.tagName.toLowerCase());
+
+  Array.from(element.attributes).forEach((attribute) => {
+    const attributeName = attribute.name.toLowerCase();
+
+    if (attributeName.startsWith('on') || attributeName === 'srcdoc') {
+      return;
+    }
+
+    if (URL_ATTRIBUTES.has(attributeName) && isDangerousUrl(attribute.value)) {
+      return;
+    }
+
+    sanitizedElement.setAttribute(attribute.name, attribute.value);
+  });
+
+  Array.from(element.childNodes).forEach((child) => {
+    sanitizedElement.append(sanitizeCustomTextNode(child));
+  });
+
+  return sanitizedElement;
+}
+
+function sanitizeCustomTextNode(node: ChildNode): Node {
+  if (isHtmlElement(node) && !isBlockedCustomTextElement(node)) {
+    return sanitizeCustomHtmlElement(node);
+  }
+
+  return document.createTextNode(node.textContent ?? '');
+}
+
+function renderSafeCustomText(target: Element, content: string): void {
+  const template = document.createElement('template');
+  template.innerHTML = content;
+
+  const sanitizedFragment = document.createDocumentFragment();
+
+  Array.from(template.content.childNodes).forEach((child) => {
+    sanitizedFragment.append(sanitizeCustomTextNode(child));
+  });
+
+  target.replaceChildren(sanitizedFragment);
+}
+
 export default function TextLayer(): React.ReactElement {
   const pageContext = usePageContext();
 
@@ -230,7 +317,7 @@ export default function TextLayer(): React.ReactElement {
                 ...item,
               });
 
-              child.innerHTML = content;
+              renderSafeCustomText(child, content);
               index += item.str && item.hasEOL ? 2 : 1;
             });
           }

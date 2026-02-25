@@ -276,5 +276,87 @@ describe('TextLayer', () => {
 
       expect(container).toHaveTextContent('Test value');
     });
+
+    it('renders HTML formatting from customTextRenderer output', async () => {
+      const { func: onRenderTextLayerSuccess, promise: onRenderTextLayerSuccessPromise } =
+        makeAsyncCallback();
+
+      const customTextRenderer: CustomTextRenderer = ({ str }: { str: string }) =>
+        str.replace(/ipsum/g, '<mark>ipsum</mark>');
+
+      const { container } = await renderWithContext(<TextLayer />, {
+        customTextRenderer,
+        onRenderTextLayerSuccess,
+        page,
+      });
+
+      expect.assertions(2);
+
+      await onRenderTextLayerSuccessPromise;
+
+      const highlightedText = container.querySelectorAll('mark');
+
+      expect(highlightedText.length).toBeGreaterThan(0);
+      expect(highlightedText[0]).toHaveTextContent('ipsum');
+    });
+
+    it('does not render blocked tags from customTextRenderer output', async () => {
+      const { func: onRenderTextLayerSuccess, promise: onRenderTextLayerSuccessPromise } =
+        makeAsyncCallback();
+
+      const windowWithBlockedTagFlag = window as typeof window & {
+        __reactPdfBlockedTagExecuted?: boolean;
+      };
+      windowWithBlockedTagFlag.__reactPdfBlockedTagExecuted = false;
+
+      const customTextRenderer: CustomTextRenderer = () =>
+        '<script>window.__reactPdfBlockedTagExecuted = true</script><mark>safe</mark>';
+
+      const { container } = await renderWithContext(<TextLayer />, {
+        customTextRenderer,
+        onRenderTextLayerSuccess,
+        page,
+      });
+
+      expect.assertions(3);
+
+      await onRenderTextLayerSuccessPromise;
+
+      expect(container.querySelector('script')).not.toBeInTheDocument();
+      expect(windowWithBlockedTagFlag.__reactPdfBlockedTagExecuted).toBe(false);
+      expect(container.querySelector('mark')).toHaveTextContent('safe');
+
+      delete windowWithBlockedTagFlag.__reactPdfBlockedTagExecuted;
+    });
+
+    it('does not execute scripts from customTextRenderer output', async () => {
+      const { func: onRenderTextLayerSuccess, promise: onRenderTextLayerSuccessPromise } =
+        makeAsyncCallback();
+
+      const customTextRenderer: CustomTextRenderer = () =>
+        'javascript:/*--></title></style></textarea></script></xmp><details open ontoggle=alert(1)>x</details>';
+
+      const alertSpy = vi.spyOn(window, 'alert').mockImplementation(() => {
+        // Intentionally empty
+      });
+
+      const { container } = await renderWithContext(<TextLayer />, {
+        customTextRenderer,
+        onRenderTextLayerSuccess,
+        page,
+      });
+
+      expect.assertions(2);
+
+      await onRenderTextLayerSuccessPromise;
+
+      const detailsElement = container.querySelector('details');
+      detailsElement?.dispatchEvent(new Event('toggle', { bubbles: true }));
+
+      expect(detailsElement).not.toHaveAttribute('ontoggle');
+      expect(alertSpy).not.toHaveBeenCalled();
+
+      alertSpy.mockRestore();
+    });
   });
 });
