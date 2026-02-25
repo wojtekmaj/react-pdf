@@ -11,7 +11,7 @@ import { loadPDF, makeAsyncCallback, muteConsole, restoreConsole } from '../../.
 
 import type { PDFPageProxy } from 'pdfjs-dist';
 import type { TextContent } from 'pdfjs-dist/types/src/display/api.js';
-import type { PageContextType } from '../shared/types.js';
+import type { CustomTextRenderer, PageContextType } from '../shared/types.js';
 
 const pdfFile = await loadPDF('../../__mocks__/_pdf.pdf');
 const untaggedPdfFile = await loadPDF('../../__mocks__/_untagged.pdf');
@@ -192,7 +192,7 @@ describe('TextLayer', () => {
       const { func: onRenderTextLayerSuccess2, promise: onRenderTextLayerSuccessPromise2 } =
         makeAsyncCallback();
 
-      const customTextRenderer = (item: { str: string }) => item.str;
+      const customTextRenderer: CustomTextRenderer = ({ str }: { str: string }) => str;
 
       await rerender(<TextLayer />, {
         customTextRenderer,
