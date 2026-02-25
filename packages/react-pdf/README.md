@@ -31,10 +31,6 @@ React-PDF is under constant development. This documentation is written for React
 - [v7.x](https://github.com/wojtekmaj/react-pdf/blob/v7.x/packages/react-pdf/README.md)
 - [v6.x](https://github.com/wojtekmaj/react-pdf/blob/v6.x/README.md)
 - [v5.x](https://github.com/wojtekmaj/react-pdf/blob/v5.x/README.md)
-- [v4.x](https://github.com/wojtekmaj/react-pdf/blob/v4.x/README.md)
-- [v3.x](https://github.com/wojtekmaj/react-pdf/blob/v3.x/README.md)
-- [v2.x](https://github.com/wojtekmaj/react-pdf/blob/v2.x/README.md)
-- [v1.x](https://github.com/wojtekmaj/react-pdf/blob/v1.x/README.md)
 
 ## Getting started
 
