@@ -17,6 +17,7 @@ import invariant from 'tiny-invariant';
 import type { PDFDocumentProxy } from 'pdfjs-dist';
 import type { IPDFLinkService } from 'pdfjs-dist/types/web/interfaces.js';
 import type {
+  Annotations,
   Dest,
   ExternalLinkRel,
   ExternalLinkTarget,
@@ -32,6 +33,7 @@ type PDFViewer = {
 };
 
 export default class LinkService implements IPDFLinkService {
+  annotationContext?: Map<string, Annotations[number]>;
   externalLinkEnabled: boolean;
   externalLinkRel?: ExternalLinkRel;
   externalLinkTarget?: ExternalLinkTarget;
@@ -46,6 +48,7 @@ export default class LinkService implements IPDFLinkService {
     this.isInPresentationMode = false;
     this.pdfDocument = undefined;
     this.pdfViewer = undefined;
+    this.annotationContext = undefined;
   }
 
   setDocument(pdfDocument: PDFDocumentProxy): void {
@@ -62,6 +65,18 @@ export default class LinkService implements IPDFLinkService {
 
   setExternalLinkTarget(externalLinkTarget?: ExternalLinkTarget): void {
     this.externalLinkTarget = externalLinkTarget;
+  }
+
+  setAnnotationContext(annotations: Annotations): void {
+    this.annotationContext = new Map(
+      annotations
+        .filter((annotation) => 'id' in annotation)
+        .map((annotation) => [String(annotation.id), annotation]),
+    );
+  }
+
+  clearAnnotationContext(): void {
+    this.annotationContext = undefined;
   }
 
   setHash(): void {
@@ -100,6 +115,15 @@ export default class LinkService implements IPDFLinkService {
     link.href = url;
     link.rel = this.externalLinkRel || DEFAULT_LINK_REL;
     link.target = newWindow ? '_blank' : this.externalLinkTarget || '';
+
+    const elementId = link.getAttribute('data-element-id');
+    const overlaidText = elementId && this.annotationContext?.get(elementId)?.overlaidText;
+
+    const trimmedText = typeof overlaidText === 'string' ? overlaidText.trim() : '';
+
+    if (trimmedText) {
+      link.setAttribute('aria-label', trimmedText);
+    }
   }
 
   goToDestination(dest: Dest): Promise<void> {
