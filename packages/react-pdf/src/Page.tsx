@@ -663,7 +663,7 @@ export default function Page(props: PageProps): React.ReactElement {
           '--scale-factor': '1',
           '--user-unit': `${scale}`,
           '--total-scale-factor': 'calc(var(--scale-factor) * var(--user-unit))',
-          backgroundColor: canvasBackground || 'white',
+          backgroundColor: canvasBackground || pageColors?.background || 'white',
           position: 'relative',
           minWidth: 'min-content',
           minHeight: 'min-content',
