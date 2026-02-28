@@ -35,5 +35,8 @@
     "webpack-cli": "^5.0.0",
     "webpack-dev-server": "^5.2.1"
   },
+  "resolutions": {
+    "serialize-javascript": "^7.0.3"
+  },
   "packageManager": "yarn@4.10.3"
 }
