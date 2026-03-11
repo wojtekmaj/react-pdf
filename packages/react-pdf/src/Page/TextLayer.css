@@ -57,7 +57,7 @@
   white-space: pre;
   cursor: text;
   margin: 0;
-  transform-origin: 0% 0%;
+  transform-origin: 0 0;
 }
 
 .textLayer > :not(.markedContent),
