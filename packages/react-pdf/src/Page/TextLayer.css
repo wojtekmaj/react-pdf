@@ -51,10 +51,6 @@
   --min-font-size-inv: calc(1 / var(--min-font-size));
 }
 
-.textLayer.highlighting {
-  touch-action: none;
-}
-
 .textLayer :is(span, br) {
   color: transparent;
   position: absolute;
