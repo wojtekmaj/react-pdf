@@ -4512,13 +4512,12 @@ __metadata:
   linkType: hard
 
 "terser-webpack-plugin@npm:^5.3.16":
-  version: 5.3.16
-  resolution: "terser-webpack-plugin@npm:5.3.16"
+  version: 5.4.0
+  resolution: "terser-webpack-plugin@npm:5.4.0"
   dependencies:
     "@jridgewell/trace-mapping": "npm:^0.3.25"
     jest-worker: "npm:^27.4.5"
     schema-utils: "npm:^4.3.0"
-    serialize-javascript: "npm:^6.0.2"
     terser: "npm:^5.31.1"
   peerDependencies:
     webpack: ^5.1.0
@@ -4529,7 +4528,7 @@ __metadata:
       optional: true
     uglify-js:
       optional: true
-  checksum: 10c0/39e37c5b3015c1a5354a3633f77235677bfa06eac2608ce26d258b1d1a74070a99910319a6f2f2c437eb61dc321f66434febe01d78e73fa96b4d4393b813f4cf
+  checksum: 10c0/1feed4b9575af795dae6af0c8f0d76d6e1fb7b357b8628d90e834c23a651b918a58cdc48d0ae6c1f0581f74bc8169b33c3b8d049f2d2190bac4e310964e59fde
   languageName: node
   linkType: hard
 
