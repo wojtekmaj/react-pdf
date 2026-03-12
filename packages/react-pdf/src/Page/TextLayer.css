@@ -94,15 +94,6 @@
   border-radius: 4px;
 }
 
-@media screen and (forced-colors: active) {
-  .textLayer .highlight {
-    --highlight-bg-color: transparent;
-    --highlight-selected-bg-color: transparent;
-    --highlight-backdrop-filter: var(--hcm-highlight-filter);
-    --highlight-selected-backdrop-filter: var(--hcm-highlight-selected-filter);
-  }
-}
-
 .textLayer .highlight.appended {
   position: initial;
 }
