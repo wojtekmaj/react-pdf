@@ -94,6 +94,13 @@
   border-radius: 4px;
 }
 
+@media screen and (forced-colors: active) {
+  .textLayer .highlight {
+    --highlight-bg-color: Highlight;
+    --highlight-selected-bg-color: ButtonText;
+  }
+}
+
 .textLayer .highlight.appended {
   position: initial;
 }
