@@ -10,6 +10,7 @@
     "noEmit": true,
     "noUncheckedIndexedAccess": true,
     "outDir": "dist",
+    "rootDir": "../..",
     "skipLibCheck": true,
     "target": "es2018",
     "verbatimModuleSyntax": true
