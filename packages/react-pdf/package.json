@@ -57,7 +57,7 @@
     "playwright": "^1.55.1",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
-    "typescript": "^5.9.2",
+    "typescript": "^6.0.2",
     "vitest": "^4.0.1",
     "vitest-browser-react": "^2.0.0"
   },

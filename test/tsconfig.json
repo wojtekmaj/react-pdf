@@ -7,7 +7,6 @@
     "noEmit": true,
     "noUncheckedIndexedAccess": true,
     "skipLibCheck": true,
-    "strict": true,
     "target": "esnext",
     "verbatimModuleSyntax": true
   }
