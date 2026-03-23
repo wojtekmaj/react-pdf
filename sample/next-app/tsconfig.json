@@ -14,6 +14,7 @@
     "plugins": [{ "name": "next" }],
     "resolveJsonModule": true,
     "skipLibCheck": true,
+    "strict": true,
     "target": "es2018",
     "verbatimModuleSyntax": true
   },

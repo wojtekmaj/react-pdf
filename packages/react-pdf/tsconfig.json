@@ -12,8 +12,7 @@
     "outDir": "dist",
     "skipLibCheck": true,
     "target": "es2018",
-    "verbatimModuleSyntax": true,
-    "rootDir": "../.."
+    "verbatimModuleSyntax": true
   },
   "exclude": ["dist"]
 }
