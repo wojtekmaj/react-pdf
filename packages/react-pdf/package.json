@@ -52,14 +52,14 @@
     "@types/react": "^19.2.0",
     "@types/react-dom": "^19.2.0",
     "@types/warning": "^3.0.0",
-    "@vitest/browser-playwright": "^4.0.1",
+    "@vitest/browser-playwright": "^4.1.0",
     "cpy-cli": "^5.0.0",
     "playwright": "^1.55.1",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "typescript": "^6.0.2",
-    "vitest": "^4.0.1",
-    "vitest-browser-react": "^2.0.0"
+    "vitest": "^4.1.0",
+    "vitest-browser-react": "^2.2.0"
   },
   "peerDependencies": {
     "@types/react": "^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0",
