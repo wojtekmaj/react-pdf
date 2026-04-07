@@ -19,6 +19,12 @@ import type { DocumentContextType, PageCallback } from './shared/types.js';
 const pdfFile = await loadPDF('../../__mocks__/_pdf.pdf');
 const pdfFile2 = await loadPDF('../../__mocks__/_pdf2.pdf');
 
+function createPdfThatNeverLoads(): PDFDocumentProxy {
+  return {
+    getPage: () => new Promise(() => {}),
+  } as unknown as PDFDocumentProxy;
+}
+
 async function renderWithContext(children: React.ReactNode, context: Partial<DocumentContextType>) {
   const { rerender, ...otherResult } = await render(
     <DocumentContext.Provider value={context as DocumentContextType}>
@@ -305,24 +311,28 @@ describe('Thumbnail', () => {
       restoreConsole();
     });
 
-    it('renders "Loading page…" when loading a page', () => {
-      renderWithContext(<Thumbnail pageIndex={0} />, { pdf });
+    it('renders "Loading page…" when loading a page', async () => {
+      await renderWithContext(<Thumbnail pageIndex={0} />, { pdf: createPdfThatNeverLoads() });
 
       const loading = page.getByText('Loading page…');
 
       expect(loading).toBeInTheDocument();
     });
 
-    it('renders custom loading message when loading a page and loading prop is given', () => {
-      renderWithContext(<Thumbnail loading="Loading" pageIndex={0} />, { pdf });
+    it('renders custom loading message when loading a page and loading prop is given', async () => {
+      await renderWithContext(<Thumbnail loading="Loading" pageIndex={0} />, {
+        pdf: createPdfThatNeverLoads(),
+      });
 
       const loading = page.getByText('Loading', { exact: true });
 
       expect(loading).toBeInTheDocument();
     });
 
-    it('renders custom loading message when loading a page and loading prop is given as a function', () => {
-      renderWithContext(<Thumbnail loading={() => 'Loading'} pageIndex={0} />, { pdf });
+    it('renders custom loading message when loading a page and loading prop is given as a function', async () => {
+      await renderWithContext(<Thumbnail loading={() => 'Loading'} pageIndex={0} />, {
+        pdf: createPdfThatNeverLoads(),
+      });
 
       const loading = page.getByText('Loading', { exact: true });
 

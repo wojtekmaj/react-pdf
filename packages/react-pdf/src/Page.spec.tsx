@@ -21,6 +21,12 @@ const pdfFile2 = await loadPDF('../../__mocks__/_pdf2.pdf');
 const pdfFile4 = await loadPDF('../../__mocks__/_pdf4.pdf');
 const pdfFile5 = await loadPDF('../../__mocks__/_pdf5.pdf');
 
+function createPdfThatNeverLoads(): PDFDocumentProxy {
+  return {
+    getPage: () => new Promise(() => {}),
+  } as unknown as PDFDocumentProxy;
+}
+
 async function renderWithContext(children: React.ReactNode, context: Partial<DocumentContextType>) {
   const { rerender, ...otherResult } = await render(
     <DocumentContext.Provider value={context as DocumentContextType}>
@@ -385,10 +391,10 @@ describe('Page', () => {
       restoreConsole();
     });
 
-    it('renders "Loading page…" when loading a page', () => {
-      renderWithContext(<Page pageIndex={0} />, {
+    it('renders "Loading page…" when loading a page', async () => {
+      await renderWithContext(<Page pageIndex={0} />, {
         linkService,
-        pdf,
+        pdf: createPdfThatNeverLoads(),
       });
 
       const loading = page.getByText('Loading page…');
@@ -396,10 +402,10 @@ describe('Page', () => {
       expect(loading).toBeInTheDocument();
     });
 
-    it('renders custom loading message when loading a page and loading prop is given', () => {
-      renderWithContext(<Page loading="Loading" pageIndex={0} />, {
+    it('renders custom loading message when loading a page and loading prop is given', async () => {
+      await renderWithContext(<Page loading="Loading" pageIndex={0} />, {
         linkService,
-        pdf,
+        pdf: createPdfThatNeverLoads(),
       });
 
       const loading = page.getByText('Loading', { exact: true });
@@ -407,10 +413,10 @@ describe('Page', () => {
       expect(loading).toBeInTheDocument();
     });
 
-    it('renders custom loading message when loading a page and loading prop is given as a function', () => {
-      renderWithContext(<Page loading={() => 'Loading'} pageIndex={0} />, {
+    it('renders custom loading message when loading a page and loading prop is given as a function', async () => {
+      await renderWithContext(<Page loading={() => 'Loading'} pageIndex={0} />, {
         linkService,
-        pdf,
+        pdf: createPdfThatNeverLoads(),
       });
 
       const loading = page.getByText('Loading', { exact: true });
