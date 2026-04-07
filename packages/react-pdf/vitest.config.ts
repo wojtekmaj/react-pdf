@@ -11,7 +11,7 @@ const config: ViteUserConfig = defineConfig({
       instances: [{ browser: 'chromium' }],
       provider: playwright(),
     },
-    exclude: [...configDefaults.exclude, 'src/index.test.ts'],
+    exclude: [...configDefaults.exclude, 'dist/index.test.js', 'src/index.test.ts'],
     pool: 'forks',
     setupFiles: 'vitest.setup.ts',
     watch: false,
