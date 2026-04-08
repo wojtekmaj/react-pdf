@@ -47,7 +47,7 @@
     "warning": "^4.0.0"
   },
   "devDependencies": {
-    "@biomejs/biome": "2.2.2",
+    "@biomejs/biome": "2.4.10",
     "@types/node": "*",
     "@types/react": "^19.2.0",
     "@types/react-dom": "^19.2.0",
