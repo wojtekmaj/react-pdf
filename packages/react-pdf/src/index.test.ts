@@ -17,10 +17,10 @@ export type { ThumbnailProps } from './Thumbnail.js';
 import './pdf.worker.entry.js';
 
 export {
-  pdfjs,
   Document,
   Outline,
   Page,
+  pdfjs,
   Thumbnail,
   useDocumentContext,
   useOutlineContext,

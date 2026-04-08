@@ -1,8 +1,7 @@
-import path from 'node:path';
 import { createRequire } from 'node:module';
-
-import { defineConfig, normalizePath } from 'vite';
+import path from 'node:path';
 import react from '@vitejs/plugin-react';
+import { defineConfig, normalizePath } from 'vite';
 import { viteStaticCopy } from 'vite-plugin-static-copy';
 
 const require = createRequire(import.meta.url);

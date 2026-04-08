@@ -32,13 +32,13 @@ displayWorkerWarning();
 pdfjs.GlobalWorkerOptions.workerSrc = 'pdf.worker.mjs';
 
 export {
-  pdfjs,
   Document,
   Outline,
   Page,
+  PasswordResponses,
+  pdfjs,
   Thumbnail,
   useDocumentContext,
   useOutlineContext,
   usePageContext,
-  PasswordResponses,
 };

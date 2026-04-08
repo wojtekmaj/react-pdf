@@ -1,8 +1,7 @@
-import webpack from 'webpack';
 import path from 'node:path';
-
 import CopyWebpackPlugin from 'copy-webpack-plugin';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
+import webpack from 'webpack';
 
 import type { Configuration } from 'webpack';
 import 'webpack-dev-server';

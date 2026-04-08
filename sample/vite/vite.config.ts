@@ -1,6 +1,5 @@
-import path from 'node:path';
 import { createRequire } from 'node:module';
-
+import path from 'node:path';
 import { defineConfig, normalizePath } from 'vite';
 import { viteStaticCopy } from 'vite-plugin-static-copy';
 

@@ -1,5 +1,6 @@
-import { isDataURI } from './shared/utils.js';
 import { useId } from 'react';
+
+import { isDataURI } from './shared/utils.js';
 
 import type { File, PassMethod } from './shared/types.js';
 
