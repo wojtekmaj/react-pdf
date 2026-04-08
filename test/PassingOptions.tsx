@@ -13,7 +13,6 @@ export default function PassingOptions({ file, passMethod, setPassMethod }: Pass
   const passNormalId = useId();
   const passObjectId = useId();
   const passStringId = useId();
-  const passBlobId = useId();
 
   const sourceType = (() => {
     if (file === null) {

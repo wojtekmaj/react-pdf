@@ -72,6 +72,7 @@ export default function Sample() {
           <Document file={file} onLoadSuccess={onDocumentLoadSuccess} options={options}>
             {Array.from(new Array(numPages), (_el, index) => (
               <Page
+                // biome-ignore lint/suspicious/noArrayIndexKey: index is stable here
                 key={`page_${index + 1}`}
                 pageNumber={index + 1}
                 width={containerWidth ? Math.min(containerWidth, maxWidth) : maxWidth}

@@ -83,7 +83,7 @@ export default function OutlineItem(props: OutlineItemProps): React.ReactElement
   }
 
   function renderSubitems() {
-    if (!item.items || !item.items.length) {
+    if (!item.items?.length) {
       return null;
     }
 

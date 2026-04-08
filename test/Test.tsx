@@ -92,7 +92,7 @@ export default function Test() {
   const [rotate, setRotate] = useState<number>();
 
   const onDocumentLoadProgress = useCallback((progressData: { loaded: number; total: number }) => {
-    console.log('Loading a document: ' + (progressData.loaded / progressData.total) * 100 + '%');
+    console.log(`Loading a document: ${(progressData.loaded / progressData.total) * 100}%`);
   }, []);
 
   const onDocumentLoadSuccess = useCallback((document: PDFDocumentProxy) => {
@@ -289,6 +289,7 @@ export default function Test() {
                 displayAll ? (
                   Array.from(new Array(numPages), (_el, index) => (
                     <Page
+                      // biome-ignore lint/suspicious/noArrayIndexKey: index is stable here
                       key={`page_${index + 1}`}
                       {...pageProps}
                       inputRef={
@@ -324,6 +325,7 @@ export default function Test() {
             <div className="Test__container__content__thumbnails">
               {Array.from(new Array(numPages), (_el, index) => (
                 <Thumbnail
+                  // biome-ignore lint/suspicious/noArrayIndexKey: index is stable here
                   key={`thumbnail_${index + 1}`}
                   className="custom-classname-thumbnail"
                   pageNumber={index + 1}
