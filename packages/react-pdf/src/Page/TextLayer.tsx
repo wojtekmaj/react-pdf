@@ -45,7 +45,11 @@ function isDangerousUrl(value: string): boolean {
     normalizedValue += char.toLowerCase();
   }
 
-  return normalizedValue.startsWith('javascript:') || normalizedValue.startsWith('vbscript:');
+  return (
+    normalizedValue.startsWith('data:') ||
+    normalizedValue.startsWith('javascript:') ||
+    normalizedValue.startsWith('vbscript:')
+  );
 }
 
 function isElementNode(node: Node): node is Element {
