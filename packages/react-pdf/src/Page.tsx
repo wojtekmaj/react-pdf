@@ -370,7 +370,7 @@ export default function Page(props: PageProps): React.ReactElement {
   const pageElement = useRef<HTMLDivElement>(null);
 
   invariant(
-    pdf,
+    pdf !== null && pdf !== undefined,
     'Attempted to load a page, but no document was specified. Wrap <Page /> in a <Document /> or pass explicit `pdf` prop.',
   );
 
