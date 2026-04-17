@@ -38,6 +38,8 @@ export default class LinkService implements IPDFLinkService {
   isInPresentationMode: boolean;
   pdfDocument?: PDFDocumentProxy | null;
   pdfViewer?: PDFViewer | null;
+  pageLabels: (string | null)[] | null;
+  private _syncHashEnabled: boolean;
 
   constructor() {
     this.externalLinkEnabled = true;
@@ -46,6 +48,62 @@ export default class LinkService implements IPDFLinkService {
     this.isInPresentationMode = false;
     this.pdfDocument = undefined;
     this.pdfViewer = undefined;
+    this.pageLabels = null;
+    this._syncHashEnabled = false;
+  }
+
+  /**
+   * Enable or disable URL hash synchronization.
+   */
+  setSyncHashEnabled(enabled: boolean): void {
+    this._syncHashEnabled = enabled;
+  }
+
+  /**
+   * Set page labels for label-based navigation.
+   */
+  setPageLabels(labels: (string | null)[] | null): void {
+    this.pageLabels = labels;
+  }
+
+  /**
+   * Get page number from a page label.
+   * Returns the 1-based page number, or null if not found.
+   */
+  getPageNumberFromLabel(label: string): number | null {
+    if (!this.pageLabels) {
+      // No labels available, try parsing as number
+      const pageNum = parseInt(label, 10);
+      if (!isNaN(pageNum) && pageNum >= 1 && pageNum <= this.pagesCount) {
+        return pageNum;
+      }
+      return null;
+    }
+
+    // Search for the label in the labels array
+    const index = this.pageLabels.findIndex((l) => l === label);
+    if (index !== -1) {
+      return index + 1; // Convert 0-based index to 1-based page number
+    }
+
+    // If not found as label, try parsing as number
+    const pageNum = parseInt(label, 10);
+    if (!isNaN(pageNum) && pageNum >= 1 && pageNum <= this.pagesCount) {
+      return pageNum;
+    }
+
+    return null;
+  }
+
+  /**
+   * Get page label for a page number.
+   * Returns the label, or the page number as string if no label exists.
+   */
+  getPageLabel(pageNumber: number): string {
+    if (this.pageLabels && this.pageLabels[pageNumber - 1]) {
+      return this.pageLabels[pageNumber - 1] as string;
+    }
+    return String(pageNumber);
   }
 
   setDocument(pdfDocument: PDFDocumentProxy): void {
@@ -64,8 +122,63 @@ export default class LinkService implements IPDFLinkService {
     this.externalLinkTarget = externalLinkTarget;
   }
 
-  setHash(): void {
-    // Intentionally empty
+  /**
+   * Update the URL hash with the current page label.
+   * Called when navigation occurs if hash sync is enabled.
+   */
+  setHash(hash?: string): void {
+    if (!this._syncHashEnabled) {
+      return;
+    }
+
+    if (typeof window === 'undefined') {
+      return;
+    }
+
+    // If a hash is provided, use it directly
+    if (hash) {
+      window.history.replaceState(null, '', hash);
+      return;
+    }
+
+    // Otherwise, update hash based on current page
+    const pageNumber = this.page;
+    if (pageNumber > 0) {
+      const label = this.getPageLabel(pageNumber);
+      window.history.replaceState(null, '', `#page=${encodeURIComponent(label)}`);
+    }
+  }
+
+  /**
+   * Parse the URL hash and navigate to the specified page.
+   * Supports formats: #page=<label> or #page=<number>
+   * Returns the page number if found, or null.
+   */
+  parseHashAndNavigate(): number | null {
+    if (typeof window === 'undefined') {
+      return null;
+    }
+
+    const hash = window.location.hash;
+    if (!hash) {
+      return null;
+    }
+
+    // Parse #page=<label> format
+    const match = hash.match(/^#page=(.+)$/);
+    if (!match || !match[1]) {
+      return null;
+    }
+
+    const label = decodeURIComponent(match[1]);
+    const pageNumber = this.getPageNumberFromLabel(label);
+
+    if (pageNumber !== null) {
+      this.goToPage(pageNumber);
+      return pageNumber;
+    }
+
+    return null;
   }
 
   setHistory(): void {
