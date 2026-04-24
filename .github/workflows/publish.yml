@@ -32,7 +32,7 @@ jobs:
       - name: Use Node.js
         uses: actions/setup-node@v6
         with:
-          node-version: '24.14.1'
+          node-version: '24'
           registry-url: 'https://registry.npmjs.org'
 
       - name: Install Corepack
