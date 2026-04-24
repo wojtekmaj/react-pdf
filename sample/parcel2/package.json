@@ -30,5 +30,5 @@
     "process": "^0.11.10",
     "typescript": "^6.0.2"
   },
-  "packageManager": "yarn@4.14.0"
+  "packageManager": "yarn@4.14.1"
 }

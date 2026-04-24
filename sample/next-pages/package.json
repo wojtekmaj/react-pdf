@@ -21,5 +21,5 @@
     "react-dom": "^19.2.0",
     "react-pdf": "latest"
   },
-  "packageManager": "yarn@4.14.0"
+  "packageManager": "yarn@4.14.1"
 }

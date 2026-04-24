@@ -25,5 +25,5 @@
     "vite": "^8.0.5",
     "vite-plugin-static-copy": "^4.0.1"
   },
-  "packageManager": "yarn@4.14.0"
+  "packageManager": "yarn@4.14.1"
 }
