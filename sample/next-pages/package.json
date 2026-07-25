@@ -22,7 +22,8 @@
     "react-pdf": "latest"
   },
   "resolutions": {
-    "postcss@8.4.31": "^8.5.10"
+    "postcss@8.4.31": "^8.5.10",
+    "sharp@^0.34.5": "^0.35.3"
   },
   "packageManager": "yarn@4.17.1"
 }
