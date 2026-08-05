@@ -108,8 +108,8 @@ export default function Canvas(props: CanvasProps): React.ReactElement {
       canvas.width = renderViewport.width;
       canvas.height = renderViewport.height;
 
-      canvas.style.width = `${Math.floor(viewport.width)}px`;
-      canvas.style.height = `${Math.floor(viewport.height)}px`;
+      canvas.style.width = `${Math.floor(viewport.width) * pdfjs.PixelsPerInch.PDF_TO_CSS_UNITS}pt`;
+      canvas.style.height = `${Math.floor(viewport.height) * pdfjs.PixelsPerInch.PDF_TO_CSS_UNITS}pt`;
       canvas.style.visibility = 'hidden';
 
       const renderContext: RenderParameters = {
