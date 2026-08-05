@@ -1,16 +1,14 @@
-import { beforeAll, describe, expect, it, vi } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import { page, userEvent } from 'vitest/browser';
 import { render } from 'vitest-browser-react';
 import { createRef } from 'react';
 
 import Document from './Document.js';
 import DocumentContext from './DocumentContext.js';
-import { pdfjs } from './index.test.js';
 import Page from './Page.js';
 
 import { loadPDF, makeAsyncCallback, muteConsole, restoreConsole } from '../../../test-utils.js';
 
-import type { PDFDocumentProxy } from 'pdfjs-dist';
 import type LinkService from './LinkService.js';
 import type { ScrollPageIntoViewArgs } from './shared/types.js';
 
@@ -48,17 +46,9 @@ async function waitForAsync() {
 }
 
 describe('Document', () => {
-  // Object with basic loaded PDF information that shall match after successful loading
-  const desiredLoadedPdf: Partial<PDFDocumentProxy> = {};
-  const desiredLoadedPdf2: Partial<PDFDocumentProxy> = {};
-
-  beforeAll(async () => {
-    const pdf = await pdfjs.getDocument({ data: pdfFile.arrayBuffer }).promise;
-    desiredLoadedPdf._pdfInfo = pdf._pdfInfo;
-
-    const pdf2 = await pdfjs.getDocument({ data: pdfFile2.arrayBuffer }).promise;
-    desiredLoadedPdf2._pdfInfo = pdf2._pdfInfo;
-  });
+  // Assert public callback fields, not PDF.js internal _pdfInfo properties.
+  const desiredLoadedPdf = { numPages: 4 };
+  const desiredLoadedPdf2 = { numPages: 5 };
 
   describe('loading', () => {
     it('loads a file and calls onSourceSuccess and onLoadSuccess callbacks via data URI properly', async () => {

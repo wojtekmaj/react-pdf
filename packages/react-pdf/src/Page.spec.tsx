@@ -13,7 +13,7 @@ import silentlyFailingPdf from '../../../__mocks__/_silently_failing_pdf.js';
 
 import { loadPDF, makeAsyncCallback, muteConsole, restoreConsole } from '../../../test-utils.js';
 
-import type { PDFDocumentProxy, PDFPageProxy } from 'pdfjs-dist';
+import type { PDFDocumentProxy } from 'pdfjs-dist';
 import type { DocumentContextType, PageCallback } from './shared/types.js';
 
 const pdfFile = await loadPDF('../../__mocks__/_pdf.pdf');
@@ -57,34 +57,19 @@ describe('Page', () => {
   let pdf4: PDFDocumentProxy;
   let pdf5: PDFDocumentProxy;
 
-  // Object with basic loaded page information that shall match after successful loading
-  const desiredLoadedPage: Partial<PDFPageProxy> = {};
-  const desiredLoadedPage2: Partial<PDFPageProxy> = {};
-  const desiredLoadedPage3: Partial<PDFPageProxy> = {};
+  // Assert public callback fields, not PDF.js internal _page* properties.
+  const desiredLoadedPage = { pageNumber: 1 };
+  const desiredLoadedPage2 = { pageNumber: 2 };
+  const desiredLoadedPage3 = { pageNumber: 1 };
 
   // Callbacks used in registerPage and unregisterPage callbacks
-  let registerPageArguments: [number, HTMLDivElement];
-  let unregisterPageArguments: [number];
+  const registerPageArguments: [number, HTMLDivElement] = [0, expect.any(HTMLDivElement)];
+  const unregisterPageArguments: [number] = [0];
 
   beforeAll(async () => {
     pdf = await pdfjs.getDocument({ data: pdfFile.arrayBuffer }).promise;
 
-    const page = await pdf.getPage(1);
-    desiredLoadedPage._pageIndex = page._pageIndex;
-    desiredLoadedPage._pageInfo = page._pageInfo;
-
-    const page2 = await pdf.getPage(2);
-    desiredLoadedPage2._pageIndex = page2._pageIndex;
-    desiredLoadedPage2._pageInfo = page2._pageInfo;
-
     pdf2 = await pdfjs.getDocument({ data: pdfFile2.arrayBuffer }).promise;
-
-    const page3 = await pdf2.getPage(1);
-    desiredLoadedPage3._pageIndex = page3._pageIndex;
-    desiredLoadedPage3._pageInfo = page3._pageInfo;
-
-    registerPageArguments = [page._pageIndex, expect.any(HTMLDivElement)];
-    unregisterPageArguments = [page._pageIndex];
 
     pdf4 = await pdfjs.getDocument({ data: pdfFile4.arrayBuffer }).promise;
 

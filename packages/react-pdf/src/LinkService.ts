@@ -12,10 +12,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { EventBus, SimpleLinkService } from 'pdfjs-dist/web/pdf_viewer.mjs';
 import invariant from 'tiny-invariant';
 
 import type { PDFDocumentProxy } from 'pdfjs-dist';
-import type { IPDFLinkService } from 'pdfjs-dist/types/web/interfaces.js';
 import type {
   Dest,
   ExternalLinkRel,
@@ -31,78 +31,56 @@ type PDFViewer = {
   scrollPageIntoView: (args: ScrollPageIntoViewArgs) => void;
 };
 
-export default class LinkService implements IPDFLinkService {
-  externalLinkEnabled: boolean;
-  externalLinkRel?: ExternalLinkRel;
-  externalLinkTarget?: ExternalLinkTarget;
-  isInPresentationMode: boolean;
-  pdfDocument?: PDFDocumentProxy | null;
-  pdfViewer?: PDFViewer | null;
+export default class LinkService extends SimpleLinkService {
+  declare pdfDocument: PDFDocumentProxy | null;
+  declare pdfViewer: PDFViewer | null;
+
+  #externalLinkRel?: ExternalLinkRel;
+  #externalLinkTarget?: ExternalLinkTarget;
 
   constructor() {
-    this.externalLinkEnabled = true;
-    this.externalLinkRel = undefined;
-    this.externalLinkTarget = undefined;
-    this.isInPresentationMode = false;
-    this.pdfDocument = undefined;
-    this.pdfViewer = undefined;
+    super({ eventBus: new EventBus() });
   }
 
-  setDocument(pdfDocument: PDFDocumentProxy): void {
+  override setDocument(pdfDocument: PDFDocumentProxy): void {
     this.pdfDocument = pdfDocument;
   }
 
-  setViewer(pdfViewer: PDFViewer): void {
+  override setViewer(pdfViewer: PDFViewer): void {
     this.pdfViewer = pdfViewer;
   }
 
   setExternalLinkRel(externalLinkRel?: ExternalLinkRel): void {
-    this.externalLinkRel = externalLinkRel;
+    this.#externalLinkRel = externalLinkRel;
   }
 
   setExternalLinkTarget(externalLinkTarget?: ExternalLinkTarget): void {
-    this.externalLinkTarget = externalLinkTarget;
+    this.#externalLinkTarget = externalLinkTarget;
   }
 
-  setHash(): void {
-    // Intentionally empty
-  }
-
-  setHistory(): void {
-    // Intentionally empty
-  }
-
-  get pagesCount(): number {
+  override get pagesCount(): number {
     return this.pdfDocument ? this.pdfDocument.numPages : 0;
   }
 
-  get page(): number {
+  override get page(): number {
     invariant(this.pdfViewer, 'PDF viewer is not initialized.');
 
     return this.pdfViewer.currentPageNumber || 0;
   }
 
-  set page(value: number) {
+  override set page(value: number) {
     invariant(this.pdfViewer, 'PDF viewer is not initialized.');
 
     this.pdfViewer.currentPageNumber = value;
   }
 
-  get rotation(): number {
-    return 0;
-  }
-
-  set rotation(_value) {
-    // Intentionally empty
-  }
-
-  addLinkAttributes(link: HTMLAnchorElement, url: string, newWindow: boolean): void {
+  override addLinkAttributes(link: HTMLAnchorElement, url: string, newWindow?: boolean): void {
     link.href = url;
-    link.rel = this.externalLinkRel || DEFAULT_LINK_REL;
-    link.target = newWindow ? '_blank' : this.externalLinkTarget || '';
+    link.rel = this.#externalLinkRel || DEFAULT_LINK_REL;
+    link.target = newWindow ? '_blank' : this.#externalLinkTarget || '';
   }
 
-  goToDestination(dest: Dest): Promise<void> {
+  override goToDestination(dest: Dest): Promise<void> {
     return new Promise<ResolvedDest | null>((resolve) => {
       invariant(this.pdfDocument, 'PDF document not loaded.');
 
@@ -156,7 +134,7 @@ export default class LinkService implements IPDFLinkService {
     });
   }
 
-  goToPage(pageNumber: number): void {
+  override goToPage(pageNumber: number): void {
     const pageIndex = pageNumber - 1;
 
     invariant(this.pdfViewer, 'PDF viewer is not initialized.');
@@ -172,30 +150,6 @@ export default class LinkService implements IPDFLinkService {
     });
   }
 
-  goToXY(): void {
-    // Intentionally empty
-  }
-
-  cachePageRef(): void {
-    // Intentionally empty
-  }
-
-  getDestinationHash(): string {
-    return '#';
-  }
-
-  getAnchorUrl(): string {
-    return '#';
-  }
-
-  executeNamedAction(): void {
-    // Intentionally empty
-  }
-
-  executeSetOCGState(): void {
-    // Intentionally empty
-  }
-
   isPageVisible(): boolean {
     return true;
   }
@@ -206,5 +160,9 @@ export default class LinkService implements IPDFLinkService {
 
   navigateTo(dest: Dest): void {
     this.goToDestination(dest);
+  }
+
+  override async executeSetOCGState(): Promise<void> {
+    // Intentionally empty
   }
 }
