@@ -8,6 +8,7 @@ import type { AnnotationLayerParameters } from 'pdfjs-dist/types/src/display/ann
 import type {
   DocumentInitParameters,
   RefProxy,
+  RenderParameters,
   StructTreeNode,
   TextContent,
   TextItem,
@@ -125,7 +126,7 @@ export type OnRenderAnnotationLayerSuccess = () => void;
 
 export type OnRenderError = OnError;
 
-export type OnRenderSuccess = (page: PageCallback) => void;
+export type OnRenderSuccess = (page: PageCallback, renderContext: RenderParameters) => void;
 
 export type OnRenderTextLayerError = OnError;
 
