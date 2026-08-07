@@ -10,6 +10,7 @@ import invariant from 'tiny-invariant';
 import warning from 'warning';
 
 import DocumentContext from './DocumentContext.js';
+import EventBus from './EventBus.js';
 import LinkService from './LinkService.js';
 import Message from './Message.js';
 import PasswordResponses from './PasswordResponses.js';
@@ -244,6 +245,7 @@ function isParameterObject(file: File): file is Source {
 const Document: React.ForwardRefExoticComponent<
   DocumentProps &
     React.RefAttributes<{
+      eventBus: React.RefObject<EventBus>;
       linkService: React.RefObject<LinkService>;
       pages: React.RefObject<HTMLDivElement[]>;
       viewer: React.RefObject<{ scrollPageIntoView: (args: ScrollPageIntoViewArgs) => void }>;
@@ -280,6 +282,7 @@ const Document: React.ForwardRefExoticComponent<
   const [pdfState, pdfDispatch] = useResolver<PDFDocumentProxy>();
   const { value: pdf, error: pdfError } = pdfState;
 
+  const eventBus = useRef(new EventBus());
   const linkService = useRef(new LinkService());
 
   const pages = useRef<HTMLDivElement[]>([]);
@@ -336,6 +339,7 @@ const Document: React.ForwardRefExoticComponent<
   useImperativeHandle(
     ref,
     () => ({
+      eventBus,
       linkService,
       pages,
       viewer,
