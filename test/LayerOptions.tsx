@@ -1,37 +1,41 @@
 import { useId } from 'react';
 
+import type { AnnotationMode } from 'react-pdf';
+
 type LayerOptionsProps = {
+  annotationMode?: keyof typeof AnnotationMode;
   renderAnnotationLayer: boolean;
-  renderForms: boolean;
   renderTextLayer: boolean;
   useCustomTextRenderer: boolean;
+  setAnnotationMode: (value: keyof typeof AnnotationMode | undefined) => void;
   setRenderAnnotationLayer: (value: boolean) => void;
-  setRenderForms: (value: boolean) => void;
   setRenderTextLayer: (value: boolean) => void;
   setUseCustomTextRenderer: (value: boolean) => void;
 };
 
 export default function LayerOptions({
+  annotationMode,
   renderAnnotationLayer,
-  renderForms,
   renderTextLayer,
   useCustomTextRenderer,
+  setAnnotationMode,
   setRenderAnnotationLayer,
-  setRenderForms,
   setRenderTextLayer,
   setUseCustomTextRenderer,
 }: LayerOptionsProps) {
+  const annotationModeId = useId();
   const renderTextLayerId = useId();
   const useCustomTextRendererId = useId();
   const renderAnnotationLayerId = useId();
-  const renderFormsId = useId();
+
+  function onAnnotationModeChange(event: React.ChangeEvent<HTMLSelectElement>) {
+    const { value } = event.target;
+
+    setAnnotationMode(value ? (value as keyof typeof AnnotationMode) : undefined);
+  }
 
   function onRenderAnnotationLayerChange(event: React.ChangeEvent<HTMLInputElement>) {
     setRenderAnnotationLayer(event.target.checked);
-  }
-
-  function onRenderFormsChange(event: React.ChangeEvent<HTMLInputElement>) {
-    setRenderForms(event.target.checked);
   }
 
   function onRenderTextLayersChange(event: React.ChangeEvent<HTMLInputElement>) {
@@ -45,6 +49,15 @@ export default function LayerOptions({
   return (
     <fieldset>
       <legend>Layer options</legend>
+
+      <label htmlFor={annotationModeId}>Annotation mode:</label>
+      <select id={annotationModeId} onChange={onAnnotationModeChange} value={annotationMode ?? ''}>
+        <option value="">Default</option>
+        <option value="DISABLE">DISABLE</option>
+        <option value="ENABLE">ENABLE</option>
+        <option value="ENABLE_FORMS">ENABLE_FORMS</option>
+        <option value="ENABLE_STORAGE">ENABLE_STORAGE</option>
+      </select>
 
       <div>
         <input
@@ -75,17 +88,6 @@ export default function LayerOptions({
           type="checkbox"
         />
         <label htmlFor={renderAnnotationLayerId}>Render annotation layer</label>
-      </div>
-
-      <div>
-        <input
-          checked={renderAnnotationLayer ? renderForms : false}
-          disabled={!renderAnnotationLayer}
-          id={renderFormsId}
-          onChange={onRenderFormsChange}
-          type="checkbox"
-        />
-        <label htmlFor={renderFormsId}>Render forms</label>
       </div>
     </fieldset>
   );

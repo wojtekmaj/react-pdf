@@ -29,7 +29,7 @@ export default function AnnotationOptions({
     <fieldset>
       <legend>Annotation options</legend>
 
-      <label htmlFor={targetUnsetId}>External link target</label>
+      <label htmlFor={targetUnsetId}>External link target:</label>
       <div>
         <input
           checked={externalLinkTarget === undefined}

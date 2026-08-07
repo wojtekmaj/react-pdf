@@ -14,6 +14,7 @@ import type { ClassName, OnItemClickArgs } from './shared/types.js';
 
 export type ThumbnailProps = Omit<
   PageProps,
+  | 'annotationMode'
   | 'className'
   | 'customTextRenderer'
   | 'onGetAnnotationsError'

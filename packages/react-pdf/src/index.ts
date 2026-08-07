@@ -1,5 +1,6 @@
 import * as pdfjs from 'pdfjs-dist';
 
+import AnnotationMode from './AnnotationMode.js';
 import Document from './Document.js';
 import Outline from './Outline.js';
 import Page from './Page.js';
@@ -32,6 +33,7 @@ displayWorkerWarning();
 pdfjs.GlobalWorkerOptions.workerSrc = 'pdf.worker.mjs';
 
 export {
+  AnnotationMode,
   Document,
   Outline,
   Page,

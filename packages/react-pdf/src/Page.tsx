@@ -8,6 +8,7 @@ import mergeRefs from 'merge-refs';
 import invariant from 'tiny-invariant';
 import warning from 'warning';
 
+import AnnotationMode from './AnnotationMode.js';
 import Message from './Message.js';
 import AnnotationLayer from './Page/AnnotationLayer.js';
 import Canvas from './Page/Canvas.js';
@@ -53,6 +54,13 @@ const defaultScale = 1;
 export type PageProps = {
   _className?: string;
   _enableRegisterUnregisterPage?: boolean;
+  /**
+   * Controls which annotations are rendered on the page canvas. When defined, this prop takes precedence over `renderForms`.
+   *
+   * @default AnnotationMode.ENABLE
+   * @example AnnotationMode.ENABLE_FORMS
+   */
+  annotationMode?: (typeof AnnotationMode)[keyof typeof AnnotationMode];
   /**
    * Canvas background color. Any valid `canvas.fillStyle` can be used.
    *
@@ -322,6 +330,7 @@ export default function Page(props: PageProps): React.ReactElement {
   const {
     _className = 'react-pdf__Page',
     _enableRegisterUnregisterPage = true,
+    annotationMode: annotationModeProps,
     canvasBackground,
     canvasRef,
     children,
@@ -355,7 +364,7 @@ export default function Page(props: PageProps): React.ReactElement {
     pdf,
     registerPage,
     renderAnnotationLayer: renderAnnotationLayerProps = true,
-    renderForms = false,
+    renderForms: renderFormsProps = false,
     renderMode = 'canvas',
     renderTextLayer: renderTextLayerProps = true,
     rotate: rotateProps,
@@ -377,6 +386,11 @@ export default function Page(props: PageProps): React.ReactElement {
   const pageIndex = isProvided(pageNumberProps) ? pageNumberProps - 1 : (pageIndexProps ?? null);
 
   const pageNumber = pageNumberProps ?? (isProvided(pageIndexProps) ? pageIndexProps + 1 : null);
+
+  const annotationMode =
+    annotationModeProps ?? (renderFormsProps ? AnnotationMode.ENABLE_FORMS : AnnotationMode.ENABLE);
+
+  const renderForms = annotationMode === AnnotationMode.ENABLE_FORMS;
 
   const rotate = rotateProps ?? (page ? page.rotate : null);
 
@@ -510,6 +524,7 @@ export default function Page(props: PageProps): React.ReactElement {
       isProvided(pageIndex) && pageNumber && isProvided(rotate) && isProvided(scale)
         ? {
             _className,
+            annotationMode,
             canvasBackground,
             customTextRenderer,
             devicePixelRatio,
@@ -538,6 +553,7 @@ export default function Page(props: PageProps): React.ReactElement {
         : null,
     [
       _className,
+      annotationMode,
       canvasBackground,
       customTextRenderer,
       devicePixelRatio,
