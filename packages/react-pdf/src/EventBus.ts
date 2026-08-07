@@ -12,11 +12,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import invariant from 'tiny-invariant';
-
 type Data = unknown;
 
 type Listener = (data: Data) => void;
+
+type ListenerEntry = {
+  external: boolean;
+  listener: Listener;
+  once: boolean;
+  removeAbortListener: (() => void) | null;
+};
 
 type Options = {
   external?: boolean;
@@ -25,10 +30,10 @@ type Options = {
 };
 
 export default class EventBus {
-  #listeners = Object.create(null);
+  #listeners: Record<string, ListenerEntry[] | undefined> = Object.create(null);
 
   on(eventName: string, listener: Listener, options: Options | null = null): void {
-    this.#on(eventName, listener, {
+    this._on(eventName, listener, {
       external: true,
       once: options?.once,
       signal: options?.signal,
@@ -36,7 +41,7 @@ export default class EventBus {
   }
 
   off(eventName: string, listener: Listener, options: Options | null = null): void {
-    this.#off(eventName, listener, options);
+    this._off(eventName, listener, options);
   }
 
   dispatch(eventName: string, data: Data): void {
@@ -45,15 +50,16 @@ export default class EventBus {
       return;
     }
 
-    let externalListeners: Listener[] | null = [];
+    let externalListeners: Listener[] | undefined;
     // Making copy of the listeners array in case if it will be modified
     // during dispatch.
     for (const { listener, external, once } of eventListeners.slice(0)) {
       if (once) {
-        this.#off(eventName, listener);
+        this._off(eventName, listener);
       }
 
       if (external) {
+        externalListeners ??= [];
         externalListeners.push(listener);
         continue;
       }
@@ -68,21 +74,23 @@ export default class EventBus {
         listener(data);
       }
 
-      externalListeners = null;
+      externalListeners = undefined;
     }
   }
 
-  #on(eventName: string, listener: Listener, options: Options | null = null) {
-    let rmAbort = null;
+  _on(eventName: string, listener: Listener, options: Options | null = null): void {
+    let removeAbortListener = null;
 
     if (options?.signal instanceof AbortSignal) {
       const { signal } = options;
 
-      invariant(!signal.aborted, 'Cannot use an `aborted` signal.');
+      if (signal.aborted) {
+        return;
+      }
 
-      const onAbort = () => this.#off(eventName, listener);
+      const onAbort = () => this._off(eventName, listener);
 
-      rmAbort = () => signal.removeEventListener('abort', onAbort);
+      removeAbortListener = () => signal.removeEventListener('abort', onAbort);
 
       signal.addEventListener('abort', onAbort);
     }
@@ -98,11 +106,11 @@ export default class EventBus {
       listener,
       external: options?.external === true,
       once: options?.once === true,
-      rmAbort,
+      removeAbortListener,
     });
   }
 
-  #off(eventName: string, listener: Listener, _options: Options | null = null) {
+  _off(eventName: string, listener: Listener, _options: Options | null = null): void {
     const eventListeners = this.#listeners[eventName];
 
     if (!eventListeners) {
@@ -112,8 +120,8 @@ export default class EventBus {
     for (let i = 0, ii = eventListeners.length; i < ii; i++) {
       const evt = eventListeners[i];
 
-      if (evt.listener === listener) {
-        evt.rmAbort?.(); // Ensure that the `AbortSignal` listener is removed.
+      if (evt?.listener === listener) {
+        evt.removeAbortListener?.();
         eventListeners.splice(i, 1);
         return;
       }

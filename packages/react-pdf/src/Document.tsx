@@ -10,6 +10,7 @@ import invariant from 'tiny-invariant';
 import warning from 'warning';
 
 import DocumentContext from './DocumentContext.js';
+import EventBus from './EventBus.js';
 import LinkService from './LinkService.js';
 import Message from './Message.js';
 import PasswordResponses from './PasswordResponses.js';
@@ -52,7 +53,6 @@ import type {
   ScrollPageIntoViewArgs,
   Source,
 } from './shared/types.js';
-import EventBus from './EventBus.js';
 
 const { PDFDataRangeTransport } = pdfjs;
 
@@ -245,6 +245,7 @@ function isParameterObject(file: File): file is Source {
 const Document: React.ForwardRefExoticComponent<
   DocumentProps &
     React.RefAttributes<{
+      eventBus: React.RefObject<EventBus>;
       linkService: React.RefObject<LinkService>;
       pages: React.RefObject<HTMLDivElement[]>;
       viewer: React.RefObject<{ scrollPageIntoView: (args: ScrollPageIntoViewArgs) => void }>;

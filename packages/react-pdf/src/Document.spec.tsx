@@ -5,6 +5,7 @@ import { createRef } from 'react';
 
 import Document from './Document.js';
 import DocumentContext from './DocumentContext.js';
+import EventBus from './EventBus.js';
 import { pdfjs } from './index.test.js';
 import Page from './Page.js';
 
@@ -491,6 +492,7 @@ describe('Document', () => {
 
       const onItemClick = vi.fn();
       const instance = createRef<{
+        eventBus: React.RefObject<EventBus>;
         linkService: React.RefObject<LinkService>;
         pages: React.RefObject<HTMLDivElement[]>;
         viewer: React.RefObject<{ scrollPageIntoView: (args: ScrollPageIntoViewArgs) => void }>;
@@ -532,6 +534,7 @@ describe('Document', () => {
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
       const instance = createRef<{
+        eventBus: React.RefObject<EventBus>;
         linkService: React.RefObject<LinkService>;
         // biome-ignore lint/suspicious/noExplicitAny: Intentional use to simplify the test
         pages: React.RefObject<any[]>;
@@ -569,6 +572,16 @@ describe('Document', () => {
       instance.current.viewer.current.scrollPageIntoView({ dest, pageIndex, pageNumber });
 
       expect(scrollIntoView).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  describe('eventBus', () => {
+    it('exposes an EventBus instance through the Document ref', async () => {
+      const instance = createRef<React.ElementRef<typeof Document>>();
+
+      await render(<Document ref={instance} />);
+
+      expect(instance.current?.eventBus.current).toBeInstanceOf(EventBus);
     });
   });
 
