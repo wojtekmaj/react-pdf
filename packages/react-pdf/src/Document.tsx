@@ -548,6 +548,9 @@ const Document: React.ForwardRefExoticComponent<
 
       return () => {
         loadingTask.destroy();
+
+        // Destroyed loading task leaves behind a dead PDFDocumentProxy
+        pdfDispatch({ type: 'RESET' });
       };
     },
     [options, pdfDispatch, source],

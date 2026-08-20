@@ -1,6 +1,7 @@
 import { beforeAll, describe, expect, it, vi } from 'vitest';
 import { page, userEvent } from 'vitest/browser';
 import { render } from 'vitest-browser-react';
+import * as React from 'react';
 import { createRef } from 'react';
 
 import Document from './Document.js';
@@ -18,6 +19,16 @@ const pdfFile = await loadPDF('../../__mocks__/_pdf.pdf');
 const pdfFile2 = await loadPDF('../../__mocks__/_pdf2.pdf');
 
 const OK = Symbol('OK');
+
+// Activity is only available in React 19.2 and later
+const { Activity } = React as unknown as {
+  Activity: React.ComponentType<{
+    children?: React.ReactNode;
+    mode: 'hidden' | 'visible';
+  }>;
+};
+
+const itIfActivityDefined = it.runIf(typeof Activity !== 'undefined');
 
 function ChildInternal({
   renderMode,
@@ -766,4 +777,26 @@ describe('Document', () => {
 
     expect(unmount).not.toThrowError();
   });
+
+  itIfActivityDefined(
+    'does not throw an error when hidden and revealed by <Activity>',
+    async () => {
+      const onRenderTextLayerSuccess = vi.fn();
+
+      const children = (
+        <Document file={pdfFile.dataURI}>
+          <Page onRenderTextLayerSuccess={onRenderTextLayerSuccess} pageNumber={1} />
+        </Document>
+      );
+
+      const { rerender } = await render(<Activity mode="visible">{children}</Activity>);
+
+      await vi.waitFor(() => expect(onRenderTextLayerSuccess).toHaveBeenCalledTimes(1));
+
+      await rerender(<Activity mode="hidden">{children}</Activity>);
+      await rerender(<Activity mode="visible">{children}</Activity>);
+
+      await vi.waitFor(() => expect(onRenderTextLayerSuccess).toHaveBeenCalledTimes(2));
+    },
+  );
 });
