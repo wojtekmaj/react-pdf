@@ -188,18 +188,14 @@ export default function AnnotationLayer(): React.ReactElement {
 
       layer.innerHTML = '';
 
-      try {
-        new pdfjs.AnnotationLayer(annotationLayerParameters).render(renderParameters);
+      const cancellable = makeCancellable(
+        new pdfjs.AnnotationLayer(annotationLayerParameters).render(renderParameters),
+      );
+      const runningTask = cancellable;
 
-        // Intentional immediate callback
-        onRenderSuccess();
-      } catch (error) {
-        onRenderError(error);
-      }
+      cancellable.promise.then(onRenderSuccess).catch(onRenderError);
 
-      return () => {
-        // TODO: Cancel running task?
-      };
+      return () => cancelRunningTask(runningTask);
     },
     [
       annotations,

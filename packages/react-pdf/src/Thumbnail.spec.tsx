@@ -13,7 +13,7 @@ import silentlyFailingPdf from '../../../__mocks__/_silently_failing_pdf.js';
 
 import { loadPDF, makeAsyncCallback, muteConsole, restoreConsole } from '../../../test-utils.js';
 
-import type { PDFDocumentProxy, PDFPageProxy } from 'pdfjs-dist';
+import type { PDFDocumentProxy } from 'pdfjs-dist';
 import type { DocumentContextType, PageCallback } from './shared/types.js';
 
 const pdfFile = await loadPDF('../../__mocks__/_pdf.pdf');
@@ -51,29 +51,17 @@ describe('Thumbnail', () => {
   let pdf: PDFDocumentProxy;
   let pdf2: PDFDocumentProxy;
 
-  // Object with basic loaded page information that shall match after successful loading
-  const desiredLoadedThumbnail: Partial<PDFPageProxy> = {};
-  const desiredLoadedThumbnail2: Partial<PDFPageProxy> = {};
-  const desiredLoadedThumbnail3: Partial<PDFPageProxy> = {};
+  // Assert public callback fields, not PDF.js internal _page* properties.
+  const desiredLoadedThumbnail = { pageNumber: 1 };
+  const desiredLoadedThumbnail2 = { pageNumber: 2 };
+  const desiredLoadedThumbnail3 = { pageNumber: 1 };
 
   const linkService = new LinkService();
 
   beforeAll(async () => {
     pdf = await pdfjs.getDocument({ data: pdfFile.arrayBuffer }).promise;
 
-    const page = await pdf.getPage(1);
-    desiredLoadedThumbnail._pageIndex = page._pageIndex;
-    desiredLoadedThumbnail._pageInfo = page._pageInfo;
-
-    const page2 = await pdf.getPage(2);
-    desiredLoadedThumbnail2._pageIndex = page2._pageIndex;
-    desiredLoadedThumbnail2._pageInfo = page2._pageInfo;
-
     pdf2 = await pdfjs.getDocument({ data: pdfFile2.arrayBuffer }).promise;
-
-    const page3 = await pdf2.getPage(1);
-    desiredLoadedThumbnail3._pageIndex = page3._pageIndex;
-    desiredLoadedThumbnail3._pageInfo = page3._pageInfo;
   });
 
   describe('loading', () => {
