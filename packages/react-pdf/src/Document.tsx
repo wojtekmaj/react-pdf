@@ -73,6 +73,22 @@ export type DocumentProps = {
    */
   className?: ClassName;
   /**
+   * If true, reads the URL hash on load and navigates to the page specified by `#page=<label>`.
+   * Supports both page numbers (e.g., `#page=5`) and page labels (e.g., `#page=iv`).
+   *
+   * @default false
+   * @example true
+   */
+  enableUrlHash?: boolean;
+  /**
+   * If true, updates the URL hash when navigating to a different page.
+   * Requires `enableUrlHash` to be true.
+   *
+   * @default false
+   * @example true
+   */
+  syncUrlHash?: boolean;
+  /**
    * What the component should display in case of an error.
    *
    * @default 'Failed to load PDF file.'
@@ -252,6 +268,7 @@ const Document: React.ForwardRefExoticComponent<
   {
     children,
     className,
+    enableUrlHash = false,
     error = 'Failed to load PDF file.',
     externalLinkRel,
     externalLinkTarget,
@@ -271,6 +288,7 @@ const Document: React.ForwardRefExoticComponent<
     renderMode,
     rotate,
     scale,
+    syncUrlHash = false,
     ...otherProps
   },
   ref,
@@ -310,6 +328,11 @@ const Document: React.ForwardRefExoticComponent<
     // Handling jumping to internal links target
     scrollPageIntoView: (args: ScrollPageIntoViewArgs) => {
       const { dest, pageNumber, pageIndex = pageNumber - 1 } = args;
+
+      // Update URL hash if sync is enabled
+      if (syncUrlHash && enableUrlHash) {
+        linkService.current.setHash();
+      }
 
       // First, check if custom handling of onItemClick was provided
       if (onItemClick) {
@@ -484,6 +507,22 @@ const Document: React.ForwardRefExoticComponent<
 
     pages.current = new Array(pdf.numPages);
     linkService.current.setDocument(pdf);
+
+    // Fetch page labels and set up URL hash handling
+    if (enableUrlHash) {
+      linkService.current.setSyncHashEnabled(syncUrlHash);
+
+      // Fetch page labels from the PDF
+      pdf.getPageLabels().then((labels) => {
+        linkService.current.setPageLabels(labels);
+
+        // After setting labels, try to navigate to the hash-specified page
+        // Use a small delay to ensure pages are registered
+        setTimeout(() => {
+          linkService.current.parseHashAndNavigate();
+        }, 100);
+      });
+    }
   }
 
   /**
