@@ -288,6 +288,50 @@ describe('AnnotationLayer', () => {
       },
     );
 
+    it('renders all links with proper ARIA labels', async () => {
+      const {
+        func: onRenderAnnotationLayerSuccess,
+        promise: onRenderAnnotationLayerSuccessPromise,
+      } = makeAsyncCallback();
+
+      const { container } = await renderWithContext(
+        <AnnotationLayer />,
+        {
+          linkService,
+          pdf,
+        },
+        {
+          onRenderAnnotationLayerSuccess,
+          page,
+        },
+      );
+
+      expect.assertions(desiredAnnotations.length);
+
+      await onRenderAnnotationLayerSuccessPromise;
+
+      const wrapper = container.firstElementChild as HTMLDivElement;
+      const annotationItems = Array.from(wrapper.children);
+      const annotationLinkItems = annotationItems
+        .map((item) => item.firstChild as HTMLElement)
+        .filter((item) => item.tagName === 'A');
+
+      for (const link of annotationLinkItems) {
+        const matchingAnnotation = desiredAnnotations.find(
+          (annotation) => annotation.url === link.getAttribute('href'),
+        );
+
+        if (!matchingAnnotation) {
+          throw new Error('Matching annotation not found');
+        }
+
+        expect(link).toHaveAttribute(
+          'aria-label',
+          matchingAnnotation.overlaidText ? String(matchingAnnotation.overlaidText).trim() : '',
+        );
+      }
+    });
+
     it('renders annotations with the default imageResourcesPath given no imageResourcesPath', async () => {
       const pdf = await pdfjs.getDocument({ data: annotatedPdfFile.arrayBuffer }).promise;
       const annotatedPage = await pdf.getPage(1);
