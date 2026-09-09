@@ -252,7 +252,9 @@ describe('TextLayer', () => {
 
       await onRenderTextLayerSuccessPromise;
 
-      expect(container).toHaveTextContent('Test value');
+      const textItems = getTextItems(container);
+
+      expect(textItems[0]).toHaveTextContent('Test value');
     });
 
     it('renders text content properly given customTextRenderer and untagged document', async () => {
@@ -274,7 +276,9 @@ describe('TextLayer', () => {
 
       await onRenderTextLayerSuccessPromise;
 
-      expect(container).toHaveTextContent('Test value');
+      const textItems = getTextItems(container);
+
+      expect(textItems[0]).toHaveTextContent('Test value');
     });
 
     it('renders HTML formatting from customTextRenderer output', async () => {
