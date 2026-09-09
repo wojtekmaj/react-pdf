@@ -52,13 +52,13 @@
     "@types/react": "^19.2.0",
     "@types/react-dom": "^19.2.0",
     "@types/warning": "^3.0.0",
-    "@vitest/browser-playwright": "^4.1.10",
+    "@vitest/browser-playwright": "^5.0.0",
     "cpy-cli": "^5.0.0",
     "playwright": "^1.60.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "typescript": "^7.0.2",
-    "vitest": "^4.1.10",
+    "vitest": "^5.0.0",
     "vitest-browser-react": "^2.3.0"
   },
   "peerDependencies": {
