@@ -175,8 +175,12 @@ export default function AnnotationLayer(): React.ReactElement {
         viewport: clonedViewport,
       };
 
+      const filteredAnnotations = filterAnnotations
+        ? filterAnnotations({ annotations })
+        : annotations;
+
       const renderParameters: AnnotationLayerParameters = {
-        annotations: filterAnnotations ? filterAnnotations({ annotations }) : annotations,
+        annotations: filteredAnnotations,
         annotationStorage: pdf.annotationStorage,
         div: layer,
         imageResourcesPath,
@@ -188,6 +192,8 @@ export default function AnnotationLayer(): React.ReactElement {
 
       layer.innerHTML = '';
 
+      linkService.setAnnotationContext(filteredAnnotations);
+
       try {
         new pdfjs.AnnotationLayer(annotationLayerParameters).render(renderParameters);
 
@@ -195,6 +201,8 @@ export default function AnnotationLayer(): React.ReactElement {
         onRenderSuccess();
       } catch (error) {
         onRenderError(error);
+      } finally {
+        linkService.clearAnnotationContext();
       }
 
       return () => {
