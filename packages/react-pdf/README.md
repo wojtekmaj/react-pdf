@@ -371,7 +371,7 @@ then you would also need to include wasm directory in your build and tell React-
 
 #### Copying wasm directory
 
-First, you need to copy wasm from `pdfjs-dist` (React-PDF's dependency - it should be in your `node_modules` if you have React-PDF installed). cMaps are located in `pdfjs-dist/wasm`.
+First, you need to copy wasm from `pdfjs-dist` (React-PDF's dependency - it should be in your `node_modules` if you have React-PDF installed). Wasm files are located in `pdfjs-dist/wasm`.
 
 ##### Vite
 
