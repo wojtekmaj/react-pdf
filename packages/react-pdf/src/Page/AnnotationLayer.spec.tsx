@@ -1,5 +1,7 @@
-import { beforeAll, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeAll, describe, expect, it, vi } from 'vitest';
+import { page as browserPage } from 'vitest/browser';
 import { render } from 'vitest-browser-react';
+import { ErrorBoundary } from 'react-error-boundary';
 
 import DocumentContext from '../DocumentContext.js';
 import { pdfjs } from '../index.test.js';
@@ -12,6 +14,7 @@ import failingPage from '../../../../__mocks__/_failing_page.js';
 import { loadPDF, makeAsyncCallback, muteConsole, restoreConsole } from '../../../../test-utils.js';
 
 import type { PDFDocumentProxy, PDFPageProxy } from 'pdfjs-dist';
+import type { FallbackProps } from 'react-error-boundary';
 import type { RenderResult } from 'vitest-browser-react';
 import type { Annotations, DocumentContextType, PageContextType } from '../shared/types.js';
 
@@ -25,7 +28,9 @@ async function renderWithContext(
 ) {
   const { rerender, ...otherResult } = await render(
     <DocumentContext.Provider value={documentContext as DocumentContextType}>
-      <PageContext.Provider value={pageContext as PageContextType}>{children}</PageContext.Provider>
+      <PageContext.Provider value={{ suspense: false, ...pageContext } as PageContextType}>
+        {children}
+      </PageContext.Provider>
     </DocumentContext.Provider>,
   );
 
@@ -46,6 +51,10 @@ async function renderWithContext(
     ...otherResult,
     rerender: customRerender,
   } as RenderResult & { rerender: typeof customRerender };
+}
+
+function renderError({ error }: FallbackProps): React.ReactNode {
+  return <div role="alert">{error instanceof Error ? error.message : String(error)}</div>;
 }
 
 describe('AnnotationLayer', () => {
@@ -380,5 +389,96 @@ describe('AnnotationLayer', () => {
 
       expect(stringifiedAnnotationLayerNode).toMatch(desiredImageTagRegExp);
     });
+  });
+
+  describe('Suspense', () => {
+    afterEach(() => {
+      vi.restoreAllMocks();
+    });
+
+    it('reports an existing load error when Suspense is enabled without repeating the callback', async () => {
+      const failure = new Error('AnnotationLayer failed');
+      const onError = vi.fn();
+      vi.spyOn(page, 'getAnnotations').mockRejectedValue(failure);
+
+      const children = (
+        <ErrorBoundary fallbackRender={renderError}>
+          <AnnotationLayer />
+        </ErrorBoundary>
+      );
+      const context = {
+        onGetAnnotationsError: onError,
+        page,
+        rotate: 0,
+        scale: 1,
+        suspense: false,
+      };
+
+      const { rerender } = await renderWithContext(children, { linkService, pdf }, context);
+
+      await expect.poll(() => onError).toHaveBeenCalledExactlyOnceWith(failure);
+
+      await rerender(children, { linkService, pdf }, { ...context, suspense: true });
+
+      await expect.element(browserPage.getByRole('alert')).toHaveTextContent(failure.message);
+      expect(onError).toHaveBeenCalledExactlyOnceWith(failure);
+    });
+
+    it('forwards asynchronous getAnnotations failures to an Error Boundary', async () => {
+      const failure = new Error('AnnotationLayer failed');
+      const onError = vi.fn();
+      vi.spyOn(page, 'getAnnotations').mockRejectedValue(failure);
+
+      await renderWithContext(
+        <ErrorBoundary fallbackRender={renderError}>
+          <AnnotationLayer />
+        </ErrorBoundary>,
+        { linkService, pdf },
+        {
+          onGetAnnotationsError: onError,
+          page,
+          rotate: 0,
+          scale: 1,
+          suspense: true,
+        },
+      );
+
+      await expect.element(browserPage.getByRole('alert')).toHaveTextContent(failure.message);
+      expect(onError).toHaveBeenCalledWith(failure);
+    });
+
+    it.each([true, false])(
+      'forwards rendering failures when Suspense is enabled (initial suspense=%s)',
+      async (suspense) => {
+        const failure = new Error('AnnotationLayer failed');
+        const onError = vi.fn();
+        vi.spyOn(pdfjs.AnnotationLayer.prototype, 'render').mockRejectedValue(failure);
+
+        const children = (
+          <ErrorBoundary fallbackRender={renderError}>
+            <AnnotationLayer />
+          </ErrorBoundary>
+        );
+        const context = {
+          onRenderAnnotationLayerError: onError,
+          page,
+          rotate: 0,
+          scale: 1,
+          suspense,
+        };
+
+        const { rerender } = await renderWithContext(children, { linkService, pdf }, context);
+
+        if (!suspense) {
+          await expect.poll(() => onError).toHaveBeenCalledExactlyOnceWith(failure);
+
+          // Switching modes retries rendering under the new error handling behavior.
+          await rerender(children, { linkService, pdf }, { ...context, suspense: true });
+        }
+
+        await expect.element(browserPage.getByRole('alert')).toHaveTextContent(failure.message);
+        expect(onError).toHaveBeenCalledWith(failure);
+      },
+    );
   });
 });

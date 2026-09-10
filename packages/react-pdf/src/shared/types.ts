@@ -149,6 +149,7 @@ export type DocumentContextType = {
   registerPage: RegisterPage;
   renderMode?: RenderMode;
   rotate?: number | null;
+  suspense?: boolean;
   unregisterPage: UnregisterPage;
 } | null;
 
@@ -178,6 +179,7 @@ export type PageContextType = {
   renderTextLayer: boolean;
   rotate: number;
   scale: number;
+  suspense?: boolean;
 } | null;
 
 export type OutlineContextType = {

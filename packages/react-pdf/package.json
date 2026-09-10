@@ -39,6 +39,7 @@
   "dependencies": {
     "clsx": "^2.0.0",
     "dequal": "^2.0.3",
+    "es-toolkit": "^1.52.0",
     "make-cancellable-promise": "^2.0.0",
     "make-event-props": "^2.0.0",
     "merge-refs": "^2.0.0",
@@ -57,6 +58,7 @@
     "playwright": "^1.60.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
+    "react-error-boundary": "^6.1.5",
     "typescript": "^7.0.2",
     "vitest": "^5.0.0",
     "vitest-browser-react": "^2.3.0"

@@ -3,7 +3,6 @@
 import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useRef } from 'react';
 import clsx from 'clsx';
 import { dequal } from 'dequal';
-import makeCancellable from 'make-cancellable-promise';
 import makeEventProps from 'make-event-props';
 import * as pdfjs from 'pdfjs-dist';
 import invariant from 'tiny-invariant';
@@ -14,10 +13,11 @@ import LinkService from './LinkService.js';
 import Message from './Message.js';
 import PasswordResponses from './PasswordResponses.js';
 
-import useResolver from './shared/hooks/useResolver.js';
+import useResource from './shared/hooks/useResource.js';
 
+import areDocumentInputsEqual from './shared/areDocumentInputsEqual.js';
+import ResourceCache from './shared/ResourceCache.js';
 import {
-  cancelRunningTask,
   dataURItoByteString,
   displayCORSWarning,
   isArrayBuffer,
@@ -28,7 +28,7 @@ import {
 } from './shared/utils.js';
 
 import type { EventProps } from 'make-event-props';
-import type { PDFDocumentProxy } from 'pdfjs-dist';
+import type { PDFDocumentLoadingTask, PDFDocumentProxy } from 'pdfjs-dist';
 import type { DocumentInitParameters } from 'pdfjs-dist/types/src/display/api.js';
 import type {
   ClassName,
@@ -96,7 +96,7 @@ export type DocumentProps = {
    *
    * Its value can be an URL, a file (imported using `import … from …` or from file input form element), or an object with parameters (`url` - URL; `data` - data, preferably Uint8Array; `range` - PDFDataRangeTransport.
    *
-   * **Warning**: Since equality check (`===`) is used to determine if `file` object has changed, it must be memoized by setting it in component's state, `useMemo` or other similar technique.
+   * Suspense compares plain parameter objects by value. Keep binary inputs and range transports outside the suspended subtree. With `suspense={false}`, memoize object props to avoid unnecessary reloads.
    *
    * @example 'https://example.com/sample.pdf'
    * @example importedPdf
@@ -187,7 +187,7 @@ export type DocumentProps = {
    *
    * For a full list of possible parameters, check [PDF.js documentation on DocumentInitParameters](https://mozilla.github.io/pdf.js/api/draft/module-pdfjsLib.html#~DocumentInitParameters).
    *
-   * **Note**: Make sure to define options object outside of your React component or use `useMemo` if you can't.
+   * Suspense compares plain options by value. Keep workers and other non-plain values outside the suspended subtree. With `suspense={false}`, memoize options to avoid unnecessary reloads.
    *
    * @example { cMapUrl: '/cmaps/', wasmUrl: '/wasm/' }
    */
@@ -212,6 +212,13 @@ export type DocumentProps = {
    * @example 0.5
    */
   scale?: number;
+  /**
+   * Whether loading suspends and errors propagate to the nearest Error Boundary.
+   * Set to `false` to use the component's loading and error behavior instead.
+   *
+   * @default true
+   */
+  suspense?: boolean;
 } & EventProps<DocumentCallback | false | undefined>;
 
 const defaultOnPassword: OnPassword = (callback, reason) => {
@@ -236,6 +243,102 @@ function isParameterObject(file: File): file is Source {
     file !== null &&
     ('data' in file || 'range' in file || 'url' in file)
   );
+}
+
+async function findDocumentSource(file: File | undefined): Promise<Source | null> {
+  if (!file) {
+    return null;
+  }
+
+  // File is a string
+  if (typeof file === 'string') {
+    if (isDataURI(file)) {
+      const fileByteString = dataURItoByteString(file);
+      return { data: fileByteString };
+    }
+
+    displayCORSWarning();
+    return { url: file };
+  }
+
+  // File is PDFDataRangeTransport
+  if (file instanceof PDFDataRangeTransport) {
+    return { range: file };
+  }
+
+  // File is an ArrayBuffer
+  if (isArrayBuffer(file)) {
+    return { data: file };
+  }
+
+  /**
+   * The cases below are browser-only.
+   * If you're running on a non-browser environment, these cases will be of no use.
+   */
+  if (isBrowser) {
+    // File is a Blob
+    if (isBlob(file)) {
+      const data = await loadFromFile(file);
+
+      return { data };
+    }
+  }
+
+  // At this point, file must be an object
+  invariant(
+    typeof file === 'object',
+    'Invalid parameter in file, need either Uint8Array, string or a parameter object',
+  );
+
+  invariant(isParameterObject(file), 'Invalid parameter object: need either .data, .range or .url');
+
+  // File .url is a string
+  if ('url' in file && typeof file.url === 'string') {
+    if (isDataURI(file.url)) {
+      const { url, ...otherParams } = file;
+      const fileByteString = dataURItoByteString(url);
+      return { data: fileByteString, ...otherParams };
+    }
+
+    displayCORSWarning();
+  }
+
+  return file;
+}
+
+const sourceCache = new ResourceCache<[File | undefined], Source | null>({
+  areKeysEqual: areDocumentInputsEqual,
+});
+
+const documentCache = new ResourceCache<[File | undefined, Options | undefined], PDFDocumentProxy>({
+  areKeysEqual: areDocumentInputsEqual,
+});
+
+function createDocumentTask(
+  source: Source,
+  options: Options | undefined,
+  onPassword: OnPassword,
+  onLoadProgress: OnDocumentLoadProgress | undefined,
+): PDFDocumentLoadingTask {
+  const initParameters: DocumentInitParameters = options ? { ...source, ...options } : source;
+  const parameters = { ...initParameters };
+
+  // PDF.js transfers input buffers to its worker. Keep the cached source reusable
+  // after eviction, and when another document uses the same input.
+  if (parameters.data instanceof ArrayBuffer) {
+    parameters.data = parameters.data.slice(0);
+  } else if (ArrayBuffer.isView(parameters.data)) {
+    const data = parameters.data;
+    parameters.data = new Uint8Array(data.buffer, data.byteOffset, data.byteLength).slice();
+  }
+
+  const task = pdfjs.getDocument(parameters);
+  task.onPassword = onPassword;
+  if (onLoadProgress) {
+    task.onProgress = onLoadProgress;
+  }
+
+  return task;
 }
 
 /**
@@ -271,14 +374,35 @@ const Document: React.ForwardRefExoticComponent<
     renderMode,
     rotate,
     scale,
+    suspense = true,
     ...otherProps
   },
   ref,
 ) {
-  const [sourceState, sourceDispatch] = useResolver<Source | null>();
-  const { value: source, error: sourceError } = sourceState;
-  const [pdfState, pdfDispatch] = useResolver<PDFDocumentProxy>();
-  const { value: pdf, error: pdfError } = pdfState;
+  const loadSource = useCallback(() => ({ promise: findDocumentSource(file) }), [file]);
+  const { value: source, error: sourceError } = useResource(
+    !suspense || file ? { cache: sourceCache, key: [file], load: loadSource } : undefined,
+    suspense,
+    onSourceErrorProps,
+  );
+
+  // biome-ignore lint/correctness/useExhaustiveDependencies: Callback changes should not restart the document load
+  const loadPdf = useMemo(() => {
+    if (!source) {
+      return;
+    }
+
+    return () => {
+      const task = createDocumentTask(source, options, onPassword, onLoadProgress);
+
+      return { promise: task.promise, dispose: () => task.destroy() };
+    };
+  }, [options, source, suspense]);
+  const { value: pdf, error: pdfError } = useResource(
+    loadPdf ? { cache: documentCache, key: [file, options], load: loadPdf } : undefined,
+    suspense,
+    onLoadErrorProps,
+  );
 
   const linkService = useRef(new LinkService());
 
@@ -287,7 +411,7 @@ const Document: React.ForwardRefExoticComponent<
   const prevFile = useRef<File | undefined>(undefined);
   const prevOptions = useRef<Options | undefined>(undefined);
 
-  if (file && file !== prevFile.current && isParameterObject(file)) {
+  if (!suspense && file && file !== prevFile.current && isParameterObject(file)) {
     warning(
       !dequal(file, prevFile.current),
       `File prop passed to <Document /> changed, but it's equal to previous one. This might result in unnecessary reloads. Consider memoizing the value passed to "file" prop.`,
@@ -297,7 +421,7 @@ const Document: React.ForwardRefExoticComponent<
   }
 
   // Detect non-memoized changes in options prop
-  if (options && options !== prevOptions.current) {
+  if (!suspense && options && options !== prevOptions.current) {
     warning(
       !dequal(options, prevOptions.current),
       `Options prop passed to <Document /> changed, but it's equal to previous one. This might result in unnecessary reloads. Consider memoizing the value passed to "options" prop.`,
@@ -368,93 +492,6 @@ const Document: React.ForwardRefExoticComponent<
     }
   }
 
-  function resetSource() {
-    sourceDispatch({ type: 'RESET' });
-  }
-
-  // biome-ignore lint/correctness/useExhaustiveDependencies: See https://github.com/biomejs/biome/issues/3080
-  useEffect(resetSource, [file, sourceDispatch]);
-
-  const findDocumentSource = useCallback(async (): Promise<Source | null> => {
-    if (!file) {
-      return null;
-    }
-
-    // File is a string
-    if (typeof file === 'string') {
-      if (isDataURI(file)) {
-        const fileByteString = dataURItoByteString(file);
-        return { data: fileByteString };
-      }
-
-      displayCORSWarning();
-      return { url: file };
-    }
-
-    // File is PDFDataRangeTransport
-    if (file instanceof PDFDataRangeTransport) {
-      return { range: file };
-    }
-
-    // File is an ArrayBuffer
-    if (isArrayBuffer(file)) {
-      return { data: file };
-    }
-
-    /**
-     * The cases below are browser-only.
-     * If you're running on a non-browser environment, these cases will be of no use.
-     */
-    if (isBrowser) {
-      // File is a Blob
-      if (isBlob(file)) {
-        const data = await loadFromFile(file);
-
-        return { data };
-      }
-    }
-
-    // At this point, file must be an object
-    invariant(
-      typeof file === 'object',
-      'Invalid parameter in file, need either Uint8Array, string or a parameter object',
-    );
-
-    invariant(
-      isParameterObject(file),
-      'Invalid parameter object: need either .data, .range or .url',
-    );
-
-    // File .url is a string
-    if ('url' in file && typeof file.url === 'string') {
-      if (isDataURI(file.url)) {
-        const { url, ...otherParams } = file;
-        const fileByteString = dataURItoByteString(url);
-        return { data: fileByteString, ...otherParams };
-      }
-
-      displayCORSWarning();
-    }
-
-    return file;
-  }, [file]);
-
-  useEffect(() => {
-    const cancellable = makeCancellable(findDocumentSource());
-
-    cancellable.promise
-      .then((nextSource) => {
-        sourceDispatch({ type: 'RESOLVE', value: nextSource });
-      })
-      .catch((error) => {
-        sourceDispatch({ type: 'REJECT', error });
-      });
-
-    return () => {
-      cancelRunningTask(cancellable);
-    };
-  }, [findDocumentSource, sourceDispatch]);
-
   // biome-ignore lint/correctness/useExhaustiveDependencies: Omitted callbacks so they are not called every time they change
   useEffect(() => {
     if (typeof source === 'undefined') {
@@ -482,7 +519,6 @@ const Document: React.ForwardRefExoticComponent<
       onLoadSuccessProps(pdf);
     }
 
-    pages.current = new Array(pdf.numPages);
     linkService.current.setDocument(pdf);
   }
 
@@ -501,60 +537,6 @@ const Document: React.ForwardRefExoticComponent<
       onLoadErrorProps(pdfError);
     }
   }
-
-  // biome-ignore lint/correctness/useExhaustiveDependencies: useEffect intentionally triggered on source change
-  useEffect(
-    function resetDocument() {
-      pdfDispatch({ type: 'RESET' });
-    },
-    [pdfDispatch, source],
-  );
-
-  // biome-ignore lint/correctness/useExhaustiveDependencies: Omitted callbacks so they are not called every time they change
-  useEffect(
-    function loadDocument() {
-      if (!source) {
-        return;
-      }
-
-      const documentInitParams: DocumentInitParameters = options
-        ? { ...source, ...options }
-        : source;
-
-      const destroyable = pdfjs.getDocument(documentInitParams);
-      if (onLoadProgress) {
-        destroyable.onProgress = onLoadProgress;
-      }
-      if (onPassword) {
-        destroyable.onPassword = onPassword;
-      }
-      const loadingTask = destroyable;
-
-      loadingTask.promise
-        .then((nextPdf) => {
-          if (loadingTask.destroyed) {
-            return;
-          }
-
-          pdfDispatch({ type: 'RESOLVE', value: nextPdf });
-        })
-        .catch((error) => {
-          if (loadingTask.destroyed) {
-            return;
-          }
-
-          pdfDispatch({ type: 'REJECT', error });
-        });
-
-      return () => {
-        loadingTask.destroy();
-
-        // Destroyed loading task leaves behind a dead PDFDocumentProxy
-        pdfDispatch({ type: 'RESET' });
-      };
-    },
-    [options, pdfDispatch, source],
-  );
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: Omitted callbacks so they are not called every time they change
   useEffect(() => {
@@ -597,9 +579,20 @@ const Document: React.ForwardRefExoticComponent<
       renderMode,
       rotate,
       scale,
+      suspense,
       unregisterPage,
     }),
-    [imageResourcesPath, onItemClick, pdf, registerPage, renderMode, rotate, scale, unregisterPage],
+    [
+      imageResourcesPath,
+      onItemClick,
+      pdf,
+      registerPage,
+      renderMode,
+      rotate,
+      scale,
+      suspense,
+      unregisterPage,
+    ],
   );
 
   const eventProps = useMemo(

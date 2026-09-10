@@ -5,6 +5,7 @@ import warning from 'warning';
 
 import StructTreeItem from './StructTreeItem.js';
 
+import useErrorBoundaryReporter from './shared/hooks/useErrorBoundaryReporter.js';
 import usePageContext from './shared/hooks/usePageContext.js';
 import useResolver from './shared/hooks/useResolver.js';
 
@@ -18,14 +19,18 @@ export default function StructTree(): React.ReactElement | null {
   invariant(pageContext, 'Unable to find Page context.');
 
   const {
+    customTextRenderer,
     onGetStructTreeError: onGetStructTreeErrorProps,
     onGetStructTreeSuccess: onGetStructTreeSuccessProps,
+    page,
+    suspense = true,
   } = pageContext;
 
-  const [structTreeState, structTreeDispatch] = useResolver<StructTreeNodeWithExtraAttributes>();
-  const { value: structTree, error: structTreeError } = structTreeState;
+  const reportError = useErrorBoundaryReporter(suspense);
 
-  const { customTextRenderer, page } = pageContext;
+  const [structTreeState, structTreeDispatch] =
+    useResolver<StructTreeNodeWithExtraAttributes>(page);
+  const { value: structTree, error: structTreeError } = structTreeState;
 
   function onLoadSuccess() {
     if (!structTree) {
@@ -50,14 +55,6 @@ export default function StructTree(): React.ReactElement | null {
       onGetStructTreeErrorProps(structTreeError);
     }
   }
-
-  // biome-ignore lint/correctness/useExhaustiveDependencies: useEffect intentionally triggered on page change
-  useEffect(
-    function resetStructTree() {
-      structTreeDispatch({ type: 'RESET' });
-    },
-    [structTreeDispatch, page],
-  );
 
   useEffect(
     function loadStructTree() {
@@ -99,6 +96,12 @@ export default function StructTree(): React.ReactElement | null {
 
     onLoadSuccess();
   }, [structTree]);
+
+  useEffect(() => {
+    if (suspense && structTreeError) {
+      reportError(structTreeError);
+    }
+  }, [structTreeError, reportError, suspense]);
 
   if (!structTree) {
     return null;

@@ -1,4 +1,5 @@
-import { useCallback, useEffect, useState } from 'react';
+import { Suspense, startTransition, useCallback, useEffect, useState } from 'react';
+import { ErrorBoundary } from 'react-error-boundary';
 import { Document, Outline, Page, pdfjs, Thumbnail } from 'react-pdf';
 import 'react-pdf/dist/Page/AnnotationLayer.css';
 import 'react-pdf/dist/Page/TextLayer.css';
@@ -10,6 +11,7 @@ import CustomRenderer from './CustomRenderer.js';
 import LayerOptions from './LayerOptions.js';
 import LoadingOptions from './LoadingOptions.js';
 import PassingOptions from './PassingOptions.js';
+import RenderingOptions from './RenderingOptions.js';
 import ViewOptions from './ViewOptions.js';
 
 import { isArrayBuffer, isBlob, isBrowser, loadFromFile } from './shared/utils.js';
@@ -76,6 +78,7 @@ export default function Test() {
   const [externalLinkTarget, setExternalLinkTarget] = useState<ExternalLinkTarget>();
   const [file, setFile] = useState<File>(null);
   const [fileForProps, setFileForProps] = useState<File>();
+  const [suspense, setSuspense] = useState(true);
   const [numPages, setNumPages] = useState<number>();
   const [pageHeight, setPageHeight] = useState<number>();
   const [pageNumber, setPageNumber] = useState<number>();
@@ -83,6 +86,7 @@ export default function Test() {
   const [pageWidth, setPageWidth] = useState<number>();
   const [passMethod, setPassMethod] = useState<PassMethod>();
   const [renderHighContrast, setRenderHighContrast] = useState(false);
+  const [documentKey, setDocumentKey] = useState(0);
   const [render, setRender] = useState(true);
   const [renderAnnotationLayer, setRenderAnnotationLayer] = useState(true);
   const [renderForms, setRenderForms] = useState(true);
@@ -120,7 +124,10 @@ export default function Test() {
   const onItemClick = useCallback((args: { pageNumber: number }) => {
     console.log('Clicked an item', args);
     const { pageNumber: nextPageNumber } = args;
-    setPageNumber(nextPageNumber);
+
+    startTransition(() => {
+      setPageNumber(nextPageNumber);
+    });
   }, []);
 
   const customTextRenderer = useCallback(
@@ -184,20 +191,37 @@ export default function Test() {
     })();
   }, [file, passMethod]);
 
-  const changePage = useCallback(
-    (offset: number) => setPageNumber((prevPageNumber) => (prevPageNumber || 1) + offset),
-    [],
-  );
+  const changePage = useCallback((offset: number) => {
+    startTransition(() => {
+      setPageNumber((prevPageNumber) => (prevPageNumber || 1) + offset);
+    });
+  }, []);
 
   const previousPage = useCallback(() => changePage(-1), [changePage]);
 
   const nextPage = useCallback(() => changePage(1), [changePage]);
+
+  function retryDocument() {
+    setDocumentKey((previous) => previous + 1);
+  }
+
+  function renderError({ error }: { error: unknown }) {
+    return (
+      <div role="alert">
+        <p>{error instanceof Error ? error.message : String(error)}</p>
+        <button onClick={retryDocument} type="button">
+          Retry
+        </button>
+      </div>
+    );
+  }
 
   const documentProps = {
     externalLinkTarget,
     file: fileForProps,
     options,
     rotate,
+    suspense,
   };
 
   const pageProps = {
@@ -232,6 +256,7 @@ export default function Test() {
         <aside className="Test__container__options">
           <LoadingOptions file={file} setFile={setFile} setRender={setRender} />
           <PassingOptions file={file} passMethod={passMethod} setPassMethod={setPassMethod} />
+          <RenderingOptions setSuspense={setSuspense} suspense={suspense} />
           <LayerOptions
             renderAnnotationLayer={renderAnnotationLayer}
             renderForms={renderForms}
@@ -268,72 +293,108 @@ export default function Test() {
           />
         </aside>
         <main className="Test__container__content">
-          <Document
-            {...documentProps}
-            className="custom-classname-document"
-            onClick={(
-              event: React.MouseEvent<HTMLDivElement>,
-              pdf: PDFDocumentProxy | false | undefined,
-            ) => console.log('Clicked a document', { event, pdf })}
-            onItemClick={onItemClick}
-            onLoadError={onDocumentLoadError}
-            onLoadProgress={onDocumentLoadProgress}
-            onLoadSuccess={onDocumentLoadSuccess}
-            onSourceError={onDocumentLoadError}
+          <ErrorBoundary
+            fallbackRender={renderError}
+            resetKeys={[fileForProps, documentKey, suspense]}
           >
-            <div className="Test__container__content__toc">
-              {render ? <Outline className="custom-classname-outline" /> : null}
-            </div>
-            <div className="Test__container__content__document">
-              {render ? (
-                displayAll ? (
-                  Array.from(new Array(numPages), (_el, index) => (
-                    <Page
-                      // biome-ignore lint/suspicious/noArrayIndexKey: index is stable here
-                      key={`page_${index + 1}`}
-                      {...pageProps}
-                      inputRef={
-                        pageNumber === index + 1
-                          ? (ref: HTMLDivElement) => {
-                              ref?.scrollIntoView();
-                            }
-                          : null
-                      }
-                      pageNumber={index + 1}
-                    />
-                  ))
-                ) : (
-                  <Page {...pageProps} pageNumber={pageNumber || 1} />
-                )
-              ) : null}
-            </div>
-            {displayAll || (
-              <div className="Test__container__content__controls">
-                <button disabled={(pageNumber || 0) <= 1} onClick={previousPage} type="button">
-                  Previous
-                </button>
-                <span>{`Page ${pageNumber || (numPages ? 1 : '--')} of ${numPages || '--'}`}</span>
-                <button
-                  disabled={(pageNumber || 0) >= (numPages || 0)}
-                  onClick={nextPage}
-                  type="button"
-                >
-                  Next
-                </button>
-              </div>
-            )}
-            <div className="Test__container__content__thumbnails">
-              {Array.from(new Array(numPages), (_el, index) => (
-                <Thumbnail
-                  // biome-ignore lint/suspicious/noArrayIndexKey: index is stable here
-                  key={`thumbnail_${index + 1}`}
-                  className="custom-classname-thumbnail"
-                  pageNumber={index + 1}
-                  width={100}
-                />
-              ))}
-            </div>
-          </Document>
+            <Suspense fallback={<p role="status">Loading document…</p>}>
+              <Document
+                {...documentProps}
+                className="custom-classname-document"
+                key={documentKey}
+                onClick={(
+                  event: React.MouseEvent<HTMLDivElement>,
+                  pdf: PDFDocumentProxy | false | undefined,
+                ) => console.log('Clicked a document', { event, pdf })}
+                onItemClick={onItemClick}
+                onLoadError={onDocumentLoadError}
+                onLoadProgress={onDocumentLoadProgress}
+                onLoadSuccess={onDocumentLoadSuccess}
+                onSourceError={onDocumentLoadError}
+              >
+                <div className="Test__container__content__toc">
+                  <ErrorBoundary
+                    fallbackRender={renderError}
+                    resetKeys={[fileForProps, documentKey, suspense]}
+                  >
+                    <Suspense fallback={<p role="status">Loading outline…</p>}>
+                      {render ? <Outline className="custom-classname-outline" /> : null}
+                    </Suspense>
+                  </ErrorBoundary>
+                </div>
+                <div className="Test__container__content__document">
+                  <ErrorBoundary
+                    fallbackRender={renderError}
+                    resetKeys={[
+                      fileForProps,
+                      documentKey,
+                      suspense,
+                      ...Object.values(pageProps),
+                      pageNumber,
+                      displayAll,
+                    ]}
+                  >
+                    <Suspense fallback={<p role="status">Loading page…</p>}>
+                      {render ? (
+                        displayAll ? (
+                          Array.from(new Array(numPages), (_el, index) => (
+                            <Page
+                              // biome-ignore lint/suspicious/noArrayIndexKey: index is stable here
+                              key={`page_${index + 1}`}
+                              {...pageProps}
+                              inputRef={
+                                pageNumber === index + 1
+                                  ? (ref: HTMLDivElement) => {
+                                      ref?.scrollIntoView();
+                                    }
+                                  : null
+                              }
+                              pageNumber={index + 1}
+                            />
+                          ))
+                        ) : (
+                          <Page {...pageProps} pageNumber={pageNumber || 1} />
+                        )
+                      ) : null}
+                    </Suspense>
+                  </ErrorBoundary>
+                </div>
+                {displayAll || (
+                  <div className="Test__container__content__controls">
+                    <button disabled={(pageNumber || 0) <= 1} onClick={previousPage} type="button">
+                      Previous
+                    </button>
+                    <span>{`Page ${pageNumber || (numPages ? 1 : '--')} of ${numPages || '--'}`}</span>
+                    <button
+                      disabled={(pageNumber || 0) >= (numPages || 0)}
+                      onClick={nextPage}
+                      type="button"
+                    >
+                      Next
+                    </button>
+                  </div>
+                )}
+                <div className="Test__container__content__thumbnails">
+                  <ErrorBoundary
+                    fallbackRender={renderError}
+                    resetKeys={[fileForProps, documentKey, suspense]}
+                  >
+                    <Suspense fallback={<p role="status">Loading thumbnails…</p>}>
+                      {Array.from(new Array(numPages), (_el, index) => (
+                        <Thumbnail
+                          // biome-ignore lint/suspicious/noArrayIndexKey: index is stable here
+                          key={`thumbnail_${index + 1}`}
+                          className="custom-classname-thumbnail"
+                          pageNumber={index + 1}
+                          width={100}
+                        />
+                      ))}
+                    </Suspense>
+                  </ErrorBoundary>
+                </div>
+              </Document>
+            </Suspense>
+          </ErrorBoundary>
         </main>
       </div>
     </div>

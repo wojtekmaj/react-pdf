@@ -1,5 +1,7 @@
-import { beforeAll, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeAll, describe, expect, it, vi } from 'vitest';
+import { page as browserPage } from 'vitest/browser';
 import { render } from 'vitest-browser-react';
+import { ErrorBoundary } from 'react-error-boundary';
 
 import { pdfjs } from '../index.test.js';
 import PageContext from '../PageContext.js';
@@ -11,6 +13,7 @@ import { loadPDF, makeAsyncCallback, muteConsole, restoreConsole } from '../../.
 
 import type { PDFPageProxy } from 'pdfjs-dist';
 import type { TextContent } from 'pdfjs-dist/types/src/display/api.js';
+import type { FallbackProps } from 'react-error-boundary';
 import type { CustomTextRenderer, PageContextType } from '../shared/types.js';
 
 const pdfFile = await loadPDF('../../__mocks__/_pdf.pdf');
@@ -18,7 +21,9 @@ const untaggedPdfFile = await loadPDF('../../__mocks__/_untagged.pdf');
 
 async function renderWithContext(children: React.ReactNode, context: Partial<PageContextType>) {
   const { rerender, ...otherResult } = await render(
-    <PageContext.Provider value={context as PageContextType}>{children}</PageContext.Provider>,
+    <PageContext.Provider value={{ suspense: false, ...context } as PageContextType}>
+      {children}
+    </PageContext.Provider>,
   );
 
   return {
@@ -47,6 +52,10 @@ function getTextItems(container: HTMLElement) {
   const wrapper = container.firstElementChild as HTMLDivElement;
 
   return wrapper.querySelectorAll('[role="presentation"]');
+}
+
+function renderError({ error }: FallbackProps): React.ReactNode {
+  return <div role="alert">{error instanceof Error ? error.message : String(error)}</div>;
 }
 
 describe('TextLayer', () => {
@@ -370,5 +379,95 @@ describe('TextLayer', () => {
 
       alertSpy.mockRestore();
     });
+  });
+
+  describe('Suspense', () => {
+    afterEach(() => {
+      vi.restoreAllMocks();
+    });
+
+    it('reports an existing load error when Suspense is enabled without repeating the callback', async () => {
+      const failure = new Error('TextLayer failed');
+      const onError = vi.fn();
+      vi.spyOn(page, 'getTextContent').mockRejectedValue(failure);
+
+      const children = (
+        <ErrorBoundary fallbackRender={renderError}>
+          <TextLayer />
+        </ErrorBoundary>
+      );
+      const context = {
+        onGetTextError: onError,
+        page,
+        rotate: 0,
+        scale: 1,
+        suspense: false,
+      };
+
+      const { rerender } = await renderWithContext(children, context);
+
+      await expect.poll(() => onError).toHaveBeenCalledExactlyOnceWith(failure);
+
+      await rerender(children, { ...context, suspense: true });
+
+      await expect.element(browserPage.getByRole('alert')).toHaveTextContent(failure.message);
+      expect(onError).toHaveBeenCalledExactlyOnceWith(failure);
+    });
+
+    it('forwards asynchronous getTextContent failures to an Error Boundary', async () => {
+      const failure = new Error('TextLayer failed');
+      const onError = vi.fn();
+      vi.spyOn(page, 'getTextContent').mockRejectedValue(failure);
+
+      await renderWithContext(
+        <ErrorBoundary fallbackRender={renderError}>
+          <TextLayer />
+        </ErrorBoundary>,
+        {
+          onGetTextError: onError,
+          page,
+          rotate: 0,
+          scale: 1,
+          suspense: true,
+        },
+      );
+
+      await expect.element(browserPage.getByRole('alert')).toHaveTextContent(failure.message);
+      expect(onError).toHaveBeenCalledWith(failure);
+    });
+
+    it.each([true, false])(
+      'forwards rendering failures when Suspense is enabled (initial suspense=%s)',
+      async (suspense) => {
+        const failure = new Error('TextLayer failed');
+        const onError = vi.fn();
+        vi.spyOn(pdfjs.TextLayer.prototype, 'render').mockRejectedValue(failure);
+
+        const children = (
+          <ErrorBoundary fallbackRender={renderError}>
+            <TextLayer />
+          </ErrorBoundary>
+        );
+        const context = {
+          onRenderTextLayerError: onError,
+          page,
+          rotate: 0,
+          scale: 1,
+          suspense,
+        };
+
+        const { rerender } = await renderWithContext(children, context);
+
+        if (!suspense) {
+          await expect.poll(() => onError).toHaveBeenCalledExactlyOnceWith(failure);
+
+          // Switching modes retries rendering under the new error handling behavior.
+          await rerender(children, { ...context, suspense: true });
+        }
+
+        await expect.element(browserPage.getByRole('alert')).toHaveTextContent(failure.message);
+        expect(onError).toHaveBeenCalledWith(failure);
+      },
+    );
   });
 });

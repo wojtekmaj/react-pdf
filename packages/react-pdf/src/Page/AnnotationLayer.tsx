@@ -8,10 +8,11 @@ import invariant from 'tiny-invariant';
 import warning from 'warning';
 
 import useDocumentContext from '../shared/hooks/useDocumentContext.js';
+import useErrorBoundaryReporter from '../shared/hooks/useErrorBoundaryReporter.js';
 import usePageContext from '../shared/hooks/usePageContext.js';
 import useResolver from '../shared/hooks/useResolver.js';
 
-import { cancelRunningTask } from '../shared/utils.js';
+import { cancelRunningTask, isAbortException } from '../shared/utils.js';
 
 import type { AnnotationLayerParameters } from 'pdfjs-dist/types/src/display/annotation_layer.js';
 import type { Annotations } from '../shared/types.js';
@@ -36,16 +37,19 @@ export default function AnnotationLayer(): React.ReactElement {
     renderForms,
     rotate,
     scale = 1,
+    suspense = true,
   } = mergedProps;
 
   invariant(
     pdf,
     'Attempted to load page annotations, but no document was specified. Wrap <Page /> in a <Document /> or pass explicit `pdf` prop.',
   );
+  const reportError = useErrorBoundaryReporter(suspense);
+
   invariant(page, 'Attempted to load page annotations, but no page was specified.');
   invariant(linkService, 'Attempted to load page annotations, but no linkService was specified.');
 
-  const [annotationsState, annotationsDispatch] = useResolver<Annotations>();
+  const [annotationsState, annotationsDispatch] = useResolver<Annotations>(page);
   const { value: annotations, error: annotationsError } = annotationsState;
   const layerElement = useRef<HTMLDivElement>(null);
 
@@ -80,14 +84,6 @@ export default function AnnotationLayer(): React.ReactElement {
       onGetAnnotationsErrorProps(annotationsError);
     }
   }
-
-  // biome-ignore lint/correctness/useExhaustiveDependencies: useEffect intentionally triggered on page change
-  useEffect(
-    function resetAnnotations() {
-      annotationsDispatch({ type: 'RESET' });
-    },
-    [annotationsDispatch, page],
-  );
 
   useEffect(
     function loadAnnotations() {
@@ -127,6 +123,12 @@ export default function AnnotationLayer(): React.ReactElement {
     onLoadSuccess();
   }, [annotations]);
 
+  useEffect(() => {
+    if (suspense && annotationsError) {
+      reportError(annotationsError);
+    }
+  }, [annotationsError, reportError, suspense]);
+
   function onRenderSuccess() {
     if (onRenderAnnotationLayerSuccessProps) {
       onRenderAnnotationLayerSuccessProps();
@@ -134,11 +136,17 @@ export default function AnnotationLayer(): React.ReactElement {
   }
 
   function onRenderError(error: unknown) {
+    if (error instanceof Error && isAbortException(error)) {
+      return;
+    }
+
     warning(false, `${error}`);
 
     if (onRenderAnnotationLayerErrorProps) {
       onRenderAnnotationLayerErrorProps(error);
     }
+
+    reportError(error);
   }
 
   const viewport = useMemo(
@@ -204,6 +212,7 @@ export default function AnnotationLayer(): React.ReactElement {
       page,
       pdf,
       renderForms,
+      suspense,
       viewport,
     ],
   );

@@ -1,8 +1,10 @@
-import { beforeAll, describe, expect, it, vi } from 'vitest';
+import { afterAll, afterEach, beforeAll, describe, expect, it, vi } from 'vitest';
 import { page, userEvent } from 'vitest/browser';
 import { render } from 'vitest-browser-react';
-import { createRef } from 'react';
+import { createRef, Suspense, startTransition, useEffect, useState } from 'react';
+import { ErrorBoundary } from 'react-error-boundary';
 
+import Document from './Document.js';
 import DocumentContext from './DocumentContext.js';
 import { pdfjs } from './index.test.js';
 import LinkService from './LinkService.js';
@@ -11,9 +13,16 @@ import Page from './Page.js';
 import failingPdf from '../../../__mocks__/_failing_pdf.js';
 import silentlyFailingPdf from '../../../__mocks__/_silently_failing_pdf.js';
 
-import { loadPDF, makeAsyncCallback, muteConsole, restoreConsole } from '../../../test-utils.js';
+import {
+  createDeferred,
+  loadPDF,
+  makeAsyncCallback,
+  muteConsole,
+  restoreConsole,
+} from '../../../test-utils.js';
 
-import type { PDFDocumentProxy, PDFPageProxy } from 'pdfjs-dist';
+import type { PDFDocumentLoadingTask, PDFDocumentProxy, PDFPageProxy } from 'pdfjs-dist';
+import type { FallbackProps } from 'react-error-boundary';
 import type { DocumentContextType, PageCallback } from './shared/types.js';
 
 const pdfFile = await loadPDF('../../__mocks__/_pdf.pdf');
@@ -29,7 +38,7 @@ function createPdfThatNeverLoads(): PDFDocumentProxy {
 
 async function renderWithContext(children: React.ReactNode, context: Partial<DocumentContextType>) {
   const { rerender, ...otherResult } = await render(
-    <DocumentContext.Provider value={context as DocumentContextType}>
+    <DocumentContext.Provider value={{ suspense: false, ...context } as DocumentContextType}>
       {children}
     </DocumentContext.Provider>,
   );
@@ -41,11 +50,17 @@ async function renderWithContext(children: React.ReactNode, context: Partial<Doc
       nextContext: Partial<DocumentContextType> = context,
     ) =>
       await rerender(
-        <DocumentContext.Provider value={nextContext as DocumentContextType}>
+        <DocumentContext.Provider
+          value={{ suspense: false, ...nextContext } as DocumentContextType}
+        >
           {nextChildren}
         </DocumentContext.Provider>,
       ),
   };
+}
+
+function renderError({ error }: FallbackProps): React.ReactNode {
+  return <div role="alert">{error instanceof Error ? error.message : String(error)}</div>;
 }
 
 describe('Page', () => {
@@ -1039,5 +1054,212 @@ describe('Page', () => {
 
     expect(page1.width).toEqual(page2.height);
     expect(page1.height).toEqual(page2.width);
+  });
+
+  describe('Suspense', () => {
+    const documents: PDFDocumentLoadingTask[] = [];
+
+    async function loadDocument(data = pdfFile.arrayBuffer): Promise<PDFDocumentProxy> {
+      const task = pdfjs.getDocument({ data });
+      documents.push(task);
+
+      return task.promise;
+    }
+
+    afterAll(async () => {
+      await Promise.all(documents.map((task) => task.destroy()));
+    });
+
+    afterEach(() => {
+      vi.restoreAllMocks();
+    });
+
+    let loadedPage: PDFPageProxy;
+
+    beforeAll(async () => {
+      const pdf = await loadDocument();
+      loadedPage = await pdf.getPage(1);
+    });
+
+    function renderPage(pdf: PDFDocumentProxy, pageNumber = 1): React.ReactNode {
+      return (
+        <Page
+          pageNumber={pageNumber}
+          pdf={pdf}
+          renderAnnotationLayer={false}
+          renderMode="none"
+          renderTextLayer={false}
+        >
+          {({ page }) => <p>Page {page.pageNumber} ready</p>}
+        </Page>
+      );
+    }
+
+    it('shows the nearest fallback while a page loads, then reveals the page', async () => {
+      const pdf = await loadDocument();
+      const pending = createDeferred<PDFPageProxy>();
+      const getPage = vi.spyOn(pdf, 'getPage').mockReturnValue(pending.promise);
+
+      await render(
+        <Suspense fallback={<p>Outer loader</p>}>
+          <p>Document ready</p>
+          <Suspense fallback={<p>Page loader</p>}>{renderPage(pdf)}</Suspense>
+        </Suspense>,
+      );
+
+      await expect.element(page.getByText('Document ready')).toBeVisible();
+      await expect.element(page.getByText('Page loader')).toBeVisible();
+
+      pending.resolve(loadedPage);
+
+      await expect.element(page.getByText('Page 1 ready')).toBeVisible();
+      expect(getPage).toHaveBeenCalledExactlyOnceWith(1);
+    });
+
+    it('inherits the document opt-out setting', async () => {
+      const pdf = await loadDocument();
+      vi.spyOn(pdf, 'getPage').mockReturnValue(new Promise(() => {}));
+
+      await render(
+        <Document file={pdfFile.arrayBuffer} suspense={false}>
+          <Page loading="Inherited placeholder" pageNumber={1} pdf={pdf} />
+        </Document>,
+      );
+
+      await expect.element(page.getByText('Inherited placeholder')).toBeVisible();
+    });
+
+    it('lets a page opt back into Suspense inside an opted-out document', async () => {
+      const pdf = await loadDocument();
+      vi.spyOn(pdf, 'getPage').mockReturnValue(new Promise(() => {}));
+
+      await render(
+        <Document file={pdfFile.arrayBuffer} suspense={false}>
+          <Suspense fallback={<p>Page boundary</p>}>
+            <Page pageNumber={1} pdf={pdf} suspense />
+          </Suspense>
+        </Document>,
+      );
+
+      await expect.element(page.getByText('Page boundary')).toBeVisible();
+    });
+
+    it('sends page failures to the nearest boundary with the original error', async () => {
+      const pdf = await loadDocument();
+      const pending = createDeferred<PDFPageProxy>();
+      const error = new Error('Cannot load this page');
+      const onError = vi.fn();
+      vi.spyOn(pdf, 'getPage').mockReturnValue(pending.promise);
+
+      await render(
+        <ErrorBoundary fallbackRender={renderError} onError={onError}>
+          <Suspense fallback={<p>Page loader</p>}>{renderPage(pdf)}</Suspense>
+        </ErrorBoundary>,
+      );
+
+      pending.reject(error);
+
+      await expect.element(page.getByRole('alert')).toHaveTextContent(error.message);
+      expect(onError).toHaveBeenCalledExactlyOnceWith(error, expect.any(Object));
+    });
+
+    it('keeps the previous page visible during a transition', async () => {
+      const pdf = await loadDocument();
+      const firstPage = await pdf.getPage(1);
+      const secondPage = await pdf.getPage(2);
+      const pending = createDeferred<PDFPageProxy>();
+      vi.spyOn(pdf, 'getPage').mockImplementation((number) =>
+        number === 1 ? Promise.resolve(firstPage) : pending.promise,
+      );
+
+      function Viewer() {
+        const [pageNumber, setPageNumber] = useState(1);
+
+        return (
+          <>
+            <button onClick={() => startTransition(() => setPageNumber(2))} type="button">
+              Next page
+            </button>
+            <Suspense fallback={<p>Page loader</p>}>{renderPage(pdf, pageNumber)}</Suspense>
+          </>
+        );
+      }
+
+      await render(<Viewer />);
+      await expect.element(page.getByText('Page 1 ready')).toBeVisible();
+      await page.getByRole('button', { name: 'Next page' }).click();
+      await expect.element(page.getByText('Page 1 ready')).toBeVisible();
+
+      pending.resolve(secondPage);
+
+      await expect.element(page.getByText('Page 2 ready')).toBeVisible();
+    });
+
+    it('reuses loaded page data without showing the fallback when revisiting a page', async () => {
+      const pdf = await loadDocument();
+      const getPage = vi.spyOn(pdf, 'getPage');
+      const onLoading = vi.fn();
+
+      function Loading() {
+        useEffect(() => {
+          onLoading();
+        }, []);
+
+        return <p>Page loader</p>;
+      }
+
+      const { rerender } = await render(
+        <Suspense fallback={<Loading />}>{renderPage(pdf, 1)}</Suspense>,
+      );
+
+      await expect.element(page.getByText('Page 1 ready')).toBeVisible();
+      await rerender(<Suspense fallback={<Loading />}>{renderPage(pdf, 2)}</Suspense>);
+      await expect.element(page.getByText('Page 2 ready')).toBeVisible();
+
+      onLoading.mockClear();
+
+      await rerender(<Suspense fallback={<Loading />}>{renderPage(pdf, 1)}</Suspense>);
+      await expect.element(page.getByText('Page 1 ready')).toBeVisible();
+
+      expect(onLoading).not.toHaveBeenCalled();
+      expect(getPage).toHaveBeenCalledTimes(2);
+      expect(getPage).toHaveBeenNthCalledWith(1, 1);
+      expect(getPage).toHaveBeenNthCalledWith(2, 2);
+    });
+
+    it('reveals page data while canvas rendering is still pending', async () => {
+      const pdf = await loadDocument();
+      const pdfPage = await pdf.getPage(1);
+      const pending = createDeferred<void>();
+      const onRenderSuccess = vi.fn();
+      vi.spyOn(pdfPage, 'render').mockImplementation(
+        () =>
+          ({
+            promise: pending.promise,
+            cancel: vi.fn(),
+          }) as unknown as ReturnType<PDFPageProxy['render']>,
+      );
+
+      await render(
+        <Suspense fallback={<p>Page loader</p>}>
+          <Page
+            onRenderSuccess={onRenderSuccess}
+            pageNumber={1}
+            pdf={pdf}
+            renderAnnotationLayer={false}
+            renderTextLayer={false}
+          >
+            <p>Page data ready</p>
+          </Page>
+        </Suspense>,
+      );
+
+      await expect.element(page.getByText('Page data ready')).toBeVisible();
+      expect(onRenderSuccess).not.toHaveBeenCalled();
+
+      pending.resolve();
+
+      await expect.poll(() => onRenderSuccess).toHaveBeenCalledOnce();
+    });
   });
 });

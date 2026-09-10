@@ -1,19 +1,34 @@
-import { beforeAll, describe, expect, it, vi } from 'vitest';
+import { afterAll, afterEach, beforeAll, describe, expect, it, vi } from 'vitest';
 import { page, userEvent } from 'vitest/browser';
 import { render } from 'vitest-browser-react';
 import * as React from 'react';
-import { createRef } from 'react';
+import { createRef, StrictMode, Suspense, useMemo, useState } from 'react';
+import { ErrorBoundary } from 'react-error-boundary';
 
 import Document from './Document.js';
 import DocumentContext from './DocumentContext.js';
 import { pdfjs } from './index.test.js';
 import Page from './Page.js';
+import PasswordResponses from './PasswordResponses.js';
 
-import { loadPDF, makeAsyncCallback, muteConsole, restoreConsole } from '../../../test-utils.js';
+import {
+  createDeferred,
+  loadPDF,
+  makeAsyncCallback,
+  muteConsole,
+  restoreConsole,
+} from '../../../test-utils.js';
 
-import type { PDFDocumentProxy } from 'pdfjs-dist';
+import type { PDFDocumentLoadingTask, PDFDocumentProxy } from 'pdfjs-dist';
+import type { FallbackProps } from 'react-error-boundary';
 import type LinkService from './LinkService.js';
-import type { ScrollPageIntoViewArgs } from './shared/types.js';
+import type { File, ScrollPageIntoViewArgs } from './shared/types.js';
+
+vi.mock(import('pdfjs-dist'), async (importOriginal) => {
+  const actual = await importOriginal();
+
+  return { ...actual, getDocument: vi.fn(actual.getDocument) };
+});
 
 const pdfFile = await loadPDF('../../__mocks__/_pdf.pdf');
 const pdfFile2 = await loadPDF('../../__mocks__/_pdf2.pdf');
@@ -58,6 +73,10 @@ async function waitForAsync() {
   });
 }
 
+function renderError({ error }: FallbackProps): React.ReactNode {
+  return <div role="alert">{error instanceof Error ? error.message : String(error)}</div>;
+}
+
 describe('Document', () => {
   // Object with basic loaded PDF information that shall match after successful loading
   const desiredLoadedPdf: Partial<PDFDocumentProxy> = {};
@@ -81,6 +100,7 @@ describe('Document', () => {
           file={pdfFile.dataURI}
           onLoadSuccess={onLoadSuccess}
           onSourceSuccess={onSourceSuccess}
+          suspense={false}
         />,
       );
 
@@ -99,6 +119,7 @@ describe('Document', () => {
           file={{ url: pdfFile.dataURI }}
           onLoadSuccess={onLoadSuccess}
           onSourceSuccess={onSourceSuccess}
+          suspense={false}
         />,
       );
 
@@ -117,6 +138,7 @@ describe('Document', () => {
           file={pdfFile.arrayBuffer}
           onLoadSuccess={onLoadSuccess}
           onSourceSuccess={onSourceSuccess}
+          suspense={false}
         />,
       );
 
@@ -135,6 +157,7 @@ describe('Document', () => {
           file={pdfFile.blob}
           onLoadSuccess={onLoadSuccess}
           onSourceSuccess={onSourceSuccess}
+          suspense={false}
         />,
       );
 
@@ -153,6 +176,7 @@ describe('Document', () => {
           file={pdfFile.file}
           onLoadSuccess={onLoadSuccess}
           onSourceSuccess={onSourceSuccess}
+          suspense={false}
         />,
       );
 
@@ -168,7 +192,7 @@ describe('Document', () => {
       muteConsole();
 
       // @ts-expect-error-next-line
-      await render(<Document file={() => null} onSourceError={onSourceError} />);
+      await render(<Document file={() => null} onSourceError={onSourceError} suspense={false} />);
 
       expect.assertions(1);
 
@@ -188,6 +212,7 @@ describe('Document', () => {
           file={pdfFile.file}
           onLoadSuccess={onLoadSuccess}
           onSourceSuccess={onSourceSuccess}
+          suspense={false}
         />,
       );
 
@@ -204,6 +229,7 @@ describe('Document', () => {
           file={pdfFile2.file}
           onLoadSuccess={onLoadSuccess2}
           onSourceSuccess={onSourceSuccess2}
+          suspense={false}
         />,
       );
 
@@ -216,7 +242,7 @@ describe('Document', () => {
     it('applies className to its wrapper when given a string', async () => {
       const className = 'testClassName';
 
-      const { container } = await render(<Document className={className} />);
+      const { container } = await render(<Document className={className} suspense={false} />);
 
       const wrapper = container.querySelector('.react-pdf__Document');
 
@@ -226,13 +252,13 @@ describe('Document', () => {
     it('passes container element to inputRef properly', async () => {
       const inputRef = createRef<HTMLDivElement>();
 
-      await render(<Document inputRef={inputRef} />);
+      await render(<Document inputRef={inputRef} suspense={false} />);
 
       expect(inputRef.current).toBeInstanceOf(HTMLDivElement);
     });
 
     it('renders "No PDF file specified." when given nothing', async () => {
-      const { container } = await render(<Document />);
+      const { container } = await render(<Document suspense={false} />);
 
       const noData = container.querySelector('.react-pdf__message');
 
@@ -241,7 +267,7 @@ describe('Document', () => {
     });
 
     it('renders custom no data message when given nothing and noData prop is given', async () => {
-      const { container } = await render(<Document noData="Nothing here" />);
+      const { container } = await render(<Document noData="Nothing here" suspense={false} />);
 
       const noData = container.querySelector('.react-pdf__message');
 
@@ -250,7 +276,9 @@ describe('Document', () => {
     });
 
     it('renders custom no data message when given nothing and noData prop is given as a function', async () => {
-      const { container } = await render(<Document noData={() => 'Nothing here'} />);
+      const { container } = await render(
+        <Document noData={() => 'Nothing here'} suspense={false} />,
+      );
 
       const noData = container.querySelector('.react-pdf__message');
 
@@ -259,7 +287,7 @@ describe('Document', () => {
     });
 
     it('renders "Loading PDF…" when loading a file', async () => {
-      const { container } = await render(<Document file={pdfFile.file} />);
+      const { container } = await render(<Document file={pdfFile.file} suspense={false} />);
 
       const loading = container.querySelector('.react-pdf__message');
 
@@ -268,7 +296,9 @@ describe('Document', () => {
     });
 
     it('renders custom loading message when loading a file and loading prop is given', async () => {
-      const { container } = await render(<Document file={pdfFile.file} loading="Loading" />);
+      const { container } = await render(
+        <Document file={pdfFile.file} loading="Loading" suspense={false} />,
+      );
 
       const loading = container.querySelector('.react-pdf__message');
 
@@ -278,7 +308,7 @@ describe('Document', () => {
 
     it('renders custom loading message when loading a file and loading prop is given as a function', async () => {
       const { container } = await render(
-        <Document file={pdfFile.file} loading={() => 'Loading'} />,
+        <Document file={pdfFile.file} loading={() => 'Loading'} suspense={false} />,
       );
 
       const loading = container.querySelector('.react-pdf__message');
@@ -293,7 +323,9 @@ describe('Document', () => {
 
       muteConsole();
 
-      const { container } = await render(<Document file={failingPdf} onLoadError={onLoadError} />);
+      const { container } = await render(
+        <Document file={failingPdf} onLoadError={onLoadError} suspense={false} />,
+      );
 
       expect.assertions(2);
 
@@ -316,7 +348,7 @@ describe('Document', () => {
       muteConsole();
 
       const { container } = await render(
-        <Document error="Error" file={failingPdf} onLoadError={onLoadError} />,
+        <Document error="Error" file={failingPdf} onLoadError={onLoadError} suspense={false} />,
       );
 
       expect.assertions(2);
@@ -341,7 +373,7 @@ describe('Document', () => {
       muteConsole();
 
       const { container } = await render(
-        <Document error="Error" file={failingPdf} onLoadError={onLoadError} />,
+        <Document error="Error" file={failingPdf} onLoadError={onLoadError} suspense={false} />,
       );
 
       expect.assertions(2);
@@ -368,6 +400,7 @@ describe('Document', () => {
           loading="Loading"
           onLoadSuccess={onLoadSuccess}
           renderMode="custom"
+          suspense={false}
         >
           <Child />
         </Document>,
@@ -386,7 +419,13 @@ describe('Document', () => {
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
       await render(
-        <Document file={pdfFile.file} loading="Loading" onLoadSuccess={onLoadSuccess} rotate={90}>
+        <Document
+          file={pdfFile.file}
+          loading="Loading"
+          onLoadSuccess={onLoadSuccess}
+          rotate={90}
+          suspense={false}
+        >
           <Child />
         </Document>,
       );
@@ -404,7 +443,13 @@ describe('Document', () => {
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
       await render(
-        <Document file={pdfFile.file} loading="Loading" onLoadSuccess={onLoadSuccess} scale={1.5}>
+        <Document
+          file={pdfFile.file}
+          loading="Loading"
+          onLoadSuccess={onLoadSuccess}
+          scale={1.5}
+          suspense={false}
+        >
           <Child />
         </Document>,
       );
@@ -427,6 +472,7 @@ describe('Document', () => {
           loading="Loading"
           onLoadSuccess={onLoadSuccess}
           renderMode="canvas"
+          suspense={false}
         >
           <Child renderMode="custom" />
         </Document>,
@@ -445,7 +491,13 @@ describe('Document', () => {
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
       await render(
-        <Document file={pdfFile.file} loading="Loading" onLoadSuccess={onLoadSuccess} rotate={90}>
+        <Document
+          file={pdfFile.file}
+          loading="Loading"
+          onLoadSuccess={onLoadSuccess}
+          rotate={90}
+          suspense={false}
+        >
           <Child rotate={180} />
         </Document>,
       );
@@ -463,7 +515,13 @@ describe('Document', () => {
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
       await render(
-        <Document file={pdfFile.file} loading="Loading" onLoadSuccess={onLoadSuccess} scale={1.5}>
+        <Document
+          file={pdfFile.file}
+          loading="Loading"
+          onLoadSuccess={onLoadSuccess}
+          scale={1.5}
+          suspense={false}
+        >
           <Child scale={2} />
         </Document>,
       );
@@ -481,7 +539,12 @@ describe('Document', () => {
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
       await render(
-        <Document file={pdfFile.file} loading="Loading" onLoadSuccess={onLoadSuccess}>
+        <Document
+          file={pdfFile.file}
+          loading="Loading"
+          onLoadSuccess={onLoadSuccess}
+          suspense={false}
+        >
           {({ pdf }) => <p>{`This PDF has ${pdf.numPages} pages`}</p>}
         </Document>,
       );
@@ -513,6 +576,7 @@ describe('Document', () => {
           onItemClick={onItemClick}
           onLoadSuccess={onLoadSuccess}
           ref={instance}
+          suspense={false}
         />,
       );
 
@@ -549,7 +613,14 @@ describe('Document', () => {
         viewer: React.RefObject<{ scrollPageIntoView: (args: ScrollPageIntoViewArgs) => void }>;
       }>();
 
-      await render(<Document file={pdfFile.file} onLoadSuccess={onLoadSuccess} ref={instance} />);
+      await render(
+        <Document
+          file={pdfFile.file}
+          onLoadSuccess={onLoadSuccess}
+          ref={instance}
+          suspense={false}
+        />,
+      );
 
       if (!instance.current) {
         throw new Error('Document ref is not set');
@@ -600,11 +671,12 @@ describe('Document', () => {
         } = makeAsyncCallback();
 
         const { container } = await render(
-          <Document externalLinkTarget={externalLinkTarget} file={pdfFile.file}>
+          <Document externalLinkTarget={externalLinkTarget} file={pdfFile.file} suspense={false}>
             <Page
               onRenderAnnotationLayerSuccess={onRenderAnnotationLayerSuccess}
               renderMode="none"
               pageNumber={1}
+              suspense={false}
             />
           </Document>,
         );
@@ -634,11 +706,12 @@ describe('Document', () => {
         } = makeAsyncCallback();
 
         const { container } = await render(
-          <Document externalLinkRel={externalLinkRel} file={pdfFile.file}>
+          <Document externalLinkRel={externalLinkRel} file={pdfFile.file} suspense={false}>
             <Page
               onRenderAnnotationLayerSuccess={onRenderAnnotationLayerSuccess}
               renderMode="none"
               pageNumber={1}
+              suspense={false}
             />
           </Document>,
         );
@@ -657,7 +730,7 @@ describe('Document', () => {
   it('calls onClick callback when clicked a document (sample of mouse events family)', async () => {
     const onClick = vi.fn();
 
-    const { container } = await render(<Document onClick={onClick} />);
+    const { container } = await render(<Document onClick={onClick} suspense={false} />);
 
     const document = container.querySelector('.react-pdf__Document') as HTMLDivElement;
     await userEvent.click(document);
@@ -672,7 +745,7 @@ describe('Document', () => {
   it('calls onTouchStart callback when touched a document (sample of touch events family)', async () => {
     const onTouchStart = vi.fn();
 
-    const { container } = await render(<Document onTouchStart={onTouchStart} />);
+    const { container } = await render(<Document onTouchStart={onTouchStart} suspense={false} />);
 
     const document = container.querySelector('.react-pdf__Document') as HTMLDivElement;
     triggerTouchStart(document);
@@ -687,9 +760,9 @@ describe('Document', () => {
 
     const file = { url: pdfFile.dataURI };
 
-    const { rerender } = await render(<Document file={file} />);
+    const { rerender } = await render(<Document file={file} suspense={false} />);
 
-    await rerender(<Document file={file} />);
+    await rerender(<Document file={file} suspense={false} />);
 
     expect(spy).not.toHaveBeenCalled();
 
@@ -701,9 +774,11 @@ describe('Document', () => {
       // Intentionally empty
     });
 
-    const { rerender } = await render(<Document file={{ url: pdfFile.dataURI }} />);
+    const { rerender } = await render(
+      <Document file={{ url: pdfFile.dataURI }} suspense={false} />,
+    );
 
-    await rerender(<Document file={{ url: pdfFile.dataURI }} />);
+    await rerender(<Document file={{ url: pdfFile.dataURI }} suspense={false} />);
 
     expect(spy).toHaveBeenCalledTimes(1);
 
@@ -715,9 +790,11 @@ describe('Document', () => {
       // Intentionally empty
     });
 
-    const { rerender } = await render(<Document file={{ url: pdfFile.dataURI }} />);
+    const { rerender } = await render(
+      <Document file={{ url: pdfFile.dataURI }} suspense={false} />,
+    );
 
-    await rerender(<Document file={{ url: pdfFile2.dataURI }} />);
+    await rerender(<Document file={{ url: pdfFile2.dataURI }} suspense={false} />);
 
     expect(spy).not.toHaveBeenCalled();
 
@@ -731,9 +808,11 @@ describe('Document', () => {
 
     const options = {};
 
-    const { rerender } = await render(<Document file={pdfFile.blob} options={options} />);
+    const { rerender } = await render(
+      <Document file={pdfFile.blob} options={options} suspense={false} />,
+    );
 
-    await rerender(<Document file={pdfFile.blob} options={options} />);
+    await rerender(<Document file={pdfFile.blob} options={options} suspense={false} />);
 
     expect(spy).not.toHaveBeenCalled();
 
@@ -745,9 +824,11 @@ describe('Document', () => {
       // Intentionally empty
     });
 
-    const { rerender } = await render(<Document file={pdfFile.blob} options={{}} />);
+    const { rerender } = await render(
+      <Document file={pdfFile.blob} options={{}} suspense={false} />,
+    );
 
-    await rerender(<Document file={pdfFile.blob} options={{}} />);
+    await rerender(<Document file={pdfFile.blob} options={{}} suspense={false} />);
 
     expect(spy).toHaveBeenCalledTimes(1);
 
@@ -759,9 +840,13 @@ describe('Document', () => {
       // Intentionally empty
     });
 
-    const { rerender } = await render(<Document file={pdfFile.blob} options={{}} />);
+    const { rerender } = await render(
+      <Document file={pdfFile.blob} options={{}} suspense={false} />,
+    );
 
-    await rerender(<Document file={pdfFile.blob} options={{ maxImageSize: 100 }} />);
+    await rerender(
+      <Document file={pdfFile.blob} options={{ maxImageSize: 100 }} suspense={false} />,
+    );
 
     expect(spy).not.toHaveBeenCalled();
 
@@ -771,7 +856,9 @@ describe('Document', () => {
   it('does not throw an error on unmount', async () => {
     const { func: onLoadProgress, promise: onLoadProgressPromise } = makeAsyncCallback();
 
-    const { unmount } = await render(<Document file={pdfFile} onLoadProgress={onLoadProgress} />);
+    const { unmount } = await render(
+      <Document file={pdfFile} onLoadProgress={onLoadProgress} suspense={false} />,
+    );
 
     await onLoadProgressPromise;
 
@@ -784,8 +871,12 @@ describe('Document', () => {
       const onRenderTextLayerSuccess = vi.fn();
 
       const children = (
-        <Document file={pdfFile.dataURI}>
-          <Page onRenderTextLayerSuccess={onRenderTextLayerSuccess} pageNumber={1} />
+        <Document file={pdfFile.dataURI} suspense={false}>
+          <Page
+            onRenderTextLayerSuccess={onRenderTextLayerSuccess}
+            pageNumber={1}
+            suspense={false}
+          />
         </Document>
       );
 
@@ -799,4 +890,302 @@ describe('Document', () => {
       await vi.waitFor(() => expect(onRenderTextLayerSuccess).toHaveBeenCalledTimes(2));
     },
   );
+
+  describe('Suspense', () => {
+    const documents: PDFDocumentLoadingTask[] = [];
+
+    async function loadDocument(data = pdfFile.arrayBuffer): Promise<PDFDocumentProxy> {
+      const task = pdfjs.getDocument({ data });
+      documents.push(task);
+
+      return task.promise;
+    }
+
+    afterAll(async () => {
+      await Promise.all(documents.map((task) => task.destroy()));
+    });
+
+    afterEach(() => {
+      vi.restoreAllMocks();
+    });
+
+    it('reuses memoized file and options when their owner initially suspends in Strict Mode', async () => {
+      const pdf = await loadDocument();
+      const pending = createDeferred<PDFDocumentProxy>();
+      const task = {
+        promise: pending.promise,
+        destroy: vi.fn(async () => {}),
+      } as unknown as PDFDocumentLoadingTask;
+      vi.mocked(pdfjs.getDocument).mockClear().mockReturnValueOnce(task);
+
+      function Viewer() {
+        const file = useMemo(() => ({ url: 'memoized-inputs.pdf' }), []);
+        const options = useMemo(() => ({ httpHeaders: { Authorization: 'test' } }), []);
+
+        return (
+          <Document file={file} options={options}>
+            <p>Document ready</p>
+          </Document>
+        );
+      }
+
+      await render(
+        <StrictMode>
+          <Suspense fallback={<p>Loading document</p>}>
+            <Viewer />
+          </Suspense>
+        </StrictMode>,
+      );
+
+      await expect.element(page.getByText('Loading document')).toBeVisible();
+      pending.resolve(pdf);
+
+      await expect.element(page.getByText('Document ready')).toBeVisible();
+      expect(pdfjs.getDocument).toHaveBeenCalledOnce();
+    });
+
+    it('keeps a document load stable while progress and password callbacks update its parent', async () => {
+      const pdf = await loadDocument();
+      const pending = createDeferred<PDFDocumentProxy>();
+      const task = {
+        promise: pending.promise,
+        destroy: vi.fn(async () => {}),
+        onPassword: vi.fn(),
+        onProgress: vi.fn(),
+      } as unknown as PDFDocumentLoadingTask;
+      const source = pdfFile.arrayBuffer;
+      const updatePassword = vi.fn();
+      vi.mocked(pdfjs.getDocument).mockClear().mockReturnValueOnce(task);
+
+      function Viewer() {
+        const [loaded, setLoaded] = useState(0);
+        const [passwordRequested, setPasswordRequested] = useState(false);
+
+        return (
+          <>
+            <p>Loaded {loaded}</p>
+            {passwordRequested ? <p>Password requested</p> : null}
+            <Suspense fallback={<p>Document loader</p>}>
+              <Document
+                file={source}
+                onLoadProgress={({ loaded }) => setLoaded(loaded)}
+                onPassword={(callback) => {
+                  setPasswordRequested(true);
+                  callback('secret');
+                }}
+              >
+                <p>Document ready</p>
+              </Document>
+            </Suspense>
+          </>
+        );
+      }
+
+      await render(<Viewer />);
+      await expect.element(page.getByText('Document loader')).toBeVisible();
+
+      task.onProgress({ loaded: 50, total: 100 });
+      task.onPassword(updatePassword, PasswordResponses.NEED_PASSWORD);
+
+      await expect.element(page.getByText('Loaded 50')).toBeVisible();
+      await expect.element(page.getByText('Password requested')).toBeVisible();
+      expect(updatePassword).toHaveBeenCalledExactlyOnceWith('secret');
+
+      pending.resolve(pdf);
+
+      await expect.element(page.getByText('Document ready')).toBeVisible();
+      expect(pdfjs.getDocument).toHaveBeenCalledOnce();
+    });
+
+    it('loads a document and page together under one boundary by default', async () => {
+      const source = pdfFile.arrayBuffer;
+      const onLoadSuccess = vi.fn();
+
+      await render(
+        <Suspense fallback={<p>Loading document</p>}>
+          <Document file={source} onLoadSuccess={onLoadSuccess}>
+            <Page
+              pageNumber={1}
+              renderAnnotationLayer={false}
+              renderMode="none"
+              renderTextLayer={false}
+            >
+              <p>Document ready</p>
+            </Page>
+          </Document>
+        </Suspense>,
+      );
+
+      await expect.element(page.getByText('Document ready')).toBeVisible();
+      expect(onLoadSuccess).toHaveBeenCalledOnce();
+      expect(source.byteLength).toBeGreaterThan(0);
+    });
+
+    it.each([false, true])(
+      'scrolls to a page loaded under the same boundary with suspense=%s',
+      async (suspense) => {
+        const documentRef = createRef<React.ComponentRef<typeof Document>>();
+
+        const { container } = await render(
+          <Suspense fallback={<p>Loading document</p>}>
+            <Document file={pdfFile.arrayBuffer} ref={documentRef} suspense={suspense}>
+              <Page
+                pageNumber={1}
+                renderAnnotationLayer={false}
+                renderMode="none"
+                renderTextLayer={false}
+              >
+                <p>Page ready</p>
+              </Page>
+            </Document>
+          </Suspense>,
+        );
+
+        await expect.element(page.getByText('Page ready')).toBeVisible();
+
+        const pageElement = container.querySelector('.react-pdf__Page');
+
+        if (!documentRef.current || !pageElement) {
+          throw new Error('Document and page are not ready');
+        }
+
+        const scrollIntoView = vi.spyOn(pageElement, 'scrollIntoView');
+
+        documentRef.current.viewer.current.scrollPageIntoView({
+          dest: [],
+          pageIndex: 0,
+          pageNumber: 1,
+        });
+
+        expect(scrollIntoView).toHaveBeenCalledOnce();
+      },
+    );
+
+    it.each(['arrayBuffer', 'blob', 'file', 'dataURI'] as const)(
+      'loads a %s source',
+      async (kind) => {
+        await render(
+          <Suspense fallback={<p>Loading document</p>}>
+            <Document file={pdfFile[kind]}>
+              <p>Document ready</p>
+            </Document>
+          </Suspense>,
+        );
+
+        await expect.element(page.getByText('Document ready')).toBeVisible();
+      },
+    );
+
+    it('keeps noData as an ordinary empty state', async () => {
+      await render(<Document noData="Choose a PDF" />);
+
+      await expect.element(page.getByText('Choose a PDF')).toBeVisible();
+    });
+
+    it('sends document source failures to the boundary and callback', async () => {
+      const onSourceError = vi.fn();
+      const onError = vi.fn();
+
+      await render(
+        <ErrorBoundary fallbackRender={renderError} onError={onError}>
+          <Suspense fallback={<p>Loading</p>}>
+            <Document file={{ invalid: true } as unknown as File} onSourceError={onSourceError} />
+          </Suspense>
+        </ErrorBoundary>,
+      );
+
+      await expect
+        .element(page.getByRole('alert'))
+        .toHaveTextContent(
+          'Invariant failed: Invalid parameter object: need either .data, .range or .url',
+        );
+      expect(onSourceError).toHaveBeenCalledWith(expect.any(Error));
+      expect(onError).toHaveBeenCalledWith(expect.any(Error), expect.any(Object));
+    });
+
+    it('sends PDF loading failures to the boundary and callback', async () => {
+      const onLoadError = vi.fn();
+
+      await render(
+        <ErrorBoundary fallbackRender={renderError}>
+          <Suspense fallback={<p>Loading</p>}>
+            <Document file={new ArrayBuffer(0)} onLoadError={onLoadError} />
+          </Suspense>
+        </ErrorBoundary>,
+      );
+
+      await expect
+        .element(page.getByRole('alert'))
+        .toHaveTextContent('The PDF file is empty, i.e. its size is zero bytes.');
+      expect(onLoadError).toHaveBeenCalledOnce();
+    });
+
+    it('retries unchanged document props after a boundary reset in Strict Mode', async () => {
+      const source = pdfFile.arrayBuffer;
+      const failure = new Error('Document temporarily unavailable');
+      const onLoadError = vi.fn();
+      vi.mocked(pdfjs.getDocument)
+        .mockClear()
+        .mockImplementationOnce(
+          () =>
+            ({
+              promise: Promise.reject(failure),
+              destroy: vi.fn(async () => {}),
+            }) as unknown as PDFDocumentLoadingTask,
+        );
+
+      await render(
+        <StrictMode>
+          <ErrorBoundary
+            fallbackRender={({ error, resetErrorBoundary }) => (
+              <>
+                {renderError({ error, resetErrorBoundary })}
+                <button onClick={resetErrorBoundary} type="button">
+                  Retry
+                </button>
+              </>
+            )}
+          >
+            <Suspense fallback={<p>Loading</p>}>
+              <Document file={source} onLoadError={onLoadError}>
+                <p>Retried</p>
+              </Document>
+            </Suspense>
+          </ErrorBoundary>
+        </StrictMode>,
+      );
+
+      await expect.element(page.getByRole('alert')).toHaveTextContent(failure.message);
+      expect(pdfjs.getDocument).toHaveBeenCalledOnce();
+      expect(onLoadError).toHaveBeenCalledExactlyOnceWith(failure);
+
+      await page.getByRole('button', { name: 'Retry' }).click();
+
+      await expect.element(page.getByText('Retried')).toBeVisible();
+      expect(pdfjs.getDocument).toHaveBeenCalledTimes(2);
+    });
+
+    it('reloads the document when its key changes', async () => {
+      const file = pdfFile.arrayBuffer;
+      const onLoadSuccess = vi.fn();
+      vi.mocked(pdfjs.getDocument).mockClear();
+
+      const { rerender } = await render(
+        <Suspense fallback={<p>Loading</p>}>
+          <Document file={file} key="first" onLoadSuccess={onLoadSuccess} />
+        </Suspense>,
+      );
+
+      await vi.waitFor(() => expect(onLoadSuccess).toHaveBeenCalledOnce());
+
+      await rerender(
+        <Suspense fallback={<p>Loading</p>}>
+          <Document file={file} key="second" onLoadSuccess={onLoadSuccess} />
+        </Suspense>,
+      );
+
+      await vi.waitFor(() => expect(onLoadSuccess).toHaveBeenCalledTimes(2));
+      expect(pdfjs.getDocument).toHaveBeenCalledTimes(2);
+    });
+  });
 });
