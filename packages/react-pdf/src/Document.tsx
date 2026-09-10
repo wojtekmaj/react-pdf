@@ -644,12 +644,7 @@ const Document: React.ForwardRefExoticComponent<
   }
 
   return (
-    <div
-      className={clsx('react-pdf__Document', className)}
-      // Assertion is needed for React 18 compatibility
-      ref={inputRef as React.Ref<HTMLDivElement>}
-      {...eventProps}
-    >
+    <div className={clsx('react-pdf__Document', className)} ref={inputRef} {...eventProps}>
       {renderContent()}
     </div>
   );

@@ -654,8 +654,7 @@ export default function Page(props: PageProps): React.ReactElement {
     <div
       className={clsx(_className, className)}
       data-page-number={pageNumber}
-      // Assertion is needed for React 18 compatibility
-      ref={mergeRefs(inputRef as React.Ref<HTMLDivElement>, pageElement)}
+      ref={mergeRefs(inputRef, pageElement)}
       style={
         {
           '--scale-round-x': '1px',
