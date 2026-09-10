@@ -35,6 +35,14 @@ async function renderWithContext(children: React.ReactNode, context: Partial<Pag
   };
 }
 
+function getRenderedTextItemCount(items: TextContent['items']) {
+  const textItems = items.filter((item) => 'str' in item);
+  const spans = textItems.filter((item) => item.str);
+  const lineBreaks = textItems.filter((item) => item.hasEOL);
+
+  return spans.length + lineBreaks.length;
+}
+
 function getTextItems(container: HTMLElement) {
   const wrapper = container.firstElementChild as HTMLDivElement;
 
@@ -150,7 +158,7 @@ describe('TextLayer', () => {
 
       const textItems = getTextItems(container);
 
-      expect(textItems).toHaveLength(desiredTextItems.length);
+      expect(textItems).toHaveLength(getRenderedTextItemCount(desiredTextItems));
     });
 
     it('renders text content properly given customTextRenderer', async () => {
@@ -171,7 +179,7 @@ describe('TextLayer', () => {
 
       const textItems = getTextItems(container);
 
-      expect(textItems).toHaveLength(desiredTextItems.length);
+      expect(textItems).toHaveLength(getRenderedTextItemCount(desiredTextItems));
     });
 
     it('maps textContent items to actual TextLayer children properly', async () => {
@@ -225,7 +233,7 @@ describe('TextLayer', () => {
 
       const textItems = getTextItems(container);
 
-      expect(textItems).toHaveLength(desiredTextItems.length);
+      expect(textItems).toHaveLength(getRenderedTextItemCount(desiredTextItems));
 
       expect(customTextRenderer).toHaveBeenCalledTimes(desiredTextItems.length);
       expect(customTextRenderer).toHaveBeenCalledWith(

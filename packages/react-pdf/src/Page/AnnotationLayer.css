@@ -77,6 +77,16 @@
   transform-origin: 0 0;
 }
 
+.annotationLayer section .overlaidText {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 0;
+  display: inline-block;
+  overflow: hidden;
+}
+
 .annotationLayer .linkAnnotation {
   outline: var(--link-outline);
 }

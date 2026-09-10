@@ -1,4 +1,4 @@
-import { beforeAll, describe, expect, it } from 'vitest';
+import { beforeAll, describe, expect, it, vi } from 'vitest';
 import { render } from 'vitest-browser-react';
 
 import DocumentContext from '../DocumentContext.js';
@@ -195,6 +195,30 @@ describe('AnnotationLayer', () => {
       const annotationItems = Array.from(wrapper.children);
 
       expect(annotationItems).toHaveLength(desiredAnnotations.length);
+    });
+
+    it('calls onRenderAnnotationLayerError when failed to render annotations', async () => {
+      const error = new Error('Annotation rendering failed');
+      const renderAnnotationLayer = vi
+        .spyOn(pdfjs.AnnotationLayer.prototype, 'render')
+        .mockRejectedValueOnce(error);
+      const { func: onRenderAnnotationLayerError, promise: onRenderAnnotationLayerErrorPromise } =
+        makeAsyncCallback();
+
+      muteConsole();
+
+      try {
+        await renderWithContext(
+          <AnnotationLayer />,
+          { linkService, pdf },
+          { onRenderAnnotationLayerError, page },
+        );
+
+        await expect(onRenderAnnotationLayerErrorPromise).resolves.toEqual([error]);
+      } finally {
+        renderAnnotationLayer.mockRestore();
+        restoreConsole();
+      }
     });
 
     it.each`
