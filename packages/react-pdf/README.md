@@ -54,6 +54,10 @@ To use the latest version of React-PDF, your project needs to use React 19 or la
 
 React-PDF may be used with Preact. Use [`preact/compat`](https://preactjs.com/guide/v11/upgrade-guide/#react-compatibility) (Preact's React adapter) with `use` support.
 
+#### Node.js
+
+React-PDF requires Node.js 22.13.0 or newer.
+
 ### Installation
 
 Add React-PDF to your project by executing `npm install react-pdf` or `yarn add react-pdf`.
