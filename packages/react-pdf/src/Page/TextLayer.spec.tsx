@@ -36,14 +36,11 @@ async function renderWithContext(children: React.ReactNode, context: Partial<Pag
 }
 
 function getRenderedTextItemCount(items: TextContent['items']) {
-  return items.reduce((count, item) => {
-    if (!('str' in item)) {
-      return count;
-    }
+  const textItems = items.filter((item) => 'str' in item);
+  const spans = textItems.filter((item) => item.str);
+  const lineBreaks = textItems.filter((item) => item.hasEOL);
 
-    // PDF.js renders nonempty text as a span and each line ending as a separate br.
-    return count + Number(Boolean(item.str)) + Number(item.hasEOL);
-  }, 0);
+  return spans.length + lineBreaks.length;
 }
 
 function getTextItems(container: HTMLElement) {

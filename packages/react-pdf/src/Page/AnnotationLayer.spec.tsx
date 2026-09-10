@@ -197,7 +197,7 @@ describe('AnnotationLayer', () => {
       expect(annotationItems).toHaveLength(desiredAnnotations.length);
     });
 
-    it('calls onRenderAnnotationLayerError when annotation rendering rejects', async () => {
+    it('calls onRenderAnnotationLayerError when failed to render annotations', async () => {
       const error = new Error('Annotation rendering failed');
       const renderAnnotationLayer = vi
         .spyOn(pdfjs.AnnotationLayer.prototype, 'render')
