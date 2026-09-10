@@ -48,7 +48,7 @@ Legacy PDF.js worker supports Chrome 125 and newer, and Safari 18 and newer. Old
 
 #### React
 
-To use the latest version of React-PDF, your project needs to use React 16.8 or later.
+To use the latest version of React-PDF, your project needs to use React 19 or later.
 
 #### Preact
 
