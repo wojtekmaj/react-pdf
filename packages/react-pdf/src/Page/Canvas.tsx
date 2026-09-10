@@ -8,6 +8,7 @@ import warning from 'warning';
 
 import StructTree from '../StructTree.js';
 
+import useErrorBoundaryReporter from '../shared/hooks/useErrorBoundaryReporter.js';
 import usePageContext from '../shared/hooks/usePageContext.js';
 
 import {
@@ -43,8 +44,11 @@ export default function Canvas(props: CanvasProps): React.ReactElement {
     pageColors,
     rotate,
     scale,
+    suspense = true,
   } = mergedProps;
   const { canvasRef } = props;
+
+  const reportError = useErrorBoundaryReporter(suspense);
 
   invariant(page, 'Attempted to render page canvas, but no page was specified.');
 
@@ -77,6 +81,8 @@ export default function Canvas(props: CanvasProps): React.ReactElement {
     if (onRenderErrorProps) {
       onRenderErrorProps(error);
     }
+
+    reportError(error);
   }
 
   const renderViewport = useMemo(
@@ -136,7 +142,7 @@ export default function Canvas(props: CanvasProps): React.ReactElement {
 
       return () => cancelRunningTask(runningTask);
     },
-    [canvasBackground, page, pageColors, renderForms, renderViewport, viewport],
+    [canvasBackground, page, pageColors, renderForms, renderViewport, suspense, viewport],
   );
 
   const cleanup = useCallback(() => {

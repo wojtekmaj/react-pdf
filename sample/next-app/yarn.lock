@@ -651,6 +651,19 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-error-boundary@npm:^6.1.5":
+  version: 6.1.5
+  resolution: "react-error-boundary@npm:6.1.5"
+  peerDependencies:
+    "@types/react": ^18.0.0 || ^19.0.0
+    react: ^18.0.0 || ^19.0.0
+  peerDependenciesMeta:
+    "@types/react":
+      optional: true
+  checksum: 10c0/2ea1da86dd4bb71d346a0cfa2e2cc0095c9ec91882b2a9acca6f2a79a063ef1427c29d819af628ae27d41272d5b82943f737dd81cdae2d90ffd74704b377ec83
+  languageName: node
+  linkType: hard
+
 "react-pdf-sample-page-next@workspace:.":
   version: 0.0.0-use.local
   resolution: "react-pdf-sample-page-next@workspace:."
@@ -659,6 +672,7 @@ __metadata:
     next: "npm:16.3.3"
     react: "npm:^19.2.0"
     react-dom: "npm:^19.2.0"
+    react-error-boundary: "npm:^6.1.5"
     react-pdf: "npm:latest"
   languageName: unknown
   linkType: soft

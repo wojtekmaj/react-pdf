@@ -1,5 +1,7 @@
-import { beforeAll, describe, expect, it } from 'vitest';
+import { afterEach, beforeAll, describe, expect, it, vi } from 'vitest';
+import { page as browserPage } from 'vitest/browser';
 import { render } from 'vitest-browser-react';
+import { ErrorBoundary } from 'react-error-boundary';
 
 import { pdfjs } from './index.test.js';
 import PageContext from './PageContext.js';
@@ -11,13 +13,16 @@ import { loadPDF, makeAsyncCallback, muteConsole, restoreConsole } from '../../.
 
 import type { PDFPageProxy } from 'pdfjs-dist';
 import type { StructTreeNode } from 'pdfjs-dist/types/src/display/api.js';
+import type { FallbackProps } from 'react-error-boundary';
 import type { PageContextType } from './shared/types.js';
 
 const pdfFile = await loadPDF('../../__mocks__/_pdf.pdf');
 
 async function renderWithContext(children: React.ReactNode, context: Partial<PageContextType>) {
   const { rerender, ...otherResult } = await render(
-    <PageContext.Provider value={context as PageContextType}>{children}</PageContext.Provider>,
+    <PageContext.Provider value={{ suspense: false, ...context } as PageContextType}>
+      {children}
+    </PageContext.Provider>,
   );
 
   return {
@@ -32,6 +37,10 @@ async function renderWithContext(children: React.ReactNode, context: Partial<Pag
         </PageContext.Provider>,
       ),
   };
+}
+
+function renderError({ error }: FallbackProps): React.ReactNode {
+  return <div role="alert">{error instanceof Error ? error.message : String(error)}</div>;
 }
 
 describe('StructTree', () => {
@@ -140,6 +149,89 @@ describe('StructTree', () => {
       expect(wrapper.outerHTML).toBe(
         '<span class="react-pdf__Page__structTree structTree"><span><span role="heading" aria-level="1" aria-owns="p3R_mc0"></span><span aria-owns="p3R_mc1"></span><span aria-owns="p3R_mc2"></span><span role="figure" aria-owns="p3R_mc12"></span><span aria-owns="p3R_mc3"></span><span aria-owns="p3R_mc4"></span><span role="heading" aria-level="2" aria-owns="p3R_mc5"></span><span aria-owns="p3R_mc6"></span><span><span aria-owns="p3R_mc7"></span><span role="link"><span aria-owns="pdfjs_internal_id_13R"></span><span aria-owns="p3R_mc8"></span></span><span aria-owns="p3R_mc9"></span></span><span aria-owns="p3R_mc10"></span><span aria-owns="p3R_mc11"></span></span></span>',
       );
+    });
+  });
+
+  describe('Suspense', () => {
+    afterEach(() => {
+      vi.restoreAllMocks();
+    });
+
+    it('reports an existing load error when Suspense is enabled without repeating the callback', async () => {
+      const failure = new Error('StructTree failed');
+      const onError = vi.fn();
+      vi.spyOn(page, 'getStructTree').mockRejectedValue(failure);
+
+      const children = (
+        <ErrorBoundary fallbackRender={renderError}>
+          <StructTree />
+        </ErrorBoundary>
+      );
+      const context = {
+        onGetStructTreeError: onError,
+        page,
+        rotate: 0,
+        scale: 1,
+        suspense: false,
+      };
+
+      const { rerender } = await renderWithContext(children, context);
+
+      await expect.poll(() => onError).toHaveBeenCalledExactlyOnceWith(failure);
+
+      await rerender(children, { ...context, suspense: true });
+
+      await expect.element(browserPage.getByRole('alert')).toHaveTextContent(failure.message);
+      expect(onError).toHaveBeenCalledExactlyOnceWith(failure);
+    });
+
+    it('loads a replacement page when enabling Suspense after an error', async () => {
+      const failure = new Error('StructTree failed');
+      const onError = vi.fn();
+      const onSuccess = vi.fn();
+      vi.spyOn(page, 'getStructTree').mockRejectedValue(failure);
+
+      const children = (
+        <ErrorBoundary fallbackRender={renderError}>
+          <StructTree />
+        </ErrorBoundary>
+      );
+      const context = {
+        onGetStructTreeError: onError,
+        onGetStructTreeSuccess: onSuccess,
+        page,
+        suspense: false,
+      };
+
+      const { rerender } = await renderWithContext(children, context);
+
+      await expect.poll(() => onError).toHaveBeenCalledExactlyOnceWith(failure);
+
+      await rerender(children, { ...context, page: page2, suspense: true });
+
+      await expect.poll(() => onSuccess).toHaveBeenCalledExactlyOnceWith(desiredStructTree2);
+    });
+
+    it('forwards asynchronous getStructTree failures to an Error Boundary', async () => {
+      const failure = new Error('StructTree failed');
+      const onError = vi.fn();
+      vi.spyOn(page, 'getStructTree').mockRejectedValue(failure);
+
+      await renderWithContext(
+        <ErrorBoundary fallbackRender={renderError}>
+          <StructTree />
+        </ErrorBoundary>,
+        {
+          onGetStructTreeError: onError,
+          page,
+          rotate: 0,
+          scale: 1,
+          suspense: true,
+        },
+      );
+
+      await expect.element(browserPage.getByRole('alert')).toHaveTextContent(failure.message);
+      expect(onError).toHaveBeenCalledWith(failure);
     });
   });
 });

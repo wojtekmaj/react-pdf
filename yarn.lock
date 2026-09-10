@@ -938,6 +938,20 @@ __metadata:
   languageName: node
   linkType: hard
 
+"es-toolkit@npm:^1.52.0":
+  version: 1.52.0
+  resolution: "es-toolkit@npm:1.52.0"
+  dependenciesMeta:
+    "@trivago/prettier-plugin-sort-imports@4.3.0":
+      unplugged: true
+    prettier-plugin-sort-re-exports@0.0.1:
+      unplugged: true
+    vitepress-plugin-sandpack@1.1.4:
+      unplugged: true
+  checksum: 10c0/465988c0a6b84b6d1d171287cbbe40c3247a1f94acea210ae14bc66b7d90c93e6839bd6937cbaf2a1d206669f3179eb26141a89d9125969a4b8e58cb7d86a2ca
+  languageName: node
+  linkType: hard
+
 "escape-string-regexp@npm:5.0.0":
   version: 5.0.0
   resolution: "escape-string-regexp@npm:5.0.0"
@@ -1528,6 +1542,19 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-error-boundary@npm:^6.1.5":
+  version: 6.1.5
+  resolution: "react-error-boundary@npm:6.1.5"
+  peerDependencies:
+    "@types/react": ^18.0.0 || ^19.0.0
+    react: ^18.0.0 || ^19.0.0
+  peerDependenciesMeta:
+    "@types/react":
+      optional: true
+  checksum: 10c0/2ea1da86dd4bb71d346a0cfa2e2cc0095c9ec91882b2a9acca6f2a79a063ef1427c29d819af628ae27d41272d5b82943f737dd81cdae2d90ffd74704b377ec83
+  languageName: node
+  linkType: hard
+
 "react-pdf-monorepo@workspace:.":
   version: 0.0.0-use.local
   resolution: "react-pdf-monorepo@workspace:."
@@ -1549,6 +1576,7 @@ __metadata:
     clsx: "npm:^2.0.0"
     cpy-cli: "npm:^5.0.0"
     dequal: "npm:^2.0.3"
+    es-toolkit: "npm:^1.52.0"
     make-cancellable-promise: "npm:^2.0.0"
     make-event-props: "npm:^2.0.0"
     merge-refs: "npm:^2.0.0"
@@ -1556,6 +1584,7 @@ __metadata:
     playwright: "npm:^1.60.0"
     react: "npm:^19.2.0"
     react-dom: "npm:^19.2.0"
+    react-error-boundary: "npm:^6.1.5"
     tiny-invariant: "npm:^1.0.0"
     typescript: "npm:^7.0.2"
     vitest: "npm:^5.0.0"
@@ -1723,6 +1752,7 @@ __metadata:
     "@vitejs/plugin-react": "npm:^6.0.2"
     react: "npm:^19.2.0"
     react-dom: "npm:^19.2.0"
+    react-error-boundary: "npm:^6.1.5"
     react-pdf: "workspace:packages/react-pdf"
     tiny-invariant: "npm:^1.0.0"
     typescript: "npm:^7.0.2"

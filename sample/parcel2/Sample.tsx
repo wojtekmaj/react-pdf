@@ -1,5 +1,6 @@
-import { useCallback, useId, useState } from 'react';
+import { Suspense, useCallback, useId, useState } from 'react';
 import { useResizeObserver } from '@wojtekmaj/react-hooks';
+import { ErrorBoundary } from 'react-error-boundary';
 import { Document, Page, pdfjs } from 'react-pdf';
 import 'react-pdf/dist/Page/AnnotationLayer.css';
 import 'react-pdf/dist/Page/TextLayer.css';
@@ -69,16 +70,20 @@ export default function Sample() {
           <input id={fileId} onChange={onFileChange} type="file" />
         </div>
         <div className="Example__container__document" ref={setContainerRef}>
-          <Document file={file} onLoadSuccess={onDocumentLoadSuccess} options={options}>
-            {Array.from(new Array(numPages), (_el, index) => (
-              <Page
-                // biome-ignore lint/suspicious/noArrayIndexKey: index is stable here
-                key={`page_${index + 1}`}
-                pageNumber={index + 1}
-                width={containerWidth ? Math.min(containerWidth, maxWidth) : maxWidth}
-              />
-            ))}
-          </Document>
+          <ErrorBoundary fallback={<p role="alert">Failed to load PDF.</p>} resetKeys={[file]}>
+            <Suspense fallback={<p>Loading PDF…</p>}>
+              <Document file={file} onLoadSuccess={onDocumentLoadSuccess} options={options}>
+                {Array.from(new Array(numPages), (_el, index) => (
+                  <Page
+                    // biome-ignore lint/suspicious/noArrayIndexKey: index is stable here
+                    key={`page_${index + 1}`}
+                    pageNumber={index + 1}
+                    width={containerWidth ? Math.min(containerWidth, maxWidth) : maxWidth}
+                  />
+                ))}
+              </Document>
+            </Suspense>
+          </ErrorBoundary>
         </div>
       </div>
     </div>

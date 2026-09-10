@@ -2,7 +2,6 @@
 
 import { useEffect, useMemo, useRef } from 'react';
 import clsx from 'clsx';
-import makeCancellable from 'make-cancellable-promise';
 import makeEventProps from 'make-event-props';
 import mergeRefs from 'merge-refs';
 import invariant from 'tiny-invariant';
@@ -15,9 +14,10 @@ import TextLayer from './Page/TextLayer.js';
 import PageContext from './PageContext.js';
 
 import useDocumentContext from './shared/hooks/useDocumentContext.js';
-import useResolver from './shared/hooks/useResolver.js';
+import useResource from './shared/hooks/useResource.js';
 
-import { cancelRunningTask, isProvided, makePageCallback } from './shared/utils.js';
+import ResourceCache from './shared/ResourceCache.js';
+import { isProvided, makePageCallback } from './shared/utils.js';
 
 import type { EventProps } from 'make-event-props';
 import type { PDFDocumentProxy, PDFPageProxy } from 'pdfjs-dist';
@@ -49,6 +49,24 @@ import type {
 } from './shared/types.js';
 
 const defaultScale = 1;
+
+const pageCaches = new WeakMap<
+  PDFDocumentProxy,
+  ResourceCache<[PDFDocumentProxy, number], PDFPageProxy>
+>();
+
+function getPageCache(
+  pdf: PDFDocumentProxy,
+): ResourceCache<[PDFDocumentProxy, number], PDFPageProxy> {
+  let cache = pageCaches.get(pdf);
+
+  if (!cache) {
+    cache = new ResourceCache({ cacheResolved: true });
+    pageCaches.set(pdf, cache);
+  }
+
+  return cache;
+}
 
 export type PageProps = {
   _className?: string;
@@ -301,6 +319,14 @@ export type PageProps = {
    * @example 0.5
    */
   scale?: number;
+  /**
+   * Whether loading suspends and errors propagate to the nearest Error Boundary.
+   * Set to `false` to use the component's loading and error behavior instead.
+   * Inherits from Document when omitted on a child component.
+   *
+   * @default true
+   */
+  suspense?: boolean;
   unregisterPage?: undefined;
   /**
    * Page width. If neither `height` nor `width` are defined, page will be rendered at the size defined in PDF. If you define `width` and `height` at the same time, `height` will be ignored. If you define `width` and `scale` at the same time, the width will be multiplied by a given factor.
@@ -360,13 +386,12 @@ export default function Page(props: PageProps): React.ReactElement {
     renderTextLayer: renderTextLayerProps = true,
     rotate: rotateProps,
     scale: scaleProps = defaultScale,
+    suspense = true,
     unregisterPage,
     width,
     ...otherProps
   } = mergedProps;
 
-  const [pageState, pageDispatch] = useResolver<PDFPageProxy>();
-  const { value: page, error: pageError } = pageState;
   const pageElement = useRef<HTMLDivElement>(null);
 
   invariant(
@@ -377,6 +402,18 @@ export default function Page(props: PageProps): React.ReactElement {
   const pageIndex = isProvided(pageNumberProps) ? pageNumberProps - 1 : (pageIndexProps ?? null);
 
   const pageNumber = pageNumberProps ?? (isProvided(pageIndexProps) ? pageIndexProps + 1 : null);
+
+  const loadPage = useMemo(
+    () => (pageNumber ? () => ({ promise: pdf.getPage(pageNumber) }) : undefined),
+    [pdf, pageNumber],
+  );
+  const { value: page, error: pageError } = useResource(
+    loadPage && pageNumber
+      ? { cache: getPageCache(pdf), key: [pdf, pageNumber], load: loadPage }
+      : undefined,
+    suspense,
+    onLoadErrorProps,
+  );
 
   const rotate = rotateProps ?? (page ? page.rotate : null);
 
@@ -460,36 +497,6 @@ export default function Page(props: PageProps): React.ReactElement {
     }
   }
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: useEffect intentionally triggered on pdf and pageIndex change
-  useEffect(
-    function resetPage() {
-      pageDispatch({ type: 'RESET' });
-    },
-    [pageDispatch, pdf, pageIndex],
-  );
-
-  useEffect(
-    function loadPage() {
-      if (!pdf || !pageNumber) {
-        return;
-      }
-
-      const cancellable = makeCancellable(pdf.getPage(pageNumber));
-      const runningTask = cancellable;
-
-      cancellable.promise
-        .then((nextPage) => {
-          pageDispatch({ type: 'RESOLVE', value: nextPage });
-        })
-        .catch((error) => {
-          pageDispatch({ type: 'REJECT', error });
-        });
-
-      return () => cancelRunningTask(runningTask);
-    },
-    [pageDispatch, pdf, pageNumber],
-  );
-
   // biome-ignore lint/correctness/useExhaustiveDependencies: Omitted callbacks so they are not called every time they change
   useEffect(() => {
     if (page === undefined) {
@@ -534,6 +541,7 @@ export default function Page(props: PageProps): React.ReactElement {
             renderTextLayer: renderTextLayerProps,
             rotate,
             scale,
+            suspense,
           }
         : null,
     [
@@ -562,6 +570,7 @@ export default function Page(props: PageProps): React.ReactElement {
       renderTextLayerProps,
       rotate,
       scale,
+      suspense,
     ],
   );
 

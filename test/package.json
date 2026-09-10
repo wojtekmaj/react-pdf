@@ -21,6 +21,7 @@
   "dependencies": {
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
+    "react-error-boundary": "^6.1.5",
     "react-pdf": "workspace:packages/react-pdf",
     "tiny-invariant": "^1.0.0"
   },

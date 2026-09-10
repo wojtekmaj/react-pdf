@@ -7,6 +7,7 @@ import * as pdfjs from 'pdfjs-dist';
 import invariant from 'tiny-invariant';
 import warning from 'warning';
 
+import useErrorBoundaryReporter from '../shared/hooks/useErrorBoundaryReporter.js';
 import usePageContext from '../shared/hooks/usePageContext.js';
 import useResolver from '../shared/hooks/useResolver.js';
 
@@ -125,11 +126,14 @@ export default function TextLayer(): React.ReactElement {
     pageNumber,
     rotate,
     scale,
+    suspense = true,
   } = pageContext;
+
+  const reportError = useErrorBoundaryReporter(suspense);
 
   invariant(page, 'Attempted to load page text content, but no page was specified.');
 
-  const [textContentState, textContentDispatch] = useResolver<TextContent>();
+  const [textContentState, textContentDispatch] = useResolver<TextContent>(page);
   const { value: textContent, error: textContentError } = textContentState;
   const layerElement = useRef<HTMLDivElement>(null);
 
@@ -171,14 +175,6 @@ export default function TextLayer(): React.ReactElement {
     }
   }
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: useEffect intentionally triggered on page change
-  useEffect(
-    function resetTextContent() {
-      textContentDispatch({ type: 'RESET' });
-    },
-    [page, textContentDispatch],
-  );
-
   useEffect(
     function loadTextContent() {
       if (!page) {
@@ -215,6 +211,12 @@ export default function TextLayer(): React.ReactElement {
     onLoadSuccess();
   }, [textContent]);
 
+  useEffect(() => {
+    if (suspense && textContentError) {
+      reportError(textContentError);
+    }
+  }, [textContentError, reportError, suspense]);
+
   /**
    * Called when a text layer is rendered successfully
    */
@@ -238,8 +240,10 @@ export default function TextLayer(): React.ReactElement {
       if (onRenderTextLayerError) {
         onRenderTextLayerError(error);
       }
+
+      reportError(error);
     },
-    [onRenderTextLayerError],
+    [onRenderTextLayerError, reportError],
   );
 
   function onMouseDown() {
@@ -340,6 +344,7 @@ export default function TextLayer(): React.ReactElement {
       page,
       pageIndex,
       pageNumber,
+      suspense,
       textContent,
       viewport,
     ],
