@@ -168,7 +168,6 @@ export default function AnnotationLayer(): React.ReactElement {
         annotationStorage: pdf.annotationStorage,
         commentManager: null, // TODO: Implement this
         div: layer,
-        l10n: null, // TODO: Implement this
         linkService,
         page,
         structTreeLayer: null, // TODO: Implement this
@@ -188,18 +187,14 @@ export default function AnnotationLayer(): React.ReactElement {
 
       layer.innerHTML = '';
 
-      try {
-        new pdfjs.AnnotationLayer(annotationLayerParameters).render(renderParameters);
+      const cancellable = makeCancellable(
+        new pdfjs.AnnotationLayer(annotationLayerParameters).render(renderParameters),
+      );
+      const runningTask = cancellable;
 
-        // Intentional immediate callback
-        onRenderSuccess();
-      } catch (error) {
-        onRenderError(error);
-      }
+      cancellable.promise.then(onRenderSuccess).catch(onRenderError);
 
-      return () => {
-        // TODO: Cancel running task?
-      };
+      return () => cancelRunningTask(runningTask);
     },
     [
       annotations,

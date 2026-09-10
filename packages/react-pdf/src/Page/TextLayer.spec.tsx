@@ -35,6 +35,17 @@ async function renderWithContext(children: React.ReactNode, context: Partial<Pag
   };
 }
 
+function getRenderedTextItemCount(items: TextContent['items']) {
+  return items.reduce((count, item) => {
+    if (!('str' in item)) {
+      return count;
+    }
+
+    // PDF.js renders nonempty text as a span and each line ending as a separate br.
+    return count + Number(Boolean(item.str)) + Number(item.hasEOL);
+  }, 0);
+}
+
 function getTextItems(container: HTMLElement) {
   const wrapper = container.firstElementChild as HTMLDivElement;
 
@@ -150,7 +161,7 @@ describe('TextLayer', () => {
 
       const textItems = getTextItems(container);
 
-      expect(textItems).toHaveLength(desiredTextItems.length);
+      expect(textItems).toHaveLength(getRenderedTextItemCount(desiredTextItems));
     });
 
     it('renders text content properly given customTextRenderer', async () => {
@@ -171,7 +182,7 @@ describe('TextLayer', () => {
 
       const textItems = getTextItems(container);
 
-      expect(textItems).toHaveLength(desiredTextItems.length);
+      expect(textItems).toHaveLength(getRenderedTextItemCount(desiredTextItems));
     });
 
     it('maps textContent items to actual TextLayer children properly', async () => {
@@ -225,7 +236,7 @@ describe('TextLayer', () => {
 
       const textItems = getTextItems(container);
 
-      expect(textItems).toHaveLength(desiredTextItems.length);
+      expect(textItems).toHaveLength(getRenderedTextItemCount(desiredTextItems));
 
       expect(customTextRenderer).toHaveBeenCalledTimes(desiredTextItems.length);
       expect(customTextRenderer).toHaveBeenCalledWith(
