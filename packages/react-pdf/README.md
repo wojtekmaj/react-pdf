@@ -45,6 +45,22 @@ Minimum browser requirements are Chrome 125 and Safari 18 (iOS 18). Versions bel
 
 For details, see the [PDF.js browser compatibility documentation](https://github.com/mozilla/pdf.js/wiki/Frequently-Asked-Questions#faq-support).
 
+##### Polyfilling `URL.parse`
+
+Modern versions of `pdfjs-dist` utilize the WHATWG static method `URL.parse()` (introduced in Chrome 126, Safari 18, and Node 22.1.0). If you support Chrome <126, Safari <18, or older webviews, add this polyfill at the top of your application's entry point:
+
+```javascript
+if (typeof URL !== 'undefined' && typeof URL.parse !== 'function') {
+  URL.parse = function (url, base) {
+    try {
+      return new URL(url, base);
+    } catch {
+      return null;
+    }
+  };
+}
+```
+
 #### React
 
 To use the latest version of React-PDF, your project needs to use React 19 or later.
