@@ -43,6 +43,22 @@ React-PDF supports the latest versions of all major modern browsers.
 
 Minimum browser requirements are Chrome 125 and Safari 18 (iOS 18). Versions below the latest releases, but meeting these minimums, may require additional polyfills, bundler transpilation, and the [legacy PDF.js worker](#legacy-pdfjs-worker).
 
+For example, Chrome 125 requires a polyfill for `URL.parse()`, which is used by PDF.js. Load the polyfill before initializing React-PDF:
+
+```javascript
+if (typeof URL !== 'undefined' && typeof URL.parse !== 'function') {
+  URL.parse = function (url, base) {
+    try {
+      return new URL(url, base);
+    } catch {
+      return null;
+    }
+  };
+}
+```
+
+Polyfilling this API alone does not establish compatibility with browsers below the minimum requirements.
+
 For details, see the [PDF.js browser compatibility documentation](https://github.com/mozilla/pdf.js/wiki/Frequently-Asked-Questions#faq-support).
 
 #### React
