@@ -67,9 +67,9 @@ describe('OutlineItem', () => {
 
       await renderWithContext(<OutlineItem item={outlineItem} />, { pdf }, { onItemClick });
 
-      const item = page.getByRole('listitem').first();
+      const link = page.getByRole('link', { name: outlineItem.title });
 
-      expect(item).toHaveTextContent(outlineItem.title);
+      expect(link).toHaveTextContent(outlineItem.title);
     });
 
     it("renders item's subitems properly", async () => {

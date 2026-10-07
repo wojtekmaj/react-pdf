@@ -1,7 +1,7 @@
-import { beforeAll, describe, expect, it, vi } from 'vitest';
+import { afterAll, afterEach, beforeAll, describe, expect, it, vi } from 'vitest';
 import { page, userEvent } from 'vitest/browser';
 import { render } from 'vitest-browser-react';
-import { createRef } from 'react';
+import { createRef, Suspense } from 'react';
 
 import DocumentContext from './DocumentContext.js';
 import { pdfjs } from './index.test.js';
@@ -11,9 +11,15 @@ import Thumbnail from './Thumbnail.js';
 import failingPdf from '../../../__mocks__/_failing_pdf.js';
 import silentlyFailingPdf from '../../../__mocks__/_silently_failing_pdf.js';
 
-import { loadPDF, makeAsyncCallback, muteConsole, restoreConsole } from '../../../test-utils.js';
+import {
+  createDeferred,
+  loadPDF,
+  makeAsyncCallback,
+  muteConsole,
+  restoreConsole,
+} from '../../../test-utils.js';
 
-import type { PDFDocumentProxy, PDFPageProxy } from 'pdfjs-dist';
+import type { PDFDocumentLoadingTask, PDFDocumentProxy, PDFPageProxy } from 'pdfjs-dist';
 import type { DocumentContextType, PageCallback } from './shared/types.js';
 
 const pdfFile = await loadPDF('../../__mocks__/_pdf.pdf');
@@ -27,7 +33,7 @@ function createPdfThatNeverLoads(): PDFDocumentProxy {
 
 async function renderWithContext(children: React.ReactNode, context: Partial<DocumentContextType>) {
   const { rerender, ...otherResult } = await render(
-    <DocumentContext.Provider value={context as DocumentContextType}>
+    <DocumentContext.Provider value={{ suspense: false, ...context } as DocumentContextType}>
       {children}
     </DocumentContext.Provider>,
   );
@@ -39,7 +45,9 @@ async function renderWithContext(children: React.ReactNode, context: Partial<Doc
       nextContext: Partial<DocumentContextType> = context,
     ) =>
       await rerender(
-        <DocumentContext.Provider value={nextContext as DocumentContextType}>
+        <DocumentContext.Provider
+          value={{ suspense: false, ...nextContext } as DocumentContextType}
+        >
           {nextChildren}
         </DocumentContext.Provider>,
       ),
@@ -188,7 +196,9 @@ describe('Thumbnail', () => {
 
       const { func: onLoadSuccess2, promise: onLoadSuccessPromise2 } = makeAsyncCallback();
 
-      await rerender(<Thumbnail onLoadSuccess={onLoadSuccess2} pageIndex={0} />, { pdf: pdf2 });
+      await rerender(<Thumbnail onLoadSuccess={onLoadSuccess2} pageIndex={0} />, {
+        pdf: pdf2,
+      });
 
       await expect(onLoadSuccessPromise2).resolves.toMatchObject([desiredLoadedThumbnail3]);
     });
@@ -209,7 +219,9 @@ describe('Thumbnail', () => {
 
       const { func: onLoadSuccess2, promise: onLoadSuccessPromise2 } = makeAsyncCallback();
 
-      await rerender(<Thumbnail onLoadSuccess={onLoadSuccess2} pageIndex={1} />, { pdf });
+      await rerender(<Thumbnail onLoadSuccess={onLoadSuccess2} pageIndex={1} />, {
+        pdf,
+      });
 
       await expect(onLoadSuccessPromise2).resolves.toMatchObject([desiredLoadedThumbnail2]);
     });
@@ -312,7 +324,9 @@ describe('Thumbnail', () => {
     });
 
     it('renders "Loading page…" when loading a page', async () => {
-      await renderWithContext(<Thumbnail pageIndex={0} />, { pdf: createPdfThatNeverLoads() });
+      await renderWithContext(<Thumbnail pageIndex={0} />, {
+        pdf: createPdfThatNeverLoads(),
+      });
 
       const loading = page.getByText('Loading page…');
 
@@ -672,5 +686,49 @@ describe('Thumbnail', () => {
     triggerTouchStart(page);
 
     expect(onTouchStart).toHaveBeenCalled();
+  });
+
+  describe('Suspense', () => {
+    const documents: PDFDocumentLoadingTask[] = [];
+
+    async function loadDocument(data = pdfFile.arrayBuffer): Promise<PDFDocumentProxy> {
+      const task = pdfjs.getDocument({ data });
+      documents.push(task);
+
+      return task.promise;
+    }
+
+    afterAll(async () => {
+      await Promise.all(documents.map((task) => task.destroy()));
+    });
+
+    afterEach(() => {
+      vi.restoreAllMocks();
+    });
+
+    let loadedPage: PDFPageProxy;
+
+    beforeAll(async () => {
+      const pdf = await loadDocument();
+      loadedPage = await pdf.getPage(1);
+    });
+
+    it('suspends thumbnails by default', async () => {
+      const pdf = await loadDocument();
+      const pending = createDeferred<PDFPageProxy>();
+      vi.spyOn(pdf, 'getPage').mockReturnValue(pending.promise);
+
+      await render(
+        <Suspense fallback={<p>Thumbnail loader</p>}>
+          <Thumbnail pageNumber={1} pdf={pdf} renderMode="none">
+            <p>Thumbnail ready</p>
+          </Thumbnail>
+        </Suspense>,
+      );
+
+      await expect.element(page.getByText('Thumbnail loader')).toBeVisible();
+      pending.resolve(loadedPage);
+      await expect.element(page.getByText('Thumbnail ready')).toBeVisible();
+    });
   });
 });

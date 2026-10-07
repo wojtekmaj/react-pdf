@@ -12,7 +12,6 @@ const config: ViteUserConfig = defineConfig({
       provider: playwright(),
     },
     exclude: [...configDefaults.exclude, 'dist/index.test.js', 'src/index.test.ts'],
-    pool: 'forks',
     setupFiles: 'vitest.setup.ts',
     watch: false,
   },

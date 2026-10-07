@@ -25,11 +25,8 @@ jobs:
         run: biome lint
 
   typescript:
-    name: Type checking (React ${{ matrix.react }})
+    name: Type checking
     runs-on: ubuntu-24.04-arm
-    strategy:
-      matrix:
-        react: [18, 19]
 
     steps:
       - name: Checkout
@@ -58,18 +55,10 @@ jobs:
         env:
           PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: true
 
-      - name: Override React version
-        if: ${{ matrix.react == 18 }}
-        run: |
-          npm pkg set resolutions.'@types/react'='npm:^18.0.0'
-          npm pkg set resolutions.'@types/react-dom'='npm:^18.0.0'
-          yarn config set enableImmutableInstalls false
-          yarn up react@^18.0.0 react-dom@^18.0.0
-
       - name: Build package
         run: yarn build
 
-      - name: Run type checking (React ${{ matrix.react }})
+      - name: Run type checking
         run: yarn tsc
 
   format:
@@ -87,11 +76,8 @@ jobs:
         run: biome format
 
   unit:
-    name: Unit tests (React ${{ matrix.react }})
+    name: Unit tests
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        react: [18, 19]
 
     steps:
       - name: Checkout
@@ -126,14 +112,6 @@ jobs:
 
       - name: Install dependencies
         run: yarn --immutable
-
-      - name: Override React version
-        if: ${{ matrix.react == 18 }}
-        run: |
-          npm pkg set resolutions.'@types/react'='npm:^18.0.0'
-          npm pkg set resolutions.'@types/react-dom'='npm:^18.0.0'
-          yarn config set enableImmutableInstalls false
-          yarn up react@^18.0.0 react-dom@^18.0.0
 
       - name: Install Playwright browsers
         if: steps.playwright-cache.outputs.cache-hit != 'true'

@@ -624,12 +624,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"nanoid@npm:^3.3.12":
-  version: 3.3.12
-  resolution: "nanoid@npm:3.3.12"
+"nanoid@npm:^3.3.17":
+  version: 3.3.18
+  resolution: "nanoid@npm:3.3.18"
   bin:
     nanoid: bin/nanoid.cjs
-  checksum: 10c0/ba142b7b39e11e80c16dd74b0365d407880c87c1cf7e1480956981ae940ee36060fa5b6f092cd1e315184dd19244c657bd017d03327bd3c62247d691c5e8edfb
+  checksum: 10c0/b994b4e396730f8be2520923284e2040d61eaee55cc6d4935ef6d38d34bafdc46133eda4d3faea5073bda545aa6079d82b886caeac5c731cf9ac18bcc1301425
   languageName: node
   linkType: hard
 
@@ -681,13 +681,13 @@ __metadata:
   linkType: hard
 
 "postcss@npm:^8.5.15":
-  version: 8.5.15
-  resolution: "postcss@npm:8.5.15"
+  version: 8.5.26
+  resolution: "postcss@npm:8.5.26"
   dependencies:
-    nanoid: "npm:^3.3.12"
+    nanoid: "npm:^3.3.17"
     picocolors: "npm:^1.1.1"
     source-map-js: "npm:^1.2.1"
-  checksum: 10c0/7f2e63ae22fbe43aace1bf652bd99da4e90737c64194d49e51ddc9cd0f9e51ff2861a7d734379b494deffa03a880a5c65eec70bc29ee9ebaa7136dde3eee8f31
+  checksum: 10c0/2bdafc00d96bd57b6649a52e458864a4bf58ee56cfdbe4aea1472b5cccc127e6c1ad653bd0bec50d211e650eb0b9270c80e1e72aff2e2fa40d9e7363234d6e43
   languageName: node
   linkType: hard
 
@@ -702,6 +702,19 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-error-boundary@npm:^6.1.5":
+  version: 6.1.5
+  resolution: "react-error-boundary@npm:6.1.5"
+  peerDependencies:
+    "@types/react": ^18.0.0 || ^19.0.0
+    react: ^18.0.0 || ^19.0.0
+  peerDependenciesMeta:
+    "@types/react":
+      optional: true
+  checksum: 10c0/2ea1da86dd4bb71d346a0cfa2e2cc0095c9ec91882b2a9acca6f2a79a063ef1427c29d819af628ae27d41272d5b82943f737dd81cdae2d90ffd74704b377ec83
+  languageName: node
+  linkType: hard
+
 "react-pdf-sample-page-vite4@workspace:.":
   version: 0.0.0-use.local
   resolution: "react-pdf-sample-page-vite4@workspace:."
@@ -710,6 +723,7 @@ __metadata:
     "@wojtekmaj/react-hooks": "npm:^2.0.0"
     react: "npm:^19.2.0"
     react-dom: "npm:^19.2.0"
+    react-error-boundary: "npm:^6.1.5"
     react-pdf: "npm:latest"
     vite: "npm:^8.0.16"
     vite-plugin-static-copy: "npm:^4.0.1"

@@ -21,11 +21,12 @@
   "dependencies": {
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
+    "react-error-boundary": "^6.1.5",
     "react-pdf": "workspace:packages/react-pdf",
     "tiny-invariant": "^1.0.0"
   },
   "devDependencies": {
-    "@biomejs/biome": "2.4.10",
+    "@biomejs/biome": "2.5.8",
     "@types/react": "^19.2.0",
     "@vitejs/plugin-react": "^6.0.2",
     "typescript": "^7.0.2",

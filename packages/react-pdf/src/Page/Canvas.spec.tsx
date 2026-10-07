@@ -1,5 +1,7 @@
-import { beforeAll, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeAll, describe, expect, it, vi } from 'vitest';
+import { page as browserPage } from 'vitest/browser';
 import { render } from 'vitest-browser-react';
+import { ErrorBoundary } from 'react-error-boundary';
 
 import { pdfjs } from '../index.test.js';
 import PageContext from '../PageContext.js';
@@ -10,13 +12,16 @@ import failingPage from '../../../../__mocks__/_failing_page.js';
 import { loadPDF, makeAsyncCallback, muteConsole, restoreConsole } from '../../../../test-utils.js';
 
 import type { PDFPageProxy } from 'pdfjs-dist';
+import type { FallbackProps } from 'react-error-boundary';
 import type { PageContextType } from '../shared/types.js';
 
 const pdfFile = await loadPDF('../../__mocks__/_pdf.pdf');
 
 async function renderWithContext(children: React.ReactNode, context: Partial<PageContextType>) {
   const { rerender, ...otherResult } = await render(
-    <PageContext.Provider value={context as PageContextType}>{children}</PageContext.Provider>,
+    <PageContext.Provider value={{ suspense: false, ...context } as PageContextType}>
+      {children}
+    </PageContext.Provider>,
   );
 
   return {
@@ -31,6 +36,10 @@ async function renderWithContext(children: React.ReactNode, context: Partial<Pag
         </PageContext.Provider>,
       ),
   };
+}
+
+function renderError({ error }: FallbackProps): React.ReactNode {
+  return <div role="alert">{error instanceof Error ? error.message : String(error)}</div>;
 }
 
 describe('Canvas', () => {
@@ -138,5 +147,52 @@ describe('Canvas', () => {
 
       expect(canvas.children.length).toBeGreaterThan(0);
     });
+  });
+
+  describe('Suspense', () => {
+    afterEach(() => {
+      vi.restoreAllMocks();
+    });
+
+    it.each([true, false])(
+      'forwards rendering failures when Suspense is enabled (initial suspense=%s)',
+      async (suspense) => {
+        const failure = new Error('Canvas failed');
+        const onError = vi.fn();
+        vi.spyOn(page, 'render').mockImplementation(
+          () =>
+            ({
+              promise: Promise.reject(failure),
+              cancel: vi.fn(),
+            }) as unknown as ReturnType<PDFPageProxy['render']>,
+        );
+
+        const children = (
+          <ErrorBoundary fallbackRender={renderError}>
+            <Canvas />
+          </ErrorBoundary>
+        );
+        const context = {
+          onRenderError: onError,
+          page,
+          renderTextLayer: false,
+          rotate: 0,
+          scale: 1,
+          suspense,
+        };
+
+        const { rerender } = await renderWithContext(children, context);
+
+        if (!suspense) {
+          await expect.poll(() => onError).toHaveBeenCalledExactlyOnceWith(failure);
+
+          // Switching modes retries rendering under the new error handling behavior.
+          await rerender(children, { ...context, suspense: true });
+        }
+
+        await expect.element(browserPage.getByRole('alert')).toHaveTextContent(failure.message);
+        expect(onError).toHaveBeenCalledWith(failure);
+      },
+    );
   });
 });

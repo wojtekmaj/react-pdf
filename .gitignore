@@ -18,6 +18,7 @@
 !**/.yarn/versions
 
 # Project-generated directories and files
+.vitest
 __screenshots__
 coverage
 dist

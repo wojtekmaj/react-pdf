@@ -1,9 +1,6 @@
-import { useReducer } from 'react';
+import { useReducer, useState } from 'react';
 
-type State<T> =
-  | { value: T; error: undefined }
-  | { value: false; error: Error }
-  | { value: undefined; error: undefined };
+export type State<T> = { value: T | undefined; error: undefined } | { value: false; error: Error };
 
 type Action<T> =
   | { type: 'RESOLVE'; value: T }
@@ -23,6 +20,15 @@ function reducer<T>(state: State<T>, action: Action<T>): State<T> {
   }
 }
 
-export default function useResolver<T>(): [State<T>, React.Dispatch<Action<T>>] {
-  return useReducer(reducer<T>, { value: undefined, error: undefined });
+export default function useResolver<T>(resetKey?: unknown): [State<T>, React.Dispatch<Action<T>>] {
+  const [previousResetKey, setPreviousResetKey] = useState(() => resetKey);
+  const [state, dispatch] = useReducer(reducer<T>, { value: undefined, error: undefined });
+
+  // Reset before effects can report a result belonging to the previous input.
+  if (!Object.is(previousResetKey, resetKey)) {
+    setPreviousResetKey(() => resetKey);
+    dispatch({ type: 'RESET' });
+  }
+
+  return [state, dispatch];
 }

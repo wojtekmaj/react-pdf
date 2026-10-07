@@ -1,8 +1,7 @@
 'use client';
 
-import { useEffect, useMemo } from 'react';
+import { useCallback, useEffect, useMemo } from 'react';
 import clsx from 'clsx';
-import makeCancellable from 'make-cancellable-promise';
 import makeEventProps from 'make-event-props';
 import invariant from 'tiny-invariant';
 import warning from 'warning';
@@ -11,15 +10,31 @@ import OutlineContext from './OutlineContext.js';
 import OutlineItem from './OutlineItem.js';
 
 import useDocumentContext from './shared/hooks/useDocumentContext.js';
-import useResolver from './shared/hooks/useResolver.js';
+import useResource from './shared/hooks/useResource.js';
 
-import { cancelRunningTask } from './shared/utils.js';
+import ResourceCache from './shared/ResourceCache.js';
 
 import type { EventProps } from 'make-event-props';
 import type { PDFDocumentProxy } from 'pdfjs-dist';
 import type { ClassName, OnItemClickArgs } from './shared/types.js';
 
 type PDFOutline = Awaited<ReturnType<PDFDocumentProxy['getOutline']>>;
+
+const outlineCaches = new WeakMap<
+  PDFDocumentProxy,
+  ResourceCache<[PDFDocumentProxy], PDFOutline>
+>();
+
+function getOutlineCache(pdf: PDFDocumentProxy): ResourceCache<[PDFDocumentProxy], PDFOutline> {
+  let cache = outlineCaches.get(pdf);
+
+  if (!cache) {
+    cache = new ResourceCache({ cacheResolved: true });
+    outlineCaches.set(pdf, cache);
+  }
+
+  return cache;
+}
 
 export type OutlineProps = {
   /**
@@ -56,6 +71,14 @@ export type OutlineProps = {
    */
   onLoadSuccess?: (outline: PDFOutline | null) => void;
   pdf?: PDFDocumentProxy | false;
+  /**
+   * Whether loading suspends and errors propagate to the nearest Error Boundary.
+   * Set to `false` to use the component's loading and error behavior instead.
+   * Inherits from Document when omitted on a child component.
+   *
+   * @default true
+   */
+  suspense?: boolean;
 } & EventProps<PDFOutline | null | false | undefined>;
 
 /**
@@ -74,6 +97,7 @@ export default function Outline(props: OutlineProps): React.ReactElement | null 
     onLoadError: onLoadErrorProps,
     onLoadSuccess: onLoadSuccessProps,
     pdf,
+    suspense = true,
     ...otherProps
   } = mergedProps;
 
@@ -82,8 +106,12 @@ export default function Outline(props: OutlineProps): React.ReactElement | null 
     'Attempted to load an outline, but no document was specified. Wrap <Outline /> in a <Document /> or pass explicit `pdf` prop.',
   );
 
-  const [outlineState, outlineDispatch] = useResolver<PDFOutline | null>();
-  const { value: outline, error: outlineError } = outlineState;
+  const loadOutline = useCallback(() => ({ promise: pdf.getOutline() }), [pdf]);
+  const { value: outline, error: outlineError } = useResource(
+    { cache: getOutlineCache(pdf), key: [pdf], load: loadOutline },
+    suspense,
+    onLoadErrorProps,
+  );
 
   /**
    * Called when an outline is read successfully
@@ -113,32 +141,6 @@ export default function Outline(props: OutlineProps): React.ReactElement | null 
       onLoadErrorProps(outlineError);
     }
   }
-
-  // biome-ignore lint/correctness/useExhaustiveDependencies: useEffect intentionally triggered on pdf change
-  useEffect(
-    function resetOutline() {
-      outlineDispatch({ type: 'RESET' });
-    },
-    [outlineDispatch, pdf],
-  );
-
-  useEffect(
-    function loadOutline() {
-      const cancellable = makeCancellable(pdf.getOutline());
-      const runningTask = cancellable;
-
-      cancellable.promise
-        .then((nextOutline) => {
-          outlineDispatch({ type: 'RESOLVE', value: nextOutline });
-        })
-        .catch((error) => {
-          outlineDispatch({ type: 'REJECT', error });
-        });
-
-      return () => cancelRunningTask(runningTask);
-    },
-    [outlineDispatch, pdf],
-  );
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: Omitted callbacks so they are not called every time they change
   useEffect(() => {
