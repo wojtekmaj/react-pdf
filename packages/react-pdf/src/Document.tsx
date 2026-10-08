@@ -601,6 +601,14 @@ const Document: React.ForwardRefExoticComponent<
     [otherProps, pdf],
   );
 
+  const documentState = !file
+    ? 'no-data'
+    : pdf === undefined || pdf === null
+      ? 'loading'
+      : pdf === false
+        ? 'error'
+        : undefined;
+
   function renderChildren() {
     function isFulfilledContext(context: DocumentContextType): context is DocumentRenderProps {
       return Boolean(context?.pdf);
@@ -619,17 +627,17 @@ const Document: React.ForwardRefExoticComponent<
   }
 
   function renderContent() {
-    if (!file) {
+    if (documentState === 'no-data') {
       return <Message type="no-data">{typeof noData === 'function' ? noData() : noData}</Message>;
     }
 
-    if (pdf === undefined || pdf === null) {
+    if (documentState === 'loading') {
       return (
         <Message type="loading">{typeof loading === 'function' ? loading() : loading}</Message>
       );
     }
 
-    if (pdf === false) {
+    if (documentState === 'error') {
       return <Message type="error">{typeof error === 'function' ? error() : error}</Message>;
     }
 
@@ -637,7 +645,15 @@ const Document: React.ForwardRefExoticComponent<
   }
 
   return (
-    <div className={clsx('react-pdf__Document', className)} ref={inputRef} {...eventProps}>
+    <div
+      className={clsx(
+        'react-pdf__Document',
+        documentState && `react-pdf__Document--${documentState}`,
+        className,
+      )}
+      ref={inputRef}
+      {...eventProps}
+    >
       {renderContent()}
     </div>
   );

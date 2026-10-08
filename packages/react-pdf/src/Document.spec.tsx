@@ -261,9 +261,11 @@ describe('Document', () => {
       const { container } = await render(<Document suspense={false} />);
 
       const noData = container.querySelector('.react-pdf__message');
+      const wrapper = container.querySelector('.react-pdf__Document');
 
       expect(noData).toBeInTheDocument();
       expect(noData).toHaveTextContent('No PDF file specified.');
+      expect(wrapper).toHaveClass('react-pdf__Document--no-data');
     });
 
     it('renders custom no data message when given nothing and noData prop is given', async () => {
@@ -290,9 +292,28 @@ describe('Document', () => {
       const { container } = await render(<Document file={pdfFile.file} suspense={false} />);
 
       const loading = container.querySelector('.react-pdf__message');
+      const wrapper = container.querySelector('.react-pdf__Document');
 
       expect(loading).toBeInTheDocument();
+      expect(wrapper).toHaveClass('react-pdf__Document--loading');
       await expect.element(page.getByText('Loading PDF…')).toBeInTheDocument();
+    });
+
+    it('removes its state modifier class after loading a file', async () => {
+      const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
+
+      const { container } = await render(
+        <Document file={pdfFile.file} onLoadSuccess={onLoadSuccess} suspense={false} />,
+      );
+
+      const wrapper = container.querySelector('.react-pdf__Document');
+
+      await onLoadSuccessPromise;
+      await waitForAsync();
+
+      expect(wrapper).not.toHaveClass('react-pdf__Document--no-data');
+      expect(wrapper).not.toHaveClass('react-pdf__Document--loading');
+      expect(wrapper).not.toHaveClass('react-pdf__Document--error');
     });
 
     it('renders custom loading message when loading a file and loading prop is given', async () => {
@@ -327,15 +348,17 @@ describe('Document', () => {
         <Document file={failingPdf} onLoadError={onLoadError} suspense={false} />,
       );
 
-      expect.assertions(2);
+      expect.assertions(3);
 
       await onLoadErrorPromise;
 
       await waitForAsync();
 
       const error = container.querySelector('.react-pdf__message');
+      const wrapper = container.querySelector('.react-pdf__Document');
 
       expect(error).toBeInTheDocument();
+      expect(wrapper).toHaveClass('react-pdf__Document--error');
       await expect.element(page.getByText('Failed to load PDF file.')).toBeInTheDocument();
 
       restoreConsole();
