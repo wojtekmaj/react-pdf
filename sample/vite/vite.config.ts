@@ -18,9 +18,9 @@ export default defineConfig({
   plugins: [
     viteStaticCopy({
       targets: [
-        { src: cMapsDir, dest: '' },
-        { src: standardFontsDir, dest: '' },
-        { src: wasmDir, dest: '' },
+        { src: cMapsDir, dest: 'cmaps', rename: { stripBase: true } },
+        { src: standardFontsDir, dest: 'standard_fonts', rename: { stripBase: true } },
+        { src: wasmDir, dest: 'wasm', rename: { stripBase: true } },
       ],
     }),
   ],

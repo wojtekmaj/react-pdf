@@ -297,7 +297,7 @@ export default defineConfig({
 +   viteStaticCopy({
 +     targets: [
 +       {
-+         src: `${cMapsDir}/*`,
++         src: cMapsDir,
 +         dest: 'cmaps',
 +         rename: { stripBase: true },
 +       },
@@ -416,7 +416,7 @@ export default defineConfig({
 +   viteStaticCopy({
 +     targets: [
 +       {
-+         src: `${wasmDir}/*`,
++         src: wasmDir,
 +         dest: 'wasm',
 +         rename: { stripBase: true },
 +       },
@@ -534,7 +534,7 @@ export default defineConfig({
 +   viteStaticCopy({
 +     targets: [
 +       {
-+         src: `${standardFontsDir}/*`,
++         src: standardFontsDir,
 +         dest: 'standard_fonts',
 +         rename: { stripBase: true },
 +       },
