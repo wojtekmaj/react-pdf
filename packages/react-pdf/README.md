@@ -298,7 +298,8 @@ export default defineConfig({
 +     targets: [
 +       {
 +         src: cMapsDir,
-+         dest: '',
++         dest: 'cmaps',
++         rename: { stripBase: true },
 +       },
 +     ],
 +   }),
@@ -378,12 +379,13 @@ const options = {
 <Document options={options} />;
 ```
 
-### Support for JPEG 2000
+### Support for JPEG 2000 and JBIG2
 
-If you want to ensure that JPEG 2000 images in PDFs will render, or you have encountered the following warning:
+If you want to ensure that JPEG 2000 and JBIG2 images in PDFs will render, or you have encountered one of the following warnings:
 
 ```
 Warning: Unable to decode image "img_p0_1": "JpxError: OpenJPEG failed to initialize".
+Warning: Unable to decode image "img_p0_1": "Jbig2Error: JBig2 failed to initialize".
 ```
 
 then you would also need to include wasm directory in your build and tell React-PDF where it is.
@@ -415,7 +417,8 @@ export default defineConfig({
 +     targets: [
 +       {
 +         src: wasmDir,
-+         dest: '',
++         dest: 'wasm',
++         rename: { stripBase: true },
 +       },
 +     ],
 +   }),
@@ -532,7 +535,8 @@ export default defineConfig({
 +     targets: [
 +       {
 +         src: standardFontsDir,
-+         dest: '',
++         dest: 'standard_fonts',
++         rename: { stripBase: true },
 +       },
 +     ],
 +   }),
