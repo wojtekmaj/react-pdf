@@ -263,6 +263,47 @@ describe('Thumbnail', () => {
       expect(inputRef.current).toBeInstanceOf(HTMLDivElement);
     });
 
+    it('applies no-data class to its page wrapper when given neither pageIndex nor pageNumber', async () => {
+      muteConsole();
+
+      const { container } = await renderWithContext(<Thumbnail />, { pdf });
+
+      const wrapper = container.querySelector('.react-pdf__Thumbnail__page');
+
+      expect(wrapper).toHaveClass('react-pdf__Thumbnail__page--no-data');
+
+      restoreConsole();
+    });
+
+    it('applies loading class to its page wrapper when loading a page', async () => {
+      const { container } = await renderWithContext(<Thumbnail pageIndex={0} />, {
+        pdf: createPdfThatNeverLoads(),
+      });
+
+      const wrapper = container.querySelector('.react-pdf__Thumbnail__page');
+
+      expect(wrapper).toHaveClass('react-pdf__Thumbnail__page--loading');
+    });
+
+    it('applies error class to its page wrapper when failed to load a page', async () => {
+      const { func: onLoadError, promise: onLoadErrorPromise } = makeAsyncCallback();
+
+      muteConsole();
+
+      const { container } = await renderWithContext(
+        <Thumbnail onLoadError={onLoadError} pageIndex={0} />,
+        { pdf: failingPdf },
+      );
+
+      await onLoadErrorPromise;
+
+      const wrapper = container.querySelector('.react-pdf__Thumbnail__page');
+
+      expect(wrapper).toHaveClass('react-pdf__Thumbnail__page--error');
+
+      restoreConsole();
+    });
+
     it('passes canvas element to ThumbnailCanvas properly', async () => {
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 

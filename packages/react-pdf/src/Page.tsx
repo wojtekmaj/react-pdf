@@ -659,9 +659,25 @@ export default function Page(props: PageProps): React.ReactElement {
     return renderChildren();
   }
 
+  const pageState = (() => {
+    if (!pageNumber) {
+      return 'no-data';
+    }
+
+    if (page === undefined || page === null) {
+      return 'loading';
+    }
+
+    if (page === false) {
+      return 'error';
+    }
+
+    return undefined;
+  })();
+
   return (
     <div
-      className={clsx(_className, className)}
+      className={clsx(_className, pageState && `${_className}--${pageState}`, className)}
       data-page-number={pageNumber}
       ref={mergeRefs(inputRef, pageElement)}
       style={

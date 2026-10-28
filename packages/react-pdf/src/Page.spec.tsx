@@ -336,6 +336,54 @@ describe('Page', () => {
       expect(inputRef.current).toBeInstanceOf(HTMLDivElement);
     });
 
+    it('applies no-data class to its wrapper when given neither pageIndex nor pageNumber', async () => {
+      muteConsole();
+
+      const { container } = await renderWithContext(<Page />, {
+        linkService,
+        pdf,
+      });
+
+      const wrapper = container.querySelector('.react-pdf__Page');
+
+      expect(wrapper).toHaveClass('react-pdf__Page--no-data');
+
+      restoreConsole();
+    });
+
+    it('applies loading class to its wrapper when loading a page', async () => {
+      const { container } = await renderWithContext(<Page pageIndex={0} />, {
+        linkService,
+        pdf: createPdfThatNeverLoads(),
+      });
+
+      const wrapper = container.querySelector('.react-pdf__Page');
+
+      expect(wrapper).toHaveClass('react-pdf__Page--loading');
+    });
+
+    it('applies error class to its wrapper when failed to load a page', async () => {
+      const { func: onLoadError, promise: onLoadErrorPromise } = makeAsyncCallback();
+
+      muteConsole();
+
+      const { container } = await renderWithContext(
+        <Page onLoadError={onLoadError} pageIndex={0} />,
+        {
+          linkService,
+          pdf: failingPdf,
+        },
+      );
+
+      await onLoadErrorPromise;
+
+      const wrapper = container.querySelector('.react-pdf__Page');
+
+      expect(wrapper).toHaveClass('react-pdf__Page--error');
+
+      restoreConsole();
+    });
+
     it('passes canvas element to Canvas properly', async () => {
       const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
 
