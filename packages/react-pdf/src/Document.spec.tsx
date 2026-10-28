@@ -257,6 +257,42 @@ describe('Document', () => {
       expect(inputRef.current).toBeInstanceOf(HTMLDivElement);
     });
 
+    it('applies no-data class to its wrapper when given nothing', async () => {
+      const { container } = await render(<Document suspense={false} />);
+
+      const wrapper = container.querySelector('.react-pdf__Document');
+
+      expect(wrapper).toHaveClass('react-pdf__Document--no-data');
+    });
+
+    it('applies loading class to its wrapper when loading a file', async () => {
+      const { container } = await render(<Document file={pdfFile.file} suspense={false} />);
+
+      const wrapper = container.querySelector('.react-pdf__Document');
+
+      expect(wrapper).toHaveClass('react-pdf__Document--loading');
+    });
+
+    it('applies error class to its wrapper when failed to load a document', async () => {
+      const { func: onLoadError, promise: onLoadErrorPromise } = makeAsyncCallback();
+      const failingPdf = 'data:application/pdf;base64,abcdef';
+
+      muteConsole();
+
+      const { container } = await render(
+        <Document file={failingPdf} onLoadError={onLoadError} suspense={false} />,
+      );
+
+      await onLoadErrorPromise;
+      await waitForAsync();
+
+      const wrapper = container.querySelector('.react-pdf__Document');
+
+      expect(wrapper).toHaveClass('react-pdf__Document--error');
+
+      restoreConsole();
+    });
+
     it('renders "No PDF file specified." when given nothing', async () => {
       const { container } = await render(<Document suspense={false} />);
 

@@ -636,8 +636,32 @@ const Document: React.ForwardRefExoticComponent<
     return renderChildren();
   }
 
+  const documentState = (() => {
+    if (!file) {
+      return 'no-data';
+    }
+
+    if (pdf === undefined || pdf === null) {
+      return 'loading';
+    }
+
+    if (pdf === false) {
+      return 'error';
+    }
+
+    return undefined;
+  })();
+
   return (
-    <div className={clsx('react-pdf__Document', className)} ref={inputRef} {...eventProps}>
+    <div
+      className={clsx(
+        'react-pdf__Document',
+        documentState && `react-pdf__Document--${documentState}`,
+        className,
+      )}
+      ref={inputRef}
+      {...eventProps}
+    >
       {renderContent()}
     </div>
   );
