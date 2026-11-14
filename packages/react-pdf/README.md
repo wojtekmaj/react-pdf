@@ -91,6 +91,9 @@ module.exports = {
 
 For React-PDF to work, PDF.js worker needs to be provided. You have several options.
 
+> [!WARNING]
+> The PDF.js worker must match React-PDF's **exact `pdfjs-dist` version**. Multiple installed versions can cause imports or copy scripts to pick the wrong worker, breaking PDF loading. If you install `pdfjs-dist` directly, pin it to that version and keep them in sync when updating dependencies.
+
 #### Import worker (recommended)
 
 For most cases, the following example will work:
