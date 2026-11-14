@@ -41,23 +41,7 @@ React-PDF is under constant development. This documentation is written for React
 
 React-PDF supports the latest versions of all major modern browsers.
 
-Minimum browser requirements are Chrome 125 and Safari 18 (iOS 18). Versions below the latest releases, but meeting these minimums, may require additional polyfills, bundler transpilation, and the [legacy PDF.js worker](#legacy-pdfjs-worker).
-
-For example, Chrome 125 requires a polyfill for `URL.parse()`, which is used by PDF.js. Load the polyfill before initializing React-PDF:
-
-```javascript
-if (typeof URL !== 'undefined' && typeof URL.parse !== 'function') {
-  URL.parse = function (url, base) {
-    try {
-      return new URL(url, base);
-    } catch {
-      return null;
-    }
-  };
-}
-```
-
-Polyfilling this API alone does not establish compatibility with browsers below the minimum requirements.
+Chrome 125 and Safari 18 (iOS 18) are supported with the [legacy PDF.js builds](#legacy-pdfjs-builds). Additional polyfills and bundler transpilation may be required.
 
 For details, see the [PDF.js browser compatibility documentation](https://github.com/mozilla/pdf.js/wiki/Frequently-Asked-Questions#faq-support).
 
@@ -171,11 +155,21 @@ pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/b
 > [!WARNING]
 > The `workerSrc` must be set in the **same module** where you use React-PDF components (e.g., `<Document>`, `<Page>`). Setting it in a separate file like `main.tsx` and then importing React-PDF in another component may cause the default value to overwrite your custom setting due to module execution order. Always configure the worker in the file where you render the PDF components.
 
-#### Legacy PDF.js worker
+#### Legacy PDF.js builds
 
-If you need to support older browsers, you may use legacy PDF.js worker. This is not a complete backwards-compatibility solution: you may still need additional polyfills and bundler transpilation.
+To support older browsers, configure your bundler to use the legacy PDF.js main build and viewer module. For example, add these aliases to Vite's `resolve.alias`:
 
-To do so, follow the instructions above, but replace `/build/` with `/legacy/build/` in PDF.js worker import path, for example:
+```js
+[
+  { find: /^pdfjs-dist$/, replacement: 'pdfjs-dist/legacy/build/pdf.mjs' },
+  {
+    find: /^pdfjs-dist\/web\/pdf_viewer\.mjs$/,
+    replacement: 'pdfjs-dist/legacy/web/pdf_viewer.mjs',
+  },
+]
+```
+
+Configure the legacy worker by following the instructions above and replacing `/build/` with `/legacy/build/` in the worker path:
 
 ```diff
  pdfjs.GlobalWorkerOptions.workerSrc = new URL(
