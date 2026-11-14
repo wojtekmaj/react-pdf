@@ -2,7 +2,7 @@
 
 import dynamic from 'next/dynamic';
 
-const Sample = dynamic(() => import('./Sample'), {
+const Sample = dynamic(() => import('../components/Sample'), {
   ssr: false,
 });
 

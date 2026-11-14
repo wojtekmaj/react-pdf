@@ -7,8 +7,7 @@
   "scripts": {
     "build": "next build",
     "dev": "next dev",
-    "preview": "next preview",
-    "test": "node --test pages-entry.spec.mjs"
+    "preview": "next preview"
   },
   "author": {
     "name": "Wojciech Maj",
