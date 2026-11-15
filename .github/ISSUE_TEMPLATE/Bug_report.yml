@@ -59,7 +59,7 @@ body:
           - **React version**: 18.2.0
           - **Bundler name and version (if applicable)**: Vite 5.2.0
       value: |
-          - **Browser (if applicable)**:
-          - **React-PDF version**:
-          - **React version**:
-          - **Bundler name and version (if applicable)**:
+        - **Browser (if applicable)**:
+        - **React-PDF version**:
+        - **React version**:
+        - **Bundler name and version (if applicable)**:
