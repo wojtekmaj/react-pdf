@@ -45,6 +45,13 @@ export type OutlineProps = {
    */
   className?: ClassName;
   /**
+   * Maximum number of outline levels to display. Set to `0` to hide the outline.
+   *
+   * @default Infinity
+   * @example 2
+   */
+  depth?: number;
+  /**
    * A prop that behaves like [ref](https://reactjs.org/docs/refs-and-the-dom.html), but it's passed to main `<div>` rendered by `<Outline>` component.
    *
    * @example (ref) => { this.myOutline = ref; }
@@ -92,6 +99,7 @@ export default function Outline(props: OutlineProps): React.ReactElement | null 
   const mergedProps = { ...documentContext, ...props };
   const {
     className,
+    depth = Infinity,
     inputRef,
     onItemClick,
     onLoadError: onLoadErrorProps,
@@ -169,7 +177,7 @@ export default function Outline(props: OutlineProps): React.ReactElement | null 
     [otherProps, outline],
   );
 
-  if (!outline) {
+  if (!outline || depth <= 0) {
     return null;
   }
 
@@ -183,6 +191,7 @@ export default function Outline(props: OutlineProps): React.ReactElement | null 
         {outline.map((item, itemIndex) => (
           <OutlineItem
             key={typeof item.dest === 'string' ? item.dest : itemIndex}
+            depth={depth}
             item={item}
             pdf={pdf}
           />

@@ -3,6 +3,7 @@ import { page } from 'vitest/browser';
 import { render } from 'vitest-browser-react';
 import { createRef, Suspense } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
+import invariant from 'tiny-invariant';
 
 import DocumentContext from './DocumentContext.js';
 import { pdfjs } from './index.test.js';
@@ -172,6 +173,50 @@ describe('Outline', () => {
       await onLoadSuccessPromise;
 
       expect(inputRef.current).toBeInstanceOf(HTMLDivElement);
+    });
+
+    it.each`
+      depth        | expectedItems
+      ${0}         | ${0}
+      ${1}         | ${1}
+      ${2}         | ${3}
+      ${3}         | ${5}
+      ${Infinity}  | ${5}
+      ${undefined} | ${5}
+    `('renders up to $depth outline levels', async ({ depth, expectedItems }) => {
+      const item = desiredLoadedOutline[0];
+      invariant(item);
+
+      const outline = [
+        {
+          ...item,
+          items: [
+            { ...item, items: [{ ...item, items: [] }] },
+            { ...item, items: [{ ...item, items: [] }] },
+          ],
+        },
+      ];
+      const task = pdfjs.getDocument({ data: pdfFile.arrayBuffer });
+      const pdf = await task.promise;
+      vi.spyOn(pdf, 'getOutline').mockResolvedValue(outline);
+      const { func: onLoadSuccess, promise: onLoadSuccessPromise } = makeAsyncCallback();
+
+      try {
+        const { rerender } = await renderWithContext(
+          <Outline depth={depth} onLoadSuccess={onLoadSuccess} />,
+          { pdf },
+        );
+
+        await onLoadSuccessPromise;
+
+        expect(page.getByRole('listitem')).toHaveLength(expectedItems);
+
+        await rerender(<Outline depth={1} />);
+
+        expect(page.getByRole('listitem')).toHaveLength(1);
+      } finally {
+        await task.destroy();
+      }
     });
 
     it('renders OutlineItem components properly', async () => {

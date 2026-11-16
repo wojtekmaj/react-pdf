@@ -65,7 +65,11 @@ describe('OutlineItem', () => {
     it('renders an item properly', async () => {
       const onItemClick = vi.fn();
 
-      await renderWithContext(<OutlineItem item={outlineItem} />, { pdf }, { onItemClick });
+      await renderWithContext(
+        <OutlineItem depth={Infinity} item={outlineItem} />,
+        { pdf },
+        { onItemClick },
+      );
 
       const link = page.getByRole('link', { name: outlineItem.title });
 
@@ -75,7 +79,11 @@ describe('OutlineItem', () => {
     it("renders item's subitems properly", async () => {
       const onItemClick = vi.fn();
 
-      await renderWithContext(<OutlineItem item={outlineItem} />, { pdf }, { onItemClick });
+      await renderWithContext(
+        <OutlineItem depth={Infinity} item={outlineItem} />,
+        { pdf },
+        { onItemClick },
+      );
 
       const item = page.getByRole('listitem').first();
       const subitems = item.getByRole('listitem');
@@ -86,7 +94,11 @@ describe('OutlineItem', () => {
     it('calls onItemClick with proper arguments when clicked a link', async () => {
       const { func: onItemClick, promise: onItemClickPromise } = makeAsyncCallback();
 
-      await renderWithContext(<OutlineItem item={outlineItem} />, { pdf }, { onItemClick });
+      await renderWithContext(
+        <OutlineItem depth={Infinity} item={outlineItem} />,
+        { pdf },
+        { onItemClick },
+      );
 
       const item = page.getByRole('listitem').first();
       const link = item.getByRole('link').first();
@@ -101,7 +113,7 @@ describe('OutlineItem', () => {
       const { func: onItemClick, promise: onItemClickPromise } = makeAsyncCallback();
 
       const { rerender } = await renderWithContext(
-        <OutlineItem item={outlineItem} />,
+        <OutlineItem depth={Infinity} item={outlineItem} />,
         { pdf },
         { onItemClick },
       );
@@ -116,7 +128,11 @@ describe('OutlineItem', () => {
 
       const { func: onItemClick2, promise: onItemClickPromise2 } = makeAsyncCallback();
 
-      await rerender(<OutlineItem item={outlineItem} />, { pdf }, { onItemClick: onItemClick2 });
+      await rerender(
+        <OutlineItem depth={Infinity} item={outlineItem} />,
+        { pdf },
+        { onItemClick: onItemClick2 },
+      );
 
       await userEvent.click(link);
 

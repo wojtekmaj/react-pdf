@@ -14,6 +14,7 @@ type PDFOutline = Awaited<ReturnType<PDFDocumentProxy['getOutline']>>;
 type PDFOutlineItem = PDFOutline[number];
 
 type OutlineItemProps = {
+  depth: number;
   item: PDFOutlineItem;
   pdf?: PDFDocumentProxy | false;
 };
@@ -26,7 +27,7 @@ export default function OutlineItem(props: OutlineItemProps): React.ReactElement
   invariant(outlineContext, 'Unable to find Outline context.');
 
   const mergedProps = { ...documentContext, ...outlineContext, ...props };
-  const { item, linkService, onItemClick, pdf, ...otherProps } = mergedProps;
+  const { depth, item, linkService, onItemClick, pdf, ...otherProps } = mergedProps;
 
   invariant(
     pdf,
@@ -83,7 +84,7 @@ export default function OutlineItem(props: OutlineItemProps): React.ReactElement
   }
 
   function renderSubitems() {
-    if (!item.items?.length) {
+    if (depth <= 1 || !item.items?.length) {
       return null;
     }
 
@@ -94,6 +95,7 @@ export default function OutlineItem(props: OutlineItemProps): React.ReactElement
         {subitems.map((subitem, subitemIndex) => (
           <OutlineItem
             key={typeof subitem.dest === 'string' ? subitem.dest : subitemIndex}
+            depth={depth - 1}
             item={subitem}
             pdf={pdf}
             {...otherProps}
